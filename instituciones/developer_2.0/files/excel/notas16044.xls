@@ -1,0 +1,329 @@
+<head>
+	<title>Planilla de notas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+
+
+
+<div align="center">  
+<table  width="100%" border="1" rules="all">
+    <thead
+    	<tr>
+            <th>#</th>
+			<th>ID</th>
+			<th>Estudiante</th>
+			<th>Nota</th>
+			<th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+    	<tr>	
+            <td>1</td>
+			<td>1868</td>
+			<td>ALZATE GIRALDO YOSEF DANIEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>2</td>
+			<td>2038</td>
+			<td>BUSTILLO MALO ESTEFANIA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>3</td>
+			<td>639</td>
+			<td>CALLE  CHAVARRIA SARA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>4</td>
+			<td>1914</td>
+			<td>CANO RAMIREZ VALENTINA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>5</td>
+			<td>1504</td>
+			<td>CHALARCA RODAS LAURA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>6</td>
+			<td>1515</td>
+			<td>CHICA GIL CELESTE</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>7</td>
+			<td>700</td>
+			<td>CORREA  RAMIREZ LUNA PAOLA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>8</td>
+			<td>756</td>
+			<td>FLOREZ  SIERRA EMILY GABRIELA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>9</td>
+			<td>1429</td>
+			<td>GARCIA ANAYA JOSE DAVID</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>10</td>
+			<td>777</td>
+			<td>GARCIA  PINEDA VALERIA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>11</td>
+			<td>1526</td>
+			<td>GAVIRIA QUINTERO STIVEN ALEJANDRO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>12</td>
+			<td>1385</td>
+			<td>GIRALDO TORRES ANTONIO ALFREDO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>13</td>
+			<td>1347</td>
+			<td>GOMEZ JIMENEZ EMANUEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>14</td>
+			<td>1548</td>
+			<td>GRANADOS GOMEZ NICOLAS</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>15</td>
+			<td>864</td>
+			<td>HOYOS  ECHAVARRIA MARIA ISABEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>16</td>
+			<td>1329</td>
+			<td>LOAIZA RAMIREZ MARIA PAULINA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>17</td>
+			<td>1502</td>
+			<td>MARIN ECHEVERRIA GONZALO ENRIQUE</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>18</td>
+			<td>1913</td>
+			<td>MARQUEZ NAVARRO ABBY DANIELA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>19</td>
+			<td>2028</td>
+			<td>MAYORGA  GARZON SARAH GABRIELLA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>20</td>
+			<td>1555</td>
+			<td>MERCADO CEBALLOS ISABELLA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>21</td>
+			<td>1528</td>
+			<td>MORALES LONDOÑO JERONIMO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>22</td>
+			<td>1413</td>
+			<td>MORALES RUA MARIA JOSE</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>23</td>
+			<td>1373</td>
+			<td>MUÑOZ ALVAREZ LUCIANA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>24</td>
+			<td>2032</td>
+			<td>OCHOA YEPES MIGUEL ANGEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>25</td>
+			<td>1928</td>
+			<td>ORREGO MARTINEZ MIGUEL ANGEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>26</td>
+			<td>1521</td>
+			<td>OSPINA MORALES SANTIAGO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>27</td>
+			<td>1513</td>
+			<td>PINEDA GANTIVA JUAN MANUEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>28</td>
+			<td>1937</td>
+			<td>RAMIREZ MARIN JACOBO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>29</td>
+			<td>1505</td>
+			<td>RODAS CAICEDO MIGUEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>30</td>
+			<td>1303</td>
+			<td>SIERRA ARREDONDO VALENTINA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>31</td>
+			<td>1134</td>
+			<td>TABORDA URIBE KARLA DE DIOS</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>32</td>
+			<td>1224</td>
+			<td>TORRES  MAQUILON JUAN ESTEBAN</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>33</td>
+			<td>1423</td>
+			<td>VACA TORO SAMUEL ELIAS</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>34</td>
+			<td>2041</td>
+			<td>VARGAS YAÑEZ JERONIMO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+        
+    </tbody>
+</table>

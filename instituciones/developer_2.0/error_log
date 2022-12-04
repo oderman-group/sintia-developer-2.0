@@ -1,0 +1,36 @@
+[26-Sep-2022 20:32:24 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:32:24 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:32:24 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79
+[26-Sep-2022 20:32:30 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:32:30 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:32:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79
+[26-Sep-2022 20:32:49 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:32:49 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:32:49 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79
+[26-Sep-2022 20:33:03 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:33:03 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:33:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79
+[26-Sep-2022 20:33:17 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:33:17 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:33:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79
+[26-Sep-2022 20:33:44 UTC] PHP Notice:  Undefined index: id in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 3
+[26-Sep-2022 20:33:44 UTC] PHP Notice:  Undefined index: urlDefault in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 73
+[26-Sep-2022 20:33:44 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_query() in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php:79
+Stack trace:
+#0 {main}
+  thrown in /home4/mobiliar/public_html/plataformasintia.com/instituciones/v2.0/index.php on line 79

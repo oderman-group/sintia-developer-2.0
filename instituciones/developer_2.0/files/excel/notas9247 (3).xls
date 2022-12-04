@@ -1,0 +1,248 @@
+<head>
+	<title>Planilla de notas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+
+
+
+<div align="center">  
+<table  width="100%" border="1" rules="all">
+    <thead
+    	<tr>
+            <th>#</th>
+			<th>ID</th>
+			<th>Estudiante</th>
+			<th>Nota</th>
+			<th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+    	<tr>	
+            <td>1</td>
+			<td>526</td>
+			<td>ARCIRIA PETRO LILIAM </td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>2</td>
+			<td>527</td>
+			<td>AYALA CAVADIA CARLOS MARIO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>3</td>
+			<td>528</td>
+			<td>BALSEIRO HERNANDEZ JEAN CARLOS</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>4</td>
+			<td>529</td>
+			<td>BANQUETH REYES LUIS FERNANDO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>5</td>
+			<td>530</td>
+			<td>BRUNO PINTO CRISTIAM ARMANDO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>6</td>
+			<td>531</td>
+			<td>CABRERA ESCOBAR LUIS ANTONIO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>7</td>
+			<td>532</td>
+			<td>CONEO AYALA SILVIO JOSE</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>8</td>
+			<td>533</td>
+			<td>GARCIA JIMENEZ RICARDO JUNIOR</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>9</td>
+			<td>534</td>
+			<td>GONZALEZ ORTIZ DIANA PAOLA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>10</td>
+			<td>535</td>
+			<td>MARTINEZ ALMANZA CARLOS ANDRES</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>11</td>
+			<td>536</td>
+			<td>MARTINEZ BRUNO DEINER DANIEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>12</td>
+			<td>537</td>
+			<td>MARTINEZ MESTRA LUIS DANIEL</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>13</td>
+			<td>538</td>
+			<td>MESTRA PICO GLORIA LUCIA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>14</td>
+			<td>539</td>
+			<td>NEGRETE MORELO MARIANA </td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>15</td>
+			<td>540</td>
+			<td>PATRON MONTALVO GEHILY </td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>16</td>
+			<td>541</td>
+			<td>PEREZ FLOREZ IVAN ANDRES</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>17</td>
+			<td>542</td>
+			<td>PEREZ FLOREZ LUIS FERNANDO</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>18</td>
+			<td>550</td>
+			<td>PINTO PATRON SEBASTIAN DAVID</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>19</td>
+			<td>543</td>
+			<td>RAMOS SANCHEZ ANA VICTORIA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>20</td>
+			<td>544</td>
+			<td>RIVAS CARVAJAL EDUIN JOSE</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>21</td>
+			<td>545</td>
+			<td>ROSSO RAMOS JUAN SEBASTIAN</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>22</td>
+			<td>546</td>
+			<td>SANCHEZ MESTRA SANTIAGO JESUS</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>23</td>
+			<td>547</td>
+			<td>SARMIENTO PETRO SARA SOFIA</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>24</td>
+			<td>548</td>
+			<td>SOTO BENITEZ ALI DAVID</td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+    
+    	<tr>	
+            <td>25</td>
+			<td>549</td>
+			<td>TUIRAN PASTRANA ISAAC </td>
+			<td style="text-align: center; color:black"></td>
+			<td></td>
+        </tr>   
+
+        
+    </tbody>
+</table>
