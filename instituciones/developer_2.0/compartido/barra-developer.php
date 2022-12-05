@@ -18,7 +18,7 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
         font-family:Arial;
         font-size:16px;
     ">
-    <b>Id Inst:</b>&nbsp;<?php echo $config['conf_id_institucion'];?>&nbsp;|&nbsp;
+    <b>ID Inst:</b>&nbsp;<?php echo $config['conf_id_institucion'];?>&nbsp;|&nbsp;
     <b>Id pagina:</b>&nbsp;<?php echo $idPaginaInterna;?>&nbsp;|&nbsp;
     <b>Archivo de ruta:</b>&nbsp;<?php echo $archivo[4];?>&nbsp;|&nbsp;
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
