@@ -14,7 +14,18 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-$matriculadosPorCurso = mysql_query("SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' ORDER BY mat_grupo, mat_primer_apellido",$conexion);
+//CONSULTA ESTUDIANTES MATRICULADOS
+$filtro = '';
+if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
+if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+$matriculadosPorCurso = mysql_query("SELECT * FROM academico_matriculas 
+INNER JOIN academico_grados ON gra_id=mat_grado
+INNER JOIN academico_grupos ON gru_id=mat_grupo
+LEFT JOIN academico_cargas ON car_curso=mat_grado AND car_grupo=mat_grupo AND car_director_grupo=1
+LEFT JOIN usuarios ON uss_id=car_docente
+WHERE mat_eliminado=0 $filtro 
+GROUP BY mat_id
+ORDER BY mat_grupo, mat_primer_apellido",$conexion);
 while($matriculadosDatos = mysql_fetch_array($matriculadosPorCurso)){
 //contador materias
 $cont_periodos=0;

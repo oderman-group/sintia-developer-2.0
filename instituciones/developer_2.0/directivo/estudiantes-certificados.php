@@ -60,11 +60,16 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 						
                         <div class="col-sm-9">
 
-
+                                <?php
+                                $ext='';
+                                if($_SESSION["inst"]=='mobiliar_innovadores'){
+                                    $ext='-2';
+                                }
+                                ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple">Certificado por áreas</header>
                                 	<div class="panel-body">
-                                        <form action="../compartido/matricula-certificado-areas.php" method="post" class="form-horizontal" enctype="multipart/form-data"  target="_blank">
+                                        <form action="../compartido/matricula-certificado-areas<?=$ext; ?>.php" method="post" class="form-horizontal" enctype="multipart/form-data"  target="_blank">
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Estudiante</label>
@@ -88,10 +93,19 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                                 <div class="col-sm-10">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
-                                                    <option value="2013">2013</option>
-                                                    <option value="2014">2014</option>
-                                                    <option value="2015">2015</option>
-                                                    <option value="2016">2016</option>
+													<?php
+                                                    $cont=1;
+                                                    $con = date("Y")-7;
+                                                    while($cont<=9)
+                                                    {
+                                                        if($_SESSION["bd"]==$con)
+                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
+                                                        else
+                                                            echo "<option value='".$con."'>".$con."</option>";
+                                                        $con++;
+                                                        $cont++;
+                                                    }
+                                                    ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -101,10 +115,19 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                                 <div class="col-sm-10">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
-                                                    <option value="2013">2013</option>
-                                                    <option value="2014">2014</option>
-                                                    <option value="2015">2015</option>
-                                                    <option value="2016">2016</option>
+													<?php
+                                                    $cont=1;
+                                                    $con = date("Y")-7;
+                                                    while($cont<=9)
+                                                    {
+                                                        if($_SESSION["bd"]==$con)
+                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
+                                                        else
+                                                            echo "<option value='".$con."'>".$con."</option>";
+                                                        $con++;
+                                                        $cont++;
+                                                    }
+                                                    ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -141,10 +164,19 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                                 <div class="col-sm-10">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
-                                                    <option value="2013">2013</option>
-                                                    <option value="2014">2014</option>
-                                                    <option value="2015">2015</option>
-                                                    <option value="2016">2016</option>
+													<?php
+                                                    $cont=1;
+                                                    $con = date("Y")-7;
+                                                    while($cont<=9)
+                                                    {
+                                                        if($_SESSION["bd"]==$con)
+                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
+                                                        else
+                                                            echo "<option value='".$con."'>".$con."</option>";
+                                                        $con++;
+                                                        $cont++;
+                                                    }
+                                                    ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -154,10 +186,19 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                                 <div class="col-sm-10">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
-                                                    <option value="2013">2013</option>
-                                                    <option value="2014">2014</option>
-                                                    <option value="2015">2015</option>
-                                                    <option value="2016">2016</option>
+													<?php
+                                                    $cont=1;
+                                                    $con = date("Y")-7;
+                                                    while($cont<=9)
+                                                    {
+                                                        if($_SESSION["bd"]==$con)
+                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
+                                                        else
+                                                            echo "<option value='".$con."'>".$con."</option>";
+                                                        $con++;
+                                                        $cont++;
+                                                    }
+                                                    ?>
                                                     </select>
                                                 </div>
                                             </div>

@@ -14,7 +14,18 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-$matriculadosPorCurso = mysql_query("SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_eliminado=0 AND mat_estado_matricula=1 ORDER BY mat_grupo, mat_primer_apellido LIMIT 63,3",$conexion);
+//CONSULTA ESTUDIANTES MATRICULADOS
+$filtro = '';
+if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
+if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+$matriculadosPorCurso = mysql_query("SELECT * FROM academico_matriculas 
+INNER JOIN academico_grados ON gra_id=mat_grado
+INNER JOIN academico_grupos ON gru_id=mat_grupo
+LEFT JOIN academico_cargas ON car_curso=mat_grado AND car_grupo=mat_grupo AND car_director_grupo=1
+LEFT JOIN usuarios ON uss_id=car_docente
+WHERE mat_eliminado=0 $filtro 
+GROUP BY mat_id
+ORDER BY mat_grupo, mat_primer_apellido",$conexion);
 while($matriculadosDatos = mysql_fetch_array($matriculadosPorCurso)){
 //contador materias
 $cont_periodos=0;
@@ -37,6 +48,25 @@ if($num_usr==0)
 }
 
 $contador_periodos=0;
+
+$contp = 1;
+$puestoCurso = 0;
+$promedioPuesto = 0;
+$puestos = mysql_query("SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom,
+ROW_NUMBER() OVER(ORDER BY prom desc) as puesto 
+	FROM academico_matriculas
+INNER JOIN academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$_GET["periodo"]."'
+WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."'
+GROUP BY mat_id 
+ORDER BY prom DESC",$conexion);
+
+while($puesto = mysql_fetch_array($puestos)){
+	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){
+		$puestoCurso = $puesto['puesto'];
+		$promedioPuesto = round($puesto['prom'],2);
+	}
+	$contp ++;
+}
 ?>
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -68,7 +98,7 @@ $numero_periodos=$config["conf_periodo"];
  ?>
 
 <div align="center" style="margin-bottom:20px;">
-    <img src="enca.png"><br>
+    <img src="../files/images/logo/encabezadoinnovadores.png"><br>
     <!--<?=$informacion_inst["info_nombre"]?><br>
     BOLET&Iacute;N DE CALIFICACIONES<br>-->
 </div> 
@@ -76,12 +106,13 @@ $numero_periodos=$config["conf_periodo"];
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
     	<td>C&oacute;digo: <b><?=$datos_usr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
+        <td colspan="2">Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
     </tr>
     
     <tr>
     	<td>Grado: <b><?=$datos_usr["gra_nombre"]." ".$datos_usr["gru_nombre"];?></b></td>
-        <td>Periodo: <b><?=strtoupper($periodoActuales);?></b></td>    
+        <td>Periodo: <b><?=strtoupper($periodoActuales);?></b></td>
+        <td>Puesto Curso:<br> <?=$puestoCurso?></td>    
     </tr>
 </table>
 <br>
@@ -182,9 +213,11 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 			<td class=""  align="center" style="font-weight:bold;"></td>
             <?php }?>
         <td align="center" style="font-weight:bold;"><?php 
+		$desempenoNotaPromArea = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio.">=notip_desde AND ".$total_promedio."<=notip_hasta",$conexion));
 		
 		if($datos_usr["mat_grado"]>11){
 				$notaFA = ceil($total_promedio);
+			/*
 				switch($notaFA){
 					case 1: echo "D"; break;
 					case 2: echo "I"; break;
@@ -192,6 +225,8 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 					case 4: echo "S"; break;
 					case 5: echo "E"; break;
 				}
+				*/
+			echo $desempenoNotaPromArea['notip_nombre'];
 				}else{
 		echo $total_promedio;
 				}
@@ -216,7 +251,7 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 	}//FIN FILA3
 ?>
  <tr bgcolor="#EAEAEA" style="font-size:12px;">
-            <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;">&raquo;<?php echo $fila2["mat_nombre"];?></td> 
+            <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;">&raquo;<?php echo $fila2["car_id"]." - ".$fila2["mat_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numero_periodos;$l++){ 
 	//$numNotaDelEstudiante = mysql_num_rows(mysql_query("SELECT count(bol_nota) FROM academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos[0]."' AND bol_periodo='".$l."'",$conexion));
@@ -228,6 +263,7 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 				$desempenoNotaP = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta",$conexion));
 				if($datos_usr["mat_grado"]>11){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
+					/*
 					switch($notaF){
 						case 1: echo "D"; break;
 						case 2: echo "I"; break;
@@ -235,6 +271,8 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 						case 4: echo "S"; break;
 						case 5: echo "E"; break;
 					}
+					*/
+					echo $desempenoNotaP[1];
 				}else{
 					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP[1];
 					//echo $notas[$l]."<br>".$desempenoNotaP[1];
@@ -246,7 +284,11 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 			}
 			?>
             </td>
-        <?php }?>
+        <?php
+		
+		
+	}
+	 ?>
       <?php 
 	  $total_promedio2=round( $fila2["suma"],1);
 	   
@@ -266,9 +308,11 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 	   ?>
        
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php 
-		
+		$desempenoNotaXasig = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio2.">=notip_desde AND ".$total_promedio2."<=notip_hasta",$conexion));
+	
 					if($datos_usr["mat_grado"]>11){
 				$notaFI = ceil($total_promedio2);
+						/*
 				switch($notaFI){
 					case 1: echo "D"; break;
 					case 2: echo "I"; break;
@@ -276,6 +320,9 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 					case 4: echo "S"; break;
 					case 5: echo "E"; break;
 				}
+				*/
+						echo $desempenoNotaXasig['notip_nombre'];
+						
 				}else{
 					echo $total_promedio2;
 				}
@@ -285,14 +332,17 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
 		while($r_desempeno=mysql_fetch_array($consulta_desempeno)){
 			if($total_promedio2>=$r_desempeno["notip_desde"] && $total_promedio2<=$r_desempeno["notip_hasta"]){
 				if($datos_usr["mat_grado"]>11){
+					/*
 					$notaFD = ceil($total_promedio2);
 				switch($notaFD){
 					case 1: echo "BAJO"; break;
 					case 2: echo "BAJO"; break;
 					case 3: echo "B&Aacute;SICO"; break;
 					case 4: echo "ALTO"; break;
-					case 5: echo "SUPERIOR"; break;
+					case 5: echo "SUPERIOR"; break;					
 				}
+				*/
+				echo $r_desempeno["notip_nombre"];
 
 				}else{
 					
@@ -305,6 +355,7 @@ while($fila2=mysql_fetch_array($consulta_a_mat)){
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($r_ausencias[0]>0){ echo $r_ausencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
 	
 	</tr>
+	
 <?php
 if($numIndicadores>0){
 	 mysql_data_seek($consulta_a_mat_indicadores,0);
@@ -314,14 +365,19 @@ if($numIndicadores>0){
 		$contador_indicadores++;
 		$nota_indicador=round($fila4["nota"],1);
 		 if($nota_indicador==1)	$nota_indicador="1.0";	if($nota_indicador==2)	$nota_indicador="2.0";		if($nota_indicador==3)	$nota_indicador="3.0";	if($nota_indicador==4)	$nota_indicador="4.0";	if($nota_indicador==5)	$nota_indicador="5.0";
+		
+		$desempenoNotaIndNombre2 = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota_indicador.">=notip_desde AND ".$nota_indicador."<=notip_hasta",$conexion));
 	?>
 <tr bgcolor="#FFF" style="font-size:12px;">
-            <td style="font-size:12px; height:15px;"><?php echo $contador_indicadores.". ".$fila4["ind_nombre"];?></td> 
+            <td style="font-size:12px; height:15px;"><?php echo $contador_indicadores.".".$fila4["ind_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;"></td>
-            <?php for($m=1;$m<=$numero_periodos;$m++){ ?>
+            <?php for($m=1;$m<=$numero_periodos;$m++){ 
+			$desempenoNotaInd = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota_indicador.">=notip_desde AND ".$nota_indicador."<=notip_hasta",$conexion));
+			?>
 			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){
 				if($datos_usr["mat_grado"]>11){
 				$notaFII = ceil($nota_indicador);
+					/*
 				switch($notaFII){
 					case 1: echo "D"; break;
 					case 2: echo "I"; break;
@@ -329,6 +385,8 @@ if($numIndicadores>0){
 					case 4: echo "S"; break;
 					case 5: echo "E"; break;
 				}
+				*/
+					echo $desempenoNotaInd['notip_nombre'];
 			}else{
 				echo $nota_indicador;
 			}
@@ -342,6 +400,25 @@ if($numIndicadores>0){
 	}//fin if
 	}
 }
+?>
+	<!-- observaciones de la asignatura-->
+	<?php
+	$observacion = mysql_fetch_array(mysql_query("SELECT * FROM academico_boletin
+	WHERE bol_carga='".$fila2["car_id"]."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$matriculadosDatos[0]."'
+	",$conexion));
+	if($observacion['bol_observaciones_boletin']!=""){
+	?>
+	<tr>
+		<td colspan="7">
+			<h5 align="center">Observaciones</h5>
+			<p style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+				<?=$observacion['bol_observaciones_boletin'];?>
+			</p>
+		</td>
+	</tr>
+	<?php }?>
+	
+<?php	
 }//while fin materias
 ?>  
 <?php }}//while fin areas?>
@@ -354,21 +431,19 @@ if($numIndicadores>0){
     <tr align="center" style="font-size:12px; font-weight:bold;">
         <td colspan="2" align="right">PROMEDIO</td>
 
-		<?php for($n=1;$n<=$numero_periodos;$n++){ ?>
-        <td style="font-size:16px;"><?php 
+		<?php for($n=1;$n<=$numero_periodos;$n++){ 
+	 $notaFFF = round(($promedios[$n]/$contpromedios[$n]),1);
+		$desempenoNotaProm = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaFFF.">=notip_desde AND ".$notaFFF."<=notip_hasta",$conexion));
+		?>
+        <td style="font-size:16px;">
+        	<?php 
 		if($promedios[$n]!=0){
 			if($datos_usr["mat_grado"]>11){
 				$notaFF = ceil(round(($promedios[$n]/$contpromedios[$n]),1));
-				switch($notaFF){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-					}
-				}else{
-					echo round(($promedios[$n]/$contpromedios[$n]),1);
-				}
+				echo $desempenoNotaProm['notip_nombre'];
+			}else{
+				echo $promedioPuesto;
+			}
 			
 			}?></td>
         <?php } ?>
@@ -393,7 +468,7 @@ if(@mysql_num_rows($cndisiplina)>0){
     
     <tr style="font-weight:bold; background:#F06; border-color:#F06; height:25px; color:#FFF; font-size:12px; text-align:center">
         <td width="8%">Periodo</td>
-        <td width="8%">Nota</td>
+        <!--<td width="8%">Nota</td>-->
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysql_fetch_array($cndisiplina)){
@@ -401,8 +476,8 @@ $desempenoND = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipo
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <td><?=$desempenoND[1]?></td>
-        <td><?=$rndisiplina["dn_observacion"]?></td>
+        <!--<td><?=$desempenoND[1]?></td>-->
+        <td align="left"><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
 <?php }?>
 </table>
@@ -440,15 +515,12 @@ $desempenoND = mysql_fetch_array(mysql_query("SELECT * FROM academico_notas_tipo
 -->
 
 <p>&nbsp;</p>
-<div align="center"><img src="../files/firmas/fondo1.jpg" height="160"></div>
-<!--
 <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
 	<tr>
-		<td align="center"><!--<img src="../files/firmas/victorc.jpg" height="160"><br>-_________________________________<br><!--<?=strtoupper("");?><br>--Rector(a)</td>
-		<td align="center"><p style="height:0px;"></p>_________________________________<br><!--<?=strtoupper("");?><br>--Director(a) de grupo</td>
+		<td align="center">_________________________________<br><!--<?=strtoupper("");?><br>-->Rector(a)</td>
+		<td align="center">_________________________________<br><!--<?=strtoupper("");?><br>-->Director(a) de grupo</td>
     </tr>
 </table> 
---> 
 
 <!--
 <br>

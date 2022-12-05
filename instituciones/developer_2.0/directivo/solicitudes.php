@@ -68,10 +68,10 @@
 												</thead>
                                                 <tbody>
 												<?php
-												$consulta = mysql_query($SQL." LIMIT $inicio, $limite",$conexion);
+												$consulta = mysql_query($SQL,$conexion);
 												while($resultado = mysql_fetch_array($consulta)){				
 												?>
-												<tr id="data1" class="odd gradeX">
+												<tr>
 													<td><?=$resultado['soli_id'];?></td>
 													<td><?=$resultado['soli_fecha'];?></td>
 													<td><?=$resultado['uss_nombre'];?></td>
