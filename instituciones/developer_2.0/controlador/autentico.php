@@ -34,6 +34,7 @@ if($posC or $possC){
 
 $rst_usrE = mysql_query("SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
 WHERE uss_usuario='".trim(mysql_real_escape_string($_POST["Usuario"]))."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL",$conexion);
+if(mysql_errno()!=0){echo mysql_error(); exit();}
 $numE = mysql_num_rows($rst_usrE);
 if($numE==0){
 	header("Location:../index.php?error=1");
@@ -48,6 +49,7 @@ if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"])
 
 $rst_usr = mysql_query("SELECT * FROM usuarios 
 WHERE uss_usuario='".trim(mysql_real_escape_string($_POST["Usuario"]))."' AND uss_clave='".mysql_real_escape_string($_POST["Clave"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL",$conexion);
+if(mysql_errno()!=0){echo mysql_error(); exit();}
 $num = mysql_num_rows($rst_usr);
 $fila = mysql_fetch_array($rst_usr);
 if($num>0)
@@ -56,7 +58,6 @@ if($num>0)
 	//if($fila[20]==1){header("Location:../index.php?error=4");exit();}
 	
 	//INICIO SESION
-	session_start();
 	$_SESSION["id"] = $fila[0];
 	
 	$URLdefault = 'noticias.php';
@@ -94,8 +95,9 @@ if($num>0)
 	if(mysql_errno()!=0){echo mysql_error();exit();}
 
 	mysql_query("INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$fila[0]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Ingreso al sistema', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')",$conexion);
-	
-	header("Location:".$url);	
+	if(mysql_errno()!=0){echo mysql_error(); exit();}
+
+	echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
 	exit();
 }else{
 	mysql_query("UPDATE usuarios SET uss_intentos_fallidos=uss_intentos_fallidos+1 WHERE uss_id='".$usrE['uss_id']."'",$conexion);

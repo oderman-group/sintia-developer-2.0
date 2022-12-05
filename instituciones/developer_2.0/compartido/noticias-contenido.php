@@ -5,101 +5,13 @@
                                 
 								<div class="col-md-4 col-lg-3">
 									
-									<?php if($datosUsuarioActual[3]==33 or $_SESSION["id"]==1){?>
-									<div class="col-sm-12 col-12">
-										
-										<div class="card  card-box">
-											<div class="card-head">
-												<header>CURSOS DEL FUTURO</header>
-												<div class="tools">
-													<a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-													<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-													<a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-												</div>
-											</div>
-											<div class="card-body no-padding height-9">
-												<div class="row">
-													<div class="noti-information notification-menu">
-														<div class="notification-list mail-list not-list small-slimscroll-style" style="width:100%; height:400px; overflow: scroll;">
-
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Diseño web</span> HTML
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Diseño web</span> CSS
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Programación web</span> JAVASCRIPT
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Bases de datos</span> FUNDAMENTO DE BASES DE DATOS
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Diseño gráfico</span> ADOBE ILLUSTRATOR
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Diseño gráfico</span> ADOBE PHOTOSHOP
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Audiovisual</span> ADOBE PREMIER PRO
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-															
-															<a href="javascript:;" class="single-mail"> <span class="icon bg-primary"> <i class="fa fa-user-o"></i>
-															</span> <span class="text-purple">Audiovisual</span> ADOBE AFTER EFFECTS
-																<span class="notificationtime">
-																	<small>Inicia en 1 mes.</small>
-																</span>
-															</a>
-
-
-
-														</div>
-														<div class="full-width text-center p-t-10" >
-															<button type="button" class="btn purple btn-outline btn-circle margin-0">VER TODO</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-                            
-                        			</div>
-									<?php }?>
-									
-									
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
 											<form action="<?=$_SERVER['PHP_SELF'];?>" method="get">
 											<div class="form-group row">
 												<div class="col-sm-8" data-hint="Aquí podrás buscar noticias específicas, dentro de todas las publicadas, usando palabras que claves que se encuentren en su titulo, descripción, etc.">
-													<input type="text" name="busqueda" class="form-control" value="<?=$_GET["busqueda"];?>" placeholder="<?=$frases[235][$datosUsuarioActual[8]];?>...">
+													<input type="text" name="busqueda" class="form-control" value="<?php if(isset($_GET['busqueda'])) echo $_GET["busqueda"];?>" placeholder="<?=$frases[235][$datosUsuarioActual[8]];?>...">
 												</div>
 												<div class="col-sm-4">
 													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual[8]];?>">
@@ -170,8 +82,8 @@
 
 											<?php 
 											$filtro = '';
-											if($_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
+											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
+											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
 											$consulta = mysql_query("SELECT * FROM social_noticias
 											INNER JOIN usuarios ON uss_id=not_usuario

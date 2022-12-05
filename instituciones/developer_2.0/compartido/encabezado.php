@@ -1,5 +1,5 @@
 <?php
-if(is_numeric($_GET["idNotify"])){
+if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
 	mysql_query("UPDATE general_alertas SET alr_vista=1 WHERE alr_id='".$_GET["idNotify"]."' AND alr_vista=0",$conexion);
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
@@ -105,13 +105,13 @@ switch($_SESSION["inst"]){
                         
 						<!-- start notification dropdown -->
                         <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar" data-step="4" data-intro="<b>Notificaciones:</b> Aquí recibirás notificaciones importantes relacionadas contigo." data-position='bottom' data-scrollTo='tooltip'>
-                            <span id="notificaciones"></span>
+                            <!--<span id="notificaciones"></span>-->
                         </li>
                         <!-- end notification dropdown -->
 						
                         <!-- start message dropdown -->
  						<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar" data-step="5" data-intro="<b>Mensajes:</b> Aquí verás los mensajes directos que te envíen otros usuarios de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
-                            <span id="mensajes"></span>
+                            <!--<span id="mensajes"></span>-->
                         </li>
                         <!-- end message dropdown -->
  						<!-- start manage user dropdown -->
@@ -132,17 +132,19 @@ switch($_SESSION["inst"]){
                         </li>
 						
 						<?php
+                        /*
 						$arrayEnviarE = array("idUsuario"=>$_SESSION["id"], "nombreUsuario"=>$datosUsuariosActual['uss_nombre'], "fotoUsuario"=>$datosUsuariosActual["uss_foto"]);
 						$arrayDatosE = json_encode($arrayEnviarE);
 						$objetoEnviarE = htmlentities($arrayDatosE);
+                        */
 						?>
 						
-                        <!-- end manage user dropdown -->
+                        <!-- end manage user dropdown --
                         <li class="dropdown dropdown-quick-sidebar-toggler">
                              <a id="headerSettingButton" class="mdl-button mdl-js-button mdl-button--icon pull-right" data-upgraded=",MaterialButton">
 	                           <i class="fa fa-weixin" id="<?=$objetoEnviarE;?>" onclick="conectarme(this)"></i>
 	                        </a>
-                        </li>
+                        </li>-->
                     </ul>
 
 					

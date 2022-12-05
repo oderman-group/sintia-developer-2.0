@@ -1,22 +1,26 @@
+<?php error_reporting (E_ALL ^ E_NOTICE); ?>
 <?php 
-session_start();
-if($_SESSION["id"]!=""){$_SESSION["id"] = $_SESSION["id"];}
+if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
+    session_start();
+}
+if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){$_SESSION["id"] = $_SESSION["id"];}
 include("../../../conexion-datos.php");
 
 //PRUEBA DE CONSULTA PHP 8
-const SERVER = 'localhost';
+/*
+const SERVER = 'sintia.co';
 const USER = 'mobiliar_enuarlara';
 const PASS = 'CiUKh?V=_%b(';
 const MAINBD = 'mobiliar_dev_2022';
 
-$conexionBd = new mysqli(SERVER, USER, PASS, MAINBD);
+$conexionBd = new mysqli(SERVER, USER, PASS, MAINBD);*/
 
 //Conexion con el Servidor
 $conexion = mysql_connect($servidorConexion, $usuarioConexion, $claveConexion);
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
 	session_destroy();
-	header("Location:https://plataformasintia.com/instituciones/developer_2.0/");
+	header("Location:http://localhost/plataformasintia.com/instituciones/developer_2.0/");
 	exit();
 }else{
 	//seleccionamos la base de datos

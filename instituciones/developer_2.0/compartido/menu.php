@@ -167,7 +167,7 @@
 							
 							<?php 
 							//MÓDULO MERCADEO
-							if($arregloModulos[6]==1){?>
+							if(isset($arregloModulos[6]) and $arregloModulos[6]==1){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
 	                                <span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>

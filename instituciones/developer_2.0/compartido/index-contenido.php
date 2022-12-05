@@ -99,7 +99,7 @@
 								<header class="panel-heading panel-heading-red">Tu opinión o sugerencia sobre la plataforma SINTIA es muy importante</header>
                                 <div class="panel-body">
 									<p style="text-align: justify;"><mark>Esta opción NO es para comunicarse con la Institución. Los mensajes aquí enviados llegarán solamente a los proveedores de la plataforma SINTIA.</mark></p>
-									<?php if($_GET["msg"]==1){?>
+									<?php if(isset($_GET["msg"]) and $_GET["msg"]==1){?>
 										<p class="text-success">
 											<i class="fa fa-thumbs-up"></i>
 											Muchas gracias por enviar tu opinión! La tendremos en cuenta para seguir mejorando.

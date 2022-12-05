@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
-	if ($_GET["urlDefault"] != "") {
+	if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
 
 		include("modelo/conexion.php");
 		$sesionAbierta = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'", $conexion));
@@ -73,16 +73,11 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 		<div class="form formLogin">
 			<h2>Ingreso al sistema</h2>
 			<form method="post" action="controlador/autentico.php">
-				<input type="hidden" name="urlDefault" value="<?= $_GET["urlDefault"]; ?>" />
+				<input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
 				<div class="form-group row">
 
 					<div class="col-sm-12">
-						<?php
-						$datosConsulta = mysql_query("SELECT * FROM " . $baseDatosServicios . ".general_categorias
-												WHERE gcat_activa=1
-												", $conexion);
-						?>
 						<select class="form-control  select2" name="bd" required onChange="mostrar(this)">
 							<option value="">Seleccione su Institución</option>
 							<option value="1">DEVELOPER</option>

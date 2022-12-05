@@ -1,14 +1,9 @@
 <?php
 include("../modelo/conexion.php");
-$consultaConfig = $conexion->query("SELECT * FROM configuracion WHERE conf_id=1");
-$config = mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
+$config = mysql_fetch_array(mysql_query("SELECT * FROM configuracion WHERE conf_id=1",$conexion));
+$informacion_inst = mysql_fetch_array(mysql_query("SELECT * FROM general_informacion",$conexion));
 
-$consultaInformacionInst = $conexion->query("SELECT * FROM general_informacion");
-$informacion_inst = mysqli_fetch_array($consultaInformacionInst, MYSQLI_BOTH);
-
-$consultaDatosUnicosInstitucion = $baseDatosServicios->query("SELECT * FROM instituciones 
-WHERE ins_id='".$config['conf_id_institucion']."'");
-$datosUnicosInstitucion = mysqli_fetch_array($consultaDatosUnicosInstitucion, MYSQLI_BOTH);
+$datosUnicosInstitucion = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$config['conf_id_institucion']."'",$conexion));
 
 //CONFIGURACIÓN GENERAL
 $opcionSINO = array ("NO","SI");

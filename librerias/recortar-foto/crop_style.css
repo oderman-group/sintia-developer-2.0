@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+body
+{
+	margin:0px;
+	padding:0px;
+}
+#crop_wrapper
+{
+	position:relative;
+	width:800px;
+	height:600px;
+}
+#crop_wrapper img
+{
+	width:800px;
+	height:600px;
+}
+
+#crop_div
+{
+	width:500px;
+	height:500px;
+	border:2px dashed red;
+	position:absolute;
+	top:0px;
+	box-sizing:border-box;
+}
+
