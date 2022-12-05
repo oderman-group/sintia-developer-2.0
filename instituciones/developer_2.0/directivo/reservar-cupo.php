@@ -69,12 +69,6 @@
 																<div class="info">
 																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></div>
 																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajePorGrado;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
 															</div>
 														</div>
 											<?php }?>
@@ -111,7 +105,7 @@
                                                 <tbody>
 													<?php
 													$respuestas = array("","SI","NO");
-													$consulta = mysql_query($SQL." LIMIT $inicio, $limite",$conexion);
+													$consulta = mysql_query($SQL,$conexion);
 													while($resultado = mysql_fetch_array($consulta)){				
 													?>
 													<tr>

@@ -57,17 +57,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
 								<?php
 								$curso = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados WHERE gra_id='".$_POST["curso"]."'",$conexion));
 								$grupo = mysql_fetch_array(mysql_query("SELECT * FROM academico_grupos WHERE gru_id='".$_POST["grupo"]."'",$conexion));
 								?>
 								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Consolidado Final</header>
