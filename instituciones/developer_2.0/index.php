@@ -64,7 +64,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 
 <body>
 	<div class="form-title">
-		<h1>PLATAFORMA SINTIA</h1>
+		<h1>PLATAFORMA SINTIA (EJEMPLO)</h1>
 	</div>
 	<!-- Login Form-->
 	<div class="login-form text-center">
