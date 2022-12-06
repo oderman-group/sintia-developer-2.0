@@ -126,7 +126,7 @@ switch($_SESSION["inst"]){
                                 <li><a href="#cambiar-clave.php"><i class="icon-user"></i> Cambiar contraseña </a></li>
 								
                                 <li class="divider"> </li>
-								<li><a href="https://plataformasintia.com/faq-uso.php" target="_blank"><i class="icon-question"></i> Ayuda </a></li>
+								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i> Ayuda/Soporte </a></li>
                                 <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i> Salir </a></li>
                             </ul>
                         </li>
