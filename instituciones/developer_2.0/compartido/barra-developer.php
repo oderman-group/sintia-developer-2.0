@@ -1,4 +1,9 @@
-<?php if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) || isset($_SESSION['docente']) ){?>
+<?php if( 
+$datosUsuarioActual[3]==1 
+|| isset($_SESSION['admin']) 
+|| isset($_SESSION['docente']) 
+|| isset($_SESSION['acudiente']) 
+){?>
 <div style="
         position:relative;
         background-color: #fbbd01; 
@@ -45,6 +50,17 @@ if( isset($_SESSION['docente']) ){
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
     <b>User Docente:&nbsp;</b> <?=$_SESSION['docente']; ?>&nbsp;|&nbsp;
 		<a href="../compartido/return-docente-panel.php" style="color:white; text-decoration:underline;">VOLVER AL PANEL DOCENTE</a>
+
+<?php }?>
+
+<?php
+/* AUTOLOGIN DE ACUDIENTES */
+if( isset($_SESSION['acudiente']) ){
+?>
+    <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
+    <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
+    <b>User Acudiente:&nbsp;</b> <?=$_SESSION['acudiente']; ?>&nbsp;|&nbsp;
+		<a href="../compartido/return-acudiente-panel.php" style="color:white; text-decoration:underline;">VOLVER AL PANEL ACUDIENTE</a>
 
 <?php }?>
 
