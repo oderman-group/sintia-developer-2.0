@@ -201,6 +201,11 @@
 
 																		  
 																		  <?php }?>
+
+																		  <?php if(!isset($_SESSION['admin'])){?>
+																		  	<li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>">Autologin</a></li>
+																		  <?php }?>
+
 																	  </ul>
 																  </div>
 															<?php
