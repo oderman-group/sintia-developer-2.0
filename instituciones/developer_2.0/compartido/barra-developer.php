@@ -1,10 +1,5 @@
-<?php 
-if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
-  $archivo = explode("/", $_SERVER['PHP_SELF']);
-  $nombre_fichero = $archivo[4];
-?>
-
-	<div style="
+<?php if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) || isset($_SESSION['docente']) ){?>
+<div style="
         position:relative;
         background-color: #fbbd01; 
         color:#000; 
@@ -17,7 +12,14 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
         align-items: center;
         font-family:Arial;
         font-size:16px;
-    ">
+">
+
+<?php 
+if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
+  $archivo = explode("/", $_SERVER['PHP_SELF']);
+  $nombre_fichero = $archivo[4];
+?>
+
     <b>ID Inst:</b>&nbsp;<?php echo $config['conf_id_institucion'];?>&nbsp;|&nbsp;
     <b>Id pagina:</b>&nbsp;<?php echo $idPaginaInterna;?>&nbsp;|&nbsp;
     <b>Archivo de ruta:</b>&nbsp;<?php echo $archivo[4];?>&nbsp;|&nbsp;
@@ -32,6 +34,19 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
 			<a href="../compartido/return-admin-panel.php" style="color:white; text-decoration:underline;">RETURN TO ADMIN PANEL</a>
 		<?php }?>
 
-	</div>
+<?php }?>
 
+
+<?php
+/* AUTOLOGIN DE DOCENTES */
+if( isset($_SESSION['docente']) ){
+?>
+    <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
+    <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
+    <b>User Docente:&nbsp;</b> <?=$_SESSION['docente']; ?>&nbsp;|&nbsp;
+		<a href="../compartido/return-docente-panel.php" style="color:white; text-decoration:underline;">VOLVER AL PANEL DOCENTE</a>
+
+<?php }?>
+
+</div>
 <?php }?>
