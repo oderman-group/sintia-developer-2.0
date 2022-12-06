@@ -72,7 +72,7 @@
 													 WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres",$conexion);
 													 $contReg = 1;
 													 while($resultado = mysql_fetch_array($consulta)){
-														 $genero = mysql_fetch_array(mysql_query("SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'",$conexion));
+														 $genero = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'",$conexion));
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;
 														$periodo = $periodoConsultaActual;
@@ -97,18 +97,22 @@
 														<td><?=$genero[1];?></td>
 														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a></td>
 														<td>
-															<?php if($datosCargaActual['car_director_grupo']==1){?>
-																<div class="btn-group">
+															<div class="btn-group">
 																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
 																	  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
+																		<?php if(!isset($_SESSION['admin'])){?>
+																	  <li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>">Autologin</a></li>
+																	  <?php }?>
+
+															<?php if($datosCargaActual['car_director_grupo']==1){?>
 																		  <li><a href="reportes-lista.php?est=<?=$resultado['mat_id_usuario'];?>&filtros=1">R. Disciplina</a></li>
 																		  <li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
-																	  </ul>
-																  </div>
 															<?php }?>
+															</ul>
+															</div>
 								
 														</td>
                                                     </tr>
