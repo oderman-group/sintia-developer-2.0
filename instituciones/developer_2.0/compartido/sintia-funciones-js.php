@@ -819,11 +819,19 @@ function mostrarModalTerminos(){$("#modalTerminos").modal("show");}
 setTimeout('mostrarModalTerminos()', 2000);
 
 
-	
-/* ACEPTACION DE CONTRATO*/
-function mostrarModalContrato(){$("#modalContrato").modal("show");}
+<?php
 
-setTimeout('mostrarModalContrato()', 2000);
+//Mostrar modal de ACEPTACION DE CONTRATO a DIRECTIVOS
+
+if($datosUsuarioActual['uss_tipo']==5){
+
+?>	
+
+	function mostrarModalContrato(){$("#modalContrato").modal("show");}
+
+	setTimeout('mostrarModalContrato()', 2000);
+
+<?php }?>
 
 
 function axiosAjax(datos){
