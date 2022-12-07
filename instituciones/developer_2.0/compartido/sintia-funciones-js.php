@@ -810,6 +810,11 @@ if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
 
 <?php }?>	
 
+
+/* Mostrar términos y condiciones */
+function mostrarModalTerminos(){$("#modalTerminos").modal("show");}
+
+setTimeout('mostrarModalTerminos()', 2000);
 	
 
 
