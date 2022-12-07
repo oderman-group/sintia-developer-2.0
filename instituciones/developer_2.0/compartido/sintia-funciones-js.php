@@ -819,7 +819,21 @@ function mostrarModalTerminos(){$("#modalTerminos").modal("show");}
 setTimeout('mostrarModalTerminos()', 2000);
 
 
+
+/* Mostrar TRATAMIENTOS DE DATOS */
+function mostrarModalTratamientos(){$("#modalTratamientos").modal("show");}
+
+setTimeout('mostrarModalTratamientos()', 2000);
+
+
+
+/* Mostrar POLITICAS */
+function mostrarModalPoliticas(){$("#modalPoliticas").modal("show");}
+
+setTimeout('mostrarModalPoliticas()', 2000);
 	
+
+
 /* ACEPTACION DE CONTRATO*/
 function mostrarModalContrato(){$("#modalContrato").modal("show");}
 
