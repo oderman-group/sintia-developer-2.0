@@ -1,9 +1,9 @@
 <?php
 //Consultas a la BD
-$terminos= mysql_query("SELECT * FROM terminos_tratamiento_politica WHERE ttp_id=1",$conexion);
+$terminos= mysql_query("SELECT * FROM '".$baseDatosServicios."'.terminos_tratamiento_politica WHERE ttp_id=1",$conexion);
 $datosTerminos = mysql_fetch_array($terminos);
 
-$aceptacion= mysql_query("SELECT * FROM terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."'",$conexion);
+$aceptacion= mysql_query("SELECT * FROM '".$baseDatosServicios."'.terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
 //Condición para mostrar o no el modal
