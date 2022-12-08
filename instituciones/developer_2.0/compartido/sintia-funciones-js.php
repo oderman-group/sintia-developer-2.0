@@ -810,8 +810,28 @@ if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
 
 <?php }?>	
 
-	
 
+
+
+/* Mostrar términos y condiciones */
+function mostrarModalTerminos(){$("#modalTerminos").modal("show");}
+
+setTimeout('mostrarModalTerminos()', 2000);
+
+
+<?php
+
+//Mostrar modal de ACEPTACION DE CONTRATO a DIRECTIVOS
+
+if($datosUsuarioActual['uss_tipo']==5){
+
+?>	
+
+	function mostrarModalContrato(){$("#modalContrato").modal("show");}
+
+	setTimeout('mostrarModalContrato()', 2000);
+
+<?php }?>
 
 
 function axiosAjax(datos){
