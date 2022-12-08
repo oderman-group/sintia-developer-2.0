@@ -1,10 +1,10 @@
 <?php
 //Consultas a la BD
-$aceptacion= mysql_query("SELECT * FROM mobiliar_sintia_admin.contratos_usuarios WHERE cxu_id_usuario='".$idSession."'",$conexion);
-$datosAceptacion = mysql_fetch_array($aceptacion);
-
-$contrato= mysql_query("SELECT * FROM mobiliar_sintia_admin.contratos WHERE cont_id='".$datosAceptacion['cxu_id_contrato']."'",$conexion);
+$contrato= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1",$conexion);
 $datosContrato = mysql_fetch_array($contrato);
+
+$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos_usuarios WHERE cxu_id_contrato='".$datosContrato['cont_id']."'  AND cxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
+$datosAceptacion = mysql_fetch_array($aceptacion);
 
 //Condición para mostrar o no el modal
 if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion']){
@@ -15,7 +15,7 @@ if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_acept
 		  <div class="modal-content">
 			  
 			  <div class="modal-header">
-				<h1 class="modal-title" align="center">Contrato de Licencia</h1>
+				<h1 class="modal-title" align="center"><?=$datosContrato['cont_nombre'];?></h1>
 				<a href="#" data-dismiss="modal" class="btn btn-danger" aria-label="Close" id="boton-cerrar-contrato"><i class="fa fa-window-close"></i></a>
 			  </div>
 			  
@@ -27,7 +27,8 @@ if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_acept
 			  
 			 <div class="modal-footer">
 				<form class="form-horizontal" action="../compartido/modal-contrato-guardar.php" method="post">
-                    <input type="hidden" name="id" value="<?=$datosAceptacion['cxu_id'];?>">
+					<input type="hidden" name="idUsuario" value="<?=$idSession;?>">
+                    <input type="hidden" name="id" value="<?=$datosContrato['cont_id'];?>">
 					<button type="submit" class="btn btn-info">Aceptar Contrato</button>
 				</form>
 		 	 </div>
