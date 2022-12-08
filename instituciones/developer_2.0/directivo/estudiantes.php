@@ -352,7 +352,7 @@
 													 INNER JOIN academico_grados ON gra_id=mat_grado
 													 INNER JOIN academico_grupos ON gru_id=mat_grupo
 													 INNER JOIN usuarios ON uss_id=mat_id_usuario
-													 INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
 													 WHERE mat_eliminado=0 $filtro
 													 ORDER BY mat_primer_apellido
 													 $filtroLimite
