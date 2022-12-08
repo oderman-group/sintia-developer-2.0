@@ -1,9 +1,9 @@
 <?php
 //Consultas a la BD
-$contrato= mysql_query("SELECT * FROM '".$baseDatosServicios."'.contratos WHERE cont_id=1",$conexion);
+$contrato= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1",$conexion);
 $datosContrato = mysql_fetch_array($contrato);
 
-$aceptacion= mysql_query("SELECT * FROM '".$baseDatosServicios."'.contratos_usuarios WHERE cxu_id_contrato='".$datosContrato['cont_id']."'  AND cxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
+$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos_usuarios WHERE cxu_id_contrato='".$datosContrato['cont_id']."'  AND cxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
 //Condición para mostrar o no el modal
