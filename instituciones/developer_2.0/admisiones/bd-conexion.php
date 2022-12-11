@@ -30,7 +30,8 @@ $estadosSolicitud = array(
 	5 => 'EXAMEN Y ENTREVISTA', 
 	6 => 'APROBADO', 
 	7 => 'NO APROBADO',
-	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE'
+	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
+	9 => 'MOVIDO AL AÑO SIGUIENTE'
 );
 $progresoSolicitud = array(
 	1 => '15%', 
@@ -38,7 +39,8 @@ $progresoSolicitud = array(
 	3 => '30%', 
 	4 => '60%',
 	5 => '75%', 
-	6 => '100%',
+	6 => '90%',
 	7 => '100%',
 	8 => '15%',
+	9 => '100%',
 );

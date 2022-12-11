@@ -1,4 +1,12 @@
-<?php //exit(); ?>
+<?php 
+$gradosConsulta = "SELECT * FROM academico_grados
+WHERE gra_estado = :estado";
+$grados = $pdoI->prepare($gradosConsulta);
+$grados->bindParam(':estado', 1, PDO::PARAM_INT);
+$grados->execute();
+$num = $grados->rowCount();
+$datos = $grados->fetch();
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -176,6 +184,8 @@
                         </div>
 
 
+
+
                         <div class="form-group col-md-3">
 
                             <label for="grado">Grado al que aspira</label>
@@ -183,7 +193,11 @@
                             <select id="grado" name="grado" class="form-control" required>
 
                                 <option value="" selected>Escoja una opción...</option>
-                                <option value="12">Pre Jardín A</option>
+                                <?php
+                                while($datos){
+                                ?>
+                                <option value="12"><?php echo $datos['gra_nombre'];?></option>
+                                <?php }?>
                                 <option value="13">Pre Jardín</option>
                                 <option value="14">Jardin</option>
                                 <option value="15">Transición</option>
