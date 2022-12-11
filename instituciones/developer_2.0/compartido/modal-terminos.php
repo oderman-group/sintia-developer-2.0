@@ -6,8 +6,8 @@ $datosTerminos = mysql_fetch_array($terminos);
 $aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
-//Condición para mostrar o no el modal
-if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion']){
+//Condición para mostrar o no el modal de T&C
+if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){
 ?>
 
 <div class="modal fade" id="modalTerminos" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -47,8 +47,8 @@ $datosTerminos = mysql_fetch_array($terminos);
 $aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
-//Condición para mostrar o no el modal
-if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion']){
+//Condición para mostrar o no el modal de TRATAMIENTO DE DATOS
+if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){
 ?>
 
 <div class="modal fade" id="modalTratamientos" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -88,8 +88,8 @@ $datosTerminos = mysql_fetch_array($terminos);
 $aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
-//Condición para mostrar o no el modal
-if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion']){
+//Condición para mostrar o no el modal de POLITICAS
+if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){
 ?>
 
 <div class="modal fade" id="modalPoliticas" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
