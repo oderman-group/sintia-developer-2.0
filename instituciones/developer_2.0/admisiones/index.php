@@ -1,11 +1,11 @@
-<?php 
+<?php
+include("bd-conexion.php");
 $gradosConsulta = "SELECT * FROM academico_grados
-WHERE gra_estado = :estado";
+WHERE gra_estado = 1";
 $grados = $pdoI->prepare($gradosConsulta);
-$grados->bindParam(':estado', 1, PDO::PARAM_INT);
 $grados->execute();
 $num = $grados->rowCount();
-$datos = $grados->fetch();
+$datosGrado = $grados->fetch();
 ?>
 <!DOCTYPE html>
 
@@ -194,25 +194,10 @@ $datos = $grados->fetch();
 
                                 <option value="" selected>Escoja una opción...</option>
                                 <?php
-                                while($datos){
+                                while($datosGrado = $grados->fetch()){
                                 ?>
-                                <option value="12"><?php echo $datos['gra_nombre'];?></option>
+                                    <option value="<?php echo $datosGrado['gra_id'];?>"><?php echo $datosGrado['gra_nombre'];?></option>
                                 <?php }?>
-                                <option value="13">Pre Jardín</option>
-                                <option value="14">Jardin</option>
-                                <option value="15">Transición</option>
-
-                                <option value="1">Primero</option>
-                                <option value="2">Segundo</option>
-                                <option value="3">Tercer</option>
-                                <option value="4">Cuarto</option>
-                                <option value="5">Quinto</option>
-                                <option value="6">Sexto</option>
-                                <option value="7">Séptimo</option>
-                                <option value="8">Octavo</option>
-                                <option value="9">Noveno</option>
-                                <option value="10">Décimo</option>
-                                <option value="11">Undécimo</option>
 
                             </select>
 

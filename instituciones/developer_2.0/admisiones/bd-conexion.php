@@ -1,13 +1,13 @@
 <?php
-$server = 'localhost';
-$user = 'mobiliar';
-$pass = 'M1X32znd9l';
+$server = 'sintia.co';
+$user = 'mobiliar_enuarlara';
+$pass = 'CiUKh?V=_%b(';
 $dbName = 'mobiliar_sintia_admisiones';
 $dbNameInstitucion = 'mobiliar_dev_2022';
 
 try{
 	$pdo = new PDO('mysql:host='.$server.';dbname='.$dbName, $user, $pass);
-    $pdo->exec("SET CHARACTER SET utf-8");
+    //$pdo->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
@@ -15,7 +15,7 @@ try{
 
 try{
 	$pdoI = new PDO('mysql:host='.$server.';dbname='.$dbNameInstitucion, $user, $pass);
-    $pdoI->exec("SET CHARACTER SET utf-8");
+    //$pdoI->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
