@@ -1,6 +1,7 @@
 <?php
-include("../directivo/session.php");
-include("../modelo/conexion.php");
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");
 
     $consultaExistencia= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_termino_tratamiento_politicas='".$_POST["id"]."' AND ttpxu_id_usuario='".$_POST["idUsuario"]."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
     $numDatos = mysql_num_rows($consultaExistencia);
