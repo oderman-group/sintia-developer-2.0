@@ -7,7 +7,7 @@ $aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos_usuari
 $datosAceptacion = mysql_fetch_array($aceptacion);
 
 //Condición para mostrar o no el modal
-if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion']){
+if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion'] and $datosContrato['cont_visible']==='SI'){
 ?>
 
 <div class="modal fade" id="modalContrato" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
