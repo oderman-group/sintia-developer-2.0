@@ -1,13 +1,13 @@
 <?php
-$server = 'localhost';
-$user = 'mobiliar';
-$pass = 'M1X32znd9l';
+$server = 'sintia.co';
+$user = 'mobiliar_enuarlara';
+$pass = 'CiUKh?V=_%b(';
 $dbName = 'mobiliar_sintia_admisiones';
 $dbNameInstitucion = 'mobiliar_dev_2022';
 
 try{
 	$pdo = new PDO('mysql:host='.$server.';dbname='.$dbName, $user, $pass);
-    $pdo->exec("SET CHARACTER SET utf-8");
+    //$pdo->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
@@ -15,7 +15,7 @@ try{
 
 try{
 	$pdoI = new PDO('mysql:host='.$server.';dbname='.$dbNameInstitucion, $user, $pass);
-    $pdoI->exec("SET CHARACTER SET utf-8");
+    //$pdoI->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
@@ -30,7 +30,8 @@ $estadosSolicitud = array(
 	5 => 'EXAMEN Y ENTREVISTA', 
 	6 => 'APROBADO', 
 	7 => 'NO APROBADO',
-	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE'
+	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
+	9 => 'MOVIDO AL AÑO SIGUIENTE'
 );
 $progresoSolicitud = array(
 	1 => '15%', 
@@ -38,7 +39,8 @@ $progresoSolicitud = array(
 	3 => '30%', 
 	4 => '60%',
 	5 => '75%', 
-	6 => '100%',
+	6 => '90%',
 	7 => '100%',
 	8 => '15%',
+	9 => '100%',
 );

@@ -1,4 +1,12 @@
-<?php //exit(); ?>
+<?php
+include("bd-conexion.php");
+$gradosConsulta = "SELECT * FROM academico_grados
+WHERE gra_estado = 1";
+$grados = $pdoI->prepare($gradosConsulta);
+$grados->execute();
+$num = $grados->rowCount();
+$datosGrado = $grados->fetch();
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -176,6 +184,8 @@
                         </div>
 
 
+
+
                         <div class="form-group col-md-3">
 
                             <label for="grado">Grado al que aspira</label>
@@ -183,22 +193,11 @@
                             <select id="grado" name="grado" class="form-control" required>
 
                                 <option value="" selected>Escoja una opción...</option>
-                                <option value="12">Pre Jardín A</option>
-                                <option value="13">Pre Jardín</option>
-                                <option value="14">Jardin</option>
-                                <option value="15">Transición</option>
-
-                                <option value="1">Primero</option>
-                                <option value="2">Segundo</option>
-                                <option value="3">Tercer</option>
-                                <option value="4">Cuarto</option>
-                                <option value="5">Quinto</option>
-                                <option value="6">Sexto</option>
-                                <option value="7">Séptimo</option>
-                                <option value="8">Octavo</option>
-                                <option value="9">Noveno</option>
-                                <option value="10">Décimo</option>
-                                <option value="11">Undécimo</option>
+                                <?php
+                                while($datosGrado = $grados->fetch()){
+                                ?>
+                                    <option value="<?php echo $datosGrado['gra_id'];?>"><?php echo $datosGrado['gra_nombre'];?></option>
+                                <?php }?>
 
                             </select>
 

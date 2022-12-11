@@ -132,7 +132,8 @@
                                                 5 => 'EXAMEN Y ENTREVISTA',
                                                 6 => 'APROBADO',
                                                 7 => 'NO APROBADO',
-                                                8 => 'VERIFICACIÓN DE CUPO DISPONIBLE'
+                                                8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
+                                                9 => 'MOVIDO AL AÑO SIGUIENTE'
                                                 );
                                                 $fondoSolicitud = array(
                                                 1 => 'yellow',
@@ -142,10 +143,11 @@
                                                 5 => 'aquamarine',
                                                 6 => 'green',
                                                 7 => 'red',
-                                                8 => 'yellow'
+                                                8 => 'yellow',
+                                                9 => '#00FAB5'
                                                 );
                                                 $consulta = mysql_query("SELECT * FROM academico_matriculas
-                                                INNER JOIN mobiliar_sintia_admisiones.aspirantes ON asp_id=mat_solicitud_inscripcion
+                                                INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
                                                 LEFT JOIN academico_grados ON gra_id=asp_grado
                                                 WHERE mat_estado_matricula=5 ORDER BY mat_primer_apellido
                                                 ", $conexion);
@@ -169,10 +171,15 @@
                                                             <ul class="dropdown-menu" role="menu">
                                                                 <li><a href="https://plataformasintia.com/instituciones/developer_2.0/admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Ver información</a></li>
                                                                 <li><a href="https://plataformasintia.com/instituciones/developer_2.0/admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Editar</a></li>
+                                                                
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
+                                                                    
                                                                 <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
+
                                                                 <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agno+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agno+1); ?></a></li>
+
                                                                 <?php } ?>
+
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2) { ?>
                                                                 <li><a href="inscripciones-eliminar-aspirante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?')){return false;}">Eliminar aspirante</a></li>
                                                                 <?php } ?>

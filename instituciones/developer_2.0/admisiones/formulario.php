@@ -6,6 +6,15 @@ if (md5($_GET['id']) != $_GET['token']) {
     redireccionMal('respuestas-usuario.php', 4);
 }
 
+//Grados
+$gradosConsulta = "SELECT * FROM academico_grados
+WHERE gra_estado = 1";
+$grados = $pdoI->prepare($gradosConsulta);
+$grados->execute();
+$num = $grados->rowCount();
+$datosGrado = $grados->fetch();
+
+//Estudiante
 $estQuery = "SELECT * FROM academico_matriculas
 LEFT JOIN usuarios ON uss_id=mat_acudiente
 WHERE mat_solicitud_inscripcion = :id";
@@ -305,20 +314,11 @@ $datosMadre = $madre->fetch();
 
                         <option value="">Escoger</option>
 
-                        <option value="13" <?php if ($datos['mat_grado'] == 13) echo "selected"; ?>>Pre-Jardín</option>
-                        <option value="14" <?php if ($datos['mat_grado'] == 14) echo "selected"; ?>>Jardín</option>
-                        <option value="15" <?php if ($datos['mat_grado'] == 15) echo "selected"; ?>>Transición</option>
-                        <option value="1" <?php if ($datos['mat_grado'] == 1) echo "selected"; ?>>Primero</option>
-                        <option value="2" <?php if ($datos['mat_grado'] == 2) echo "selected"; ?>>Segundo</option>
-                        <option value="3" <?php if ($datos['mat_grado'] == 3) echo "selected"; ?>>Tercero</option>
-                        <option value="4" <?php if ($datos['mat_grado'] == 4) echo "selected"; ?>>Cuarto</option>
-                        <option value="5" <?php if ($datos['mat_grado'] == 5) echo "selected"; ?>>Quinto</option>
-                        <option value="6" <?php if ($datos['mat_grado'] == 6) echo "selected"; ?>>Sexto</option>
-                        <option value="7" <?php if ($datos['mat_grado'] == 7) echo "selected"; ?>>Séptimo</option>
-                        <option value="8" <?php if ($datos['mat_grado'] == 8) echo "selected"; ?>>Octavo</option>
-                        <option value="9" <?php if ($datos['mat_grado'] == 9) echo "selected"; ?>>Noveno</option>
-                        <option value="10" <?php if ($datos['mat_grado'] == 10) echo "selected"; ?>>Décimo</option>
-                        <option value="11" <?php if ($datos['mat_grado'] == 11) echo "selected"; ?>>Undécimo</option>
+                        <?php
+                                while($datosGrado = $grados->fetch()){
+                                ?>
+                                    <option value="<?php echo $datosGrado['gra_id'];?>" <?php if ($datos['mat_grado'] == $datosGrado['gra_id']) echo "selected"; ?>><?php echo $datosGrado['gra_nombre'];?></option>
+                                <?php }?>
 
                     </select>
 
