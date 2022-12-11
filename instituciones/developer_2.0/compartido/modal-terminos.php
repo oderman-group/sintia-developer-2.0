@@ -26,7 +26,7 @@ if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_acep
 			 </div>
 			  
 			 <div class="modal-footer">
-			 	<form class="form-horizontal" action="../compartido/modal-Terminos-guardar.php" method="post">
+			 	<form class="form-horizontal" action="../compartido/modal-terminos-guardar.php" method="post">
 					<input type="hidden" name="idUsuario" value="<?=$idSession;?>">
 					<input type="hidden" name="id" value="<?=$datosTerminos['ttp_id'];?>">
 					<button type="submit" class="btn btn-info">Aceptar Terminos</button>
@@ -67,7 +67,7 @@ if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_acep
 			 </div>
 			  
 			 <div class="modal-footer">
-			 	<form class="form-horizontal" action="../compartido/modal-Terminos-guardar.php" method="post">
+			 	<form class="form-horizontal" action="../compartido/modal-terminos-guardar.php" method="post">
 					<input type="hidden" name="idUsuario" value="<?=$idSession;?>">
 					<input type="hidden" name="id" value="<?=$datosTerminos['ttp_id'];?>">
 					<button type="submit" class="btn btn-info">Aceptar Tratamiento de datos</button>
@@ -108,7 +108,7 @@ if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_acep
 			 </div>
 			  
 			 <div class="modal-footer">
-			 	<form class="form-horizontal" action="../compartido/modal-Terminos-guardar.php" method="post">
+			 	<form class="form-horizontal" action="../compartido/modal-terminos-guardar.php" method="post">
 					<input type="hidden" name="idUsuario" value="<?=$idSession;?>">
 					<input type="hidden" name="id" value="<?=$datosTerminos['ttp_id'];?>">
 					<button type="submit" class="btn btn-info">Aceptar Politicas</button>
