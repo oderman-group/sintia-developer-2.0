@@ -62,7 +62,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 
                                 <?php
                                 $ext='';
-                                if($_SESSION["inst"]=='mobiliar_innovadores'){
+                                if($config['conf_id_institucion'] == 20){
                                     $ext='-2';
                                 }
                                 ?>

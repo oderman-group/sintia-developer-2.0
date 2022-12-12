@@ -1,12 +1,5 @@
 <?php 
-$servidorConexion = 'localhost';
-$usuarioConexion = 'mobiliar';
-$claveConexion = 'M1X32znd9l';
-
-//Conexion con el Servidor
-$conexion = mysql_connect($servidorConexion, $usuarioConexion, $claveConexion);
-//seleccionamos la base de datos
-mysql_select_db("mobiliar_ict_2019", $conexion);
+//Consulta
 ?>
 
 <?php

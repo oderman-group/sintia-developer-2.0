@@ -177,11 +177,11 @@
 																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>">R. Disciplina</a></li>
 																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
 																		  
-																		  <?php if($_SESSION["inst"]=='mobiliar_maxtrummer'){?>
+																		  <?php if($config['conf_id_institucion'] == 9){?>
 																		  <li><a href="../../../maxtrummer/compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 																		  <?php }?>
 																		  
-																		  <?php if($_SESSION["inst"]=='mobiliar_icolven'){
+																		  <?php if($config['conf_id_institucion'] == 1){
 																			  
 																			if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																			?>

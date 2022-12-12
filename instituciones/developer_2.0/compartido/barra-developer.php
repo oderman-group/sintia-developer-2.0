@@ -23,8 +23,14 @@ $datosUsuarioActual[3]==1
 if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
   $archivo = explode("/", $_SERVER['PHP_SELF']);
   $nombre_fichero = $archivo[4];
+
+  $lines = file('../../../.git/HEAD');
+  foreach ($lines as $line_num => $line) {
+  }
+  $ramaActual = substr($line, 16);
 ?>
 
+    <b>Rama actual GIT:</b>&nbsp;<?php echo $ramaActual;?>&nbsp;|&nbsp;
     <b>ID Inst:</b>&nbsp;<?php echo $config['conf_id_institucion'];?>&nbsp;|&nbsp;
     <b>Id pagina:</b>&nbsp;<?php echo $idPaginaInterna;?>&nbsp;|&nbsp;
     <b>Archivo de ruta:</b>&nbsp;<?php echo $archivo[4];?>&nbsp;|&nbsp;

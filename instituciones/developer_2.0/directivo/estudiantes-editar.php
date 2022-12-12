@@ -119,7 +119,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-2">
 													<?php
-													$opcionesConsulta = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales
+													$opcionesConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales
 													WHERE ogen_grupo=1
 													",$conexion);
 													?>
@@ -146,8 +146,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 													<select class="form-control  select2" name="lugarD">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM mobiliar_sintia_admin.localidad_ciudades
-														INNER JOIN mobiliar_sintia_admin.localidad_departamentos ON dep_id=ciu_departamento 
+														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
 														ORDER BY ciu_nombre
 														",$conexion);
 														while($opg = mysql_fetch_array($opcionesG)){
@@ -218,8 +218,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 													<select class="form-control  select2" name="lNac">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM mobiliar_sintia_admin.localidad_ciudades
-														INNER JOIN mobiliar_sintia_admin.localidad_departamentos ON dep_id=ciu_departamento 
+														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
 														ORDER BY ciu_nombre
 														",$conexion);
 														while($opg = mysql_fetch_array($opcionesG)){
@@ -233,7 +233,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Genero</label>
 												<?php
-												$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4",$conexion);
+												$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
 												?>
 												<div class="col-sm-4">
 													<select class="form-control  select2" name="genero">
@@ -285,7 +285,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Religi&oacute;n</label>
 												<?php
-												$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=2",$conexion);
+												$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2",$conexion);
 												?>
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="religion">
@@ -316,8 +316,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 													<select class="form-control  select2" name="ciudadR">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM mobiliar_sintia_admin.localidad_ciudades
-														INNER JOIN mobiliar_sintia_admin.localidad_departamentos ON dep_id=ciu_departamento 
+														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
 														ORDER BY ciu_nombre ",$conexion);
 														while($opg = mysql_fetch_array($opcionesG)){
 														$selected='';
@@ -336,7 +336,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estrato</label>
 												<?php
-												$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=3",$conexion);
+												$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3",$conexion);
 												?>
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="estrato">
@@ -559,7 +559,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Tipo estudiante</label>
 												<div class="col-sm-4">
 													<?php
-													$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=5",$conexion);
+													$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5",$conexion);
 													?>
 													<select class="form-control" name="tipoEst">
 														<option value="">Seleccione una opción</option>
@@ -628,7 +628,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-3">
 													<?php
-													$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=1",$conexion);
+													$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=1",$conexion);
 													?>
 													<select class="form-control" name="tipoDAcudiente">
 														<?php while($o = mysql_fetch_array($op)){
@@ -652,8 +652,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 													<select class="form-control" name="lugardA">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM mobiliar_sintia_admin.localidad_ciudades
-														INNER JOIN mobiliar_sintia_admin.localidad_departamentos ON dep_id=ciu_departamento 
+														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
 														ORDER BY ciu_nombre
 														",$conexion);
 														while($opg = mysql_fetch_array($opcionesG)){
@@ -697,7 +697,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
 													<?php
-													$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4",$conexion);
+													$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
 													?>
 													<select class="form-control" name="generoA">
 														<option value="">Seleccione una opción</option>
@@ -723,7 +723,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-3">
 													<?php
-													$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=1",$conexion);
+													$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=1",$conexion);
 													?>
 													<select class="form-control" name="tipoDAcudiente2">
 														<?php while($o = mysql_fetch_array($op)){
@@ -747,8 +747,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 													<select class="form-control" name="lugardA2">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM mobiliar_sintia_admin.localidad_ciudades
-														INNER JOIN mobiliar_sintia_admin.localidad_departamentos ON dep_id=ciu_departamento 
+														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
 														ORDER BY ciu_nombre
 														",$conexion);
 														while($opg = mysql_fetch_array($opcionesG)){
@@ -792,7 +792,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
 													<?php
-													$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4",$conexion);
+													$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
 													?>
 													<select class="form-control" name="generoA2">
 														<option value="">Seleccione una opción</option>

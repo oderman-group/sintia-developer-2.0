@@ -110,7 +110,7 @@ if(mysql_errno()!=0){echo mysql_error(); exit();}
                                                 <option value=""></option>
                                                 <?php 
                                                 //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
-                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=5;",$conexion);
+                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5;",$conexion);
                                                 while($r_testudiante=mysql_fetch_array($c_testudiante)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -169,7 +169,7 @@ if(mysql_errno()!=0){echo mysql_error(); exit();}
                                                 <select class="form-control  select2" name="generoR">
                                                 <option value=""></option>
                                                 <?php 
-                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4;",$conexion);
+                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4;",$conexion);
                                                 while($r_testudiante=mysql_fetch_array($c_testudiante)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -184,7 +184,7 @@ if(mysql_errno()!=0){echo mysql_error(); exit();}
                                                 <select class="form-control  select2" name="religionR">
                                                 <option value=""></option>
                                                 <?php 
-                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=2;",$conexion);
+                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2;",$conexion);
                                                 while($r_testudiante=mysql_fetch_array($c_testudiante)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -200,7 +200,7 @@ if(mysql_errno()!=0){echo mysql_error(); exit();}
                                                 <option value=""></option>
                                                 <?php 
                                                 //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
-                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=3;",$conexion);
+                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3;",$conexion);
                                                 while($r_testudiante=mysql_fetch_array($c_testudiante)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -216,7 +216,7 @@ if(mysql_errno()!=0){echo mysql_error(); exit();}
                                                 <option value=""></option>
                                                 <?php 
                                                 //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
-                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=1;",$conexion);
+                                                    $c_testudiante=mysql_query("SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=1;",$conexion);
                                                 while($r_testudiante=mysql_fetch_array($c_testudiante)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
