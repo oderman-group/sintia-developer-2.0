@@ -6,13 +6,6 @@ $institucionConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instit
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 $institucion = mysql_fetch_array($institucionConsulta);
 
-// switch($_POST["bd"]){
-// 	case 1: $institucion = 'mobiliar_dev'; break;
-		
-// 	default:
-// 		$institucion = 'mobiliar_dev';
-// 	break;	
-// }
 $_SESSION["inst"] = $institucion['ins_bd'];
 
 if(isset($_POST["agnoIngreso"]) and is_numeric($_POST["agnoIngreso"])){
