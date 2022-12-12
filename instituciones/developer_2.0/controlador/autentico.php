@@ -1,19 +1,25 @@
 <?php 
 session_start();
-switch($_POST["bd"]){
-	case 1: $institucion = 'mobiliar_dev'; break;
+include("../../../conexion-datos.php");
+$conexion = mysql_connect($servidorConexion, $usuarioConexion, $claveConexion);
+$institucionConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST["bd"]."'",$conexion);
+if(mysql_errno()!=0){echo mysql_error(); exit();}
+$institucion = mysql_fetch_array($institucionConsulta);
+
+// switch($_POST["bd"]){
+// 	case 1: $institucion = 'mobiliar_dev'; break;
 		
-	default:
-		$institucion = 'mobiliar_dev';
-	break;	
-}
-$_SESSION["inst"] = $institucion;
+// 	default:
+// 		$institucion = 'mobiliar_dev';
+// 	break;	
+// }
+$_SESSION["inst"] = $institucion['ins_bd'];
+
 if(isset($_POST["agnoIngreso"]) and is_numeric($_POST["agnoIngreso"])){
 	$_SESSION["bd"] = $_POST["agnoIngreso"];
 }else{
 	$_SESSION["bd"] = date("Y");
 }
-
 
 include("../modelo/conexion.php");
 
@@ -34,7 +40,7 @@ if($posC or $possC){
 
 $rst_usrE = mysql_query("SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
 WHERE uss_usuario='".trim(mysql_real_escape_string($_POST["Usuario"]))."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL",$conexion);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+if(mysql_errno()!=0){echo "44". mysql_error(); exit();}
 $numE = mysql_num_rows($rst_usrE);
 if($numE==0){
 	header("Location:../index.php?error=1");
