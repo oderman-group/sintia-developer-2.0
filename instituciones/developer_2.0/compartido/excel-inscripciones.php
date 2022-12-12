@@ -35,7 +35,7 @@ $fondoSolicitud = array(
 );
 
 $consulta = mysql_query("SELECT * FROM academico_matriculas
-INNER JOIN mobiliar_sintia_admisiones.aspirantes ON asp_id=mat_solicitud_inscripcion
+INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
   WHERE mat_estado_matricula=5 ORDER BY mat_primer_apellido
   ", $conexion);
 ?>

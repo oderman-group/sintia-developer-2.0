@@ -186,7 +186,7 @@
 													<select class="form-control  select2" name="genero">
 														<option value="">Seleccione una opción</option>
 														<?php
-										  				$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4",$conexion);
+										  				$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
 														while($opg = mysql_fetch_array($op)){
 														?>
 															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
@@ -235,7 +235,7 @@
 													<select class="form-control  select2" name="religion">
 														<option value="">Seleccione una opción</option>
 														<?php
-										  				$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=2",$conexion);
+										  				$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2",$conexion);
 														while($opg = mysql_fetch_array($op)){
 														?>
 															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
@@ -279,7 +279,7 @@
 													<select class="form-control  select2" name="estrato">
 														<option value="">Seleccione una opción</option>
 														<?php
-															$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=3",$conexion);
+															$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3",$conexion);
 														while($opg = mysql_fetch_array($op)){
 														?>
 															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
@@ -461,7 +461,7 @@
 													<select class="form-control" name="generoA">
 														<option value="">Seleccione una opción</option>
 														<?php
-															$op = mysql_query("SELECT * FROM mobiliar_sintia_admin.opciones_generales WHERE ogen_grupo=4",$conexion);
+															$op = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
 														while($opg = mysql_fetch_array($op)){
 														?>
 															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
