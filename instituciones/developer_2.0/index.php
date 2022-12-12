@@ -38,6 +38,9 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 		exit();
 	}
 }
+include("../../conexion-datos.php");
+$conexion = mysql_connect($servidorConexion, $usuarioConexion, $claveConexion);
+$institucionesConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1",$conexion);
 ?>
 <!DOCTYPE html>
 <html>
@@ -64,7 +67,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 
 <body>
 	<div class="form-title">
-		<h1>PLATAFORMA SINTIA (EJEMPLO)</h1>
+		<h1>PLATAFORMA SINTIA</h1>
 	</div>
 	<!-- Login Form-->
 	<div class="login-form text-center">
@@ -80,7 +83,12 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 					<div class="col-sm-12">
 						<select class="form-control  select2" name="bd" required onChange="mostrar(this)">
 							<option value="">Seleccione su Institución</option>
-							<option value="1">DEVELOPER</option>
+							<?php
+							while($instituciones = mysql_fetch_array($institucionesConsulta)){
+							?>
+								<option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
+							<?php }?>
+							
 
 						</select>
 					</div>

@@ -4,29 +4,10 @@ if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 }
-switch($_SESSION["inst"]){
-	case "mobiliar_icolven": $institucionNombre = 'ICOLVEN'; break;
-	case "mobiliar_coalst": $institucionNombre = 'COALST'; break;
-	case "mobiliar_eduardoortega": $institucionNombre = 'E.O. NIQUÍA'; break;
-	case "mobiliar_cemped": $institucionNombre = 'CEMPED'; break;
-	case "mobiliar_maxtrummer": $institucionNombre = 'MAXTRUMMER'; break;
-	case "mobiliar_eoa_lacamila": $institucionNombre = 'E.O. LA CAMILA'; break;
-	case "mobiliar_eoa_altosoriente": $institucionNombre = 'E.O. A. ORIENTE'; break;
-	case "mobiliar_eoa_paris": $institucionNombre = 'E.O. PARIS'; break;
-	case "mobiliar_eoa_pinar": $institucionNombre = 'E.O. PINAR'; break;
-	case "mobiliar_eoa_srita": $institucionNombre = 'E.O. S. RITA'; break;
-	case "mobiliar_ict": $institucionNombre = 'IC&amp;T'; break;		
-    case "mobiliar_sintiademo": $institucionNombre = 'DEMO'; break;
-    case "mobiliar_ellenkey": $institucionNombre = 'ELLEN KEY'; break;	
-    case "mobiliar_jose_antonio": $institucionNombre = 'JOSE ANTONIO'; break;
-    case "mobiliar_redencion": $institucionNombre = 'REDENCIÓN'; break;
-    case "mobiliar_innovadores": $institucionNombre = 'L.I.G. INNOVADORES'; break;
-    case "mobiliar_dev": $institucionNombre = 'DEVELOPER'; break;
-		
-	default:
-		$institucionNombre = 'DESC.';
-	break;	
-}
+$institucionConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$_SESSION["inst"]."'",$conexion);
+if(mysql_errno()!=0){echo mysql_error(); exit();}
+$institucion = mysql_fetch_array($institucionConsulta);
+$institucionNombre = $institucion['ins_siglas'];
 ?>
 
 
