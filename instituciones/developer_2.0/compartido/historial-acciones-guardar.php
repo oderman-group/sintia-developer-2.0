@@ -21,7 +21,7 @@ $paginaActualUsuario = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatos
 INNER JOIN ".$baseDatosServicios.".instituciones_modulos ON ipmod_modulo=pagp_modulo
 WHERE pagp_id='".$idPaginaInterna."'",$conexion));
 
-if(false and $paginaActualUsuario[0]==""){
+if($paginaActualUsuario[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=302&idPagina='.$idPaginaInterna.'";</script>';
 	exit();	
 }
