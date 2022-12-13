@@ -15,8 +15,8 @@ if(isset($_POST["id"])){
 <?php
 //SOLICITUD DE DESBLOQUEO
 if($_POST["id"]==1){	
-	mysql_query("INSERT INTO general_solicitudes(soli_id_recurso, soli_remitente, soli_fecha, soli_mensaje, soli_estado, soli_tipo)
-	VALUES('".$_POST["idRecurso"]."', '".$_SESSION["id"]."', now(), '".$_POST["contenido"]."', 1, 1)",$conexion);
+	mysql_query("INSERT INTO ".$baseDatosServicios.".general_solicitudes(soli_id_recurso, soli_remitente, soli_fecha, soli_mensaje, soli_estado, soli_tipo, soli_institucion)
+	VALUES('".$_POST["idRecurso"]."', '".$_SESSION["id"]."', now(), '".$_POST["contenido"]."', 1, 1, '".$config['conf_id_institucion']."')",$conexion);
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=110";</script>';
 	exit();
