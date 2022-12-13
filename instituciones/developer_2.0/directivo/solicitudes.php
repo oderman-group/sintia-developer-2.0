@@ -31,9 +31,10 @@
                         <div class="col-md-12">
                             <div class="row">
 								<?php
-									$SQL = "SELECT * FROM general_solicitudes 
-									INNER JOIN usuarios ON uss_id=soli_remitente
-									INNER JOIN academico_matriculas ON mat_id_usuario=soli_id_recurso
+									$SQL = "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
+									LEFT JOIN usuarios ON uss_id=soli_remitente
+									LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+                                    WHERE soli_institucion='".$config['conf_id_institucion']."'
 									";
 								?>
 								
