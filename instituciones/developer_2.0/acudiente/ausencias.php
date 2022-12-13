@@ -1,4 +1,5 @@
 <?php include("session.php");?>
+<?php $idPaginaInterna = 'AC0016'; ?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 </head>

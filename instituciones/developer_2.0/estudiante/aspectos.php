@@ -1,7 +1,7 @@
 <?php include("session.php"); ?>
 <?php include("verificar-usuario.php"); ?>
 <?php include("verificar-sanciones.php"); ?>
-<?php $idPaginaInterna = 110; ?>
+<?php $idPaginaInterna = 'ES0050'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php include("verificar-carga.php"); ?>
 <?php include("../compartido/head.php"); ?>

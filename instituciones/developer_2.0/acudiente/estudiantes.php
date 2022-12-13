@@ -1,6 +1,6 @@
 <?php include("session.php");?>
 <?php //include("verificar-sanciones.php");?>
-<?php $idPaginaInterna = 29;?>
+<?php $idPaginaInterna = 'AC0005';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->

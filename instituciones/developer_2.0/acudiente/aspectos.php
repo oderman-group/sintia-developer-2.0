@@ -1,7 +1,7 @@
 <?php include("session.php"); ?>
 <?php include("../estudiante/verificar-usuario.php");?>
 <?php //include("verificar-sanciones.php"); ?>
-<?php $idPaginaInterna = 110; ?>
+<?php $idPaginaInterna = 'AC0015'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php //include("verificar-carga.php"); ?>
 <?php include("../compartido/head.php"); ?>
