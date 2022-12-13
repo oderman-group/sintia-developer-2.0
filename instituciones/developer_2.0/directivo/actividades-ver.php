@@ -1,4 +1,5 @@
 <?php include("session.php");?>
+<?php $idPaginaInterna = 'DT0013';?>
 <?php include("../compartido/head.php");?>
 </head>
 <!-- END HEAD -->

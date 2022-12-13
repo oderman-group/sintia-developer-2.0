@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 1;?>
+<?php $idPaginaInterna = 'DT0030';?>
 <?php
 if(isset($_POST["cambiar"]))
 {

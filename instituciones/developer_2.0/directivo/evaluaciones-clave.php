@@ -1,4 +1,5 @@
 <?php include("session.php");?>
+<?php $idPaginaInterna = 'DT0091';?>
 <?php include("verificar-carga.php");?>
 <!DOCTYPE html>
 <html>

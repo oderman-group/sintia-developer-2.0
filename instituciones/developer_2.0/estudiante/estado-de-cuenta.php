@@ -1,6 +1,6 @@
 <?php include("session.php");?>
 <?php include("verificar-usuario.php");?>
-<?php $idPaginaInterna = 44;?>
+<?php $idPaginaInterna = 'ES0012';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->

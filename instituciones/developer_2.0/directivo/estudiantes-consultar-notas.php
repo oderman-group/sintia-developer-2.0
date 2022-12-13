@@ -23,7 +23,7 @@ if(isset($_POST["consultas"])){
 }
 ?>
 <?php include("session.php");?>
-<?php $idPaginaInterna = 1;?>
+<?php $idPaginaInterna = 'DT0079';?>
 <?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>

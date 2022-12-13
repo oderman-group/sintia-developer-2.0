@@ -1,6 +1,6 @@
 <?php include("session.php"); ?>
 
-<?php $idPaginaInterna = 111; ?>
+<?php $idPaginaInterna = 'DC0079'; ?>
 
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 

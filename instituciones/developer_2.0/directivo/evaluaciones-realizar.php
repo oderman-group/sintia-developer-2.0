@@ -1,4 +1,5 @@
 <?php include("session.php");?>
+<?php $idPaginaInterna = 'DT0088';?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <script type="text/javascript">

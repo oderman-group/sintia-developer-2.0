@@ -1,4 +1,5 @@
 <?php include("session.php");?>
+<?php $idPaginaInterna = 'AC0022';?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
     <link href="../../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>

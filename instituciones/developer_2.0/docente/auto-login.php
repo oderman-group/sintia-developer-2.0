@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+$idPaginaInterna = 'DC0065';
 
 $_SESSION['docente'] = $_SESSION['id'];
 

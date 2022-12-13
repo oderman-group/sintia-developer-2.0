@@ -4,7 +4,7 @@ $_SESSION["bd"] = date("Y");
 ?>
 <?php include("verificar-usuario.php");?>
 <?php include("verificar-sanciones.php");?>
-<?php $idPaginaInterna = 42;?>
+<?php $idPaginaInterna = 'ES0010';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php
 if(isset($_GET["carga"]) and $_GET["carga"]!="" and is_numeric($_GET["carga"])){
