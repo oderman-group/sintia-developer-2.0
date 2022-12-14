@@ -29,9 +29,9 @@ $institucionNombre = $institucion['ins_siglas'];
 				
 				<?php //include("mega-menu.php");?>
 				
-                 <form class="search-form-opened" action="#" method="GET">
+                 <form class="search-form-opened" action="paginas-buscador.php" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="<?=$frases[8][$datosUsuarioActual[8]];?>..." name="query">
+                        <input type="text" class="form-control" placeholder="<?=$frases[8][$datosUsuarioActual[8]];?>..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
                         <span class="input-group-btn">
                           <a href="javascript:;" class="btn submit">
                              <i class="icon-magnifier"></i>
