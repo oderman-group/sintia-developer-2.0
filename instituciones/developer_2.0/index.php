@@ -51,7 +51,7 @@ $institucionesConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".inst
 	<meta content="width=device-width, initial-scale=1" name="viewport" />
 	<meta name="description" content="Responsive Admin Template" />
 	<meta name="author" content="SmartUniversity" />
-	<title>Plataforma educativa SINTIA | Login </title>
+	<title>Plataforma Educativa SINTIA | Login </title>
 	<!-- google font -->
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
 	<!-- icons -->
