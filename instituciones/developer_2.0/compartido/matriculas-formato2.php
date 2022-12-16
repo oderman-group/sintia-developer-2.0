@@ -5,7 +5,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 }
 ?>
 <?php include("../../../config-general/config.php");?>
-<?php include("../modelo/conexion.php");?>
+<?php include("../directivo/session.php");?>
 <?php include("../head.php");?>
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">

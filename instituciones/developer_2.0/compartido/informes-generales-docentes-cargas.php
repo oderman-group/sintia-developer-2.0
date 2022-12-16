@@ -1,5 +1,7 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("../../../config-general/config.php");?>
+<?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");?>
 <?php
 $filtro = '';
 if(is_numeric($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}

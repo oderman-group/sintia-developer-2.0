@@ -1,5 +1,7 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("../compartido/config.php");?>
+<?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");?>
 <head>
 	<title>SINTIA | Usuarios</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

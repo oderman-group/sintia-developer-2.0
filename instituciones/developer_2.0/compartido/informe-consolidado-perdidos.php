@@ -1,6 +1,7 @@
 <?php
-	include("../modelo/conexion.php");
-	include("../../../config-general/config.php");
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");
 ?>
 <head>
 	<title>SINTIA | Defintivas del año</title>
