@@ -5,7 +5,7 @@ if($_SERVER['HTTP_REFERER']==""){
 }
 ?>
 <?php include("../../../config-general/config.php");?>
-<?php include("../modelo/conexion.php");?>
+<?php include("../directivo/session.php");?>
 <?php include("../head.php");?>
 <style>
 #saltoPagina

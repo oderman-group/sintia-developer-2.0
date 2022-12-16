@@ -1,4 +1,4 @@
-<?php include("../modelo/conexion.php");?>
+<?php include("../directivo/session.php");?>
 <?php include("../../../config-general/config.php");?>
 
 <?php

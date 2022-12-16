@@ -4,7 +4,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 	exit();
 }
 
-include("../modelo/conexion.php");
+include("../directivo/session.php");
 include("../../../config-general/config.php");
 include("head.php");
 ?>

@@ -4,7 +4,10 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 	exit();
 }
 ?>
-<?php include("../modelo/conexion.php");?>
+<?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");?>
 <?php include("../head.php");?>
   <style type="text/css">
   @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
