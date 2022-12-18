@@ -1,6 +1,7 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("../../../config-general/config.php");?>
 <?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");
 $resultado = mysql_fetch_array(mysql_query("SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'",$conexion));
 $grados = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$resultado[6]."' AND gru_id='".$resultado[7]."'",$conexion));
 ?>

@@ -8,4 +8,5 @@ $datosUnicosInstitucion = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDa
 //CONFIGURACIÓN GENERAL
 $opcionSINO = array ("NO","SI");
 $mesesAgno = array("","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE");
+$opcionEstado = array("INACTIVO", "ACTIVO");
 ?>

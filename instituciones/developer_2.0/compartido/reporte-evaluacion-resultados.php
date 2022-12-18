@@ -1,5 +1,7 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("../compartido/config.php");?>
+<?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");?>
 <?php
 $datosGenerales = mysql_fetch_array(mysql_query("SELECT * FROM general_evaluacion_asignar 
 INNER JOIN general_evaluaciones ON evag_id=epag_id_evaluacion

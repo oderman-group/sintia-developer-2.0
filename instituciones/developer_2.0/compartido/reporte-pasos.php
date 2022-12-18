@@ -1,6 +1,7 @@
-<?php include("../modelo/conexion.php"); ?>
-<?php include("../../../config-general/config.php");?>
 <?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");
 /*
  $conf_reporte=mysql_query("SELECT * FROM configuracion WHERE conf_id=2",$conexion);
   $num_config_reporte=mysql_num_rows($conf_reporte);

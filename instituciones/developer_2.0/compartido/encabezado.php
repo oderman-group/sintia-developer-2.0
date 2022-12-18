@@ -29,11 +29,12 @@ $institucionNombre = $institucion['ins_siglas'];
 				
 				<?php //include("mega-menu.php");?>
 				
-                 <form class="search-form-opened" action="paginas-buscador.php" method="GET">
+                 <form class="search-form-opened" action="paginas-buscador.php" method="GET" name="busqueda">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="<?=$frases[8][$datosUsuarioActual[8]];?>..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
                         <span class="input-group-btn">
-                          <a href="javascript:;" class="btn submit">
+                        <span class="input-group-btn">
+                          <a href="javascript:;" onclick="document.forms.busqueda.submit()" class="btn submit">
                              <i class="icon-magnifier"></i>
                            </a>
                         </span>

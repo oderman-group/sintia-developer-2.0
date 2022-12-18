@@ -1,6 +1,7 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("../compartido/config.php");?>
 <?php
+session_start();
+include("../../../config-general/config.php");
+include("../../../config-general/consulta-usuario-actual.php");
 switch($_POST["documento"]){
 	case 1: $titulo = "CONTRATO DE PRESTACIÓN DE SERVICIO EDUCATIVO"; break;
 	case 2: $titulo = "COLEGIO CELCO DEL MPIO DE PAZ DE ARIPORO"; break;
