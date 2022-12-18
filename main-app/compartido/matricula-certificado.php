@@ -1,3 +1,4 @@
+<?php include("../directivo/session.php");?>
 <?php include("../../config-general/config.php");?>
 
 <?php
@@ -54,7 +55,6 @@ $modulo = 1;
 
 $horas[0]='CERO'; $horas[1]='UNO'; $horas[2]='DOS'; $horas[3]='TRES'; $horas[4]='CUATRO'; $horas[5]='CINCO'; $horas[6]='SEIS'; $horas[7]='SIETE'; $horas[8]='OCHO'; $horas[9]='NUEVE'; $horas[10]='DIEZ'; 
 
-$conexion = mysql_connect("localhost","odermanc","4dYw19e1eL");
 
 $restaAgnos = ($_POST["hasta"]-$_POST["desde"])+1;
 
