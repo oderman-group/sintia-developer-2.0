@@ -59,8 +59,8 @@ Código DANE 368235800001-- NIT 32.858.419-1<br><br>
 $meses = array(" ","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 $horas[0]='CERO'; $horas[1]='UNO'; $horas[2]='DOS'; $horas[3]='TRES'; $horas[4]='CUATRO'; $horas[5]='CINCO'; $horas[6]='SEIS'; $horas[7]='SIETE'; $horas[8]='OCHO'; $horas[9]='NUEVE'; $horas[10]='DIEZ'; 
 
-//$conexion = mysql_connect("ftp.oderman.com.co","odermanc","4dYw19e1eL");
-$conexion = mysql_connect("localhost","mobiliar","M1X32znd9l");
+inlude("../../conexion-datos.php");
+$conexion = mysql_connect($servidorConexion,$usuarioConexion,$claveConexion);
 
 $restaAgnos = ($_POST["hasta"]-$_POST["desde"])+1;
 
