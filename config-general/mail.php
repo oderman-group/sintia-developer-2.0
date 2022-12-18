@@ -1,5 +1,5 @@
 <?php
-include("../../../conexion.php");
+include("../../conexion.php");
 $datosEmpresa = mysql_fetch_array(mysql_query("SELECT * FROM datos_contacto WHERE dtc_id=1",$conexion));
 
 //echo "Envia: ".$datosEmpresa['dtc_clave_email'];
