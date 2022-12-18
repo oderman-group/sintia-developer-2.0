@@ -1,8 +1,9 @@
 <?php
-$server = 'sintia.co';
-$user = 'mobiliar_enuarlara';
-$pass = 'CiUKh?V=_%b(';
-$dbName = 'mobiliar_sintia_admisiones';
+include("../../conexion-datos.php");
+$server = $servidorConexion;
+$user = $usuarioConexion;
+$pass = $claveConexion;
+$dbName = $baseDatosAdmisiones;
 $dbNameInstitucion = 'mobiliar_dev_2022';
 
 try{

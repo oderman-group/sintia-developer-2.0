@@ -7,7 +7,8 @@ if($permisoDeEjecucion != 2609){
 	exit();
 }
 
-$conexion = mysql_connect("localhost","mobiliar","M1X32znd9l");
+inlude("../../conexion-datos.php");
+$conexion = mysql_connect($servidorConexion,$usuarioConexion,$claveConexion);
 
 //FOLIO 
 #Penultimo uso: 09 de Agosto de 2021
