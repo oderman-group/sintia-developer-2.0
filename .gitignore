@@ -1,1 +1,10 @@
 conexion-datos.php
+main-app/error_log
+main-app/directivo/error_log
+main-app/docente/error_log
+main-app/acudiente/error_log
+main-app/estudiante/error_log
+main-app/compartido/error_log
+main-app/modelo/error_log
+main-app/controlador/error_log
+main-app/admisiones/error_log
