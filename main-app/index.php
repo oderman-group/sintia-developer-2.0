@@ -39,8 +39,8 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 	}
 }
 include("../conexion-datos.php");
-$conexion = mysql_connect($servidorConexion, $usuarioConexion, $claveConexion);
-$institucionesConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1",$conexion);
+$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
 ?>
 <!DOCTYPE html>
 <html>
@@ -84,7 +84,7 @@ $institucionesConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".inst
 						<select class="form-control  select2" name="bd" required onChange="mostrar(this)">
 							<option value="">Seleccione su Institución</option>
 							<?php
-							while($instituciones = mysql_fetch_array($institucionesConsulta)){
+							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
 							?>
 								<option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
 							<?php }?>
