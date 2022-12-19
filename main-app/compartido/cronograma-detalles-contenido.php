@@ -1,5 +1,5 @@
 <?php
-$datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_cronograma WHERE cro_id='".$_GET["idR"]."'",$conexion));
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
 ?>
 <div class="page-content">
                     <div class="page-bar">

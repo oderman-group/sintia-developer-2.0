@@ -1,5 +1,5 @@
 <?php
-$infoIdPagina = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$idPaginaInterna."'",$conexion));
+$infoIdPagina = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$idPaginaInterna."'"), MYSQLI_BOTH);
 ?>
 
 <div id="noInternet" style="margin-bottom: 10px; margin-top: 10px; padding: 5px; background-color: red; color: white; width: 100%; display: none;">
@@ -28,22 +28,22 @@ $infoIdPagina = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServici
 
 
 <?php
-$numOP = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
+$numOP = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 WHERE pubxub_ubicacion=4 AND pubxub_id_institucion='".$config['conf_id_institucion']."' AND pubxub_id_pagina='".$idPaginaInterna."'
-",$conexion));
+"));
 $numOP --;
 $empezar = rand(0,$numOP);
 
-$publicidadTop = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
+$publicidadTop = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 WHERE pubxub_ubicacion=4 AND pubxub_id_institucion='".$config['conf_id_institucion']."' AND pubxub_id_pagina='".$idPaginaInterna."'
 LIMIT ".$empezar.",1
-",$conexion));
+"), MYSQLI_BOTH);
 ?>
 <?php if($publicidadTop['pubxub_id']!=""){
-	mysql_query("INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
-	VALUES('".$publicidadTop['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 4, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)",$conexion);
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
+	VALUES('".$publicidadTop['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 4, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 ?>
 	<div align="center">

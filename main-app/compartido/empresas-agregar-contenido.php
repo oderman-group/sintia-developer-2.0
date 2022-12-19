@@ -36,8 +36,8 @@
 												<div class="col-sm-9">
 													<select id="multiple" class="form-control select2-multiple" multiple name="sector[]" required aucomplete="off">
 													<?php
-													$infoConsulta = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias",$conexion);
-													while($infoDatos = mysql_fetch_array($infoConsulta)){
+													$infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
+													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	
 													  <option value="<?=$infoDatos[0];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
 													<?php }?>	

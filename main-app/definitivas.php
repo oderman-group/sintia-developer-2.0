@@ -1,15 +1,12 @@
 <?php
-
-//$notasEstudiante = mysql_num_rows(mysql_query("SELECT * FROM academico_calificaciones WHERE cal_id_estudiante='".$datosEstudianteActual[0]."'",$conexion));
-
 //CALCULO DEFINITIVA
 
-$consultaD = mysql_query("SELECT * FROM academico_actividades 
-WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' $filtro ",$conexion);
+$consultaD = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' $filtro ");
 
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 
-$numConsultaD = mysql_num_rows($consultaD);
+$numConsultaD = mysqli_num_rows($consultaD);
 
 	$acumulaValor = 0;
 
@@ -21,9 +18,9 @@ $numConsultaD = mysql_num_rows($consultaD);
 
 	$notaMultiplicada = 0;
 
-	while($resultadoD = mysql_fetch_array($consultaD)){
+	while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
 
-		$nota = mysql_fetch_array(mysql_query("SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'",$conexion));
+		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'"), MYSQLI_BOTH);
 
 		if(mysql_errno()!=0){echo mysql_error(); exit();}
 

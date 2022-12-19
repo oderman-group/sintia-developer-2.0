@@ -2,12 +2,12 @@
                         <div class="col-md-12">
                             <div class="row">
 								<?php
-								$resumen = mysql_fetch_array(mysql_query("SELECT
+								$resumen = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=1),
 								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=2),
 								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=3),
 								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=4)
-								",$conexion));
+								"), MYSQLI_BOTH);
 								$saldo = ($resumen[0] - $resumen[2]);
 								$mensajeSaldo='Tienes las cuentas al día. Excelente!';
 								if($saldo>0){$mensajeSaldo='Tienes saldo a favor.';}
@@ -61,10 +61,10 @@
                                                 <tbody>
 													<?php
 													 $tiposArray = array("","ABONO","PAGO REALIZADO A TI","COBRO","POR PAGARTE");
-													 $consulta = mysql_query("SELECT * FROM finanzas_cuentas 
-													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0",$conexion);
+													 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas 
+													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0");
 													 $contReg = 1;
-													 while($resultado = mysql_fetch_array($consulta)){
+													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $colorValor = 'black';
 														 if($resultado['fcu_tipo']==3) $colorValor = 'red';
 													 ?>

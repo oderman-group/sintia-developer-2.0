@@ -2,11 +2,11 @@
             <div class="page-content-wrapper">
 				
 				<?php
-				$evaluacion = mysql_fetch_array(mysql_query("SELECT * FROM academico_actividad_evaluaciones 
-				WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1",$conexion));
+				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
+				WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1"), MYSQLI_BOTH);
 
 				//respuestas
-				$respuestasEvaluacion = mysql_fetch_array(mysql_query("SELECT
+				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1 
 				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
@@ -15,13 +15,13 @@
 				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
 				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0)
-				",$conexion));
+				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
-				$preguntasConsulta = mysql_query("SELECT * FROM academico_actividad_evaluacion_preguntas
+				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 				INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
 				WHERE evp_id_evaluacion='".$_GET["idE"]."'
-				",$conexion);
+				");
 				if(mysql_errno()!=0){echo mysql_error(); exit();}
 				$cantPreguntas = mysql_num_rows($preguntasConsulta);
 
@@ -32,8 +32,8 @@
 				}
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-				$nume = mysql_num_rows(mysql_query("SELECT * FROM academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'",$conexion));
+				$nume = mysql_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
+				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
 				if(mysql_errno()!=0){echo mysql_error(); exit();}
 				if($nume==0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=203";</script>';
@@ -41,8 +41,8 @@
 				}
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-				$estadoSesionEvaluacion = mysql_num_rows(mysql_query("SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-				WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL",$conexion));
+				$estadoSesionEvaluacion = mysql_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
+				WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 					exit();
@@ -100,14 +100,14 @@
 										<div class="panel-body">
 											<p><?=$frases[159][$datosUsuarioActual[8]];?></p>
 											<?php
-											$evaluacionesEnComun = mysql_query("SELECT * FROM academico_actividad_evaluaciones
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
 											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
 											ORDER BY eva_id DESC
-											",$conexion);
-											while($evaComun = mysql_fetch_array($evaluacionesEnComun)){
+											");
+											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-												$nume = mysql_num_rows(mysql_query("SELECT * FROM academico_actividad_evaluaciones_resultados 
-												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual[0]."'",$conexion));
+												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
+												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
 												if(mysql_errno()!=0){echo mysql_error(); exit();}
 												if($nume==0){continue;}
 											?>
@@ -135,10 +135,10 @@
 											$arrayColoresC = "";
 											$arrayColoresI = "";
 											$contPreguntas = 1;
-											while($preguntas = mysql_fetch_array($preguntasConsulta)){
-												$respuestasConsulta = mysql_query("SELECT * FROM academico_actividad_respuestas
+											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
+												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
 												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
-												",$conexion);
+												");
 												if(mysql_errno()!=0){echo mysql_error(); exit();}
 												$cantRespuestas = mysql_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
@@ -146,7 +146,7 @@
 													continue;
 												}
 												
-												$respuestasXpregunta = mysql_fetch_array(mysql_query("SELECT
+												$respuestasXpregunta = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1
 												WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_pregunta='".$preguntas['preg_id']."'),
@@ -154,7 +154,7 @@
 												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
 												WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_pregunta='".$preguntas['preg_id']."')
-												",$conexion));
+												"), MYSQLI_BOTH);
 												
 												$totalPuntos +=$preguntas['preg_valor'];
 												$arrayPreguntas .= '"Pregunta '.$contPreguntas.'",';
@@ -168,10 +168,10 @@
 													<div class="panel-body">
 											<?php 
 												$contRespuestas = 1;
-												while($respuestas = mysql_fetch_array($respuestasConsulta)){
-													$compararRespuestas = mysql_fetch_array(mysql_query("SELECT * FROM academico_actividad_evaluaciones_resultados
+												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
+													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados
 													WHERE res_id_evaluacion='".$_GET['idE']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."'
-													",$conexion));
+													"), MYSQLI_BOTH);
 													if($compararRespuestas[0]!="") $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
 													if($respuestas['resp_correcta']==1 and $compararRespuestas[0]!=""){

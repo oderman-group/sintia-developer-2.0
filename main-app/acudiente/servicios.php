@@ -51,8 +51,8 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[179][$datosUsuarioActual[8]];?></header>
 										<div class="panel-body">
 											<?php
-											$categorias = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias",$conexion);
-											while($cat = mysql_fetch_array($categorias)){
+											$categorias = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
+											while($cat = mysqli_fetch_array($categorias, MYSQLI_BOTH)){
 												if($cat['svcat_id']==$_GET["cat"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 												<p>
@@ -80,12 +80,12 @@
 						$filtro = '';
 						if($_GET["cat"]!=""){$filtro .= " AND excat_categoria='".$_GET["cat"]."'";}
 						if(is_numeric($_GET["emp"])){$filtro .= " AND emp_id='".$_GET["emp"]."'";}
-						$serviciosConsulta = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".empresas_categorias
+						$serviciosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas_categorias
 						INNER JOIN ".$baseDatosMarketPlace.".empresas ON emp_id=excat_empresa AND emp_estado=1
 						INNER JOIN ".$baseDatosMarketPlace.".servicios_categorias ON svcat_id=excat_categoria AND svcat_activa=1
 						WHERE excat_id=excat_id $filtro
-						",$conexion);
-						while($datosConsulta = mysql_fetch_array($serviciosConsulta)){
+						");
+						while($datosConsulta = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)){
 							$logo = 'course3.jpg';
 							if($datosConsulta['emp_logo']!=""){$logo = $datosConsulta['emp_logo'];}
 						?>
@@ -100,17 +100,17 @@
 		                            </div>
 									<?php 
 									if(is_numeric($_GET["emp"])){
-										$consultaVisita = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".empresas_visitas 
-										WHERE exvis_empresa='".$_GET["emp"]."' AND exvis_usuario='".$_SESSION["id"]."' AND exvis_institucion='".$config['conf_id_institucion']."'",$conexion);
+										$consultaVisita = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas_visitas 
+										WHERE exvis_empresa='".$_GET["emp"]."' AND exvis_usuario='".$_SESSION["id"]."' AND exvis_institucion='".$config['conf_id_institucion']."'");
 										if(mysql_errno()!=0){echo mysql_error(); exit();}
-										$numVisita = mysql_num_rows($consultaVisita);
-										$datoVisita = mysql_fetch_array($consultaVisita);
+										$numVisita = mysqli_num_rows($consultaVisita);
+										$datoVisita = mysqli_fetch_array($consultaVisita, MYSQLI_BOTH);
 										if($numVisita>0){
-											mysql_query("UPDATE ".$baseDatosMarketPlace.".empresas_visitas SET exvis_cantidad=exvis_cantidad+1 
-											WHERE exvis_usuario='".$_SESSION["id"]."' AND exvis_institucion='".$config['conf_id_institucion']."'",$conexion);
+											mysqli_query($conexion, "UPDATE ".$baseDatosMarketPlace.".empresas_visitas SET exvis_cantidad=exvis_cantidad+1 
+											WHERE exvis_usuario='".$_SESSION["id"]."' AND exvis_institucion='".$config['conf_id_institucion']."'");
 											if(mysql_errno()!=0){echo mysql_error(); exit();}
 										}else{
-											mysql_query("INSERT INTO ".$baseDatosMarketPlace.".empresas_visitas(exvis_empresa, exvis_institucion, exvis_usuario, exvis_fecha, exvis_cantidad)VALUES('".$_GET["emp"]."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', now(), 1)",$conexion);
+											mysqli_query($conexion, "INSERT INTO ".$baseDatosMarketPlace.".empresas_visitas(exvis_empresa, exvis_institucion, exvis_usuario, exvis_fecha, exvis_cantidad)VALUES('".$_GET["emp"]."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', now(), 1)");
 											if(mysql_errno()!=0){echo mysql_error(); exit();}
 										}
 									?>

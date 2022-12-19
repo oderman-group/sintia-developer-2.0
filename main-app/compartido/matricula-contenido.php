@@ -1,6 +1,6 @@
 						
 <?php
-$acudiente = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'",$conexion));
+$acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'"), MYSQLI_BOTH);
 ?>
 						<div class="col-sm-9">
 						    <div class="card card-box">
@@ -54,9 +54,9 @@ $acudiente = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id=
 						                        <select class="form-control  select2" name="lNacimiento">
 						                            <option value="">Seleccione una opción</option>
 						                            <?php
-                                                    $opcionesG = mysql_query("SELECT * FROM academico_grados
-													", $conexion);
-                                                    while ($opg = mysql_fetch_array($opcionesG)) {
+                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM academico_grados
+													");
+                                                    while ($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)) {
                                                     ?>
 						                                <option value="<?= $opg['gra_id']; ?>" <?php if ($opg['gra_id'] == $datosEstudianteActual["mat_grado"]) {
                                                                                                     echo "selected";
@@ -101,8 +101,8 @@ $acudiente = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id=
 						                        <select class="form-control  select2" name="estrato" required>
 						                            <option value="">Seleccione una opción</option>
 						                            <?php
-                                                    $opcionesG = mysql_query("SELECT * FROM " . $baseDatosServicios . ".opciones_generales WHERE ogen_grupo=3", $conexion);
-                                                    while ($opg = mysql_fetch_array($opcionesG)) {
+                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".opciones_generales WHERE ogen_grupo=3");
+                                                    while ($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)) {
                                                     ?>
 						                                <option value="<?= $opg[0]; ?>" <?php if ($opg[0] == $datosEstudianteActual["mat_estrato"]) {
                                                                                             echo "selected";

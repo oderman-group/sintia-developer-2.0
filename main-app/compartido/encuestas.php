@@ -1,9 +1,9 @@
 							<?php
-							$encuesta = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".encuestas WHERE adenc_estado=1",$conexion));
+							$encuesta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".encuestas WHERE adenc_estado=1"), MYSQLI_BOTH);
 							if($encuesta['adenc_id']!=""){
-								$numRespUsuario = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".comentarios 
+								$numRespUsuario = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".comentarios 
 								WHERE adcom_institucion='".$config['conf_id_institucion']."' AND adcom_usuario='".$_SESSION["id"]."' AND adcom_id_encuesta='".$encuesta['adenc_id']."'
-								",$conexion));
+								"));
 							?>
 							<div class="panel">
 								<header class="panel-heading panel-heading-purple">Encuesta</header>
@@ -20,15 +20,15 @@
 										<input type="hidden" name="id" value="11">
 										<input type="hidden" name="encuesta" value="<?=$encuesta['adenc_id'];?>">
 										<?php
-										$opcionesR = mysql_query("SELECT * FROM ".$baseDatosServicios.".encuestas_opciones WHERE adencop_encuesta='".$encuesta['adenc_id']."'",$conexion);
-										while($opciones = mysql_fetch_array($opcionesR)){
-											$numGeneral = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".comentarios 
+										$opcionesR = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".encuestas_opciones WHERE adencop_encuesta='".$encuesta['adenc_id']."'");
+										while($opciones = mysqli_fetch_array($opcionesR, MYSQLI_BOTH)){
+											$numGeneral = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".comentarios 
 											WHERE adcom_respuesta='".$opciones['adencop_id']."'
-											",$conexion));
+											"));
 											
-											$numRsp = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".comentarios 
+											$numRsp = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".comentarios 
 											WHERE adcom_institucion='".$config['conf_id_institucion']."' AND adcom_usuario='".$_SESSION["id"]."' AND adcom_respuesta='".$opciones['adencop_id']."'
-											",$conexion));
+											"));
 										?>
 											<div class="form-group row">
 												<div class="col-sm-12">

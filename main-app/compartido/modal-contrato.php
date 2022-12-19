@@ -1,10 +1,10 @@
 <?php
 //Consultas a la BD
-$contrato= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1",$conexion);
-$datosContrato = mysql_fetch_array($contrato);
+$contrato= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
+$datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
 
-$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".contratos_usuarios WHERE cxu_id_contrato='".$datosContrato['cont_id']."'  AND cxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
-$datosAceptacion = mysql_fetch_array($aceptacion);
+$aceptacion= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos_usuarios WHERE cxu_id_contrato='".$datosContrato['cont_id']."'  AND cxu_id_institucion='".$config['conf_id_institucion']."'");
+$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
 //Condición para mostrar o no el modal
 if($datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion'] and $datosContrato['cont_visible']==='SI'){

@@ -31,12 +31,12 @@
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$consulta = mysql_query("SELECT * FROM academico_matriculas 
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido",$conexion);
+													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 													$contReg = 1;
-													while($resultado = mysql_fetch_array($consulta)){
-														$genero = mysql_fetch_array(mysql_query("SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'",$conexion));
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
 														<a href="chat-grupal.php?usuario=<?=$resultado['mat_id_usuario'];?>"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></a> 
@@ -96,14 +96,14 @@
 											<?php
 											$filtro = '';
 											if($_GET["usuario"]){$filtro .= " AND chatg_emisor='".$_GET["usuario"]."'";}
-											$consulta = mysql_query("SELECT * FROM academico_chat_grupal
+											$consulta = mysqli_query($conexion, "SELECT * FROM academico_chat_grupal
 											INNER JOIN usuarios ON uss_id=chatg_emisor
 											WHERE chatg_carga='".$datosCargaActual[0]."'
 											$filtro
 											ORDER BY chatg_id DESC
-											",$conexion);
+											");
 											$contReg = 1;
-											while($resultado = mysql_fetch_array($consulta)){
+											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 											?>
 												<div id="PUB<?=$resultado['com_id'];?>" class="row">
 													<div class="col-sm-12">

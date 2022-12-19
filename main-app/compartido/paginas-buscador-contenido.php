@@ -34,8 +34,8 @@
                                         $tipoUsuario=5;
                                     }
 
-                                    $consulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_tipo_usuario='".$tipoUsuario."' $filtro ORDER BY pagp_id",$conexion);
-                                    while($resultado = mysql_fetch_array($consulta)){
+                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_tipo_usuario='".$tipoUsuario."' $filtro ORDER BY pagp_id");
+                                    while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
                                         $ruta=$resultado['pagp_ruta'];
                                         if($resultado['pagp_parametro']!=1){

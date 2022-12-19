@@ -1,5 +1,5 @@
 								<?php
-								mysql_query("UPDATE general_alertas SET alr_vista=1 WHERE alr_usuario='".$_SESSION["id"]."' AND alr_vista=0",$conexion);
+								mysqli_query($conexion, "UPDATE general_alertas SET alr_vista=1 WHERE alr_usuario='".$_SESSION["id"]."' AND alr_vista=0");
 								if(mysql_errno()!=0){echo mysql_error(); exit();}
 								?>
 								<div class="col-md-9">
@@ -28,13 +28,13 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysql_query("SELECT * FROM general_alertas 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM general_alertas 
 													 WHERE alr_usuario='".$_SESSION["id"]."'
 													 ORDER BY alr_id DESC
-													 ",$conexion);
+													 ");
 													$contReg=1; 
-													while($resultado = mysql_fetch_array($consulta)){
-														$dias = mysql_fetch_array(mysql_query("SELECT DATEDIFF('".$resultado['alr_fecha_envio']."','".date("Y-m-d")."')",$conexion));
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$dias = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['alr_fecha_envio']."','".date("Y-m-d")."')"), MYSQLI_BOTH);
 														$dias = ($dias[0] * -1);
 														switch($dias){
 															case ($dias==0): $msjFecha = 'Hoy'; break;

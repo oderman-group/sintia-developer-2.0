@@ -3,12 +3,12 @@
 									
                        		<div class="row">
 											<?php
-											$datosConsulta = mysql_query("SELECT * FROM usuarios
+											$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
 											INNER JOIN perfiles ON pes_id=uss_tipo
 											ORDER BY uss_nombre
 											LIMIT 0,1000
-											",$conexion);
-											while($datos = mysql_fetch_array($datosConsulta)){
+											");
+											while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												$fileFoto = "../files/fotos/".$datos['uss_foto'];
 												if($datos['uss_foto']=="" or !file_exists($fileFoto) or $datos['uss_nombre']=="") continue;
 												

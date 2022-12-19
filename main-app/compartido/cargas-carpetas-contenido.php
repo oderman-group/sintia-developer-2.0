@@ -14,7 +14,7 @@
 									$i=0;
 									$vectorDatos = array();
 									while($var==1){
-										$carpetaActual = mysql_fetch_array(mysql_query("SELECT fold_id, fold_padre FROM general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1",$conexion));
+										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT fold_id, fold_padre FROM general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1"), MYSQLI_BOTH);
 										$vectorDatos[$i] = $carpetaActual['fold_id'];
 										if($carpetaActual['fold_padre']!="" and $carpetaActual['fold_padre']!='0'){
 											$idFolderActual = $carpetaActual['fold_padre'];
@@ -28,7 +28,7 @@
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
 									while($cont>=0){
-										$carpetaActual = mysql_fetch_array(mysql_query("SELECT * FROM general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1",$conexion));
+										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1"), MYSQLI_BOTH);
 										if($cont>0){
 									?>
 											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=$carpetaActual['fold_id'];?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
@@ -95,14 +95,14 @@
 										$filtro = '';
 										if(is_numeric($_GET["carpeta"])){$filtro .= " AND fold_padre='".$_GET["carpeta"]."'";}
 										if($_GET["busqueda"]!=""){$filtro .= " AND (fold_nombre LIKE '%".$_GET["busqueda"]."%' OR fold_keywords LIKE '%".$_GET["busqueda"]."%')";}
-										$carpetas = mysql_query("SELECT * FROM general_folders 
+										$carpetas = mysqli_query($conexion, "SELECT * FROM general_folders 
 										WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_estado=1 $filtro
 										ORDER BY fold_tipo, fold_nombre
-										",$conexion);
-										while($carpeta = mysql_fetch_array($carpetas)){
-											$compartidoNum = mysql_num_rows(mysql_query("SELECT * FROM general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'",$conexion));
+										");
+										while($carpeta = mysqli_fetch_array($carpetas, MYSQLI_BOTH)){
+											$compartidoNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'"));
 											
-											$numRecursos = mysql_num_rows(mysql_query("SELECT * FROM general_folders WHERE fold_padre='".$carpeta['fold_id']."' AND fold_estado=1",$conexion));
+											$numRecursos = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_padre='".$carpeta['fold_id']."' AND fold_estado=1"));
 											if(!is_numeric($_GET["carpeta"]) and $carpeta['fold_padre']!="" and $carpeta['fold_padre']!="0" and $_GET["busqueda"]=="") continue;
 										?>
 										
@@ -171,13 +171,13 @@
 									<div class="row">
 										
 										<?php
-										$carpetasCompartidas = mysql_query("SELECT * FROM general_folders
+										$carpetasCompartidas = mysqli_query($conexion, "SELECT * FROM general_folders
 										INNER JOIN general_folders_usuarios_compartir ON (fxuc_folder=fold_id OR fxuc_folder=fold_padre) AND fxuc_usuario='".$_SESSION["id"]."'
 										WHERE fold_activo=1 AND fold_categoria=2 AND fold_estado=1 $filtro
 										ORDER BY fold_tipo, fold_nombre
-										",$conexion);
-										while($carpetaCompartida = mysql_fetch_array($carpetasCompartidas)){
-											$numRecursosCompartido = mysql_num_rows(mysql_query("SELECT * FROM general_folders WHERE fold_padre='".$carpetaCompartida['fold_id']."' AND fold_estado=1",$conexion));
+										");
+										while($carpetaCompartida = mysqli_fetch_array($carpetasCompartidas, MYSQLI_BOTH)){
+											$numRecursosCompartido = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_padre='".$carpetaCompartida['fold_id']."' AND fold_estado=1"));
 											if(!is_numeric($_GET["carpeta"]) and $carpetaCompartida['fold_padre']!="" and $carpetaCompartida['fold_padre']!="0" and $_GET["busqueda"]=="" and $carpetaCompartida['fxuc_folder']!=$carpetaCompartida['fold_id']) continue;
 										?>
 										

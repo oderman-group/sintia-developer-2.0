@@ -142,17 +142,17 @@
 
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 
-												$periodosCursos = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados_periodos
+												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 
 												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
 
-												",$conexion));
+												"), MYSQLI_BOTH);
 
 												
 
-												$notapp = mysql_fetch_array(mysql_query("SELECT bol_nota FROM academico_boletin 
+												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'",$conexion));
+												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
 
 												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
 
@@ -294,20 +294,20 @@
 
 													 if(is_numeric($_GET["indicador"])){$filtro .= " AND act_id_tipo='".$_GET["indicador"]."'";}
 
-													 $consulta = mysql_query("SELECT * FROM academico_actividades 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 
 													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'
 
 													 AND act_registrada=1 AND act_estado=1 $filtro
 
-													 ",$conexion);
+													 ");
 
 													 $contReg = 1;
 
-													 while($resultado = mysql_fetch_array($consulta)){
+													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$nota = mysql_fetch_array(mysql_query("SELECT * FROM academico_calificaciones
-														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."'",$conexion));
+														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
+														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
 
 														$porNuevo = ($resultado[3] / 100);
 
@@ -323,10 +323,10 @@
 
 														else $colorNota = $config[7];
 
-														$indicadorName = mysql_fetch_array(mysql_query("SELECT * FROM academico_indicadores 
+														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores 
 															INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
 															WHERE ind_id='".$resultado['act_id_tipo']."'
-															",$conexion)); 
+															"), MYSQLI_BOTH); 
 
 													 ?>
 

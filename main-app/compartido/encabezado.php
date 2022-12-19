@@ -1,12 +1,12 @@
 <?php
 if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
-	mysql_query("UPDATE general_alertas SET alr_vista=1 WHERE alr_id='".$_GET["idNotify"]."' AND alr_vista=0",$conexion);
+	mysqli_query($conexion, "UPDATE general_alertas SET alr_vista=1 WHERE alr_id='".$_GET["idNotify"]."' AND alr_vista=0");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 }
-$institucionConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$_SESSION["inst"]."'",$conexion);
+$institucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$_SESSION["inst"]."'");
 if(mysql_errno()!=0){echo mysql_error(); exit();}
-$institucion = mysql_fetch_array($institucionConsulta);
+$institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $institucionNombre = $institucion['ins_siglas'];
 ?>
 
