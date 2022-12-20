@@ -1,11 +1,15 @@
 <?php
-$datosConsulta = mysql_fetch_array(mysql_query("SELECT * FROM social_emails
+$filtro="AND ema_para='".$_SESSION["id"]."'";
+if(isset($_GET["opt"]) AND $_GET["opt"]==2){
+	$filtro='';
+}
+$datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_emails
 INNER JOIN usuarios ON uss_id=ema_de
-WHERE ema_id='".$_GET["idR"]."' AND ema_para='".$_SESSION["id"]."'",$conexion));
+WHERE ema_id='".$_GET["idR"]."' $filtro"), MYSQLI_BOTH);
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 
 if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']=='0'){
-	mysql_query("UPDATE social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$_GET["idR"]."'",$conexion);
+	mysqli_query($conexion, "UPDATE social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$_GET["idR"]."'");
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 }
 ?>

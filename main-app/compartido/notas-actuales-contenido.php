@@ -70,16 +70,16 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$periodosCursos = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados_periodos
+													$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																",$conexion));
+																"), MYSQLI_BOTH);
 													
 													$contReg = 1; 
-													$cCargas = mysql_query("SELECT * FROM academico_cargas 
-													WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'",$conexion);
-													while($rCargas = mysql_fetch_array($cCargas)){
-														$cDatos = mysql_query("SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'",$conexion);
-														$rDatos = mysql_fetch_array($cDatos);
+													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+													WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 														
 														//DEFINITIVAS
 														$carga = $rCargas[0];

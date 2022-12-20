@@ -48,14 +48,14 @@
                                             <label class="col-sm-2 control-label"><?=$frases[224][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysql_query("SELECT * FROM ".$baseDatosServicios.".general_categorias
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_categorias
 												WHERE gcat_activa=1
-												",$conexion);
+												");
 												?>
                                                 <select class="form-control  select2" name="categoriaGeneral" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													while($datos = mysql_fetch_array($datosConsulta)){
+													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
                                                     	<option value="<?=$datos['gcat_id'];?>" <?php if($datos['gcat_id']==15) echo "selected"; ?> ><?=$datos['gcat_nombre']?></option>
 													<?php }?>
@@ -97,8 +97,8 @@
 												<div class="col-sm-10">
 													<select id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
 													<?php
-													$infoConsulta = mysql_query("SELECT * FROM academico_grados",$conexion);
-													while($infoDatos = mysql_fetch_array($infoConsulta)){
+													$infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	
 													  <option value="<?=$infoDatos['gra_id'];?>"><?=strtoupper($infoDatos['gra_nombre']);?></option>
 													<?php }?>	

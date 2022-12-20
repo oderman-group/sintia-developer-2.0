@@ -1,10 +1,10 @@
 <?php
 //Consultas a la BD
-$terminos= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=1",$conexion);
-$datosTerminos = mysql_fetch_array($terminos);
+$terminos= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=1");
+$datosTerminos = mysqli_fetch_array($terminos, MYSQLI_BOTH);
 
-$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
-$datosAceptacion = mysql_fetch_array($aceptacion);
+$aceptacion= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'");
+$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
 //Condición para mostrar o no el modal de T&C
 if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){
@@ -41,11 +41,11 @@ if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_acep
 
 <?php
 //Consultas a la BD
-$terminos= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=2",$conexion);
-$datosTerminos = mysql_fetch_array($terminos);
+$terminos= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=2");
+$datosTerminos = mysqli_fetch_array($terminos, MYSQLI_BOTH);
 
-$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
-$datosAceptacion = mysql_fetch_array($aceptacion);
+$aceptacion= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'");
+$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
 //Condición para mostrar o no el modal de TRATAMIENTO DE DATOS
 if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){
@@ -82,11 +82,11 @@ if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_acep
 
 <?php
 //Consultas a la BD
-$terminos= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=3",$conexion);
-$datosTerminos = mysql_fetch_array($terminos);
+$terminos= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politica WHERE ttp_id=3");
+$datosTerminos = mysqli_fetch_array($terminos, MYSQLI_BOTH);
 
-$aceptacion= mysql_query("SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'",$conexion);
-$datosAceptacion = mysql_fetch_array($aceptacion);
+$aceptacion= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'");
+$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
 //Condición para mostrar o no el modal de POLITICAS
 if($datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion['ttpxu_fecha_aceptacion'] and $datosTerminos['ttp_visible']==='SI'){

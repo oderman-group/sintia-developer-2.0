@@ -26,13 +26,13 @@
 																<select id="multiple" class="form-control select2-multiple" multiple name="para[]" required>
 																	<option value="">Seleccione una opción</option>
 																<?php
-																$datosConsulta = mysql_query("SELECT * FROM usuarios 
+																$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios 
 																LEFT JOIN perfiles ON pes_id=uss_tipo
 																LEFT JOIN academico_matriculas ON mat_id_usuario=uss_id
 																LEFT JOIN academico_grados ON gra_id=mat_grado
 																ORDER BY uss_tipo, mat_grado
-																",$conexion);
-																while($datos = mysql_fetch_array($datosConsulta)){
+																");
+																while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 																	
 																?>
 																  <option value="<?=$datos['uss_id'];?>" <?php if($datos['uss_id']==$_GET["para"]){echo "selected";}?>><?=strtoupper($datos['uss_nombre']." (".$datos['pes_nombre']." ".$datos['gra_nombre'].")");?></option>	

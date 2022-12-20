@@ -12,11 +12,11 @@ if($datosUsuarioActual[3]==4){
 }
 
 //ESTUDIANTE ACTUAL
-$consultaEstudianteActual = mysql_query("SELECT * FROM academico_matriculas
+$consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas
 LEFT JOIN usuarios ON uss_id=mat_acudiente
 INNER JOIN academico_grados ON gra_id=mat_grado
-WHERE mat_id_usuario='".$usuarioEstudianteConsultaActual."'",$conexion);
+WHERE mat_id_usuario='".$usuarioEstudianteConsultaActual."'");
 if(mysql_errno()!=0){echo mysql_error(); exit();}
-$numEstudianteActual = mysql_num_rows($consultaEstudianteActual);
-$datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
+$numEstudianteActual = mysqli_num_rows($consultaEstudianteActual);
+$datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
 ?>

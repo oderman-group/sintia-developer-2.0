@@ -1,24 +1,24 @@
 <?php
-$numOPMF = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad
+$numOPMF = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad
 INNER JOIN ".$baseDatosServicios.".general_categorias ON gcat_id=pub_categoria_especifica
 WHERE pub_estado=1 AND pub_tipo=2 AND pub_tipo_usuario='".$datosUsuarioActual['uss_tipo']."'
-",$conexion));
+"));
 $numOPMF --;
 $empezarMF = rand(0,$numOPMF);
 
-$publicidadLateralMF = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad
+$publicidadLateralMF = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad
 INNER JOIN ".$baseDatosServicios.".general_categorias ON gcat_id=pub_categoria_especifica
 WHERE pub_estado=1 AND pub_tipo=2 AND pub_tipo_usuario='".$datosUsuarioActual['uss_tipo']."'
 LIMIT ".$empezarMF.",1
-",$conexion));
+"), MYSQLI_BOTH);
 ?>
 <?php if($publicidadLateralMF['pub_id']!=""){
-	mysql_query("INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
-	VALUES('".$publicidadLateralMF['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 1, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)",$conexion);
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
+	VALUES('".$publicidadLateralMF['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 1, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 	
-	$guardadaNum = mysql_num_rows(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad_guardadas
-	WHERE psave_publicidad='".$publicidadLateralMF['pub_id']."' AND psave_institucion='".$config['conf_id_institucion']."' AND psave_usuario='".$_SESSION["id"]."'",$conexion));
+	$guardadaNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_guardadas
+	WHERE psave_publicidad='".$publicidadLateralMF['pub_id']."' AND psave_institucion='".$config['conf_id_institucion']."' AND psave_usuario='".$_SESSION["id"]."'"));
 ?>
 <div class="panel">
 	<header class="panel-heading panel-heading-yellow"><?=strtoupper($publicidadLateralMF['gcat_nombre']);?></header>

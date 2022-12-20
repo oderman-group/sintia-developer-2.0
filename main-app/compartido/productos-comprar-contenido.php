@@ -1,9 +1,9 @@
 <?php
-$producto = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".productos
+$producto = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".productos
 INNER JOIN ".$baseDatosMarketPlace.".categorias_productos ON catp_id=prod_categoria
 INNER JOIN ".$baseDatosMarketPlace.".empresas ON emp_id=prod_empresa
 WHERE prod_id='".$_GET["id"]."'
-",$conexion));
+"), MYSQLI_BOTH);
 ?>
 <div class="row">
                         <div class="col-sm-9">

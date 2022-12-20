@@ -106,8 +106,8 @@
                                                 <select class="form-control  select2" name="genero" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_genero"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -142,10 +142,10 @@
                                                 <select class="form-control  select2" name="lNacimiento" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
 													INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-													",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosUsuarioActual["uss_lugar_nacimiento"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 													<?php }?>
@@ -160,8 +160,8 @@
                                                 <select class="form-control  select2" name="nAcademico" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=7",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=7");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_nivel_academico"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -175,9 +175,9 @@
                                                 <select class="form-control  select2" name="profesion" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".general_profesiones_categorias
-													",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_profesiones_categorias
+													");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_profesion"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -202,8 +202,8 @@
                                                 <select class="form-control  select2" name="eLaboral" required onChange="empresario(this)">
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=9",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=9");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estado_laboral"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -221,8 +221,8 @@
 													<select class="form-control  select2" name="tipoNegocio">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=10",$conexion);
-														while($opg = mysql_fetch_array($opcionesG)){
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=10");
+														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 															<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_tipo_negocio"]){echo "selected";}?>><?=$opg[1];?></option>
 														<?php }?>
@@ -246,8 +246,8 @@
                                                 <select class="form-control  select2" name="religion" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_religion"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -261,8 +261,8 @@
                                                 <select class="form-control  select2" name="eCivil" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=8",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=8");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estado_civil"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -283,8 +283,8 @@
                                                 <select class="form-control  select2" name="estrato" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estrato"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -298,8 +298,8 @@
                                                 <select class="form-control  select2" name="tipoVivienda" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=12",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=12");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_tipo_vivienda"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
@@ -313,8 +313,8 @@
                                                 <select class="form-control  select2" name="medioTransporte" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=13",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=13");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_medio_transporte"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>

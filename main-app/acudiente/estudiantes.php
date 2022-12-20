@@ -123,21 +123,21 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysql_query("SELECT * FROM academico_matriculas
+													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
 													 INNER JOIN academico_grados ON gra_id=mat_grado
 													 INNER JOIN academico_grupos ON gru_id=mat_grupo
 													 INNER JOIN usuarios ON uss_id=mat_id_usuario
 													 INNER JOIN usuarios_por_estudiantes ON upe_id_estudiante=mat_id AND upe_id_usuario='".$datosUsuarioActual[0]."'
-													 WHERE mat_eliminado=0 ORDER BY mat_primer_apellido",$conexion);
+													 WHERE mat_eliminado=0 ORDER BY mat_primer_apellido");
 													 $contReg = 1;
-													 while($resultado = mysql_fetch_array($consulta)){
-														 $genero = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'",$conexion));
+													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 
-														 $aspectos1 = mysql_fetch_array(mysql_query("SELECT * FROM disiplina_nota 
-                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1", $conexion));
+														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
+                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1"), MYSQLI_BOTH);
 
-															$aspectos = mysql_fetch_array(mysql_query("SELECT * FROM disiplina_nota 
-															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "'", $conexion));
+															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
+															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "'"), MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
@@ -154,8 +154,8 @@
 														<td>
 															<?php 
 														 	if($config['conf_activar_encuesta']==1){
-																$respuesta = mysql_num_rows(mysql_query("SELECT * FROM general_encuestas 
-																WHERE genc_estudiante='".$resultado['mat_id']."'",$conexion));
+																$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_encuestas 
+																WHERE genc_estudiante='".$resultado['mat_id']."'"));
 															}
 														 
 														 if($config['conf_activar_encuesta']!=1 or $respuesta>0){	

@@ -1,6 +1,6 @@
 <?php if($publicidadPopUp['pubxub_id']!="" and $numMostrarPopUp<$publicidadPopUp['pubxub_muestras_popup']){
-	mysql_query("INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
-	VALUES('".$publicidadPopUp['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 3, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)",$conexion);
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
+	VALUES('".$publicidadPopUp['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 3, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 ?>
 <div class="modal fade" id="modalAnuncios" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -76,10 +76,10 @@ if($datosUsuarioActual['uss_solicitar_datos']==1){
                                                 <select class="form-control  select2" name="instMunicipio" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													$opcionesG = mysql_query("SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
 													INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-													",$conexion);
-													while($opg = mysql_fetch_array($opcionesG)){
+													");
+													while($opg = mysql_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg['ciu_id'];?>"><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 													<?php }?>

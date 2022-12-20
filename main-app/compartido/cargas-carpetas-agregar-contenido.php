@@ -57,14 +57,14 @@
 												<label class="col-sm-3 control-label">Carpeta padre</label>
 												<div class="col-sm-9">
 													<?php
-													$consulta = mysql_query("SELECT * FROM general_folders 
+													$consulta = mysqli_query($conexion, "SELECT * FROM general_folders 
 													WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_tipo=1 AND fold_estado=1
-													ORDER BY fold_tipo, fold_nombre",$conexion);
+													ORDER BY fold_tipo, fold_nombre");
 													?>
 													<select class="form-control  select2" name="padre" required>
 														<option value="0">--Raiz--</option>
 														<?php
-														while($datos = mysql_fetch_array($consulta)){
+														while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														?>
 															<option value="<?=$datos[0];?>" <?php if($datos[0]==$_GET["carpeta"]){echo "selected";}?>><?=$datos['fold_nombre']?></option>
 														<?php }?>
@@ -77,10 +77,10 @@
 												<div class="col-sm-9">
 													<select id="multiple" class="form-control select2-multiple" multiple name="compartirCon[]">
 													<?php
-													$infoConsulta = mysql_query("SELECT * FROM usuarios
+													$infoConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
 													INNER JOIN perfiles ON pes_id=uss_tipo
-													",$conexion);
-													while($infoDatos = mysql_fetch_array($infoConsulta)){
+													");
+													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	
 													  <option value="<?=$infoDatos['uss_id'];?>"><?=strtoupper($infoDatos['uss_nombre'])." - ".$infoDatos['pes_nombre'];?></option>
 													<?php }?>	

@@ -1,5 +1,5 @@
 <?php
-$datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'",$conexion));
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -26,16 +26,16 @@ $datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_activi
 												<ul class="list-group list-group-unbordered">
 													<?php
 													$urlRecurso = 'foros-detalles.php?idR='.$_GET["idR"];
-													$consultas = mysql_query("SELECT * FROM academico_matriculas 
+													$consultas = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 													INNER JOIN usuarios ON uss_id=mat_id_usuario
 													INNER JOIN seguridad_historial_acciones ON hil_url LIKE '%".$urlRecurso."%' AND hil_usuario=uss_id
 													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 
 													GROUP BY mat_id_usuario
 													ORDER BY mat_primer_apellido
-													",$conexion);
+													");
 													$contReg = 1;
-													while($resultados = mysql_fetch_array($consultas)){
-														$genero = mysql_fetch_array(mysql_query("SELECT * FROM opciones_generales WHERE ogen_id='".$resultados[8]."'",$conexion));
+													while($resultados = mysqli_fetch_array($consultas, MYSQLI_BOTH)){
+														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultados[8]."'"), MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
 														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=strtoupper($resultados[3]." ".$resultados[4]." ".$resultados[5]);?></a> 
@@ -95,20 +95,20 @@ $datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_activi
 											if($_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
 											if(is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
-											$consulta = mysql_query("SELECT * FROM academico_actividad_foro_comentarios
+											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
 											WHERE com_id_foro='".$_GET["idR"]."'
 											$filtro
 											ORDER BY com_id DESC
-											",$conexion);
+											");
 											$contReg = 1;
-											while($resultado = mysql_fetch_array($consulta)){
-												$consultaReacciones = mysql_query("SELECT * FROM academico_actividad_foro_respuestas
+											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_respuestas
 												INNER JOIN usuarios ON uss_id=fore_id_estudiante
 												WHERE fore_id_comentario='".$resultado[0]."'
 												ORDER BY fore_id ASC
-												",$conexion);
-												$numReacciones = mysql_num_rows($consultaReacciones);
+												");
+												$numReacciones = mysqli_num_rows($consultaReacciones);
 	
 											?>
 												<div id="PUB<?=$resultado['com_id'];?>" class="row">
@@ -183,7 +183,7 @@ $datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_activi
 																</form>
 																
 																<?php
-																while($datoReacciones = mysql_fetch_array($consultaReacciones)){
+																while($datoReacciones = mysqli_fetch_array($consultaReacciones, MYSQLI_BOTH)){
 																?>
 																	<p>
 																		<?php if($_SESSION["id"]==$datoReacciones['fore_id_estudiante']){?>
@@ -210,11 +210,11 @@ $datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_activi
 										<header class="panel-heading panel-heading-purple"><?=strtoupper($frases[113][$datosUsuarioActual['uss_idioma']]);?> </header>
 										<div class="panel-body">
 											<?php
-											$registrosEnComun = mysql_query("SELECT * FROM academico_actividad_foro 
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
 											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$_GET["idR"]."'
 											ORDER BY foro_id DESC
-											",$conexion);
-											while($regComun = mysql_fetch_array($registrosEnComun)){
+											");
+											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['foro_id'];?>"><?=$regComun['foro_nombre'];?></a></p>
 											<?php }?>
