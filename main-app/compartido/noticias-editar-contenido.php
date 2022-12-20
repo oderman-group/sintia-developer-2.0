@@ -60,14 +60,14 @@
                                             <label class="col-sm-2 control-label"><?=$frases[224][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsultaBD = mysql_query("SELECT * FROM ".$baseDatosServicios.".general_categorias
+												$datosConsultaBD = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_categorias
 												WHERE gcat_activa=1
-												",$conexion);
+												");
 												?>
                                                 <select class="form-control  select2" name="categoriaGeneral" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													while($datosBD = mysql_fetch_array($datosConsultaBD)){
+													while($datosBD = mysqli_fetch_array($datosConsultaBD, MYSQLI_BOTH)){
 													?>
                                                     	<option value="<?=$datosBD['gcat_id'];?>" <?php if($datosBD['gcat_id']==$datosConsulta['not_id_categoria_general'])echo "selected";?>><?=$datosBD['gcat_nombre']?></option>
 													<?php }?>
@@ -114,9 +114,9 @@
 												<div class="col-sm-10">
 													<select id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
 													<?php
-													$infoConsulta = mysql_query("SELECT * FROM academico_grados",$conexion);
-													while($infoDatos = mysql_fetch_array($infoConsulta)){
-														$existe = mysql_num_rows(mysql_query("SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$_GET["idR"]."' AND notpc_curso='".$infoDatos['gra_id']."'",$conexion));
+													$infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
+														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$_GET["idR"]."' AND notpc_curso='".$infoDatos['gra_id']."'"));
 														if(mysql_errno()!=0){echo mysql_error(); exit();}
 													?>	
 													  <option value="<?=$infoDatos['gra_id'];?>" <?php if($existe>0){echo "selected";}?>><?=strtoupper($infoDatos['gra_nombre']);?></option>

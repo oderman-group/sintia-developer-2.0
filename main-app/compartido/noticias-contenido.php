@@ -85,35 +85,35 @@
 											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
 											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
-											$consulta = mysql_query("SELECT * FROM social_noticias
+											$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias
 											INNER JOIN usuarios ON uss_id=not_usuario
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
 											$filtro
 											ORDER BY not_id DESC
-											",$conexion);
+											");
 											$not = 1;
 											$contReg = 1;
-											while($resultado = mysql_fetch_array($consulta)){
+											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$colorFondo = 'style="background: #FFF;"';
 												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
-												$consultaReacciones = mysql_query("SELECT * FROM social_noticias_reacciones
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones
 												INNER JOIN usuarios ON uss_id=npr_usuario
 												WHERE npr_noticia='".$resultado[0]."'
 												ORDER BY npr_id DESC
-												",$conexion);
-												$numReacciones = mysql_num_rows($consultaReacciones);
-												$usrReacciones = mysql_fetch_array(mysql_query("SELECT * FROM social_noticias_reacciones 
-												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'",$conexion));
+												");
+												$numReacciones = mysqli_num_rows($consultaReacciones);
+												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones 
+												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
 												if($datosUsuarioActual[3]==4){
 													include("verificar-usuario.php");
-													$noticiasCursos = mysql_query("SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'",$conexion);
-													$notCursoNum = mysql_num_rows($noticiasCursos);
+													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
+													$notCursoNum = mysqli_num_rows($noticiasCursos);
 													if($notCursoNum>0){
 														$noticiaPermitida=0;
-														while($notCursosInfo = mysql_fetch_array($noticiasCursos)){
+														while($notCursosInfo = mysqli_fetch_array($noticiasCursos, MYSQLI_BOTH)){
 															if($notCursosInfo['notpc_curso']==$datosEstudianteActual['mat_grado']) {$noticiaPermitida=1;}
 														}
 														if($noticiaPermitida==0) continue;
@@ -221,7 +221,7 @@
 															</header>
 															<div class="panel-body">
 																<?php
-																while($datoReacciones = mysql_fetch_array($consultaReacciones)){
+																while($datoReacciones = mysqli_fetch_array($consultaReacciones, MYSQLI_BOTH)){
 																?>
 																	<p><a><?=$datoReacciones['uss_nombre'];?></a> (<?=$rName[$datoReacciones['npr_reaccion']];?>)<br>
 																		<span style="font-size: 10px; color: darkgray;"><?=$datoReacciones['npr_fecha'];?></span></p>
@@ -236,15 +236,15 @@
 												<?php 
 												if($not==3){
 													$inicioPublicidad = ($contReg / $not) - 1;
-													$publicidadNoticias = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
+													$publicidadNoticias = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 													INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 													WHERE pubxub_ubicacion=5 AND pubxub_id_institucion='".$config['conf_id_institucion']."'
 													LIMIT $inicioPublicidad, 1
-													",$conexion));
+													"), MYSQLI_BOTH);
 												?>
 													<?php if($publicidadNoticias['pubxub_id']!=""){
-														mysql_query("INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
-														VALUES('".$publicidadNoticias['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 5, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)",$conexion);
+														mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
+														VALUES('".$publicidadNoticias['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 5, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 														if(mysql_errno()!=0){echo mysql_error(); exit();}
 													?>
 														<div align="center" style="padding-top: 5px; padding-bottom: 10px;">

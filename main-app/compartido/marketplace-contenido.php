@@ -72,8 +72,8 @@
 										<header class="panel-heading panel-heading-purple">Categorías</header>
 										<div class="panel-body">
 											<?php
-											$categorias = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos",$conexion);
-											while($cat = mysql_fetch_array($categorias)){
+											$categorias = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos");
+											while($cat = mysqli_fetch_array($categorias, MYSQLI_BOTH)){
 												if($cat[0]==$_GET["cat"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 												<p>
@@ -103,20 +103,20 @@
 						OR prod_keywords LIKE '%".$_GET["busqueda"]."%'
 						)";}		
 								
-						$serviciosConsulta = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".productos
+						$serviciosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".productos
 						INNER JOIN ".$baseDatosMarketPlace.".categorias_productos ON catp_id=prod_categoria
 						INNER JOIN ".$baseDatosMarketPlace.".empresas ON emp_id=prod_empresa
 						WHERE prod_id=prod_id $filtro
-						",$conexion);
+						");
 						
-						$numProductos = mysql_num_rows($serviciosConsulta);
+						$numProductos = mysqli_num_rows($serviciosConsulta);
 						if($numProductos==0){
 							echo '
 							<p style="padding:10px; color:tomato;">No se econtraron productos.</p>
 							<p style="padding:10px;"><a href="marketplace.php">VER TODOS</a></p>
 							';
 						}		
-						while($datosConsulta = mysql_fetch_array($serviciosConsulta)){
+						while($datosConsulta = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)){
 							$foto = 'course3.jpg';
 							if($datosConsulta['prod_foto']!=""){$foto = $datosConsulta['prod_foto'];}
 							
@@ -143,17 +143,17 @@
 									<p><span style="font-weight: bold;"> $<?=number_format($datosConsulta['prod_precio'],0,",",".");?></span></p>
 									<?php 
 									if(is_numeric($_GET["prod"])){
-										$consultaVisita = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".productos_visitas 
-										WHERE pxvis_producto='".$_GET["prod"]."' AND pxvis_usuario='".$_SESSION["id"]."' AND pxvis_institucion='".$config['conf_id_institucion']."'",$conexion);
+										$consultaVisita = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".productos_visitas 
+										WHERE pxvis_producto='".$_GET["prod"]."' AND pxvis_usuario='".$_SESSION["id"]."' AND pxvis_institucion='".$config['conf_id_institucion']."'");
 										if(mysql_errno()!=0){echo mysql_error(); exit();}
-										$numVisita = mysql_num_rows($consultaVisita);
-										$datoVisita = mysql_fetch_array($consultaVisita);
+										$numVisita = mysqli_num_rows($consultaVisita);
+										$datoVisita = mysqli_fetch_array($consultaVisita, MYSQLI_BOTH);
 										if($numVisita>0){
-											mysql_query("UPDATE ".$baseDatosMarketPlace.".productos_visitas SET pxvis_cantidad=pxvis_cantidad+1 
-											WHERE pxvis_usuario='".$_SESSION["id"]."' AND pxvis_institucion='".$config['conf_id_institucion']."' AND pxvis_producto='".$_GET["prod"]."'",$conexion);
+											mysqli_query($conexion, "UPDATE ".$baseDatosMarketPlace.".productos_visitas SET pxvis_cantidad=pxvis_cantidad+1 
+											WHERE pxvis_usuario='".$_SESSION["id"]."' AND pxvis_institucion='".$config['conf_id_institucion']."' AND pxvis_producto='".$_GET["prod"]."'");
 											if(mysql_errno()!=0){echo mysql_error(); exit();}
 										}else{
-											mysql_query("INSERT INTO ".$baseDatosMarketPlace.".productos_visitas(pxvis_producto, pxvis_institucion, pxvis_usuario, pxvis_fecha, pxvis_cantidad)VALUES('".$_GET["prod"]."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', now(), 1)",$conexion);
+											mysqli_query($conexion, "INSERT INTO ".$baseDatosMarketPlace.".productos_visitas(pxvis_producto, pxvis_institucion, pxvis_usuario, pxvis_fecha, pxvis_cantidad)VALUES('".$_GET["prod"]."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', now(), 1)");
 											if(mysql_errno()!=0){echo mysql_error(); exit();}
 										}
 									?>

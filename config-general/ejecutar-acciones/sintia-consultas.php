@@ -1,5 +1,6 @@
 <?php
-$conexion = mysql_connect("localhost","mobiliar","M1X32znd9l");
+inlude("../../conexion-datos.php");
+$conexion = mysql_connect($servidorConexion,$usuarioConexion,$claveConexion);
 $e=0;
 
 //AGREGAR/MODIFICAR COLUMNAS

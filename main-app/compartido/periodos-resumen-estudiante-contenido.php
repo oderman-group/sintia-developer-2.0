@@ -78,9 +78,9 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														<?php
 															$p = 1;
 															while($p<=$datosEstudianteActual['gra_periodos']){
-																$periodosCursos = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados_periodos
+																$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																",$conexion));
+																"), MYSQLI_BOTH);
 																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
 																$p++;
 															}
@@ -94,10 +94,10 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$cCargas = mysql_query("SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'",$conexion);
-													while($rCargas = mysql_fetch_array($cCargas)){
-														$cDatos = mysql_query("SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'",$conexion);
-														$rDatos = mysql_fetch_array($cDatos);
+													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 													?>
                                                     
 													<tr>
@@ -113,15 +113,15 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														 $n = 0;
 														 for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 															
-															 $periodosCursos = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados_periodos
+															 $periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
-															",$conexion));
+															"), MYSQLI_BOTH);
 															 $decimal = $periodosCursos['gvp_valor']/100;
 															 
 															//LAS CALIFICACIONES
-															$notasConsulta = mysql_query("SELECT * FROM academico_boletin WHERE bol_estudiante=".$datosEstudianteActual[0]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i,$conexion);
-															$notasResultado = mysql_fetch_array($notasConsulta);
-															$numN = mysql_num_rows($notasConsulta);
+															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$datosEstudianteActual[0]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);
+															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
+															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;
 																$definitiva += $notasResultado[4]*$decimal;
@@ -137,10 +137,10 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														<?php		
 														 }
 															@$definitiva = ($definitiva / $sumaPorcentaje);
-															$consultaN = mysql_query("SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual[0]." AND niv_id_asg=".$rCargas[0],$conexion);
+															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual[0]." AND niv_id_asg=".$rCargas[0]);
 															if(mysql_errno()!=0){echo mysql_error(); exit();}
-															$numN = mysql_num_rows($consultaN);
-															$rN = mysql_fetch_array($consultaN);
+															$numN = mysqli_num_rows($consultaN);
+															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
 															if($numN==0){
 																if($n>0)
 																	$definitiva = round(($definitiva), $config['conf_decimales_notas']);
@@ -155,9 +155,9 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														 //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
 														 if($config[2]==$datosEstudianteActual['gra_periodos']){
 															 $notaMinima = ($config[5]-$definitiva);
-															 $periodosCursos2 = mysql_fetch_array(mysql_query("SELECT * FROM academico_grados_periodos
+															 $periodosCursos2 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 															 WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$datosEstudianteActual['gra_periodos']."'
-															 ",$conexion));
+															 "), MYSQLI_BOTH);
 															 $decimal2 = $periodosCursos2['gvp_valor']/100;
 															 
 															@$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']); 

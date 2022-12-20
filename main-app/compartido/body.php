@@ -1,8 +1,9 @@
 <?php
-$resumenEC = mysql_fetch_array(mysql_query("SELECT
+$consultaFinanzas=mysqli_query($conexion, "SELECT
 (SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=1),
 (SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=3)
-",$conexion));
+");
+$resumenEC = mysqli_fetch_array($consultaFinanzas, MYSQLI_BOTH);
 $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 ?>
 

@@ -37,7 +37,7 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
 		<b>Versión PHP:&nbsp;</b> <?=phpversion(); ?>&nbsp;|&nbsp; 
-		<b>Server:&nbsp;</b> <?=$_SERVER['SERVER_NAME']; ?>&nbsp;|&nbsp;
+		<b>Host:&nbsp;</b> <?=$_SERVER['HTTP_HOST']; ?>&nbsp;|&nbsp;
     <b>Peso página:&nbsp;</b> <?php //echo number_format(filesize($nombre_fichero)) . ' bytes'; ?>&nbsp;|&nbsp;
 
     <?php if( isset($_SESSION['admin']) ){?>

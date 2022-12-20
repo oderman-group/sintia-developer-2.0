@@ -1,16 +1,16 @@
 <?php
-$datosEditar = mysql_fetch_array(mysql_query("SELECT * FROM academico_matriculas
+$datosEditar = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_matriculas
 LEFT JOIN usuarios ON uss_id=mat_acudiente
 INNER JOIN academico_grados ON gra_id=mat_grado
-WHERE mat_id_usuario='".$_GET["idR"]."'",$conexion));
+WHERE mat_id_usuario='".$_GET["idR"]."'"), MYSQLI_BOTH);
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 
-$usuarioEstudiante = mysql_fetch_array(mysql_query("SELECT * FROM usuarios
-WHERE uss_id='".$_GET["idR"]."'",$conexion));
+$usuarioEstudiante = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios
+WHERE uss_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 
-$agnoNacimiento = mysql_fetch_array(mysql_query("SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
-WHERE mat_id_usuario='".$_GET["idR"]."'",$conexion));
+$agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
+WHERE mat_id_usuario='".$_GET["idR"]."'"), MYSQLI_BOTH);
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 
 $edad = date("Y") - $agnoNacimiento[0];
@@ -250,8 +250,8 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         $p=1;
                                         while($p<=4){
 
-                                            $aspectos = mysql_fetch_array(mysql_query("SELECT * FROM disiplina_nota 
-                                            WHERE dn_cod_estudiante='".$datosEditar['mat_id']."' AND dn_periodo='".$p."'",$conexion));
+                                            $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
+                                            WHERE dn_cod_estudiante='".$datosEditar['mat_id']."' AND dn_periodo='".$p."'"), MYSQLI_BOTH);
 
                                         ?>
 
@@ -326,10 +326,10 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                             
                                 
                             <?php
-                            $aspectosCosnulta = mysql_query("SELECT * FROM matriculas_aspectos
+                            $aspectosCosnulta = mysqli_query($conexion, "SELECT * FROM matriculas_aspectos
                                 INNER JOIN usuarios ON uss_id=mata_usuario
-                                WHERE mata_estudiante='".$datosEditar['mat_id']."' AND mata_periodo='".$p."' ORDER BY mata_id DESC",$conexion);
-                            while($aspectos = mysql_fetch_array($aspectosCosnulta)){
+                                WHERE mata_estudiante='".$datosEditar['mat_id']."' AND mata_periodo='".$p."' ORDER BY mata_id DESC");
+                            while($aspectos = mysqli_fetch_array($aspectosCosnulta, MYSQLI_BOTH)){
                             ?>
                                 
 

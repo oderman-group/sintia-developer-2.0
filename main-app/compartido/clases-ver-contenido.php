@@ -1,6 +1,6 @@
 <?php
-$datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_clases 
-WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1",$conexion));
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_clases 
+WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1"), MYSQLI_BOTH);
 ?>
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -25,24 +25,24 @@ WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1",$conexion));
 												<ul class="list-group list-group-unbordered">
 													<?php
 													$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
-													$consulta = mysql_query("SELECT * FROM academico_matriculas 
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 													INNER JOIN usuarios ON uss_id=mat_id_usuario
 													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 
 													GROUP BY mat_id_usuario
 													ORDER BY mat_primer_apellido
-													",$conexion);
+													");
 													$contReg = 1;
-													while($resultado = mysql_fetch_array($consulta)){
-														$genero = mysql_fetch_array(mysql_query("SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'",$conexion));
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 														
-														$ingresoClase = mysql_fetch_array(mysql_query("SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
+														$ingresoClase = mysqli_fetch_array(mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
 														FROM seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."'
 														UNION 
 														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
 														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."'
-														",$conexion));
+														"), MYSQLI_BOTH);
 														
 														if($ingresoClase[0]==""){continue;}
 													?>
@@ -348,9 +348,9 @@ WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1",$conexion));
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$consulta = mysql_query("SELECT * FROM academico_clases 
-													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1",$conexion);
-													while($resultado = mysql_fetch_array($consulta)){
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
+													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1");
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$resaltaItem = 'darkblue';
 														if($resultado['cls_id']==$_GET["idR"]){$resaltaItem = 'limegreen';}
 														

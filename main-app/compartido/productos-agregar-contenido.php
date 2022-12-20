@@ -51,12 +51,12 @@
                                             <label class="col-sm-2 control-label">Categoría del producto (*)</label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysql_query("SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos",$conexion);
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos");
 												?>
                                                 <select class="form-control  select2" name="categoria" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													while($datos = mysql_fetch_array($datosConsulta)){
+													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
                                                     	<option value="<?=$datos[0];?>"><?=$datos['catp_nombre']?></option>
 													<?php }?>

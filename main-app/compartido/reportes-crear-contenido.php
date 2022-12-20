@@ -19,15 +19,15 @@
                                             <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysql_query("SELECT * FROM academico_matriculas 
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 												INNER JOIN usuarios ON uss_id=mat_id_usuario
 												WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido
-												",$conexion);
+												");
 												?>
                                                 <select class="form-control  select2" name="estudiante" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-													while($datos = mysql_fetch_array($datosConsulta)){
+													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
                                                     	<option value="<?=$datos['uss_id'];?>"><?="[".$datos['uss_id']."] ".$datos['uss_nombre']?></option>
 													<?php }?>
@@ -40,10 +40,10 @@
                                             <div class="col-sm-10">
                                                 <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple>
 												<?php
-												$datosConsulta = mysql_query("SELECT * FROM disciplina_faltas 
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
 												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-												",$conexion);
-												while($datos = mysql_fetch_array($datosConsulta)){
+												");
+												while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												?>	
                                                   <option value="<?=$datos['dfal_id'];?>"><?=$datos['dfal_codigo'].". ".$datos['dfal_nombre'];?></option>	
 												<?php }?>	
@@ -56,15 +56,15 @@
 												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-10">
 													<?php
-													$datosConsulta = mysql_query("SELECT * FROM usuarios
+													$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
 													WHERE (uss_tipo=2 OR uss_tipo=5)
 													ORDER BY uss_tipo, uss_nombre
-													",$conexion);
+													");
 													?>
 													<select class="form-control  select2" name="usuario" required>
 														<option value="">Seleccione una opción</option>
 														<?php
-														while($datos = mysql_fetch_array($datosConsulta)){
+														while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 														?>
 															<option value="<?=$datos['uss_id'];?>"><?=$datos['uss_nombre']?></option>
 														<?php }?>
