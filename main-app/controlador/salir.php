@@ -14,4 +14,4 @@ setcookie("carga","",time()-3600);
 setcookie("periodo","",time()-3600);
 session_destroy();
 
-header("Location:".REDIRECT_ROUTE);
+header("Location:".$REDIRECT_ROUTE);
