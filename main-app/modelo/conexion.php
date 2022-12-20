@@ -1,6 +1,10 @@
 <?php 
 error_reporting (E_ALL ^ E_NOTICE);
 
+if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
+    session_start();
+}
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost';
 	$REDIRECT_ROUTE = 'http://localhost/plataformasintia.com/main-app';
@@ -13,11 +17,6 @@ switch($_SERVER['HTTP_HOST']){
 	case 'main.plataformasintia.com';
 	$REDIRECT_ROUTE = 'https://main.plataformasintia.com/app-sintia/main-app';
 	break;
-}
-
-
-if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
-    session_start();
 }
 
 if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
