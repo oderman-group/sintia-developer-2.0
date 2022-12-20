@@ -22,13 +22,13 @@ WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND us
 if(mysql_errno()!=0){echo "44". mysql_error(); exit();}
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=1&msg=usuario-no-fue-encontrado");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=1&msg=usuario-no-fue-encontrado");
 	exit();
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=3");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=3");
 	exit();
 }
 
@@ -87,6 +87,6 @@ if($num>0)
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."')");
 	if(mysql_errno()!=0){echo mysql_error();exit();}
 
-	header("Location:".REDIRECT_ROUTE."/index.php?error=2&msg=clave-incorrecta");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=2&msg=clave-incorrecta");
 	exit();
 }

@@ -1,7 +1,20 @@
 <?php 
 error_reporting (E_ALL ^ E_NOTICE);
 
-const REDIRECT_ROUTE = 'http://localhost/plataformasintia.com/main-app';
+switch($_SERVER['HTTP_HOST']){
+	case 'localhost';
+	$REDIRECT_ROUTE = 'http://localhost/plataformasintia.com/main-app';
+	break;
+
+	case 'developer.plataformasintia.com';
+	$REDIRECT_ROUTE = 'https://developer.plataformasintia.com/app-sintia/main-app';
+	break;
+
+	case 'main.plataformasintia.com';
+	$REDIRECT_ROUTE = 'https://main.plataformasintia.com/app-sintia/main-app';
+	break;
+}
+
 
 if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
     session_start();
@@ -16,7 +29,7 @@ include("../../conexion-datos.php");
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
 	session_destroy();
-	header("Location:".REDIRECT_ROUTE."?error=no_hay_sesion_institucion");
+	header("Location:".$REDIRECT_ROUTE."?error=no_hay_sesion_institucion");
 	exit();
 }else{
 	
