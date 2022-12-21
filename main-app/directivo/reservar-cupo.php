@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0121';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -40,8 +39,7 @@
 									INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
 									INNER JOIN academico_grados ON gra_id=mat_grado
 									INNER JOIN academico_grupos ON gru_id=mat_grupo
-									WHERE genc_id=genc_id $filtro
-									";
+									WHERE genc_id=genc_id $filtro";
 								?>
 								
 								
@@ -52,15 +50,12 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cursos = mysql_query("SELECT * FROM academico_grados
+											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
 											WHERE gra_estado=1
-											ORDER BY gra_vocal
-											",$conexion);
-											while($curso = mysql_fetch_array($cursos)){
-												$estudiantesPorGrado = mysql_fetch_array(mysql_query("
-												SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'
-												",$conexion));
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
+											ORDER BY gra_vocal");
+											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
+												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
+												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
 												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -105,8 +100,8 @@
                                                 <tbody>
 													<?php
 													$respuestas = array("","SI","NO");
-													$consulta = mysql_query($SQL,$conexion);
-													while($resultado = mysql_fetch_array($consulta)){				
+													$consulta = mysqli_query($conexion, $SQL);
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 													?>
 													<tr>
 														<td><?=$resultado['genc_id'];?></td>

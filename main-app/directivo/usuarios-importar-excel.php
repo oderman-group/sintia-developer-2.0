@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0125';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 
@@ -67,15 +66,6 @@
                                    
 									<form name="formularioGuardar" action="excel-importar-usuarios.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="12" name="id">
-										
-											<!--
-											<div class="form-group row">
-												<label class="col-sm-3 control-label">Planilla de uso</label>
-												<div class="col-sm-9">
-													<a href="excel-planilla-notas.php?idR=<?=$_GET['idR'];?>&curso=<?=$datosCargaActual['car_curso'];?>&grupo=<?=$datosCargaActual['car_grupo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar planilla para esta actividad</a>
-												</div>
-											</div>
--->
 										
 										<div class="form-group row">
 												<label class="col-sm-3 control-label">Subir la planilla lista</label>

@@ -11,15 +11,18 @@ include("head.php");
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
-  $resultado = mysql_fetch_array($consulta = mysql_query("SELECT * FROM academico_matriculas 
+  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
   INNER JOIN academico_grados ON gra_id=mat_grado
   INNER JOIN academico_grupos ON gru_id=mat_grupo
   INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-  WHERE mat_matricula='".$_GET["ref"]."'",$conexion));
-  $acudiente1 = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'"));
-  $acudiente2 = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente2']."'"));
-  
-  $tipo = mysql_fetch_array(mysql_query("SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'",$conexion));
+  WHERE mat_matricula='".$_GET["ref"]."'");
+  $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+  $consultaAcudiente1=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'");
+  $acudiente1 = mysqli_fetch_array($consultaAcudiente1, MYSQLI_BOTH);
+  $consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente2']."'");
+  $acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+  $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
+  $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
   
 <table width="90%" cellpadding="5" cellspacing="0" border="0" align="center" style="font-size:10px;">
