@@ -95,10 +95,10 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysql_query("SELECT * FROM academico_cronograma 
-													 WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."'",$conexion);
+													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_cronograma 
+													 WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."'");
 													$contReg=1; 
-													while($resultado = mysql_fetch_array($consulta)){
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr id="reg<?=$resultado['cro_id'];?>">
                                                         <td><?=$contReg;?></td>
