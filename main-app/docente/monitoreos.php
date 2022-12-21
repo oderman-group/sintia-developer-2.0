@@ -66,13 +66,12 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysql_query("SELECT * FROM academico_monitoreo 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_monitoreo 
 													 INNER JOIN usuarios ON uss_id=moni_evaluado
 													 WHERE moni_evaluador='".$_SESSION["id"]."' 
-													 ORDER BY moni_id DESC
-													 ",$conexion);
+													 ORDER BY moni_id DESC");
 													$contReg=1; 
-													while($resultado = mysql_fetch_array($consulta)){
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>

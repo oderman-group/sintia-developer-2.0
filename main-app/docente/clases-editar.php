@@ -5,7 +5,8 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$datosConsulta = mysql_fetch_array(mysql_query("SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1",$conexion));
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 
 	<!--bootstrap -->
