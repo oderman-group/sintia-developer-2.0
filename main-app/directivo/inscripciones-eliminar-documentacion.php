@@ -2,7 +2,8 @@
 include("session.php");
 include("../modelo/conexion.php");
 
-	$documentos = mysql_fetch_array(mysql_query("SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'",$conexion));
+	$consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
+	$documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 
 	$ruta = '../admisiones/files/otros';
@@ -15,7 +16,7 @@ include("../modelo/conexion.php");
 	if(file_exists($ruta."/".$documentos['matd_documento_identidad'])){	unlink($ruta."/".$documentos['matd_documento_identidad']);	}
 	if(file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$documentos['matd_certificados']);	}
 
-	mysql_query("UPDATE academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados='".$_SESSION["id"]."' WHERE matd_matricula='".$_GET["matricula"]."'",$conexion);
+	mysqli_query($conexion, "UPDATE academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados='".$_SESSION["id"]."' WHERE matd_matricula='".$_GET["matricula"]."'");
 	if(mysql_errno()!=0){echo mysql_error(); exit();}
 	
 	echo '<script type="text/javascript">window.location.href="inscripciones.php?msg=1";</script>';

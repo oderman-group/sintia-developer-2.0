@@ -3,7 +3,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$datosConsulta = mysql_fetch_array(mysql_query("SELECT * FROM social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2",$conexion));
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2");
+$datosConsulta = mysqli_fetch_array($consultaDatos);
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 ?>
 

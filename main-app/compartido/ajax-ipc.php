@@ -5,11 +5,11 @@ if(trim($_POST["ih"])==""){
 	exit();
 }
 include("../modelo/conexion.php");
-mysql_query("DELETE FROM academico_intensidad_curso WHERE ipc_curso='".$_POST["curso"]."' AND ipc_materia='".$_POST["materia"]."'",$conexion);
+mysqli_query($conexion, "DELETE FROM academico_intensidad_curso WHERE ipc_curso='".$_POST["curso"]."' AND ipc_materia='".$_POST["materia"]."'");
 if(mysql_errno()!=0){echo mysql_error(); exit();}
-mysql_query("INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('".$_POST["curso"]."','".$_POST["materia"]."','".$_POST["ih"]."')",$conexion);
+mysqli_query($conexion, "INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('".$_POST["curso"]."','".$_POST["materia"]."','".$_POST["ih"]."')");
 if(mysql_errno()!=0){echo mysql_error(); exit();}
-mysql_query("UPDATE academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."'",$conexion);
+mysqli_query($conexion, "UPDATE academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."'");
 if(mysql_errno()!=0){echo mysql_error(); exit();}
 else{
 ?>
