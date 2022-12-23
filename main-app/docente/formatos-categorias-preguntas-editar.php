@@ -4,7 +4,8 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$datosConsultaBD = mysql_fetch_array(mysql_query("SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$_GET["idR"]."'",$conexion));
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$_GET["idR"]."'");
+$datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
 	<!--bootstrap -->

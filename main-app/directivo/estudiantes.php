@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0001';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -77,16 +76,15 @@
 										if(is_numeric($_GET["grupo"])){$filtro .= " AND mat_grupo='".$_GET["grupo"]."'";}
 										if(is_numeric($_GET["genero"])){$filtro .= " AND mat_genero='".$_GET["genero"]."'";}
 										
-										$estadisticasEstudiantes = mysql_fetch_array(mysql_query("
-										SELECT
+										$consultaEstadisticasEstudiantes=mysqli_query($conexion, "SELECT
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=2 $filtro),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=3 $filtro),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=4 $filtro),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=126),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=127)
-										",$conexion));
+										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=127)");
+										$estadisticasEstudiantes = mysqli_fetch_array($consultaEstadisticasEstudiantes, MYSQLI_BOTH);
 										$porcentajeMatriculados = round(($estadisticasEstudiantes[1]/$estadisticasEstudiantes[0])*100,2);
 										$porcentajeAsistentes = round(($estadisticasEstudiantes[2]/$estadisticasEstudiantes[0])*100,2);
 										$porcentajeCancelados = round(($estadisticasEstudiantes[3]/$estadisticasEstudiantes[0])*100,2);
@@ -201,14 +199,12 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cursos = mysql_query("SELECT * FROM academico_grados
+											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
 											WHERE gra_estado=1
-											ORDER BY gra_vocal
-											",$conexion);
-											while($curso = mysql_fetch_array($cursos)){
-												$estudiantesPorGrado = mysql_fetch_array(mysql_query("
-												SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'
-												",$conexion));
+											ORDER BY gra_vocal");
+											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
+												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
+												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
 												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
 												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
@@ -236,9 +232,8 @@
 										<header class="panel-heading panel-heading-purple">Grupos </header>
 										<div class="panel-body">
 											<?php
-											$grupos = mysql_query("SELECT * FROM academico_grupos
-											",$conexion);
-											while($grupo = mysql_fetch_array($grupos)){
+											$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
 												if($grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>&curso=<?=$_GET["curso"];?>&genero=<?=$_GET["genero"];?>&estadoM=<?=$_GET["estadoM"];?>" <?=$estiloResaltado;?>><?=strtoupper($grupo['gru_nombre']);?></a></p>
@@ -348,20 +343,20 @@
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													
-													 $consulta = mysql_query("SELECT * FROM academico_matriculas
+													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
 													 INNER JOIN academico_grados ON gra_id=mat_grado
 													 INNER JOIN academico_grupos ON gru_id=mat_grupo
 													 INNER JOIN usuarios ON uss_id=mat_id_usuario
 													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
 													 WHERE mat_eliminado=0 $filtro
 													 ORDER BY mat_primer_apellido
-													 $filtroLimite
-													 ",$conexion);
+													 $filtroLimite");
 													 $contReg = 1;
 													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 													$estadosEtiquetas = array("","text-success","text-warning","text-danger","text-warning");
-													 while($resultado = mysql_fetch_array($consulta)){
-														$acudiente = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='".$resultado["mat_acudiente"]."'",$conexion));
+													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$consultaAcudientes=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado["mat_acudiente"]."'");
+														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
 														$bgColor = '';
 														if($resultado['uss_bloqueado']==1) $bgColor = '#ff572238';
 													 ?>
