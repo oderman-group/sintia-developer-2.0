@@ -20,7 +20,7 @@ if($_POST["id"]==1000){
 
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."', uss_email='".$_POST["email"]."' WHERE uss_id='".$_SESION["id"]."'");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	echo '<script type="text/javascript">window.location.href="matricula.php";</script>';
 
@@ -40,7 +40,7 @@ if($_POST["id"]==7){
 
 	mysqli_query($conexion, "INSERT INTO academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".$_POST["com"]."', '".$_SESION["id"]."', now())");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 ?>
 
@@ -118,7 +118,7 @@ if($_POST["id"]==8){
 
 	mysqli_query($conexion, "INSERT INTO academico_actividad_foro_respuestas(fore_id_comentario, fore_respuesta, fore_id_estudiante, fore_fecha)VALUES('".$_POST["idCom"]."', '".$_POST["respu"]."', '".$_SESION["id"]."', now())");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 ?>
 
@@ -222,7 +222,7 @@ if($_POST["id"]==9){
 
 	WHERE res_id_estudiante='".$datosEstudianteActual[0]."' AND res_id_evaluacion='".$_POST["idE"]."'");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	
 
@@ -236,7 +236,7 @@ if($_POST["id"]==9){
 
 	");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
@@ -250,7 +250,7 @@ if($_POST["id"]==9){
 
 		");
 
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 
 		$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 
@@ -296,7 +296,7 @@ if($_POST["id"]==9){
 
 		VALUES('".$_POST["P$contPreguntas"]."', '".$_POST["R$contPreguntas"]."', '".$datosEstudianteActual[0]."', '".$_POST["idE"]."', '".$archivo."')");
 
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 
 		
 
@@ -316,7 +316,7 @@ if($_POST["id"]==9){
 
 	WHERE epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_id_evaluacion='".$_POST["idE"]."'");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	
 
@@ -516,7 +516,7 @@ if($_POST["id"]==11){
 	mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aprobado=1, dn_fecha_aprobado=now()
     WHERE dn_cod_estudiante=" . $_POST["estudiante"] . " AND dn_periodo='" . $_POST["periodo"] . "'");
 
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	echo '<script type="text/javascript">window.location.href="aspectos.php";</script>';
 

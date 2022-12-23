@@ -23,7 +23,7 @@
 	WHERE evp_id_evaluacion='".$_GET["idE"]."'
 	ORDER BY preg_id DESC
 	");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
 	?>
@@ -232,15 +232,15 @@
 														 if($_POST["exportar"]==1 and $nota!=""){
 															 
 															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
-															if(mysql_errno()!=0){echo mysql_error(); exit();}
+															
 															 
 															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado[0]."','".$nota."','".$_POST["actividad"]."', now(), 0)");
-															if(mysql_errno()!=0){echo mysql_error(); exit();}
+															
 															
 															 //Solo actuliza una vez que la actividad fue registrada.
 															 if($registroNotas<1){
 																mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."'");
-																if(mysql_errno()!=0){echo mysql_error(); exit();}
+																
 															}
 															 
 															 $registroNotas ++;

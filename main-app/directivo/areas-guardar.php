@@ -7,6 +7,6 @@
 		exit();
 	}
 	mysqli_query($conexion, "INSERT INTO academico_areas (ar_nombre,ar_posicion)VALUES('".$_POST["nombreA"]."',".$_POST["posicionA"].");");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
 	exit();

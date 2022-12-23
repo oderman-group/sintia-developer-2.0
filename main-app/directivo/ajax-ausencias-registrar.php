@@ -3,21 +3,21 @@
 <?php
 include("../modelo/conexion.php");
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."'");
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 $num = mysqli_num_rows($consulta);
 $rC = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 if($num==0){
 	mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "INSERT INTO academico_ausencias(aus_id_estudiante, aus_ausencias, aus_id_clase)VALUES('".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."')");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "UPDATE academico_clases SET cls_registrada=1, cls_fecha_registro=now() WHERE cls_id='".$_POST["codNota"]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }else{
 	mysqli_query($conexion, "UPDATE academico_ausencias SET aus_ausencias='".$_POST["nota"]."' WHERE aus_id='".$rC[0]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "UPDATE academico_clases SET cls_registrada=1, cls_fecha_modificacion=now() WHERE cls_id='".$_POST["codNota"]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }	
 ?>
 	<script type="text/javascript">

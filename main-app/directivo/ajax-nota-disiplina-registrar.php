@@ -9,14 +9,14 @@ if(mysqli_num_rows($cdnota)==0){
 	}else{
 	mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["observacion"]."', now(),'".$_POST["periodo"]."')");	
 		}
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }else{
 	if(isset($_POST["nota"])){
 	mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$_POST["nota"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
 	}else{
 	mysqli_query($conexion, "UPDATE disiplina_nota SET dn_observacion='".$_POST["observacion"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");	
 		}
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	}
 if(mysql_errno()!=0){echo "ERROR: ".mysql_errno()." - ".mysql_error();exit();}
 else{

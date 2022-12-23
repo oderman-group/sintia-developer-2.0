@@ -4,7 +4,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Informaci n', now())");
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 ?>
 
 	<!--bootstrap -->

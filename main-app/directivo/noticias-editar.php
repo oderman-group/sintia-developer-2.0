@@ -5,7 +5,7 @@
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2");
 $datosConsulta = mysqli_fetch_array($consultaDatos);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 ?>
 
 	<!--bootstrap -->

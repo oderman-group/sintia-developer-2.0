@@ -15,7 +15,7 @@
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
 WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1")
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 ?>
 
 	<input type="hidden" id="idR" name="idR" value="<?=$_GET["idR"];?>">
