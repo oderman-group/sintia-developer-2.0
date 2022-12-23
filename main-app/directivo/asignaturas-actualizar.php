@@ -3,6 +3,6 @@
 <?php
     //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
     mysqli_query($conexion, "UPDATE academico_materias SET mat_codigo='".$_POST["codigoM"]."', mat_nombre='".$_POST["nombreM"]."', mat_siglas='".$_POST["siglasM"]."', mat_area=".$_POST["areaM"].", mat_oficial=1 WHERE mat_id='".$_POST["idM"]."'");
-    if(mysql_errno()!=0){echo mysql_error(); exit();}
+    
     echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
 		exit();

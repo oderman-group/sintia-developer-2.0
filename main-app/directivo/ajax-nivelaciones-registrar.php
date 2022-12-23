@@ -8,17 +8,17 @@ if(trim($_POST["nota"])==""){
 if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
 include("../modelo/conexion.php");
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$_POST["codEst"]."' AND niv_id_asg='".$_COOKIE["carga"]"'");
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 $num = mysqli_num_rows($consulta);
 $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 if($num==0){
 	mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_id='".$rB[0]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "INSERT INTO academico_nivelaciones(niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha)VALUES('".$_COOKIE["carga"]."','".$_POST["codEst"]."','".$_POST["nota"]."',now())");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }else{
 	mysqli_query($conexion, "UPDATE academico_nivelaciones SET niv_definitiva='".$_POST["nota"]."', niv_fecha=now() WHERE niv_id=".$rB[0]);
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }	
 
 

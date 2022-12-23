@@ -178,7 +178,7 @@ function niv(enviada){
 														<?php		
 														 }
 															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
-															if(mysql_errno()!=0){echo mysql_error(); exit();}
+															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
 															if($numN==0){
