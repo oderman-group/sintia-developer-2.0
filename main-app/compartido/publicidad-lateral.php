@@ -44,7 +44,7 @@ LIMIT ".$empezar.",1
 <?php if($publicidadLateral['pubxub_id']!=""){
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
 	VALUES('".$publicidadLateral['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 1, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 ?>
 <div class="panel" style="position: sticky; top:0;">
 	<!--<header class="panel-heading panel-heading-green"><?=$frases[133][$datosUsuarioActual['uss_idioma']];?> </header>-->

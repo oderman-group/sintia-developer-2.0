@@ -65,7 +65,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                         <?php		
 										 }
 											$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$_GET["estudiante"]." AND niv_id_asg=".$rCargas[0]);
-											if(mysql_errno()!=0){echo mysql_error(); exit();}
+											
 											$numN = mysqli_num_rows($consultaN);
 											$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
 											if($numN==0){

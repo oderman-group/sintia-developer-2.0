@@ -20,7 +20,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                   <?php
 								  //ESTUDIANTE ACTUAL
 								  $consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["estudiante"]."'");
-								  if(mysql_errno()!=0){echo mysql_error(); exit();}
+								  
 								  $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
 								  ?>
                                   <!-- BEGIN TABLE DATA -->
