@@ -10,8 +10,6 @@ if(isset($_POST["cambiar"]))
 }
 ?>
 <?php include("../modelo/conexion.php");?>
-<?php $idPaginaInterna = 1;?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 

@@ -893,7 +893,7 @@ if ($_POST["id"] == 29) {
 
 	if($numD==0){
 		mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["estudiante"]."' AND dn_periodo='".$_POST["periodo"]."'");
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 		mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_aspecto_academico, dn_aspecto_convivencial, dn_periodo, dn_id_carga)VALUES('".$_POST["estudiante"]."','".$_POST["academicos"]."','".$_POST["convivenciales"]."', '".$_POST["periodo"]."', '".$carga['car_id']."')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");

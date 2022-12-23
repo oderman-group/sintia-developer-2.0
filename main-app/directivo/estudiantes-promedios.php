@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0002';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -36,11 +35,10 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cursos = mysql_query("SELECT * FROM academico_grados
+											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
 											WHERE gra_estado=1
-											ORDER BY gra_vocal
-											",$conexion);
-											while($curso = mysql_fetch_array($cursos)){
+											ORDER BY gra_vocal");
+											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>&grupo=<?=$_GET["grupo"];?>&periodo=<?=$_GET["periodo"];?>&cantidad=<?=$_GET["cantidad"];?>&orden=<?=$_GET["orden"];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></p>
@@ -53,9 +51,8 @@
 										<header class="panel-heading panel-heading-purple">Grupos </header>
 										<div class="panel-body">
 											<?php
-											$grupos = mysql_query("SELECT * FROM academico_grupos
-											",$conexion);
-											while($grupo = mysql_fetch_array($grupos)){
+											$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
 												if($grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>&curso=<?=$_GET["curso"];?>&periodo=<?=$_GET["periodo"];?>&cantidad=<?=$_GET["cantidad"];?>&orden=<?=$_GET["orden"];?>" <?=$estiloResaltado;?>><?=strtoupper($grupo['gru_nombre']);?></a></p>
@@ -103,14 +100,13 @@
 											$filtroOrden ='DESC';
 											if($_GET["orden"]!=""){$filtroOrden = $_GET["orden"];}
 											
-											$destacados = mysql_query("SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin
+											$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin
 											INNER JOIN academico_matriculas ON mat_id=bol_estudiante $filtro AND mat_eliminado=0
 											WHERE bol_id=bol_id $filtroBoletin
 											GROUP BY bol_estudiante ORDER BY promedio $filtroOrden
-											$filtroLimite
-											",$conexion);
+											$filtroLimite");
 											$contP = 1;
-											while($dest = mysql_fetch_array($destacados)){
+											while($dest = mysqli_fetch_array($destacados, MYSQLI_BOTH)){
 												$porcentaje = ($dest['promedio']/$config['conf_nota_hasta'])*100;
 												if($dest['promedio'] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 											?>
@@ -162,12 +158,11 @@
 											<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 											<div class="panel-body">
 												<?php
-												$cargas = mysql_query("SELECT * FROM academico_cargas 
+												$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 												INNER JOIN academico_materias ON mat_id=car_materia
 												WHERE car_curso='".$_GET["curso"]."' AND car_grupo='".$_GET["grupo"]."'
-												ORDER BY mat_nombre
-												",$conexion);
-												while($carga = mysql_fetch_array($cargas)){
+												ORDER BY mat_nombre");
+												while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 													if($carga['car_id']==$_GET["carga"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 												?>
 													<p><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$_GET['curso'];?>&grupo=<?=$_GET["grupo"];?>&periodo=<?=$_GET["periodo"];?>&cantidad=<?=$_GET["cantidad"];?>&orden=<?=$_GET["orden"];?>&carga=<?=$carga['car_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($carga['mat_nombre']);?></a></p>

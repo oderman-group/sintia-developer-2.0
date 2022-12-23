@@ -15,7 +15,7 @@ LIMIT ".$empezarMF.",1
 <?php if($publicidadLateralMF['pub_id']!=""){
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
 	VALUES('".$publicidadLateralMF['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 1, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	
 	$guardadaNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_guardadas
 	WHERE psave_publicidad='".$publicidadLateralMF['pub_id']."' AND psave_institucion='".$config['conf_id_institucion']."' AND psave_usuario='".$_SESSION["id"]."'"));
