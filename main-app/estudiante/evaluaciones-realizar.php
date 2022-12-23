@@ -108,7 +108,7 @@
 	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
 	WHERE evp_id_evaluacion='".$_GET["idE"]."'
 	");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
 	//Si la evaluación no tiene preguntas, lo mandamos para la pagina informativa
@@ -120,7 +120,7 @@
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
 	WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	if($nume>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=200";</script>';
 		exit();
@@ -135,16 +135,16 @@
 	}
 	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
 	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$_GET["idE"]."', now())");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 
 	//CUANTOS ESTÁN REALIZANDO LA EVALUACIÓN EN ESTE MOMENTO Y CUANTOS TERMINARON
 	$Numerosevaluados = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_fin IS NULL),
 	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
 	"), MYSQLI_BOTH);
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	?>
 
 	<input type="hidden" id="idE" name="idE" value="<?=$_GET["idE"];?>">
@@ -242,7 +242,7 @@
 												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
 												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
 												");
-												if(mysql_errno()!=0){echo mysql_error(); exit();}
+												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
 													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual[8]].".</span>";
