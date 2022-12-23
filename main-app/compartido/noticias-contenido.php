@@ -245,7 +245,7 @@
 													<?php if($publicidadNoticias['pubxub_id']!=""){
 														mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
 														VALUES('".$publicidadNoticias['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 5, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
-														if(mysql_errno()!=0){echo mysql_error(); exit();}
+														
 													?>
 														<div align="center" style="padding-top: 5px; padding-bottom: 10px;">
 															<span style="color: blue; font-size: 10px;">Promociado</span>

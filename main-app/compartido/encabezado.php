@@ -5,7 +5,7 @@ if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
 	include("../compartido/reporte-errores.php");
 }
 $institucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$_SESSION["inst"]."'");
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $institucionNombre = $institucion['ins_siglas'];
 ?>

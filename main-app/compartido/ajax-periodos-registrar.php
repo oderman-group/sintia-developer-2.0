@@ -11,18 +11,18 @@ if(trim($_POST["nota"])==""){
 if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
 include("../modelo/conexion.php");
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$_POST["codEst"]." AND bol_carga=".$_POST["carga"]." AND bol_periodo=".$_POST["per"]);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 $num = mysqli_num_rows($consulta);
 $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 //echo $num; exit();
 if($num==0){
 	mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_id='".$rB[0]."'");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_observaciones)VALUES('".$_POST["carga"]."','".$_POST["codEst"]."','".$_POST["per"]."','".$_POST["nota"]."',1, 'Colocada desde la parte Directiva.')");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }else{
 	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada desde la parte Directiva', bol_tipo=1 WHERE bol_id=".$rB[0]);
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 }	
 if(mysql_errno()!=0){echo "ERROR: ".mysql_errno()." - ".mysql_error();exit();}
 else{
@@ -31,7 +31,7 @@ else{
 		$usuarioResponsable = mysqli_fetch_array($consultaUsuarioResponsable, MYSQLI_BOTH);
 		if($usuarioResponsable[1]=="") $usuarioResponsable[1]=0;
 		mysqli_query($conexion, "INSERT INTO general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable[1]."',now(),0,1,2)");
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 		$consultaEstudiantes=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_POST["codEst"]."'");
 		$estudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);
 		$nombreCompleto = strtoupper($estudiante[3]." ".$estudiante[4]." ".$estudiante[5]);

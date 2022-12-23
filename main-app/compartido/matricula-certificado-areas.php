@@ -70,7 +70,7 @@ while($i<=$restaAgnos){
 	INNER JOIN academico_grados ON gra_id=mat_grado
 	INNER JOIN academico_grupos ON gru_id=mat_grupo
 	WHERE mat_id='".$_POST["id"]."' AND mat_eliminado=0");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	
 	$estudiante = mysqli_fetch_array($estudianteC, MYSQLI_BOTH);
 	
@@ -207,7 +207,7 @@ while($i<=$restaAgnos){
             <?php
 			//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 			$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='".$cargas["ar_id"]."' AND mat_id=car_materia AND car_curso='".$matricula["gra_id"]."' AND car_grupo='".$matricula["gru_id"]."' AND ipc_curso='".$matricula["mat_grado"]."' AND ipc_materia=mat_id");
-			if(mysql_errno()!=0){echo mysql_error(); exit();}
+			
 			while($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)){
 				$consultaNotaDefMateria=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$mda["car_id"]."'");
 				$notaDefMateria = mysqli_fetch_array($consultaNotaDefMateria, MYSQLI_BOTH);
@@ -261,7 +261,7 @@ while($i<=$restaAgnos){
 
 									WHERE niv_cod_estudiante='".$_POST["id"]."'");
 
-		if(mysql_errno()!=0){echo mysql_error(); exit();}							
+									
 
 		$numNiv = mysqli_num_rows($nivelaciones);
 

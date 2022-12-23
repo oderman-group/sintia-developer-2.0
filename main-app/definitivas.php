@@ -4,7 +4,7 @@
 $consultaD = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' $filtro ");
 
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 
 $numConsultaD = mysqli_num_rows($consultaD);
 
@@ -22,7 +22,7 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'"), MYSQLI_BOTH);
 
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 
 		if($nota[3]!=""){
 

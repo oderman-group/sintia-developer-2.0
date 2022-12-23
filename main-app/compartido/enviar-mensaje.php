@@ -203,7 +203,7 @@ while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 		continue;
 	else{	
 		mysqli_query($conexion, "INSERT INTO emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto)VALUES('".$_GET["de"]."', '".$resultado[0]."', '".$_POST["asunto"]."', '".$_POST["mensaje"]."', now(), 0)");
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 	}	
 }
 	

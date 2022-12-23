@@ -7,7 +7,7 @@ $consultaNumerosEvaluadoss=mysqli_query($conexion, "SELECT
 (SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_POST["eva"]."' AND epe_fin IS NULL),
 (SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_POST["eva"]."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)");
 $Numerosevaluadoss = mysqli_fetch_array($consultaNumerosEvaluadoss, MYSQLI_BOTH);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 
 if($_POST["consulta"]==1){echo $Numerosevaluadoss[0];}	
 if($_POST["consulta"]==2){echo $Numerosevaluadoss[1];}	

@@ -217,7 +217,7 @@ while($i<=$restaAgnos){
 
 									WHERE niv_cod_estudiante='".$_POST["id"]."'");
 
-		if(mysql_errno()!=0){echo mysql_error(); exit();}							
+									
 
 		$numNiv = mysqli_num_rows($nivelaciones);
 

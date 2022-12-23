@@ -16,12 +16,12 @@ while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 		$p=1;
 		while($p<=$config['conf_periodos_maximos']){
 			mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$cgs[0]."','".$_POST["indicador"]."','".$indicadorObg['ind_valor']."','".$p."',0)");
-			if(mysql_errno()!=0){echo mysql_error(); exit();}
+			
 			$p++;
 		}
 	}else{
 		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_indicador='".$_POST["indicador"]."' AND ipc_creado=0");
-		if(mysql_errno()!=0){echo mysql_error(); exit();}
+		
 	}
 }
 
