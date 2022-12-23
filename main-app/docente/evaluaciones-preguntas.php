@@ -90,7 +90,7 @@ function mostrarNuevaRespuesta(datos){
 	WHERE evp_id_evaluacion='".$_GET["idE"]."'
 	ORDER BY preg_id DESC
 	");
-	if(mysql_errno()!=0){echo mysql_error(); exit();}
+	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
 	?>
@@ -182,7 +182,7 @@ function mostrarNuevaRespuesta(datos){
 												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
 												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
 												");
-												if(mysql_errno()!=0){echo mysql_error(); exit();}
+												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												
 												$totalPuntos +=$preguntas['preg_valor'];

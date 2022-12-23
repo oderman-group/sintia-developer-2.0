@@ -6,7 +6,7 @@
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_id='".$_GET["idR"]."' AND fold_categoria=2");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 ?>
 
 	<!--bootstrap -->

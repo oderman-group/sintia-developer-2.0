@@ -14,7 +14,7 @@ $preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_
 INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
 WHERE evp_id_evaluacion='".$_GET["idE"]."'
 ORDER BY preg_id DESC");
-if(mysql_errno()!=0){echo mysql_error(); exit();}
+
 $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 ?>
 
