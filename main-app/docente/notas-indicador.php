@@ -274,7 +274,7 @@
 
 		<!-- end page content -->
 
-		<?php include("../compartido/panel-configuracion.php"); ?>
+		<?php // include("../compartido/panel-configuracion.php"); ?>
 
 	</div>
 

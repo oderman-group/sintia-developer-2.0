@@ -98,9 +98,9 @@ include("head.php");
 <table width="90%" cellpadding="5" cellspacing="0" border="1" rules="groups" align="center" style="font-size:10px;">
     <tr>
     	<td>NOMBRE DE LA MADRE:</td> 
-        <td><b><?=strtoupper($acudiente2['uss_nombre']);?></b></td>
+        <td><b><?php if(isset($acudiente2['uss_nombre'])){ echo strtoupper($acudiente2['uss_nombre']);}?></b></td>
         <td>NOMBRE DEL PADRE:</td> 
-        <td><b><?=strtoupper($acudiente1['uss_nombre']);?></b></td>
+        <td><b><?php if(isset($acudiente1['uss_nombre'])){ echo strtoupper($acudiente1['uss_nombre']);}?></b></td>
     </tr>
 </table>
 
@@ -109,9 +109,9 @@ include("head.php");
 <table width="90%" cellpadding="5" cellspacing="0" border="1" rules="groups" align="center" style="font-size:10px;">
     <tr>
     	<td>NOMBRES Y APELLIDOS:</td> 
-        <td><b><?=strtoupper($acudiente1['uss_nombre']." ".$acudiente1['uss_nombre2']." ".$acudiente1['uss_apellido1']." ".$acudiente1['uss_apellido2']);?></b></td>
+        <td><b><?php if(isset($acudiente1['uss_nombre'])){ echo strtoupper($acudiente1['uss_nombre']." ".$acudiente1['uss_nombre2']." ".$acudiente1['uss_apellido1']." ".$acudiente1['uss_apellido2']);}?></b></td>
         <td>DNI:</td> 
-        <td><b><?=strtoupper($acudiente1['uss_usuario']);?></b></td>
+        <td><b><?php if(isset($acudiente1['uss_usuario'])){ echo strtoupper($acudiente1['uss_usuario']);}?></b></td>
         <td>EDAD: </td> 
         <td>ESTRATO</td> 
         <td>&nbsp;</td>
@@ -121,9 +121,9 @@ include("head.php");
     	<td>PARENTESCO:</td> 
         <td colspan="2">&nbsp;</td>
         <td>PROFESIÓN:</td> 
-        <td><b><?=strtoupper($acudiente1['uss_ocupacion']);?></b></td>
-        <td>CELULAR: <b><?=strtoupper($acudiente1['uss_celular']);?></b></td> 
-        <td>TELÉFONO: <b><?=strtoupper($acudiente1['uss_telefono']);?></b></td> 
+        <td><b><?php if(isset($acudiente1['uss_ocupacion'])){ echo strtoupper($acudiente1['uss_ocupacion']);}?></b></td>
+        <td>CELULAR: <b><?php if(isset($acudiente1['uss_celular'])){ echo strtoupper($acudiente1['uss_celular']);}?></b></td> 
+        <td>TELÉFONO: <b><?php if(isset($acudiente1['uss_telefono'])){ echo strtoupper($acudiente1['uss_telefono']);}?></b></td> 
     </tr>
 </table>
 
@@ -132,9 +132,9 @@ include("head.php");
 <table width="90%" cellpadding="5" cellspacing="0" border="1" rules="groups" align="center" style="font-size:10px;">
     <tr>
     	<td>NOMBRES Y APELLIDOS:</td> 
-        <td><b><?=strtoupper($acudiente2['uss_nombre']);?></b></td>
+        <td><b><?php if(isset($acudiente2['uss_nombre'])){ echo strtoupper($acudiente2['uss_nombre']);}?></b></td>
         <td>DNI:</td> 
-        <td><b><?=strtoupper($acudiente2['uss_usuario']);?></b></td>
+        <td><b><?php if(isset($acudiente2['uss_usuario'])){ echo strtoupper($acudiente2['uss_usuario']);}?></b></td>
         <td>EDAD: </td> 
         <td>ESTRATO</td> 
         <td>&nbsp;</td>
@@ -144,21 +144,21 @@ include("head.php");
     	<td>PARENTESCO:</td> 
         <td colspan="2">&nbsp;</td>
         <td>PROFESIÓN:</td> 
-        <td><b><?=strtoupper($acudiente2['uss_ocupacion']);?></b></td>
-        <td>CELULAR: <b><?=strtoupper($acudiente2['uss_celular']);?></b></td> 
-        <td>TELÉFONO: <b><?=strtoupper($acudiente2['uss_telefono']);?></b></td> 
+        <td><b><?php if(isset($acudiente2['uss_ocupacion'])){ echo strtoupper($acudiente2['uss_ocupacion']);}?></b></td>
+        <td>CELULAR: <b><?php if(isset($acudiente2['uss_celular'])){ echo strtoupper($acudiente2['uss_celular']);}?></b></td> 
+        <td>TELÉFONO: <b><?php if(isset($acudiente2['uss_telefono'])){ echo strtoupper($acudiente2['uss_telefono']);}?></b></td> 
     </tr>
     
     <tr>
     	<td>DIRECCIÓN:</td> 
-        <td colspan="2"><b><?=strtoupper($acudiente2['uss_direccion']);?></b></td>
+        <td colspan="2"><b><?php if(isset($acudiente2['uss_direccion'])){ echo strtoupper($acudiente2['uss_direccion']);}?></b></td>
         <td>BARRIO:</td> 
         <td colspan="3">&nbsp;</td> 
     </tr>
     
     <tr>
     	<td>CORREO ELECTRÓNICO:</td> 
-        <td colspan="2"><b><?=strtoupper($acudiente2['uss_email']);?></b></td>
+        <td colspan="2"><b><?php if(isset($acudiente2['uss_email'])){ echo strtoupper($acudiente2['uss_email']);}?></b></td>
         <td>CORREO ELECTRÓNICO:</td> 
         <td colspan="3">&nbsp;</td> 
     </tr>
@@ -169,7 +169,7 @@ include("head.php");
 <table width="90%" cellpadding="5" cellspacing="0" border="1" rules="groups" align="center" style="font-size:10px;">
     <tr>
     	<td>INSTITUCIÓN DE PROCEDENCIA:</td> 
-        <td colspan="2"><b><?=strtoupper($resultado['mat_institucion_procedencia']);?></b></td>
+        <td colspan="2"><b><?php if(isset($resultado['mat_institucion_procedencia'])){ echo strtoupper($resultado['mat_institucion_procedencia']);}?></b></td>
     </tr>
     
     <tr style="font-weight:bold;">

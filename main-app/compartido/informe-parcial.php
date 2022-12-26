@@ -49,7 +49,11 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
 										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 									    //PLAN DE CLASE
-										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$_GET["periodo"]."'");
+                        $cPeriodo=$config[2];
+                      if(isset($_GET["periodo"])){
+                        $cPeriodo=$_GET["periodo"];
+                      }
+										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$cPeriodo."'");
 									    $Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
 									    $Npc = mysqli_num_rows($Cpc);
 										//DEFINITIVAS

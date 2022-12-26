@@ -9,7 +9,6 @@ mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, h
 
 
 mysqli_query($conexion, "UPDATE usuarios SET uss_estado=0, uss_ultima_salida=now() WHERE uss_id='".$_SESSION["id"]."'");
-if(mysql_errno()!=0){echo mysql_error();exit();}
 setcookie("carga","",time()-3600);
 setcookie("periodo","",time()-3600);
 session_destroy();
