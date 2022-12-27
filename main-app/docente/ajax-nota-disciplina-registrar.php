@@ -18,8 +18,8 @@ if(mysql_num_rows($cdnota)==0){
 		}
 	
 	}
-if(mysql_errno()!=0){echo "ERROR: ".mysql_errno()." - ".mysql_error();exit();}
-else{
+
+
 ?>
 	<script type="text/javascript">
 		function notifica(){
@@ -47,5 +47,5 @@ else{
 	</div>
 <?php	
 	exit();
-}
+
 ?>

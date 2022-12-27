@@ -28,8 +28,8 @@ if($num==0){
 	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada DEF. por docente.', bol_tipo=4, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=".$rB[0]);
 	
 }	
-if(mysql_errno()!=0){echo "ERROR: ".mysql_errno()." - ".mysql_error();exit();}
-else{
+
+
 	
 ?>
     <div class="alert alert-success">
@@ -38,5 +38,5 @@ else{
 	</div>
 <?php	
 	exit();
-}
+
 ?>

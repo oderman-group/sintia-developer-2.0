@@ -22,9 +22,6 @@ $consulta = mysql_query("SELECT * FROM ".$bdSelect.".academico_matriculas
 	WHERE mat_estado_matricula=1 AND mat_eliminado=0 
 	ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres
 	",$conexion);
-if(mysql_errno()!=0){
-	echo mysql_error(); exit();
-}
 
 $folio = 1;
 while($datos = mysql_fetch_array($consulta)){
