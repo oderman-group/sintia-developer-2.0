@@ -1,5 +1,5 @@
 <?php 
-error_reporting (E_ALL ^ E_NOTICE);
+error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
 
 if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
     session_start();
