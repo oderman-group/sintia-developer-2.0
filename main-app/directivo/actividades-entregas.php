@@ -168,7 +168,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                         </div>
                     </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>    

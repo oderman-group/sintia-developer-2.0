@@ -2,7 +2,7 @@
 //CALCULO DEFINITIVA
 
 $consultaD = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' $filtro ");
+WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."'");
 
 
 
@@ -24,7 +24,7 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 		
 
-		if($nota[3]!=""){
+		if(isset($nota[3])&&$nota[3]!=""){
 
 			$porNuevo = ($resultadoD[3] / 100);
 

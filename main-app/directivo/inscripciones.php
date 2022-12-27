@@ -48,7 +48,7 @@
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
                                                 $consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
+												if(isset($_GET["curso"])&&$curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
 												<div class="work-monitor work-progress">
@@ -189,7 +189,7 @@
                 </div>
             </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

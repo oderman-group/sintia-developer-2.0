@@ -609,7 +609,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 										<fieldset>
    
    
-											<?php if($acudiente[0]==""){?>
+											<?php if(isset($acudiente[0])&&$acudiente[0]==""){?>
 												<span style="color:#F03;">Si este estudiante no tiene acudiente, primero debe crearlo desde la opción <b>Usuarios->Acudientes</b> y asociarlo allá mismo.</span>
 											<?php }else{?>
 												<span style="color:#009;">Esta opción es solo para actualizar los datos del acudiente.<br>
@@ -621,7 +621,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                                           
 											<h2><b>ACUDIENTE 1</b></h2>
 											<p>
-												<a href="usuarios-editar.php?id=<?=$acudiente[0]?>" target="_blank" class="btn btn-info">Editar información del acudiente</a>
+												<a href="usuarios-editar.php?id=<?php if(isset($acudiente[0])){ echo $acudiente[0];}?>" target="_blank" class="btn btn-info">Editar información del acudiente</a>
 											</p>
 
 											<div class="form-group row">
@@ -642,7 +642,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 												
 												<label class="col-sm-2 control-label">ID Acudiente</label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off" value="<?=$acudiente['uss_usuario']?>">
+													<input type="text" name="documentoA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>">
 												</div>
 											</div>
 												
@@ -658,38 +658,38 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$acudiente["uss_lugar_expedicion"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if(isset($acudiente["uss_lugar_expedicion"])&&$opg['ciu_id']==$acudiente["uss_lugar_expedicion"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>	
 
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
-													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$acudiente["uss_ocupacion"];?>">
+													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_ocupacion"])){ echo $acudiente["uss_ocupacion"];}?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Primer Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido1A" class="form-control" autocomplete="off" value="<?=$acudiente["uss_apellido1"];?>">
+													<input type="text" name="apellido1A" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_apellido1"])){ echo $acudiente["uss_apellido1"];}?>">
 												</div>
 																							
 												<label class="col-sm-2 control-label">Segundo Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido2A" class="form-control" autocomplete="off" value="<?=$acudiente["uss_apellido2"];?>">
+													<input type="text" name="apellido2A" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_apellido2"])){ echo $acudiente["uss_apellido2"];}?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombreA" class="form-control" autocomplete="off" value="<?=$acudiente["uss_nombre"];?>">
+													<input type="text" name="nombreA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_nombre"])){ echo $acudiente["uss_nombre"];}?>">
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombre2A" class="form-control" autocomplete="off" value="<?=$acudiente["uss_nombre2"];?>">
+													<input type="text" name="nombre2A" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_nombre2"])){ echo $acudiente["uss_nombre2"];}?>">
 												</div>
 											</div>	
 												
@@ -738,7 +738,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 												
 												<label class="col-sm-2 control-label">ID Acudiente</label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?=$acudiente2[0]?>">
+													<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2[0])){ echo $acudiente2[0];}?>">
 												</div>
 											</div>
 												
@@ -754,38 +754,38 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$acudiente2["uss_lugar_expedicion"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if(isset($acudiente2["uss_lugar_expedicion"])&&$opg['ciu_id']==$acudiente2["uss_lugar_expedicion"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>	
 
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
-													<input type="text" name="ocupacionA2" class="form-control" autocomplete="off" value="<?=$acudiente2["uss_ocupacion"];?>">
+													<input type="text" name="ocupacionA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_ocupacion"])){ echo $acudiente2["uss_ocupacion"];}?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Primer Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido1A2" class="form-control" autocomplete="off" value="<?=$acudiente2["uss_apellido1"];?>">
+													<input type="text" name="apellido1A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido1"])){ echo $acudiente2["uss_apellido1"];}?>">
 												</div>
 																							
 												<label class="col-sm-2 control-label">Segundo Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido2A2" class="form-control" autocomplete="off" value="<?=$acudiente2["uss_apellido2"];?>">
+													<input type="text" name="apellido2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido2"])){ echo $acudiente2["uss_apellido2"];}?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombreA2" class="form-control" autocomplete="off" value="<?=$acudiente2["uss_nombre"];?>">
+													<input type="text" name="nombreA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre"])){ echo $acudiente2["uss_nombre"];}?>">
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombre2A2" class="form-control" autocomplete="off" value="<?=$acudiente2["uss_nombre2"];?>">
+													<input type="text" name="nombre2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre2"])){ echo $acudiente2["uss_nombre2"];}?>">
 												</div>
 											</div>	
 												
@@ -820,7 +820,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                 </div>
             </div>
             <!-- end page content -->
-            <?php include("../compartido/panel-configuracion.php");?>
+            <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <!-- start footer -->

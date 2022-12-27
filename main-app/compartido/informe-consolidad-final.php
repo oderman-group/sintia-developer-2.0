@@ -25,7 +25,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
 											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 										?>
-                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia[2];?></th>
+                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(isset($materia[2])){echo $materia[2];}?></th>
                                         <?php
 										}
 										?>
@@ -67,12 +67,14 @@ include("../../config-general/consulta-usuario-actual.php");?>
 											while($p<=$config[19]){
 												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-												if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
+												if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
 												//$defPorMateria += $boletin[4];
+												if(isset($boletin[4])){
 												$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
+												}
 												//DEFINITIVA DE CADA PERIODO
 											?>	
-												<td style="text-align:center; color:<?=$color;?>"><?=$boletin[4];?></td>
+												<td style="text-align:center; color:<?=$color;?>"><?php if(isset($boletin[4])){echo $boletin[4];}?></td>
                                             <?php
 												$p++;
                                             }

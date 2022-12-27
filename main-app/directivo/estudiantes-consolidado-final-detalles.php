@@ -46,7 +46,7 @@
                                 <div class="page-title">Consolidado Final</div>
                           
 								<div>
-									<b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?>
+									<b>Curso:</b> <?php if(isset($curso[2])){echo $curso[2];}?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?php if(isset($grupo[2])){echo $grupo[2];}?>
 								</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
@@ -85,7 +85,7 @@
                               					<p>La definitiva de cada materia se obtiene del promedio de los periodos. Para que esta definitiva pueda ser correcta debe estar la nota de todos los periodos registada.</p>
 											</div>
 											<span id="resp"></span>
-											<input type="hidden" name="periodo" value="<?=$_POST["periodo"];?>" id="periodo">
+											<input type="hidden" name="periodo" value="<?php if(isset($_POST["periodo"])){echo $_POST["periodo"];}?>" id="periodo">
 											
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
@@ -165,23 +165,25 @@
 														while($p<=$config[19]){
 															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-															if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
-															$defPorMateria += $boletin[4];
-															if($boletin[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
-															elseif($boletin[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
-															elseif($boletin[5]==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
-															elseif($boletin[5]==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
+															if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
+															if(isset($boletin[4])){
+																$defPorMateria += $boletin[4];
+															}
+															if(isset($boletin[5]) and $boletin[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
+															elseif(isset($boletin[5]) and $boletin[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
+															elseif(isset($boletin[5]) and $boletin[5]==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
+															elseif(isset($boletin[5]) and $boletin[5]==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
 															
 															else $tipo='';
 															//DEFINITIVA DE CADA PERIODO
 															
 															$disabled = "";
-															if($boletin[4]!="" or $carga['car_periodo']<=$p){
+															if(isset($boletin[4]) and ($boletin[4]!="" or $carga['car_periodo']<=$p)){
 																$disabled = "disabled";
 															}
 														?>	
 															<td style="text-align:center;">
-																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?=$boletin[4];?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?>><br><?=$tipo;?>
+																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?>><br><?=$tipo;?>
 															</td>
 														<?php
 															$p++;
@@ -192,9 +194,9 @@
 															//CONSULTAR NIVELACIONES
 															$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
 															$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
-															if($cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
+															if(isset($cNiv[3]) and $cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														?>
-															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?=$defPorMateria;?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?=$msj;?><br><?="Acta ".$cNiv[5]." de ".$cNiv[6];?></span></td>
+															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?php if(isset($defPorMateria)){ echo $defPorMateria;}?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?php if(isset($msj)){ echo $msj;}?><br><?php if(isset($cNiv[5]) and isset($cNiv[6])){ echo "Acta ".$cNiv[5]." de ".$cNiv[6];}?></span></td>
 													<?php
 														//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 														$defPorEstudiante += $defPorMateria;   
@@ -274,7 +276,7 @@
                 </div>
             </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

@@ -234,7 +234,7 @@ mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, h
 
                 </div>
                 <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
