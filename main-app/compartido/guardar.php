@@ -676,10 +676,7 @@ if ($_POST["id"] == 16) {
 	$i = 0;
 	while ($i < $cont) {
 		mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 		$i++;
 	}
 

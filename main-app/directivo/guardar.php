@@ -116,10 +116,7 @@ if ($_POST["id"] == 16) {
 
 	if ($_POST["tipoUsuario"] == 4) {
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_email='" . strtolower($_POST["email"]) . "'");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	}
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
@@ -356,10 +353,7 @@ if ($_POST["id"] == 34) {
 	}
 	if (trim($_POST["gustoAdicional"]) != "") {
 		$cons = mysqli_query($conexion, "SELECT lower(prel_nombre) FROM social_preferencias_lista WHERE lower(prel_nombre)='" . strtolower($_POST["gustoAdicional"]) . "' LIMIT 0,1");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 		$numGustoAdicional = mysqli_num_rows($cons);
 		$dat = mysqli_fetch_array($cons, MYSQLI_BOTH);
 		if ($numGustoAdicional > 0) {
@@ -431,10 +425,7 @@ if ($_POST["id"] == 37) {
 	$contador = 0;
 	while ($contador < $numero) {
 		mysqli_query($conexion, "INSERT INTO general_evaluacion_asignar(epag_id_evaluacion, epag_curso, epag_grupo, epag_usuario)VALUES('" . $_POST["eva"] . "','" . $_POST["curso"] . "','" . $_POST["grupo"] . "','" . $_POST["usuario"][$contador] . "')");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 		$contador++;
 	}
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
@@ -516,10 +507,7 @@ if ($_POST["id"] == 43) {
 		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='" . $_POST["acudiente"] . "' AND upe_id_estudiante='" . $_POST["acudidos"][$contador] . "'");
 		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('" . $_POST["acudiente"] . "','" . $_POST["acudidos"][$contador] . "')");
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='" . $_POST["acudiente"] . "' WHERE mat_id='" . $_POST["acudidos"][$contador] . "'");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 		$contador++;
 	}
 	echo '<script type="text/javascript">window.location.href="usuarios-acudidos.php?id=' . $_POST["acudiente"] . '";</script>';
@@ -617,10 +605,7 @@ if ($_POST["id"] == 50) {
 	$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='" . $_POST["grado"] . "'");
 	while ($datosE = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 		mysqli_query($conexion, "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, fcu_forma_pago, fcu_cerrado)VALUES('" . $_POST["fecha"] . "','" . $detalle . "','" . $valor . "','" . $_POST["tipo"] . "','" . $_POST["obs"] . "','" . $datosE["mat_id_usuario"] . "',0,5,0)");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	}
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
@@ -975,10 +960,7 @@ if ($_GET["get"] == 19) {
 	$consulta = mysqli_query($conexion, "SELECT * FROM social_muro_acciones WHERE mpa_muro='" . $_GET["muro"] . "' AND mpa_usuario='" . $_SESSION["id"] . "' AND mpa_institucion='" . $_GET["i"] . "' AND mpa_accion='" . $_GET["ac"] . "'");
 	if ($num = mysqli_num_rows($consulta) == 0) {
 		mysqli_query($conexion, "INSERT INTO social_muro_acciones(mpa_muro, mpa_usuario, mpa_fecha, mpa_accion, mpa_institucion)VALUES('" . $_GET["muro"] . "','" . $_SESSION["id"] . "',now(),'" . $_GET["ac"] . "','" . $_GET["i"] . "')");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	}
 	echo '<script type="text/javascript">window.location.href="social-muro.php#M' . $_GET["muro"] . '";</script>';
 	exit();
@@ -1268,16 +1250,10 @@ if ($_GET["get"] == 67) {
 	include("../compartido/reporte-errores.php");
 	if ($reaccion[0] == "") {
 		mysqli_query($conexion, "INSERT INTO social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado)VALUES('" . $_SESSION["id"] . "', '" . $_GET["post"] . "','" . $_GET["r"] . "',now(),1)");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	} else {
 		mysqli_query($conexion, "UPDATE social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["post"] . "'");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	}
 	echo '<script type="text/javascript">window.location.href="noticias.php";</script>';
 	exit();

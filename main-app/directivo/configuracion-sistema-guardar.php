@@ -13,10 +13,7 @@
 
 	if ($_POST["claveSeguridad"] == "Oderman2014$") {
 		mysqli_query($conexion, "UPDATE configuracion SET conf_base_datos='" . $_POST["baseDatos"] . "', conf_servidor='" . $_POST["servidorConexion"] . "', conf_usuario='" . $_POST["usuarioConexion"] . "', conf_clave='" . $_POST["claveConexion"] . "', conf_id_institucion='" . $_POST["idColegio"] . "' WHERE conf_id=1");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 	}
 
 	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
