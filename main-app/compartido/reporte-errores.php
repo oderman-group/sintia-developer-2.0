@@ -1,4 +1,5 @@
 <?php
+/*
 if(mysql_errno()!=0){
 	$lineaError = $lineaError - 1;
 	$numError = mysql_errno();
@@ -30,4 +31,4 @@ if(mysql_errno()!=0){
 <?php
 	exit();
 }
-?>
+*/

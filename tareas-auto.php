@@ -326,7 +326,6 @@ while($cProg = mysql_fetch_array($correosProg)){
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
 			WHERE act_id='".$cDat["corr_actividad"]."'
 			",$conexion));
-			if(mysql_errno()!=0){echo mysql_error()." - Linea 242"; exit();}
 			
 			$docente = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'",$conexion));
 			

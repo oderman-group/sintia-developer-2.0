@@ -13,7 +13,7 @@ include("../../config-general/config.php");
 <?php
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 $usr=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id=".$_GET["id"]);
-if(mysql_errno()!=0){echo mysql_errno(); exit();}
+
 $num_usr=mysqli_num_rows($usr);
 $datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 if($num_usr==0)
@@ -27,7 +27,7 @@ if($num_usr==0)
 }
 //=============================== MATERIAS DEL ESTUDIANTE =================
 $mat=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$datos_usr[6]." AND car_grupo='".$datos_usr[7]."' ORDER BY car_materia");
-if(mysql_errno()!=0){echo mysql_errno(); exit();}
+
 $num_mat=mysqli_num_rows($mat);
 if($num_mat==0)
 {
@@ -90,7 +90,7 @@ $contador = 0;  //para que solo halla un while en area
 $totalDefini=0;
 $materiasPerdidas=0;
 $materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia) AND (car_curso=".$datos_usr[6]." AND car_grupo=".$datos_usr[7].") AND ar_id=mat_area GROUP BY ar_id ORDER BY ar_posicion");
-if(mysql_errno()!=0){echo mysql_errno(); exit();}
+
 $ii = 1;
 while($fila_mat=mysqli_fetch_array($materia, MYSQLI_BOTH)){
 if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
@@ -100,12 +100,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     </tr>
 <?php 
 	$consulta = mysqli_query($conexion, "SELECT  mat_nombre, mat_area, mat_id, car_id FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia)AND(car_curso=".$datos_usr[6]." AND car_grupo=".$datos_usr[7].") and ar_id=mat_area and mat_area=".$fila_mat[4]);
-	if(mysql_errno()!=0){echo mysql_errno(); exit();}
+	
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
 		$periodo=$fila_mat[7]-1; //asperiodo
 		$datos=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND  bol_periodo=".$periodoActual);//asmat
-		if(mysql_errno()!=0){echo mysql_errno(); exit();}
+		
 		$dato=mysqli_fetch_array($datos, MYSQLI_BOTH);
 		$numero=mysqli_num_rows($datos);
 		if($numero>0)$acumu=$acumu+1;

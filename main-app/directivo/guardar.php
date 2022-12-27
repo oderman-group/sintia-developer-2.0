@@ -345,10 +345,7 @@ if ($_POST["id"] == 34) {
 		$nPref = mysqli_num_rows($consultaNumPref);
 		if ($nPref == 0) {
 			mysqli_query($conexion, "INSERT INTO social_preferencias_usuarios(preu_usuario, preu_preferencia, preu_gusto)VALUES('" . $_SESSION["id"] . "','" . $preferencia[$i] . "',1)");
-			if (mysql_errno() != 0) {
-				echo mysql_error();
-				exit();
-			}
+			
 		}
 	}
 	if (trim($_POST["gustoAdicional"]) != "") {
@@ -369,15 +366,9 @@ if ($_POST["id"] == 34) {
 		if ($permiso == 1) {
 			mysqli_query($conexion, "INSERT INTO social_preferencias_lista(prel_nombre, prel_guardado, prel_fecha)VALUES('" . $_POST["gustoAdicional"] . "',2,now())");
 			$idInsercion = mysqli_insert_id($conexion);
-			if (mysql_errno() != 0) {
-				echo mysql_error();
-				exit();
-			}
+			
 			mysqli_query($conexion, "INSERT INTO social_preferencias_usuarios(preu_usuario, preu_preferencia, preu_gusto)VALUES('" . $_SESSION["id"] . "','" . $idInsercion . "',1)");
-			if (mysql_errno() != 0) {
-				echo mysql_error();
-				exit();
-			}
+			
 		}
 	}
 
@@ -389,10 +380,7 @@ if ($_POST["id"] == 34) {
 		$nPref = mysqli_num_rows($consultaNumPref);
 		if ($nPref == 0) {
 			mysqli_query($conexion, "INSERT INTO social_preferencias_usuarios(preu_usuario, preu_preferencia, preu_no_gusto)VALUES('" . $_SESSION["id"] . "','" . $preferencia[$i] . "',1)");
-			if (mysql_errno() != 0) {
-				echo mysql_error();
-				exit();
-			}
+			
 		}
 	}
 
@@ -404,10 +392,7 @@ if ($_POST["id"] == 34) {
 		$nPref = mysqli_num_rows($consultaNumPref);
 		if ($nPref == 0) {
 			mysqli_query($conexion, "INSERT INTO social_preferencias_usuarios(preu_usuario, preu_preferencia, preu_conocimiento)VALUES('" . $_SESSION["id"] . "','" . $preferencia[$i] . "',1)");
-			if (mysql_errno() != 0) {
-				echo mysql_error();
-				exit();
-			}
+			
 		}
 	}
 

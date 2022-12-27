@@ -3428,15 +3428,12 @@ if($_GET["get"]==20){
 
 	$tipos = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$_COOKIE["carga"]."' AND ipc_indicador='".$_GET["ind"]."' AND ipc_periodo='".$datosCargaActual[5]."'");
 
-	if(mysql_errno()!=0){echo mysql_error()." Linea 452"; exit();}
-
     $tipo = mysqli_fetch_array($tipos, MYSQLI_BOTH);
 
 	//============================================= VERIFICAMOS CUANTAS NOTAS EXISTEN DEL MISMO TIPO ================================================
 
 	$registros = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_COOKIE["carga"]."' AND act_id_tipo='".$_GET["ind"]."' AND act_periodo='".$datosCargaActual[5]."' AND act_estado=1");
 
-	if(mysql_errno()!=0){echo mysql_error()." Linea 469"; exit();}
 
    	$num_reg = mysqli_num_rows($registros);
 
@@ -3452,7 +3449,6 @@ if($_GET["get"]==20){
 
 	//echo $valnota; exit();
 
-	if(mysql_errno()!=0){echo mysql_error()." Linea 466"; exit();}
 
 	echo '<script type="text/javascript">window.location.href="calificaciones.php";</script>';
 
@@ -3504,15 +3500,11 @@ if($_GET["get"]==25){
 
 	$tipos = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$_COOKIE["carga"]."' AND ipc_indicador='".$_GET["ind"]."' AND ipc_periodo=1");
 
-	if(mysql_errno()!=0){echo mysql_error()." Linea 452"; exit();}
-
     $tipo = mysqli_fetch_array($tipos, MYSQLI_BOTH);
 
 	//============================================= VERIFICAMOS CUANTAS NOTAS EXISTEN DEL MISMO TIPO ================================================
 
 	$registros = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_COOKIE["carga"]."' AND act_id_tipo='".$_GET["ind"]."' AND act_periodo=1 AND act_estado=1");
-
-	if(mysql_errno()!=0){echo mysql_error()." Linea 469"; exit();}
 
    	$num_reg = mysqli_num_rows($registros);
 
@@ -3525,10 +3517,6 @@ if($_GET["get"]==25){
 		$valnota = 0;
 
 	mysqli_query($conexion, "UPDATE academico_actividades SET act_valor='".$valnota."' WHERE act_id_carga='".$_COOKIE["carga"]."' AND act_id_tipo='".$_GET["ind"]."' AND act_periodo=1");
-
-	//echo $valnota; exit();
-
-	if(mysql_errno()!=0){echo mysql_error()." Linea 466"; exit();}
 
 	echo '<script type="text/javascript">window.location.href="calificaciones1.php";</script>';
 
@@ -3548,25 +3536,18 @@ if($_GET["get"]==26){
 		$consultaNInd=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$asgT[2]."'");
 		$nInd = mysqli_fetch_array($consultaNInd, MYSQLI_BOTH);
 
-		if(mysql_errno()!=0){echo mysql_error();exit();}
-
 		mysqli_query($conexion, "INSERT INTO academico_indicadores(ind_nombre, ind_obligatorio)VALUES('".$nInd[1]."',0)");
 
 		$idInd = mysqli_insert_id($conexion);
 
-		if(mysql_errno()!=0){echo mysql_error();exit();} 
 
 		mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$_COOKIE["carga"]."','".$idInd."','".$asgT[3]."','".$datosCargaActual[5]."','".$asgT[5]."')");
 
-		if(mysql_errno()!=0){echo mysql_error();exit();}
 
 		mysqli_query($conexion, "UPDATE academico_actividades SET act_id_tipo='".$idInd."' WHERE act_id_tipo='".$asgT[2]."' AND act_id_carga='".$_COOKIE["carga"]."' AND act_periodo='".$datosCargaActual[5]."'");
 
-		if(mysql_errno()!=0){echo mysql_error();exit();}
 
 		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_carga=".$_COOKIE["carga"]." AND ipc_periodo='".$datosCargaActual[5]."' AND ipc_indicador='".$asgT[2]."'");
-
-		if(mysql_errno()!=0){echo mysql_error();exit();}
 
 		$cont++;
 

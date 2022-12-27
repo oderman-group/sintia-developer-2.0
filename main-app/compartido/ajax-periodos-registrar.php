@@ -24,8 +24,8 @@ if($num==0){
 	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada desde la parte Directiva', bol_tipo=1 WHERE bol_id=".$rB[0]);
 	
 }	
-if(mysql_errno()!=0){echo "ERROR: ".mysql_errno()." - ".mysql_error();exit();}
-else{
+
+
 	if($_POST["nota"]>$config[5]){
 		$consultaUsuarioResponsable=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_estudiante='".$_POST["codEst"]."'");
 		$usuarioResponsable = mysqli_fetch_array($consultaUsuarioResponsable, MYSQLI_BOTH);
@@ -136,5 +136,5 @@ else{
 	</div>
 <?php	
 	exit();
-}
+
 ?>
