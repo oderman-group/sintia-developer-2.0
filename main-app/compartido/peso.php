@@ -1,21 +1,21 @@
 <?php
-$dir = ('../files/archivos');
+$direccionArchivo = ('../files/archivos');
 
- "Total : " . Fsize($dir);
-function Fsize($dir)
+ "Total : " . Fsize($direccionArchivo);
+function Fsize($direccionArchivo)
 {
     clearstatcache();
-    $cont = 0;
-    if (is_dir($dir)) {
-        if ($gd = opendir($dir)) {
+    $contadorByte = 0;
+    if (is_dir($direccionArchivo)) {
+        if ($gd = opendir($direccionArchivo)) {
             while (($archivo = readdir($gd)) !== false) {
                 if ($archivo != "." && $archivo != "..") {
                     if (is_dir($archivo)) {
-                        $cont += Fsize($dir . "/" . $archivo);
+                        $contadorByte += Fsize($direccionArchivo . "/" . $archivo);
                     } else {
-                        $nombreArchivo= "archivo : " . $dir . "/" . $archivo . "&nbsp;&nbsp;" . filesize($dir . "/" . $archivo) . "<br />";
+                        $nombreArchivo= "archivo : " . $direccionArchivo . "/" . $archivo . "&nbsp;&nbsp;" . filesize($direccionArchivo . "/" . $archivo) . "<br />";
                         if (strpos($nombreArchivo, 'mobiliar_coalst')){
-                            $cont += sprintf("%u", filesize($dir . "/" . $archivo));
+                            $contadorByte += sprintf("%u", filesize($direccionArchivo . "/" . $archivo));
                               $nombreArchivo;
                         }
                     }
@@ -24,16 +24,20 @@ function Fsize($dir)
             closedir($gd);
         }
     }
-    $disponible=0.1;
-    $gb= $cont/1073741824;
-    "Carpeta: ".$dir."<br>";
-    $porcentaje = ($gb/$disponible)*100;
+    $espacioDisponible=0.021;
+    $gb= $contadorByte/1073741824;
+    "Carpeta: ".$direccionArchivo."<br>";
+    $porcentaje = ($gb/$espacioDisponible)*100;
+
+    if($porcentaje<=50){$colorGrafico='info';}
+    elseif($porcentaje>50 and $porcentaje<=80){$colorGrafico='warning';}
+    else{$colorGrafico='danger';}
     return "<div class='work-monitor work-progress'>
     <div class='states'>
         <div class='info'>
             <div class='desc pull-left'><b>".round($gb, 2.)." GB/</b></div>
-            <div class='desc pull-left'><b>".round($disponible, 2.)." GB</b></div>
-            <div class='percent pull-right'>".round($porcentaje, 2)."%</div>
+            <div class='desc pull-left'><b>".round($espacioDisponible, 3.)." GB</b></div>
+            <div class='percent pull-right'>".round($porcentaje, 3.)."%</div>
         </div>
     
         <div class='progress progress-xs'>
@@ -47,9 +51,9 @@ function Fsize($dir)
 
 ?>
 
-<div class="card">
+<div class="card" style="margin-left:5px; margin-right:5px; padding:5px;">
 <td> Uso Del Disco </td>
-   <?=Fsize($dir)?>
+   <?=Fsize($direccionArchivo)?>
 
 </div>
 
