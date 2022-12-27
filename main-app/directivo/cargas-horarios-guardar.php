@@ -10,10 +10,7 @@
 	$contador = 0;
 	while ($contador < $numero) {
 		mysqli_query($conexion, "INSERT INTO academico_horarios(hor_id_carga, hor_dia, hor_desde, hor_hasta)VALUES(" . $_POST["idH"] . ",'" . $_POST["diaH"][$contador] . "','" . $_POST["inicioH"] . "','" . $_POST["finH"] . "');");
-		if (mysql_errno() != 0) {
-			echo mysql_error();
-			exit();
-		}
+		
 		$contador++;
 	}
 	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_POST["idH"] . '";</script>';
