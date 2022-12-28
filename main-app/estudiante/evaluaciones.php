@@ -83,7 +83,7 @@
 													//Cantidad de preguntas de la evaluación
 													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 													WHERE evp_id_evaluacion='".$resultado['eva_id']."'
-													"), MYSQLI_BOTH);
+													"));
 													  
 													  //Obtener los datos si ya ha realizado la evaluación
 													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes
