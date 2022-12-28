@@ -70,13 +70,15 @@ if ($_POST["id"] == 2) {
 	mysqli_query($conexion, "DELETE FROM social_noticias_cursos WHERE notpc_noticia='" . $idRegistro . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
-	$cont = count($_POST["cursos"]);
-	$i = 0;
-	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "')");
-		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");
-		$i++;
+	if($_POST["cursos"]>0){
+		$cont = count($_POST["cursos"]);
+		$i = 0;
+		while ($i < $cont) {
+			mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "')");
+			$lineaError = __LINE__;
+			include("../compartido/reporte-errores.php");
+			$i++;
+		}
 	}
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
