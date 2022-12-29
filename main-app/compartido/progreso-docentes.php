@@ -19,8 +19,11 @@
 													(SELECT sum(act_valor) FROM academico_actividades INNER JOIN academico_cargas ON car_id=act_id_carga AND car_periodo='".$config['conf_periodo']."' AND car_docente='".$docProgreso['uss_id']."' WHERE act_estado=1 AND act_periodo='".$config['conf_periodo']."'),
 													(SELECT sum(act_valor) FROM academico_actividades INNER JOIN academico_cargas ON car_id=act_id_carga AND car_periodo='".$config['conf_periodo']."' AND car_docente='".$docProgreso['uss_id']."' WHERE act_estado=1 AND act_periodo='".$config['conf_periodo']."' AND act_registrada=1)");
 													$datosProgreso = mysqli_fetch_array($consultaDatosProgreso, MYSQLI_BOTH);
-													@$sumasProgreso = ($datosProgreso[1] + $datosProgreso[2])/2;
-													@$sumasProgreso = round($sumasProgreso / $datosProgreso[0],2);
+													$sumasProgreso = ($datosProgreso[1] + $datosProgreso[2])/2;
+													if($datosProgreso[0]>0){
+														$sumasProgreso = round($sumasProgreso / $datosProgreso[0],2);
+													}
+													
 													if($sumasProgreso>0){
 														$profes[$docProgreso['uss_id']] = $sumasProgreso;
 														$profesNombre[$docProgreso['uss_id']] = strtoupper($docProgreso['uss_nombre']);
