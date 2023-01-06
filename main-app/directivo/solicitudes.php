@@ -35,14 +35,9 @@
 									LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
                                     WHERE soli_institucion='".$config['conf_id_institucion']."'";
 								?>
+
 								
-								
-								
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Solicitudes</header>
