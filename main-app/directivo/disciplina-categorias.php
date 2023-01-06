@@ -30,7 +30,7 @@
                         <div class="col-md-12">
                             <div class="row">
 								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Categorías</header>
@@ -100,13 +100,6 @@
                                         </div>
                                     </div>
                                 </div>
-								
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								
-								
 							
                             </div>
                         </div>
