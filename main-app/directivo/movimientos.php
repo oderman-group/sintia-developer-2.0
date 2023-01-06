@@ -54,8 +54,13 @@
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0'),
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0')");
 										$estadisticasCuentas = mysqli_fetch_array($consultaEstadisticas, MYSQLI_BOTH);
-										@$porcentajeIngreso = round(($estadisticasCuentas[0]/$estadisticasCuentas[2])*100,2);
-										@$porcentajeEgreso = round(($estadisticasCuentas[1]/$estadisticasCuentas[3])*100,2);
+										if($estadisticasCuentas[2]>0){
+											$porcentajeIngreso = round(($estadisticasCuentas[0]/$estadisticasCuentas[2])*100,2);
+										}	
+
+										if($estadisticasCuentas[3]>0){
+											$porcentajeEgreso = round(($estadisticasCuentas[1]/$estadisticasCuentas[3])*100,2);
+										}
 										?>
 									
 									
@@ -78,7 +83,7 @@
 																</div>
 															</div>
 														</div>
-											
+											<?php if($estadisticasCuentas[1]>0){?>
 											<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
@@ -93,7 +98,9 @@
 																</div>
 															</div>
 														</div>
-											
+												<?php }?>		
+
+												<?php if($estadisticasCuentas[2]>0){?>
 													<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
@@ -101,7 +108,9 @@
 																</div>
 															</div>
 														</div>
+											<?php }?>
 											
+											<?php if($estadisticasCuentas[3]>0){?>
 											<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
@@ -109,6 +118,7 @@
 																</div>
 															</div>
 														</div>
+											<?php }?>			
 
 											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>">VER TODOS</a></p>
 										</div>
