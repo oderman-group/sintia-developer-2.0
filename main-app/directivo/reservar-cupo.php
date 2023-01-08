@@ -44,12 +44,16 @@
 								
 								
 								
-								<div class="col-md-4 col-lg-3">
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
-										<div class="panel-body">
-											<?php
+							
+								
+								<div class="col-md-12">
+								<div class="btn-group">
+																<button type="button" class="btn btn-default">Filtrar por cursos</button>
+																<button type="button" class="btn btn-default dropdown-toggle m-r-20" data-toggle="dropdown">
+																	<i class="fa fa-angle-down"></i>
+																</button>
+																<ul class="dropdown-menu" role="menu">
+																<?php
 											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
 											WHERE gra_estado=1
 											ORDER BY gra_vocal");
@@ -58,22 +62,11 @@
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
 												if(isset($_GET["curso"]) AND $curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></div>
-																</div>
-															</div>
-														</div>
+												<li><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></li>
 											<?php }?>
-											<p align="center"><a href="reservar-cupo.php">VER TODOS</a></p>
-										</div>
-                                    </div>
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
+																</ul>
+															</div>
 								
-								<div class="col-md-8 col-lg-9">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Reserva de cupos</header>

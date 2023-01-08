@@ -42,7 +42,7 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
 
     <?php if( isset($_SESSION['admin']) ){?>
 			<b>User Admin:&nbsp;</b> <?=$_SESSION['admin']; ?>&nbsp;|&nbsp;
-			<a href="../compartido/return-admin-panel.php" style="color:white; text-decoration:underline;">RETURN TO ADMIN PANEL</a>
+			<a href="../compartido/return-admin-panel.php?tipo=<?=$datosUsuarioActual[3];?>" style="color:white; text-decoration:underline;">VOLVER A MI PANEL</a>
 		<?php }?>
 
 <?php }?>

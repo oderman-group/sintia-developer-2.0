@@ -4,4 +4,4 @@ $_SESSION['id'] = $_SESSION['admin'];
 $_SESSION['admin'] = '';
 unset( $_SESSION["admin"] );
 
-header("Location:../directivo/index.php");
+header("Location:../directivo/usuarios.php?tipo=".$_GET['tipo']);

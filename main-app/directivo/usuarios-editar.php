@@ -102,7 +102,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Email</label>
 											<div class="col-sm-4">
-												<input type="text" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>">
+												<input type="email" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>">
 											</div>
 										</div>
 										

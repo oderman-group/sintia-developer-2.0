@@ -67,7 +67,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								
 								
 								
-								<div class="col-md-4 col-lg-3">
+								<div class="col-md-12 col-lg-3">
 									
 									<?php
 										$filtro = '';
@@ -170,7 +170,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 									<?php include("../compartido/publicidad-lateral.php");?>
 								</div>
 								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12 col-lg-9">
 									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">

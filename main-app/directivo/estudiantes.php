@@ -325,14 +325,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
-                                        				<th>Cod. Sistema</th>
 														<th><?=$frases[246][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[241][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-                                        				<th>Acudiente</th>
 														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
 														<th>Usuario</th>
-														<th>Notify</th>
+														<th>Acudiente</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
@@ -363,32 +361,31 @@
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
-																<a href="estudiantes-activar.php?id=<?=$resultado["mat_id"];?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
+																<a href="estudiantes-activar.php?id=<?=$resultado["mat_id"];?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
 															<?php }else{?>
-																<a href="estudiantes-bloquear.php?id=<?=$resultado["mat_id"];?>" title="Bloquear para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
+																<a href="estudiantes-bloquear.php?id=<?=$resultado["mat_id"];?>" title="Bloquear para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
 															<?php }?>
-															<a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" title="Informe Parcial" target="_blank" style="text-decoration:underline;"><?=$resultado["mat_id"];?></a>
+															<?=$resultado["mat_id"];?>
 														</td>
-                                        				<td><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank" style="text-decoration:underline;"><?=$resultado["mat_matricula"];?></a></td>
+                                        				
 														<td><span class="<?=$estadosEtiquetas[$resultado['mat_estado_matricula']];?>"><?=$estadosMatriculas[$resultado['mat_estado_matricula']];?></span></td>
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?>
 														<?php
 														if($resultado["mat_inclusion"]==0){
 															$color=$config[6];
-															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline;">'.$nombre.'</a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
+															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline; font-weight:bold;">'.$nombre.'</a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
 														}else{
 															$color=$config[5];
-															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline;"><b>'.$nombre.'</b></a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
+															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline; font-weight:bold;"><b>'.$nombre.'</b></a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
 														}
 														if(isset($acudiente[0]) AND $acudiente[4]!=''){$nombreAcudiente=strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); $idAcudiente=$acudiente[0];}
 														?>
-														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline; color:#0C0;"><?=$nombreAcudiente;?></a><?php if(isset($acudiente[4]) AND $acudiente[4]!=""){?><br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline;">Enviar mensaje</a><?php }?></td>
+														
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
-														<td>
-															<?=$resultado['uss_usuario'];?>
-														</td>
-														<td><?=$resultado['mat_notificacion1'];?></td>
+														<td><?=$resultado['uss_usuario'];?></td>
+														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a><?php if(isset($acudiente[4]) AND $acudiente[4]!=""){?><br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline;">Enviar mensaje</a><?php }?></td>
+
 														<td>
 															<div class="btn-group">
 																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
@@ -412,6 +409,9 @@
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
 																	<hr>
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
+																	<hr>
+																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
+																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
 																</ul>
 															</div>
 														</td>

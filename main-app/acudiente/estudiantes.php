@@ -31,7 +31,7 @@
                         <div class="col-md-12">
                             <div class="row">
 									
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
 									
 									<?php if($_GET["req"]==1){?>
 										<div class="card card-topline-red">
@@ -237,11 +237,6 @@
 
                                 </div>
 								
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-							
                             </div>
                         </div>
                     </div>
