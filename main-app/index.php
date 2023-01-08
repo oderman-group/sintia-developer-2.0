@@ -42,46 +42,75 @@ include("../conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
 ?>
-<!DOCTYPE html>
-<html>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8" />
+	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1" name="viewport" />
-	<meta name="description" content="Responsive Admin Template" />
-	<meta name="author" content="SmartUniversity" />
-	<title>Plataforma Educativa SINTIA | Login </title>
-	<!-- google font -->
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
-	<!-- icons -->
-	<link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-	<link href="fonts/material-design-icons/material-icon.css" rel="stylesheet" type="text/css" />
-	<!-- bootstrap -->
-	<link href="../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<!-- style -->
-	<link rel="stylesheet" href="../config-general/assets/css/pages/extra_pages.css">
-	<!-- favicon -->
-	<link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Plataforma Educativa SINTIA | Login</title>
+
+
+	<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css"
+  rel="stylesheet"
+/>
+
+	<link href="index-nuevo.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-	<div class="form-title">
-		<h1>PLATAFORMA SINTIA</h1>
-	</div>
-	<!-- Login Form-->
-	<div class="login-form text-center">
-		<div class="toggle"><i class="fa fa-user-plus"></i>
-		</div>
-		<div class="form formLogin">
-			<h2>Ingreso a la plataforma</h2>
-			<form method="post" action="controlador/autentico.php">
-				<input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
+	
 
-				<div class="form-group row">
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="draw2.webp"
+          class="img-fluid" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form method="post" action="controlador/autentico.php">
+			
+          <!--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+			
+            <button type="button" class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-facebook-f"></i>
+            </button>
 
-					<div class="col-sm-12">
-						<select class="form-control  select2" name="bd" required onChange="mostrar(this)">
+            <button type="button" class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-twitter"></i>
+            </button>
+
+            <button type="button" class="btn btn-primary btn-floating mx-1">
+              <i class="fab fa-linkedin-in"></i>
+            </button>
+          </div>-->
+
+		  <input type="hidden" name="agnoIngreso" value="2022" />
+		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
+
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0">Ingreso a la plataforma SINTIA</p>
+          </div>
+
+		   <!-- Email input -->
+		   <div class="form-outline mb-4">
+		   <label for="Usuario">Institución</label>
+		   <select class="form-control form-control-lg" name="bd" required>
 							<option value="">Seleccione su Institución</option>
 							<?php
 							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
@@ -91,83 +120,78 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 							
 
 						</select>
-					</div>
-				</div>
 
-				<div id="campos" style="display: none;">
-					<input type="text" name="Usuario" placeholder="Usuario" />
-					<input type="password" name="Clave" placeholder="Contraseña" />
+          </div>
 
-					<div class="form-group row">
+		  <!-- Email input -->
+          <div class="form-outline mb-4">
+		  <label for="Usuario">Usuario</label>
+            <input type="text" id="Usuario" name="Usuario" class="form-control form-control-lg"
+              placeholder="Usuario" />
+          </div>
 
-						<div class="col-sm-12">
-							<select class="form-control  select2" name="agnoIngreso" required>
-								<option value="2020">Seleccione el año</option>
-								<option value="2021">2021</option>
-								<option value="2022" selected>2022</option>
-							</select>
-						</div>
-					</div>
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+		  <label for="Clave">Contraseña</label>
+            <input type="password" id="Clave" name="Clave" class="form-control form-control-lg"
+              placeholder="Ingrese la contraseña" />
+            
+          </div>
 
-					<?php
-					if (isset($_GET["error"]) and $_GET["error"] == 3) {
-						$numA1 = rand(1, 10);
-						$numA2 = rand(1, 10);
-						$resultadoA = $numA1 + $numA2;
-					?>
-						<p style="color: tomato;"><b>Valida que no eres un Robot</b><br>
-							Escribe el resultado de la siguiente operación.</p>
-						<input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
-						<input type="text" name="suma" placeholder="Cuánto es <?= $numA1 . "+" . $numA2; ?>?" required autocomplete="off" style="font-weight: bold;" />
-					<?php } ?>
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
+              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+              <label class="form-check-label" for="form2Example3">
+                Recuerda me
+              </label>
+            </div>
+            <a href="#!" class="text-body">Olvidaste tu contraseña?</a>
+          </div>
 
-					<button>Entrar</button>
-					<div class="forgetPassword"><a href="javascript:void(0)">Olvidaste tu contraseña?</a> </div>
-				</div>
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Empezar la aventura</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">No tienes una cuenta aún? <a href="#!"
+                class="link-danger">Registrarme</a></p>
+          </div>
 
+        </form>
+      </div>
+    </div>
+  </div>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © 2022. All rights reserved.
+    </div>
+    <!-- Copyright -->
 
+    <!-- Right -->
+    <div>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="#!" class="text-white me-4">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="#!" class="text-white">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </div>
+</section>
 
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+></script>
 
-
-			</form>
-		</div>
-
-		<div class="form formRegister">
-			<h2>Create an account</h2>
-			<form>
-				<input type="text" placeholder="Username" />
-				<input type="password" placeholder="Password" />
-				<input type="email" placeholder="Email Address" />
-				<input type="text" placeholder="Full Name" />
-				<input type="tel" placeholder="Phone Number" />
-				<button>Register</button>
-			</form>
-		</div>
-
-		<div class="form formReset">
-			<h2>Recordaremos tu contraseña</h2>
-			<form action="guardar.php" method="post">
-				<input type="hidden" value="2" name="id">
-				<input type="email" name="email" placeholder="Tu email" />
-				<button type="submit">Verificar Email</button>
-			</form>
-		</div>
-
-	</div>
-	<!-- start js include path -->
-	<script src="../config-general/assets/plugins/jquery/jquery.min.js"></script>
-
-	<script src="../config-general/assets/js/pages/extra-pages/pages.js"></script>
-	<!-- end js include path -->
-
-	<script>
-		function mostrar(data) {
-			if (data.value == "")
-				document.getElementById("campos").style.display = "none";
-			else
-				document.getElementById("campos").style.display = "block";
-		}
-	</script>
 </body>
-
 </html>
