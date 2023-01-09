@@ -4,7 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
 $consultaDatosGenerales=mysqli_query($conexion, "SELECT * FROM general_evaluacion_asignar 
-INNER JOIN general_evaluaciones ON evag_id=epag_id_evaluacion
+INNER JOIN ".$baseDatosServicios.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion='".$config['conf_id_institucion']."' AND evag_year='".$_SESSION["bd"]."'
 INNER JOIN usuarios ON uss_id=epag_usuario
 INNER JOIN academico_grados ON gra_id=epag_curso
 INNER JOIN academico_grupos ON gru_id=epag_grupo
