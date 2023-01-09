@@ -423,7 +423,7 @@ if ($_POST["id"] == 38) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_evaluaciones(evag_nombre, evag_descripcion, evag_fecha, evag_creada)VALUES('" . $_POST["titulo"] . "','" . $_POST["contenido"] . "',now(),'" . $_SESSION["id"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_evaluaciones(evag_nombre, evag_descripcion, evag_fecha, evag_creada, evag_institucion, evag_year)VALUES('" . $_POST["titulo"] . "','" . $_POST["contenido"] . "',now(),'" . $_SESSION["id"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -437,7 +437,7 @@ if ($_POST["id"] == 39) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "UPDATE general_evaluaciones SET evag_nombre='" . $_POST["titulo"] . "', evag_descripcion='" . $_POST["contenido"] . "', evag_editada='" . $_SESSION["id"] . "' WHERE evag_id='" . $_POST["idN"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_evaluaciones SET evag_nombre='" . $_POST["titulo"] . "', evag_descripcion='" . $_POST["contenido"] . "', evag_editada='" . $_SESSION["id"] . "' WHERE evag_id='" . $_POST["idN"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -973,7 +973,7 @@ if ($_GET["get"] == 22) {
 if ($_GET["get"] == 23) {
 	mysqli_query($conexion, "DELETE FROM general_preguntas WHERE pregg_id_evaluacion=" . $_GET["idN"] . ";");
 	mysqli_query($conexion, "DELETE FROM general_evaluacion_asignar WHERE epag_id_evaluacion=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_evaluaciones WHERE evag_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluaciones WHERE evag_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
