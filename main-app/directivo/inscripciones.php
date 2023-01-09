@@ -159,7 +159,7 @@
                                                                     
                                                                 <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
 
-                                                                <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agno+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agno+1); ?></a></li>
+                                                                <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agnoBD+1); ?></a></li>
 
                                                                 <?php } ?>
 
