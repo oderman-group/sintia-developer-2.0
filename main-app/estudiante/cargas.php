@@ -20,7 +20,7 @@ if(isset($_GET["carga"]) and $_GET["carga"]!="" and is_numeric($_GET["carga"])){
 
 <?php
 if($config['conf_activar_encuesta']==1){
-	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_encuestas 
+	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
 	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."'"));
 	if($respuesta==0 and $datosEstudianteActual[6]!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
