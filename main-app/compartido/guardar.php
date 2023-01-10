@@ -100,13 +100,13 @@ if ($_POST["id"] == 3) {
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	mysqli_query($conexion, "DELETE FROM general_folders_usuarios_compartir WHERE fxuc_folder='" . $idRegistro . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='" . $idRegistro . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["compartirCon"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -179,13 +179,13 @@ if ($_POST["id"] == 5) {
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
-	mysqli_query($conexion, "DELETE FROM general_folders_usuarios_compartir WHERE fxuc_folder='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["compartirCon"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario)VALUES('" . $_POST["idR"] . "','" . $_POST["compartirCon"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;

@@ -100,7 +100,7 @@
 										ORDER BY fold_tipo, fold_nombre
 										");
 										while($carpeta = mysqli_fetch_array($carpetas, MYSQLI_BOTH)){
-											$compartidoNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'"));
+											$compartidoNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'"));
 											
 											$numRecursos = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_padre='".$carpeta['fold_id']."' AND fold_estado=1"));
 											if(!is_numeric($_GET["carpeta"]) and $carpeta['fold_padre']!="" and $carpeta['fold_padre']!="0" and $_GET["busqueda"]=="") continue;
@@ -172,7 +172,7 @@
 										
 										<?php
 										$carpetasCompartidas = mysqli_query($conexion, "SELECT * FROM general_folders
-										INNER JOIN general_folders_usuarios_compartir ON (fxuc_folder=fold_id OR fxuc_folder=fold_padre) AND fxuc_usuario='".$_SESSION["id"]."'
+										INNER JOIN ".$baseDatosServicios.".general_folders_usuarios_compartir ON (fxuc_folder=fold_id OR fxuc_folder=fold_padre) AND fxuc_usuario='".$_SESSION["id"]."'
 										WHERE fold_activo=1 AND fold_categoria=2 AND fold_estado=1 $filtro
 										ORDER BY fold_tipo, fold_nombre
 										");
