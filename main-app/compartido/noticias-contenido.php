@@ -98,13 +98,13 @@
 												$colorFondo = 'style="background: #FFF;"';
 												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
-												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones
 												INNER JOIN usuarios ON uss_id=npr_usuario
 												WHERE npr_noticia='".$resultado[0]."'
 												ORDER BY npr_id DESC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
-												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones 
+												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones 
 												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
 												if($datosUsuarioActual[3]==4){
