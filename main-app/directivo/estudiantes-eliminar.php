@@ -16,7 +16,7 @@ include("../modelo/conexion.php");
     mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_cod_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='" . $_GET["idU"] . "'");
-    mysqli_query($conexion, "DELETE FROM general_resultados WHERE resg_id_estudiante='" . $_GET["idE"] . "'");
+    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM seguridad_historial_acciones WHERE hil_usuario='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM social_amigos WHERE ams_usuario='" . $_GET["idU"] . "' OR ams_amigo");
     mysqli_query($conexion, "DELETE FROM social_noticias WHERE not_usuario='" . $_GET["idU"] . "'");
