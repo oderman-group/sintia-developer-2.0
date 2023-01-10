@@ -113,7 +113,7 @@
 													INNER JOIN perfiles ON pes_id=uss_tipo
 													");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_usuario='".$infoDatos['uss_id']."'"));
+														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_usuario='".$infoDatos['uss_id']."'"));
 														
 													?>	
 													  <option value="<?=$infoDatos['uss_id'];?>" <?php if($existe>0){echo "selected";}?>><?=strtoupper($infoDatos['uss_nombre'])." - ".$infoDatos['pes_nombre'];?></option>
