@@ -23,8 +23,8 @@ if($_POST["id"]==1){
 }
 //ENCUESTA RESERVA DE CUPO
 if($_POST["id"]==2){	
-	mysqli_query($conexion, "INSERT INTO general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario)
-	VALUES('".$_POST["idEstudiante"]."', now(), '".$_POST["respuesta"]."', '".$_POST["motivo"]."')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario, genc_institucion, genc_year)
+	VALUES('".$_POST["idEstudiante"]."', now(), '".$_POST["respuesta"]."', '".$_POST["motivo"]."','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=111";</script>';
 	exit();
