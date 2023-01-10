@@ -409,7 +409,7 @@ if ($_POST["id"] == 37) {
 	$numero = (count($_POST["usuario"]));
 	$contador = 0;
 	while ($contador < $numero) {
-		mysqli_query($conexion, "INSERT INTO general_evaluacion_asignar(epag_id_evaluacion, epag_curso, epag_grupo, epag_usuario)VALUES('" . $_POST["eva"] . "','" . $_POST["curso"] . "','" . $_POST["grupo"] . "','" . $_POST["usuario"][$contador] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_evaluacion_asignar(epag_id_evaluacion, epag_curso, epag_grupo, epag_usuario, epag_institucion, epag_year)VALUES('" . $_POST["eva"] . "','" . $_POST["curso"] . "','" . $_POST["grupo"] . "','" . $_POST["usuario"][$contador] . "','".$config['conf_id_institucion']."','".$_SESSION["bd"]."')");
 		
 		$contador++;
 	}
@@ -451,7 +451,7 @@ if ($_POST["id"] == 40) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_preguntas(pregg_descripcion, pregg_id_evaluacion)VALUES('" . $_POST["contenido"] . "','" . $_POST["eva"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_preguntas(pregg_descripcion, pregg_id_evaluacion, pregg_institucion, pregg_year)VALUES('" . $_POST["contenido"] . "','" . $_POST["eva"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -464,7 +464,7 @@ if ($_POST["id"] == 41) {
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 		exit();
 	}
-	mysqli_query($conexion, "UPDATE general_preguntas SET pregg_descripcion='" . $_POST["contenido"] . "' WHERE pregg_id='" . $_POST["idN"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_preguntas SET pregg_descripcion='" . $_POST["contenido"] . "' WHERE pregg_id='" . $_POST["idN"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -477,7 +477,7 @@ if ($_POST["id"] == 42) {
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_respuestas(resg_descripcion, resg_id_pregunta)VALUES('" . $_POST["respuesta"] . "','" . $_POST["idPregunta"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_respuestas(resg_descripcion, resg_id_pregunta, resg_institucion, resg_year)VALUES('" . $_POST["respuesta"] . "','" . $_POST["idPregunta"] . "','".$config['conf_id_institucion']."','".$_SESSION["bd"]."')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -952,7 +952,7 @@ if ($_GET["get"] == 19) {
 }
 //ELIMINAR RESPUESTAS GENERALES
 if ($_GET["get"] == 21) {
-	mysqli_query($conexion, "DELETE FROM general_respuestas WHERE resg_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -961,8 +961,8 @@ if ($_GET["get"] == 21) {
 }
 //ELIMINAR PREGUNTAS
 if ($_GET["get"] == 22) {
-	mysqli_query($conexion, "DELETE FROM general_respuestas WHERE resg_id_pregunta=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_preguntas WHERE pregg_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id_pregunta=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -971,8 +971,8 @@ if ($_GET["get"] == 22) {
 }
 //ELIMINAR EVALUACIONES
 if ($_GET["get"] == 23) {
-	mysqli_query($conexion, "DELETE FROM general_preguntas WHERE pregg_id_evaluacion=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_evaluacion_asignar WHERE epag_id_evaluacion=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluacion_asignar WHERE epag_id_evaluacion=" . $_GET["idN"] . ";");
 	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluaciones WHERE evag_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
@@ -982,7 +982,7 @@ if ($_GET["get"] == 23) {
 }
 //ELIMINAR EVALUACIONES
 if ($_GET["get"] == 24) {
-	mysqli_query($conexion, "DELETE FROM general_evaluacion_asignar WHERE epag_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluacion_asignar WHERE epag_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
