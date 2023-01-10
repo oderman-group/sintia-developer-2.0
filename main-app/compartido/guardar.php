@@ -67,14 +67,14 @@ if ($_POST["id"] == 2) {
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	mysqli_query($conexion, "DELETE FROM social_noticias_cursos WHERE notpc_noticia='" . $idRegistro . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='" . $idRegistro . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	if($_POST["cursos"]>0){
 		$cont = count($_POST["cursos"]);
 		$i = 0;
 		while ($i < $cont) {
-			mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "')");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 			$i++;
@@ -146,13 +146,13 @@ if ($_POST["id"] == 4) {
 
 	mysqli_query($conexion, "UPDATE social_noticias SET not_titulo='" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', not_descripcion='" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',  not_keywords='" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', not_url_imagen='" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', not_video='" . $video . "', not_id_categoria_general='" . $_POST["categoriaGeneral"] . "', not_video_url='" . $_POST["video"] . "' WHERE not_id='" . $_POST["idR"] . "'");
 
-	mysqli_query($conexion, "DELETE FROM social_noticias_cursos WHERE notpc_noticia='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["cursos"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
