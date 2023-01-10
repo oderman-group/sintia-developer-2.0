@@ -15,9 +15,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 </div>   
 <?php
 									if(isset($_GET["tipo"]) and $_GET["tipo"]!="" and is_numeric($_GET["tipo"])){
-										$SQL = "SELECT * FROM usuarios INNER JOIN perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."' ORDER BY uss_nombre";
+										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."' ORDER BY uss_nombre";
 									}else{
-										$SQL = "SELECT * FROM usuarios INNER JOIN perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' ORDER BY uss_nombre, uss_tipo";
+										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' ORDER BY uss_nombre, uss_tipo";
 									}
 									//include("paginacion.php");
 									?>
