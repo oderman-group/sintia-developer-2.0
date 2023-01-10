@@ -24,7 +24,7 @@ include("../modelo/conexion.php");
     mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_id='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM social_preferencias_usuarios WHERE preu_usuario='" . $_GET["idU"] . "'");
-    mysqli_query($conexion, "DELETE FROM social_emails WHERE ema_de='" . $_GET["idU"] . "' OR ema_para='" . $_GET["idU"] . "'");
+    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_emails WHERE ema_de='" . $_GET["idU"] . "' OR ema_para='" . $_GET["idU"] . "'");
     $lineaError = __LINE__;
 
     include("../compartido/reporte-errores.php");

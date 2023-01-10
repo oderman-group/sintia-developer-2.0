@@ -365,8 +365,8 @@ if ($_POST["id"] == 7) {
 
 		$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"][$i] . "'"), MYSQLI_BOTH);
 
-		mysqli_query($conexion, "INSERT INTO social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para)
-		VALUES('" . $_SESSION["id"] . "', '" . $_POST["para"][$i] . "', '" . mysqli_real_escape_string($conexion,$_POST["asunto"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+		VALUES('" . $_SESSION["id"] . "', '" . $_POST["para"][$i] . "', '" . mysqli_real_escape_string($conexion,$_POST["asunto"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -720,8 +720,8 @@ if ($_POST["id"] == 18) {
 	$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'"), MYSQLI_BOTH);
 	$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"] . "'"), MYSQLI_BOTH);
 
-	mysqli_query($conexion, "INSERT INTO social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para)
-	VALUES('" . $_SESSION["id"] . "', '" . $_POST["destinoMarketplace"] . "', '" . $_POST["asuntoMarketplace"] . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0)");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+	VALUES('" . $_SESSION["id"] . "', '" . $_POST["destinoMarketplace"] . "', '" . $_POST["asuntoMarketplace"] . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
@@ -1082,11 +1082,11 @@ if ($_GET["get"] == 16) {
 //ELIMINAR MENSAJES
 if ($_GET["get"] == 17) {
 	if ($_GET["elm"] == 1) {
-		mysqli_query($conexion, "UPDATE social_emails SET ema_eliminado_de=1 WHERE ema_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_de=1 WHERE ema_id='" . $_GET["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	} else {
-		mysqli_query($conexion, "UPDATE social_emails SET ema_eliminado_para=1 WHERE ema_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_para=1 WHERE ema_id='" . $_GET["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	}
