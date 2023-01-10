@@ -1336,8 +1336,8 @@ if ($_GET["get"] == 70) {
 if($_GET["get"]==71){
 	//echo $_GET["idEstudiante"]; exit();
 
-	mysqli_query($conexion, "INSERT INTO general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario)
-	VALUES('".$_GET["idEstudiante"]."', now(), 1, 'Reservado por un directivo.')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario, genc_institucion, genc_year)
+	VALUES('".$_GET["idEstudiante"]."', now(), 1, 'Reservado por un directivo.','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	
 	
 	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
