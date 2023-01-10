@@ -109,7 +109,7 @@
 												
 												if($datosUsuarioActual[3]==4){
 													include("verificar-usuario.php");
-													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
+													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
 													$notCursoNum = mysqli_num_rows($noticiasCursos);
 													if($notCursoNum>0){
 														$noticiaPermitida=0;
