@@ -5,7 +5,7 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_id='".$_GET["idR"]."' AND fold_categoria=2"), MYSQLI_BOTH);
+$datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$_GET["idR"]."' AND fold_categoria=2"), MYSQLI_BOTH);
 
 ?>
 
@@ -48,7 +48,7 @@ $datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM gener
 									$i=0;
 									$vectorDatos = array();
 									while($var==1){
-										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT fold_id, fold_padre FROM general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1"), MYSQLI_BOTH);
+										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT fold_id, fold_padre FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1"), MYSQLI_BOTH);
 										$vectorDatos[$i] = $carpetaActual['fold_id'];
 										if($carpetaActual['fold_padre']!="" and $carpetaActual['fold_padre']!='0'){
 											$idFolderActual = $carpetaActual['fold_padre'];
@@ -62,7 +62,7 @@ $datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM gener
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
 									while($cont>0){
-										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1"), MYSQLI_BOTH);
+										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1"), MYSQLI_BOTH);
 
 									?>
 											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=$carpetaActual['fold_id'];?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
