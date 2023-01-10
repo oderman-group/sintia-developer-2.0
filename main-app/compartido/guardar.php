@@ -94,8 +94,8 @@ if ($_POST["id"] == 3) {
 		$destino = "../files/archivos";
 		move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
 	}
-	mysqli_query($conexion, "INSERT INTO general_folders(fold_nombre, fold_padre, fold_activo, fold_fecha_creacion, fold_propietario, fold_id_recurso_principal, fold_categoria, fold_tipo, fold_estado, fold_keywords)
-	VALUES('" . $archivo . "', '" . $_POST["padre"] . "', 1, now(), '" . $_SESSION["id"] . "', '" . $_POST["idRecursoP"] . "', '" . $_POST["idCategoria"] . "', '" . $_POST["tipo"] . "', 1, '" . $_POST["keyw"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders(fold_nombre, fold_padre, fold_activo, fold_fecha_creacion, fold_propietario, fold_id_recurso_principal, fold_categoria, fold_tipo, fold_estado, fold_keywords, fold_institucion, fold_year)
+	VALUES('" . $archivo . "', '" . $_POST["padre"] . "', 1, now(), '" . $_SESSION["id"] . "', '" . $_POST["idRecursoP"] . "', '" . $_POST["idCategoria"] . "', '" . $_POST["tipo"] . "', 1, '" . $_POST["keyw"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
@@ -519,15 +519,15 @@ if ($_POST["id"] == 12) {
 		include("../compartido/reporte-errores.php");
 		$i++;
 
-		mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-		VALUES('Reporte disciplinario', 'Te han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $_POST["estudiante"] . "', now(), 3, 2, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+		VALUES('Reporte disciplinario', 'Te han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $_POST["estudiante"] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$idNotify = mysqli_insert_id($conexion);
-		mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "' WHERE alr_id='" . $idNotify . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "' WHERE alr_id='" . $idNotify . "'");
 
-		mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-		VALUES('Reporte disciplinario - " . $acudiente['mat_nombres'] . "', 'A tu acudido " . $acudiente['mat_nombres'] . " le han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $acudiente['uss_id'] . "', now(), 3, 2, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+		VALUES('Reporte disciplinario - " . $acudiente['mat_nombres'] . "', 'A tu acudido " . $acudiente['mat_nombres'] . " le han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $acudiente['uss_id'] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$idNotify = mysqli_insert_id($conexion);
-		mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "&usrEstud=" . $_POST["estudiante"] . "' WHERE alr_id='" . $idNotify . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "&usrEstud=" . $_POST["estudiante"] . "' WHERE alr_id='" . $idNotify . "'");
 	}
 
 	if ($acudiente['mat_notificacion1'] == 1) {
@@ -980,10 +980,10 @@ if ($_GET["get"] == 8) {
 		include("../compartido/reporte-errores.php");
 	}
 
-	mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-	VALUES('<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación', '<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación " . $_GET["postname"] . ".', 2, '" . $_GET["postowner"] . "', now(), 3, 2, 0)");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+	VALUES('<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación', '<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación " . $_GET["postname"] . ".', 2, '" . $_GET["postowner"] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$idNotify = mysqli_insert_id($conexion);
-	mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='noticias.php?idNotify=" . $idNotify . "#PUB" . $_GET["idR"] . "' WHERE alr_id='" . $idNotify . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='noticias.php?idNotify=" . $idNotify . "#PUB" . $_GET["idR"] . "' WHERE alr_id='" . $idNotify . "'");
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . $_GET["idR"] . '";</script>';
 	exit();
@@ -999,7 +999,7 @@ if ($_GET["get"] == 9) {
 }
 //ELIMINAR NOTIFICACIONES
 if ($_GET["get"] == 10) {
-	mysqli_query($conexion, "DELETE FROM general_alertas WHERE alr_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_alertas WHERE alr_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -1073,7 +1073,7 @@ if ($_GET["get"] == 15) {
 }
 //ELIMINAR TODAS LAS NOTIFICACIONES
 if ($_GET["get"] == 16) {
-	mysqli_query($conexion, "DELETE FROM general_alertas WHERE alr_usuario='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_alertas WHERE alr_usuario='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
