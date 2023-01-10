@@ -14,7 +14,7 @@
 	mysqli_query($conexion, "DELETE FROM disciplina_matricula_condicional");
 	mysqli_query($conexion, "DELETE FROM disciplina_reportes");
 	mysqli_query($conexion, "DELETE FROM disiplina_nota");
-	mysqli_query($conexion, "DELETE FROM general_resultados");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados");
 	mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_tipo=4");
 	mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes");
 	$lineaError = __LINE__;
