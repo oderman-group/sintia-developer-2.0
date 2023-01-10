@@ -172,10 +172,10 @@ if ($_POST["id"] == 5) {
 		$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_fileFolder_') . "." . $extension;
 		$destino = "../files/archivos";
 		move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
-		mysqli_query($conexion, "UPDATE general_folders SET fold_nombre='" . $archivo . "' WHERE fold_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_nombre='" . $archivo . "' WHERE fold_id='" . $_POST["idR"] . "'");
 	}
 
-	mysqli_query($conexion, "UPDATE general_folders SET fold_nombre='" . $archivo . "', fold_padre='" . $_POST["padre"] . "', fold_tipo='" . $_POST["tipo"] . "', fold_keywords='" . $_POST["keyw"] . "', fold_fecha_modificacion=now() WHERE fold_id='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_nombre='" . $archivo . "', fold_padre='" . $_POST["padre"] . "', fold_tipo='" . $_POST["tipo"] . "', fold_keywords='" . $_POST["keyw"] . "', fold_fecha_modificacion=now() WHERE fold_id='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
@@ -990,8 +990,8 @@ if ($_GET["get"] == 8) {
 }
 //ELIMINAR CARPETA
 if ($_GET["get"] == 9) {
-	mysqli_query($conexion, "UPDATE general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
-	mysqli_query($conexion, "UPDATE general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
