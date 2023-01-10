@@ -2,7 +2,7 @@
 include("../../config-general/config.php");
 //include("../modelo/conexion.php");
 
-$mensajesConsulta = mysqli_query($conexion, "SELECT * FROM social_emails 
+$mensajesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails 
 INNER JOIN usuarios ON uss_id=ema_de
 WHERE ema_para='".$_POST["usuario"]."' AND ema_visto=0 ORDER BY ema_id DESC");
 $mensajesNumero = mysqli_num_rows($mensajesConsulta);
