@@ -110,7 +110,7 @@
                                             <div class="col-sm-10">
 												<?php
 												$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-												INNER JOIN perfiles ON pes_id=uss_tipo");
+												INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
 												?>
                                                 <select class="form-control  select2" name="usuario" required>
                                                     <option value="">Seleccione una opción</option>

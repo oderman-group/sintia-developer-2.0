@@ -110,7 +110,7 @@
 													<select id="multiple" class="form-control select2-multiple" multiple name="compartirCon[]">
 													<?php
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													INNER JOIN perfiles ON pes_id=uss_tipo
+													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 													");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_usuario='".$infoDatos['uss_id']."'"));
