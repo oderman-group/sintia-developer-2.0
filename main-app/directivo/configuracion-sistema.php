@@ -41,12 +41,7 @@
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                                 <?php
                                 $consultaCfg=mysqli_query($conexion, "SELECT * FROM configuracion WHERE conf_id=1");
                                 $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
