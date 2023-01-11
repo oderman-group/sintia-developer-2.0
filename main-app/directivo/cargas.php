@@ -36,7 +36,7 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[12][$datosUsuarioActual['uss_idioma']]);?></header>
 										<div class="panel-body">
-                                        	<p><a href="cargas-eliminar-todas.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Eliminar todas las cargas</p>
+                                        	
 											<p><a href="cargas-transferir.php">Transferir cargas</a></p>
 											<p><a href="cargas-estilo-notas.php">Estilo de notas</a></p>
 											<p><a href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a></p>

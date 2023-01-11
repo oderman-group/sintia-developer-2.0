@@ -78,31 +78,8 @@
 							
 							<?php 
 							//MENÚ DIRECTIVOS
-							if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
+							if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){							
 							
-							<li class="nav-item" data-step="9" data-intro="<b><?=$frases[223][$datosUsuarioActual['uss_idioma']];?>:</b> Aquí podrás ver las fotos de perfil que los usuarios han montado." data-position='left'>
-	                            <a href="galeria.php" class="nav-link nav-toggle">
-	                                <i class="fa fa-picture-o"></i>
-	                                <span class="title"><?=$frases[223][$datosUsuarioActual['uss_idioma']];?></span>
-	                            </a>
-	                        </li>
-							
-							<li class="nav-item" data-step="9" data-intro="<b>Reservar Cupos:</b> Aquí podras ver los estudiantes que han reservado cupos." data-position='left'>
-	                            <a href="reservar-cupo.php" class="nav-link nav-toggle">
-	                                <i class="fa fa-file"></i>
-	                                <span class="title">R. Cupos</span>
-	                            </a>
-	                        </li>
-							
-							<li class="nav-item" data-step="9" data-intro="<b>Solicitudes de Bloqueo:</b> Aquí podras ver las solicitudes de estudiantes bloqueados." data-position='left'>
-	                            <a href="solicitudes.php" class="nav-link nav-toggle">
-	                                <i class="fa fa-lock"></i>
-	                                <span class="title">S. Desbloqueo</span>
-	                            </a>
-	                        </li>
-							
-							
-							<?php 
 							//MÓDULO ACADÉMICO
 							if($arregloModulos[1]==1){?>
 							<li class="nav-item">
@@ -115,7 +92,10 @@
 									<li class="nav-item"><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
+									<li class="nav-item"><a href="cargas.php?cantidad=10" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
+
+									<li class="nav-item"><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
+									<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
 	                            </ul>
 	                        </li>
 							<?php }?>
@@ -144,7 +124,6 @@
 	                            <ul class="sub-menu">
 	                                <li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<li class="nav-item"><a href="reportes-sacar-filtro.php" class="nav-link"> <span class="title"><?=$frases[249][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<li class="nav-item"><a href="disciplina-categorias.php" class="nav-link"> <span class="title">Categorías</span></a></li>
 									<li class="nav-item"><a href="disciplina-faltas.php" class="nav-link"> <span class="title">Faltas</span></a></li>
 	                            </ul>
@@ -160,6 +139,7 @@
 	                            </a>
 	                            <ul class="sub-menu">
 	                                <li class="nav-item"><a href="usuarios.php?cantidad=10" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
+									<li class="nav-item"><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
 
 	                            </ul>
 	                        </li>
@@ -179,21 +159,6 @@
 	                        </li>
 							<?php }?>
 							
-							<li class="nav-item">
-	                            <a href="informes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-file-text"></i>
-	                                <span class="title">Informes</span> 
-	                            </a>
-	                        </li>
-
-							<li class="nav-item">
-								<a href="#" class="nav-link nav-toggle"> <i class="fa fa-tasks"></i></i>
-									<span class="title">Sacar Reportes</span> <span class="arrow"></span>
-								</a>
-								<ul class="sub-menu">
-									<li><a href="reportes-academicos-consultas.php">Generales</a></li>
-									<li><a href="informe-parcial-grupo.php">Informe parcial</a></li>
-								</ul>
-							</li>
 
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-cogs"></i></i>
@@ -207,24 +172,16 @@
 	                            </ul>
 	                        </li>
 
+							<li class="nav-item">
+	                            <a href="informes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-file-text"></i>
+	                                <span class="title">Informes</span> 
+	                            </a>
+	                        </li>
+
 							<div class="nav-item">
 							<?php include("../compartido/peso.php");?>
 							</div>
 												
-							<!--
-							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
-	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
-	                                <span class="title">Marketplace</span> 
-	                            </a>
-	                        </li>
-							
-							
-							<li class="nav-item">
-	                            <a href="../../directivo/index.php" class="nav-link nav-toggle"> <i class="fa fa-undo"></i>
-	                                <span class="title">VERSIÓN ANTERIOR</span> 
-	                            </a>
-	                        </li>
-							-->
 							
 							<?php }?>
 							

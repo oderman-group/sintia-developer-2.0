@@ -40,13 +40,7 @@
 											<p><a href="estudiantes-importar-excel.php">Imporatar matrículas excel</a></p>
 											<p><a href="estudiantes-consolidado-final.php">Consolidado final</a></p>
 											<p><a href="estudiantes-nivelaciones.php">Nivelaciones</a></p>
-											<p><a href="estudiantes-certificados.php">Certificados</a></p>
-											<hr>
-											<p><a href="../compartido/reporte-estudiantes.php" target="_blank">Sacar Informe</a></p>
-											<p><a href="../compartido/reporte-pasos.php" target="_blank">Informe pasos matrícula</a></p>
-											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">Reporte informe parcial</a></p>
-											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">Reporte vista observador</a></p>
-											<p><a href="../compartido/excel-estudiantes.php" target="_blank">Exportar Excel</a></p>
+											
 											<?php if(isset($_GET["curso"]) and is_numeric($_GET["curso"]) and isset($_GET["grupo"]) and is_numeric($_GET["grupo"])){?>
 												<p><a href="../compartido/planilla-estudiantes.php?grado=<?=$_GET["curso"];?>&grupo=<?=$fgrupo;?>" target="_blank">Imprimir Planilla</a></p>
 											<?php }elseif(isset($_GET["curso"]) and is_numeric($_GET["curso"])){ ?>
@@ -55,7 +49,7 @@
 											<hr>
 											<p><a href="estudiantes-matricular-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Matricular todos</a></p>
 											<p><a href="estudiantes-matriculas-cancelar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Cancelar todos</a></p>
-											<p><a href="estudiantes-eliminar-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Eliminar todos</a></p>
+
 											<hr>
 											<p><a href="estudiantes-nuevos-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Todos nuevos</a></p>
 											<p><a href="estudiantes-antiguos-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Todos antiguos</a></p>
@@ -399,7 +393,7 @@
 																	<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
 																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
 																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
-																	<li><a href="estudiantes-consultar-notas.php?idE=<?=$resultado["mat_id"];?>" target="_blank">Consulta Académica</a></li>
+																	
 																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
 																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
 																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
