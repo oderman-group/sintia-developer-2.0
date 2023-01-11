@@ -63,7 +63,7 @@ if(isset($idPaginaInterna)){
     <link href="../../config-general/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="../../config-general/assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
 	<!-- favicon -->
-    <link rel="shortcut icon" href="../files/images/plataforma-sintia-logo.png" />
+    <link rel="shortcut icon" href="../sintia-icono.png" />
 	<!-- Jquery Toast css -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
 	
