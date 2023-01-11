@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0099';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -21,7 +20,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[252][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title">Informes</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -31,46 +30,58 @@
                         <div class="col-md-12">
                             <div class="row">
 								
-								
-								
 								<div class="col-md-6">
 									<div class="panel">
-										<header class="panel-heading panel-heading-red">INFORMES ACADÉMICOS</header>
+										<header class="panel-heading panel-heading-blue">INFORMES ACADÉMICOS</header>
 										<div class="panel-body">
 											<p><a href="informes-boletines.php">Boletines por curso</a></p>
-											<p><a href="#">Certificados</a></p>
-											<p><a href="#">Libro final</a></p>
+											<p><a href="estudiantes-certificados.php">Certificados</a></p>
+											<p><a href="reportes-academicos-consultas.php">Reporte general</a></p>
+                                            <p><a href="informe-parcial-grupo.php">Informe parcial por grupo</a></p>
 											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">Docentes y cargas académicas</a></p>
+                                            <p><a href="../compartido/reporte-estudiantes.php" target="_blank">Sacar informe de estudiantes</a></p>
+											<p><a href="../compartido/reporte-pasos.php" target="_blank">Informe pasos matrícula</a></p>
+											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">Reporte informe parcial</a></p>
+											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">Reporte vista observador</a></p>
 										</div>
                                 	</div>
-									
+								</div>
+
+                                <div class="col-md-6">
+									<div class="panel">
+										<header class="panel-heading panel-heading-green">INFORMES FINANCIEROS</header>
+										<div class="panel-body">
+
+										</div>
+                                	</div>
+								</div>
+
+                                <div class="col-md-6">
+									<div class="panel">
+										<header class="panel-heading panel-heading-red">INFORMES DISCPLINARIOS</header>
+										<div class="panel-body">
+											<p><a href="reportes-sacar-filtro.php">Sacar reportes</a></p>
+										</div>
+                                	</div>
 								</div>
 								
 								<div class="col-md-6">
 									<div class="panel">
-										<header class="panel-heading panel-heading-green">EXPORTAR A EXCEL</header>
+										<header class="panel-heading panel-heading-yellow">EXPORTAR A EXCEL</header>
 										<div class="panel-body">
-											<p><a href="#">Nivelaciones</a></p>
-											<p><a href="#">Certificados</a></p>
+                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">Exportar Inscripciones</a></p>
+                                            <p><a href="../compartido/excel-estudiantes.php" target="_blank">Exportar Matrículas</a></p>
 										</div>
                                 	</div>
 									
 								</div>
-								
-								
-								
-								
-								
-								
-								
-							
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

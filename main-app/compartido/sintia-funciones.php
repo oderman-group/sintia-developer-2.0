@@ -128,7 +128,7 @@ class BaseDatos {
 
 		
 
-		mysql_query("DELETE FROM ".$tabla." WHERE ".$clave."='".$id."'",$conexion);
+		mysqli_query($conexion, "DELETE FROM ".$tabla." WHERE ".$clave."='".$id."'");
 
 		$lineaError = __LINE__;
 
@@ -203,7 +203,7 @@ function validarClave($clave) {
         echo '
         <div style="font-family: Consolas; padding: 10px; background-color: black; color:white;">
         La clave no cumple con todos los requerimientos:<br>
-        - Debe tener entre 8 y 20 caracteres.<br>
+        - Debe tener mínimo 8 caracteres.<br>
         - Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos(. y $).
         </div>
         ';

@@ -1,18 +1,13 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0082';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-mysql_query("INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Informaci n', now())",$conexion);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
-?>
-<?php
 //ESTUDIANTE ACTUAL
-$consultaEstudianteActual = mysql_query("SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'",$conexion);
-if(mysql_errno()!=0){echo mysql_error(); exit();}
-$numEstudianteActual = mysql_num_rows($consultaEstudianteActual);
-$datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
+$consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
+
+$numEstudianteActual = mysqli_num_rows($consultaEstudianteActual);
+$datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
 ?>
 
 	<!--bootstrap -->
@@ -53,12 +48,8 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
 						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
                                 <?php
                                 $ext='';
@@ -73,12 +64,12 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Estudiante</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
-                                                    $c=mysql_query("SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido",$conexion) ;
-                                                    while($r=mysql_fetch_array($c)){
+                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido") ;
+                                                    while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>
                                                     <?php 
@@ -90,7 +81,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Desde que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
@@ -112,7 +103,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Hasta que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php
@@ -144,12 +135,12 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Estudiante</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
-                                                    $c=mysql_query("SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido",$conexion) ;
-                                                    while($r=mysql_fetch_array($c)){
+                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido") ;
+                                                    while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>
                                                     <?php 
@@ -161,7 +152,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Desde que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
@@ -183,7 +174,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Hasta que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php
@@ -214,7 +205,7 @@ $datosEstudianteActual = mysql_fetch_array($consultaEstudianteActual);
 
                 </div>
                 <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

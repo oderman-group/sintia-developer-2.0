@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0121';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -33,52 +32,41 @@
 								<?php
 									$filtro = '';
 									$filtroMat = '';
-									if(is_numeric($_GET["curso"])){$filtroMat .= " AND mat_grado='".$_GET["curso"]."'";}
-									if(is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
+									if(isset($_GET["curso"]) AND is_numeric($_GET["curso"])){$filtroMat .= " AND mat_grado='".$_GET["curso"]."'";}
+									if(isset($_GET["resp"]) AND is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
 						
 									$SQL = "SELECT * FROM general_encuestas
 									INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
 									INNER JOIN academico_grados ON gra_id=mat_grado
 									INNER JOIN academico_grupos ON gru_id=mat_grupo
-									WHERE genc_id=genc_id $filtro
-									";
+									WHERE genc_id=genc_id $filtro";
 								?>
 								
 								
 								
-								<div class="col-md-4 col-lg-3">
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
-										<div class="panel-body">
-											<?php
-											$cursos = mysql_query("SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal
-											",$conexion);
-											while($curso = mysql_fetch_array($cursos)){
-												$estudiantesPorGrado = mysql_fetch_array(mysql_query("
-												SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'
-												",$conexion));
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
-												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></div>
-																</div>
-															</div>
-														</div>
-											<?php }?>
-											<p align="center"><a href="reservar-cupo.php">VER TODOS</a></p>
-										</div>
-                                    </div>
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
+							
 								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
+								<div class="btn-group">
+																<button type="button" class="btn btn-default">Filtrar por cursos</button>
+																<button type="button" class="btn btn-default dropdown-toggle m-r-20" data-toggle="dropdown">
+																	<i class="fa fa-angle-down"></i>
+																</button>
+																<ul class="dropdown-menu" role="menu">
+																<?php
+											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
+											WHERE gra_estado=1
+											ORDER BY gra_vocal");
+											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
+												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
+												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
+												if(isset($_GET["curso"]) AND $curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
+											?>
+												<li><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></li>
+											<?php }?>
+																</ul>
+															</div>
+								
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Reserva de cupos</header>
@@ -105,8 +93,8 @@
                                                 <tbody>
 													<?php
 													$respuestas = array("","SI","NO");
-													$consulta = mysql_query($SQL,$conexion);
-													while($resultado = mysql_fetch_array($consulta)){				
+													$consulta = mysqli_query($conexion, $SQL);
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 													?>
 													<tr>
 														<td><?=$resultado['genc_id'];?></td>
@@ -129,7 +117,7 @@
                 </div>
             </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php// include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

@@ -1,6 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0122';?>
-<?php include("verificar-permiso-pagina.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -34,17 +33,11 @@
 									$SQL = "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
 									LEFT JOIN usuarios ON uss_id=soli_remitente
 									LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
-                                    WHERE soli_institucion='".$config['conf_id_institucion']."'
-									";
+                                    WHERE soli_institucion='".$config['conf_id_institucion']."'";
 								?>
+
 								
-								
-								
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Solicitudes</header>
@@ -69,8 +62,8 @@
 												</thead>
                                                 <tbody>
 												<?php
-												$consulta = mysql_query($SQL,$conexion);
-												while($resultado = mysql_fetch_array($consulta)){				
+												$consulta = mysqli_query($conexion, $SQL);
+												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 												?>
 												<tr>
 													<td><?=$resultado['soli_id'];?></td>
@@ -92,7 +85,7 @@
                 </div>
             </div>
             <!-- end page content -->
-             <?php include("../compartido/panel-configuracion.php");?>
+             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
