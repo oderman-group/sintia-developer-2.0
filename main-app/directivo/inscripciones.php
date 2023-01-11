@@ -30,12 +30,6 @@
                         <div class="col-md-12">
                             <div class="row">
 								<div class="col-md-4 col-lg-3">
-									<div class="panel">
-										<header class="panel-heading panel-heading-red">MENÚ INSCRIPCIÓNES</header>
-										<div class="panel-body">
-                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">Exportar Excel</a></p>
-										</div>
-                                	</div>
 
 									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
 									<div class="panel">
