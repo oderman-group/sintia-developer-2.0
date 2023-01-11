@@ -85,10 +85,11 @@
 											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
 											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
-											$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias
+											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 											INNER JOIN usuarios ON uss_id=not_usuario
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
+											AND not_year='" . $_SESSION["bd"] . "'
 											$filtro
 											ORDER BY not_id DESC
 											");
