@@ -85,7 +85,7 @@ if ($_POST["id"] == 13) {
 		exit();
 	}
 	//mysqli_query($conexion, "UPDATE configuracion SET conf_color_borde='#009900', conf_color_encabezado='#00FF99',conf_tam_borde=3 WHERE conf_id=2;");
-	mysqli_query($conexion, "UPDATE configuracion SET conf_color_borde='" . $_POST["color_borde"] . "', conf_color_encabezado='" . $_POST["color_encabezado"] . "',conf_tam_borde=" . $_POST["tborde"] . " WHERE conf_id=1;");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET conf_color_borde='" . $_POST["color_borde"] . "', conf_color_encabezado='" . $_POST["color_encabezado"] . "',conf_tam_borde=" . $_POST["tborde"] . " WHERE conf_id='".$config['conf_id']."';");
 	echo '<script type="text/javascript">window.location.href="config-reporte.php";</script>';
 	exit();
 }
@@ -188,7 +188,7 @@ if ($_POST["id"] == 20) {
 }
 //ACTUALIZAR CONFIGURACION INSTITUCION
 if ($_POST["id"] == 21) {
-	mysqli_query($conexion, "UPDATE configuracion SET conf_periodo=" . $_POST["periodoActualC"] . ", conf_nota_desde=" . $_POST["notaMinC"] . ", conf_nota_hasta=" . $_POST["notaMaxC"] . ", conf_nota_minima_aprobar=" . $_POST["notaMinAprobarC"] . ", conf_color_perdida='" . $_POST["colorNotasPC"] . "', conf_color_ganada='" . $_POST["colorNotasGC"] . "',conf_pie='" . $_POST["configPie"] . "', conf_num_materias_perder_ano=" . $_POST["numMateriasMinRC"] . ", conf_ini_matrucula='" . $_POST["iniciomatC"] . "', conf_fin_matricul='" . $_POST["finmatC"] . "', conf_apertura_academica='" . $_POST["aperturaacademicaAC"] . "', conf_clausura_academica='" . $_POST["clausuraacademicaAC"] . "'
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET conf_periodo=" . $_POST["periodoActualC"] . ", conf_nota_desde=" . $_POST["notaMinC"] . ", conf_nota_hasta=" . $_POST["notaMaxC"] . ", conf_nota_minima_aprobar=" . $_POST["notaMinAprobarC"] . ", conf_color_perdida='" . $_POST["colorNotasPC"] . "', conf_color_ganada='" . $_POST["colorNotasGC"] . "',conf_pie='" . $_POST["configPie"] . "', conf_num_materias_perder_ano=" . $_POST["numMateriasMinRC"] . ", conf_ini_matrucula='" . $_POST["iniciomatC"] . "', conf_fin_matricul='" . $_POST["finmatC"] . "', conf_apertura_academica='" . $_POST["aperturaacademicaAC"] . "', conf_clausura_academica='" . $_POST["clausuraacademicaAC"] . "'
 WHERE conf_id=" . $_POST["id_IC"] . ";");
 	$lineaError = __LINE__;
 

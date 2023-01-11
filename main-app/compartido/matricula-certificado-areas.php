@@ -134,7 +134,7 @@ while($i<=$restaAgnos){
 	
 
 	<?php 
-	$consultaConfig=mysqli_query($conexion, "SELECT * FROM configuracion WHERE conf_id=1");
+	$consultaConfig=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
 	$configAA=mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
 	if($inicio<=$config[1] and $configAA[2]==5){?>
 
