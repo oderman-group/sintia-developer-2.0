@@ -48,12 +48,8 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
 						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
                                 <?php
                                 $ext='';
@@ -68,7 +64,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Estudiante</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
@@ -85,7 +81,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Desde que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
@@ -107,7 +103,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Hasta que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php
@@ -139,7 +135,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Estudiante</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
@@ -156,7 +152,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Desde que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
@@ -178,7 +174,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                             
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Hasta que año</label>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-9">
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php

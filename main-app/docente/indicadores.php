@@ -96,16 +96,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																	<p style="color: tomato;"> Has alcanzado el número máximo de indicadores permitidos. </p>
 																<?php }?>
 					                                        </div>
-					                                        <div class="col-md-6 col-sm-6 col-6">
-					                                            <div class="btn-group pull-right">
-					                                                <a class="btn btn-primary  btn-outline dropdown-toggle" data-toggle="dropdown">Herramientas
-					                                                    <i class="fa fa-angle-down"></i>
-					                                                </a>
-					                                                <ul class="dropdown-menu pull-right">
-					                                                    <li><a href="javascript:;"><i class="fa fa-print"></i> Imprimir </a></li>
-					                                                </ul>
-					                                            </div>
-					                                        </div>
+					                                        
 					                                    </div>	
                                         	<div class="table-scrollable">
 					                           <table class="table table-striped table-bordered table-hover table-checkable order-column valign-middle" id="example4">

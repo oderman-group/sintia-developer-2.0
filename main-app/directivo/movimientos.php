@@ -36,9 +36,6 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[95][$datosUsuarioActual['uss_idioma']]);?></header>
 										<div class="panel-body">
-											<p><a href="#">Sacar informe</a></p>
-											<p><a href="#">Cobro masivo</a></p>
-											<p><a href="#">Eliminar todo</a></p>
 											<p><a href="movimientos-importar.php">Importar saldos</a></p>
 										</div>
                                 	</div>

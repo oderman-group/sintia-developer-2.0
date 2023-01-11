@@ -279,9 +279,14 @@
 														$consultaPromedioPeriodo=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_carga='".$resultado[0]."' AND bol_periodo='".$p."'");
 														$promedioPeriodo = mysqli_fetch_array($consultaPromedioPeriodo, MYSQLI_BOTH);
 														if($promedioPeriodo[0]<$config[5] and $promedioPeriodo[0]!="")$color = $config[6]; elseif($promedioPeriodo[0]>=$config[5]) $color = $config[7];
+														if(!empty($promedioPeriodo[0])){
 														echo '<td style="text-align:center; color:'.$color.'"><a href="../compartido/reportes-sabanas.php?curso='.$cargaAcademica["car_curso"].'&grupo='.$cargaAcademica["car_grupo"].'&per='.$p.'" target="_blank" style="text-decoration:underline; color:#00F;" data-toggle="popover" data-placement="top" title="Imprimir sabanas">'.$numeroNotasBoletin." - <b>".round($promedioPeriodo[0],2).'</b></a><br><br><a href="cargas-comportamiento.php?carga='.$resultado[0].'&periodo='.$p.'&grado='.$cargaAcademica[2].'&grupo='.$cargaAcademica[3].'" style="text-decoration:underline; color:red;">Comp.</a></td>';
+														}else{
+															echo '<td>-</td>';
+														}
 														$p++;
-														} ?>
+														}
+														?>
 														
 														<td>
 															<div class="btn-group">
