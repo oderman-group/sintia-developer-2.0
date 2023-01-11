@@ -3,7 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaCfg=mysqli_query($conexion, "SELECT * FROM configuracion WHERE conf_id=1");
+$consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
 $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 ?>
 <?php
