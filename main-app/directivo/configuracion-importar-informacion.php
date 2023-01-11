@@ -1,5 +1,5 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0061';?>
+<?php //include("session.php");?>
+<?php //$idPaginaInterna = 'DT0061';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
@@ -178,7 +178,7 @@ mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, h
                                 	<div class="panel-body">
 
                                    
-                                    <form action="configuracion-importar-informacion.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                    <form action="#configuracion-importar-informacion.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">¿Desde que a&ntilde;o desea traer la informaci&oacute;n?</label>
