@@ -98,6 +98,7 @@
 														<td><?=$genero[1];?></td>
 														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a></td>
 														<td>
+														<?php if($datosCargaActual['car_director_grupo']==1 || empty($_SESSION['admin']) ){?>
 															<div class="btn-group">
 																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
 																	  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
@@ -114,6 +115,7 @@
 															<?php }?>
 															</ul>
 															</div>
+															<?php }?>
 								
 														</td>
                                                     </tr>

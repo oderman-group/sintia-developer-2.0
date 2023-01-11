@@ -37,7 +37,7 @@
 										<header class="panel-heading panel-heading-red">INFORMES ACADÉMICOS</header>
 										<div class="panel-body">
 											<p><a href="informes-boletines.php">Boletines por curso</a></p>
-											<p><a href="#">Certificados</a></p>
+											<p><a href="estudiantes-certificados.php">Certificados</a></p>
 											<p><a href="#">Libro final</a></p>
 											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">Docentes y cargas académicas</a></p>
 										</div>
