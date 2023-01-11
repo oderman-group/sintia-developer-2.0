@@ -142,13 +142,32 @@
 									WHERE 
 									hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
 									AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
-									ORDER BY hil_id DESC LIMIT 5");										 
+									ORDER BY hil_id DESC LIMIT 10");										 
                                     while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
                                     ?>
 										<li><a href="<?=$consultaReciente['pagp_ruta'];?>" style="text-decoration: underline;"><?php echo $consultaReciente["pagp_pagina"]; ?></a></li>
 									<?php }?>
 								</div>
 							</div>
+
+							<div class="panel">
+								
+							    <header class="panel-heading panel-heading-blue" align="center">Páginas mas visitadas (5)</header>
+								<div class="col-sm-12">
+								<?php	
+                                    $ultimasPaginas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+									INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
+									WHERE 
+									hil_id IN (SELECT ALL(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo)
+									AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
+									ORDER BY hil_id DESC LIMIT 10");										 
+                                    while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
+                                    ?>
+										<li><a href="<?=$consultaReciente['pagp_ruta'];?>" style="text-decoration: underline;"><?php echo $consultaReciente["pagp_pagina"]; ?></a></li>
+									<?php }?>
+								</div>
+							</div>
+
 								
 							<?php include("../compartido/modulo-frases-lateral.php");?>
 							
