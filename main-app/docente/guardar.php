@@ -2699,13 +2699,13 @@ if($_POST["id"]==47){
 
 if($_GET["get"]==1){
 
-	$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias WHERE not_id='".$_GET["id"]."'");
+	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$_GET["id"]."'");
 
 	$resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 	if($resultado[5]==0) $estado=1; else $estado=0;
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado='".$estado."' WHERE not_id='".$_GET["id"]."'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='".$estado."' WHERE not_id='".$_GET["id"]."'");
 
 	$lineaError = __LINE__;
 
@@ -2721,7 +2721,7 @@ if($_GET["get"]==1){
 
 if($_GET["get"]==2){
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_id='".$_GET["id"]."'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_id='".$_GET["id"]."'");
 
 	$lineaError = __LINE__;
 
@@ -2737,7 +2737,7 @@ if($_GET["get"]==2){
 
 if($_GET["get"]==3){
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=1 WHERE not_usuario='".$idSession."' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=1 WHERE not_usuario='".$idSession."' AND not_estado!=2");
 
 	$lineaError = __LINE__;
 
@@ -2753,7 +2753,7 @@ if($_GET["get"]==3){
 
 if($_GET["get"]==4){
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=0 WHERE not_usuario='".$idSession."' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=0 WHERE not_usuario='".$idSession."' AND not_estado!=2");
 
 	$lineaError = __LINE__;
 
@@ -2769,7 +2769,7 @@ if($_GET["get"]==4){
 
 if($_GET["get"]==5){
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_usuario='".$idSession."'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_usuario='".$idSession."'");
 
 	$lineaError = __LINE__;
 

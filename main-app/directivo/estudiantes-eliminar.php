@@ -19,7 +19,7 @@ include("../modelo/conexion.php");
     mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM seguridad_historial_acciones WHERE hil_usuario='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM social_amigos WHERE ams_usuario='" . $_GET["idU"] . "' OR ams_amigo");
-    mysqli_query($conexion, "DELETE FROM social_noticias WHERE not_usuario='" . $_GET["idU"] . "'");
+    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_noticias WHERE not_usuario='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM social_visitas WHERE vis_usuario='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_id='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $_GET["idE"] . "'");

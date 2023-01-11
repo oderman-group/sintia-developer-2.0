@@ -789,11 +789,11 @@ if ($_POST["id"] == 61) {
 
 //CAMBIAR DE ESTADO LAS NOTICIAS
 if ($_GET["get"] == 1) {
-	$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias WHERE not_id='" . $_GET["id"] . "'");
+	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='" . $_GET["id"] . "'");
 	$resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 	if ($resultado[5] == 0) $estado = 1;
 	else $estado = 0;
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado='" . $estado . "' WHERE not_id='" . $_GET["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $estado . "' WHERE not_id='" . $_GET["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -802,7 +802,7 @@ if ($_GET["get"] == 1) {
 }
 //ELIMINAR NOTICIAS
 if ($_GET["get"] == 2) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_id='" . $_GET["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_id='" . $_GET["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -811,7 +811,7 @@ if ($_GET["get"] == 2) {
 }
 //MOSTRAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 3) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=1 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=1 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -820,7 +820,7 @@ if ($_GET["get"] == 3) {
 }
 //OCULTAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 4) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=0 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=0 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -829,7 +829,7 @@ if ($_GET["get"] == 4) {
 }
 //ELIMINAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 5) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_usuario='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_usuario='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -858,7 +858,7 @@ if ($_GET["get"] == 7) {
 }
 //MOSTRAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 8) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=1 WHERE not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=1 WHERE not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -867,7 +867,7 @@ if ($_GET["get"] == 8) {
 }
 //OCULTAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 9) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=0 WHERE not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=0 WHERE not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -876,7 +876,7 @@ if ($_GET["get"] == 9) {
 }
 //ELIMINAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 10) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
