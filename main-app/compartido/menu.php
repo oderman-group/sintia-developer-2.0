@@ -168,7 +168,6 @@
 									<li><a href="configuracion-sistema.php">del Sistema</a></li>
 									<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
 									<li><a href="configuracion-opciones-generales.php">Opciones generales</a></li>
-									<li><a href="configuracion-importar-informacion.php">Importar información</a></li>
 	                            </ul>
 	                        </li>
 
