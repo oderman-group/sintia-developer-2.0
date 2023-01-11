@@ -62,7 +62,6 @@
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
-														<th>Codigo</th>
                                                         <th>ID</th>
                                                         <th>Nombre</th>
                                                         <th>Grupo</th>
