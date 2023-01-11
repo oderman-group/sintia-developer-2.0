@@ -167,11 +167,11 @@
 									<!--
 									<ul class="feed-blog">
 										<?php
-										$consultaReciente = mysqli_query($conexion, "SELECT * FROM social_noticias
+										$consultaReciente = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 										INNER JOIN usuarios ON uss_id=not_usuario
 										WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 										AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
-										
+										AND not_year='" . $_SESSION["bd"] . "'
 										ORDER BY not_id DESC
 										LIMIT 0,3
 										");
