@@ -166,7 +166,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Tipo de usuario</label>
                                             <div class="col-sm-4">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles WHERE pes_year='".$_SESSION["bd"] . "'");
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
 												?>
                                                 <select class="form-control  select2" name="tipoUsuario" required>
                                                     <option value="">Seleccione una opción</option>

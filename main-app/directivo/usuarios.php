@@ -104,7 +104,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                         </div>
 										<div class="card-body">
 											<?php
-											$docentes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles WHERE pes_year='".$_SESSION["bd"] . "' ORDER BY pes_id");
+											$docentes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles ORDER BY pes_id");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(uss_id) FROM usuarios WHERE uss_tipo='".$docente['pes_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
