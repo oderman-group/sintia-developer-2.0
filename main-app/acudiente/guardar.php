@@ -15,16 +15,16 @@ if(isset($_POST["id"])){
 <?php
 //SOLICITUD DE DESBLOQUEO
 if($_POST["id"]==1){	
-	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_solicitudes(soli_id_recurso, soli_remitente, soli_fecha, soli_mensaje, soli_estado, soli_tipo, soli_institucion)
-	VALUES('".$_POST["idRecurso"]."', '".$_SESSION["id"]."', now(), '".$_POST["contenido"]."', 1, 1, '".$config['conf_id_institucion']."')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_solicitudes(soli_id_recurso, soli_remitente, soli_fecha, soli_mensaje, soli_estado, soli_tipo, soli_institucion, soli_year)
+	VALUES('".$_POST["idRecurso"]."', '".$_SESSION["id"]."', now(), '".$_POST["contenido"]."', 1, 1, '".$config['conf_id_institucion']."', '".$_SESSION["bd"]."')");
 	
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=110";</script>';
 	exit();
 }
 //ENCUESTA RESERVA DE CUPO
 if($_POST["id"]==2){	
-	mysqli_query($conexion, "INSERT INTO general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario)
-	VALUES('".$_POST["idEstudiante"]."', now(), '".$_POST["respuesta"]."', '".$_POST["motivo"]."')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario, genc_institucion, genc_year)
+	VALUES('".$_POST["idEstudiante"]."', now(), '".$_POST["respuesta"]."', '".$_POST["motivo"]."','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=111";</script>';
 	exit();

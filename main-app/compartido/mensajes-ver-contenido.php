@@ -3,13 +3,13 @@ $filtro="AND ema_para='".$_SESSION["id"]."'";
 if(isset($_GET["opt"]) AND $_GET["opt"]==2){
 	$filtro='';
 }
-$datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_emails
+$datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 INNER JOIN usuarios ON uss_id=ema_de
 WHERE ema_id='".$_GET["idR"]."' $filtro"), MYSQLI_BOTH);
 
 
 if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']=='0'){
-	mysqli_query($conexion, "UPDATE social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$_GET["idR"]."'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$_GET["idR"]."'");
 	
 }
 ?>

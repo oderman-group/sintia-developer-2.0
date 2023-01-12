@@ -26,7 +26,7 @@ if ($_POST["id"] == 1) {
 
 	$destinatarios = "1,2,3,4,5";
 	//if($_POST["doc"]==1)$destinatarios .="2,"; if($_POST["acu"]==1)$destinatarios .="3,"; if($_POST["est"]==1)$destinatarios .="4,";  
-	mysqli_query($conexion, "INSERT INTO social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -61,20 +61,20 @@ if ($_POST["id"] == 2) {
 	$pos = strpos($_POST["video"], $findme) + 3;
 	$video = substr($_POST["video"], $pos, 11);
 
-	mysqli_query($conexion, "INSERT INTO social_noticias(not_titulo, not_descripcion, not_usuario, not_fecha, not_estado, not_para, not_imagen, not_archivo, not_keywords, not_url_imagen, not_video, not_id_categoria_general, not_video_url)
-	VALUES('" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', '" . $_SESSION["id"] . "',now(), '" . $estado . "', '" . $destinatarios . "', '" . $imagen . "', '" . $archivo . "', '" . $_POST["keyw"] . "', '" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', '" . $video . "', '" . $_POST["categoriaGeneral"] . "', '" . mysqli_real_escape_string($conexion,$_POST["video"]) . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_titulo, not_descripcion, not_usuario, not_fecha, not_estado, not_para, not_imagen, not_archivo, not_keywords, not_url_imagen, not_video, not_id_categoria_general, not_video_url, not_institucion, not_year)
+	VALUES('" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', '" . $_SESSION["id"] . "',now(), '" . $estado . "', '" . $destinatarios . "', '" . $imagen . "', '" . $archivo . "', '" . $_POST["keyw"] . "', '" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', '" . $video . "', '" . $_POST["categoriaGeneral"] . "', '" . mysqli_real_escape_string($conexion,$_POST["video"]) . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	mysqli_query($conexion, "DELETE FROM social_noticias_cursos WHERE notpc_noticia='" . $idRegistro . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='" . $idRegistro . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	if($_POST["cursos"]>0){
 		$cont = count($_POST["cursos"]);
 		$i = 0;
 		while ($i < $cont) {
-			mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "')");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $idRegistro . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 			$i++;
@@ -94,19 +94,19 @@ if ($_POST["id"] == 3) {
 		$destino = "../files/archivos";
 		move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
 	}
-	mysqli_query($conexion, "INSERT INTO general_folders(fold_nombre, fold_padre, fold_activo, fold_fecha_creacion, fold_propietario, fold_id_recurso_principal, fold_categoria, fold_tipo, fold_estado, fold_keywords)
-	VALUES('" . $archivo . "', '" . $_POST["padre"] . "', 1, now(), '" . $_SESSION["id"] . "', '" . $_POST["idRecursoP"] . "', '" . $_POST["idCategoria"] . "', '" . $_POST["tipo"] . "', 1, '" . $_POST["keyw"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders(fold_nombre, fold_padre, fold_activo, fold_fecha_creacion, fold_propietario, fold_id_recurso_principal, fold_categoria, fold_tipo, fold_estado, fold_keywords, fold_institucion, fold_year)
+	VALUES('" . $archivo . "', '" . $_POST["padre"] . "', 1, now(), '" . $_SESSION["id"] . "', '" . $_POST["idRecursoP"] . "', '" . $_POST["idCategoria"] . "', '" . $_POST["tipo"] . "', 1, '" . $_POST["keyw"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	mysqli_query($conexion, "DELETE FROM general_folders_usuarios_compartir WHERE fxuc_folder='" . $idRegistro . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='" . $idRegistro . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["compartirCon"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -125,7 +125,7 @@ if ($_POST["id"] == 4) {
 		$imagen = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_imgNoti_') . "." . $extension;
 		$destino = "../files/publicaciones";
 		move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
-		mysqli_query($conexion, "UPDATE social_noticias SET not_imagen='" . $imagen . "' WHERE not_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_imagen='" . $imagen . "' WHERE not_id='" . $_POST["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	}
@@ -135,7 +135,7 @@ if ($_POST["id"] == 4) {
 		$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_fileNoti_') . "." . $extension;
 		$destino = "../files/publicaciones";
 		move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
-		mysqli_query($conexion, "UPDATE social_noticias SET not_archivo='" . $archivo . "' WHERE not_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_archivo='" . $archivo . "' WHERE not_id='" . $_POST["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	}
@@ -144,15 +144,15 @@ if ($_POST["id"] == 4) {
 	$pos = strpos($_POST["video"], $findme) + 3;
 	$video = substr($_POST["video"], $pos, 11);
 
-	mysqli_query($conexion, "UPDATE social_noticias SET not_titulo='" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', not_descripcion='" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',  not_keywords='" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', not_url_imagen='" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', not_video='" . $video . "', not_id_categoria_general='" . $_POST["categoriaGeneral"] . "', not_video_url='" . $_POST["video"] . "' WHERE not_id='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_titulo='" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', not_descripcion='" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',  not_keywords='" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', not_url_imagen='" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', not_video='" . $video . "', not_id_categoria_general='" . $_POST["categoriaGeneral"] . "', not_video_url='" . $_POST["video"] . "' WHERE not_id='" . $_POST["idR"] . "'");
 
-	mysqli_query($conexion, "DELETE FROM social_noticias_cursos WHERE notpc_noticia='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["cursos"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO social_noticias_cursos(notpc_noticia, notpc_curso)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -172,20 +172,20 @@ if ($_POST["id"] == 5) {
 		$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_fileFolder_') . "." . $extension;
 		$destino = "../files/archivos";
 		move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
-		mysqli_query($conexion, "UPDATE general_folders SET fold_nombre='" . $archivo . "' WHERE fold_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_nombre='" . $archivo . "' WHERE fold_id='" . $_POST["idR"] . "'");
 	}
 
-	mysqli_query($conexion, "UPDATE general_folders SET fold_nombre='" . $archivo . "', fold_padre='" . $_POST["padre"] . "', fold_tipo='" . $_POST["tipo"] . "', fold_keywords='" . $_POST["keyw"] . "', fold_fecha_modificacion=now() WHERE fold_id='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_nombre='" . $archivo . "', fold_padre='" . $_POST["padre"] . "', fold_tipo='" . $_POST["tipo"] . "', fold_keywords='" . $_POST["keyw"] . "', fold_fecha_modificacion=now() WHERE fold_id='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
-	mysqli_query($conexion, "DELETE FROM general_folders_usuarios_compartir WHERE fxuc_folder='" . $_POST["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='" . $_POST["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	$cont = count($_POST["compartirCon"]);
 	$i = 0;
 	while ($i < $cont) {
-		mysqli_query($conexion, "INSERT INTO general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario)VALUES('" . $_POST["idR"] . "','" . $_POST["compartirCon"][$i] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -365,8 +365,8 @@ if ($_POST["id"] == 7) {
 
 		$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"][$i] . "'"), MYSQLI_BOTH);
 
-		mysqli_query($conexion, "INSERT INTO social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para)
-		VALUES('" . $_SESSION["id"] . "', '" . $_POST["para"][$i] . "', '" . mysqli_real_escape_string($conexion,$_POST["asunto"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+		VALUES('" . $_SESSION["id"] . "', '" . $_POST["para"][$i] . "', '" . mysqli_real_escape_string($conexion,$_POST["asunto"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		$i++;
@@ -519,15 +519,15 @@ if ($_POST["id"] == 12) {
 		include("../compartido/reporte-errores.php");
 		$i++;
 
-		mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-		VALUES('Reporte disciplinario', 'Te han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $_POST["estudiante"] . "', now(), 3, 2, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+		VALUES('Reporte disciplinario', 'Te han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $_POST["estudiante"] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$idNotify = mysqli_insert_id($conexion);
-		mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "' WHERE alr_id='" . $idNotify . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "' WHERE alr_id='" . $idNotify . "'");
 
-		mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-		VALUES('Reporte disciplinario - " . $acudiente['mat_nombres'] . "', 'A tu acudido " . $acudiente['mat_nombres'] . " le han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $acudiente['uss_id'] . "', now(), 3, 2, 0)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+		VALUES('Reporte disciplinario - " . $acudiente['mat_nombres'] . "', 'A tu acudido " . $acudiente['mat_nombres'] . " le han hecho un nuevo reporte disciplinario - COD: " . $_POST["faltas"][$i] . ".', 2, '" . $acudiente['uss_id'] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$idNotify = mysqli_insert_id($conexion);
-		mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "&usrEstud=" . $_POST["estudiante"] . "' WHERE alr_id='" . $idNotify . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "&usrEstud=" . $_POST["estudiante"] . "' WHERE alr_id='" . $idNotify . "'");
 	}
 
 	if ($acudiente['mat_notificacion1'] == 1) {
@@ -720,8 +720,8 @@ if ($_POST["id"] == 18) {
 	$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'"), MYSQLI_BOTH);
 	$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"] . "'"), MYSQLI_BOTH);
 
-	mysqli_query($conexion, "INSERT INTO social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para)
-	VALUES('" . $_SESSION["id"] . "', '" . $_POST["destinoMarketplace"] . "', '" . $_POST["asuntoMarketplace"] . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0)");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+	VALUES('" . $_SESSION["id"] . "', '" . $_POST["destinoMarketplace"] . "', '" . $_POST["asuntoMarketplace"] . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
@@ -951,7 +951,7 @@ if ($_GET["get"] == 5) {
 }
 //ELIMINAR/MOSTRAR/OCULTAR UNA NOTICIA
 if ($_GET["get"] == 6) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -959,7 +959,7 @@ if ($_GET["get"] == 6) {
 }
 //ELIMINAR/MOSTRAR/OCULTAR TODAS LAS NOTICIAS DE UN USUARIO
 if ($_GET["get"] == 7) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -967,31 +967,31 @@ if ($_GET["get"] == 7) {
 }
 //REACCIONES POR NOTICIA
 if ($_GET["get"] == 8) {
-	$reaccion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'"), MYSQLI_BOTH);
+	$reaccion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'"), MYSQLI_BOTH);
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	if ($reaccion[0] == "") {
-		mysqli_query($conexion, "INSERT INTO social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado)VALUES('" . $_SESSION["id"] . "', '" . $_GET["idR"] . "','" . $_GET["r"] . "',now(),1)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_insitucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . $_GET["idR"] . "','" . $_GET["r"] . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	} else {
-		mysqli_query($conexion, "UPDATE social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	}
 
-	mysqli_query($conexion, "INSERT INTO general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista)
-	VALUES('<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación', '<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación " . $_GET["postname"] . ".', 2, '" . $_GET["postowner"] . "', now(), 3, 2, 0)");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+	VALUES('<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación', '<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación " . $_GET["postname"] . ".', 2, '" . $_GET["postowner"] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$idNotify = mysqli_insert_id($conexion);
-	mysqli_query($conexion, "UPDATE general_alertas SET alr_url_acceso='noticias.php?idNotify=" . $idNotify . "#PUB" . $_GET["idR"] . "' WHERE alr_id='" . $idNotify . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='noticias.php?idNotify=" . $idNotify . "#PUB" . $_GET["idR"] . "' WHERE alr_id='" . $idNotify . "'");
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . $_GET["idR"] . '";</script>';
 	exit();
 }
 //ELIMINAR CARPETA
 if ($_GET["get"] == 9) {
-	mysqli_query($conexion, "UPDATE general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
-	mysqli_query($conexion, "UPDATE general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -999,7 +999,7 @@ if ($_GET["get"] == 9) {
 }
 //ELIMINAR NOTIFICACIONES
 if ($_GET["get"] == 10) {
-	mysqli_query($conexion, "DELETE FROM general_alertas WHERE alr_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_alertas WHERE alr_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -1007,7 +1007,7 @@ if ($_GET["get"] == 10) {
 }
 //ELIMINAR IMAGEN DE LA NOTICIA
 if ($_GET["get"] == 11) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_imagen='' WHERE not_id='" . $_GET["idR"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_imagen='' WHERE not_id='" . $_GET["idR"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -1073,7 +1073,7 @@ if ($_GET["get"] == 15) {
 }
 //ELIMINAR TODAS LAS NOTIFICACIONES
 if ($_GET["get"] == 16) {
-	mysqli_query($conexion, "DELETE FROM general_alertas WHERE alr_usuario='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_alertas WHERE alr_usuario='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -1082,11 +1082,11 @@ if ($_GET["get"] == 16) {
 //ELIMINAR MENSAJES
 if ($_GET["get"] == 17) {
 	if ($_GET["elm"] == 1) {
-		mysqli_query($conexion, "UPDATE social_emails SET ema_eliminado_de=1 WHERE ema_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_de=1 WHERE ema_id='" . $_GET["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	} else {
-		mysqli_query($conexion, "UPDATE social_emails SET ema_eliminado_para=1 WHERE ema_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_para=1 WHERE ema_id='" . $_GET["idR"] . "'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	}

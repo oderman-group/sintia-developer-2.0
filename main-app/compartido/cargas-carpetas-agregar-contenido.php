@@ -57,8 +57,8 @@
 												<label class="col-sm-3 control-label">Carpeta padre</label>
 												<div class="col-sm-9">
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM general_folders 
-													WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_tipo=1 AND fold_estado=1
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders 
+													WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_tipo=1 AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'
 													ORDER BY fold_tipo, fold_nombre");
 													?>
 													<select class="form-control  select2" name="padre" required>
@@ -78,7 +78,7 @@
 													<select id="multiple" class="form-control select2-multiple" multiple name="compartirCon[]">
 													<?php
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													INNER JOIN perfiles ON pes_id=uss_tipo
+													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 													");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	

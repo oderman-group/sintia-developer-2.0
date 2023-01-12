@@ -104,7 +104,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                         </div>
 										<div class="card-body">
 											<?php
-											$docentes = mysqli_query($conexion, "SELECT * FROM perfiles ORDER BY pes_id");
+											$docentes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles ORDER BY pes_id");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(uss_id) FROM usuarios WHERE uss_tipo='".$docente['pes_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
@@ -219,7 +219,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													
 													 $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													 INNER JOIN perfiles ON pes_id=uss_tipo
+													 INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 													 WHERE uss_id=uss_id $filtro
 													 ORDER BY uss_id
 													 $filtroLimite");
