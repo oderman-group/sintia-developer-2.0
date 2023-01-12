@@ -1,20 +1,20 @@
 <?php
 if(isset($_GET["opt"])&&$_GET["opt"]==2){
-	$consulta = mysqli_query($conexion, "SELECT * FROM social_emails
+	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN usuarios ON uss_id=ema_para
 	WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de='0'
 	ORDER BY ema_id DESC
 	");
 	$opt=$_GET["opt"];
 }else{
-	$consulta = mysqli_query($conexion, "SELECT * FROM social_emails
+	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN usuarios ON uss_id=ema_de
 	WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para='0'
 	ORDER BY ema_id DESC
 	");
 }
-$numR = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM social_emails WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para!=1 AND ema_visto=0"));
-$numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM social_emails WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de!=1 AND ema_visto=0"));
+$numR = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para!=1 AND ema_visto=0"));
+$numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de!=1 AND ema_visto=0"));
 ?>
 <div class="row">
                         <div class="col-md-12">

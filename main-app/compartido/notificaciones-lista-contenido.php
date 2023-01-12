@@ -1,5 +1,5 @@
 								<?php
-								mysqli_query($conexion, "UPDATE general_alertas SET alr_vista=1 WHERE alr_usuario='".$_SESSION["id"]."' AND alr_vista=0");
+								mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_vista=1 WHERE alr_usuario='".$_SESSION["id"]."' AND alr_vista=0 AND alr_year='" . $_SESSION["bd"] . "'");
 								
 								?>
 								<div class="col-md-9">
@@ -28,8 +28,8 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM general_alertas 
-													 WHERE alr_usuario='".$_SESSION["id"]."'
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_alertas 
+													 WHERE alr_usuario='".$_SESSION["id"]."' AND alr_year='" . $_SESSION["bd"] . "'
 													 ORDER BY alr_id DESC
 													 ");
 													$contReg=1; 

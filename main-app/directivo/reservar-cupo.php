@@ -35,7 +35,7 @@
 									if(isset($_GET["curso"]) AND is_numeric($_GET["curso"])){$filtroMat .= " AND mat_grado='".$_GET["curso"]."'";}
 									if(isset($_GET["resp"]) AND is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
 						
-									$SQL = "SELECT * FROM general_encuestas
+									$SQL = "SELECT * FROM ".$baseDatosServicios.".general_encuestas
 									INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
 									INNER JOIN academico_grados ON gra_id=mat_grado
 									INNER JOIN academico_grupos ON gru_id=mat_grupo

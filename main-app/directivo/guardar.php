@@ -66,7 +66,7 @@ if ($_POST["id"] == 9) {
 	}
 	$consultaUsuarioResponsable=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $_POST["codigo"] . "'");
 	$usuarioResponsable = mysqli_fetch_array($consultaUsuarioResponsable, MYSQLI_BOTH);
-	mysqli_query($conexion, "INSERT INTO general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia)VALUES('Reporte disciplinario','El estudiante " . $_POST["codigo"] . " le han hecho un reporte disciplinario',2,'" . $usuarioResponsable[1] . "',now(),0,2,2)");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia, alr_institucion, alert_year)VALUES('Reporte disciplinario','El estudiante " . $_POST["codigo"] . " le han hecho un reporte disciplinario',2,'" . $usuarioResponsable[1] . "',now(),0,2,2,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -85,7 +85,7 @@ if ($_POST["id"] == 13) {
 		exit();
 	}
 	//mysqli_query($conexion, "UPDATE configuracion SET conf_color_borde='#009900', conf_color_encabezado='#00FF99',conf_tam_borde=3 WHERE conf_id=2;");
-	mysqli_query($conexion, "UPDATE configuracion SET conf_color_borde='" . $_POST["color_borde"] . "', conf_color_encabezado='" . $_POST["color_encabezado"] . "',conf_tam_borde=" . $_POST["tborde"] . " WHERE conf_id=1;");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET conf_color_borde='" . $_POST["color_borde"] . "', conf_color_encabezado='" . $_POST["color_encabezado"] . "',conf_tam_borde=" . $_POST["tborde"] . " WHERE conf_id='".$config['conf_id']."';");
 	echo '<script type="text/javascript">window.location.href="config-reporte.php";</script>';
 	exit();
 }
@@ -188,7 +188,7 @@ if ($_POST["id"] == 20) {
 }
 //ACTUALIZAR CONFIGURACION INSTITUCION
 if ($_POST["id"] == 21) {
-	mysqli_query($conexion, "UPDATE configuracion SET conf_periodo=" . $_POST["periodoActualC"] . ", conf_nota_desde=" . $_POST["notaMinC"] . ", conf_nota_hasta=" . $_POST["notaMaxC"] . ", conf_nota_minima_aprobar=" . $_POST["notaMinAprobarC"] . ", conf_color_perdida='" . $_POST["colorNotasPC"] . "', conf_color_ganada='" . $_POST["colorNotasGC"] . "',conf_pie='" . $_POST["configPie"] . "', conf_num_materias_perder_ano=" . $_POST["numMateriasMinRC"] . ", conf_ini_matrucula='" . $_POST["iniciomatC"] . "', conf_fin_matricul='" . $_POST["finmatC"] . "', conf_apertura_academica='" . $_POST["aperturaacademicaAC"] . "', conf_clausura_academica='" . $_POST["clausuraacademicaAC"] . "'
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET conf_periodo=" . $_POST["periodoActualC"] . ", conf_nota_desde=" . $_POST["notaMinC"] . ", conf_nota_hasta=" . $_POST["notaMaxC"] . ", conf_nota_minima_aprobar=" . $_POST["notaMinAprobarC"] . ", conf_color_perdida='" . $_POST["colorNotasPC"] . "', conf_color_ganada='" . $_POST["colorNotasGC"] . "',conf_pie='" . $_POST["configPie"] . "', conf_num_materias_perder_ano=" . $_POST["numMateriasMinRC"] . ", conf_ini_matrucula='" . $_POST["iniciomatC"] . "', conf_fin_matricul='" . $_POST["finmatC"] . "', conf_apertura_academica='" . $_POST["aperturaacademicaAC"] . "', conf_clausura_academica='" . $_POST["clausuraacademicaAC"] . "'
 WHERE conf_id=" . $_POST["id_IC"] . ";");
 	$lineaError = __LINE__;
 
@@ -212,7 +212,7 @@ if ($_POST["id"] == 22) {
 	} else {
 		$archivo = $_POST["logoAnterior"];
 	}
-	mysqli_query($conexion, "UPDATE general_informacion SET info_rector='" . $_POST["rectorI"] . "', info_secretaria_academica='" . $_POST["secretarioI"] . "', info_logo='" . $archivo . "', info_nit='" . $_POST["nitI"] . "', info_nombre='" . $_POST["nomInstI"] . "', info_direccion='" . $_POST["direccionI"] . "', info_telefono='" . $_POST["telI"] . "', info_clase='" . $_POST["calseI"] . "', info_caracter='" . $_POST["caracterI"] . "',info_calendario='" . $_POST["calendarioI"] . "', info_jornada='" . $_POST["jornadaI"] . "', info_horario='" . $_POST["horarioI"] . "', info_niveles='" . $_POST["nivelesI"] . "', info_modalidad='" . $_POST["modalidadI"] . "', info_propietario='" . $_POST["propietarioI"] . "', info_coordinador_academico='" . $_POST["coordinadorI"] . "', info_tesorero='" . $_POST["tesoreroI"] . "'
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_informacion SET info_rector='" . $_POST["rectorI"] . "', info_secretaria_academica='" . $_POST["secretarioI"] . "', info_logo='" . $archivo . "', info_nit='" . $_POST["nitI"] . "', info_nombre='" . $_POST["nomInstI"] . "', info_direccion='" . $_POST["direccionI"] . "', info_telefono='" . $_POST["telI"] . "', info_clase='" . $_POST["calseI"] . "', info_caracter='" . $_POST["caracterI"] . "',info_calendario='" . $_POST["calendarioI"] . "', info_jornada='" . $_POST["jornadaI"] . "', info_horario='" . $_POST["horarioI"] . "', info_niveles='" . $_POST["nivelesI"] . "', info_modalidad='" . $_POST["modalidadI"] . "', info_propietario='" . $_POST["propietarioI"] . "', info_coordinador_academico='" . $_POST["coordinadorI"] . "', info_tesorero='" . $_POST["tesoreroI"] . "'
 WHERE info_id=" . $_POST["idCI"] . ";");
 	$lineaError = __LINE__;
 
@@ -409,7 +409,7 @@ if ($_POST["id"] == 37) {
 	$numero = (count($_POST["usuario"]));
 	$contador = 0;
 	while ($contador < $numero) {
-		mysqli_query($conexion, "INSERT INTO general_evaluacion_asignar(epag_id_evaluacion, epag_curso, epag_grupo, epag_usuario)VALUES('" . $_POST["eva"] . "','" . $_POST["curso"] . "','" . $_POST["grupo"] . "','" . $_POST["usuario"][$contador] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_evaluacion_asignar(epag_id_evaluacion, epag_curso, epag_grupo, epag_usuario, epag_institucion, epag_year)VALUES('" . $_POST["eva"] . "','" . $_POST["curso"] . "','" . $_POST["grupo"] . "','" . $_POST["usuario"][$contador] . "','".$config['conf_id_institucion']."','".$_SESSION["bd"]."')");
 		
 		$contador++;
 	}
@@ -423,7 +423,7 @@ if ($_POST["id"] == 38) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_evaluaciones(evag_nombre, evag_descripcion, evag_fecha, evag_creada)VALUES('" . $_POST["titulo"] . "','" . $_POST["contenido"] . "',now(),'" . $_SESSION["id"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_evaluaciones(evag_nombre, evag_descripcion, evag_fecha, evag_creada, evag_institucion, evag_year)VALUES('" . $_POST["titulo"] . "','" . $_POST["contenido"] . "',now(),'" . $_SESSION["id"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -437,7 +437,7 @@ if ($_POST["id"] == 39) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "UPDATE general_evaluaciones SET evag_nombre='" . $_POST["titulo"] . "', evag_descripcion='" . $_POST["contenido"] . "', evag_editada='" . $_SESSION["id"] . "' WHERE evag_id='" . $_POST["idN"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_evaluaciones SET evag_nombre='" . $_POST["titulo"] . "', evag_descripcion='" . $_POST["contenido"] . "', evag_editada='" . $_SESSION["id"] . "' WHERE evag_id='" . $_POST["idN"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -451,7 +451,7 @@ if ($_POST["id"] == 40) {
 			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_preguntas(pregg_descripcion, pregg_id_evaluacion)VALUES('" . $_POST["contenido"] . "','" . $_POST["eva"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_preguntas(pregg_descripcion, pregg_id_evaluacion, pregg_institucion, pregg_year)VALUES('" . $_POST["contenido"] . "','" . $_POST["eva"] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -464,7 +464,7 @@ if ($_POST["id"] == 41) {
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 		exit();
 	}
-	mysqli_query($conexion, "UPDATE general_preguntas SET pregg_descripcion='" . $_POST["contenido"] . "' WHERE pregg_id='" . $_POST["idN"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_preguntas SET pregg_descripcion='" . $_POST["contenido"] . "' WHERE pregg_id='" . $_POST["idN"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -477,7 +477,7 @@ if ($_POST["id"] == 42) {
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO general_respuestas(resg_descripcion, resg_id_pregunta)VALUES('" . $_POST["respuesta"] . "','" . $_POST["idPregunta"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_respuestas(resg_descripcion, resg_id_pregunta, resg_institucion, resg_year)VALUES('" . $_POST["respuesta"] . "','" . $_POST["idPregunta"] . "','".$config['conf_id_institucion']."','".$_SESSION["bd"]."')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -789,11 +789,11 @@ if ($_POST["id"] == 61) {
 
 //CAMBIAR DE ESTADO LAS NOTICIAS
 if ($_GET["get"] == 1) {
-	$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias WHERE not_id='" . $_GET["id"] . "'");
+	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='" . $_GET["id"] . "'");
 	$resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 	if ($resultado[5] == 0) $estado = 1;
 	else $estado = 0;
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado='" . $estado . "' WHERE not_id='" . $_GET["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $estado . "' WHERE not_id='" . $_GET["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -802,7 +802,7 @@ if ($_GET["get"] == 1) {
 }
 //ELIMINAR NOTICIAS
 if ($_GET["get"] == 2) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_id='" . $_GET["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_id='" . $_GET["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -811,7 +811,7 @@ if ($_GET["get"] == 2) {
 }
 //MOSTRAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 3) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=1 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=1 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -820,7 +820,7 @@ if ($_GET["get"] == 3) {
 }
 //OCULTAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 4) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=0 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=0 WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -829,7 +829,7 @@ if ($_GET["get"] == 4) {
 }
 //ELIMINAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 5) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2 WHERE not_usuario='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2 WHERE not_usuario='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -858,7 +858,7 @@ if ($_GET["get"] == 7) {
 }
 //MOSTRAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 8) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=1 WHERE not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=1 WHERE not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -867,7 +867,7 @@ if ($_GET["get"] == 8) {
 }
 //OCULTAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 9) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=0 WHERE not_estado!=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=0 WHERE not_estado!=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -876,7 +876,7 @@ if ($_GET["get"] == 9) {
 }
 //ELIMINAR TODAS MIS NOTICIAS
 if ($_GET["get"] == 10) {
-	mysqli_query($conexion, "UPDATE social_noticias SET not_estado=2");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado=2");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -952,7 +952,7 @@ if ($_GET["get"] == 19) {
 }
 //ELIMINAR RESPUESTAS GENERALES
 if ($_GET["get"] == 21) {
-	mysqli_query($conexion, "DELETE FROM general_respuestas WHERE resg_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -961,8 +961,8 @@ if ($_GET["get"] == 21) {
 }
 //ELIMINAR PREGUNTAS
 if ($_GET["get"] == 22) {
-	mysqli_query($conexion, "DELETE FROM general_respuestas WHERE resg_id_pregunta=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_preguntas WHERE pregg_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id_pregunta=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -971,9 +971,9 @@ if ($_GET["get"] == 22) {
 }
 //ELIMINAR EVALUACIONES
 if ($_GET["get"] == 23) {
-	mysqli_query($conexion, "DELETE FROM general_preguntas WHERE pregg_id_evaluacion=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_evaluacion_asignar WHERE epag_id_evaluacion=" . $_GET["idN"] . ";");
-	mysqli_query($conexion, "DELETE FROM general_evaluaciones WHERE evag_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluacion_asignar WHERE epag_id_evaluacion=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluaciones WHERE evag_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -982,7 +982,7 @@ if ($_GET["get"] == 23) {
 }
 //ELIMINAR EVALUACIONES
 if ($_GET["get"] == 24) {
-	mysqli_query($conexion, "DELETE FROM general_evaluacion_asignar WHERE epag_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_evaluacion_asignar WHERE epag_id=" . $_GET["idN"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -1228,16 +1228,16 @@ if ($_GET["get"] == 64) {
 }
 //REACCIONES POR NOTICIA
 if ($_GET["get"] == 67) {
-	$consultaReaccion=mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["post"] . "'");
+	$consultaReaccion=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["post"] . "'");
 	$reaccion = mysqli_fetch_array($consultaReaccion, MYSQLI_BOTH);
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
 	if ($reaccion[0] == "") {
-		mysqli_query($conexion, "INSERT INTO social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado)VALUES('" . $_SESSION["id"] . "', '" . $_GET["post"] . "','" . $_GET["r"] . "',now(),1)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_institucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . $_GET["post"] . "','" . $_GET["r"] . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		
 	} else {
-		mysqli_query($conexion, "UPDATE social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["post"] . "'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["post"] . "'");
 		
 	}
 	echo '<script type="text/javascript">window.location.href="noticias.php";</script>';
@@ -1336,8 +1336,8 @@ if ($_GET["get"] == 70) {
 if($_GET["get"]==71){
 	//echo $_GET["idEstudiante"]; exit();
 
-	mysqli_query($conexion, "INSERT INTO general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario)
-	VALUES('".$_GET["idEstudiante"]."', now(), 1, 'Reservado por un directivo.')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_encuestas(genc_estudiante, genc_fecha, genc_respuesta, genc_comentario, genc_institucion, genc_year)
+	VALUES('".$_GET["idEstudiante"]."', now(), 1, 'Reservado por un directivo.','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 	
 	
 	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';

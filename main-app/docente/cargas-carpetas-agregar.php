@@ -43,7 +43,7 @@
 									$i=0;
 									$vectorDatos = array();
 									while($var==1){
-                                        $consultaCarpetaActual=mysqli_query($conexion, "SELECT fold_id, fold_padre FROM general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1");
+                                        $consultaCarpetaActual=mysqli_query($conexion, "SELECT fold_id, fold_padre FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'");
 										$carpetaActual = mysqli_fetch_array($consultaCarpetaActual, MYSQLI_BOTH);
 										$vectorDatos[$i] = $carpetaActual['fold_id'];
 										if($carpetaActual['fold_padre']!="" and $carpetaActual['fold_padre']!='0'){
@@ -58,7 +58,7 @@
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
 									while($cont>=0){
-                                        $consultaCarpetaActual=mysqli_query($conexion, "SELECT * FROM general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1");
+                                        $consultaCarpetaActual=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'");
 										$carpetaActual = mysqli_fetch_array($consultaCarpetaActual, MYSQLI_BOTH);
 
 									?>

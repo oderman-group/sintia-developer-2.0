@@ -33,14 +33,14 @@ if($_SESSION["inst"]==""){
 }else{
 	
 	//seleccionamos el año de la base de datos
-	$agno = date("Y");
+	$agnoBD = date("Y");
 	if($_SESSION["bd"]!=""){
-		$agno = $_SESSION["bd"];
+		$agnoBD = $_SESSION["bd"];
 	}
 
-	$bdActual = $_SESSION["inst"]."_".$agno;
-	$bdApasar = $_SESSION["inst"]."_".($agno+1);
+	$bdActual = $_SESSION["inst"]."_".$agnoBD;
+	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);
 	//Conexion con el Servidor
-	$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agno);
+	$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agnoBD);
 
 }
