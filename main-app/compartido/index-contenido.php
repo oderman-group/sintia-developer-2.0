@@ -159,7 +159,7 @@
 									INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
 									WHERE hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
 									AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
-									GROUP BY hil_titulo ORDER BY HAVING COUNT(hil_titulo) DESC LIMIT 5");										 
+									GROUP BY hil_titulo ORDER BY COUNT(hil_titulo) DESC LIMIT 5");										 
                                     while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
                                     ?>
 										<li><a href="<?=$consultaReciente['pagp_ruta'];?>" style="text-decoration: underline;"><?php echo $consultaReciente["pagp_pagina"]; ?></a></li>
