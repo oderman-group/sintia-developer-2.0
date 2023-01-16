@@ -23,5 +23,5 @@ include("../modelo/conexion.php");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="usuario-modificar.php?id=' . $idUsuario . '";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id=' . $idUsuario . '";</script>';
 	exit();
