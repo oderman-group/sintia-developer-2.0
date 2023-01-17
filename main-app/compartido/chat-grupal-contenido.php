@@ -36,7 +36,7 @@
 													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
+														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
 														<a href="chat-grupal.php?usuario=<?=$resultado['mat_id_usuario'];?>"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></a> 

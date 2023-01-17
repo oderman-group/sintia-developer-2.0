@@ -35,7 +35,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 													");
 													$contReg = 1;
 													while($resultados = mysqli_fetch_array($consultas, MYSQLI_BOTH)){
-														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultados[8]."'"), MYSQLI_BOTH);
+														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultados[8]."'"), MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
 														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=strtoupper($resultados[3]." ".$resultados[4]." ".$resultados[5]);?></a> 

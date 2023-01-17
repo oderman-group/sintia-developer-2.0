@@ -540,7 +540,7 @@ if ($_POST["id"] == 45) {
 //CREAR OPCION GENERALS
 if ($_POST["id"] == 46) {
 
-	mysqli_query($conexion, "INSERT INTO opciones_generales (ogen_nombre, ogen_grupo)VALUES('" . $_POST["nombre"] . "','" . $_POST["grupo"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".opciones_generales (ogen_nombre, ogen_grupo)VALUES('" . $_POST["nombre"] . "','" . $_POST["grupo"] . "')");
 	$idIte = mysqli_insert_id($conexion);
 	$lineaError = __LINE__;
 
@@ -551,7 +551,7 @@ if ($_POST["id"] == 46) {
 }
 //EDITAR OPCION GENERALS
 if ($_POST["id"] == 47) {
-	mysqli_query($conexion, "UPDATE opciones_generales SET ogen_nombre='" . $_POST["nombre"] . "', ogen_grupo='" . $_POST["grupo"] . "' WHERE ogen_id='" . $_POST["idogen"] . "'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".opciones_generales SET ogen_nombre='" . $_POST["nombre"] . "', ogen_grupo='" . $_POST["grupo"] . "' WHERE ogen_id='" . $_POST["idogen"] . "'");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
@@ -1158,7 +1158,7 @@ if ($_GET["get"] == 49) {
 }
 //ELIMINAR OPCION GENERAL
 if ($_GET["get"] == 50) {
-	mysqli_query($conexion, "DELETE FROM opciones_generales WHERE ogen_id='" . $_GET["idogen"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='" . $_GET["idogen"] . "'");
 	echo '<script type="text/javascript">window.location.href="opciones-generales.php";</script>';
 	exit();
 }
