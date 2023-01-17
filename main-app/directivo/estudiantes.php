@@ -37,7 +37,7 @@
 										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[209][$datosUsuarioActual['uss_idioma']]);?></header>
 										<div class="panel-body">
 											<p><a href="estudiantes-promedios.php">Promedios estudiantiles</a></p>
-											<p><a href="estudiantes-importar-excel.php">Imporatar matrículas excel</a></p>
+											<p><a href="estudiantes-importar-excel.php">Importar matrículas excel</a></p>
 											<p><a href="estudiantes-consolidado-final.php">Consolidado final</a></p>
 											<p><a href="estudiantes-nivelaciones.php">Nivelaciones</a></p>
 											
