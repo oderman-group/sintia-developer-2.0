@@ -546,7 +546,7 @@ if ($_POST["id"] == 46) {
 
 	include("../compartido/reporte-errores.php");
 
-	echo '<script type="text/javascript">window.location.href="opciones-generales.php"</script>';
+	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php"</script>';
 	exit();
 }
 //EDITAR OPCION GENERALS
@@ -555,7 +555,7 @@ if ($_POST["id"] == 47) {
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="opciones-generales.php"</script>';
+	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php"</script>';
 	exit();
 }
 //CREAR OBSERVACIÓN
@@ -1159,7 +1159,7 @@ if ($_GET["get"] == 49) {
 //ELIMINAR OPCION GENERAL
 if ($_GET["get"] == 50) {
 	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='" . $_GET["idogen"] . "'");
-	echo '<script type="text/javascript">window.location.href="opciones-generales.php";</script>';
+	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php";</script>';
 	exit();
 }
 //ELIMINAR AUSENCIA
