@@ -1,17 +1,16 @@
-<?php include("../../config-general/config.php");?>
 <?php
+session_start();
+include("../../config-general/config.php");
 if(trim($_POST["ih"])==""){
     echo "<span style='color:red; font-size:16px;'>Digite una I.H correcta</span>";
 	exit();
 }
-include("../modelo/conexion.php");
 mysqli_query($conexion, "DELETE FROM academico_intensidad_curso WHERE ipc_curso='".$_POST["curso"]."' AND ipc_materia='".$_POST["materia"]."'");
 
 mysqli_query($conexion, "INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('".$_POST["curso"]."','".$_POST["materia"]."','".$_POST["ih"]."')");
 
 mysqli_query($conexion, "UPDATE academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."'");
 
-else{
 ?>
 	<script type="text/javascript">
 		function notifica(){
@@ -39,5 +38,5 @@ else{
 	</div>
 <?php
 	exit();
-}
+
 ?>
