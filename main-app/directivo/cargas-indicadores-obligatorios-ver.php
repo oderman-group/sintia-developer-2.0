@@ -65,6 +65,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
+										<span id="resp"></span>
 											
                                         <div class="table-scrollable">
                                     		<table id="example1" class="display" style="width:100%;">
