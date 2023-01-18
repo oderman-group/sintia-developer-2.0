@@ -1,5 +1,5 @@
 <?php
-include("../modelo/conexion.php");
+session_start();
 include("../../config-general/config.php");
 $cdnota=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
 
