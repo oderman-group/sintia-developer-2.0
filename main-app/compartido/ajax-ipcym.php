@@ -1,6 +1,6 @@
 <?php
+session_start();
 include("../../config-general/config.php");
-include("../modelo/conexion.php");
 $consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_POST["indicador"]."'");
 $indicadorObg = mysqli_fetch_array($consultaIndicadorObg, MYSQLI_BOTH);
 
