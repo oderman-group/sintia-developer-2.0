@@ -1,5 +1,6 @@
-<?php include("../../config-general/config.php");?>
 <?php
+session_start();
+include("../../config-general/config.php");
 $consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
