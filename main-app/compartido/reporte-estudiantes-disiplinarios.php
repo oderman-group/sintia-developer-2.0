@@ -64,7 +64,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 CASE dr_tipo WHEN 1 THEN 'Leve' WHEN 2 THEN 'Grave' WHEN 3 THEN 'Gravísima' END as tipo_falta
 FROM academico_matriculas am INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
 INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
-INNER JOIN opciones_generales og ON og.ogen_id=am.mat_tipo
+INNER JOIN ".$baseDatosServicios.".opciones_generales og ON og.ogen_id=am.mat_tipo
 INNER JOIN disciplina_reportes dr ON dr.dr_estudiante=am.mat_id ".$condicionw.$condicion."
 ORDER BY mat_primer_apellido;");
  while($resultado=mysqli_fetch_array($c_matricEst)){

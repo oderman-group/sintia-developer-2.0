@@ -114,8 +114,10 @@ $e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
 													}
 														$consultaC=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 AND fcu_tipo=3");
 														$c = mysqli_fetch_array($consultaC, MYSQLI_BOTH);
+														if(empty($c[0])){ $c[0]=0; }
 														$consultaA=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 AND fcu_tipo=1");
 														$a = mysqli_fetch_array($consultaA, MYSQLI_BOTH);
+														if(empty($a[0])){ $a[0]=0; }
 														$t = $a[0] - $c[0];
 														if($t>=0) $color = 'blue'; else $color = 'red';
 													?>

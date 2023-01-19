@@ -30,7 +30,7 @@ if($notificacionID[1]>=$notificacionID[2])
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){
-					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
 					VALUES('Quedan 2 días para enviar la actividad', 'Quedan sólo 2 días para que se termine el plazo de enviar la actividad ".strtoupper($actividadesDatos['tar_titulo']).". Si no las has enviado aún, te sugerimos hacerlo.', 2, '".$cargasDatos['mat_id_usuario']."', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 
 					$idNotify = mysqli_insert_id($conexion);
@@ -55,7 +55,7 @@ if($notificacionID[1]>=$notificacionID[2])
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){
-					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
 					VALUES('Hoy vence el plazo para enviar la actividad', 'Hoy es el último día para que se termine el plazo de enviar la actividad ".strtoupper($actividadesDatos['tar_titulo']).". Si no las has enviado aún, te sugerimos hacerlo AHORA.', 2, '".$cargasDatos['mat_id_usuario']."', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 
 					$idNotify = mysqli_insert_id($conexion);
@@ -89,7 +89,7 @@ if($notificacionID[1]>=$notificacionID[2])
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		$edad = date("Y") - $cumple['agno'];
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alert_year)
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alr_year)
 		VALUES('FELIZ CUMPLEAÑOS', '".$cumple['uss_nombre']." queremos desearte muchos éxitos, prosperidad y bendiciones en esta fecha especial.', 2, '".$cumple['uss_id']."', now(), 3, 2, 'notificaciones-lista.php', 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		
 		$enviosNotf ++;
@@ -171,7 +171,7 @@ if($notificacionID[1]>=$notificacionID[2])
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		
 		if($cumple['uss_notificacion']==1){
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
 			VALUES('ACTUALIZA TU FOTO', 'Aún no has actualizado tu foto de perfil. Hazlo ahora!. Recuerda que debe ser una foto cuadrada. Ejemplo: 500px X 500px.', 2, '".$cumple['uss_id']."', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 
 			$idNotify = mysqli_insert_id($conexion);
@@ -282,7 +282,7 @@ if($notificacionID[1]>=$notificacionID[2])
 		");
 
 		while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alert_year)
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alr_year)
 			VALUES('FELIZ DÍA MUJER', '".$cumple['uss_nombre']." queremos felicitarte en este día especial de la mujer.', 2, '".$cumple['uss_id']."', now(), 3, 2, 'notificaciones-lista.php', 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 			
 
@@ -362,7 +362,7 @@ if($notificacionID[1]>=$notificacionID[2])
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		
 		if($cumple['uss_notificacion']==1){
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alert_year)
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
 			VALUES('TU INFORMACIÓN ES IMPORTANTE. Cambia tu clave ahora!', 'Tu clave no debería ser igual a tu usuario o documento. Tampoco que sea la que te asignaron por defecto o que sea <b>1234</b>.<br>
 			Te recomendamos una clave que sea mayor a 5 caracteres y que tenga combinación de letras y números.', 2, '".$cumple['uss_id']."', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 

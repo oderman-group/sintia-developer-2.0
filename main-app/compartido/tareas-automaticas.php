@@ -29,7 +29,7 @@ while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 				
 				if($porcentajeActual>0){
 					$porcentajeFaltante = (100 - $porcentajeActual);
-					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alert_year)
+					mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_url_acceso, alr_vista, alr_institucion, alr_year)
 					VALUES('No se pudo generar el informe', 'No se pudo generar el informe para la carga ".$cargasDatos['car_id']." con el estudiante ".$resultado['mat_nombres'].". Le falta un ".$porcentajeFaltante."% para completar el 100% de sus notas.', 2, '".$cargasDatos['car_docente']."', now(), 3, 2, 'calificaciones.php?carga=".$cargasDatos['car_id']."&periodo=".$cargasDatos['car_periodo']."', 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 					
 				}

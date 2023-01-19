@@ -13,10 +13,10 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
   $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
   INNER JOIN academico_grados ON gra_id=mat_grado
   INNER JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN opciones_generales ON ogen_id=mat_genero
+  INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
   WHERE mat_matricula='".$_GET["ref"]."'");
   $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-  $consultaTipo=mysqli_query($conexion, "SELECT * FROM opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
+  $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
 <table width="80%" cellpadding="5" cellspacing="0" border="0" align="center" style="font-size:15px;">
