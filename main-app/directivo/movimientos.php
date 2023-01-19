@@ -58,6 +58,7 @@
 										if($estadisticasCuentas[3]>0){
 											$porcentajeEgreso = round(($estadisticasCuentas[1]/$estadisticasCuentas[3])*100,2);
 										}
+										if(empty($estadisticasCuentas[0])){ $estadisticasCuentas[0]=0; }
 										?>
 									
 									
