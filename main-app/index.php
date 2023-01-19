@@ -102,29 +102,43 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
               <i class="fab fa-linkedin-in"></i>
             </button>
           </div>-->
-
-		  <input type="hidden" name="agnoIngreso" value="2022" />
 		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
           <div class="divider d-flex align-items-center my-4">
             <p class="text-center fw-bold mx-3 mb-0">Ingreso a la plataforma SINTIA</p>
           </div>
 
-		   <!-- Email input -->
+		   <!-- Colegios input -->
 		   <div class="form-outline mb-4">
-		   <label for="Usuario">Institución</label>
-		   <select class="form-control form-control-lg" name="bd" required>
+		    <label for="bd">Institución</label>
+		    <select class="form-control form-control-lg" name="bd" required>
 							<option value="">Seleccione su Institución</option>
 							<?php
 							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
 							?>
 								<option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
 							<?php }?>
-							
-
 						</select>
+        </div>
 
-          </div>
+        <!-- Año input -->
+		   <div class="form-outline mb-4">
+		    <label for="agnoIngreso">Año de consulta</label>
+		    <select class="form-control form-control-lg" name="agnoIngreso" required>
+							<option value="">Seleccione el año</option>
+							<?php
+              $yearToShow = date("Y") - 1;
+							while($yearToShow <= date("Y") + 1){
+                $selected = '';
+                if($yearToShow == date("Y")) $selected = 'selected';
+							?>
+								<option value="<?=$yearToShow;?>" <?=$selected;?>><?=$yearToShow;?></option>
+							<?php 
+                $yearToShow ++;
+              }
+              ?>
+						</select>
+        </div>
 
 		  <!-- Email input -->
           <div class="form-outline mb-4">
@@ -156,7 +170,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
             <button type="submit" class="btn btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem; background-color:#41c4c4; color:#fff;">Empezar la aventura</button>
             <p class="small fw-bold mt-2 pt-1 mb-0">Tu institución aún no tiene la plataforma SINTIA? 
-              <a href="#!" style="color:#6017dc;" target="_blank">Solicitar prueba gratis</a></p>
+              <a href="https://plataformasintia.com/es/prueba-gratis.php" style="color:#6017dc;" target="_blank">Solicitar prueba gratis</a></p>
           </div>
 
         </form>
