@@ -203,7 +203,7 @@
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu" role="menu">
-																	<li><a href="#"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																	<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																	<?php if($resultado['fcu_anulado']!=1){?>
 																		<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
 																	<?php } ?>
