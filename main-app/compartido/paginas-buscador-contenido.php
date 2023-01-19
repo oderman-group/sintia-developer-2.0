@@ -43,7 +43,8 @@
                                         }
                                 ?>
                                 <p>
-                                    <h3><a href="<?=$ruta;?>"><?=$resultado['pagp_pagina'];?></a></h3>
+                                    <h3 style="margin: 0px";><a href="<?=$ruta;?>"><?=$resultado['pagp_pagina'];?></a></h3>
+                                    <h6 style="margin: 0px";><a href="<?=$ruta;?>"><?=$ruta;?></a></h6>
                                     <p><?=$resultado['pagp_descripcion'];?></P>
                                 </p>
                                 <?php
