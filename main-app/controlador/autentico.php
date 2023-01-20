@@ -28,7 +28,7 @@ if($numE==0){
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=3");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']);
 	exit();
 }
 
