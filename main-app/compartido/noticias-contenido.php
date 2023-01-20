@@ -38,10 +38,10 @@
 										<div class="panel">
 											<header class="panel-heading panel-heading-red">Pagos</header>
 											<div class="panel-body">
-												<p><b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, le recordamos tiene un pago pendiente con la plataforma SINTIA.<br>
-												Puede hacer el pago en el siguiente boton.</p>
+												<p><b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, le recordamos que tiene un pago pendiente con la plataforma SINTIA.<br><br>
+												Puede hacer el pago en el siguiente botón.</p>
 												<div class="col-sm-4">
-													<a href="#" class="btn btn-danger">PAGA AQUI</a>
+													<a href="#" class="btn btn-danger">PAGA AQUÍ</a>
 												</div>
 											</div>
 										</div>
