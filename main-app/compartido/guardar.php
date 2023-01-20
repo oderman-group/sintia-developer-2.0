@@ -80,8 +80,29 @@ if ($_POST["id"] == 2) {
 			$i++;
 		}
 	}
+     
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/noticias.php";
+			break;
+		case 3:
+			$destinos = "../acudiente/noticias.php";
+			break;
+		case 4:
+			$destinos =  "../estudiante/noticias.php";
+			break;
+		case 2:
+			$destinos = "../docente/noticias.php";
+			break;
+		case 1:
+			$destinos = "../directivo/noticias.php";
+			break;	
+	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	
+	
+	echo '<script type="text/javascript">window.location.href="' .$destinos. '" </script>';
+
 	exit();
 }
 //GUARDAR CARPETA
