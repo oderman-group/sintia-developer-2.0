@@ -18,7 +18,7 @@ if($dfDias==90 || $dfDias==30 || $dfDias==5 || $dfDias==1){
 
 			<div class="modal-header">
 				<h1 class="modal-title" align="center">Vencimiento de licencia</h1>
-				<a href="#" data-dismiss="modal" class="btn btn-danger" aria-label="Close" id="boton-cerrar-2"><i class="fa fa-window-close"></i></a>
+				<a href="#" data-dismiss="modal" class="btn btn-danger" aria-label="Close" id="boton-cerrar-licencia"><i class="fa fa-window-close"></i></a>
 			</div>
 
 			<div class="modal-body" align="center">
@@ -30,7 +30,8 @@ if($dfDias==90 || $dfDias==30 || $dfDias==5 || $dfDias==1){
 			</div>
 
 			<div class="modal-footer">
-				<a href="#" data-dismiss="modal" class="btn btn-danger" id="boton-cerrar">CERRAR</a>
+                <a href="#" class="btn btn-danger">PAGA AQUÍ</a>
+				<a href="#" data-dismiss="modal" class="btn btn-danger" id="boton-cerrar-licencia-2">CERRAR</a>
 			</div>
 
 		  </div>
