@@ -21,17 +21,5 @@ else
 		";
 		exit();		
 	}
-	//ESTADOS DE ANIMO
-	/*
-	$estadoAnimo = mysql_num_rows(mysql_query("SELECT * FROM usuarios_estados_animo WHERE uean_usuario='".$_SESSION["id"]."' AND DATEDIFF(now(),uean_fecha)=0 ORDER BY uean_id DESC",$conexion));
-	if($datosUsuarioActual['uss_preguntar_animo']==1 and $estadoAnimo==0){
-?>		
-		<script type="text/javascript">
-			window.location.href="page-ea.php";
-		</script>
-<?php			
-	}
-	*/
-	
 }
-?>
+
