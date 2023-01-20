@@ -58,6 +58,7 @@
 										if($estadisticasCuentas[3]>0){
 											$porcentajeEgreso = round(($estadisticasCuentas[1]/$estadisticasCuentas[3])*100,2);
 										}
+										if(empty($estadisticasCuentas[0])){ $estadisticasCuentas[0]=0; }
 										?>
 									
 									
@@ -197,14 +198,16 @@
 
 														<td>
 															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="#"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	  <li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
-																  </ul>
+																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																	<i class="fa fa-angle-down"></i>
+																</button>
+																<ul class="dropdown-menu" role="menu">
+																	<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																	<?php if($resultado['fcu_anulado']!=1){?>
+																		<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
+																	<?php } ?>
+																</ul>
 															  </div>
 														</td>
                                                     </tr>
