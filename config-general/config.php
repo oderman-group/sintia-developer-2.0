@@ -8,6 +8,9 @@ $informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
 
 $datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$config['conf_id_institucion']."'");
 $datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
+$yearArray = explode(",", $datosUnicosInstitucion['ins_years']);
+$yearStart = $yearArray[0];
+$yearEnd = $yearArray[1];
 
 //CONFIGURACIÓN GENERAL
 $opcionSINO = array ("NO","SI");

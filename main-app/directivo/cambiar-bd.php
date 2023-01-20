@@ -68,16 +68,12 @@ if(isset($_POST["cambiar"]))
                                                 <select class="form-control  select2" name="agno" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
-                                                    $cont=1;
-                                                    $con = date("Y")-3;
-                                                    while($cont<=5)
-                                                    {	
-                                                    if($_SESSION["bd"]==$con)
-                                                        echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
+                                                    while($yearStart <= $yearEnd){	
+                                                    if($_SESSION["bd"]==$yearStart)
+                                                        echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
                                                     else
-                                                        echo "<option value='".$con."'>".$con."</option>";
-                                                        $con++;
-                                                        $cont++;
+                                                        echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                        $yearStart++;
                                                     }
                                                     ?>
                                                 </select>
