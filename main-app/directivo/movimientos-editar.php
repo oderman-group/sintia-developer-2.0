@@ -1,7 +1,11 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0106';?>
+<?php $idPaginaInterna = 'DT0128';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".$_GET['idU']."'");
+$resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -31,12 +35,12 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[95][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title">Editar Movimientos</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[95][$datosUsuarioActual[8]];?></li>
+                                <li class="active">Editar Movimientos</li>
                             </ol>
                         </div>
                     </div>
@@ -50,20 +54,20 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="8" name="id">
+									<form name="formularioGuardar" action="movimientos-actualizar.php" method="post">
+										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU">
 										
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Fecha</label>
 													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date("Y-m-d");?>">
+														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>">
 													</div>
 											</div>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Detalle</label>
 												<div class="col-sm-10">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" required>
+													<input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required>
 												</div>
 											</div>
 											
@@ -72,7 +76,7 @@
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="text" name="valor" class="form-control" autocomplete="off" required>
+														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required>
 													</div>
 											</div>
 										
@@ -82,10 +86,34 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="tipo" required>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1">Ingreso</option>
-													<option value="2">Egreso</option>
-													<option value="3">Cobro (CPC)</option>
-													<option value="4">Deuda (CPP)</option>
+													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
+													<option value="2" <?php if($resultado['fcu_tipo']==2){ echo "selected";}?>>Egreso</option>
+													<option value="3" <?php if($resultado['fcu_tipo']==3){ echo "selected";}?>>Cobro (CPC)</option>
+													<option value="4" <?php if($resultado['fcu_tipo']==4){ echo "selected";}?>>Deuda (CPP)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Anulado</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control  select2" name="anulado" required>
+                                                    <option value="">Seleccione una opción</option>
+													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
+													<option value="1" <?php if($resultado['fcu_anulado']==1){ echo "selected";}?>>Si</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Estado</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control  select2" name="estado" required>
+                                                    <option value="">Seleccione una opción</option>
+													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
+													<option value="1" <?php if($resultado['fcu_cerrado']==1){ echo "selected";}?>>Cerrado</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -95,11 +123,11 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="forma" required>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1">Efectivo</option>
-													<option value="2">Cheque</option>
-													<option value="3">T. Débito</option>
-													<option value="4">T. Crédito</option>
-													<option value="5" selected>No aplica</option>
+													<option value="1" <?php if($resultado['fcu_forma_pago']==1){ echo "selected";}?>>Efectivo</option>
+													<option value="2" <?php if($resultado['fcu_forma_pago']==2){ echo "selected";}?>>Cheque</option>
+													<option value="3" <?php if($resultado['fcu_forma_pago']==3){ echo "selected";}?>>T. Débito</option>
+													<option value="4" <?php if($resultado['fcu_forma_pago']==4){ echo "selected";}?>>T. Crédito</option>
+													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>No aplica</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -117,7 +145,7 @@
 													<?php
 													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$resultadosDatos[0];?>"><?=$resultadosDatos['uss_nombre']." (".$resultadosDatos['pes_nombre'].")"?></option>
+                                                    	<option value="<?=$resultadosDatos[0];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos[0]){ echo "selected";}?>><?=$resultadosDatos['uss_nombre']." (".$resultadosDatos['pes_nombre'].")"?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -136,7 +164,7 @@
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
 												<div class="col-sm-10">
-                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required><?=$resultado['fcu_observaciones'];?></textarea>
 												</div>
 											</div>
 										

@@ -60,7 +60,7 @@
                                  	<form name="example_advanced_form" id="example-advanced-form" action="configuracion-institucion-guardar.php" method="post" enctype="multipart/form-data">
                                         
                                        <?php 
-                                       $consultaDatosInf=mysqli_query($conexion, "SELECT info_id, info_rector, info_secretaria_academica, info_logo, info_nit, info_nombre, info_direccion, info_telefono, info_clase, info_caracter, info_calendario, info_jornada, info_horario, info_niveles, info_modalidad, info_propietario, info_coordinador_academico, info_tesorero FROM general_informacion;");
+                                       $consultaDatosInf=mysqli_query($conexion, "SELECT info_id, info_rector, info_secretaria_academica, info_logo, info_nit, info_nombre, info_direccion, info_telefono, info_clase, info_caracter, info_calendario, info_jornada, info_horario, info_niveles, info_modalidad, info_propietario, info_coordinador_academico, info_tesorero FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "';");
 									   $datosinf= mysqli_fetch_array($consultaDatosInf, MYSQLI_BOTH);
 									   ?>
 									  

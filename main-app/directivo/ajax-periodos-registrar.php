@@ -1,5 +1,6 @@
-<?php include("session.php");?>
-<?php
+<?php 
+session_start();
+include("../../config-general/config.php");
 $consultaDatosCargaActual=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargaActual, MYSQLI_BOTH);
 ?>
@@ -9,8 +10,7 @@ if(trim($_POST["nota"])==""){
 	exit();
 }
 if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
-include("../modelo/conexion.php");
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$_POST["codEst"]."' AND bol_carga='".$_COOKIE["carga"]."' AND bol_periodo='".$_POST["per"]"'");
+$consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$_POST["codEst"]."' AND bol_carga='".$_COOKIE["carga"]."' AND bol_periodo='".$_POST["per"]."'");
 
 $num = mysqli_num_rows($consulta);
 $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);

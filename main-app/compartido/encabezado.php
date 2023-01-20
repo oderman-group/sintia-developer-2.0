@@ -1,6 +1,6 @@
 <?php
 if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
-	mysqli_query($conexion, "UPDATE general_alertas SET alr_vista=1 WHERE alr_id='".$_GET["idNotify"]."' AND alr_vista=0");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_vista=1 WHERE alr_id='".$_GET["idNotify"]."' AND alr_vista=0");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 }

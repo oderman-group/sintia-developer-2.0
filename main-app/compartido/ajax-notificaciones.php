@@ -1,7 +1,7 @@
 <?php
 include("../../config-general/config.php");
 //include("../modelo/conexion.php");
-$notificacionesConsulta = mysqli_query($conexion, "SELECT * FROM general_alertas WHERE alr_usuario='".$_POST["usuario"]."' AND alr_vista=0 ORDER BY alr_id DESC");
+$notificacionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_alertas WHERE alr_year='" . $_SESSION["bd"] . "' AND alr_usuario='".$_POST["usuario"]."' AND alr_vista=0 ORDER BY alr_id DESC");
 $notificacionesNumero = mysqli_num_rows($notificacionesConsulta);
 ?>
 

@@ -85,10 +85,11 @@
 											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
 											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
-											$consulta = mysqli_query($conexion, "SELECT * FROM social_noticias
+											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 											INNER JOIN usuarios ON uss_id=not_usuario
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
+											AND not_year='" . $_SESSION["bd"] . "'
 											$filtro
 											ORDER BY not_id DESC
 											");
@@ -98,18 +99,18 @@
 												$colorFondo = 'style="background: #FFF;"';
 												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
-												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones
 												INNER JOIN usuarios ON uss_id=npr_usuario
 												WHERE npr_noticia='".$resultado[0]."'
 												ORDER BY npr_id DESC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
-												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM social_noticias_reacciones 
+												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones 
 												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
 												if($datosUsuarioActual[3]==4){
 													include("verificar-usuario.php");
-													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
+													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
 													$notCursoNum = mysqli_num_rows($noticiasCursos);
 													if($notCursoNum>0){
 														$noticiaPermitida=0;

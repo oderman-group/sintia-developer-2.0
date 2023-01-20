@@ -43,7 +43,7 @@ include("../../config-general/consulta-usuario-actual.php");
       <td><?=$grados["gru_nombre"];?></td>
       <td><?=$resultado["mat_telefono"];?></td>
       <td><?=$resultado["mat_celular"];?></td>
-     <td><?=strtoupper($acudiente[4]);?></td> 
+     <td><?=strtoupper($acudiente['uss_nombre']." ".$acudiente['uss_nombre2']." ".$acudiente['uss_apellido1']." ".$acudiente['uss_apellido2']);?></td> 
 </tr>
   <?php
   $cont++;

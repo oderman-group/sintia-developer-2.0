@@ -154,7 +154,7 @@
 														<td>
 															<?php 
 														 	if($config['conf_activar_encuesta']==1){
-																$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM general_encuestas 
+																$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
 																WHERE genc_estudiante='".$resultado['mat_id']."'"));
 															}
 														 

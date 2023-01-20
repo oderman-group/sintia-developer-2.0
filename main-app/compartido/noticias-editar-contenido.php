@@ -116,7 +116,7 @@
 													<?php
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM social_noticias_cursos WHERE notpc_noticia='".$_GET["idR"]."' AND notpc_curso='".$infoDatos['gra_id']."'"));
+														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$_GET["idR"]."' AND notpc_curso='".$infoDatos['gra_id']."'"));
 														
 													?>	
 													  <option value="<?=$infoDatos['gra_id'];?>" <?php if($existe>0){echo "selected";}?>><?=strtoupper($infoDatos['gra_nombre']);?></option>

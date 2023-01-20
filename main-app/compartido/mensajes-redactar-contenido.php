@@ -27,7 +27,7 @@
 																	<option value="">Seleccione una opción</option>
 																<?php
 																$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios 
-																LEFT JOIN perfiles ON pes_id=uss_tipo
+																LEFT JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 																LEFT JOIN academico_matriculas ON mat_id_usuario=uss_id
 																LEFT JOIN academico_grados ON gra_id=mat_grado
 																ORDER BY uss_tipo, mat_grado

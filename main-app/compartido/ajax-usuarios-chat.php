@@ -6,7 +6,7 @@ include("../compartido/sintia-funciones.php");
 $usuariosClase = new Usuarios();
 
 										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM usuarios 
-										INNER JOIN perfiles ON pes_id=uss_tipo
+										INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 										WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='".$_POST["usuario"]."' 
 										AND YEAR(uss_ultimo_ingreso)='".date("Y")."' AND MONTH(uss_ultimo_ingreso)='".date("m")."' AND DAY(uss_ultimo_ingreso)='".date("d")."'
 										ORDER BY uss_nombre

@@ -3,8 +3,8 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
-$consultaDatosGenerales=mysqli_query($conexion, "SELECT * FROM general_evaluacion_asignar 
-INNER JOIN general_evaluaciones ON evag_id=epag_id_evaluacion
+$consultaDatosGenerales=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_evaluacion_asignar 
+INNER JOIN ".$baseDatosServicios.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion='".$config['conf_id_institucion']."' AND evag_year='".$_SESSION["bd"]."'
 INNER JOIN usuarios ON uss_id=epag_usuario
 INNER JOIN academico_grados ON gra_id=epag_curso
 INNER JOIN academico_grupos ON gru_id=epag_grupo
@@ -42,11 +42,11 @@ $datosGenerales = mysqli_fetch_array($consultaDatosGenerales, MYSQLI_BOTH);
     <!--<th>Estudiante</th>-->
   </tr>
 <?php
-$consulta = mysqli_query($conexion, "SELECT * FROM general_resultados
-INNER JOIN general_preguntas ON pregg_id=resg_id_pregunta
+$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_resultados
+INNER JOIN ".$baseDatosServicios.".general_preguntas ON pregg_id=resg_id_pregunta
 INNER JOIN academico_matriculas ON mat_id=resg_id_estudiante
 WHERE resg_id_asignacion='".$_GET["a"]."'");
-$consultaNumPregunta=mysqli_query($conexion, "SELECT * FROM general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
+$consultaNumPregunta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
 $preguntasNum = mysqli_num_rows($consultaNumPregunta);
 $e=0;
 $i=0;
@@ -57,7 +57,7 @@ $fondo[2] = '#FC9';
 $fondo[3] = '#CFC';
 $fondo[4] = '#FCC';
 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-  $consultaRespuesta=mysqli_query($conexion, "SELECT * FROM general_respuestas WHERE resg_id='".$resultado['resg_id_respuesta']."'");
+  $consultaRespuesta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id='".$resultado['resg_id_respuesta']."'");
 	$respuesta = mysqli_fetch_array($consultaRespuesta, MYSQLI_BOTH);
 	//ESTUDIANTE
 	if($e!=$resultado['resg_id_estudiante']){$e=$resultado['resg_id_estudiante']; $i++; $c=1; $num++;} if($i==5) $i=1;
@@ -87,7 +87,7 @@ while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" align="center">
 <?php
 //CANTIDAD DE OPCIONES DE RESPUESTAS POR PREGUNTA
-$preguntas = mysqli_query($conexion, "SELECT * FROM general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
+$preguntas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
 while($preg = mysqli_fetch_array($preguntas, MYSQLI_BOTH)){
 ?>
 	<tr style="font-weight:bold; font-size:12px; height:30px; background:#003; color:#FFF;">
@@ -98,9 +98,9 @@ while($preg = mysqli_fetch_array($preguntas, MYSQLI_BOTH)){
         <td>Cant.</td>
     </tr>
 <?php	
-	$rpp = mysqli_query($conexion, "SELECT resg_id_respuesta, count(resg_id_respuesta) as cant FROM general_resultados WHERE resg_id_pregunta='".$preg[0]."' AND resg_id_asignacion='".$_GET["a"]."' group by resg_id_respuesta");
+	$rpp = mysqli_query($conexion, "SELECT resg_id_respuesta, count(resg_id_respuesta) as cant FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_pregunta='".$preg[0]."' AND resg_id_asignacion='".$_GET["a"]."' group by resg_id_respuesta");
 	while($rppD = mysqli_fetch_array($rpp, MYSQLI_BOTH)){
-    $consultaRespuesta=mysqli_query($conexion, "SELECT * FROM general_respuestas WHERE resg_id='".$rppD['resg_id_respuesta']."'");
+    $consultaRespuesta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id='".$rppD['resg_id_respuesta']."'");
 		$respuesta = mysqli_fetch_array($consultaRespuesta, MYSQLI_BOTH);
 		$total = $total + $rppD['cant'];
 ?>

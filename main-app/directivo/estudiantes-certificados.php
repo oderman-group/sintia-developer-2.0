@@ -85,16 +85,12 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
-                                                    $cont=1;
-                                                    $con = date("Y")-7;
-                                                    while($cont<=9)
-                                                    {
-                                                        if($_SESSION["bd"]==$con)
-                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
-                                                        else
-                                                            echo "<option value='".$con."'>".$con."</option>";
-                                                        $con++;
-                                                        $cont++;
+                                                    while($yearStart <= $yearEnd){	
+                                                    if($_SESSION["bd"]==$yearStart)
+                                                        echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
+                                                    else
+                                                        echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                        $yearStart++;
                                                     }
                                                     ?>
                                                     </select>
@@ -107,16 +103,13 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php
-                                                    $cont=1;
-                                                    $con = date("Y")-7;
-                                                    while($cont<=9)
-                                                    {
-                                                        if($_SESSION["bd"]==$con)
-                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
-                                                        else
-                                                            echo "<option value='".$con."'>".$con."</option>";
-                                                        $con++;
-                                                        $cont++;
+                                                    $yearStart = $yearArray[0];
+                                                    while($yearStart <= $yearEnd){	
+                                                    if($_SESSION["bd"]==$yearStart)
+                                                        echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
+                                                    else
+                                                        echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                        $yearStart++;
                                                     }
                                                     ?>
                                                     </select>
@@ -156,16 +149,13 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                                     <select class="form-control  select2" name="desde" required>
                                                     <option value=""></option>
 													<?php
-                                                    $cont=1;
-                                                    $con = date("Y")-7;
-                                                    while($cont<=9)
-                                                    {
-                                                        if($_SESSION["bd"]==$con)
-                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
-                                                        else
-                                                            echo "<option value='".$con."'>".$con."</option>";
-                                                        $con++;
-                                                        $cont++;
+                                                    $yearStart = $yearArray[0];
+                                                    while($yearStart <= $yearEnd){	
+                                                    if($_SESSION["bd"]==$yearStart)
+                                                        echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
+                                                    else
+                                                        echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                        $yearStart++;
                                                     }
                                                     ?>
                                                     </select>
@@ -178,16 +168,13 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                                                     <select class="form-control  select2" name="hasta" required>
                                                     <option value=""></option>
 													<?php
-                                                    $cont=1;
-                                                    $con = date("Y")-7;
-                                                    while($cont<=9)
-                                                    {
-                                                        if($_SESSION["bd"]==$con)
-                                                            echo "<option value='".$con."' selected style='color:blue;'>".$con."</option>";
-                                                        else
-                                                            echo "<option value='".$con."'>".$con."</option>";
-                                                        $con++;
-                                                        $cont++;
+                                                    $yearStart = $yearArray[0];
+                                                    while($yearStart <= $yearEnd){	
+                                                    if($_SESSION["bd"]==$yearStart)
+                                                        echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
+                                                    else
+                                                        echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                        $yearStart++;
                                                     }
                                                     ?>
                                                     </select>

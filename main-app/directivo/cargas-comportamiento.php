@@ -130,6 +130,7 @@
 												<a class="t-close btn-color fa fa-times" href="javascript:;"></a>
 											</div>
 										</div>
+										<span id="resp"></span>
 
 										<div class="card-body">					
 											<div class="table-scrollable">

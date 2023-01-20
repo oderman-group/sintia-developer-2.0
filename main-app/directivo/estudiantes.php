@@ -37,7 +37,7 @@
 										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[209][$datosUsuarioActual['uss_idioma']]);?></header>
 										<div class="panel-body">
 											<p><a href="estudiantes-promedios.php">Promedios estudiantiles</a></p>
-											<p><a href="estudiantes-importar-excel.php">Imporatar matrículas excel</a></p>
+											<p><a href="estudiantes-importar-excel.php">Importar matrículas excel</a></p>
 											<p><a href="estudiantes-consolidado-final.php">Consolidado final</a></p>
 											<p><a href="estudiantes-nivelaciones.php">Nivelaciones</a></p>
 											
@@ -398,12 +398,12 @@
 																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
 																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
 																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank">Retirar</a></li>
-																	<hr>
+
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
-																	<hr>
+
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
-																	<hr>
+
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
 																</ul>

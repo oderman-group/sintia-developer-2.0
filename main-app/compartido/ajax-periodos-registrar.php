@@ -1,5 +1,6 @@
-<?php include("../../config-general/config.php");?>
 <?php
+session_start();
+include("../../config-general/config.php");
 $consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
@@ -30,7 +31,7 @@ if($num==0){
 		$consultaUsuarioResponsable=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_estudiante='".$_POST["codEst"]."'");
 		$usuarioResponsable = mysqli_fetch_array($consultaUsuarioResponsable, MYSQLI_BOTH);
 		if($usuarioResponsable[1]=="") $usuarioResponsable[1]=0;
-		mysqli_query($conexion, "INSERT INTO general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable[1]."',now(),0,1,2)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia, alr_institucion, alr_year)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable[1]."',now(),0,1,2,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		
 		$consultaEstudiantes=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_POST["codEst"]."'");
 		$estudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);

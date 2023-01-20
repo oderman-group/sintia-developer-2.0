@@ -4,7 +4,7 @@
                        		<div class="row">
 											<?php
 											$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-											INNER JOIN perfiles ON pes_id=uss_tipo
+											INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 											ORDER BY uss_nombre
 											LIMIT 0,1000
 											");
