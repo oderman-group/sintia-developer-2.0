@@ -83,25 +83,25 @@ if ($_POST["id"] == 2) {
      
 	switch ($datosUsuarioActual[3]) {
 		case 5:
-			$destinos = "../directivo/noticias.php";
+			$destinos = "../directivo/";
 			break;
 		case 3:
-			$destinos = "../acudiente/noticias.php";
+			$destinos = "../acudiente/";
 			break;
 		case 4:
-			$destinos =  "../estudiante/noticias.php";
+			$destinos =  "../estudiante/";
 			break;
 		case 2:
-			$destinos = "../docente/noticias.php";
+			$destinos = "../docente/";
 			break;
 		case 1:
-			$destinos = "../directivo/noticias.php";
+			$destinos = "../directivo/";
 			break;	
 	}
 
 	
 	
-	echo '<script type="text/javascript">window.location.href="' .$destinos. '" </script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'noticias.php" </script>';
 
 	exit();
 }
@@ -181,7 +181,25 @@ if ($_POST["id"] == 4) {
 
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/";
+			break;
+		case 3:
+			$destinos = "../acudiente/";
+			break;
+		case 4:
+			$destinos =  "../estudiante/";
+			break;
+		case 2:
+			$destinos = "../docente/";
+			break;
+		case 1:
+			$destinos = "../directivo/";
+			break;	
+	}
+	echo '<script type="text/javascript">window.location.href="' . $destinos . 'noticias.php";</script>';
 	exit();
 }
 //EDITAR CARPETA
@@ -375,23 +393,23 @@ if ($_POST["id"] == 6) {
 
 	switch ($datosUsuarioActual[3]) {
 		case 5:
-			$destinos = "../directivo/index.php";
+			$destinos = "../directivo/";
 			break;
 		case 3:
-			$destinos = "../acudiente/index.php";
+			$destinos = "../acudiente/";
 			break;
 		case 4:
-			$destinos =  "../estudiante/index.php";
+			$destinos =  "../estudiante/";
 			break;
 		case 2:
-			$destinos = "../docente/index.php";
+			$destinos = "../docente/";
 			break;
 		case 1:
-			$destinos = "../directivo/index.php";
+			$destinos = "../directivo/";
 			break;	
 	}
 
-	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'index.php";</script>';
 	exit();
 }
 //ENVIAR MENSAJE
@@ -454,23 +472,23 @@ if ($_POST["id"] == 7) {
 
 	switch ($datosUsuarioActual[3]) {
 		case 5:
-			$destinos = "../directivo/mensajes.php";
+			$destinos = "../directivo/";
 			break;
 		case 3:
-			$destinos = "../acudiente/mensajes.php";
+			$destinos = "../acudiente/";
 			break;
 		case 4:
-			$destinos =  "../estudiante/mensajes.php";
+			$destinos =  "../estudiante/";
 			break;
 		case 2:
-			$destinos = "../docente/mensajes.php";
+			$destinos = "../docente/";
 			break;
 		case 1:
-			$destinos = "../directivo/mensajes.php";
+			$destinos = "../directivo/";
 			break;	
 	}
 
-	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'mensajes.php";</script>';
 	exit();
 }
 //COMENTARIO AL FORO
@@ -626,23 +644,23 @@ if ($_POST["id"] == 12) {
 	}
 	switch ($datosUsuarioActual[3]) {
 		case 5:
-			$destinos = "../directivo/reportes-lista.php";
+			$destinos = "../directivo/";
 			break;
 		case 3:
-			$destinos = "../acudiente/reportes-lista.php";
+			$destinos = "../acudiente/";
 			break;
 		case 4:
-			$destinos =  "../estudiante/reportes-lista.php";
+			$destinos =  "../estudiante/";
 			break;
 		case 2:
-			$destinos = "../docente/reportes-lista.php";
+			$destinos = "../docente/";
 			break;
 		case 1:
-			$destinos = "../directivo/reportes-lista.php";
+			$destinos = "../directivo/";
 			break;	
 	}
 
-	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'reportes-lista.php";</script>';
 	exit();
 }
 //GUARDAR EN CHAT GRUPAL
@@ -782,11 +800,25 @@ if ($_POST["id"] == 17) {
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	$paginaRed = 'marketplace.php';
-	$urlRedireccion = $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'], $paginaRed);
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/";
+			break;
+		case 3:
+			$destinos = "../acudiente/";
+			break;
+		case 4:
+			$destinos =  "../estudiante/";
+			break;
+		case 2:
+			$destinos = "../docente/";
+			break;
+		case 1:
+			$destinos = "../directivo/";
+			break;	
+	}
 
-
-	echo '<script type="text/javascript">window.location.href="' . $urlRedireccion . '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'marketplace.php";</script>';
 	exit();
 }
 //ENVIAR MENSAJE A VENDEDOR DE MARKETPLACE
@@ -828,7 +860,6 @@ if ($_POST["id"] == 19) {
 		WHERE uss_id='" . $_POST["idAcudiente"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
-
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
