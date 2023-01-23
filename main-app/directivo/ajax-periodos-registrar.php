@@ -19,15 +19,11 @@ if($num==0){
 	
 	mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_observaciones)VALUES('".$_COOKIE["carga"]."','".$_POST["codEst"]."','".$_POST["per"]."','".$_POST["nota"]."',2, '')");
 	
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$idSession."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Inserción de notas en el periodo', now())");
-	
 }else{
 	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$_POST["nota"]."', bol_observaciones='', bol_tipo=2 WHERE bol_id=".$rB[0]);
 	
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$idSession."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Actualización de notas en el periodo', now())");
-	
 }	
-
+include("../compartido/guardar-historial-acciones.php");
 ?>
 <script type="text/javascript">
 function notifica(){
