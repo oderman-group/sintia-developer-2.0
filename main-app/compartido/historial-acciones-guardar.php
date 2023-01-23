@@ -25,11 +25,4 @@ if($paginaActualUsuario[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=302&idPagina='.$idPaginaInterna.'";</script>';
 	exit();	
 }
-
-
-
-//HISTORIAL DE ACCIONES
-mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_ip, hil_so, hil_institucion, hil_pagina_anterior)
-VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$idPaginaInterna."', '".$_SERVER["REMOTE_ADDR"]."', '".$_SERVER['HTTP_USER_AGENT']."', '".$config['conf_id_institucion']."', '".$_SERVER["HTTP_REFERER"]."')");
-
 ?>
