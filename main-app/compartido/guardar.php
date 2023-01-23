@@ -373,7 +373,25 @@ if ($_POST["id"] == 6) {
 		include("../compartido/reporte-errores.php");
 	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/index.php";
+			break;
+		case 3:
+			$destinos = "../acudiente/index.php";
+			break;
+		case 4:
+			$destinos =  "../estudiante/index.php";
+			break;
+		case 2:
+			$destinos = "../docente/index.php";
+			break;
+		case 1:
+			$destinos = "../directivo/index.php";
+			break;	
+	}
+
+	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
 	exit();
 }
 //ENVIAR MENSAJE
@@ -434,7 +452,25 @@ if ($_POST["id"] == 7) {
 		}
 	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/mensajes.php";
+			break;
+		case 3:
+			$destinos = "../acudiente/mensajes.php";
+			break;
+		case 4:
+			$destinos =  "../estudiante/mensajes.php";
+			break;
+		case 2:
+			$destinos = "../docente/mensajes.php";
+			break;
+		case 1:
+			$destinos = "../directivo/mensajes.php";
+			break;	
+	}
+
+	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
 	exit();
 }
 //COMENTARIO AL FORO
@@ -588,8 +624,25 @@ if ($_POST["id"] == 12) {
 		}
 		//FIN ENVÍO DE MENSAJE
 	}
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/reportes-lista.php";
+			break;
+		case 3:
+			$destinos = "../acudiente/reportes-lista.php";
+			break;
+		case 4:
+			$destinos =  "../estudiante/reportes-lista.php";
+			break;
+		case 2:
+			$destinos = "../docente/reportes-lista.php";
+			break;
+		case 1:
+			$destinos = "../directivo/reportes-lista.php";
+			break;	
+	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. '";</script>';
 	exit();
 }
 //GUARDAR EN CHAT GRUPAL
