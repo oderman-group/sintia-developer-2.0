@@ -81,25 +81,7 @@ if ($_POST["id"] == 2) {
 		}
 	}
      
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
-
-	
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 	
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'noticias.php" </script>';
 
@@ -182,23 +164,8 @@ if ($_POST["id"] == 4) {
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
+
 	echo '<script type="text/javascript">window.location.href="' . $destinos . 'noticias.php";</script>';
 	exit();
 }
@@ -391,23 +358,7 @@ if ($_POST["id"] == 6) {
 		include("../compartido/reporte-errores.php");
 	}
 
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'index.php";</script>';
 	exit();
@@ -470,23 +421,7 @@ if ($_POST["id"] == 7) {
 		}
 	}
 
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'mensajes.php";</script>';
 	exit();
@@ -642,23 +577,7 @@ if ($_POST["id"] == 12) {
 		}
 		//FIN ENVÍO DE MENSAJE
 	}
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'reportes-lista.php";</script>';
 	exit();
@@ -800,23 +719,7 @@ if ($_POST["id"] == 17) {
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	switch ($datosUsuarioActual[3]) {
-		case 5:
-			$destinos = "../directivo/";
-			break;
-		case 3:
-			$destinos = "../acudiente/";
-			break;
-		case 4:
-			$destinos =  "../estudiante/";
-			break;
-		case 2:
-			$destinos = "../docente/";
-			break;
-		case 1:
-			$destinos = "../directivo/";
-			break;	
-	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'marketplace.php";</script>';
 	exit();
