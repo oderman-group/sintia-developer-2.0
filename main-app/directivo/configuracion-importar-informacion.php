@@ -13,9 +13,6 @@ if(isset($_POST["cursos"]))
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_grados");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_grados(gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado)SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".academico_grados");
 	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - CURSOS ".$_POST["agnoDesde"]."', now())");
-	
 	echo '<script type="text/javascript">window.location.href="cursos.php";</script>';
 	exit();
 }
@@ -25,9 +22,6 @@ if(isset($_POST["areas"]))
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_areas");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_areas(ar_id, ar_nombre, ar_posicion)SELECT ar_id, ar_nombre, ar_posicion FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".academico_areas");
 	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - AREAS ".$_POST["agnoDesde"]."', now())");
-	
 	echo '<script type="text/javascript">window.location.href="areas.php";</script>';
 	exit();
 }
@@ -36,9 +30,6 @@ if(isset($_POST["materias"]))
 {
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_materias");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_materias(mat_id, mat_codigo, mat_nombre, mat_siglas, mat_area)SELECT mat_id, mat_codigo, mat_nombre, mat_siglas, mat_area FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".academico_materias");
-	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - MATERIAS ".$_POST["agnoDesde"]."', now())");
 	
 	echo '<script type="text/javascript">window.location.href="asignaturas.php";</script>';
 	exit();
@@ -57,10 +48,6 @@ if(isset($_POST["usuarios"]))
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".usuarios_por_estudiantes");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante) SELECT upe_id, upe_id_usuario, upe_id_estudiante FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".usuarios_por_estudiantes");
 	
-	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - USUARIOS ".$_POST["agnoDesde"]."', now())");
-	
 	echo '<script type="text/javascript">window.location.href="usuarios.php";</script>';
 	exit();
 }
@@ -69,9 +56,6 @@ if(isset($_POST["cargas"]))
 {
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_cargas");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_cargas(car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable)SELECT car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".academico_cargas");
-	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - CARGAS ".$_POST["agnoDesde"]."', now())");
 	
 	echo '<script type="text/javascript">window.location.href="cargas.php";</script>';
 	exit();
@@ -108,18 +92,9 @@ if(isset($_POST["todo"]))
 	mysqli_query($conexion, "DELETE FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_cargas");
 	mysqli_query($conexion, "INSERT INTO ".$cfg["conf_base_datos"]."_".$_POST["agnoPara"].".academico_cargas(car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable)SELECT car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable FROM ".$cfg["conf_base_datos"]."_".$_POST["agnoDesde"].".academico_cargas");
 	
-	
-	//INSERTAR EN EL HISTORIAL
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información - TODO ".$_POST["agnoDesde"]."', now())");
-	
 	echo '<script type="text/javascript">window.location.href="configuracion-importar-informacion.php";</script>';
 	exit();
 }
-?>
-
-<?php
-mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Importar Información', now())");
-
 ?>
 
 	<!--bootstrap -->

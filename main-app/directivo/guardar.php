@@ -6,25 +6,7 @@ $modulo = 4; ?>
 include("../../config-general/config.php");
 
 include("../compartido/sintia-funciones.php");
-?>
-
-<?php
-if (isset($_POST["id"])) {
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('" . $_SESSION["id"] . "', '" . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "', 'Acciones POST - " . $_SERVER['HTTP_REFERER'] . "', now())");
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");
-} elseif ($_GET["get"]) {
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('" . $_SESSION["id"] . "', '" . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "', 'Acciones GET - " . $_SERVER['HTTP_REFERER'] . "', now())");
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");
-} else {
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('" . $_SESSION["id"] . "', '" . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "', 'Acciones DESCONOCIDA - " . $_SERVER['HTTP_REFERER'] . "', now())");
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");
-}
+include("../compartido/guardar-historial-acciones.php");
 ?>
 <?php
 //GUARDAR MOVIMIENTO

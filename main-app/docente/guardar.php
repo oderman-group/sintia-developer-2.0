@@ -11,33 +11,7 @@ $operacionBD = new BaseDatos;
 ?>
 
 <?php
-
-if(isset($_POST["id"])){
-
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_ip, hil_so)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Acciones POST - ".$_SERVER['HTTP_REFERER']."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SERVER['HTTP_USER_AGENT']."')");
-
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");	
-
-}elseif(isset($_GET["get"])){
-
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_ip, hil_so)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Acciones GET - ".$_SERVER['HTTP_REFERER']."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SERVER['HTTP_USER_AGENT']."')");
-
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");	
-
-}else{
-
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_ip, hil_so)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Acciones DESCONOCIDA - ".$_SERVER['HTTP_REFERER']."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SERVER['HTTP_USER_AGENT']."')");
-
-	$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");
-
-}
-
+include("../compartido/guardar-historial-acciones.php");
 ?>
 
 <?php
