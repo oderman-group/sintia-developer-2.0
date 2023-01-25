@@ -291,6 +291,14 @@ switch($_GET["idmsg"]){
 		$boton1 = 'IR AL INICIO';
 	break;	
 		
+	case 304:
+		$color = 'red';
+		$titulo = 'ACCESO INCORRECTO';
+		$texto = 'Lo sentimos para el año '.$_SESSION["cambioYear"].' usted no era administrativo';
+		$url1 = 'index.php';
+		$boton1 = 'IR AL INICIO';
+	break;
+		
 		
 		
 	

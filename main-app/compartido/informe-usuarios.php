@@ -39,9 +39,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 									 $consulta = mysqli_query($conexion, $SQL);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 										 if($resultado[5]==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado[5]==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
-                     $consultaClics=mysqli_query($conexion, "SELECT ROUND(((SELECT count(hil_id) FROM seguridad_historial_acciones where hil_usuario='".$resultado[0]."')/(SELECT count(hil_id) FROM seguridad_historial_acciones))*100,2)");
+                     $consultaClics=mysqli_query($conexion, "SELECT ROUND(((SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado[0]."')/(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones))*100,2)");
 										 $clics = mysqli_fetch_array($consultaClics, MYSQLI_BOTH);
-                     $consultaClics2=mysqli_query($conexion, "SELECT (SELECT count(hil_id) FROM seguridad_historial_acciones where hil_usuario='".$resultado[0]."'),(SELECT count(hil_id) FROM seguridad_historial_acciones)");
+                     $consultaClics2=mysqli_query($conexion, "SELECT (SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado[0]."'),(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones)");
 										 $clics2 = mysqli_fetch_array($consultaClics2, MYSQLI_BOTH);
                      $consultaEntrada=mysqli_query($conexion, "SELECT (DATEDIFF(uss_ultimo_ingreso, now())*-1) FROM usuarios WHERE uss_id='".$resultado[0]."'");
 										 $entrada = mysqli_fetch_array($consultaEntrada, MYSQLI_BOTH);

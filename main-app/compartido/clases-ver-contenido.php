@@ -36,7 +36,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														$consultaGenero=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado[8]."'");
 														$genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
 														$consultaIngresoClase=mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
-														FROM seguridad_historial_acciones 
+														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."'
 														UNION 
 														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
