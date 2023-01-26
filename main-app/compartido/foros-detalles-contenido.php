@@ -28,7 +28,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 													$urlRecurso = 'foros-detalles.php?idR='.$_GET["idR"];
 													$consultas = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													INNER JOIN seguridad_historial_acciones ON hil_url LIKE '%".$urlRecurso."%' AND hil_usuario=uss_id
+													INNER JOIN ".$baseDatosServicios.".seguridad_historial_acciones ON hil_url LIKE '%".$urlRecurso."%' AND hil_usuario=uss_id
 													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 
 													GROUP BY mat_id_usuario
 													ORDER BY mat_primer_apellido

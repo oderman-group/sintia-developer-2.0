@@ -708,6 +708,18 @@ if($datosUsuarioActual['uss_solicitar_datos']==1){
 
 $(document).ready(function(){
 
+	$('#boton-cerrar-licencia').click(function(){                    
+
+		localStorage.setItem("licencia", 1);
+
+	});
+
+	$('#boton-cerrar-licencia-2').click(function(){                    
+
+		localStorage.setItem("licencia", 1);
+
+	});
+
     $('#boton-cerrar').click(function(){                    
 
     	localStorage.setItem("estado", 1);
@@ -810,7 +822,23 @@ if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
 
 <?php }?>	
 
+<?php
 
+/* Mostrar renovacion de licencia */
+
+if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
+
+	?>	
+	
+		if(localStorage.getItem("licencia")!=1){
+	
+			function mostrarModalLicencia(){$("#modalLicencia").modal("show");}
+	
+			setTimeout('mostrarModalLicencia()', 2000);
+	
+		}
+	
+	<?php }?>
 
 
 /* Mostrar términos y condiciones */

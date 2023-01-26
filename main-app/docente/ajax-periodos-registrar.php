@@ -37,13 +37,9 @@ if($num==0){
 	mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_id='".$rB[0]."'");
 	
 	mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_observaciones)VALUES('".$_COOKIE["carga"]."', '".$_POST["codEst"]."', '".$_POST["per"]."', '".$_POST["nota"]."', 2, now(), 0, 'Recuperación del periodo.')");
-	
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$idSession."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Inserción de notas en el periodo', now())");
 		
 }else{
 	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$_POST["nota"]."', bol_nota_anterior='".$_POST["notaAnterior"]."', bol_observaciones='Recuperación del periodo.', bol_tipo=2, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=".$rB[0]);
-	
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha)VALUES('".$idSession."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Actualización de notas en el periodo', now())");
 	
 	
 	//Si la institución autoriza el envío de mensajes
@@ -104,7 +100,7 @@ if($num==0){
 		}
 	}
 }	
-
+include("../compartido/guardar-historial-acciones.php");
 ?>
 <script type="text/javascript">
 function notifica(){

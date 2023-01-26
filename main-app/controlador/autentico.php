@@ -22,13 +22,13 @@ WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND us
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=1&msg=usuario-no-fue-encontrado");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=3");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }
 
@@ -74,7 +74,7 @@ if($num>0)
 	include("ip.php");
 	mysqli_query($conexion, "UPDATE usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila[0]."'");
 
-	mysqli_query($conexion, "INSERT INTO seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$fila[0]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Ingreso al sistema', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$fila[0]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Ingreso al sistema', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
 
 	echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
 	exit();
@@ -85,6 +85,6 @@ if($num>0)
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion, uif_year)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."', '".$_SESSION["bd"]."')");
 
 
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=2&msg=clave-incorrecta");
+	header("Location:".$REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }

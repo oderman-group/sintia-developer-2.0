@@ -80,8 +80,11 @@ if ($_POST["id"] == 2) {
 			$i++;
 		}
 	}
+     
+	$destinos = validarUsuarioActual($datosUsuarioActual);
+	
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'noticias.php" </script>';
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
 //GUARDAR CARPETA
@@ -160,7 +163,10 @@ if ($_POST["id"] == 4) {
 
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+
+	$destinos = validarUsuarioActual($datosUsuarioActual);
+
+	echo '<script type="text/javascript">window.location.href="' . $destinos . 'noticias.php";</script>';
 	exit();
 }
 //EDITAR CARPETA
@@ -352,7 +358,9 @@ if ($_POST["id"] == 6) {
 		include("../compartido/reporte-errores.php");
 	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	$destinos = validarUsuarioActual($datosUsuarioActual);
+
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'index.php";</script>';
 	exit();
 }
 //ENVIAR MENSAJE
@@ -413,7 +421,9 @@ if ($_POST["id"] == 7) {
 		}
 	}
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	$destinos = validarUsuarioActual($datosUsuarioActual);
+
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'mensajes.php";</script>';
 	exit();
 }
 //COMENTARIO AL FORO
@@ -567,8 +577,9 @@ if ($_POST["id"] == 12) {
 		}
 		//FIN ENVÍO DE MENSAJE
 	}
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'reportes-lista.php";</script>';
 	exit();
 }
 //GUARDAR EN CHAT GRUPAL
@@ -708,11 +719,9 @@ if ($_POST["id"] == 17) {
 	include("../compartido/reporte-errores.php");
 	$idRegistro = mysqli_insert_id($conexion);
 
-	$paginaRed = 'marketplace.php';
-	$urlRedireccion = $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'], $paginaRed);
+	$destinos = validarUsuarioActual($datosUsuarioActual);
 
-
-	echo '<script type="text/javascript">window.location.href="' . $urlRedireccion . '";</script>';
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'marketplace.php";</script>';
 	exit();
 }
 //ENVIAR MENSAJE A VENDEDOR DE MARKETPLACE
@@ -754,7 +763,6 @@ if ($_POST["id"] == 19) {
 		WHERE uss_id='" . $_POST["idAcudiente"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
-
 
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
