@@ -1,11 +1,13 @@
 <?php
 include("session.php");
 
+$idPaginaInterna = 'DT0129';
+
 $_SESSION['admin'] = $_SESSION['id'];
 
 $_SESSION['id'] = $_GET['user'];
 
-mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'autologin', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
+include("../compartido/guardar-historial-acciones.php");
 
 switch ($_GET['tipe']) {
 	case 2:
