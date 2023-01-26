@@ -34,7 +34,7 @@
 									
 									<?php include("../compartido/datos-fechas.php");?>
 
-									<?php if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){?>
+									<?php if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 && $dfDias<=1)){?>
 										<div class="panel">
 											<header class="panel-heading panel-heading-red">Pagos</header>
 											<div class="panel-body">
