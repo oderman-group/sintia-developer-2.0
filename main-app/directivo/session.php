@@ -14,24 +14,12 @@ else
 
 	if($datosUsuarioActual[3]!=5 && $datosUsuarioActual[3]!=1)
 	{
-		echo "
-		Usted no tiene permisos para acceder a esta opci&oacute;n:<br>
-		Usuario: ".$datosUsuarioActual[0]."<br>
-		Tipo: ".$datosUsuarioActual[3]."
-		";
+		if(isset($_SESSION["yearAnterior"])){
+			$_SESSION["cambioYear"]=$_SESSION["bd"];
+			$_SESSION["bd"]=$_SESSION["yearAnterior"];
+		}
+		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=304";</script>';
 		exit();		
 	}
-	//ESTADOS DE ANIMO
-	/*
-	$estadoAnimo = mysql_num_rows(mysql_query("SELECT * FROM usuarios_estados_animo WHERE uean_usuario='".$_SESSION["id"]."' AND DATEDIFF(now(),uean_fecha)=0 ORDER BY uean_id DESC",$conexion));
-	if($datosUsuarioActual['uss_preguntar_animo']==1 and $estadoAnimo==0){
-?>		
-		<script type="text/javascript">
-			window.location.href="page-ea.php";
-		</script>
-<?php			
-	}
-	*/
-	
 }
-?>
+
