@@ -212,3 +212,25 @@ function validarClave($clave) {
     	return true;
     }
 }
+
+
+function validarUsuarioActual($datosUsuarioActual) {
+	switch ($datosUsuarioActual[3]) {
+		case 5:
+			$destinos = "../directivo/";
+			break;
+		case 3:
+			$destinos = "../acudiente/";
+			break;
+		case 4:
+			$destinos =  "../estudiante/";
+			break;
+		case 2:
+			$destinos = "../docente/";
+			break;
+		case 1:
+			$destinos = "../directivo/";
+			break;	
+	}
+	return $destinos;
+}

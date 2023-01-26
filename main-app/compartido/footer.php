@@ -29,6 +29,7 @@ LIMIT ".$empezar.",1
 		<?php }?>
 	</div>
 <?php }?>
+<?php include("../compartido/guardar-historial-acciones.php");?>
 
 <!-- start footer -->
 <div class="page-footer">

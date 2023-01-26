@@ -102,6 +102,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
               <i class="fab fa-linkedin-in"></i>
             </button>
           </div>-->
+          <?php include("../config-general/mensajes-informativos.php"); ?>
 		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
           <div class="divider d-flex align-items-center my-4">
@@ -115,8 +116,9 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 							<option value="">Seleccione su Institución</option>
 							<?php
 							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
+                $selected = (isset($_GET['inst']) and $_GET['inst']==$instituciones['ins_id']) ? 'selected' : '';
 							?>
-								<option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
+								<option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
 							<?php }?>
 						</select>
         </div>

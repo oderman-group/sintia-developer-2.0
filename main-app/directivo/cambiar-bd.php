@@ -4,6 +4,7 @@
 if(isset($_POST["cambiar"]))
 {
 	session_start();
+    $_SESSION["yearAnterior"]=$_SESSION["bd"];
 	$_SESSION["bd"] = $_POST["agno"];
 	header("Location:cambiar-bd.php");
 	exit();
