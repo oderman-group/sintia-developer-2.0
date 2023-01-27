@@ -1,10 +1,13 @@
 <?php
 include("session.php");
 
+$idPaginaInterna = 'DT0129';
+
 $_SESSION['admin'] = $_SESSION['id'];
 
 $_SESSION['id'] = $_GET['user'];
 
+include("../compartido/guardar-historial-acciones.php");
 
 switch ($_GET['tipe']) {
 	case 2:
