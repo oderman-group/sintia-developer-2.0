@@ -1,6 +1,7 @@
 <?php
 
 include("session.php");
+$idPaginaInterna = 'DC0089';
 
 include("../compartido/sintia-funciones.php");
 

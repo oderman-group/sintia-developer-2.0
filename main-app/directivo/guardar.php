@@ -3,6 +3,7 @@ $modulo = 4; ?>
 <?php include("session.php"); ?>
 <?php include("../modelo/conexion.php"); ?>
 <?php 
+$idPaginaInterna = 'DT0130';
 include("../../config-general/config.php");
 
 include("../compartido/sintia-funciones.php");
