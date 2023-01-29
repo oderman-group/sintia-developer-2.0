@@ -171,6 +171,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								</div>
 								
 								<div class="col-md-12 col-lg-9">
+									<?php include("../../config-general/mensajes-informativos.php"); ?>
 									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -263,7 +264,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar <?php //echo $frases[165][$datosUsuarioActual[8]];?></a></li>
+																  <?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
+																  	<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
+																  <?php }?>	
 
 																	  <?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
 																	  	<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>

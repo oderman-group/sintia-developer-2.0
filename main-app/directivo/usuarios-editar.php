@@ -5,6 +5,10 @@
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
+	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
+	exit();
+}
 ?>
 
 	<!--bootstrap -->
@@ -48,8 +52,8 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 						
 						
 						
-                        <div class="col-sm-9">
-
+                        <div class="col-sm-12">
+						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
@@ -70,7 +74,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>
 											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>">
+												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" readonly>
 											</div>
 										</div>
 										
@@ -145,7 +149,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Género</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 												?>
@@ -164,7 +168,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de usuario</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
 												?>
@@ -172,6 +176,9 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+														if(
+														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 6) 
+														and $datosUsuarioActual['uss_tipo'==5]){continue;}
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
 													?>
@@ -181,7 +188,21 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                             </div>
                                         </div>
 										
-										
+										<hr>
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Intentos de acceso fallidos</label>
+											<div class="col-sm-1">
+												<input type="number" name="intentosFallidos" class="form-control" value="<?=$datosEditar['uss_intentos_fallidos'];?>">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Usuario bloqueado</label>
+											<div class="col-sm-1">
+												<input type="number" name="bloqueado" class="form-control" value="<?=$datosEditar['uss_bloqueado'];?>" readonly>
+											</div>
+										</div>
+
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Última actualización</label>
 											<div class="col-sm-4">
@@ -212,7 +233,6 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                             </div>
                         </div>
 						
-						<div class="col-sm-3"></div>
 						
                     </div>
 

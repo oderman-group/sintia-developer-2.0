@@ -1,6 +1,7 @@
 <?php include("session.php");?>
 
 <?php
+$idPaginaInterna = 'AC0031';
 //SOLICITUD DE DESBLOQUEO
 if($_POST["id"]==1){	
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_solicitudes(soli_id_recurso, soli_remitente, soli_fecha, soli_mensaje, soli_estado, soli_tipo, soli_institucion, soli_year)

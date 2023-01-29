@@ -2,6 +2,34 @@
 <?php $idPaginaInterna = 'DT0123';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+$datosUsuario = [
+	'usuario'     => '',
+	'nombre'      => '',
+	'email'       => '',
+	'celular'    => '',
+	'genero'      => '',
+	'tipoUsuario' => ''
+];
+if(isset($_GET['usuario'])){
+	$datosUsuario['usuario'] = $_GET['usuario'];
+}
+if(isset($_GET['nombre'])){
+	$datosUsuario['nombre'] = $_GET['nombre'];
+}
+if(isset($_GET['email'])){
+	$datosUsuario['email'] = $_GET['email'];
+}
+if(isset($_GET['celular'])){
+	$datosUsuario['celular'] = $_GET['celular'];
+}
+if(isset($_GET['genero'])){
+	$datosUsuario['genero'] = $_GET['genero'];
+}
+if(isset($_GET['tipoUsuario'])){
+	$datosUsuario['tipoUsuario'] = $_GET['tipoUsuario'];
+}
+?>
 
 
 	<!--bootstrap -->
@@ -46,7 +74,7 @@
 						
 						
                         <div class="col-sm-9">
-
+						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
@@ -59,7 +87,7 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>
 											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>">
+												<input type="text" name="usuario" class="form-control" value="<?=$datosUsuario['usuario'];?>">
 												<span id="respuestaAjax"></span>
 											</div>
 										</div>
@@ -67,28 +95,28 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Contraseña</label>
 											<div class="col-sm-4">
-												<input type="text" name="clave" class="form-control" value="<?=$datosEditar['uss_clave'];?>">
+												<input type="text" name="clave" class="form-control">
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-4">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>">
+												<input type="text" name="nombre" class="form-control" value="<?=$datosUsuario['nombre'];?>">
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Email</label>
 											<div class="col-sm-4">
-												<input type="text" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>">
+												<input type="email" name="email" class="form-control" value="<?=$datosUsuario['email'];?>">
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Celular</label>
 											<div class="col-sm-4">
-												<input type="text" name="celular" class="form-control" value="<?=$datosEditar['uss_celular'];?>">
+												<input type="text" name="celular" class="form-control" value="<?=$datosUsuario['celular'];?>">
 											</div>
 										</div>
 										
@@ -105,7 +133,7 @@
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['uss_genero']) $select = 'selected';
+														if($opcionesDatos[0]==$datosUsuario['genero']) $select = 'selected';
 													?>
                                                     	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['ogen_nombre'];?></option>
 													<?php }?>
@@ -123,8 +151,11 @@
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+														if(
+														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 4 || $opcionesDatos[0] == 6) 
+														and $datosUsuarioActual['uss_tipo'==5]){continue;}
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
+														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
 													?>
                                                     	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['pes_nombre'];?></option>
 													<?php }?>

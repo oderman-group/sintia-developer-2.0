@@ -93,9 +93,8 @@
 									<li class="nav-item"><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="cargas.php?cantidad=10" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
-
 									<li class="nav-item"><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
-									<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
+									
 	                            </ul>
 	                        </li>
 							<?php }?>
@@ -139,6 +138,7 @@
 	                            </a>
 	                            <ul class="sub-menu">
 	                                <li class="nav-item"><a href="usuarios.php?cantidad=10" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
+									<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
 									<li class="nav-item"><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
 
 	                            </ul>
