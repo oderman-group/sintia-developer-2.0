@@ -92,7 +92,6 @@
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="asignaturas-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																	  <?php if($numeros[0]==0){?><li><a href="asignaturas-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
-																	  <li><a href="#"><?=$frases[104][$datosUsuarioActual[8]];?></a></li>
 																  </ul>
 															  </div>
 														</td>
