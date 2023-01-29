@@ -159,7 +159,7 @@ if ($newId > 0) {
         //Server settings
         $mail->SMTPDebug = 2;                                       // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'mail.plataformasintia.com';  // Specify main and backup SMTP servers
+        $mail->Host       = 'jemima.dongee.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
         $mail->Username   = 'info@plataformasintia.com';                     // SMTP username
         $mail->Password   = 'B=XKY?y{VWiH';                              // SMTP password
