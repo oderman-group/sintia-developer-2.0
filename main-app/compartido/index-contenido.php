@@ -94,7 +94,7 @@
 							
 							<?php include("../compartido/encuestas.php");?>
 							
-							
+							<!--
 							<div class="panel" data-hint="Envíanos tu sugerencia para la plataforma. Ayudanos a mejorar.">
 								<header class="panel-heading panel-heading-red">Tu opinión o sugerencia sobre la plataforma SINTIA es muy importante</header>
                                 <div class="panel-body">
@@ -131,6 +131,7 @@
 									<?php }?>
 								</div>
 							</div>
+							-->
 
 							<div class="panel">
 								
