@@ -5,6 +5,10 @@
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
+	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
+	exit();
+}
 ?>
 
 	<!--bootstrap -->
@@ -172,6 +176,9 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+														if(
+														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 6) 
+														and $datosUsuarioActual['uss_tipo'==5]){continue;}
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
 													?>
