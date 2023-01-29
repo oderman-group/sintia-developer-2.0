@@ -175,7 +175,11 @@
 						
 						<!-- Activity feed start -->
 						<div class="col-sm-8" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
-							<div class="card-box">
+							<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
+								<?php include("../compartido/progreso-docentes.php");?>
+							<?php }?>
+
+						<div class="card-box">
 								<div class="card-head">
 									<header>Listado de opiniones y sugerencias</header>
 								</div>
