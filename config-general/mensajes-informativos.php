@@ -1,5 +1,6 @@
 <?php
-if(isset($_GET['error'])){
+if(isset($_GET['error']) || isset($_GET['success'])){
+    /* MENSAJES DE ERROR O INFORMATIVOS */
     switch($_GET['error']){
         case 1:
             $tipo = 'danger';
@@ -23,14 +24,29 @@ if(isset($_GET['error'])){
 
         case 'ER_DT_2':
             $tipo = 'danger';
-            $mensaje = 'No tienes permiso para editar a este usuario (<b>' . $_GET["usuario"] . '</b>)';
+            $mensaje = 'No tienes permiso para editar a este usuario: <b>' . $_GET["usuario"] . '</b>';
         break;
+
 
         default:
             $tipo = 'secondary';
             $mensaje = 'Error desconocido: '.$_GET['error'];
         break;
-    }  
+    }
+    
+    /* MENSAJES DE EXITO */
+    switch($_GET['success']){
+        case 'SC_DT_1':
+            $tipo = 'success';
+            $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . $_GET["id"] . '</b>';
+        break;
+
+
+        default:
+            $tipo = 'secondary';
+            $mensaje = 'Error desconocido: '.$_GET['error'];
+        break;
+    } 
 ?>
     
     <div class="alert alert-<?=$tipo;?>" role="alert">
