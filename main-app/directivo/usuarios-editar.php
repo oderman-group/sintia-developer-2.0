@@ -52,8 +52,8 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 						
 						
 						
-                        <div class="col-sm-9">
-
+                        <div class="col-sm-12">
+						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
@@ -74,7 +74,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>
 											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>">
+												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" readonly>
 											</div>
 										</div>
 										
@@ -149,7 +149,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Género</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 												?>
@@ -168,7 +168,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de usuario</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
 												?>
@@ -188,7 +188,21 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                                             </div>
                                         </div>
 										
-										
+										<hr>
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Intentos de acceso fallidos</label>
+											<div class="col-sm-1">
+												<input type="number" name="intentosFallidos" class="form-control" value="<?=$datosEditar['uss_intentos_fallidos'];?>">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Usuario bloqueado</label>
+											<div class="col-sm-1">
+												<input type="number" name="bloqueado" class="form-control" value="<?=$datosEditar['uss_bloqueado'];?>" readonly>
+											</div>
+										</div>
+
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Última actualización</label>
 											<div class="col-sm-4">
@@ -219,7 +233,6 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                             </div>
                         </div>
 						
-						<div class="col-sm-3"></div>
 						
                     </div>
 
