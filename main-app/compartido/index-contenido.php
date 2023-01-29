@@ -135,25 +135,41 @@
 
 							<div class="panel">
 								
-							    <header class="panel-heading panel-heading-purple" align="center">Páginas recientes (5)</header>
+							    <header class="panel-heading panel-heading-purple" align="center">Mis páginas recientes (5)</header>
 								<div class="col-sm-12">
-								<?php	
-                                    $ultimasPaginas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-									LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-									WHERE 
-									hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
-									AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
-									ORDER BY hil_id DESC LIMIT 5");										 
-                                    while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
-                                    ?>
-										<li><a href="<?=$consultaReciente['pagp_ruta'];?>" style="text-decoration: underline;"><?php echo $consultaReciente["pagp_pagina"]; ?></a></li>
-									<?php }?>
+									<ul class="feed-blog">
+									<?php	
+										$ultimasPaginas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+										LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
+										WHERE 
+										hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
+										AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
+										ORDER BY hil_id DESC LIMIT 5");										 
+										while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
+										?>
+										
+										<li class="diactive-feed">
+											<div class="feed-user-img">
+												<img src="<?=$fotoPerfilUsr;?>" class="img-radius "
+													alt="User-Profile-Image">
+											</div>
+											<h6>
+												<span class="label label-sm label-success">
+												<a href="<?=$consultaReciente['pagp_ruta'];?>" style="color:#FFF;"><?php echo $consultaReciente["pagp_pagina"]; ?></a>
+												</span> 
+												</span>&nbsp;</span>
+												<small class="text-muted"><?=$consultaReciente['hil_fecha'];?></small>
+											</h6>
+										</li>
+
+										<?php }?>
+									</ul>	
 								</div>
 							</div>
 
 							<div class="panel">
 								
-							    <header class="panel-heading panel-heading-blue" align="center">Páginas más visitadas (5)</header>
+							    <header class="panel-heading panel-heading-blue" align="center">Mis páginas más visitadas (5)</header>
 								<div class="col-sm-12">
 								<?php	
                                     $paginasMasVisitadasConsulta = mysqli_query($conexion, "SELECT count(*) as visitas, pagp_pagina, pagp_ruta FROM ".$baseDatosServicios.".seguridad_historial_acciones
@@ -180,71 +196,35 @@
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>
 
-						<div class="card-box">
+						<!--
+							<div class="card-box">
 								<div class="card-head">
-									<header>Listado de opiniones y sugerencias</header>
+									<header>Contenido variado</header>
 								</div>
 								<div class="card-body">
 
-									<!--<ul class="feed-blog" id="listarDatos"></ul>-->
+									<ul class="feed-blog" id="listarDatos"></ul>
 									
-									<!--
+									
 									<ul class="feed-blog">
-										<?php
-										$consultaReciente = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
-										INNER JOIN usuarios ON uss_id=not_usuario
-										WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
-										AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
-										AND not_year='" . $_SESSION["bd"] . "'
-										ORDER BY not_id DESC
-										LIMIT 0,3
-										");
-										while($resultadoReciente = mysqli_fetch_array($consultaReciente, MYSQLI_BOTH)){
-											$fotoUsr = $usuariosClase->verificarFoto($resultadoReciente['uss_foto']);
-										?>
-										<li class="active-feed">
-											<div class="feed-user-img">
-												<img src="<?php echo $fotoUsr;?>" class="img-radius" alt="User-Profile-Image">
-											</div>
-											<h6>
-												<a href="noticias.php#PUB<?php echo $resultadoReciente['not_id'];?>">
-												<span class="label label-sm label-danger">Publicación</span>
-												<b><?php echo $resultadoReciente['uss_nombre'];?></b> ha publicado <b><?php echo $resultadoReciente['not_titulo'];?></b>
-												<small class="text-muted"><?php echo $resultadoReciente['not_fecha'];?></small>
-												</a>
-											</h6>
-											<p class="m-b-15 m-t-15">
-												<?php echo substr($resultadoReciente['not_descripcion'],0,100);?>
-											</p>
-												
-										</li>
-										<?php }?>
+										
 										<li class="diactive-feed">
 											<div class="feed-user-img">
 												<img src="../../config-general/assets/img/std/std2.jpg" class="img-radius "
 													alt="User-Profile-Image">
 											</div>
 											<h6>
-												<span class="label label-sm label-success">Tarea </span> Te han dejado una tarea que tiene plazo de entrega hasta pasado mañana: <span class="green-color"> 
-												Please add new student details.</span>
+												<span class="label label-sm label-success">Tarea </span> Lorem</span>
 												<small class="text-muted">Hace 5 horas</small>
 											</h6>
 										</li>
 										
-										<li class="diactive-feed">
-											<div class="feed-user-img">
-												<img src="../../config-general/assets/img/std/std3.jpg" class="img-radius "
-													alt="User-Profile-Image">
-											</div>
-											<h6>
-												<span class="label label-sm label-primary">Evaluación</span> Hay una evaluación de matemáticas para dentro de una semana. Estudia. <span class="text-c-green">Please add new student details.</span> <small class="text-muted">Hace 6 horas</small>
-											</h6>
-										</li>
-										
 									</ul>
-									-->
+									
 								</div>
 							</div>
+							-->
+
 						</div>	
 						<!-- Activity feed end -->
 					</div>
