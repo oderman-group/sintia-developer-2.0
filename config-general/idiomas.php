@@ -26,7 +26,7 @@ $frases[10][$l] = 'Mi perfil';
 
 $frases[11][$l] = 'Mapa mundial';
 
-$frases[12][$l] = 'Cargas acad&eacute;micas';
+$frases[12][$l] = 'Cargas académicas';
 
 $frases[13][$l] = 'Administrar';
 
@@ -36,15 +36,15 @@ $frases[15][$l] = 'Salir';
 
 $frases[16][$l] = 'Ayuda';
 
-$frases[17][$l] = 'Configuraci&oacute;n';
+$frases[17][$l] = 'Configuración';
 
 $frases[18][$l] = 'Idioma';
 
-$frases[19][$l] = 'Seleccione una opci&oacute;n';
+$frases[19][$l] = 'Seleccione una opción';
 
-$frases[20][$l] = 'Espa&ntilde;ol';
+$frases[20][$l] = 'Español';
 
-$frases[21][$l] = 'Ingl&eacute;s';
+$frases[21][$l] = 'Inglés';
 
 $frases[22][$l] = 'Tema';
 

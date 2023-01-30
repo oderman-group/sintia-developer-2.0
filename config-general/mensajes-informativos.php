@@ -18,6 +18,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Ha superado el número máximo de intentos fallidos. Por favor comúniquese con la administración.';
             break;
 
+            case 4:
+                $tipo = 'primary';
+                $mensaje = 'No se encontró una sesión de usuario activa. Ingrese al sistema nuevamente.';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
@@ -42,6 +47,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_1':
                 $tipo = 'success';
                 $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . $_GET["id"] . '</b>';
+            break;
+
+            case 'SC_DT_2':
+                $tipo = 'success';
+                $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
             break;
 
 

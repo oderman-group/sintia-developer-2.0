@@ -12,6 +12,9 @@ include("../compartido/guardar-historial-acciones.php");
 switch ($_GET['tipe']) {
 	case 2:
 		$url = '../docente/index.php';
+		if(isset($_GET['carga']) && is_numeric($_GET['carga'])){
+			$url = '../docente/guardar.php?get=100&carga='.$_GET["carga"].'&periodo='.$_GET["periodo"];
+		}
 	break;
 
 	case 3:

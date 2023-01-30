@@ -206,7 +206,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                         <th>#</th>
 														<th>Bloq.</th>
 														<th>ID</th>
-														<th>Usuario</th>
+														<th>Usuario (REP)</th>
 														<th>Nombre</th>
 														<th>Tipo</th>
 														<th>Sesión</th>
@@ -235,6 +235,15 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 
 														$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
 														$numCarga = mysqli_num_rows($consultaNumCarga);
+
+														$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
+														FROM usuarios 
+														WHERE uss_usuario='".$resultado['uss_usuario']."'
+														GROUP BY uss_usuario
+														");
+														$usuarioRepetido = mysqli_fetch_array($consultaUsuariosRepetidos, MYSQLI_BOTH);
+														$avisoRepetido = null;
+														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';
 													 ?>
 													<tr id="Reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -247,8 +256,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															</div>
 														</td>
 														<td><?=$resultado['uss_id'];?></td>
-														<td>
+														<td <?=$avisoRepetido?>>
 															<?=$resultado['uss_usuario'];?>
+															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
 														<td><?=$resultado['uss_nombre'];?></td>
 														<td><?=$resultado['pes_nombre'];?></td>

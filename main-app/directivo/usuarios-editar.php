@@ -60,8 +60,8 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="16" name="id">
+									<form name="formularioGuardar" action="usuarios-update.php" method="post">
+
 										<input type="hidden" value="<?=$datosEditar['uss_id'];?>" name="idR">
 
 										<div class="form-group row">
