@@ -138,7 +138,11 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
 				
 				$promedioMateria +=$datosBoletin['bol_nota'];
             ?>
-                <td align="center"><?=round($datosAusencias[0],0);?></td>
+                <td align="center"><?php 
+                if ($datosAusencias[0]>0) {
+                    echo round($datosAusencias[0],0);
+                } 
+                ?></td>
                 <td align="center"><?=$datosBoletin['bol_nota'];?></td>
                 <td align="center"><?=$datosBoletin['notip_nombre'];?></td>
             <?php 
