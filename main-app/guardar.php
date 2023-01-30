@@ -71,7 +71,7 @@ if ($_GET["get"] == 1) {
 	<form name="frm_login" action="https://developer.plataformasintia.com/controlador/autentico.php" method="post">
 		<input type="hidden" name="Usuario" value="<?= $_GET["user"]; ?>">
 		<input type="hidden" name="Clave" value="<?= $_GET["pass"]; ?>">
-		<input type="hidden" name="bd" value="14">
+		<input type="hidden" name="bd" value="22">
 	</form>
 
 	<script type="text/javascript">
