@@ -159,13 +159,8 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 
           <div class="d-flex justify-content-between align-items-center">
             <!-- Checkbox -->
-            <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-              <label class="form-check-label" for="form2Example3">
-                Recuerda me
-              </label>
-            </div>
-            <a href="#!" class="text-body">Olvidaste tu contraseña?</a>
+            <a href="#!" class="text-body">¿Olvidaste tu contraseña?</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body" target="_blank">¿Requieres soporte?</a>
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">

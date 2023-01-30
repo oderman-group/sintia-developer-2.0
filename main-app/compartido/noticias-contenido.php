@@ -47,10 +47,6 @@
 										</div>
 									<?php }?>
 
-									<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5){?>
-										<?php include("../compartido/progreso-docentes.php");?>
-									<?php }?>
-									
 									<?php include("../compartido/modulo-frases-lateral.php");?>
 									
 									<?php include("../compartido/publicidad-lateral.php");?>

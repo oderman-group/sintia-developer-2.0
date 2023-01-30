@@ -3,6 +3,7 @@
 <?php 
 
 include("verificar-usuario.php");
+$idPaginaInterna = 'ES0053';
 
 include("../compartido/sintia-funciones.php");
 
