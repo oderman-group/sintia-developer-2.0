@@ -1,5 +1,5 @@
-<?php 
-//Consulta
+<?php
+include("../conexion.php");
 ?>
 
 <?php
@@ -58,6 +58,28 @@ if($_POST["id"]==2){
 		echo '<script type="text/javascript">window.location.href="index.php?error=3";</script>';
 		exit();	
 	}
+}//======================GET=====================
+//MONITOREAR ACCESO AL DEMO
+if ($_GET["get"] == 1) {
+	mysql_query("INSERT INTO demo(demo_fecha_ingreso, demo_usuario, demo_ip)VALUES(now(), '" . $_GET["usr"] . "', '" . $_SERVER["REMOTE_ADDR"] . "')", $conexion);
+	if (mysql_errno() != 0) {
+		echo mysql_error();
+		exit();
+	}
+	?>
+
+	<form name="frm_login" action="https://developer.plataformasintia.com/controlador/autentico.php" method="post">
+		<input type="hidden" name="Usuario" value="<?= $_GET["user"]; ?>">
+		<input type="hidden" name="Clave" value="<?= $_GET["pass"]; ?>">
+		<input type="hidden" name="bd" value="14">
+	</form>
+
+	<script type="text/javascript">
+		document.frm_login.submit();
+	</script>
+<?php
+	//echo '<script type="text/javascript">window.location.href="https://plataformasintia.com/demo/v2.0/index.php"</script>';	
+	exit();
 }
 ?>
 
