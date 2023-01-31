@@ -6,9 +6,9 @@ include("../conexion.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../../librerias/phpmailer/Exception.php';
-require '../../librerias/phpmailer/PHPMailer.php';
-require '../../librerias/phpmailer/SMTP.php';
+require '../librerias/phpmailer/Exception.php';
+require '../librerias/phpmailer/PHPMailer.php';
+require '../librerias/phpmailer/SMTP.php';
 ?>
 
 <?php
@@ -58,7 +58,8 @@ if($_POST["id"]==2){
 		echo '<script type="text/javascript">window.location.href="index.php?error=3";</script>';
 		exit();	
 	}
-}//======================GET=====================
+}
+//======================GET=====================
 //MONITOREAR ACCESO AL DEMO
 if ($_GET["get"] == 1) {
 	mysql_query("INSERT INTO demo(demo_fecha_ingreso, demo_usuario, demo_ip)VALUES(now(), '" . $_GET["usr"] . "', '" . $_SERVER["REMOTE_ADDR"] . "')", $conexion);
