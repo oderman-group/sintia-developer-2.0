@@ -1,10 +1,13 @@
 <?php 
 include("../modelo/conexion.php");
+
+$idPaginaInterna = 'GN0002';
+
 if($_SESSION["id"]==""){
-	header("Location:../index.php?s=0");
+	header("Location:../index.php?error=4");
 	exit();
 }
-mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', 'Salida del sistema', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
+mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$_SESSION["id"]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$idPaginaInterna."', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
 
 
 

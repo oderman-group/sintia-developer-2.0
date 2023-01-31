@@ -171,6 +171,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								</div>
 								
 								<div class="col-md-12 col-lg-9">
+									<?php include("../../config-general/mensajes-informativos.php"); ?>
 									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -205,7 +206,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                         <th>#</th>
 														<th>Bloq.</th>
 														<th>ID</th>
-														<th>Usuario</th>
+														<th>Usuario (REP)</th>
 														<th>Nombre</th>
 														<th>Tipo</th>
 														<th>Sesión</th>
@@ -234,6 +235,15 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 
 														$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
 														$numCarga = mysqli_num_rows($consultaNumCarga);
+
+														$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
+														FROM usuarios 
+														WHERE uss_usuario='".$resultado['uss_usuario']."'
+														GROUP BY uss_usuario
+														");
+														$usuarioRepetido = mysqli_fetch_array($consultaUsuariosRepetidos, MYSQLI_BOTH);
+														$avisoRepetido = null;
+														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';
 													 ?>
 													<tr id="Reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -246,8 +256,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															</div>
 														</td>
 														<td><?=$resultado['uss_id'];?></td>
-														<td>
+														<td <?=$avisoRepetido?>>
 															<?=$resultado['uss_usuario'];?>
+															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
 														<td><?=$resultado['uss_nombre'];?></td>
 														<td><?=$resultado['pes_nombre'];?></td>
@@ -263,7 +274,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar <?php //echo $frases[165][$datosUsuarioActual[8]];?></a></li>
+																  <?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
+																  	<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
+																  <?php }?>	
 
 																	  <?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
 																	  	<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
