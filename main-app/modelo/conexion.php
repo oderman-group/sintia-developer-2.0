@@ -1,5 +1,5 @@
 <?php 
-error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+//error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
 
 if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
     session_start();
@@ -28,7 +28,7 @@ include("../../conexion-datos.php");
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
 	session_destroy();
-	header("Location:".$REDIRECT_ROUTE."?error=no_hay_sesion_institucion");
+	header("Location:".$REDIRECT_ROUTE."?error=4");
 	exit();
 }else{
 	
