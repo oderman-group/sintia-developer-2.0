@@ -567,6 +567,9 @@ window.onload = mensajes();
 	
 
 
+<?php 
+if(isset($_GET["idE"])){
+?>
 
 function realizando(){
 
@@ -640,6 +643,7 @@ window.onload = realizando();
 
 window.onload = finalizado();
 
+<?php }?>
 
 
 
