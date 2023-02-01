@@ -188,6 +188,7 @@ if ($_POST["id"] == 23) {
 if ($_POST["id"] == 24) {
 	$consultaUsuarioA = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='" . $_POST["usuario"] . "'");
 	$numUsuarioA = mysqli_num_rows($consultaUsuarioA);
+	validarClave($_POST["clave"]);
 	$datosUsuarioA = mysqli_fetch_array($consultaUsuarioA, MYSQLI_BOTH);
 	if ($numUsuarioA > 0) {
 		echo '<script type="text/javascript">window.location.href="usuarios-agregar.php?error=ER_DT_1&usuario='.$_POST["usuario"].'&nombre='.$_POST["nombre"].'&email='.$_POST["email"].'&celular='.$_POST["celular"].'&genero='.$_POST["genero"].'&tipoUsuario='.$_POST["tipoUsuario"].'";</script>';
