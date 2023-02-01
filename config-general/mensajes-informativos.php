@@ -23,6 +23,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'No se encontró una sesión de usuario activa. Ingrese al sistema nuevamente.';
             break;
 
+            case 5:
+                $tipo = 'danger';
+                $mensaje = 'La clave no cumple con todos los requerimientos:<br>
+                            - Debe tener mínimo 8 caracteres.<br>
+                            - Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos(. y $).';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
