@@ -7,7 +7,7 @@ $resumenEC = mysqli_fetch_array($consultaFinanzas, MYSQLI_BOTH);
 $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 ?>
 
-<body onLoad="listarTareas()" class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md <?=$datosUsuarioActual['uss_tema_header'];?> <?=$datosUsuarioActual['uss_tema_sidebar'];?> 
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md <?=$datosUsuarioActual['uss_tema_header'];?> <?=$datosUsuarioActual['uss_tema_sidebar'];?> 
 			 <?=$datosUsuarioActual['uss_tema_logo'];?>"> <!-- chat-sidebar-open-->
 	
 	
