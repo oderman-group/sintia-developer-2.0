@@ -188,12 +188,12 @@ if ($_POST["id"] == 23) {
 if ($_POST["id"] == 24) {
 	$consultaUsuarioA = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='" . $_POST["usuario"] . "'");
 	$numUsuarioA = mysqli_num_rows($consultaUsuarioA);
-	validarClave($_POST["clave"]);
 	$datosUsuarioA = mysqli_fetch_array($consultaUsuarioA, MYSQLI_BOTH);
 	if ($numUsuarioA > 0) {
 		echo '<script type="text/javascript">window.location.href="usuarios-agregar.php?error=ER_DT_1&usuario='.$_POST["usuario"].'&nombre='.$_POST["nombre"].'&email='.$_POST["email"].'&celular='.$_POST["celular"].'&genero='.$_POST["genero"].'&tipoUsuario='.$_POST["tipoUsuario"].'";</script>';
 		exit();
 	}
+	validarClave($_POST["clave"]);
 	mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_ocupacion, uss_intentos_fallidos)VALUES(
 		'" . $_POST["usuario"] . "',
 		'" . $_POST["clave"] . "',
