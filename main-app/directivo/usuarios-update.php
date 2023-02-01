@@ -7,7 +7,7 @@ include("../compartido/guardar-historial-acciones.php");
 
 $validarClave=validarClave($_POST["clave"]);
 if($validarClave!=true){
-	echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&usuario='.$_POST["usuario"].'&nombre='.$_POST["nombre"].'&email='.$_POST["email"].'&celular='.$_POST["celular"].'&genero='.$_POST["genero"].'&tipoUsuario='.$_POST["tipoUsuario"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.$_POST["idR"].'";</script>';
 	exit();
 }
 
