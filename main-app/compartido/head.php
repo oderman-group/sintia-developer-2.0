@@ -94,15 +94,15 @@ if(isset($idPaginaInterna)){
 	<script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
 	
 	
-	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first --
 	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>	
 	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
-	<!-- mis funciones de Firebase -->
+	<-- mis funciones de Firebase --
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.7/uuid.min.js"></script>
 	<script src="../modelo/conexion-firebase.js"></script>
 	<script src="../compartido/firebase-funciones.js"></script>
-	
+	-->
 	
 	<!-- Axios -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
