@@ -6,7 +6,10 @@ $tiempo_final = microtime(true);
 $tiempo = $tiempo_final - $tiempo_inicial;
 $tiempoMostrar = round($tiempo,3);
 
-$idLogin=$_SESSION['admin'];
+$idLogin=null;
+if(isset($_SESSION['admin'])){
+    $idLogin=$_SESSION['admin'];
+}
 if(isset($_SESSION['docente'])){
     $idLogin=$_SESSION['docente'];
 }
