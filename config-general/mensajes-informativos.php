@@ -98,6 +98,36 @@ if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso']))
             break;
         }
     }
+    
+    /* MENSAJES PARA CURSOS */
+    if(isset($_GET['msgArea'])){
+        switch($_GET['msgArea']){
+            case 1:
+                $tipo = 'success';
+                $mensaje = 'El area fue crada exitosamente.';
+            break;
+
+            case 2:
+                $tipo = 'warning';
+                $mensaje = 'Debe llenar todos los campos.';
+            break;
+
+            case 3:
+                $tipo = 'success';
+                $mensaje = 'El información del area se actualizo exitosamente.';
+            break;
+
+            case 4:
+                $tipo = 'danger';
+                $mensaje = 'El area se elimino exitosamente.';
+            break;
+
+            default:
+                $tipo = 'secondary';
+                $mensaje = 'Error desconocido: '.$_GET['error'];
+            break;
+        }
+    }
 ?>
     
     <div class="alert alert-block <?=$tipo;?>">
