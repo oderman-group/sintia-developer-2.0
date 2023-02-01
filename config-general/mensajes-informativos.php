@@ -74,18 +74,27 @@ if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso']))
         switch($_GET['msgCurso']){
             case 1:
                 $tipo = 'success';
-                $mensaje = 'El curso fue crado exitosamente.</b>';
+                $mensaje = 'El curso fue crado exitosamente.';
             break;
 
             case 2:
                 $tipo = 'warning';
-                $mensaje = 'Debe llenar todos los campos.</b>';
+                $mensaje = 'Debe llenar todos los campos.';
             break;
 
+            case 3:
+                $tipo = 'success';
+                $mensaje = 'El información del curso se actualizo exitosamente.';
+            break;
+
+            case 4:
+                $tipo = 'danger';
+                $mensaje = 'El curso se elimino exitosamente.';
+            break;
 
             default:
-                $tipo = 'success';
-                $mensaje = 'El información del curso se actualizo exitosamente.</b>';
+                $tipo = 'secondary';
+                $mensaje = 'Error desconocido: '.$_GET['error'];
             break;
         }
     }
