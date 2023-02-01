@@ -1,5 +1,5 @@
 <?php
-if(isset($_GET['error']) || isset($_GET['success'])){
+if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso'])){
     /* MENSAJES DE ERROR O INFORMATIVOS */
     if(isset($_GET['error'])){
         switch($_GET['error']){
@@ -67,11 +67,34 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Error desconocido: '.$_GET['error'];
             break;
         }
+    }  
+    
+    /* MENSAJES PARA CURSOS */
+    if(isset($_GET['msgCurso'])){
+        switch($_GET['msgCurso']){
+            case 1:
+                $tipo = 'success';
+                $mensaje = 'El curso fue crado exitosamente.</b>';
+            break;
+
+            case 2:
+                $tipo = 'warning';
+                $mensaje = 'Debe llenar todos los campos.</b>';
+            break;
+
+
+            default:
+                $tipo = 'success';
+                $mensaje = 'El información del curso se actualizo exitosamente.</b>';
+            break;
+        }
     }
 ?>
     
-    <div class="alert alert-<?=$tipo;?>" role="alert">
-        <?=$mensaje;?>
+    <div class="alert alert-block <?=$tipo;?>">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4 class="alert-heading">MENSAJE INFORMATIVO</h4>
+        <p><?=$mensaje;?></p>
     </div>
 
 <?php    
