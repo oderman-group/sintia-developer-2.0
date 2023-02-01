@@ -200,8 +200,7 @@ function validarClave($clave) {
     $validarClave = preg_match($regex, $clave);
 
     if($validarClave === 0){
-		echo '<script type="text/javascript">window.location.href="../directivo/usuarios-agregar.php?error=5";</script>';
-		exit();
+    	return false;
     }else{
     	return true;
     }
