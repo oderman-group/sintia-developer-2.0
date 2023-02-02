@@ -18,6 +18,7 @@ if($periodoActual==4) $periodoActuales = "Final";?>
 $filtro = '';
 if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 $matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 INNER JOIN academico_grados ON gra_id=mat_grado
 INNER JOIN academico_grupos ON gru_id=mat_grupo
@@ -98,9 +99,9 @@ $numero_periodos=$config["conf_periodo"];
  ?>
 
 <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/encabezadoinnovadores.png"><br>
-    <!--<?=$informacion_inst["info_nombre"]?><br>
-    BOLET&Iacute;N DE CALIFICACIONES<br>-->
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
+    <!-- <?=$informacion_inst["info_nombre"]?><br>
+    BOLETÍN DE CALIFICACIONES<br> -->
 </div> 
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">

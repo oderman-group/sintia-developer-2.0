@@ -20,6 +20,7 @@ if (is_numeric($_GET["id"])) {
 if (is_numeric($_REQUEST["curso"])) {
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
+if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 $matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 INNER JOIN academico_grados ON gra_id=mat_grado
 INNER JOIN academico_grupos ON gru_id=mat_grupo
@@ -81,7 +82,11 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
         <div style="margin-bottom: 10px;">  
 
-            <div align="center"><img src="encabezadoellen.png" width="95%"></div>
+            <div align="center">
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
+    <!-- <?=$informacion_inst["info_nombre"]?><br>
+    BOLETÍN DE CALIFICACIONES<br> -->
+</div>
 
             <div>
                 <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 14px;">

@@ -16,6 +16,7 @@ if($periodoActual==4) $periodoActuales = "Final";
 $filtro = '';
 if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 $matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 INNER JOIN academico_grados ON gra_id=mat_grado
 INNER JOIN academico_grupos ON gru_id=mat_grupo
