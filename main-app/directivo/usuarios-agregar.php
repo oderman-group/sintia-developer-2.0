@@ -53,7 +53,7 @@ if(isset($_GET['tipoUsuario'])){
 <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script type="application/javascript">
 $(document).ready(function() {
-    $("#usuario").on("keyup", function() {
+    $("#usuario").on("blur", function() {
         var usuario = $("#usuario").val();
         var dataString = 'usuario=' + usuario;
 		
@@ -81,7 +81,7 @@ $(document).ready(function() {
 	 }
     });
 
-    $("#email").on("keyup", function() {
+    $("#email").on("blur", function() {
         var email = $("#email").val();
         var dataString = 'email=' + email;
 
@@ -182,8 +182,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Email</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="email" id="email" autofocus class="form-control"
-                                                value="<?=$datosEditar['uss_email'];?>">
+                                            <input type="text" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>">
                                             <span style="color: blue; font-size: 15px;" id="respuestaEmail"></span>
                                         </div>
                                     </div>
