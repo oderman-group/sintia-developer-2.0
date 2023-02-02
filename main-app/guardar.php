@@ -1,22 +1,22 @@
-<?php 
-//Consulta
+<?php
+include("../conexion.php");
 ?>
 
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../../librerias/phpmailer/Exception.php';
-require '../../librerias/phpmailer/PHPMailer.php';
-require '../../librerias/phpmailer/SMTP.php';
+require '../librerias/phpmailer/Exception.php';
+require '../librerias/phpmailer/PHPMailer.php';
+require '../librerias/phpmailer/SMTP.php';
 ?>
 
 <?php
 //RECORDAR CLAVE
 if($_POST["id"]==2){
-	$usuario = mysql_query("SELECT * FROM usuarios WHERE uss_email='".$_POST["email"]."'",$conexion);
-	$nU = mysql_num_rows($usuario);
-	$dU = mysql_fetch_array($usuario);
+	$usuario = mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_email='".$_POST["email"]."'");
+	$nU = mysqli_num_rows($usuario);
+	$dU = mysqli_fetch_array($usuario, MYSQLI_BOTH);
 	if($nU>0){
 		//INICIO ENVÍO DE MENSAJE
 		$tituloMsj = "¡".strtoupper($dU["uss_nombre"])." TUS CREDENCIALES!";
@@ -58,6 +58,25 @@ if($_POST["id"]==2){
 		echo '<script type="text/javascript">window.location.href="index.php?error=3";</script>';
 		exit();	
 	}
+}
+//======================GET=====================
+//MONITOREAR ACCESO AL DEMO
+if ($_GET["get"] == 1) {
+	mysqli_query($conexion,"INSERT INTO demo(demo_fecha_ingreso, demo_usuario, demo_ip)VALUES(now(), '" . $_GET["usr"] . "', '" . $_SERVER["REMOTE_ADDR"] . "')");
+	?>
+
+	<form name="frm_login" action="https://developer.plataformasintia.com/app-sintia/main-app/controlador/autentico.php" method="post">
+		<input type="hidden" name="Usuario" value="<?= $_GET["user"]; ?>">
+		<input type="hidden" name="Clave" value="<?= $_GET["pass"]; ?>">
+		<input type="hidden" name="bd" value="22">
+	</form>
+
+	<script type="text/javascript">
+		document.frm_login.submit();
+	</script>
+<?php
+	//echo '<script type="text/javascript">window.location.href="https://plataformasintia.com/demo/v2.0/index.php"</script>';	
+	exit();
 }
 ?>
 
