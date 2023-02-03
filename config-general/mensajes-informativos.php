@@ -1,5 +1,5 @@
 <?php
-if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso']) || isset($_GET['msgArea']) || isset($_GET['msgAsignatura'])){
+if(isset($_GET['error']) || isset($_GET['success'])){
     /* MENSAJES DE ERROR O INFORMATIVOS */
     if(isset($_GET['error'])){
         switch($_GET['error']){
@@ -40,6 +40,16 @@ if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso']) 
                 $mensaje = 'No tienes permiso para editar a este usuario: <b>' . $_GET["usuario"] . '</b>';
             break;
 
+            case 'ER_DT_3':
+                $tipo = 'danger';
+                $mensaje = 'El registro se elimino exitosamente.';
+            break;
+
+            case 'ER_DT_4':
+                $tipo = 'warning';
+                $mensaje = 'Debe llenar todos los campos.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -61,96 +71,6 @@ if(isset($_GET['error']) || isset($_GET['success']) || isset($_GET['msgCurso']) 
                 $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
             break;
 
-
-            default:
-                $tipo = 'secondary';
-                $mensaje = 'Error desconocido: '.$_GET['error'];
-            break;
-        }
-    }  
-    
-    /* MENSAJES PARA CURSOS */
-    if(isset($_GET['msgCurso'])){
-        switch($_GET['msgCurso']){
-            case 1:
-                $tipo = 'success';
-                $mensaje = 'El curso fue crado exitosamente.';
-            break;
-
-            case 2:
-                $tipo = 'warning';
-                $mensaje = 'Debe llenar todos los campos.';
-            break;
-
-            case 3:
-                $tipo = 'success';
-                $mensaje = 'El información del curso se actualizo exitosamente.';
-            break;
-
-            case 4:
-                $tipo = 'danger';
-                $mensaje = 'El curso se elimino exitosamente.';
-            break;
-
-            default:
-                $tipo = 'secondary';
-                $mensaje = 'Error desconocido: '.$_GET['error'];
-            break;
-        }
-    }
-    
-    /* MENSAJES PARA AREAS */
-    if(isset($_GET['msgArea'])){
-        switch($_GET['msgArea']){
-            case 1:
-                $tipo = 'success';
-                $mensaje = 'El area fue crada exitosamente.';
-            break;
-
-            case 2:
-                $tipo = 'warning';
-                $mensaje = 'Debe llenar todos los campos.';
-            break;
-
-            case 3:
-                $tipo = 'success';
-                $mensaje = 'El información del area se actualizo exitosamente.';
-            break;
-
-            case 4:
-                $tipo = 'danger';
-                $mensaje = 'El area se elimino exitosamente.';
-            break;
-
-            default:
-                $tipo = 'secondary';
-                $mensaje = 'Error desconocido: '.$_GET['error'];
-            break;
-        }
-    }
-    
-    /* MENSAJES PARA ASIGNATURAS */
-    if(isset($_GET['msgAsignatura'])){
-        switch($_GET['msgAsignatura']){
-            case 1:
-                $tipo = 'success';
-                $mensaje = 'La asignatura fue crada exitosamente.';
-            break;
-
-            case 2:
-                $tipo = 'warning';
-                $mensaje = 'Debe llenar todos los campos.';
-            break;
-
-            case 3:
-                $tipo = 'success';
-                $mensaje = 'La información de la asignatura se actualizo exitosamente.';
-            break;
-
-            case 4:
-                $tipo = 'danger';
-                $mensaje = 'La asignatura se elimino exitosamente.';
-            break;
 
             default:
                 $tipo = 'secondary';
