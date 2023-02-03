@@ -17,7 +17,7 @@ include("../modelo/conexion.php");
 	}
 
 	$consultaResult=mysqli_query($conexion, "SELECT MAX(mat_matricula)+1 AS num_mat FROM academico_matriculas");
-	$result_numMat=mysql_fetch_array($consultaResult, MYSQLI_BOTH);
+	$result_numMat=mysqli_fetch_array($consultaResult, MYSQLI_BOTH);
 	if($result_numMat[0]=="") $result_numMat[0]=$config[1]."1";
 	//COMPRBAR QUE NO SE VAYA A REPETIR EL NUMERO DE LA MATRICULA
 	$i=1;
@@ -42,7 +42,7 @@ include("../modelo/conexion.php");
 
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 	$acudienteNum = mysqli_num_rows($acudienteConsulta);
-	$acudienteDatos = mysql_fetch_array($acudienteConsulta, MYSQLI_BOTH);
+	$acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 	//PREGUNTAMOS SI EL ACUDIENTE EXISTE
 	if($acudienteNum>0){			
 		$idAcudiente = $acudienteDatos[0];

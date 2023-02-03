@@ -130,7 +130,7 @@ if(
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" selected>--Ninguno--</option>
 													<?php
-													while($opcionesDatos = mysql_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$recursoPropio = '';
 														if($opcionesDatos['act_id_carga']==$cargaConsultaActual)$recursoPropio = ' - MIO';
 													?>
