@@ -12,7 +12,9 @@ include("../modelo/conexion.php");
 	$consultaRes=mysqli_query($conexion, "SELECT MAX(uss_id)+1 as iduss FROM usuarios;");
 	$res_consultaid_acu=mysqli_fetch_array($consultaRes, MYSQLI_BOTH);
 
-	require_once("apis-sion-modify-student.php");
+	if($config['conf_id_institucion']==1){
+		require_once("apis-sion-modify-student.php");
+	}
 
 	//Actualiza el usuario
 	if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
