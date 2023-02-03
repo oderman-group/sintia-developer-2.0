@@ -26,33 +26,26 @@
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
 
 	<script type="application/javascript">
+		function nuevoEstudiante(enviada){
+			var nDoct = enviada.value;
 
+			if(nDoct!=""){
+				$('#nDocu').empty().hide().html("Validado documento...").show(1);
 
-       function nuevoEstudiante(enviada){
-		var nDoct = "nDoct"	
-		var documento = enviada.title;
+				datos = "nDoct="+(nDoct);
+					$.ajax({
+					type: "POST",
+					url: "ajax-estudiantes-agregar.php",
+					data: datos,
+					success: function(data){
+						$('#nDocu').empty().hide().html(data).show(1);
+					}
 
-		$('#nDocu').empty().hide().html("Guardando información, espere por favor...").show(1);
+				});
 
-               datos = "documento="+(documento)+
-			           "&nDoct="+(nDoct);
-                        $.ajax({
-	                      type: "POST",
-	                      url: "ajax-estudiantes-agregar.php",
-	                      data: datos,
-                          success: function(data){
-		                    $('#nDocu').empty().hide().html(data).show(1);
-     	                  }
-
-                    });
-
-         }
-
-
-
-</script>
-
-<?php echo $_GET["nDoct"]; exit(); ?>
+			}
+		}
+	</script>
 
 </head>
 
@@ -135,7 +128,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento</label>
 												<div class="col-sm-4">
-													<input type="text" size="5" maxlength="3" name="nDoc" class="form-control" autocomplete="off"  title="1" tabindex="<?=$contReg;?>">
+													<input type="text" name="nDoc" class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
 												</div>
 
 											</div>	
