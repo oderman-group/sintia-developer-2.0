@@ -6,5 +6,5 @@
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="cursos.php?msgCurso=4";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?error=ER_DT_3";</script>';
 	exit();
