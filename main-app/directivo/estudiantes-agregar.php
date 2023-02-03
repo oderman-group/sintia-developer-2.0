@@ -12,6 +12,7 @@
     <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 	<link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
 	<!-- favicon -->
     <link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
@@ -24,8 +25,39 @@
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
 
+	<script type="application/javascript">
+
+
+       function nuevoEstudiante(enviada){
+		var nDoct = "nDoct"	
+		var documento = enviada.title;
+
+		$('#nDocu').empty().hide().html("Guardando información, espere por favor...").show(1);
+
+               datos = "documento="+(documento)+
+			           "&nDoct="+(nDoct);
+                        $.ajax({
+	                      type: "POST",
+	                      url: "ajax-estudiantes-agregar.php",
+	                      data: datos,
+                          success: function(data){
+		                    $('#nDocu').empty().hide().html(data).show(1);
+     	                  }
+
+                    });
+
+         }
+
+
+
+</script>
+
+<?php echo $_GET["nDoct"]; exit(); ?>
+
 </head>
+
 <!-- END HEAD -->
+
 <?php include("../compartido/body.php");?>
     <div class="page-wrapper">
         <!-- start header -->
@@ -35,6 +67,7 @@
         <!-- start page container -->
         <div class="page-container">
  			<?php include("../compartido/menu.php");?>
+
             <div class="page-content-wrapper">
                 <div class="page-content">
                     <div class="page-bar">
@@ -49,6 +82,15 @@
                         </div>
                     </div>
 
+					
+					<div class="card-body">
+
+                        <div class="row" style="margin-bottom: 10px;">
+                           	<div class="col-sm-12" align="center">
+	                         	<p style="color: darkblue;"></p>
+	                        </div>
+                        </div>
+						<span style="color: blue; font-size: 15px;" id="nDocu"></span>
                          
                     <!-- wizard with validation-->
                     <div class="row">
@@ -57,6 +99,11 @@
                                  <div class="card-head">
                                      <header>Matrículas</header>
                                  </div>
+
+								 <div class="card-body">
+
+                                    
+
                                  <div class="card-body">
                                  	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-guardar.php" method="post">
 									  
@@ -82,12 +129,15 @@
 													</select>
 												</div>
 											</div>
-												
+
+											
+											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento</label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" class="form-control" autocomplete="off">
+													<input type="text" size="5" maxlength="3" name="nDoc" class="form-control" autocomplete="off"  title="1" tabindex="<?=$contReg;?>">
 												</div>
+
 											</div>	
 												
 											<div class="form-group row">
