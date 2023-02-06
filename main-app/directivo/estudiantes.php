@@ -255,6 +255,7 @@
 								</div>
 								
 								<div class="col-md-8 col-lg-9">
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
 									<?php
 										if(isset($_GET['msgsion']) AND $_GET['msgsion']==''){
 										$aler='alert-danger';
