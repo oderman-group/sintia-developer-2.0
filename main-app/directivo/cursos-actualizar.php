@@ -4,7 +4,7 @@
 	
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
-		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
+		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
 	mysqli_query($conexion, "UPDATE academico_grados SET 
@@ -22,5 +22,5 @@
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
 
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
 	exit();

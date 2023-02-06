@@ -369,7 +369,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                         $contador_periodos = 0;
 
-                        mysql_data_seek($consulta_a_mat_per, 0);
+                        mysqli_data_seek($consulta_a_mat_per, 0);
 
                         $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin 
                         INNER JOIN academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
@@ -408,7 +408,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                         if ($numIndicadores > 0) {
 
-                            mysql_data_seek($consulta_a_mat_indicadores, 0);
+                            mysqli_data_seek($consulta_a_mat_indicadores, 0);
 
                             $contador_indicadores = 0;
 

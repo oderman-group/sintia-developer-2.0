@@ -321,7 +321,7 @@ switch($_GET["opcion"]){
 	break;
 }
 
-$num = mysql_num_rows($consulta);
+$num = mysqli_num_rows($consulta);
 $con=1;
 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 	if($resultado[6]=="")

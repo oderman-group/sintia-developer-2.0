@@ -10,16 +10,15 @@ require 'librerias/phpmailer/SMTP.php';
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
-$correosDemo = mysql_query("SELECT DATEDIFF(now(), demo_fecha_ingreso), demo_usuario, uss_nombre, uss_email, uss_ultimo_ingreso FROM demo
+$correosDemo = mysqli_query($conexion,"SELECT DATEDIFF(now(), demo_fecha_ingreso), demo_usuario, uss_nombre, uss_email, uss_ultimo_ingreso FROM demo
 INNER JOIN mobiliar_sintiademo.usuarios ON uss_id=demo_usuario
-WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)
-",$conexion);
+WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
 
 
 
 
 $paraEnviar = 0;
-while($cDemo = mysql_fetch_array($correosDemo)){
+while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	echo $cDemo[0]."<br>";
 	//Correo 2/ 1er día/ ¿Necesitas Ayuda?
 	if($cDemo[0]==1){
@@ -247,30 +246,29 @@ while($cDemo = mysql_fetch_array($correosDemo)){
 
 
 //=====CORREOS PROGRAMADOS DE LAS NOTIFICACIONES A ACUDIENTES=====//
-$correosProg = mysql_query("SELECT * FROM correos
+$correosProg = mysqli_query($conexion,"SELECT * FROM correos
 INNER JOIN instituciones ON ins_id=corr_institucion
 WHERE corr_estado=0 AND corr_usuario IS NOT NULL
 GROUP BY corr_institucion, corr_usuario
-ORDER BY corr_institucion, corr_usuario
-",$conexion);
+ORDER BY corr_institucion, corr_usuario");
 
 
 $mensajesEnviados = 0;
 $mensajesTotales = 0;
-while($cProg = mysql_fetch_array($correosProg)){
+while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 
-	$numeros = mysql_fetch_array(mysql_query("
-	SELECT
+	$consultaNumeros=mysqli_query($conexion,"SELECT
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=1 AND corr_estado=0),
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=2 AND corr_estado=0),
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=3 AND corr_estado=0),
-	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=4 AND corr_estado=0)
-	",$conexion));
+	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=4 AND corr_estado=0)");
+	$numeros = mysqli_fetch_array($consultaNumeros, MYSQLI_BOTH);
 	
 	
 	$institucionAgno = $cProg['ins_bd']."_".date("Y");
 	
-	$acudiente = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$cProg['corr_usuario']."'",$conexion));
+	$consultaAcudiente=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$cProg['corr_usuario']."'");
+	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
 	
 	$tituloMsj = "INFORME DIARIO DE SINTIA";
 	$bgTitulo = "#4086f4";
@@ -305,29 +303,29 @@ while($cProg = mysql_fetch_array($correosProg)){
 			
 	';
 	
-	$correosDatos = mysql_query("SELECT * FROM correos
+	$correosDatos = mysqli_query($conexion,"SELECT * FROM correos
 	WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_estado=0
-	ORDER BY corr_tipo
-	",$conexion);
+	ORDER BY corr_tipo");
 	
 	
 	$novedades = 0; 
 	//Recorrer por institución y por usuario
-	while($cDat = mysql_fetch_array($correosDatos)){	
+	while($cDat = mysqli_fetch_array($correosDatos, MYSQLI_BOTH)){	
 		
 		//De los primeros tipos: 1, 2 y 3
 		if($cDat['corr_tipo']==1 or $cDat['corr_tipo']==2 or $cDat['corr_tipo']==3){
 			
-			$datosRelacionados = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".academico_actividades 
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_actividades 
 			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=act_id_carga
 			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
 			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE act_id='".$cDat["corr_actividad"]."'
-			",$conexion));
+			WHERE act_id='".$cDat["corr_actividad"]."'");
+			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
-			$docente = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'",$conexion));
+			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");
+			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
 			if($datosRelacionados[0]!=""){
@@ -381,29 +379,29 @@ while($cProg = mysql_fetch_array($correosProg)){
 					';
 				}
 				
-				mysql_query("UPDATE correos SET corr_estado=1, corr_fecha_envio=now() WHERE corr_id='".$cDat["corr_id"]."'",$conexion);
+				mysqli_query($conexion,"UPDATE correos SET corr_estado=1, corr_fecha_envio=now() WHERE corr_id='".$cDat["corr_id"]."'");
 				
 				$novedades ++;
 				$mensajesTotales++;
 				
 			}else{
-				mysql_query("UPDATE correos SET corr_observacion='No hay datos relacionados en correos tipo 1, 2, 3.' WHERE corr_id='".$cDat["corr_id"]."'",$conexion);
+				mysqli_query($conexion,"UPDATE correos SET corr_observacion='No hay datos relacionados en correos tipo 1, 2, 3.' WHERE corr_id='".$cDat["corr_id"]."'");
 				
 			}
 		}
 		
 		//Del tipo 4
 		if($cDat['corr_tipo']==4){
-			$datosRelacionados = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".academico_cargas 
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_cargas 
 			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
 			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE car_id='".$cDat["corr_carga"]."'
-			",$conexion));
+			WHERE car_id='".$cDat["corr_carga"]."'");
+			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
-			
-			$docente = mysql_fetch_array(mysql_query("SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'",$conexion));
+			$consultaDocentes=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");
+			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
 			if($datosRelacionados[0]!=""){
@@ -422,13 +420,13 @@ while($cProg = mysql_fetch_array($correosProg)){
 					</p><hr>
 				';
 			
-				mysql_query("UPDATE correos SET corr_estado=1, corr_fecha_envio=now() WHERE corr_id='".$cDat["corr_id"]."'",$conexion);
+				mysqli_query($conexion,"UPDATE correos SET corr_estado=1, corr_fecha_envio=now() WHERE corr_id='".$cDat["corr_id"]."'");
 				
 				$novedades ++;
 				$mensajesTotales++;
 				
 			}else{
-				mysql_query("UPDATE correos SET corr_observacion='No hay datos relacionados en correos tipo 4.' WHERE corr_id='".$cDat["corr_id"]."'",$conexion);
+				mysqli_query($conexion,"UPDATE correos SET corr_observacion='No hay datos relacionados en correos tipo 4.' WHERE corr_id='".$cDat["corr_id"]."'");
 				
 			}
 		}
@@ -466,14 +464,14 @@ while($cProg = mysql_fetch_array($correosProg)){
 				$mail->send();
 				echo 'Mensaje enviado correctamente.';
 			} catch (Exception $e) {
-				mysql_query("INSERT INTO correos_enviados(cenv_fecha, cenv_cantidad, cenv_novedades)VALUES(now(), '".$mensajesEnviados."', '".$mensajesTotales."')",$conexion);
+				mysqli_query($conexion,"INSERT INTO correos_enviados(cenv_fecha, cenv_cantidad, cenv_novedades)VALUES(now(), '".$mensajesEnviados."', '".$mensajesTotales."')");
 				
 				
 				echo "Error: {$mail->ErrorInfo}"; exit();
 			}
 		echo '</div>';
 	}else{
-		mysql_query("UPDATE correos SET corr_observacion='El acudiente no tiene email registrado.' WHERE corr_id='".$cDat["corr_id"]."'",$conexion);
+		mysqli_query($conexion,"UPDATE correos SET corr_observacion='El acudiente no tiene email registrado.' WHERE corr_id='".$cDat["corr_id"]."'");
 		
 	}
 	//FIN ENVÍO DE MENSAJE

@@ -12,7 +12,9 @@ include("../modelo/conexion.php");
 	$consultaRes=mysqli_query($conexion, "SELECT MAX(uss_id)+1 as iduss FROM usuarios;");
 	$res_consultaid_acu=mysqli_fetch_array($consultaRes, MYSQLI_BOTH);
 
-	require_once("apis-sion-modify-student.php");
+	if($config['conf_id_institucion']==1){
+		require_once("apis-sion-modify-student.php");
+	}
 
 	//Actualiza el usuario
 	if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
@@ -102,7 +104,7 @@ include("../modelo/conexion.php");
 		if($_POST["documentoA2"]!=""){
 			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2)VALUES('".$_POST["documentoA2"]."','1234',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."')");
 			
-			$idAcudiente2 = mysql_insert_id();
+			$idAcudiente2 = mysqli_insert_id($conexion);
 			
 			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."'WHERE mat_id=".$_POST["id"].";");
 			
