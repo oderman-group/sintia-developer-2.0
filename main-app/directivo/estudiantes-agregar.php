@@ -53,6 +53,7 @@
                     <!-- wizard with validation-->
                     <div class="row">
                     	<div class="col-sm-12">
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
                              <div class="card-box">
                                  <div class="card-head">
                                      <header>Matrículas</header>
