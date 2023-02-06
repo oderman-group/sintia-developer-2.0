@@ -110,6 +110,8 @@ include("../modelo/conexion.php");
 			
 		}
 	}
+	$estadoSintia=true;
+	$mensajeSintia='La información del estudiante se actualizo correctamente en SINTIA.';
 
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&msgsintia=1";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
 	exit();

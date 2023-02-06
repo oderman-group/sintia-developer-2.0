@@ -74,5 +74,5 @@ include("../modelo/conexion.php");
 		$estadoSintia=true;
 		$mensajeSintia='El estudiante fue creado correctamente en SINTIA.';
 	}
-	echo '<script type="text/javascript">window.location.href="estudiantes.php?stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$idEstudiante.'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
 	exit();
