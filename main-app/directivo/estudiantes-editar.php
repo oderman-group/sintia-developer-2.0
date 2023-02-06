@@ -64,25 +64,30 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 							<?php
 							if($config['conf_id_institucion']==1){
 								if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
-								$aler='alert-success';
+									$aler='alert-success';
+									$mensajeSion=$_GET['msgsion'];
 									if($_GET['stadsion']!=true){
 										$aler='alert-danger';
 									}
-							?>
-								<div class="alert alert-block <?=$aler;?>">
-									<button type="button" class="close" data-dismiss="alert">×</button>
-									<h4 class="alert-heading">SION!</h4>
-									<p><?=$_GET['msgsion'];?></p>
-								</div>
-							<?php 
+								?>
+									<div class="alert alert-block <?=$aler;?>">
+										<button type="button" class="close" data-dismiss="alert">×</button>
+										<h4 class="alert-heading">SION!</h4>
+										<p><?=$mensajeSion;?></p>
+									</div>
+								<?php 
 								}
 							}
 							if(isset($_GET['msgsintia'])){
+								$aler='alert-success';
+								if($_GET['stadsintia']!=true){
+								$aler='alert-danger';
+								}
 							?>
-							<div class="alert alert-block alert-success">
+							<div class="alert alert-block <?=$aler;?>">
 								<button type="button" class="close" data-dismiss="alert">×</button>
 								<h4 class="alert-heading">SINTIA!</h4>
-								<p>La información del estudiante se actualizo correctamente en SINTIA.</p>
+								<p><?=$_GET['msgsintia'];?></p>
 							</div>
 							<?php }?>
                              <div class="card-box">
