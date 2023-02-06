@@ -181,7 +181,7 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 
 while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){ 
 	$contador_periodos=0;
-	mysql_data_seek($consulta_a_mat_per,0);
+	mysqli_data_seek($consulta_a_mat_per,0);
 	//CONSULTAR NOTA POR PERIODO
 	while($fila3=mysqli_fetch_array($consulta_a_mat_per, MYSQLI_BOTH)){
 		if($fila2["mat_id"]==$fila3["mat_id"]){
@@ -240,13 +240,13 @@ for($l=1;$l<=$numero_periodos;$l++){
 				echo $r_desempeno["notip_nombre"];
 				}
 			}
-			mysql_data_seek($consulta_desempeno,0);
+			mysqli_data_seek($consulta_desempeno,0);
 		 ?></td>
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($r_ausencias[0]>0){ echo $r_ausencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
 	</tr>
 <?php
 if($numIndicadores>0){
-	 mysql_data_seek($consulta_a_mat_indicadores,0);
+	 mysqli_data_seek($consulta_a_mat_indicadores,0);
 	 $contador_indicadores=0;
 	while($fila4=mysqli_fetch_array($consulta_a_mat_indicadores, MYSQLI_BOTH)){
 	if($fila4["mat_id"]==$fila2["mat_id"]){

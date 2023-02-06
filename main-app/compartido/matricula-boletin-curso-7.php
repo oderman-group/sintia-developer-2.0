@@ -128,7 +128,7 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
 				
                 $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin 
                 INNER JOIN academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-                WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'")
+                WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'");
                 $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 				
                 $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM academico_clases 
@@ -138,7 +138,11 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
 				
 				$promedioMateria +=$datosBoletin['bol_nota'];
             ?>
-                <td align="center"><?=round($datosAusencias[0],0);?></td>
+                <td align="center"><?php 
+                if ($datosAusencias[0]>0) {
+                    echo round($datosAusencias[0],0);
+                } 
+                ?></td>
                 <td align="center"><?=$datosBoletin['bol_nota'];?></td>
                 <td align="center"><?=$datosBoletin['notip_nombre'];?></td>
             <?php 

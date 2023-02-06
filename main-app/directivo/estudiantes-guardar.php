@@ -17,7 +17,7 @@ include("../modelo/conexion.php");
 	}
 
 	$consultaResult=mysqli_query($conexion, "SELECT MAX(mat_matricula)+1 AS num_mat FROM academico_matriculas");
-	$result_numMat=mysql_fetch_array($consultaResult, MYSQLI_BOTH);
+	$result_numMat=mysqli_fetch_array($consultaResult, MYSQLI_BOTH);
 	if($result_numMat[0]=="") $result_numMat[0]=$config[1]."1";
 	//COMPRBAR QUE NO SE VAYA A REPETIR EL NUMERO DE LA MATRICULA
 	$i=1;
@@ -32,7 +32,9 @@ include("../modelo/conexion.php");
 	if($_POST["va_matricula"]=="") $_POST["va_matricula"]=0;
 	if($_POST["grupo"]=="") $_POST["grupo"]=4;
 
-	require_once("apis-sion-create-student.php");
+	if($config['conf_id_institucion']==1){
+		require_once("apis-sion-create-student.php");
+	}
 
 	//INSERTAMOS EL USUARIO ESTUDIANTE
 	mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2)VALUES('".	$_POST["nDoc"]."','1234',4,'".$_POST["nombres"]."',0,'".strtolower($_POST["email"])."','".$_POST["fNac"]."',0,'".$_POST["genero"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green','".$_POST["tipoD"]."','".$_POST["lugarD"]."', '".$_POST["direccion"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', '".$_POST["nombre2"]."')");
@@ -40,7 +42,7 @@ include("../modelo/conexion.php");
 
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 	$acudienteNum = mysqli_num_rows($acudienteConsulta);
-	$acudienteDatos = mysql_fetch_array($acudienteConsulta, MYSQLI_BOTH);
+	$acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 	//PREGUNTAMOS SI EL ACUDIENTE EXISTE
 	if($acudienteNum>0){			
 		$idAcudiente = $acudienteDatos[0];

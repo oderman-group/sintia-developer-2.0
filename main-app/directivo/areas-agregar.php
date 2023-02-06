@@ -48,6 +48,7 @@
                         </div>
 						
                         <div class="col-sm-9">
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
 								<div class="panel">
