@@ -161,7 +161,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Folio Y Tesorer&iacute;a</label>
+												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
 													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[34];?>">
 												</div>
