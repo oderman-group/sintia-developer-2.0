@@ -5,8 +5,8 @@ include("../modelo/conexion.php");
 	$_POST["ciudadR"] = trim($_POST["ciudadR"]);
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if(trim($_POST["tipoD"])=="" or trim($_POST["nDoc"])=="" or trim($_POST["genero"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["apellido2"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["grupo"])=="" or trim($_POST["tipoEst"])=="" or trim($_POST["matestM"])==""){
-		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos del estudiante.</samp>";
+	if(trim($_POST["tipoD"])=="" or trim($_POST["nDoc"])=="" or trim($_POST["genero"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["grupo"])=="" or trim($_POST["tipoEst"])=="" or trim($_POST["matestM"])==""){
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
 	$consultaRes=mysqli_query($conexion, "SELECT MAX(uss_id)+1 as iduss FROM usuarios;");
