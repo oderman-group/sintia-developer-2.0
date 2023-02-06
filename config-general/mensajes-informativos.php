@@ -42,7 +42,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_3':
                 $tipo = 'danger';
-                $mensaje = 'El registro se elimino exitosamente.';
+                $mensaje = 'El registro se eliminó exitosamente.';
             break;
 
             case 'ER_DT_4':
