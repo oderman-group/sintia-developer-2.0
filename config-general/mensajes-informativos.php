@@ -86,8 +86,6 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 ?>
     
     <div class="alert alert-block alert-<?=$tipo;?>">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <h4 class="alert-heading">MENSAJE INFORMATIVO</h4>
         <p><?=$mensaje;?></p>
     </div>
 
