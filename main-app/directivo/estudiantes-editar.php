@@ -60,22 +60,25 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
                     <!-- wizard with validation-->
                     <div class="row">
                     	<div class="col-sm-12">
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
 							<?php
+							if($config['conf_id_institucion']==1){
 								if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
 								$aler='alert-success';
-								if($_GET['stadsion']!=true){
-									$aler='alert-danger';
-								}
-										?>
-							<div class="alert alert-block <?=$aler;?>">
-								<button type="button" class="close" data-dismiss="alert">×</button>
-								<h4 class="alert-heading">SION!</h4>
-								<p><?=$_GET['msgsion'];?></p>
-							</div>
+									if($_GET['stadsion']!=true){
+										$aler='alert-danger';
+									}
+							?>
+								<div class="alert alert-block <?=$aler;?>">
+									<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4 class="alert-heading">SION!</h4>
+									<p><?=$_GET['msgsion'];?></p>
+								</div>
 							<?php 
+								}
 							}
 							if(isset($_GET['msgsintia'])){
-										?>
+							?>
 							<div class="alert alert-block alert-success">
 								<button type="button" class="close" data-dismiss="alert">×</button>
 								<h4 class="alert-heading">SINTIA!</h4>

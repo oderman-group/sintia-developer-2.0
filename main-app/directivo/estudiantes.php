@@ -257,30 +257,32 @@
 								<div class="col-md-8 col-lg-9">
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 									<?php
+									if($config['conf_id_institucion']==1){
 										if(isset($_GET['msgsion']) AND $_GET['msgsion']==''){
 										$aler='alert-danger';
 										$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
-												?>
-									<div class="alert alert-block <?=$aler;?>">
-										<button type="button" class="close" data-dismiss="alert">×</button>
-										<h4 class="alert-heading">SION!</h4>
-										<p><?=$mensajeSion;?></p>
-									</div>
+									?>
+										<div class="alert alert-block <?=$aler;?>">
+											<button type="button" class="close" data-dismiss="alert">×</button>
+											<h4 class="alert-heading">SION!</h4>
+											<p><?=$mensajeSion;?></p>
+										</div>
 									<?php 
 									}
-										if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
+									if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
 										$aler='alert-success';
 										$mensajeSion=$_GET['msgsion'];
 										if($_GET['stadsion']!=true){
 											$aler='alert-danger';
 										}
-												?>
-									<div class="alert alert-block <?=$aler;?>">
-										<button type="button" class="close" data-dismiss="alert">×</button>
-										<h4 class="alert-heading">SION!</h4>
-										<p><?=$mensajeSion;?></p>
-									</div>
+									?>
+										<div class="alert alert-block <?=$aler;?>">
+											<button type="button" class="close" data-dismiss="alert">×</button>
+											<h4 class="alert-heading">SION!</h4>
+											<p><?=$mensajeSion;?></p>
+										</div>
 									<?php 
+									}
 									}
 									if(isset($_GET['msgsintia'])){
 										$aler='alert-success';
