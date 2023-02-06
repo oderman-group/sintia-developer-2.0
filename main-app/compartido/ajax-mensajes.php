@@ -21,7 +21,7 @@ $mensajesNumero = mysqli_num_rows($mensajesConsulta);
                                     <ul class="dropdown-menu-list small-slimscroll-style" data-handle-color="#637283">
 										
 										<?php
-										while($mensajesDatos = mysql_fetch_array($mensajesConsulta)){
+										while($mensajesDatos = mysqli_fetch_array($mensajesConsulta, MYSQLI_BOTH)){
 										?>
 											<li>
 												<a href="mensajes-ver.php?idR=<?=$mensajesDatos['ema_id'];?>">

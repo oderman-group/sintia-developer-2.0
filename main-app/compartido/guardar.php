@@ -893,7 +893,7 @@ if ($_POST["id"] == 29) {
 	include("../compartido/reporte-errores.php");
 	
 	//PARA NOTAS DE COMPORTAMIENTO
-	$numD = mysql_num_rows( mysqli_query($conexion, "SELECT * FROM disiplina_nota
+	$numD = mysqli_num_rows( mysqli_query($conexion, "SELECT * FROM disiplina_nota
 	WHERE dn_cod_estudiante='".$_POST["estudiante"]."' AND dn_periodo='".$_POST["periodo"]."'"));
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");

@@ -316,7 +316,7 @@ if($_POST["operacion"]==3){
 		".$datosInsert."
 		");
 		
-		//echo "Este es:". $idNotify = mysql_insert_id(); exit();
+		//echo "Este es:". $idNotify = mysqli_insert_id($conexion); exit();
 	}
 	
 	if($accionBD==2){

@@ -23,7 +23,7 @@
 				WHERE evp_id_evaluacion='".$_GET["idE"]."'
 				");
 				
-				$cantPreguntas = mysql_num_rows($preguntasConsulta);
+				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
 				//Si la evaluación no tiene preguntas, lo mandamos para la pagina informativa
 				if($cantPreguntas==0){
@@ -32,7 +32,7 @@
 				}
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-				$nume = mysql_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
+				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
 				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
 				
 				if($nume==0){
@@ -41,7 +41,7 @@
 				}
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-				$estadoSesionEvaluacion = mysql_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
+				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
 				WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
@@ -140,7 +140,7 @@
 												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
 												");
 												
-												$cantRespuestas = mysql_num_rows($respuestasConsulta);
+												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
 													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual[8]].".</span>";
 													continue;
