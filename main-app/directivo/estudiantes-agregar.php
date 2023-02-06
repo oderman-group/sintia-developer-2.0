@@ -393,7 +393,7 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">ID Acudiente</label>
+												<label class="col-sm-2 control-label">Documento</label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA" class="form-control" autocomplete="off">
 												</div>

@@ -643,7 +643,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">ID Acudiente</label>
+												<label class="col-sm-2 control-label">Documento/label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>">
 												</div>
@@ -739,7 +739,7 @@ $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BO
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">ID Acudiente</label>
+												<label class="col-sm-2 control-label">Documento</label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2[0])){ echo $acudiente2[0];}?>">
 												</div>
