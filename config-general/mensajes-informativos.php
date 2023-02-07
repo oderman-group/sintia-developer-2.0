@@ -50,6 +50,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Debe llenar todos los campos.';
             break;
 
+            case 'ER_DT_5':
+                $tipo = 'warning';
+                $mensaje = 'Este estudiante ya se ecuentra creado.';
+            break;
+
+            case 'ER_DT_6':
+                $tipo = 'warning';
+                $mensaje = 'El acudiente no existe, por tanto debe llenar todos los campos para registrarlo.';
+            break;
+
 
             default:
                 $tipo = 'secondary';

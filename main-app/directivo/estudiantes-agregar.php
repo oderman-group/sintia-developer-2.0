@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0084';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php include("includes/variables-estudiantes-agregar.php");?>
     <!-- Material Design Lite CSS -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
 	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
@@ -115,11 +116,12 @@
 													?>
 													<select class="form-control  select2" name="tipoD">
 														<option value="">Seleccione una opción</option>
-														<?php
-														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['ogen_nombre'];?></option>
-														<?php }?>
+														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['tipoD'])
+															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+														else
+															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -129,7 +131,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
+													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)" value="<?=$datosMatricula['documento'];?>">
 												</div>
 
 											</div>	
@@ -145,7 +147,7 @@
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$opg['ciu_id'];?>" ><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarEx']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -155,12 +157,12 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
-													<input type="text" name="folio" class="form-control" autocomplete="off">
+													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosMatricula['folio'];?>">
 												</div>
 												
 												<label class="col-sm-2 control-label">Codigo Tesoreria</label>
 												<div class="col-sm-2">
-													<input type="text" name="codTesoreria" class="form-control" autocomplete="off">
+													<input type="text" name="codTesoreria" class="form-control" autocomplete="off" value="<?=$datosMatricula['tesoreria'];?>">
 												</div>
 											</div>
 											<?php }?>
@@ -168,31 +170,31 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off" required>
+													<input type="text" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido2" class="form-control" autocomplete="off">
+													<input type="text" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nombres" class="form-control" autocomplete="off" required>
+													<input type="text" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-4">
-													<input type="text" name="nombre2" class="form-control" autocomplete="off">
+													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Email</label>
 												<div class="col-sm-6">
-													<input type="text" name="email" class="form-control" value="notiene@notiene.com" autocomplete="off">
+													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off">
 												</div>
 											</div>
 											
@@ -200,7 +202,7 @@
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-4">
 													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-													<input class="form-control" size="16" type="text">
+													<input class="form-control" size="16" type="text" value="<?=$datosMatricula['nacimiento'];?>">
 													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 													</div>
 												</div>
@@ -218,7 +220,7 @@
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$opg['ciu_id'];?>" ><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarNac']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -231,10 +233,12 @@
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-														while($opg = mysqli_fetch_array($op, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
-														<?php }?>
+														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['genero'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -243,14 +247,14 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo Sanguineo</label>
 												<div class="col-sm-2">
-													<input type="text" name="tipoSangre" class="form-control" autocomplete="off">
+													<input type="text" name="tipoSangre" class="form-control" autocomplete="off" value="<?=$datosMatricula['tipoSangre'];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">EPS</label>
 												<div class="col-sm-2">
-													<input type="text" name="eps" class="form-control" autocomplete="off">
+													<input type="text" name="eps" class="form-control" autocomplete="off" value="<?=$datosMatricula['eps'];?>">
 												</div>
 											</div>
 												
@@ -259,8 +263,8 @@
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="inclusion">
 														<option value="">Seleccione una opción</option>
-														<option value="1">Si</option>
-														<option value="0" selected>No</option>
+														<option value="1"<?php if ($datosMatricula['inclusion']==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosMatricula['inclusion']==0){echo "selected";}?>>No</option>
 													</select>
 												</div>
 												
@@ -268,8 +272,8 @@
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="extran">
 														<option value="">Seleccione una opción</option>
-														<option value="1">Si</option>
-														<option value="0" selected>No</option>
+														<option value="1"<?php if ($datosMatricula['extran']==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosMatricula['extran']==0){echo "selected";}?>>No</option>
 													</select>
 												</div>
 											</div>
@@ -281,10 +285,12 @@
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
-														while($opg = mysqli_fetch_array($op, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
-														<?php }?>
+														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['religion'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -293,10 +299,10 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
 												<div class="col-sm-4">
-													<input type="text" name="direccion" class="form-control" autocomplete="off">
+													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosMatricula['direcion'];?>">
 												</div>
 												<div class="col-sm-4">
-													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off">
+													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosMatricula['barrio'];?>">
 												</div>
 											</div>
 												
@@ -311,10 +317,15 @@
 														ORDER BY ciu_nombre
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
+															$selected='';
 															$opg['ciu_codigo'] = trim($opg['ciu_codigo']);
-														?>
-                                                        	<option value="<?=$opg['ciu_codigo'];?>"><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
-														<?php }?>
+															if($opg['ciu_codigo']==$datosMatricula['ciudadR']){
+																$selected='selected';
+															}
+	
+															?>
+															<option value="<?=$opg['ciu_codigo'];?>" <?=$selected;?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+															<?php }?>
 													</select>
 												</div>
 											</div>
@@ -326,10 +337,12 @@
 														<option value="">Seleccione una opción</option>
 														<?php
 															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
-														while($opg = mysqli_fetch_array($op, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
-														<?php }?>
+														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['estrato'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -338,13 +351,13 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
 												<div class="col-sm-2">
-													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off">
+													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosMatricula['telefono'];?>">
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off">
+													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosMatricula['celular'];?>">
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off">
+													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off" value="<?=$datosMatricula['celular2'];?>">
 												</div>
 											</div>								   
 									       
@@ -365,9 +378,11 @@
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gra_nombre'];?></option>
-														<?php }?>
+															if($opcionesDatos[0]==$datosMatricula['grado'])
+																echo '<option value="'.$opcionesDatos[0].'" selected>'.$opcionesDatos[2].'</option>';
+															else
+																echo '<option value="'.$opcionesDatos[0].'">'.$opcionesDatos[2].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -382,10 +397,12 @@
 													<select class="form-control" name="grupo">
 														<option value="">Seleccione una opción</option>
 														<?php
-														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_nombre'];?></option>
-														<?php }?>
+														while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($rv[0]==$datosMatricula['grupo'])
+																echo '<option value="'.$rv[0].'" selected>'.$rv['gru_nombre'].'</option>';
+															else
+																echo '<option value="'.$rv[0].'">'.$rv['gru_nombre'].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -401,15 +418,12 @@
 													<select class="form-control" name="tipoEst">
 														<option value="">Seleccione una opción</option>
 														<?php
-														
-														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															$selected = '';
-															if($opcionesDatos[0] == 128) {
-																$selected = 'selected';
-															}
-														?>
-															<option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['ogen_nombre'];?></option>
-														<?php }?>
+														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['tipoE'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>
@@ -417,7 +431,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>
 												<div class="col-sm-2">
-													<input type="text" name="va_matricula" class="form-control" autocomplete="off">
+													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>">
 												</div>
 											</div>	
 											
@@ -438,22 +452,24 @@
 													<select class="form-control" name="tipoDAcudiente">
 														<option value="">Seleccione una opción</option>
 														<?php
-														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['ogen_nombre'];?></option>
-														<?php }?>
+														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['tipoDocA'])
+															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+														else
+															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 												
 												<label class="col-sm-2 control-label">Documento<span style="color: red;">*</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off" required>
+													<input type="text" name="documentoA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['documentoA'];?>">
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de expedición</label>
-												<div class="col-sm-3">
+												<div class="col-sm-4">
 													<select class="form-control" name="lugarDa">
 														<option value="">Seleccione una opción</option>
 														<?php
@@ -462,15 +478,15 @@
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$opg['ciu_id'];?>" ><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['expedicionA']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
-												</div>	
+												</div>
 
 												<?php if($config['conf_id_institucion']==1){ ?>
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
-													<input type="text" name="ocupacionA" class="form-control" autocomplete="off">
+													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>">
 												</div>
 												<?php }?>
 
@@ -479,24 +495,24 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Primer Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido1A" class="form-control" autocomplete="off">
+													<input type="text" name="apellido1A" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido1A'];?>">
 												</div>
 																							
 												<label class="col-sm-2 control-label">Segundo Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido2A" class="form-control" autocomplete="off">
+													<input type="text" name="apellido2A" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2A'];?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre<span style="color: red;">*</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" class="form-control" autocomplete="off" required>
+													<input type="text" name="nombresA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombreA'];?>">
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombre2A" class="form-control" autocomplete="off">
+													<input type="text" name="nombre2A" class="form-control" autocomplete="off" value="<?=$datosMatricula['documentoA'];?>">
 												</div>
 											</div>	
 												
@@ -513,14 +529,16 @@
 
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
-													<select class="form-control" name="generoA">
+													<select class="form-control  select2" name="generoA">
 														<option value="">Seleccione una opción</option>
 														<?php
-															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-														while($opg = mysqli_fetch_array($op, MYSQLI_BOTH)){
-														?>
-															<option value="<?=$opg[0];?>" ><?=$opg[1];?></option>
-														<?php }?>
+										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['generoA'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 													</select>
 												</div>
 											</div>

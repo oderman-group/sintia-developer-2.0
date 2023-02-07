@@ -6,7 +6,8 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
-	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4";</script>';
+
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
 	exit();
 }
 //VALIDAMOS QUE EL ESTUDIANTE NO SE ENCUENTRE CREADO
@@ -17,7 +18,8 @@ try{
 	exit();
 }
 if(mysqli_num_rows($valiEstudiante)>0){
-	echo "<span style='font-family:Arial; color:red;'>Este estudiante ya se ecuentra creado.</samp>";
+
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_5&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
 	exit();
 }
 
@@ -206,7 +208,8 @@ if($acudienteNum>0){
 else{
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
-		echo "<span style='font-family:Arial; color:red;'>El acudiente no existe, por tanto debe llenar todos los campos para registrarlo.</samp>";
+
+		echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_6&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
 		exit();
 	}
 	if($_POST["generoA"]=="")       $_POST["generoA"]       = 126;
