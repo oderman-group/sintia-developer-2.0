@@ -1,9 +1,23 @@
 <?php
+
+try{
+    $pesoInstituciones=mysqli_query($conexion, "SELECT plns_espacio_gb FROM $baseDatosServicios.instituciones 
+    INNER JOIN $baseDatosServicios.planes_sintia  
+    ON plns_id=ins_id_plan
+    WHERE ins_id='".$config['conf_id_institucion']."'");
+}catch(Exception $e){
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+    exit();
+}
+
+ $peso=mysqli_fetch_array($pesoInstituciones, MYSQLI_BOTH);
+
 $direccionArchivo = ('../files/archivos');
 
  "Total : " . Fsize($direccionArchivo);
-function Fsize($direccionArchivo)
+ function Fsize($direccionArchivo)
 {
+    
     clearstatcache();
     $contadorByte = 0;
     if (is_dir($direccionArchivo)) {
@@ -14,7 +28,7 @@ function Fsize($direccionArchivo)
                         $contadorByte += Fsize($direccionArchivo . "/" . $archivo);
                     } else {
                         $nombreArchivo= "archivo : " . $direccionArchivo . "/" . $archivo . "&nbsp;&nbsp;" . filesize($direccionArchivo . "/" . $archivo) . "<br />";
-                        if (strpos($nombreArchivo, 'mobiliar_coalst')){
+                        if (strpos($nombreArchivo, $_SESSION["inst"])){
                             $contadorByte += sprintf("%u", filesize($direccionArchivo . "/" . $archivo));
                               $nombreArchivo;
                         }
@@ -24,10 +38,13 @@ function Fsize($direccionArchivo)
             closedir($gd);
         }
     }
-    $espacioDisponible=0.021;
     $gb= $contadorByte/1073741824;
     "Carpeta: ".$direccionArchivo."<br>";
-    $porcentaje = ($gb/$espacioDisponible)*100;
+    global $peso;
+
+    
+
+    $porcentaje = ($gb/$peso[0])*100;
 
     if($porcentaje<=50){$colorGrafico='info';}
     elseif($porcentaje>50 and $porcentaje<=80){$colorGrafico='warning';}
@@ -36,7 +53,7 @@ function Fsize($direccionArchivo)
     <div class='states'>
         <div class='info'>
             <div class='desc pull-left'><b>".round($gb, 2.)." GB/</b></div>
-            <div class='desc pull-left'><b>".round($espacioDisponible, 3.)." GB</b></div>
+            <div class='desc pull-left'><b>".round($peso[0], 3.)." GB</b></div>
             <div class='percent pull-right'>".round($porcentaje, 3.)."%</div>
         </div>
     
@@ -49,9 +66,11 @@ function Fsize($direccionArchivo)
     </div>";
 }
 
+
 ?>
 
 <div class="card" style="margin-left:5px; margin-right:5px; padding:5px;">
+<?php sleep(20) ?>
 <td> Uso Del Disco </td>
    <?=Fsize($direccionArchivo)?>
 
