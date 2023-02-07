@@ -127,9 +127,9 @@
 											
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Número de documento</label>
+												<label class="col-sm-2 control-label">Número de documento<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
+													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
 												</div>
 
 											</div>	
@@ -166,9 +166,9 @@
 											<?php }?>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Primer apellido</label>
+												<label class="col-sm-2 control-label">Primer apellido<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off">
+													<input type="text" name="apellido1" class="form-control" autocomplete="off" required>
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
@@ -178,9 +178,9 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Primer Nombre</label>
+												<label class="col-sm-2 control-label">Primer Nombre<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nombres" class="form-control" autocomplete="off">
+													<input type="text" name="nombres" class="form-control" autocomplete="off" required>
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -354,14 +354,14 @@
 									    <fieldset>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Curso</label>
+												<label class="col-sm-2 control-label">Curso<span style="color: red;">*</span></label>
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
 													WHERE gra_estado=1
 													");
 													?>
-													<select class="form-control" name="grado">
+													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -445,9 +445,9 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Documento</label>
+												<label class="col-sm-2 control-label">Documento<span style="color: red;">*</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off">
+													<input type="text" name="documentoA" class="form-control" autocomplete="off" required>
 												</div>
 											</div>
 												
@@ -489,9 +489,9 @@
 											</div>
 
 											<div class="form-group row">												
-												<label class="col-sm-2 control-label">Nombre</label>
+												<label class="col-sm-2 control-label">Nombre<span style="color: red;">*</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" class="form-control" autocomplete="off">
+													<input type="text" name="nombresA" class="form-control" autocomplete="off" required>
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
