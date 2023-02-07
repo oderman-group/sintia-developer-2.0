@@ -12,6 +12,7 @@
     <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 	<link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
 	<!-- favicon -->
     <link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
@@ -24,8 +25,32 @@
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
 
+	<script type="application/javascript">
+		function nuevoEstudiante(enviada){
+			var nDoct = enviada.value;
+
+			if(nDoct!=""){
+				$('#nDocu').empty().hide().html("Validado documento...").show(1);
+
+				datos = "nDoct="+(nDoct);
+					$.ajax({
+					type: "POST",
+					url: "ajax-estudiantes-agregar.php",
+					data: datos,
+					success: function(data){
+						$('#nDocu').empty().hide().html(data).show(1);
+					}
+
+				});
+
+			}
+		}
+	</script>
+
 </head>
+
 <!-- END HEAD -->
+
 <?php include("../compartido/body.php");?>
     <div class="page-wrapper">
         <!-- start header -->
@@ -35,6 +60,7 @@
         <!-- start page container -->
         <div class="page-container">
  			<?php include("../compartido/menu.php");?>
+
             <div class="page-content-wrapper">
                 <div class="page-content">
                     <div class="page-bar">
@@ -49,14 +75,29 @@
                         </div>
                     </div>
 
+					
+					<div class="card-body">
+
+                        <div class="row" style="margin-bottom: 10px;">
+                           	<div class="col-sm-12" align="center">
+	                         	<p style="color: darkblue;"></p>
+	                        </div>
+                        </div>
+						<span style="color: blue; font-size: 15px;" id="nDocu"></span>
                          
                     <!-- wizard with validation-->
                     <div class="row">
                     	<div class="col-sm-12">
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
                              <div class="card-box">
                                  <div class="card-head">
                                      <header>Matrículas</header>
                                  </div>
+
+								 <div class="card-body">
+
+                                    
+
                                  <div class="card-body">
                                  	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-guardar.php" method="post">
 									  
@@ -82,12 +123,15 @@
 													</select>
 												</div>
 											</div>
-												
+
+											
+											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento</label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" class="form-control" autocomplete="off">
+													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
 												</div>
+
 											</div>	
 												
 											<div class="form-group row">
@@ -107,8 +151,9 @@
 												</div>
 											</div>
 											
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Folio Y Tesorer&iacute;a</label>
+												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
 													<input type="text" name="folio" class="form-control" autocomplete="off">
 												</div>
@@ -118,27 +163,28 @@
 													<input type="text" name="codTesoreria" class="form-control" autocomplete="off">
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido</label>
-												<div class="col-sm-2">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off">
+												<div class="col-sm-4">
+													<input type="text" name="apellido1" class="form-control" autocomplete="off" required>
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="apellido2" class="form-control" autocomplete="off">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre</label>
-												<div class="col-sm-2">
-													<input type="text" name="nombres" class="form-control" autocomplete="off">
+												<div class="col-sm-4">
+													<input type="text" name="nombres" class="form-control" autocomplete="off" required>
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="nombre2" class="form-control" autocomplete="off">
 												</div>
 											</div>
@@ -192,7 +238,8 @@
 													</select>
 												</div>
 											</div>
-											
+
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo Sanguineo</label>
 												<div class="col-sm-2">
@@ -213,7 +260,7 @@
 													<select class="form-control  select2" name="inclusion">
 														<option value="">Seleccione una opción</option>
 														<option value="1">Si</option>
-														<option value="0">No</option>
+														<option value="0" selected>No</option>
 													</select>
 												</div>
 												
@@ -222,7 +269,7 @@
 													<select class="form-control  select2" name="extran">
 														<option value="">Seleccione una opción</option>
 														<option value="1">Si</option>
-														<option value="0">No</option>
+														<option value="0" selected>No</option>
 													</select>
 												</div>
 											</div>
@@ -241,6 +288,7 @@
 													</select>
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
@@ -270,7 +318,7 @@
 													</select>
 												</div>
 											</div>
-												
+											<?php if($config['conf_id_institucion']==1){ ?>	
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estrato</label>
 												<div class="col-sm-2">
@@ -285,6 +333,7 @@
 													</select>
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
@@ -312,7 +361,7 @@
 													WHERE gra_estado=1
 													");
 													?>
-													<select class="form-control" name="grado">
+													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -354,8 +403,12 @@
 														<?php
 														
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															$selected = '';
+															if($opcionesDatos[0] == 128) {
+																$selected = 'selected';
+															}
 														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['ogen_nombre'];?></option>
+															<option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['ogen_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -392,9 +445,9 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">ID Acudiente</label>
+												<label class="col-sm-2 control-label">Documento</label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off">
+													<input type="text" name="documentoA" class="form-control" autocomplete="off" required>
 												</div>
 											</div>
 												
@@ -414,10 +467,13 @@
 													</select>
 												</div>	
 
+												<?php if($config['conf_id_institucion']==1){ ?>
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
 													<input type="text" name="ocupacionA" class="form-control" autocomplete="off">
 												</div>
+												<?php }?>
+
 											</div>
 
 											<div class="form-group row">												
@@ -435,7 +491,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" class="form-control" autocomplete="off">
+													<input type="text" name="nombresA" class="form-control" autocomplete="off" required>
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -444,6 +500,7 @@
 												</div>
 											</div>	
 												
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-3">
@@ -466,7 +523,8 @@
 														<?php }?>
 													</select>
 												</div>
-											</div>									   
+											</div>
+											<?php }?>									   
 									       
 									    </fieldset>
 										

@@ -71,6 +71,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
             break;
 
+            case 'SC_DT_3':
+                $tipo = 'success';
+                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -81,8 +86,6 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 ?>
     
     <div class="alert alert-block alert-<?=$tipo;?>">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <h4 class="alert-heading">MENSAJE INFORMATIVO</h4>
         <p><?=$mensaje;?></p>
     </div>
 
