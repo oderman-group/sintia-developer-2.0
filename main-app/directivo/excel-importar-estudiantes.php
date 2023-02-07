@@ -57,7 +57,7 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 		mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro)VALUES('".$data->sheets[0]['cells'][$i][9]."', '".$data->sheets[0]['cells'][$i][9]."', 4, '".$nombreCompleto."', 1, 0, now(), '".$_SESSION["id"]."')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
-		$idRegistro = mysql_insert_id();
+		$idRegistro = mysqli_insert_id($conexion);
 
 
 		$datosInsert .="(

@@ -23,6 +23,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'No se encontró una sesión de usuario activa. Ingrese al sistema nuevamente.';
             break;
 
+            case 5:
+                $tipo = 'danger';
+                $mensaje = 'La clave no cumple con todos los requerimientos:<br>
+                            - Debe tener mínimo 8 caracteres.<br>
+                            - Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos(. y $).';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
@@ -31,6 +38,26 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'ER_DT_2':
                 $tipo = 'danger';
                 $mensaje = 'No tienes permiso para editar a este usuario: <b>' . $_GET["usuario"] . '</b>';
+            break;
+
+            case 'ER_DT_3':
+                $tipo = 'danger';
+                $mensaje = 'El registro se eliminó exitosamente.';
+            break;
+
+            case 'ER_DT_4':
+                $tipo = 'warning';
+                $mensaje = 'Debe llenar todos los campos.';
+            break;
+
+            case 'ER_DT_5':
+                $tipo = 'warning';
+                $mensaje = 'Este estudiante ya se ecuentra creado.';
+            break;
+
+            case 'ER_DT_6':
+                $tipo = 'warning';
+                $mensaje = 'El acudiente no existe, por tanto debe llenar todos los campos para registrarlo.';
             break;
 
 
@@ -54,6 +81,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
             break;
 
+            case 'SC_DT_3':
+                $tipo = 'success';
+                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -63,8 +95,8 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }
 ?>
     
-    <div class="alert alert-<?=$tipo;?>" role="alert">
-        <?=$mensaje;?>
+    <div class="alert alert-block alert-<?=$tipo;?>">
+        <p><?=$mensaje;?></p>
     </div>
 
 <?php    

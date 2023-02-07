@@ -28,8 +28,8 @@
                     -->
                     <div class="items-container isotope row image-box style9">
                         <?php
-						$fotos = mysql_query("SELECT * FROM portafolio",$conexion);
-						while($fot = mysql_fetch_array($fotos)){
+						$fotos = mysqli_query($conexion,"SELECT * FROM portafolio");
+						while($fot = mysqli_fetch_array($fotos, MYSQLI_BOTH)){
 						?>
                         <div class="iso-item col-xs-12 col-sm-4 filter-all filter-island filter-beach">
                             <article class="box">

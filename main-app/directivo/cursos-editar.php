@@ -49,6 +49,8 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 						<div class="col-sm-3">
                         </div>
                         <div class="col-sm-9">
+                    
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
                                 <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 <div class="panel-body">

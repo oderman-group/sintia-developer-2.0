@@ -4,7 +4,8 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 	if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
 
 		include("modelo/conexion.php");
-		$sesionAbierta = mysql_fetch_array(mysql_query("SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'", $conexion));
+    $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'");
+		$sesionAbierta = mysqli_fetch_array($consultaSesion, MYSQLI_BOTH);
 
 		switch ($sesionAbierta[3]) {
 			case 1:
@@ -129,7 +130,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 		    <select class="form-control form-control-lg" name="agnoIngreso" required>
 							<option value="">Seleccione el año</option>
 							<?php
-              $yearToShow = date("Y") - 1;
+              $yearToShow = 2015;
 							while($yearToShow <= date("Y") + 1){
                 $selected = '';
                 if($yearToShow == date("Y")) $selected = 'selected';
