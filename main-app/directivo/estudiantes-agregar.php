@@ -88,6 +88,7 @@
                     <!-- wizard with validation-->
                     <div class="row">
                     	<div class="col-sm-12">
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
                              <div class="card-box">
                                  <div class="card-head">
                                      <header>Matrículas</header>
@@ -151,7 +152,7 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Folio Y Tesorer&iacute;a</label>
+												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
 													<input type="text" name="folio" class="form-control" autocomplete="off">
 												</div>
@@ -256,7 +257,7 @@
 													<select class="form-control  select2" name="inclusion">
 														<option value="">Seleccione una opción</option>
 														<option value="1">Si</option>
-														<option value="0">No</option>
+														<option value="0" selected>No</option>
 													</select>
 												</div>
 												
@@ -265,7 +266,7 @@
 													<select class="form-control  select2" name="extran">
 														<option value="">Seleccione una opción</option>
 														<option value="1">Si</option>
-														<option value="0">No</option>
+														<option value="0" selected>No</option>
 													</select>
 												</div>
 											</div>
@@ -435,7 +436,7 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">ID Acudiente</label>
+												<label class="col-sm-2 control-label">Documento</label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA" class="form-control" autocomplete="off">
 												</div>
