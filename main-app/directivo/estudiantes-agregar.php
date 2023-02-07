@@ -151,6 +151,7 @@
 												</div>
 											</div>
 											
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
@@ -162,27 +163,28 @@
 													<input type="text" name="codTesoreria" class="form-control" autocomplete="off">
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="apellido1" class="form-control" autocomplete="off">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="apellido2" class="form-control" autocomplete="off">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="nombres" class="form-control" autocomplete="off">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
-												<div class="col-sm-2">
+												<div class="col-sm-4">
 													<input type="text" name="nombre2" class="form-control" autocomplete="off">
 												</div>
 											</div>
@@ -236,7 +238,8 @@
 													</select>
 												</div>
 											</div>
-											
+
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo Sanguineo</label>
 												<div class="col-sm-2">
@@ -285,6 +288,7 @@
 													</select>
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
@@ -314,7 +318,7 @@
 													</select>
 												</div>
 											</div>
-												
+											<?php if($config['conf_id_institucion']==1){ ?>	
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estrato</label>
 												<div class="col-sm-2">
@@ -329,6 +333,7 @@
 													</select>
 												</div>
 											</div>
+											<?php }?>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
@@ -398,8 +403,12 @@
 														<?php
 														
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															$selected = '';
+															if($opcionesDatos[0] == 128) {
+																$selected = 'selected';
+															}
 														?>
-															<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['ogen_nombre'];?></option>
+															<option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['ogen_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -458,10 +467,13 @@
 													</select>
 												</div>	
 
+												<?php if($config['conf_id_institucion']==1){ ?>
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
 													<input type="text" name="ocupacionA" class="form-control" autocomplete="off">
 												</div>
+												<?php }?>
+
 											</div>
 
 											<div class="form-group row">												
@@ -488,6 +500,7 @@
 												</div>
 											</div>	
 												
+											<?php if($config['conf_id_institucion']==1){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-3">
@@ -510,7 +523,8 @@
 														<?php }?>
 													</select>
 												</div>
-											</div>									   
+											</div>
+											<?php }?>									   
 									       
 									    </fieldset>
 										
