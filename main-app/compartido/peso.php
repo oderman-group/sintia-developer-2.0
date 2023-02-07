@@ -9,15 +9,13 @@ try{
     echo 'Caught exception: ',  $e->getMessage(), "\n";
     exit();
 }
-
- $peso=mysqli_fetch_array($pesoInstituciones, MYSQLI_BOTH);
+$peso=mysqli_fetch_array($pesoInstituciones, MYSQLI_BOTH);
 
 $direccionArchivo = ('../files/archivos');
 
  "Total : " . Fsize($direccionArchivo);
  function Fsize($direccionArchivo)
 {
-    
     clearstatcache();
     $contadorByte = 0;
     if (is_dir($direccionArchivo)) {
@@ -41,9 +39,6 @@ $direccionArchivo = ('../files/archivos');
     $gb= $contadorByte/1073741824;
     "Carpeta: ".$direccionArchivo."<br>";
     global $peso;
-
-    
-
     $porcentaje = ($gb/$peso[0])*100;
 
     if($porcentaje<=50){$colorGrafico='info';}
@@ -65,14 +60,9 @@ $direccionArchivo = ('../files/archivos');
     </div>
     </div>";
 }
-
-
 ?>
-
 <div class="card" style="margin-left:5px; margin-right:5px; padding:5px;">
-<?php sleep(20) ?>
 <td> Uso Del Disco </td>
    <?=Fsize($direccionArchivo)?>
-
 </div>
 
