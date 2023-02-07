@@ -129,7 +129,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento</label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
+													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)">
 												</div>
 
 											</div>	
@@ -168,7 +168,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido</label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off">
+													<input type="text" name="apellido1" class="form-control" autocomplete="off" required>
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
@@ -180,7 +180,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre</label>
 												<div class="col-sm-4">
-													<input type="text" name="nombres" class="form-control" autocomplete="off">
+													<input type="text" name="nombres" class="form-control" autocomplete="off" required>
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -361,7 +361,7 @@
 													WHERE gra_estado=1
 													");
 													?>
-													<select class="form-control" name="grado">
+													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -447,7 +447,7 @@
 												
 												<label class="col-sm-2 control-label">Documento</label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off">
+													<input type="text" name="documentoA" class="form-control" autocomplete="off" required>
 												</div>
 											</div>
 												
@@ -491,7 +491,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" class="form-control" autocomplete="off">
+													<input type="text" name="nombresA" class="form-control" autocomplete="off" required>
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
