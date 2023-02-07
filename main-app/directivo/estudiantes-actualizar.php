@@ -89,7 +89,7 @@ include("../modelo/conexion.php");
 		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$acudiente['uss_id']."', '".$_POST["id"]."')");
 		
 
-		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA"]."', uss_nombre='".$_POST["nombreA"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA"]."', uss_genero='".$_POST["generoA"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA"]."', uss_tipo_documento='".$_POST["tipoDAcudiente"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A"]."', uss_apellido2='".$_POST["apellido2A"]."', uss_nombre2='".$_POST["nombre2A"]."' WHERE uss_id='".$_POST["documentoA"]."'");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA"]."', uss_nombre='".$_POST["nombreA"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA"]."', uss_genero='".$_POST["generoA"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA"]."', uss_tipo_documento='".$_POST["tipoDAcudiente"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A"]."', uss_apellido2='".$_POST["apellido2A"]."', uss_nombre2='".$_POST["nombre2A"]."' WHERE uss_id='".$acudiente['uss_id']."'");
 		
 
 
