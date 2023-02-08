@@ -12,7 +12,8 @@ if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nom
 }
 //VALIDAMOS QUE EL ESTUDIANTE NO SE ENCUENTRE CREADO
 try{
-	$valiEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_documento='".$_POST["nDoc"]."'");
+	$valiEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+	WHERE mat_documento='".$_POST["nDoc"]."' AND mat_eliminado=0");
 } catch (Exception $e) {
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 	exit();
