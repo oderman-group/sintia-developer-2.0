@@ -34,7 +34,11 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue">INFORMES ACADÉMICOS</header>
 										<div class="panel-body">
+											<p><a href="informe-estudiantes.php">Informe de Estudiantes</a></p>
+											<p><a href="consolidado-perdidos.php">Informe de consolidado perdidos</a></p>
+											<p><a href="estudiantes-planilla.php">Planilla de Estudiantes</a></p>
 											<p><a href="informes-boletines.php">Boletines por curso</a></p>
+											<p><a href="informe-libro-cursos.php">Informe libro por curso</a></p>
 											<p><a href="estudiantes-certificados.php">Certificados</a></p>
 											<p><a href="reportes-academicos-consultas.php">Reporte general</a></p>
                                             <p><a href="informe-parcial-grupo.php">Informe parcial por grupo</a></p>
