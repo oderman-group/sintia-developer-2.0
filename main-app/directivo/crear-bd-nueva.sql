@@ -427,6 +427,16 @@ CREATE TABLE `academico_categorias_notas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `academico_categorias_notas`
+--
+
+LOCK TABLES `academico_categorias_notas` WRITE;
+/*!40000 ALTER TABLE `academico_categorias_notas` DISABLE KEYS */;
+INSERT INTO `academico_categorias_notas` VALUES (1,'Desempenos (Bajo a Superior)'),(2,'Letras (D a E)'),(3,'Numerica de 0 a 100'),(4,'Caritas (Llorando - Contento)'),(5,'bachiller '),(6,'Juan Pérez ');
+/*!40000 ALTER TABLE `academico_categorias_notas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `academico_chat_grupal`
 --
 
@@ -607,6 +617,17 @@ CREATE TABLE `academico_grupos` (
   PRIMARY KEY (`gru_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `academico_grupos`
+--
+
+LOCK TABLES `academico_grupos` WRITE;
+/*!40000 ALTER TABLE `academico_grupos` DISABLE KEYS */;
+INSERT INTO `academico_grupos` VALUES (1,1267,'A',NULL,NULL),(2,1268,'B',NULL,NULL),(3,1269,'C',NULL,NULL),(4,1270,'Sin grupo',NULL,NULL);
+/*!40000 ALTER TABLE `academico_grupos` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
 -- Table structure for table `academico_horarios`
