@@ -1,7 +1,7 @@
 <?php 
 include("session.php");
 $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
-WHERE mat_documento ='".$_POST["nDoct"]."'");
+WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
 $numDotos=mysqli_num_rows($consultaDoc);
 if ($numDotos > 0) { 
 ?>
