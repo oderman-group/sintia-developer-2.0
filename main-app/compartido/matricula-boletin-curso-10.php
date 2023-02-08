@@ -16,6 +16,7 @@ if($periodoActual==4) $periodoActuales = "Final";
 $filtro = '';
 if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
 $matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
 INNER JOIN academico_grados ON gra_id=mat_grado
@@ -61,7 +62,10 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	
 	<!--<div align="center" style="margin-bottom: 10px;"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="350"></div>-->
 	
-	<div align="center" style="margin-bottom: 10px;"><img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150" width="200"></div>
+	<div align="center" style="margin-bottom: 10px;">
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
+    <!-- <?=$informacion_inst["info_nombre"]?><br>
+    BOLETÍN DE CALIFICACIONES<br> --></div>
     
 	<div style="width:100%">
         <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all">

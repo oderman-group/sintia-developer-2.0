@@ -31,35 +31,25 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[253][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title">Informes Boletines</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)"><?=$frases[252][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[253][$datosUsuarioActual[8]];?></li>
+                                <li class="active">Informes Boletines</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
 						
 						<div class="col-sm-3">
-
-
                         </div>
 						
                         <div class="col-sm-9">
-
-
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple">POR CURSO </header>
                                 	<div class="panel-body">
-
-                                   
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="18" name="id">
-										
-
-										
+									<form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso</label>
                                             <div class="col-sm-8">
@@ -86,7 +76,7 @@
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
 												?>
-                                                <select class="form-control  select2" name="grupo" required>
+                                                <select class="form-control  select2" name="grupo">
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -114,19 +104,6 @@
                                             </div>
                                         </div>
 										
-										
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Formato</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control  select2" name="formato" required>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="1" selected>Formato 1</option>
-													<option value="0">Formato 2</option>
-                                                </select>
-                                            </div>
-                                        </div>
-										
 										<input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
 										
 										<a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
@@ -134,16 +111,10 @@
                                 </div>
                             </div>
 							
-								<div class="panel">
-									<header class="panel-heading panel-heading-red">POR ESTUDIANTE </header>
-                                	<div class="panel-body">
-
-                                   
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="18" name="id">
-										
-
-										
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-red">POR ESTUDIANTE </header>
+                                <div class="panel-body">
+									<form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estudiante</label>
                                             <div class="col-sm-8">
@@ -156,7 +127,7 @@
 												WHERE mat_eliminado=0
 												ORDER BY mat_grado, mat_grupo, mat_primer_apellido");
 												?>
-                                                <select class="form-control  select2" name="esstudiante" required>
+                                                <select class="form-control  select2" name="estudiante" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -180,19 +151,6 @@
 														$p++;
 													}
 													?>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Formato</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control  select2" name="formato" required>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="1" selected>Formato 1</option>
-													<option value="0">Formato 2</option>
                                                 </select>
                                             </div>
                                         </div>

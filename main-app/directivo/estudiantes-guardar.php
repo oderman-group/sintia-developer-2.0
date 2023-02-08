@@ -6,23 +6,41 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
-	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4";</script>';
+
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
 	exit();
 }
 //VALIDAMOS QUE EL ESTUDIANTE NO SE ENCUENTRE CREADO
-$valiEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_documento='".$_POST["nDoc"]."'");
+try{
+	$valiEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+	WHERE mat_documento='".$_POST["nDoc"]."' AND mat_eliminado=0");
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}
 if(mysqli_num_rows($valiEstudiante)>0){
-	echo "<span style='font-family:Arial; color:red;'>Este estudiante ya se ecuentra creado.</samp>";
+
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_5&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
 	exit();
 }
 
-$consultaResult=mysqli_query($conexion, "SELECT MAX(mat_matricula)+1 AS num_mat FROM academico_matriculas");
+try{
+	$consultaResult=mysqli_query($conexion, "SELECT MAX(mat_matricula)+1 AS num_mat FROM academico_matriculas");
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}
 $result_numMat=mysqli_fetch_array($consultaResult, MYSQLI_BOTH);
 if($result_numMat[0]=="") $result_numMat[0]=$config[1]."1";
 //COMPRBAR QUE NO SE VAYA A REPETIR EL NUMERO DE LA MATRICULA
 $i=1;
 while($i==1){
-	$matriculados = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_matricula='".$result_numMat[0]."'");
+	try{
+		$matriculados = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_matricula='".$result_numMat[0]."'");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}
 	if($matriculadosNum = mysqli_num_rows($matriculados)>0){
 		$result_numMat[0]++;
 	}else{
@@ -51,12 +69,13 @@ if($config['conf_id_institucion']==1){
 }
 
 //INSERTAMOS EL USUARIO ESTUDIANTE
-mysqli_query($conexion, "INSERT INTO usuarios(
-	uss_usuario, 
-	uss_clave, 
-	uss_tipo, 
-	uss_nombre, 
-	uss_estado, 
+try{
+	mysqli_query($conexion, "INSERT INTO usuarios(
+		uss_usuario, 
+		uss_clave, 
+		uss_tipo, 
+		uss_nombre, 
+		uss_estado, 
 		uss_email, 
 		uss_fecha_nacimiento, 
 		uss_permiso1, 
@@ -90,14 +109,24 @@ mysqli_query($conexion, "INSERT INTO usuarios(
 		'".$_POST["apellido2"]."', 
 		'".$_POST["nombre2"]."'
 		)");
-	$idEstudianteU = mysqli_insert_id($conexion);
+} catch (Exception $e) {
+	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}
+$idEstudianteU = mysqli_insert_id($conexion);
 
+try{
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
-	$acudienteNum = mysqli_num_rows($acudienteConsulta);
-	$acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
-	//PREGUNTAMOS SI EL ACUDIENTE EXISTE
-	if($acudienteNum>0){			
-		$idAcudiente = $acudienteDatos[0];
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}
+$acudienteNum = mysqli_num_rows($acudienteConsulta);
+$acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
+//PREGUNTAMOS SI EL ACUDIENTE EXISTE
+if($acudienteNum>0){			
+	$idAcudiente = $acudienteDatos[0];
+	try{
 		mysqli_query($conexion, "INSERT INTO academico_matriculas(
 			mat_matricula, 
 			mat_fecha, 
@@ -169,18 +198,24 @@ mysqli_query($conexion, "INSERT INTO usuarios(
 			'".$_POST["ciudadR"]."', 
 			'".$_POST["nombre2"]."'
 			)");
-		$idEstudiante = mysqli_insert_id($conexion);
-			 		
-	}
-	//SI EL ACUDIENTE NO EXISTE, LO CREAMOS
-	else{
-		//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
-		echo "<span style='font-family:Arial; color:red;'>El acudiente no existe, por tanto debe llenar todos los campos para registrarlo.</samp>";
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 		exit();
 	}
-		if($_POST["generoA"]=="")       $_POST["generoA"]       = 126;
-		
+	$idEstudiante = mysqli_insert_id($conexion);
+				
+}
+	//SI EL ACUDIENTE NO EXISTE, LO CREAMOS
+else{
+	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
+	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
+
+		echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_6&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
+		exit();
+	}
+	if($_POST["generoA"]=="")       $_POST["generoA"]       = 126;
+	
+	try{
 		mysqli_query($conexion, "INSERT INTO usuarios(
 			uss_usuario, 
 			uss_clave, 
@@ -222,9 +257,14 @@ mysqli_query($conexion, "INSERT INTO usuarios(
 			'".$_POST["apellido2A"]."', 
 			'".$_POST["nombre2A"]."'
 			)");
-		
-		$idAcudiente = mysqli_insert_id($conexion);
-		
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}
+	
+	$idAcudiente = mysqli_insert_id($conexion);
+	
+	try{
 		mysqli_query($conexion, "INSERT INTO academico_matriculas(
 			mat_matricula, 
 			mat_fecha, 
@@ -296,17 +336,30 @@ mysqli_query($conexion, "INSERT INTO usuarios(
 			'".$_POST["ciudadR"]."', 
 			'".$_POST["nombre2"]."'
 			)");
-		$idEstudiante = mysqli_insert_id($conexion);
-		
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
 	}
-	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
+	$idEstudiante = mysqli_insert_id($conexion);
 	
-	$idUsr = mysqli_insert_id($conexion);
-	$estadoSintia=false;
-	$mensajeSintia='El estudiante no pudo ser creado correctamente en SINTIA.';
-	if(isset($idUsr) AND $idUsr!=''){
-		$estadoSintia=true;
-		$mensajeSintia='El estudiante fue creado correctamente en SINTIA.';
-	}
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$idEstudiante.'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+}
+try{
+	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 	exit();
+}
+
+if(!isset($estado) AND !isset($mensaje)){
+	$estado="";
+	$mensaje="";
+}
+$idUsr = mysqli_insert_id($conexion);
+$estadoSintia=false;
+$mensajeSintia='El estudiante no pudo ser creado correctamente en SINTIA.';
+if(isset($idUsr) AND $idUsr!=''){
+	$estadoSintia=true;
+	$mensajeSintia='El estudiante fue creado correctamente en SINTIA.';
+}
+echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$idEstudiante.'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+exit();
