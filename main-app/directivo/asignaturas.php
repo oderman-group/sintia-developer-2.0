@@ -31,6 +31,7 @@
                             <div class="row">
 								
 								<div class="col-md-12">
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></header>

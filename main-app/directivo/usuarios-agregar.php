@@ -81,8 +81,7 @@ if(isset($_GET['tipoUsuario'])){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="24" name="id">
+									<form name="formularioGuardar" action="usuarios-guardar.php" method="post">
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>

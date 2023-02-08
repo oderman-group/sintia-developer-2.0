@@ -77,9 +77,8 @@ if($datosUsuarioActual['uss_solicitar_datos']==1){
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-													INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-													");
-													while($opg = mysql_fetch_array($opcionesG, MYSQLI_BOTH)){
+													INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento");
+													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
 														<option value="<?=$opg['ciu_id'];?>"><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 													<?php }?>
