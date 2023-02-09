@@ -12,7 +12,10 @@ if( $totalCliente <= 0 ){
     $jsonData['message'] = '';
 } else{
     $jsonData['success'] = 1;
-    $jsonData['message'] = '<div style="color:red; text-align:right">Ya existe este Correo</div>';
+    $jsonData['message'] = '<div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="icon-exclamation-sign"></i>Este Email Ya Se Encuentra Registrado</div>';
+                            
 }
 //Mostrando respuesta en formato Json
 header('Content-type: application/json; charset=utf-8');

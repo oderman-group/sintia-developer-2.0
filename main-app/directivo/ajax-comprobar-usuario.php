@@ -13,7 +13,9 @@ if( $totalCliente <= 0 ){
 } else{
     
     $jsonData['success'] = 1;
-    $jsonData['message'] = '<div style="color:red; text-align:right">Ya existe el Usuario </div>';
+    $jsonData['message'] = '<div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="icon-exclamation-sign"></i>Este Usuario Ya Se Encuentra Registrado</div>';
 }
 
 header('Content-type: application/json; charset=utf-8');
