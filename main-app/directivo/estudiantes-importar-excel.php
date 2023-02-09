@@ -43,10 +43,6 @@
                     <div class="row">
 						
 						<div class="col-sm-3">
-
-
-							
-							
 							<div class="panel">
 								<header class="panel-heading panel-heading-red">1 sólo paso</header>
 									<div class="panel-body">
@@ -57,24 +53,21 @@
                         </div>
 						
                         <div class="col-sm-9">
-
-
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
                                    
 									<form name="formularioGuardar" action="excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="12" name="id">
 										
-											<!--
-											<div class="form-group row">
-												<label class="col-sm-3 control-label">Planilla de uso</label>
-												<div class="col-sm-9">
-													<a href="excel-planilla-notas.php?idR=<?=$_GET['idR'];?>&curso=<?=$datosCargaActual['car_curso'];?>&grupo=<?=$datosCargaActual['car_grupo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar planilla para esta actividad</a>
-												</div>
-											</div>
--->
+											
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Descargar formato de plantilla</label>
+                                            <div class="col-sm-9">
+                                                <a href="../files/excel/estudiantes.xlsx" target="_blank"><i class="fa fa-download"></i> Plantilla para Matriculas</a>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
 												<label class="col-sm-3 control-label">Subir la planilla lista</label>
