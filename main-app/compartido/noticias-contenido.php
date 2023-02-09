@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
 
 <div class="row">
 
