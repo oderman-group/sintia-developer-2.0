@@ -67,12 +67,12 @@ $(document).ready(function() {
 
             success: function(datos) {
                 if (datos.success == 1) {
-                    $("#respuesta").html(datos.message);
+                    $("#respuestaUsuario").html(datos.message);
                     $("input").attr('disabled', true); 
                     $("input#usuario").attr('disabled',false); 
                     $("#btnEnviar").attr('disabled', true); 
                 } else {
-                    $("#respuesta").html(datos.message);
+                    $("#respuestaUsuario").html(datos.message);
                     $("input").attr('disabled', false); 
                     $("#btnEnviar").attr('disabled', false); 
                 }
@@ -136,12 +136,12 @@ $(document).ready(function() {
                         </ol>
                     </div>
                 </div>
-
+     
                 <div class="row">
 
-
-
-                    <div class="col-sm-9">
+                <div class="col-sm-9">
+                    <span style="color: blue; font-size: 15px;" id="respuestaEmail"></span>
+                    <span style="color: blue; font-size: 15px;" id="respuestaUsuario"></span>
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 
                         <div class="panel">
@@ -159,7 +159,7 @@ $(document).ready(function() {
                                             <input type="text" name="usuario" id="usuario" autofocus
                                                 class="form-control" value="<?=$datosUsuario['usuario'];?> ">
 
-                                            <span style="color: blue; font-size: 15px;" id="respuesta"></span>
+                                            
 
                                         </div>
                                     </div>
@@ -183,7 +183,7 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Email</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>">
-                                            <span style="color: blue; font-size: 15px;" id="respuestaEmail"></span>
+                                            
                                         </div>
                                     </div>
 
