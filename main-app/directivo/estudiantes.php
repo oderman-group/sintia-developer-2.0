@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0001';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -331,14 +334,15 @@
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+													 /*$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
 													 LEFT JOIN academico_grados ON gra_id=mat_grado
 													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
 													 LEFT JOIN usuarios ON uss_id=mat_id_usuario
 													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
 													 WHERE mat_eliminado=0 $filtro
 													 ORDER BY mat_primer_apellido
-													 $filtroLimite");
+													 $filtroLimite");*/
+													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													 $contReg = 1;
 													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 													$estadosEtiquetas = array("","text-success","text-warning","text-danger","text-warning");
