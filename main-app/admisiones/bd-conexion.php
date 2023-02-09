@@ -1,10 +1,11 @@
 <?php
-include("../../conexion-datos.php");
+// include("../../conexion-datos.php");
+include("../directivo/session.php");
 $server = $servidorConexion;
 $user = $usuarioConexion;
 $pass = $claveConexion;
 $dbName = $baseDatosAdmisiones;
-$dbNameInstitucion = 'mobiliar_dev_2022';
+$dbNameInstitucion = $bdActual;
 
 try{
 	$pdo = new PDO('mysql:host='.$server.';dbname='.$dbName, $user, $pass);
