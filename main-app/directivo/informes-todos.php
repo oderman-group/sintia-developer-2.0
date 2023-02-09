@@ -34,15 +34,19 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue">INFORMES ACADÉMICOS</header>
 										<div class="panel-body">
-											<p><a href="informes-boletines.php">Boletines por curso</a></p>
-											<p><a href="estudiantes-certificados.php">Certificados</a></p>
-											<p><a href="reportes-academicos-consultas.php">Reporte general</a></p>
-                                            <p><a href="informe-parcial-grupo.php">Informe parcial por grupo</a></p>
-											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">Docentes y cargas académicas</a></p>
-                                            <p><a href="../compartido/reporte-estudiantes.php" target="_blank">Sacar informe de estudiantes</a></p>
-											<p><a href="../compartido/reporte-pasos.php" target="_blank">Informe pasos matrícula</a></p>
-											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">Reporte informe parcial</a></p>
-											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">Reporte vista observador</a></p>
+											<p><a href="informes-boletines.php">1. Boletines</a></p>
+											<p><a href="estudiantes-certificados.php">2. Certificados</a></p>
+											<p><a href="consolidado-perdidos.php">3. Consolidado de asignaturas perdidas</a></p>
+											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">4. Docentes y cargas académicas</a></p>
+											<p><a href="informe-libro-cursos.php">5. Libro final por curso</a></p>
+											<p><a href="informe-estudiantes.php">6. Listado de Estudiantes</a></p>
+											<p><a href="informe-parcial-grupo.php">7. Informe parcial por grupo</a></p>
+											<p><a href="../compartido/reporte-pasos.php" target="_blank">8. Informe pasos matrícula</a></p>
+											<p><a href="estudiantes-planilla.php">9. Planilla de Estudiantes</a></p>
+											<p><a href="reportes-academicos-consultas.php">10. Reporte general</a></p>
+											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
+											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">12. Reporte vista observador</a></p>
+											<p><a href="../compartido/reporte-estudiantes.php" target="_blank">13. Informe de estudiantes</a></p>
 										</div>
                                 	</div>
 								</div>

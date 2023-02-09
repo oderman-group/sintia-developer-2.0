@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0001';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -331,14 +334,15 @@
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 INNER JOIN academico_grados ON gra_id=mat_grado
-													 INNER JOIN academico_grupos ON gru_id=mat_grupo
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
+													 /*$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+													 LEFT JOIN academico_grados ON gra_id=mat_grado
+													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
+													 LEFT JOIN usuarios ON uss_id=mat_id_usuario
 													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
 													 WHERE mat_eliminado=0 $filtro
 													 ORDER BY mat_primer_apellido
-													 $filtroLimite");
+													 $filtroLimite");*/
+													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													 $contReg = 1;
 													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 													$estadosEtiquetas = array("","text-success","text-warning","text-danger","text-warning");
@@ -398,6 +402,9 @@
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
+																	<?php if($config['conf_id_institucion']==1){ ?>	
+																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
+																	<?php }?>
 																	<li><a href="finanzas-cuentas.php?id=<?=$resultado["mat_id_usuario"];?>" target="_blank">Estado de cuenta</a></li>
 																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
 																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>

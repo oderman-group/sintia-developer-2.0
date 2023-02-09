@@ -39,7 +39,7 @@
                                     //buscador usuarios
                                     if ($numDatos<=0){
                                         $dato=2;
-                                        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario LIKE '%".$_GET["query"]."%' OR uss_nombre LIKE '%".$_GET["query"]."%' OR uss_email LIKE '%".$_GET["query"]."%'"); 
+                                        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario LIKE '%".$_GET["query"]."%' OR uss_nombre LIKE '%".$_GET["query"]."%' OR uss_email LIKE '%".$_GET["query"]."%'");
                                     }
                                     $numDatos=mysqli_num_rows($consulta);
                                     if ($numDatos<=0) {
@@ -65,23 +65,41 @@
                                                 break;
                                             
                                             case 2:
+                                                switch ($resultado['uss_tipo']){
+                                                    case 1:
+                                                        $usuarioTipo="DEV";
+                                                    break;
+                                                    case 2:
+                                                        $usuarioTipo="Docente";
+                                                    break;
+                                                    case 3:
+                                                        $usuarioTipo="Acudiente";
+                                                    break;
+                                                    case 4:
+                                                        $usuarioTipo="Estudiante";
+                                                    break;
+                                                    case 5:
+                                                        $usuarioTipo="Directivo";
+                                                    break;
+
+                                                }
                                                 $nombre=$resultado['uss_nombre'];
                                                 $descripcion="";
-                                                $ruta="usuarios-editar.php?id".$resultado['uss_id'];
+                                                $ruta="usuarios-editar.php?id=".$resultado['uss_id'];
                                                 $nombreRuta="";
                                                 break;
 
                                             case 3:
                                                 $nombre=$resultado['mat_nombre'];
                                                 $descripcion="";
-                                                $ruta="asignaturas-editar.php?id".$resultado['mat_id'];
+                                                $ruta="asignaturas-editar.php?id=".$resultado['mat_id'];
                                                 $nombreRuta="";
                                                 break;
 
                                             case 4:
                                                 $nombre=$resultado['gra_nombre'];
                                                 $descripcion="";
-                                                $ruta="cursos-editar.php?id".$resultado['gra_id'];
+                                                $ruta="cursos-editar.php?id=".$resultado['gra_id'];
                                                 $nombreRuta="";
                                                 break;  
 
@@ -89,8 +107,8 @@
  
                                 ?>
                                 <p>
-                                    <h3 style="margin: 0px";><a href="<?=$ruta;?>"><?=$nombre;?></a></h3>
-                                    <h6 style="margin: 0px";><a href="<?=$ruta;?>"><?=$nombreRuta;?></a></h6>
+                                    <h3 class="text-transform: uppercase"; style="margin: 0px";><a href="<?=$ruta;?>"><?=$nombre;?>( <?=$usuarioTipo;?>)</a></h3>
+                                    <h6 class="text-transform: uppercase"; style="margin: 0px";><a href="<?=$ruta;?>"><?=$nombreRuta;?></a></h6>
                                     <p><?=$descripcion;?></P>
                                 </p>
 

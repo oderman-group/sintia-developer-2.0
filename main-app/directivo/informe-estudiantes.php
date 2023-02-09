@@ -1,10 +1,7 @@
 <?php include("session.php");?>
-<?php include("verificar-usuario.php");?>
-<?php include("verificar-sanciones.php");?>
-<?php $idPaginaInterna = 'ES0002';?>
+<?php $idPaginaInterna = 'DT0133';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -34,18 +31,73 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[60][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title">Listado de estudiantes</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
+							<ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Listado de estudiantes</li>
+                            </ol>
                         </div>
                     </div>
                     <div class="row">
-                        
-                       <?php include("../compartido/matricula-contenido.php");?>
-							
+						
+						<div class="col-sm-3">
+                        </div>
+						
+                        <div class="col-sm-9">
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-purple">POR CURSO </header>
+                                <div class="panel-body">
+                                <form name="formularioGuardar" action="../compartido/listado-estudiante.php" method="post" target="_blank">
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Curso</label>
+                                        <div class="col-sm-8">
+                                            <?php
+                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
+                                            ORDER BY gra_vocal");
+                                            ?>
+                                            <select class="form-control  select2" name="grado" required>
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+                                                while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                    $disabled = '';
+                                                    if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
+                                                ?>
+                                                    <option value="<?=$opcionesDatos[0];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                <?php }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Grupo</label>
+                                        <div class="col-sm-4">
+                                            <?php
+                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                            ?>
+                                            <select class="form-control  select2" name="grupo">
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+                                                while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                ?>
+                                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                <?php }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+                                    
+                                    <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                </form>
+                            </div>
+                        </div>
+						
                     </div>
+
                 </div>
-			</div>
                 <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
