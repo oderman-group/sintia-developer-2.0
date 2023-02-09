@@ -87,7 +87,7 @@
                                                 <tbody>
 													<?php													
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_grados AS g1
-													 INNER JOIN academico_grados AS g2 ON g2.gra_id=g1.gra_grado_siguiente
+													 LEFT JOIN academico_grados AS g2 ON g2.gra_id=g1.gra_grado_siguiente
 													 WHERE g1.gra_estado=1
 													 ORDER BY g1.gra_vocal
 													 ");
