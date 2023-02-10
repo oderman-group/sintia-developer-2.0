@@ -3,6 +3,9 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 <script type="text/javascript">
   function def(enviada){
   var nota = enviada.value;
@@ -150,8 +153,7 @@ function niv(enviada){
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$colorEstudiante = '#000;';
 														if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
@@ -159,7 +161,7 @@ function niv(enviada){
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td style="color: <?=$colorEstudiante;?>"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td style="color: <?=$colorEstudiante;?>"><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
 
 														<?php
 														 $definitiva = 0;
@@ -223,7 +225,10 @@ function niv(enviada){
 																$colorFaltante = "black";
 															}
 														
-															@$definitiva = ($definitiva / $sumaPorcentaje);
+															if($sumaPorcentaje > 0){
+																$definitiva = ($definitiva / $sumaPorcentaje);
+															}
+															
 															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
 															
 															$numN = mysqli_num_rows($consultaN);
