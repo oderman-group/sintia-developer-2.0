@@ -333,15 +333,6 @@ include("../class/Estudiantes.php");
 													
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													
-													 /*$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 LEFT JOIN academico_grados ON gra_id=mat_grado
-													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
-													 LEFT JOIN usuarios ON uss_id=mat_id_usuario
-													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-													 WHERE mat_eliminado=0 $filtro
-													 ORDER BY mat_primer_apellido
-													 $filtroLimite");*/
 													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													 $contReg = 1;
 													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
