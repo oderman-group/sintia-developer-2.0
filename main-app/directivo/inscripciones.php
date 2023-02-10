@@ -136,7 +136,7 @@
                                                 WHERE mat_estado_matricula=5 ORDER BY mat_primer_apellido");
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                 ?>
-                                                <tr id="data1" class="odd gradeX" style="color: ;">
+                                                <tr id="data1" class="odd gradeX">
                                                     <td><?= $resultado["mat_id"]; ?></td>
                                                     <td><?= $resultado["asp_fecha"]; ?></td>
                                                     <td><?= $resultado["mat_documento"]; ?></td>

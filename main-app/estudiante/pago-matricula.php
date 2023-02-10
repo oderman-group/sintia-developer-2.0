@@ -1,7 +1,4 @@
 <?php include("session.php"); ?>
-<?php
-$_SESSION["bd"] = 2022;
-?>
 <?php include("verificar-usuario.php"); ?>
 <?php include("verificar-sanciones.php"); ?>
 <?php $idPaginaInterna = 'ES0038'; ?>

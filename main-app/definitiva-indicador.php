@@ -1,11 +1,12 @@
 <?php
 //CALCULO DEFINITIVA
-$consultaD = mysql_query("SELECT * FROM academico_actividades WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' AND act_id_tipo=".$indicador,$conexion);
+$consultaD = mysqli_query($conexion,"SELECT * FROM academico_actividades WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' AND act_id_tipo=".$indicador);
 $acumulaValor = "";
 $sumaNota = "";
 $definitiva = "";
-while($resultadoD = mysql_fetch_array($consultaD)){
-	$nota = mysql_fetch_array(mysql_query("SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'",$conexion));
+while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
+	$consultaNotas=mysqli_query($conexion,"SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'");
+	$nota = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 	$porNuevo = ($resultadoD[3] / 100);
 	$acumulaValor = ($acumulaValor + $porNuevo);
 	$notaMultiplicada = ($nota[3] * $porNuevo);

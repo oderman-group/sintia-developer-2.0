@@ -4,7 +4,12 @@ $idPaginaInterna = 'DT0131';
 include("../compartido/sintia-funciones.php");
 include("../compartido/guardar-historial-acciones.php");
 
-validarClave($_POST["clave"]);
+
+$validarClave=validarClave($_POST["clave"]);
+if($validarClave!=true){
+	echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.$_POST["idR"].'";</script>';
+	exit();
+}
 
 mysqli_query($conexion, "UPDATE usuarios SET 
 uss_usuario=           '" . $_POST["usuario"] . "', 

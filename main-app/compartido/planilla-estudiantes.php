@@ -9,14 +9,20 @@ include("../../config-general/consulta-usuario-actual.php");?>
 </head>
 <body style="font-family:Arial;">
 <?php
-	if(isset($_GET["grado"]) and isset($_GET["grupo"])){
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$_GET["grado"]."' AND gru_id='".$_GET["grupo"]."'");
+  $year=$agnoBD;
+  $BD=$_SESSION["inst"]."_".$agnoBD;
+  if(isset($_POST["agno"])){
+    $year=$_POST["agno"];
+    $BD=$_SESSION["inst"]."_".$_POST["agno"];
+	}
+	if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
 		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
-	}elseif(isset($_GET["grado"])){
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$_GET["grado"]."'")
+	}elseif(is_numeric($_REQUEST["grado"])){
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."'");
 		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	}else{
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos")
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos");
 		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	}
 ?>
@@ -25,10 +31,10 @@ include("../../config-general/consulta-usuario-actual.php");?>
     <?=$informacion_inst["info_nombre"]?><br>
     PLANILLA DE ESTUDIANTES</br>
     <?php
-        if(isset($_GET["grado"]) and isset($_GET["grupo"])){
-            echo strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);
-		}elseif(isset($_GET["grado"])) {
-			echo strtoupper($grados["gra_nombre"]);
+        if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+            echo strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year);
+		}elseif(is_numeric($_REQUEST["grado"])) {
+			echo strtoupper($grados["gra_nombre"]."<br>".$year);
 		}
 	?>
 </div>   
@@ -43,16 +49,18 @@ include("../../config-general/consulta-usuario-actual.php");?>
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
   </tr>
   <?php
-	if(isset($_GET["grado"]) and isset($_GET["grupo"])){
-		$adicional = "mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND ";
-	}elseif(isset($_GET["grado"])) {
-		$adicional = "mat_grado='".$_GET["grado"]."' AND ";
+  if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+		$adicional = "mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND ";
+  }elseif(is_numeric($_REQUEST["grado"])) {
+		$adicional = "mat_grado='".$_REQUEST["grado"]."' AND ";
 	}else{
 		$adicional = "";
 	}
   $cont=1;
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas am INNER JOIN academico_grados ag ON am.mat_grado=ag.gra_id
-	INNER JOIN academico_grupos agr ON am.mat_grupo=agr.gru_id WHERE ".$adicional." (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+  $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am 
+  INNER JOIN $BD.academico_grados ag ON am.mat_grado=ag.gra_id
+	INNER JOIN $BD.academico_grupos agr ON am.mat_grupo=agr.gru_id 
+  WHERE ".$adicional." (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
   $numE=mysqli_num_rows($consulta);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   ?>

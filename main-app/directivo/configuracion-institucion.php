@@ -66,11 +66,16 @@
 									  
 										<h3>Información Basica</h3>
 									    <fieldset>
-										
+                                            <?php
+                                                $infoLogo="sintia-logo-2023.png";
+                                                if(isset($datosinf["info_logo"]) && $datosinf["info_logo"]!=""){
+                                                    $infoLogo=$datosinf["info_logo"];
+                                                }
+                                            ?>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Logo</label>
                                                 <div class="col-sm-4">
-                                                    <img src="../files/images/logo/<?=$datosinf["info_logo"];?>" alt="<?=$datosinf["info_logo"];?>" style="width: 200px; height: 150px;">
+                                                    <img src="../files/images/logo/<?=$infoLogo;?>" alt="<?=$infoLogo;?>" style="width: 200px; height: 150px;">
                                                     <input type="file" name="logo" class="form-control">
                                                 </div>
                                             </div>

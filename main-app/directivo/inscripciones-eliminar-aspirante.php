@@ -3,7 +3,7 @@ include("session.php");
 include("../modelo/conexion.php");
 
 $consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
-$documentos = mysql_fetch_array($consultaDocumentos, MYSQLI_BOTH);
+$documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
 
 
 $ruta = '../admisiones/files/otros';

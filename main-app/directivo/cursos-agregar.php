@@ -48,6 +48,8 @@
                         </div>
 						
                         <div class="col-sm-9">
+                    
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
 								<div class="panel">
@@ -76,8 +78,13 @@
                                             <div class="col-sm-10">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal ");
+                                                $numCursos=mysqli_num_rows($opcionesConsulta);
+                                                $required="required";
+                                                if($numCursos==0){
+                                                    $required="";
+                                                }
 												?>
-                                                <select class="form-control  select2" name="graSiguiente" required>
+                                                <select class="form-control  select2" name="graSiguiente" <?=$required;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){

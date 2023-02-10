@@ -5,8 +5,8 @@ include("../modelo/conexion.php");
 	$_POST["ciudadR"] = trim($_POST["ciudadR"]);
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if(trim($_POST["tipoD"])=="" or trim($_POST["nDoc"])=="" or trim($_POST["genero"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["apellido2"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["grupo"])=="" or trim($_POST["tipoEst"])=="" or trim($_POST["matestM"])==""){
-		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos del estudiante.</samp>";
+	if(trim($_POST["tipoD"])=="" or trim($_POST["nDoc"])=="" or trim($_POST["genero"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["grupo"])=="" or trim($_POST["tipoEst"])=="" or trim($_POST["matestM"])==""){
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
 	$consultaRes=mysqli_query($conexion, "SELECT MAX(uss_id)+1 as iduss FROM usuarios;");
@@ -89,7 +89,7 @@ include("../modelo/conexion.php");
 		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$acudiente['uss_id']."', '".$_POST["id"]."')");
 		
 
-		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA"]."', uss_nombre='".$_POST["nombreA"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA"]."', uss_genero='".$_POST["generoA"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA"]."', uss_tipo_documento='".$_POST["tipoDAcudiente"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A"]."', uss_apellido2='".$_POST["apellido2A"]."', uss_nombre2='".$_POST["nombre2A"]."' WHERE uss_id='".$_POST["documentoA"]."'");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA"]."', uss_nombre='".$_POST["nombreA"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA"]."', uss_genero='".$_POST["generoA"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA"]."', uss_tipo_documento='".$_POST["tipoDAcudiente"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A"]."', uss_apellido2='".$_POST["apellido2A"]."', uss_nombre2='".$_POST["nombre2A"]."' WHERE uss_id='".$acudiente['uss_id']."'");
 		
 
 
@@ -104,12 +104,14 @@ include("../modelo/conexion.php");
 		if($_POST["documentoA2"]!=""){
 			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2)VALUES('".$_POST["documentoA2"]."','1234',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."')");
 			
-			$idAcudiente2 = mysql_insert_id();
+			$idAcudiente2 = mysqli_insert_id($conexion);
 			
 			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."'WHERE mat_id=".$_POST["id"].";");
 			
 		}
 	}
+	$estadoSintia=true;
+	$mensajeSintia='La información del estudiante se actualizo correctamente en SINTIA.';
 
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&msgsintia=1";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
 	exit();

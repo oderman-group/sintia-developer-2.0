@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0001';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -255,31 +258,27 @@
 								</div>
 								
 								<div class="col-md-8 col-lg-9">
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
 									<?php
-										if(isset($_GET['msgsion']) AND $_GET['msgsion']==''){
-										$aler='alert-danger';
-										$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
-												?>
-									<div class="alert alert-block <?=$aler;?>">
-										<button type="button" class="close" data-dismiss="alert">×</button>
-										<h4 class="alert-heading">SION!</h4>
-										<p><?=$mensajeSion;?></p>
-									</div>
-									<?php 
-									}
-										if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
-										$aler='alert-success';
-										$mensajeSion=$_GET['msgsion'];
-										if($_GET['stadsion']!=true){
+									if($config['conf_id_institucion']==1){
+										if(isset($_GET['msgsion'])){
 											$aler='alert-danger';
-										}
-												?>
-									<div class="alert alert-block <?=$aler;?>">
-										<button type="button" class="close" data-dismiss="alert">×</button>
-										<h4 class="alert-heading">SION!</h4>
-										<p><?=$mensajeSion;?></p>
-									</div>
+											$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
+											if($_GET['msgsion']!=''){
+												$aler='alert-success';
+												$mensajeSion=$_GET['msgsion'];
+												if($_GET['stadsion']!=true){
+													$aler='alert-danger';
+												}
+											}
+									?>
+										<div class="alert alert-block <?=$aler;?>">
+											<button type="button" class="close" data-dismiss="alert">×</button>
+											<h4 class="alert-heading">SION!</h4>
+											<p><?=$mensajeSion;?></p>
+										</div>
 									<?php 
+										}
 									}
 									if(isset($_GET['msgsintia'])){
 										$aler='alert-success';
@@ -335,14 +334,15 @@
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 INNER JOIN academico_grados ON gra_id=mat_grado
-													 INNER JOIN academico_grupos ON gru_id=mat_grupo
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
+													 /*$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+													 LEFT JOIN academico_grados ON gra_id=mat_grado
+													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
+													 LEFT JOIN usuarios ON uss_id=mat_id_usuario
 													 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
 													 WHERE mat_eliminado=0 $filtro
 													 ORDER BY mat_primer_apellido
-													 $filtroLimite");
+													 $filtroLimite");*/
+													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													 $contReg = 1;
 													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 													$estadosEtiquetas = array("","text-success","text-warning","text-danger","text-warning");
@@ -391,23 +391,24 @@
 																	<?php if($config['conf_id_institucion']==1){ ?>
 																		<li><a href="estudiantes-crear-sion.php?id=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
 																	<?php } ?>
-																	<li><a href="finanzas-cuentas.php?id=<?=$resultado["mat_id_usuario"];?>" target="_blank">Estado de cuenta</a></li>
+
+																	
 																	<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
 																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
-																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
-																	
-																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
-																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
 																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
 																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank">Retirar</a></li>
-
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
-
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
-
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
+																	<?php if($config['conf_id_institucion']==1){ ?>	
+																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
+																	<?php }?>
+																	<li><a href="finanzas-cuentas.php?id=<?=$resultado["mat_id_usuario"];?>" target="_blank">Estado de cuenta</a></li>
+																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
+																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
+																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
 																</ul>
 															</div>
 														</td>

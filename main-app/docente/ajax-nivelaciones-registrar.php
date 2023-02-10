@@ -8,8 +8,8 @@ if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) 
 include("../modelo/conexion.php");
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$_POST["codEst"]." AND niv_id_asg=".$_COOKIE["carga"]);
 
-$num = mysql_num_rows($consulta);
-$rB = mysql_fetch_array($consulta);
+$num = mysqli_num_rows($consulta);
+$rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 if($num==0){
 	mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_id='".$rB[0]."'");
 	

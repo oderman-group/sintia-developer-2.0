@@ -10,11 +10,6 @@ function Head(){
 }
 
 function Top(){
-	/*
-	include("modell/conexion.php");
-	$usuarioActivo = mysql_query("SELECT * FROM usuarios WHERE id='".$_SESSION["admin"]."'",$conexion);
-	$datosUsuario = mysql_fetch_array($usuarioActivo);
-	*/
 ?>
 <div class="navbar navbar-inverse top-nav">
 		<div class="navbar-inner">

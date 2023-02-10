@@ -200,10 +200,10 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Género</label>
                                         <div class="col-sm-4">
-                                            <?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-												?>
-                                            <select class="form-control  select2" name="genero" required>
+                                        <?php
+												                 $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+												                  ?>
+                                        <select class="form-control  select2" name="genero" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){

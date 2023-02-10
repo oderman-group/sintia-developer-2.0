@@ -38,6 +38,7 @@ if (is_numeric($_REQUEST["curso"])) {
 
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
+if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
 
 
@@ -148,11 +149,10 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
         ?>
 
-        <div align="center" style="margin-bottom:20px;"> <img src="enca.png"><br>
-
-            <!--<?= $informacion_inst["info_nombre"] ?><br>
-
-    BOLET&Iacute;N DE CALIFICACIONES<br>-->
+        <div align="center" style="margin-bottom:20px;">
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
+    <!-- <?=$informacion_inst["info_nombre"]?><br>
+    BOLETÍN DE CALIFICACIONES<br> -->
 
         </div>
 
