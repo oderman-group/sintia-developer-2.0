@@ -355,7 +355,7 @@ include("../class/Estudiantes.php");
                                         				
 														<td><span class="<?=$estadosEtiquetas[$resultado['mat_estado_matricula']];?>"><?=$estadosMatriculas[$resultado['mat_estado_matricula']];?></span></td>
 														<td><?=$resultado['mat_documento'];?></td>
-														<?php $nombre=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?>
+														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														<?php
 														if($resultado["mat_inclusion"]==0){
 															$color=$config[6];

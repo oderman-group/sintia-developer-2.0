@@ -156,7 +156,7 @@ th {
 													<tr style="background-color: <?=$colorFondo;?>">
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
 														<td style="color: <?=$colorEstudiante;?>">
-															<?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														</td>
 
 														<?php

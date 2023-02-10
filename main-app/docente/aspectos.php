@@ -147,7 +147,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                         <td><?=$contReg;?></td>
 														<td width="60%">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														</td>
 														<td width="20%">
 															

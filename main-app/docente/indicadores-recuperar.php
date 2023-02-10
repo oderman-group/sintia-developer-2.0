@@ -252,7 +252,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<td><?=$resultado['mat_id'];?></td>
 														<td style="color: <?=$colorEstudiante;?>">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														</td>
 														<td>
 															<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>&indicador=<?=$_GET["idR"];?>" style="text-decoration:underline;">

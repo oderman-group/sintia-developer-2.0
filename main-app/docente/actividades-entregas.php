@@ -140,7 +140,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
 														<td><?=$datos1['ent_fecha'];?></td>
 														<td><?php if($datos1[1]>0){echo $datos1[1]." Min. y ";} if($datos1[2]>0){echo $datos1[2]." Seg.";}?></td>
 														<td>

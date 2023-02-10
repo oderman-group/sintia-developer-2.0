@@ -150,7 +150,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                         <td><?=$contReg;?></td>
 														<td>
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														</td>
 														<td>
 															<input type="number" style="text-align: center;" size="5" maxlength="3" value="<?=$notas['aus_ausencias'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)" tabindex="<?=$contReg;?>">
