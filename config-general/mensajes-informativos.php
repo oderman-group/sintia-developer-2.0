@@ -61,12 +61,12 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
 
             case 'ER_DT_7':
-                $tipo = 'warning';
-                $mensaje = 'Hubo un problema al importar los registros.';
+                $tipo = 'danger';
+                $mensaje = $_GET['msj'];;
             break;
 
             case 'ER_DT_8':
-                $tipo = 'warning';
+                $tipo = 'danger';
                 $mensaje = 'El archivo enviado es invalido. Por favor vuelva a intentarlo.';
             break;
 
@@ -97,8 +97,12 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
 
             case 'SC_DT_4':
+                if($_GET["no"]>0){
+                    $no= '- No importaron '.$_GET["no"].' estudiantes por falta de Nro Documento, 1er Nombre, 1er Apellido y Grado.';
+                }
                 $tipo = 'success';
-                $mensaje = 'Excel importado correctamente.';
+                $mensaje = 'Excel importado correctamente.<br/>
+                            - Se importaron '.$_GET["si"].' estudiantes correctamente.<br>'.$no;
             break;
 
 
