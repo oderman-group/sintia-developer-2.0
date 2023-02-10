@@ -4,6 +4,9 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+include("../class/Estudiantes.php");
+?>
+<?php
 $consultaValores=mysqli_query($conexion, "SELECT
 (SELECT sum(act_valor) FROM academico_actividades 
 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
@@ -171,9 +174,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;

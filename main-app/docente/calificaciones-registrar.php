@@ -11,6 +11,10 @@
 <?php include("../compartido/head.php");?>
 
 <?php
+include("../class/Estudiantes.php");
+?>
+
+<?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
 WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
@@ -343,18 +347,10 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 <tbody>
 
 													<?php
-
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
-
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
-
-													 $contReg = 1;
-
-													 $colorNota = "black";
-
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$contReg = 1;
+													$colorNota = "black";
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														 if($calificacion['act_registrada']==1){
 

@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DC0067';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 
 <!-- Axios -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
@@ -129,9 +132,7 @@ th {
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;

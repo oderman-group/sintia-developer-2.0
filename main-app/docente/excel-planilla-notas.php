@@ -5,14 +5,18 @@ header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 header("content-disposition: attachment;filename=notas".$_GET["idR"].".xls");
 include("../modelo/conexion.php");
-?><head>
+?>
+<?php include("verificar-carga.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
+<head>
 	<title>Planilla de notas</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
 <?php
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-WHERE mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido");
+$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 ?>
 
 

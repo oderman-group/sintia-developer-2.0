@@ -4,6 +4,9 @@
 <?php include("verificar-carga.php");?>
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -200,9 +203,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -223,7 +224,10 @@
 														 ");
 														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
 														 
-														 @$porcentaje = round(($datos2[1]/$datos2[0])*100,$config['conf_decimales_notas']);
+														 if($datos2[0] > 0){
+															$porcentaje = round(($datos2[1]/$datos2[0])*100,$config['conf_decimales_notas']);
+														 }
+														 
 														 $nota = round(($config['conf_nota_hasta']*($porcentaje/100)),$config['conf_decimales_notas']);
 														 
 														 if($nota<$config[5])$color = $config[6]; elseif($nota>=$config[5]) $color = $config[7];
