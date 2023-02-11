@@ -47,4 +47,4 @@ if($numCargaActual==0)
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=100";</script>';
 	exit();		
 }
-?>
+$filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
