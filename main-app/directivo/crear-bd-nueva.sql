@@ -270,6 +270,16 @@ CREATE TABLE `academico_areas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `academico_areas`
+--
+
+LOCK TABLES `academico_areas` WRITE;
+/*!40000 ALTER TABLE `academico_areas` DISABLE KEYS */;
+INSERT INTO `academico_areas` VALUES (1,'AREA DE PRUEBA',1);
+/*!40000 ALTER TABLE `academico_areas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `academico_ausencias`
 --
 
@@ -377,6 +387,16 @@ CREATE TABLE `academico_cargas` (
   KEY `Index_ordinarios_5` (`car_docente`,`car_curso`,`car_grupo`,`car_materia`,`car_periodo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `academico_cargas`
+--
+
+LOCK TABLES `academico_cargas` WRITE;
+/*!40000 ALTER TABLE `academico_cargas` DISABLE KEYS */;
+INSERT INTO `academico_cargas` VALUES (1,3,1,1,1,1,1,1,3,2,'0000-00-00 00:00:00',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `academico_cargas` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `academico_cargas_acceso`
@@ -585,6 +605,17 @@ CREATE TABLE `academico_grados` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `academico_grados`
+--
+
+LOCK TABLES `academico_grados` WRITE;
+/*!40000 ALTER TABLE `academico_grados` DISABLE KEYS */;
+INSERT INTO `academico_grados` VALUES (1,'0','PRIMERO',1,0,0,1,2,NULL,NULL,15,NULL,NULL),(2,'0','SEGUNDO',1,0,0,1,3,NULL,NULL,1,NULL,NULL),(3,'0','TERCERO',1,0,0,1,4,NULL,NULL,2,NULL,NULL),(4,'0','CUARTO',1,0,0,1,5,NULL,NULL,3,NULL,NULL),(5,'0','QUINTO',1,0,0,1,6,NULL,NULL,4,NULL,NULL),(6,'0','SEXTO',1,0,0,1,7,NULL,NULL,5,NULL,NULL),(7,'0','SEPTIMO',1,0,0,1,8,NULL,NULL,6,NULL,NULL),(8,'0','OCTAVO',1,0,0,1,9,NULL,NULL,7,NULL,NULL),(9,'0','NOVENO',1,0,0,1,10,NULL,NULL,8,NULL,NULL),(10,'0','DECIMO',1,0,0,1,11,NULL,NULL,9,NULL,NULL),(11,'0','UNDECIMO',1,0,0,1,0,NULL,NULL,10,NULL,NULL),(12,'0','PARVULOS',1,0,0,1,13,NULL,NULL,0,NULL,NULL),(13,'0','PREJARDIN',1,0,0,1,14,NULL,NULL,12,NULL,NULL),(14,'0','JARDIN',1,0,0,1,15,NULL,NULL,13,NULL,NULL),(15,'0','TRANSICIÓN',1,0,0,1,1,NULL,NULL,14,NULL,NULL);
+/*!40000 ALTER TABLE `academico_grados` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
 -- Table structure for table `academico_grados_periodos`
 --
 
@@ -755,6 +786,17 @@ CREATE TABLE `academico_materias` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `academico_materias`
+--
+
+LOCK TABLES `academico_materias` WRITE;
+/*!40000 ALTER TABLE `academico_materias` DISABLE KEYS */;
+INSERT INTO `academico_materias` VALUES (1,'1','MATERIA DE PRUEBA','PRU',1,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `academico_materias` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
 -- Table structure for table `academico_matricula_proceso`
 --
 
@@ -869,6 +911,17 @@ CREATE TABLE `academico_matriculas` (
   KEY `Index_ordinarios_1` (`mat_grado`,`mat_grupo`,`mat_estado_matricula`,`mat_id_usuario`,`mat_eliminado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `academico_matriculas`
+--
+
+LOCK TABLES `academico_matriculas` WRITE;
+/*!40000 ALTER TABLE `academico_matriculas` DISABLE KEYS */;
+INSERT INTO `academico_matriculas` VALUES (1,'00001','0000-00-00 00:00:00','PRUEBA','DE','ESTUDIANTE',1,1,126,'1993-10-21','1',108,'0000000000','1',111,'Cra 00 #00-00','B. Prueba',NULL,NULL,116,NULL,129,1,5,0,'notiene@notiene.com',4,0,'0',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `academico_matriculas` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
 -- Table structure for table `academico_matriculas_documentos`
@@ -1317,7 +1370,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'sintia','sintia2014$',1,'ADMINISTRACIÓN PLATAFORMA SINTIA',1,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',0,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,NULL,NULL,'','calle 44 # 77 71',156,0,NULL,21,165,151,'111',NULL,0,150,'https://plataformasintia.com',169,117,177,182,'white-sidebar-color','header-white','logo-indigo',NULL,0,0,'2022-12-17 21:02:42',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `usuarios` VALUES (1,'sintia','sintia2014$',1,'ADMINISTRACIÓN PLATAFORMA SINTIA',1,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',0,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,NULL,NULL,'','calle 44 # 77 71',156,0,NULL,21,165,151,'111',NULL,0,150,'https://plataformasintia.com',169,117,177,182,'white-sidebar-color','header-white','logo-indigo',NULL,0,0,'2022-12-17 21:02:42',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'pruebaDT','pruebaDT',5,'USUARIO DE PRUEBA DIRECTIVO',1,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'pruebaDC','pruebaDC',2,'USUARIO DE PRUEBA DOCENTES',5,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'pruebaAC','pruebaAC',3,'USUARIO DE PRUEBA ACUDIENTES',5,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'pruebaES','pruebaES',4,'USUARIO DE PRUEBA ESTUDIANTES',5,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
