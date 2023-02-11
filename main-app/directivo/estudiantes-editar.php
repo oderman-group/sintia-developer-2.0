@@ -3,11 +3,10 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-//ESTUDIANTE ACTUAL
-$consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
-
-$numEstudianteActual = mysqli_num_rows($consultaEstudianteActual);
-$datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
+include("../class/Estudiantes.php");
+?>
+<?php
+$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 ?>
     <!-- Material Design Lite CSS -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
