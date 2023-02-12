@@ -150,14 +150,13 @@ $(document).ready(function() {
                             <div class="panel-body">
 
 
-                                <form name="formularioGuardar" action="guardar.php" method="post">
-                                    <input type="hidden" value="24" name="id">
+                                <form name="formularioGuardar" action="usuarios-guardar.php" method="post">
 
                                     <div class="form-group row">
                                         <label id="" class="col-sm-2 control-label">Usuario</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="usuario" id="usuario" autofocus
-                                                class="form-control" value="<?=$datosUsuario['usuario'];?> ">
+                                                class="form-control" value="<?=$datosUsuario['usuario'];?>">
 
                                             
 
