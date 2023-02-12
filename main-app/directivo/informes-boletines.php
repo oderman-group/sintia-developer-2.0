@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0100';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -118,22 +121,34 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estudiante</label>
                                             <div class="col-sm-8">
-												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-												INNER JOIN academico_grados ON gra_id=mat_grado
-												INNER JOIN academico_grupos ON gru_id=mat_grupo
-												INNER JOIN usuarios ON uss_id=mat_id_usuario
-												INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-												WHERE mat_eliminado=0
-												ORDER BY mat_grado, mat_grupo, mat_primer_apellido");
-												?>
+
                                                 <select class="form-control  select2" name="estudiante" required>
                                                     <option value="">Seleccione una opción</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=strtoupper($opcionesDatos['mat_primer_apellido']." ".$opcionesDatos['mat_segundo_apellido']." ".$opcionesDatos['mat_nombres']);?> - <?=strtoupper($opcionesDatos['gra_nombre']." ".$opcionesDatos['gru_nombre']);?></option>
-													<?php }?>
+                                                    <?php
+                                                    $grados = mysqli_query($conexion, "SELECT * FROM academico_grados 
+                                                    WHERE gra_estado=1
+                                                    ORDER BY gra_vocal
+                                                    ");
+                                                    while($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)){
+                                                    ?>
+
+                                                    <optgroup label="<?=$grado['gra_nombre'];?>">
+                                                        <?php
+                                                        $filtro = ' AND mat_grado='.$grado['gra_id'];
+                                                        $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+                                                        while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                        ?>
+                                                        
+                                                            <option value="<?=$opcionesDatos[0];?>">
+                                                                <?="[".$opcionesDatos['mat_id']."] ".strtoupper($opcionesDatos['mat_primer_apellido']." ".$opcionesDatos['mat_segundo_apellido']." ".$opcionesDatos['mat_nombres']." ".$opcionesDatos['mat_nombre2']);?> 
+                                                                - <?=strtoupper($opcionesDatos['gra_nombre']." ".$opcionesDatos['gru_nombre']);?>
+                                                            </option>
+                                                        
+                                                        <?php }?>
+
+                                                    </optgroup>    
+                                                    <?php }?>
+
                                                 </select>
                                             </div>
                                         </div>

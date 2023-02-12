@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
 <head>
@@ -38,8 +40,13 @@ include("../../config-general/consulta-usuario-actual.php");?>
       
     </div>
 
-  <table bgcolor="#FFFFFF" width="100%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-    <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+    <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:#6017dc; 
+  font-size:11px;
+  ">
+  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
       <th>ID</th>
       <th>Documento</th>
       <th>Estudiante</th>
@@ -61,17 +68,17 @@ include("../../config-general/consulta-usuario-actual.php");?>
       $ordenado = $_GET["orden"]." DESC";
     }
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  LEFT JOIN academico_grados ON gra_id=mat_grado
-  WHERE  mat_eliminado=0 $filtro
-  ORDER BY $ordenado");
+    $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+  
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
       $colorProceso = 'tomato';
       if ($resultado["mat_informe_parcial"] >= 1) {
         $colorProceso = '';
       }
     ?>
-      <tr style="font-size:13px;">
+      <tr style="
+  border-color:#41c4c4;
+  ">
         <td><?= $resultado['mat_id']; ?></td>
         <td><?= $resultado[12]; ?></td>
         <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?></a></td>
@@ -85,11 +92,10 @@ include("../../config-general/consulta-usuario-actual.php");?>
     } //Fin mientras que
     ?>
   </table>
-  </center>
-  <div align="center" style="font-size:10px; margin-top:10px;">
-    <img src="../files/images/sintia.png" height="50" width="100"><br>
-    SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?= date("l, d-M-Y"); ?>
-  </div>
+  <div style="font-size:10px; margin-top:10px; text-align:center;">
+      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
+      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
+     </div>
 
   
   </div>
