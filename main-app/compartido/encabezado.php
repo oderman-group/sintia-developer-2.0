@@ -31,7 +31,7 @@ $institucionNombre = $institucion['ins_siglas'];
 				
                  <form class="search-form-opened" action="paginas-buscador.php" method="GET" name="busqueda">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Busca cualquier pagina..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
+                        <input type="text" class="form-control" placeholder="Buscar información..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
                         <span class="input-group-btn">
                         <span class="input-group-btn">
                           <a href="javascript:;" onclick="document.forms.busqueda.submit()" class="btn submit">
