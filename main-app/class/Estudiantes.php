@@ -16,9 +16,37 @@ class Estudiantes {
             LEFT JOIN academico_grados ON gra_id=mat_grado
             LEFT JOIN academico_grupos ON gru_id=mat_grupo
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+            LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
             WHERE mat_eliminado IN (0, '".$eliminados."')
             ".$filtroAdicional."
             ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres
+            ".$filtroLimite."
+            ");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
+    public static function listarEstudiantesEnGrados(
+        string $filtroAdicional = '', 
+        string $filtroLimite    = 'LIMIT 0, 2000'
+    )
+    {
+        global $conexion, $baseDatosServicios;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            LEFT JOIN usuarios ON uss_id=mat_id_usuario
+            INNER JOIN academico_grados ON gra_id=mat_grado
+            INNER JOIN academico_grupos ON gru_id=mat_grupo
+            LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+            WHERE mat_eliminado = 0
+            ".$filtroAdicional."
+            ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
             ".$filtroLimite."
             ");
         } catch (Exception $e) {
@@ -184,6 +212,26 @@ class Estudiantes {
         }
 
         return $resultado;
+
+    }
+
+    public static function validarExistenciaEstudiante($estudiante = 0)
+    {
+
+        global $conexion;
+        $num = 0;
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
+            ");
+            $num = mysqli_num_rows($consulta);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $num;
 
     }
 
