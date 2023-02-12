@@ -42,7 +42,7 @@ include("../class/Estudiantes.php");
   if(isset($_GET["grado"]))  { $filtro = " AND mat_grado = '".$_GET["grado"]."'";}
   if(isset($_POST["grupo"]) AND $_POST["grupo"]!=""){ $filtro .= " AND mat_grupo='".$_POST["grupo"]."'";}
   $cont=1;
-  $consulta = Estudiantes::listarEstudiantes(0, $filtro, NULL);
+  $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);

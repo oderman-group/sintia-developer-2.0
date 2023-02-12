@@ -461,7 +461,7 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Documento<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['documentoA'];?>">
 												</div>
@@ -505,7 +505,7 @@
 											</div>
 
 											<div class="form-group row">												
-												<label class="col-sm-2 control-label">Nombre<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
 													<input type="text" name="nombresA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombreA'];?>">
 												</div>
