@@ -238,7 +238,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                         $promedioFinal = round($promedioFinal/$config["conf_periodo"],2);
                         $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
-                        WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta",$conexion);
+                        WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta");
                         $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
                     ?>
                     <td><?=$promedioFinal;?></td>
@@ -261,7 +261,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                 <?php 
                 $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."'",$conexion);
+                WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."'");
                 while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
                 ?>
 
@@ -281,10 +281,10 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             <thead>
                 <tr>
                     <td style="width: 40%;">Dir. Curso <?= strtoupper($matriculadosDatos['uss_nombre']); ?></td>
-                    <td style="width: 15%;"><img src="sup.png" width="10"> SUP 4.7 – 5.0 </td>
-                    <td style="width: 15%;"><img src="alto.png" width="10"> ALT 4.0 – 4.6 </td>
-                    <td style="width: 15%;"><img src="bas.png" width="10"> BAS 3.0 – 3.9 </td>
-                    <td style="width: 15%;"><img src="bajo.png" width="10"> BAJ 1.0 – 2.9</td>
+                    <td style="width: 15%;"><img src="../files/iconos/sup.png" width="10"> SUP 4.7 – 5.0 </td>
+                    <td style="width: 15%;"><img src="../files/iconos/alto.png" width="10"> ALT 4.0 – 4.6 </td>
+                    <td style="width: 15%;"><img src="../files/iconos/bas.png" width="10"> BAS 3.0 – 3.9 </td>
+                    <td style="width: 15%;"><img src="../files/iconos/bajo.png" width="10"> BAJ 1.0 – 2.9</td>
                 </tr>
 
                 <tr style="height: 70px;">
