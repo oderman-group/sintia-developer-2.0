@@ -70,11 +70,12 @@
                                         </div>
 										
 										<div class="form-group row">
-												<label class="col-sm-3 control-label">Subir la planilla lista</label>
-												<div class="col-sm-9">
-													<input type="file" name="planilla" required>
-												</div>
-											</div>
+                                            <label class="col-sm-3 control-label">Subir la planilla lista</label>
+                                            <div class="col-sm-9">
+                                                <input type="file" name="planilla" required><br>
+                                                <span style="font-size: 12px; color:red;">Tenga en cuenta, para importar un estudiante los campos del Nro. de cédula, Primer Nombre, Primer Apellido y grado, son requeridos.</span>
+                                            </div>
+                                        </div>
 
 										<input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
 										
