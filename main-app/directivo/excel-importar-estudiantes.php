@@ -7,8 +7,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 $temName=$_FILES['planilla']['tmp_name'];
 $archivo = $_FILES['planilla']['name'];
 $destino = "../files/excel/";
-$nombreArchivo= $destino.$archivo;
 $extension = end(explode(".", $archivo));
+$fullArchivo = uniqid('importado_').".".$extension;
+$nombreArchivo= $destino.$fullArchivo;
 
 if($extension == 'xlsx'){
 
