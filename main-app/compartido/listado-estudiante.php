@@ -27,6 +27,7 @@ include("../class/Estudiantes.php");
         <th>NO.</th>      
         <th>ID Estudiante</th>
         <th>ID Usuario</th>
+        <th>Estado</th>
         <th>Documento</th>
         <th>Estudiante</th>
         <th>Grado</th>
@@ -53,6 +54,7 @@ include("../class/Estudiantes.php");
       <td style="text-align:center"><?=$cont;?></td>  
       <td style="text-align:center"><?=$resultado['mat_id'];?></td>
       <td style="text-align:center"><?=$resultado["uss_id"];?></td>
+      <td style="text-align:center"><?=$estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];?></td>
       <td><?=$resultado['mat_documento'];?></td>
       <td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
       <td><?=$resultado["gra_nombre"];?></td>
