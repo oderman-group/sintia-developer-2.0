@@ -39,9 +39,9 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Número de documento</label>
+												<label class="col-sm-2 control-label">Número de documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nDoc" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[12];?>">
+													<input type="text" name="nDoc" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[12];?>">
 												</div>
 											</div>	
 												
@@ -76,9 +76,9 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Primer apellido</label>
+												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[3];?>">
+													<input type="text" name="apellido1" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[3];?>">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
@@ -88,9 +88,9 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Nombres</label>
+												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nombres" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[5];?>">
+													<input type="text" name="nombres" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[5];?>">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
