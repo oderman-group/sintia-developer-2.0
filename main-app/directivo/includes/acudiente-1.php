@@ -29,9 +29,9 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Documento</label>
+												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>">
+													<input type="text" name="documentoA" required class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>">
 												</div>
 											</div>
 												
@@ -71,9 +71,9 @@
 											</div>
 
 											<div class="form-group row">												
-												<label class="col-sm-2 control-label">Nombre</label>
+												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="nombreA" class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_nombre"])){ echo $acudiente["uss_nombre"];}?>">
+													<input type="text" name="nombreA" required class="form-control" autocomplete="off" value="<?php if(isset($acudiente["uss_nombre"])){ echo $acudiente["uss_nombre"];}?>">
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>

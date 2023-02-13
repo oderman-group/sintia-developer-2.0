@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0082';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -61,7 +64,7 @@
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
-                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido") ;
+                                                    $c=Estudiantes::listarEstudiantesEnGrados('', '');
                                                     while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>
@@ -125,7 +128,7 @@
                                                     <select class="form-control  select2" name="id" required>
                                                     <option value=""></option>
                                                     <?php 
-                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_eliminado=0 ORDER BY mat_primer_apellido") ;
+                                                    $c=Estudiantes::listarEstudiantesEnGrados('', '');
                                                     while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>

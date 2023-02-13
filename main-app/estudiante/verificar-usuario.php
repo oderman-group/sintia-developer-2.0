@@ -12,11 +12,5 @@ if($datosUsuarioActual[3]==4){
 }
 
 //ESTUDIANTE ACTUAL
-$consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-LEFT JOIN usuarios ON uss_id=mat_acudiente
-INNER JOIN academico_grados ON gra_id=mat_grado
-WHERE mat_id_usuario='".$usuarioEstudianteConsultaActual."'");
-
-$numEstudianteActual = mysqli_num_rows($consultaEstudianteActual);
-$datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
-?>
+include("../class/Estudiantes.php");
+$datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($usuarioEstudianteConsultaActual);

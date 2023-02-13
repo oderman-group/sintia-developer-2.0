@@ -27,6 +27,7 @@ include("../class/Estudiantes.php");
         <th>NO.</th>      
         <th>ID Estudiante</th>
         <th>ID Usuario</th>
+        <th>Estado</th>
         <th>Documento</th>
         <th>Estudiante</th>
         <th>Grado</th>
@@ -42,7 +43,7 @@ include("../class/Estudiantes.php");
   if(isset($_GET["grado"]))  { $filtro = " AND mat_grado = '".$_GET["grado"]."'";}
   if(isset($_POST["grupo"]) AND $_POST["grupo"]!=""){ $filtro .= " AND mat_grupo='".$_POST["grupo"]."'";}
   $cont=1;
-  $consulta = Estudiantes::listarEstudiantes(0, $filtro, NULL);
+  $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
@@ -53,6 +54,7 @@ include("../class/Estudiantes.php");
       <td style="text-align:center"><?=$cont;?></td>  
       <td style="text-align:center"><?=$resultado['mat_id'];?></td>
       <td style="text-align:center"><?=$resultado["uss_id"];?></td>
+      <td style="text-align:center"><?=$estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];?></td>
       <td><?=$resultado['mat_documento'];?></td>
       <td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
       <td><?=$resultado["gra_nombre"];?></td>

@@ -46,7 +46,6 @@
 											<p><a href="reportes-academicos-consultas.php">10. Reporte general</a></p>
 											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
 											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">12. Reporte vista observador</a></p>
-											<p><a href="../compartido/reporte-estudiantes.php" target="_blank">13. Informe de estudiantes</a></p>
 										</div>
                                 	</div>
 								</div>
