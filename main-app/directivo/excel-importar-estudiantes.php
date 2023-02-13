@@ -25,6 +25,7 @@ if($extension == 'xlsx'){
 			$f=2;
 			$numImportados=0;
 			$numNoImportados=0;
+			$numNoXusuarios=0;
 			while($f<=$numFilas){
 				$A= $hojaActual->getCell('A'.$f)->getValue();
 				$B= $hojaActual->getCell('B'.$f)->getValue();
@@ -238,27 +239,70 @@ if($extension == 'xlsx'){
 						}
 
 						try{
-							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario,uss_clave,uss_tipo,uss_nombre,uss_estado,uss_foto,uss_portada,uss_idioma,uss_email,uss_fecha_nacimiento,uss_celular,uss_genero,uss_bloqueado,uss_fecha_registro,uss_responsable_registro,uss_direccion,uss_intentos_fallidos,uss_apellido1,uss_apellido2,uss_nombre2) VALUES ('".$documento."', '12345678', 4, '".$nombre1."',0,'default.png','default.png',1,'".$email."','".$fNacimiento."','".$celular."', '".$genero."',0, now(),'".$_SESSION["id"]."', '".$direccion."',0, '".$apellido1."','".$apellido2."','".$nombre2."')");
+							$usuarioConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$documento."'");
 						} catch (Exception $e) {
 							echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 							exit();
 						}
-						$idRegistro = mysqli_insert_id($conexion);
-
+						$usuarioNum = mysqli_num_rows($usuarioConsulta);
 						try{
-							mysqli_query($conexion, "INSERT INTO academico_matriculas(mat_fecha,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_grado,mat_grupo,mat_genero,mat_fecha_nacimiento,mat_tipo_documento,mat_documento,mat_direccion,mat_barrio,mat_celular,mat_estrato,mat_tipo,mat_estado_matricula,mat_id_usuario,mat_eliminado,mat_email,mat_inclusion,mat_extranjero,mat_estado_agno,mat_solicitud_inscripcion,mat_tipo_sangre,mat_eps,mat_nombre2) VALUES (now(), '".$apellido1."','".$apellido2."','".$nombre1."','".$grado."','".$grupo."', '".$genero."','".$fNacimiento."','".$tDocumento."','".$documento."', '".$direccion."','".$barrio."','".$celular."','".$estrato."',128,4,'".$idRegistro."',0,'".$email."',0,0,0,0,'".$tSangre."','".$eps."','".$nombre2."')");
+							$matConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_documento='".$documento."'");
 						} catch (Exception $e) {
 							echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 							exit();
 						}
-						$numImportados++;
+						$matNum = mysqli_num_rows($matConsulta);
+						if ($usuarioNum > 0 AND $matNum > 0) {
+							$numNoXusuarios++;
+						}elseif ($usuarioNum > 0 AND $matNum==0) {//Si existe el usuario y no la matricula, entonces creamos la matricula del estudiante
+							$datosUsuario = mysqli_fetch_array($usuarioConsulta, MYSQLI_BOTH);
+							try{
+								mysqli_query($conexion, "INSERT INTO academico_matriculas(mat_fecha,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_grado,mat_grupo,mat_genero,mat_fecha_nacimiento,mat_tipo_documento,mat_documento,mat_direccion,mat_barrio,mat_celular,mat_estrato,mat_tipo,mat_estado_matricula,mat_id_usuario,mat_eliminado,mat_email,mat_inclusion,mat_extranjero,mat_estado_agno,mat_solicitud_inscripcion,mat_tipo_sangre,mat_eps,mat_nombre2) VALUES (now(), '".$apellido1."','".$apellido2."','".$nombre1."','".$grado."','".$grupo."', '".$genero."','".$fNacimiento."','".$tDocumento."','".$documento."', '".$direccion."','".$barrio."','".$celular."','".$estrato."',128,4,'".$datosUsuario['uss_id']."',0,'".$email."',0,0,0,0,'".$tSangre."','".$eps."','".$nombre2."')");
+							} catch (Exception $e) {
+								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+								exit();
+							}
+							$numImportados++;
+						}elseif ($usuarioNum==0 AND $matNum > 0) {//Si existe la matricula y no el usuario, entonces creamos el usuario del estudiante
+							$datosMat = mysqli_fetch_array($matConsulta, MYSQLI_BOTH);
+							try{
+								mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario,uss_clave,uss_tipo,uss_nombre,uss_estado,uss_foto,uss_portada,uss_idioma,uss_email,uss_fecha_nacimiento,uss_celular,uss_genero,uss_bloqueado,uss_fecha_registro,uss_responsable_registro,uss_direccion,uss_intentos_fallidos,uss_apellido1,uss_apellido2,uss_nombre2) VALUES ('".$documento."', '12345678', 4, '".$nombre1."',0,'default.png','default.png',1,'".$email."','".$fNacimiento."','".$celular."', '".$genero."',0, now(),'".$_SESSION["id"]."', '".$direccion."',0, '".$apellido1."','".$apellido2."','".$nombre2."')");
+							} catch (Exception $e) {
+								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+								exit();
+							}
+							$idRegistro = mysqli_insert_id($conexion);
+							try {
+								mysqli_query($conexion, "UPDATE academico_matriculas SET mat_id_usuario='".$idRegistro."' WHERE mat_id='".$datosMat["mat_id"]."'");
+							} catch (Exception $e) {
+								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+								exit();
+							}
+							$numImportados++;
+						}else{
+							try{
+								mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario,uss_clave,uss_tipo,uss_nombre,uss_estado,uss_foto,uss_portada,uss_idioma,uss_email,uss_fecha_nacimiento,uss_celular,uss_genero,uss_bloqueado,uss_fecha_registro,uss_responsable_registro,uss_direccion,uss_intentos_fallidos,uss_apellido1,uss_apellido2,uss_nombre2) VALUES ('".$documento."', '12345678', 4, '".$nombre1."',0,'default.png','default.png',1,'".$email."','".$fNacimiento."','".$celular."', '".$genero."',0, now(),'".$_SESSION["id"]."', '".$direccion."',0, '".$apellido1."','".$apellido2."','".$nombre2."')");
+							} catch (Exception $e) {
+								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+								exit();
+							}
+							$idRegistro = mysqli_insert_id($conexion);
+
+							try{
+								mysqli_query($conexion, "INSERT INTO academico_matriculas(mat_fecha,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_grado,mat_grupo,mat_genero,mat_fecha_nacimiento,mat_tipo_documento,mat_documento,mat_direccion,mat_barrio,mat_celular,mat_estrato,mat_tipo,mat_estado_matricula,mat_id_usuario,mat_eliminado,mat_email,mat_inclusion,mat_extranjero,mat_estado_agno,mat_solicitud_inscripcion,mat_tipo_sangre,mat_eps,mat_nombre2) VALUES (now(), '".$apellido1."','".$apellido2."','".$nombre1."','".$grado."','".$grupo."', '".$genero."','".$fNacimiento."','".$tDocumento."','".$documento."', '".$direccion."','".$barrio."','".$celular."','".$estrato."',128,4,'".$idRegistro."',0,'".$email."',0,0,0,0,'".$tSangre."','".$eps."','".$nombre2."')");
+							} catch (Exception $e) {
+								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+								exit();
+							}
+							$numImportados++;
+						}
 					}else{
 						$numNoImportados++;
 					}
 				}
 				$f++;
 			}
-			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&numImportados='.$numImportados.'&numNoImportados='.$numNoImportados.'";</script>';
+			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&numImportados='.$numImportados.'&numNoImportados='.$numNoImportados.'&numNoXusuarios='.$numNoXusuarios.'";</script>';
 			exit();
 		}else{
 			switch ($_FILES['planilla']['error']) {
