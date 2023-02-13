@@ -102,12 +102,15 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
 
             case 'SC_DT_4':
+                if($_GET["numNoXusuarios"]>0){
+                    $numNoXusuarios= '<br>- '.$_GET["numNoXusuarios"].' estudiantes no se importaron, Sus documentos ya se encuentran registrados.';
+                }
                 if($_GET["numNoImportados"]>0){
-                    $numNoImportados= '- No se importaron '.$_GET["numNoImportados"].' estudiantes por falta de información requerida.';
+                    $numNoImportados= '<br>- No se importaron '.$_GET["numNoImportados"].' estudiantes por falta de información requerida.';
                 }
                 $tipo = 'success';
                 $mensaje = 'Excel importado correctamente.<br/>
-                            - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.<br>'.$numNoImportados;
+                            - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoXusuarios.$numNoImportados;
             break;
 
 
