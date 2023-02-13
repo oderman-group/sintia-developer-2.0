@@ -42,9 +42,11 @@ $num = mysqli_num_rows($rst_usr);
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
 if($num>0)
 {	
-	//INICIO SESION
-	$_SESSION["id"] = $fila[0];
-	
+	if($fila['uss_bloqueado'] == 1){
+		header("Location:".$REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+		exit();
+	}
+
 	$URLdefault = 'noticias.php';
 	if($_POST["urlDefault"]!=""){$URLdefault = $_POST["urlDefault"];}	
 	
@@ -73,6 +75,10 @@ if($num>0)
 		  $url = 'salir.php';
 		break;
 	}
+
+	//INICIO SESION
+	$_SESSION["id"] = $fila[0];
+
 	include("navegador.php");
 	include("ip.php");
 	mysqli_query($conexion, "UPDATE usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila[0]."'");

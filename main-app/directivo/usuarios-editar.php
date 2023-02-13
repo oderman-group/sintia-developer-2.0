@@ -178,7 +178,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														if(
 														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 6) 
-														and $datosUsuarioActual['uss_tipo'==5]){continue;}
+														and $datosUsuarioActual['uss_tipo']==5){continue;}
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
 													?>

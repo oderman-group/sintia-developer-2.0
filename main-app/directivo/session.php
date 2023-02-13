@@ -12,7 +12,7 @@ else
 	include("../../config-general/consulta-usuario-actual.php");
 	include("../../config-general/verificar-usuario-bloqueado.php");
 
-	if($datosUsuarioActual[3]!=5 && $datosUsuarioActual[3]!=1)
+	if($datosUsuarioActual[3]!=5 && $datosUsuarioActual[3]!=1 && !strpos($_SERVER['PHP_SELF'], 'page-info.php'))
 	{
 		if(isset($_SESSION["yearAnterior"])){
 			$_SESSION["cambioYear"]=$_SESSION["bd"];

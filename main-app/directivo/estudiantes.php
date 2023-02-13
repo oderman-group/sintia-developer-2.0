@@ -358,9 +358,9 @@ include("../class/Estudiantes.php");
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														
 														<?php
-														$color = $config[6];
+														$color = '';
 														if($resultado["mat_inclusion"] == 1){
-															$color = $config[5];
+															$color = 'blue';
 														}
 														if(isset($acudiente[0]) AND $acudiente[4]!=''){$nombreAcudiente=strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); $idAcudiente=$acudiente[0];}
 														?>

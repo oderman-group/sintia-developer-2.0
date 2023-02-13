@@ -17,3 +17,4 @@ $yearEnd = $yearArray[1];
 $opcionSINO = array ("NO","SI");
 $mesesAgno = array("","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE");
 $opcionEstado = array("INACTIVO", "ACTIVO");
+$estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado");
