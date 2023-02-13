@@ -2,24 +2,20 @@
 include("session.php");
 include("../modelo/conexion.php");
 
-	$_POST["ciudadR"] = trim($_POST["ciudadR"]);
+//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
+if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
+	exit();
+}
 
-	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if(trim($_POST["tipoD"])=="" or trim($_POST["nDoc"])=="" or trim($_POST["genero"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["grupo"])=="" or trim($_POST["tipoEst"])=="" or trim($_POST["matestM"])==""){
-		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?error=ER_DT_4";</script>';
-		exit();
-	}
-	$consultaRes=mysqli_query($conexion, "SELECT MAX(uss_id)+1 as iduss FROM usuarios;");
-	$res_consultaid_acu=mysqli_fetch_array($consultaRes, MYSQLI_BOTH);
+if($config['conf_id_institucion']==1){
+	require_once("apis-sion-modify-student.php");
+}
 
-	if($config['conf_id_institucion']==1){
-		require_once("apis-sion-modify-student.php");
-	}
+$_POST["ciudadR"] = trim($_POST["ciudadR"]);
+if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 
-	//Actualiza el usuario
-	if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
-
-
+try{
 	mysqli_query($conexion, "UPDATE academico_matriculas SET 
 	mat_tipo_documento='".$_POST["tipoD"]."', 
 	mat_documento='".$_POST["nDoc"]."', 
@@ -68,50 +64,124 @@ include("../modelo/conexion.php");
 	mat_nombre2='".$_POST["nombre2"]."'
 
 	WHERE mat_id=".$_POST["id"].";");
-	
-	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
 
-	//ACTUALIZAR EL ACUDIENTE 1	
-	if($_POST["documentoA"]!=""){
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}	
 
+try {
+	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' 
+	WHERE uss_id='".$_POST["idU"]."'");
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+	exit();
+}	
 
-		$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
+//ACTUALIZAR EL ACUDIENTE 1	
+if($_POST["documentoA"]!=""){
+
+	try {
+		$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios 
+		WHERE uss_usuario='".$_POST["documentoA"]."'");
 		$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
-		 
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}		
 
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$acudiente['uss_id']."' WHERE mat_id='".$_POST["id"]."'");
-		
+	try {
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$acudiente['uss_id']."' 
+		WHERE mat_id='".$_POST["id"]."'");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}	
 
+	try {
+		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes 
+		WHERE upe_id_estudiante='".$_POST["id"]."'");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}	
 
-		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='".$_POST["id"]."'");
-		
-
+	try {
 		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$acudiente['uss_id']."', '".$_POST["id"]."')");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}	
+
+	try {
+		mysqli_query($conexion, "UPDATE usuarios SET 
+		uss_usuario   		 = '".$_POST["documentoA"]."', 
+		uss_nombre    		 = '".$_POST["nombreA"]."', 
+		uss_email     		 = '".$_POST["email"]."', 
+		uss_ocupacion 		 = '".$_POST["ocupacionA"]."', 
+		uss_genero    		 = '".$_POST["generoA"]."', 
+		uss_celular   		 = '".$_POST["celular"]."', 
+		uss_lugar_expedicion = '".$_POST["lugardA"]."', 
+		uss_tipo_documento   = '".$_POST["tipoDAcudiente"]."', 
+		uss_direccion        = '".$_POST["direccion"]."', 
+		uss_apellido1 		 = '".$_POST["apellido1A"]."', 
+		uss_apellido2		 = '".$_POST["apellido2A"]."', 
+		uss_nombre2			 = '".$_POST["nombre2A"]."' 
+		WHERE uss_id='".$acudiente['uss_id']."'");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}	
 		
+}
 
-		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA"]."', uss_nombre='".$_POST["nombreA"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA"]."', uss_genero='".$_POST["generoA"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA"]."', uss_tipo_documento='".$_POST["tipoDAcudiente"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A"]."', uss_apellido2='".$_POST["apellido2A"]."', uss_nombre2='".$_POST["nombre2A"]."' WHERE uss_id='".$acudiente['uss_id']."'");
+
+//ACTUALIZAR EL ACUDIENTE 2
+if($_POST["idAcudiente2"]!=""){
+
+	try {
+		mysqli_query($conexion, "UPDATE usuarios SET 
+		uss_usuario='".$_POST["documentoA2"]."', 
+		uss_nombre='".$_POST["nombreA2"]."', 
+		uss_email='".$_POST["email"]."', 
+		uss_ocupacion='".$_POST["ocupacionA2"]."', 
+		uss_genero='".$_POST["generoA2"]."', 
+		uss_celular='".$_POST["celular"]."', 
+		uss_lugar_expedicion='".$_POST["lugardA2"]."', 
+		uss_direccion='".$_POST["direccion"]."', 
+		uss_apellido1='".$_POST["apellido1A2"]."', 
+		uss_apellido2='".$_POST["apellido2A2"]."', 
+		uss_nombre2='".$_POST["nombre2A2"]."' 
+		WHERE uss_id='".$_POST["documentoA2"]."'");
+	} catch (Exception $e) {
+		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+		exit();
+	}	
 		
+}else {
+	if($_POST["documentoA2"]!=""){
 
-
-	}
-
-
-	//ACTUALIZAR EL ACUDIENTE 2
-	if($_POST["idAcudiente2"]!=""){
-		mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["documentoA2"]."', uss_nombre='".$_POST["nombreA2"]."', uss_email='".$_POST["email"]."', uss_ocupacion='".$_POST["ocupacionA2"]."', uss_genero='".$_POST["generoA2"]."', uss_celular='".$_POST["celular"]."', uss_lugar_expedicion='".$_POST["lugardA2"]."', uss_direccion='".$_POST["direccion"]."', uss_apellido1='".$_POST["apellido1A2"]."', uss_apellido2='".$_POST["apellido2A2"]."', uss_nombre2='".$_POST["nombre2A2"]."' WHERE uss_id='".$_POST["documentoA2"]."'");
-		
-	}else{
-		if($_POST["documentoA2"]!=""){
+		try {
 			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2)VALUES('".$_POST["documentoA2"]."','1234',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."')");
 			
 			$idAcudiente2 = mysqli_insert_id($conexion);
+		} catch (Exception $e) {
+			echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+			exit();
+		}	
+		
+		try {
+			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."'
+			WHERE mat_id=".$_POST["id"]);
+		} catch (Exception $e) {
+			echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+			exit();
+		}	
 			
-			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."'WHERE mat_id=".$_POST["id"].";");
-			
-		}
 	}
-	$estadoSintia=true;
-	$mensajeSintia='La información del estudiante se actualizo correctamente en SINTIA.';
+}
+$estadoSintia=true;
+$mensajeSintia='La información del estudiante se actualizó correctamente en SINTIA.';
 
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
-	exit();
+echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+exit();
