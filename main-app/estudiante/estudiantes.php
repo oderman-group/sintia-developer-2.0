@@ -54,15 +54,16 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                                                     $filtroEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+													 $consulta = Estudiantes::listarEstudiantesParaEstudiantes($filtroEstudiantes);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
+                                                        $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
-														<td><?=$genero[1];?></td>
+														<td><?=$nombreEstudiante;?></td>
+														<td><?=$resultado['ogen_nombre'];?></td>
                                                     </tr>
 													<?php 
 														 $contReg++;

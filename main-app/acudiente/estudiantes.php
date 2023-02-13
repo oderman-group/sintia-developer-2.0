@@ -3,6 +3,9 @@
 <?php $idPaginaInterna = 'AC0005';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -123,12 +126,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 INNER JOIN academico_grados ON gra_id=mat_grado
-													 INNER JOIN academico_grupos ON gru_id=mat_grupo
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
-													 INNER JOIN usuarios_por_estudiantes ON upe_id_estudiante=mat_id AND upe_id_usuario='".$datosUsuarioActual[0]."'
-													 WHERE mat_eliminado=0 ORDER BY mat_primer_apellido");
+													 $consulta = Estudiantes::listarEstudiantesParaAcudientes($datosUsuarioActual[0]);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);

@@ -129,9 +129,9 @@
 											
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Número de documento<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Número de documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)" value="<?=$datosMatricula['documento'];?>">
+													<input type="text" id="nDoc" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)" value="<?=$datosMatricula['documento'];?>">
 												</div>
 
 											</div>	
@@ -168,21 +168,21 @@
 											<?php }?>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Primer apellido<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>">
+													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-4">
-													<input type="text" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>">
+													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Primer Nombre<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>">
+													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -227,7 +227,7 @@
 											</div>
 												
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Genero</label>
+												<label class="col-sm-2 control-label">Género</label>
 												<div class="col-sm-4">
 													<select class="form-control  select2" name="genero">
 														<option value="">Seleccione una opción</option>
@@ -461,7 +461,7 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Documento<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
 													<input type="text" name="documentoA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['documentoA'];?>">
 												</div>
@@ -505,7 +505,7 @@
 											</div>
 
 											<div class="form-group row">												
-												<label class="col-sm-2 control-label">Nombre<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
 													<input type="text" name="nombresA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombreA'];?>">
 												</div>

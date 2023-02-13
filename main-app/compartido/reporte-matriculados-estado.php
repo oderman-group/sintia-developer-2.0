@@ -1,10 +1,10 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
-<?php
-
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
 ?>
+
 <head>
 	<title>Estudiantes</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -124,10 +124,19 @@ include("../../config-general/consulta-usuario-actual.php");?>
 	if($condicion!=""){
 		$condicionw="WHERE ";
 		}
-		$c_matricEst=mysqli_query($conexion, "SELECT mat_matricula,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_inclusion,mat_extranjero,mat_documento,uss_usuario,uss_email,uss_celular,uss_telefono,gru_nombre,gra_nombre,og.ogen_nombre as Tipo_est,
-IF(mat_acudiente is null,'No',uss_nombre)as nom_acudiente,IF(mat_foto is null,'No','Si')as foto,og2.ogen_nombre as genero,og3.ogen_nombre as religion,og4.ogen_nombre as estrato,og5.ogen_nombre as tipoDoc,
-CASE mat_estado_matricula WHEN 1 THEN 'Matriculado' WHEN 2 THEN 'Asistente' WHEN 3 THEN 'Cancelado' WHEN 4 THEN 'No matriculado' END AS estado
-FROM academico_matriculas am INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
+		$c_matricEst=mysqli_query($conexion, "SELECT mat_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_inclusion, mat_extranjero, mat_documento, uss_usuario, uss_email, uss_celular, uss_telefono, gru_nombre, gra_nombre, og.ogen_nombre as Tipo_est, mat_id,
+IF(mat_acudiente is null,'No',uss_nombre) as nom_acudiente,
+IF(mat_foto is null,'No','Si') as foto, 
+og2.ogen_nombre as genero, og3.ogen_nombre as religion, og4.ogen_nombre as estrato, og5.ogen_nombre as tipoDoc,
+CASE mat_estado_matricula 
+	WHEN 1 THEN 'Matriculado' 
+	WHEN 2 THEN 'Asistente' 
+	WHEN 3 THEN 'Cancelado' 
+	WHEN 4 
+	THEN 'No matriculado' 
+END AS estado
+FROM academico_matriculas am 
+INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
 INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
 INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
 INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
@@ -140,12 +149,17 @@ GROUP BY mat_id
 ORDER BY mat_primer_apellido,mat_estado_matricula;");
  $numE=mysqli_num_rows($c_matricEst);
  ?>
- <div style="width:80%; margin-left:auto; margin-right:auto;">
+ <div style="width:100%; margin-left:auto; margin-right:auto;">
  Total Estudiantes: <?=$numE;?>
  </div>
-  <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
-        <th>Código</th>
+  <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:#6017dc; 
+  font-size:11px;
+  ">
+  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+        <th>ID</th>
         <th>Nombre</th>
         <th>Curso</th>
         <th>Grupo</th>
@@ -189,9 +203,11 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
 		$color="#000";
 	}
   ?>
-  <tr style="font-size:13px; color:<?=$color;?>;">
-      <td><?=$resultado["mat_matricula"];?></td>
-      <td><?=strtoupper($resultado["mat_primer_apellido"]." ".$resultado["mat_segundo_apellido"]." ".$resultado["mat_nombres"]);?></td>
+  <tr style="
+  border-color:#41c4c4;
+  ">
+      <td><?=$resultado["mat_id"];?></td>
+      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado["mat_id"]);?></td>
       <td><?=$resultado["gra_nombre"];?></td>
       <td><?=$resultado["gru_nombre"];?></td>
       <td><?=$resultado["estado"];?></td>
@@ -214,11 +230,11 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
    }//Fin mientras que
   ?>
   </table>
-  </center>
-	<div align="center" style="font-size:10px; margin-top:10px;">
-                                        <img src="../files/images/sintia.png" height="50" width="100"><br>
-                                        SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
-                                    </div>
+
+  <div style="font-size:10px; margin-top:10px; text-align:center;">
+      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
+      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
+     </div>
 </body>
 </html>
 

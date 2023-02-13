@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0083';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -49,8 +52,7 @@
                         <div class="col-sm-9">
                           
                                 <?php
-                                    $consultaE = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
-                                    $e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
+                                    $e = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                                 ?>
 
 								<div class="panel">
@@ -65,11 +67,11 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estudiante</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="codigoE" class="form-control" autocomplete="off" value="<?=$e[1];?>" readonly>
+                                                <input type="text" name="codigoE" class="form-control" autocomplete="off" value="<?=$e['mat_id'];?>" readonly>
                                             </div>
                                             
                                             <div class="col-sm-4">
-                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=$e['mat_primer_apellido']." ".$e['mat_segundo_apellido']." ".$e['mat_nombres']." ".$e['mat_nombre2'];?>" readonly>
+                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e['mat_id']);?>" readonly>
                                             </div>
                                         </div>
 

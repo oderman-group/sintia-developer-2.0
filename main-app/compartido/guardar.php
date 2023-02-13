@@ -979,7 +979,7 @@ if ($_GET["get"] == 8) {
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 	if ($reaccion[0] == "") {
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_insitucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . $_GET["idR"] . "','" . $_GET["r"] . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_institucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . $_GET["idR"] . "','" . $_GET["r"] . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 	} else {

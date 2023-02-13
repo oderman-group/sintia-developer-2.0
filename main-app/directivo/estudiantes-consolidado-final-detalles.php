@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0081';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">
@@ -91,7 +94,7 @@
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<a href="../compartido/informe-consolidad-final.php?curso=<?=$_POST["curso"];?>&grupo=<?=$_POST["grupo"];?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
-															Sacar Informe <i class="fa fa-plus"></i>
+															Sacar Informe
 														</a>
 													</div>
 												</div>
@@ -139,7 +142,8 @@
 												<!-- BEGIN -->
 												<tbody>
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_POST["curso"]."' AND mat_grupo='".$_POST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+												$filtro = " AND mat_grado='".$_POST["curso"]."' AND mat_grupo='".$_POST["grupo"]."'";
+												$consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
 												//PRIMER PUESTO
 												$primerPuestoNota = 0;
 												$primerPuestoNombre = '';
@@ -203,18 +207,6 @@
 													}
 														$defPorEstudiante = round($defPorEstudiante/$numCargasPorCurso,2);
 														if($defPorEstudiante<$config[5] and $defPorEstudiante!="")$color = $config[6]; elseif($defPorEstudiante>=$config[5]) $color = $config[7];
-														//PRIMER PUESTO
-														if($defPorEstudiante>$primerPuestoNota){
-															$primerPuestoNota = $defPorEstudiante;
-															$primerPuestoNombre = $resultado[3]." ".$resultado[4]." ".$resultado[5];
-															$primerPuestoID = $resultado[0];
-														}
-														//SEGUNDO PUESTO
-														if($defPorEstudiante>$segundoPuestoNota and $defPorEstudiante<=$primerPuestoNota and $resultado[0]!=$primerPuestoID){
-															$segundoPuestoNota = $defPorEstudiante;
-															$segundoPuestoNombre = $resultado[3]." ".$resultado[4]." ".$resultado[5];
-															$segundoPuestoID = $resultado[0];
-														}
 													?>
 														<td style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>"><?=$defPorEstudiante;?></td>
 												</tr>
@@ -226,40 +218,6 @@
                                             </table>
                                             </div>
                                         </div>
-
-										<div class="col-md-12">
-											<div class="card card-topline-purple">
-												<div class="card-body">
-
-													<div class="table-scrollable">
-														<table cellpadding="0" cellspacing="0" border="1"  class="display al" style="width:100%;">
-															<thead>
-																<tr>
-																	<th colspan="3" style="text-align:center; background:#0CC;">PUESTOS POR ESTUDIANTE</th>
-																</tr>
-																<tr>
-																	<th style="text-align:center;">PUESTO</th>
-																	<th style="text-align:center;">ESTUDIANTE</th>
-																	<th style="text-align:center;">PROMEDIO</th>
-																</tr>
-															</thead>
-															<tbody>
-																<tr>
-																	<td style="text-align:center;">1</td>
-																	<td><?=$primerPuestoNombre;?></td>
-																	<td><?=$primerPuestoNota;?></td>
-																</tr>
-																<tr>
-																	<td style="text-align:center;">2</td>
-																	<td><?=$segundoPuestoNombre;?></td>
-																	<td><?=$segundoPuestoNota;?></td>
-																</tr>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>	
-										</div>
                                     </div>
                                 </div>
 								

@@ -8,6 +8,10 @@
 
 <?php include("../compartido/head.php"); ?>
 
+<?php
+include("../class/Estudiantes.php");
+?>
+
 </head>
 
 <!-- END HEAD -->
@@ -147,11 +151,7 @@
 
 													$contReg = 1;
 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-
-													WHERE mat_grado='" . $datosCargaActual['car_curso'] . "' AND mat_grupo='" . $datosCargaActual['car_grupo'] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
@@ -185,7 +185,7 @@
 
 																<img src="../files/fotos/<?= $resultado['uss_foto']; ?>" width="50">
 
-																<?= strtoupper($resultado[3] . " " . $resultado[4] . " " . $resultado[5]); ?>
+																<?= Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']); ?>
 
 															</td>
 
