@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>Estudiantes</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -13,9 +15,14 @@ include("../../config-general/consulta-usuario-actual.php");?>
     <?=$informacion_inst["info_nombre"]?><br>
     INFORME DE ESTUDIANTES</br>
 </div>   
-  <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
-        <th>Matr&iacute;cula</th>
+<table width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:#6017dc; 
+  font-size:11px;
+  ">
+  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+        <th>ID</th>
         <th>Documento</th>
         <th>Estudiante</th>
         <th>Grado</th>
@@ -26,7 +33,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
   <?php
   if(isset($_GET["grado"]) and isset($_GET["grupo"])) $adicional = "mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND "; else $adicional = "";
   $cont=1;
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE ".$adicional." (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+  $consulta = Estudiantes::listarEstudiantes(0, $adicional, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
@@ -34,7 +41,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 	$grados = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);	
   ?>
   <tr style="font-size:13px;">
-      <td><?=$resultado[1];?></td>
+      <td><?=$resultado['mat_id'];?></td>
       <td><?=$resultado[12];?></td>
       <td><?=strtoupper($resultado["mat_primer_apellido"].' '.$resultado["mat_segundo_apellido"].' '.$resultado["mat_nombres"].' '.$resultado["mat_nombre2"]);?></td>
       <td><?=$grados["gra_nombre"];?></td>
@@ -47,10 +54,10 @@ include("../../config-general/consulta-usuario-actual.php");?>
   }//Fin mientras que
   ?>
   </table>
-  </center>
-	<div align="center" style="font-size:10px; margin-top:10px;">
-      <img src="../files/images/sintia.png" height="50" width="100"><br>
-      SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
+
+	<div style="font-size:10px; margin-top:10px; text-align:center;">
+      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
+      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
      </div>
 </body>
 </html>

@@ -3,6 +3,9 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+include("../class/Estudiantes.php");
+?>
 <script type="text/javascript">
   function def(enviada){
   var nota = enviada.value;
@@ -135,15 +138,15 @@ function niv(enviada){
                                                 </thead>
                                                 <tbody>
 													<?php
-													$contReg = 1; 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+													$contReg = 1;
+													$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
 
 														<?php
 														 $definitiva = 0;
