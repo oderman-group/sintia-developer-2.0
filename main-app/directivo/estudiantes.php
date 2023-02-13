@@ -356,20 +356,22 @@ include("../class/Estudiantes.php");
 														<td><span class="<?=$estadosEtiquetas[$resultado['mat_estado_matricula']];?>"><?=$estadosMatriculas[$resultado['mat_estado_matricula']];?></span></td>
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+														
 														<?php
-														if($resultado["mat_inclusion"]==0){
-															$color=$config[6];
-															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline; font-weight:bold;">'.$nombre.'</a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
-														}else{
-															$color=$config[5];
-															echo '<td style="color:'.$color.';"><a href="../compartido/carnet.php?id='.$resultado["mat_id"].'" target="_blank" style="text-decoration:underline; font-weight:bold;"><b>'.$nombre.'</b></a><br><a href="mensajes-redactar.php?destino='.$resultado[23].'" style="text-decoration:underline;">Enviar mensaje</a></td>';
+														$color = $config[6];
+														if($resultado["mat_inclusion"] == 1){
+															$color = $config[5];
 														}
 														if(isset($acudiente[0]) AND $acudiente[4]!=''){$nombreAcudiente=strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); $idAcudiente=$acudiente[0];}
 														?>
-														
+														<td style="color:<?=$color;?>;"><?=$nombre;?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
-														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a><?php if(isset($acudiente[4]) AND $acudiente[4]!=""){?><br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline;">Enviar mensaje</a><?php }?></td>
+														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
+														<?php if(!empty($acudiente['uss_id']) and !empty($acudiente['uss_email'])){?>
+															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline;">Enviar mensaje</a>
+														<?php }?>
+														</td>
 
 														<td>
 															<div class="btn-group">
