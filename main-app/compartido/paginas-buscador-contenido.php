@@ -39,27 +39,29 @@
                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad 
                                     WHERE pagp_tipo_usuario='".$tipoUsuario."' $filtro ORDER BY pagp_id");
                                     $numDatos=mysqli_num_rows($consulta);
-                                    //buscador usuarios
-                                    if ($numDatos<=0){
-                                        $dato = 2;
-                                        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios 
-                                        WHERE uss_usuario LIKE '%".$_GET["query"]."%' 
-                                        OR uss_nombre LIKE '%".$_GET["query"]."%' 
-                                        OR uss_email LIKE '%".$_GET["query"]."%'");
-                                    }
-                                    $numDatos=mysqli_num_rows($consulta);
-                                    if ($numDatos<=0) {
-                                        $dato = 3;
-                                        $consulta = mysqli_query($conexion, "SELECT * FROM academico_materias 
-                                        WHERE mat_nombre LIKE '%".$_GET["query"]."%' 
-                                        OR mat_siglas LIKE '%".$_GET["query"]."%'");
-                                    }
-                                    $numDatos=mysqli_num_rows($consulta);
-                                    if ($numDatos<=0) {
-                                        $dato = 4;
-                                        $consulta = mysqli_query($conexion, "SELECT * FROM academico_grados 
-                                         WHERE gra_nombre LIKE '%".$_GET["query"]."%' 
-                                         OR gra_codigo LIKE '%".$_GET["query"]."%'");
+                                    if($tipoUsuario == 5){
+                                        //buscador usuarios
+                                        if ($numDatos<=0){
+                                            $dato = 2;
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM usuarios 
+                                            WHERE uss_usuario LIKE '%".$_GET["query"]."%' 
+                                            OR uss_nombre LIKE '%".$_GET["query"]."%' 
+                                            OR uss_email LIKE '%".$_GET["query"]."%'");
+                                        }
+                                        $numDatos=mysqli_num_rows($consulta);
+                                        if ($numDatos<=0) {
+                                            $dato = 3;
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM academico_materias 
+                                            WHERE mat_nombre LIKE '%".$_GET["query"]."%' 
+                                            OR mat_siglas LIKE '%".$_GET["query"]."%'");
+                                        }
+                                        $numDatos=mysqli_num_rows($consulta);
+                                        if ($numDatos<=0) {
+                                            $dato = 4;
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM academico_grados 
+                                            WHERE gra_nombre LIKE '%".$_GET["query"]."%' 
+                                            OR gra_codigo LIKE '%".$_GET["query"]."%'");
+                                        }
                                     }
                                     
                                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -116,6 +118,16 @@
                                                 $ruta="cursos-editar.php?id=".$resultado['gra_id'];
                                                 $nombreRuta="";
                                                 break;
+
+                                            default:
+                                            $nombre      = $resultado['pagp_pagina'];
+                                            $descripcion = $resultado['pagp_descripcion'];
+                                            $ruta        = $resultado['pagp_ruta'];
+                                            $nombreRuta  = $resultado['pagp_ruta'];
+                                            if ($resultado['pagp_parametro']!=1) {
+                                                $ruta="page-info.php?idmsg=303&idPagina='".$resultado['pagp_id']."'";
+                                            }
+                                            break;
                                         }
  
                                 ?>
