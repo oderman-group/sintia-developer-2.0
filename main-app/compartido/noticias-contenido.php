@@ -376,7 +376,7 @@
             </div>
 
 
-            <div class="col-md-4 col-lg-3">
+            <!--<div class="col-md-4 col-lg-3">
 
                 <div class="panel" data-hint="Se muestran las personas que están de cumpleaños en este día."
                     id="../compartido/cumplimentados.php" title="cumplimentados" onClick="axiosAjax(this)">
@@ -387,7 +387,7 @@
                 </div>
 
 
-            </div>
+            </div>-->
 
 
         </div>

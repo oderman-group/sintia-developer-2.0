@@ -99,6 +99,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   	$j=1;
 	$cambios=0;
 	$valor=0;
+	if(!empty($notas1)){
   	arsort($notas1); 
 	foreach ($notas1 as $key => $val) { 
 		if($val!=$valor){
@@ -129,6 +130,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	<?php	
 		$j++;
 	}
+}
   ?>
     
   </table>  

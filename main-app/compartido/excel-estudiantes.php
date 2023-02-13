@@ -6,13 +6,9 @@ header("content-disposition: attachment;filename=Estudiantes_".date("d/m/Y")."-S
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
 
-$consulta=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-INNER JOIN academico_grados ON gra_id=mat_grado
-INNER JOIN academico_grupos ON gru_id=mat_grupo
-LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_tipo_documento
-LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
-WHERE mat_eliminado=0 ORDER BY mat_primer_apellido");
+$consulta = Estudiantes::listarEstudiantes(0, '', '');
 ?>
 
 <!DOCTYPE html>
@@ -29,10 +25,11 @@ WHERE mat_eliminado=0 ORDER BY mat_primer_apellido");
 <table  width="100%" border="1" rules="all">
     <thead>
     	<tr>
-        	<th colspan="21" style="background:#060; color:#FFF;">MATRICULAS ACTUALES <?=date('Y');?></th>
+        	<th colspan="22" style="background:#6017dc; color:#FFF;">MATRICULAS ACTUALES <?=date('Y');?></th>
         </tr>
     	<tr>
             <th scope="col" align="center">No.</th>
+            <th scope="col" align="center">ID.</th>
             <th scope="col" align="center">Estudiante</th>
             <th scope="col" align="center">Grado</th>
             <th scope="col" align="center">Grupo</th>
@@ -86,16 +83,19 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 ?>    
     	<tr>	
             <td align="center"><?=$conta;?></td>
-            <td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></td>
+            <td align="center"><?=$resultado['mat_id'];?></td>
+            <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
             <td align="center"><?=$resultado['gra_nombre'];?></td>
             <td align="center"><?=$resultado['gru_nombre'];?></td>
             <td align="center"><?=$estadoM;?></td>
             <td align="center"><?=$resultado[9];?></td>
-            <td align="center"><?php 
-            $lugarNacimiento = is_numeric($resultado['mat_lugar_nacimiento']) ?  $resultado['ciu_nombre']
-            : $resultado['mat_lugar_nacimiento'];
+            <td align="center"><?php
+            if(!empty($resultado['mat_lugar_nacimiento'])){
+                $lugarNacimiento = is_numeric($resultado['mat_lugar_nacimiento']) ?  $resultado['ciu_nombre']
+                : $resultado['mat_lugar_nacimiento'];
 
-            echo strtoupper($lugarNacimiento);
+                echo strtoupper($lugarNacimiento);
+            }
             ?></td>
             <td align="center"><?=$resultado['ogen_nombre'];?></td>
             <td align="center"><?=$resultado['mat_documento'];?></td>
@@ -103,21 +103,31 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             <td align="center"><?=$resultado[15];?></td>
             <td align="center"><?=$resultado[16];?></td>
             <td align="center"><?=$resultado[17];?></td>
-            <td align="center"><?=strtolower($resultado[25]);?></td>
+            <td><?php
+            if(!empty($resultado['uss_email'])){ 
+                strtolower($resultado['mat_email']);
+            }    
+            ?></td>
 			<td align="center"><?=$resultado[34];?></td>
             <td align="center"><?=$resultado[35];?></td>
             <td align="center"><?=$resultado['mat_numero_matricula'];?></td>
 
             <td><?=$datosA['ogen_nombre'];?></td>
             <td><?=$datosA['uss_usuario'];?></td>
-            <td align="center"><?php 
-                $nombreCompleto = !empty($datosA['uss_apellido1']) ? 
-                $datosA['uss_apellido1']." ".$datosA['uss_apellido2']." ".$datosA['uss_nombre']." ".$datosA['uss_nombre2'] 
-                :  $datosA['uss_nombre'];
+            <td align="center"><?php
+                if(!empty($datosA['uss_apellido1'])){ 
+                    $nombreCompleto = !empty($datosA['uss_apellido1']) ? 
+                    $datosA['uss_apellido1']." ".$datosA['uss_apellido2']." ".$datosA['uss_nombre']." ".$datosA['uss_nombre2'] 
+                    :  $datosA['uss_nombre'];
 
-                echo strtoupper($nombreCompleto);
+                    echo strtoupper($nombreCompleto);
+                }
             ?></td>
-			<td><?=strtolower($datosA['uss_email']);?></td>
+			<td><?php
+            if(!empty($datosA['uss_email'])){ 
+                strtolower($datosA['uss_email']);
+            }
+            ?></td>
         </tr>   
 
 <?php

@@ -7,6 +7,9 @@
 include("verificar-periodos-iguales.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+include("../class/Estudiantes.php");
+?>
+<?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
 INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
 WHERE ind_id='".$_GET["idR"]."'");
@@ -211,9 +214,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-													 INNER JOIN usuarios ON uss_id=mat_id_usuario
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -251,7 +252,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<td><?=$resultado['mat_id'];?></td>
 														<td style="color: <?=$colorEstudiante;?>">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
 														</td>
 														<td>
 															<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>&indicador=<?=$_GET["idR"];?>" style="text-decoration:underline;">
