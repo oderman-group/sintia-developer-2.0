@@ -34,7 +34,7 @@
 	                                    <img src="<?=$fotoPerfilUsr;?>" class="img-circle user-img-circle" alt="User Image" />
 	                                </div>
 	                                <div class="pull-left info">
-	                                    <p> <?=$datosUsuarioActual['uss_nombre'];?></p>
+	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual['uss_id']);?></p>
 	                                    <a href="#"><i class="fa fa-circle user-online"></i><span class="txtOnline"> <?=$_SESSION["bd"];?></span></a>
 	                                </div>
 	                            </div>
