@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0062';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php include("../class/Grados.php");?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -86,11 +87,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_grados AS g1
-													 LEFT JOIN academico_grados AS g2 ON g2.gra_id=g1.gra_grado_siguiente
-													 WHERE g1.gra_estado=1
-													 ORDER BY g1.gra_vocal
-													 ");
+                           $consulta = Grados::listarGrados(1);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
