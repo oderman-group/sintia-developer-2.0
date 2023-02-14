@@ -3,6 +3,8 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 include("../class/Estudiantes.php");
+include("../class/Plataforma.php");
+$Plataforma = new Plataforma;
 ?>
 <head>
 	<title>LISTADO DE ESTUDIANTES</title>
@@ -20,10 +22,10 @@ include("../class/Estudiantes.php");
   <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
   border:solid; 
-  border-color:#6017dc; 
+  border-color:<?=$Plataforma->colorUno;?>; 
   font-size:11px;
   ">
-  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+  <tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
         <th>NO.</th>      
         <th>ID Estudiante</th>
         <th>ID Usuario</th>
@@ -49,7 +51,7 @@ include("../class/Estudiantes.php");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
   ?>
   <tr style="
-  border-color:#41c4c4;
+  border-color:<?=$Plataforma->colorDos;?>;
   ">
       <td style="text-align:center"><?=$cont;?></td>  
       <td style="text-align:center"><?=$resultado['mat_id'];?></td>
@@ -71,7 +73,7 @@ include("../class/Estudiantes.php");
   </table>
 
 	  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
+      <img src="<?=$Plataforma->logo;?>" width="150"><br>
       PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
      </div>
 
