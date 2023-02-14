@@ -87,7 +87,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php													
-													 $consulta = Grados::listarGrados(1);
+                           $consulta = Grados::listarGrados(1);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
