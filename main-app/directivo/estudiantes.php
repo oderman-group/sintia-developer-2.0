@@ -205,7 +205,9 @@ include("../class/Estudiantes.php");
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
+												if ($estadisticasEstudiantes[0] > 0) {
+													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
+												}
 												if(isset($fcurso) AND $curso['gra_id']==$fcurso) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
