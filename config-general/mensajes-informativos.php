@@ -65,6 +65,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El acudiente no existe, por tanto debe llenar todos los campos para registrarlo.';
             break;
 
+            case 'ER_DT_7':
+                $tipo = 'danger';
+                $mensaje = $_GET['msj'];;
+            break;
+
+            case 'ER_DT_8':
+                $tipo = 'danger';
+                $mensaje = 'El archivo enviado es invalido. Por favor vuelva a intentarlo.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -89,6 +99,18 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_3':
                 $tipo = 'success';
                 $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+            break;
+
+            case 'SC_DT_4':
+                if($_GET["numNoImportadosXusuarios"]>0){
+                    $numNoImportadosXusuarios= '<br>- '.$_GET["numNoImportadosXusuarios"].' estudiantes no se importaron, Sus documentos ya se encuentran registrados.';
+                }
+                if($_GET["numNoImportados"]>0){
+                    $numNoImportados= '<br>- No se importaron '.$_GET["numNoImportados"].' estudiantes por falta de información requerida.';
+                }
+                $tipo = 'success';
+                $mensaje = 'Excel importado correctamente.<br/>
+                            - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoImportadosXusuarios.$numNoImportados;
             break;
 
 
