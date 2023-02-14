@@ -384,7 +384,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
                                     $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion 
-                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'",$conexion);
+                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
                                     $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                     

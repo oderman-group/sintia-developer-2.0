@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 
 <head>
 
@@ -63,7 +65,6 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
 
 <div align="center" style="margin-bottom:20px;"> 
 
-	<!--<img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>-->
 
   <b>
 
@@ -188,8 +189,8 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
     <td align="center" colspan="7">Inasistencia</td>
 
     <?php
-
-    $estudiantes = mysqli_query($conexion,  "SELECT * FROM academico_matriculas WHERE mat_grado='" . $rCargas[ "car_curso" ] . "' AND mat_grupo='" . $rCargas[ "car_grupo" ] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres" );
+    $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
+    $estudiantes = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 
     $n = 1;
 
@@ -207,7 +208,7 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
 
     <td align="center" width="5%"><?=$e[0];?></td>
 
-    <td width="20%"><?=$e[3]." ".$e[4]." ".$e[5];?></td>
+    <td width="20%"><?=Estudiantes::NombreCompletoDelEstudiante($e['mat_id']);?></td>
 
     <td width="3%">&nbsp;</td>
 

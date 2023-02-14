@@ -82,13 +82,16 @@ include("../class/Estudiantes.php");
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=126),
 										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=127)");
 										$estadisticasEstudiantes = mysqli_fetch_array($consultaEstadisticasEstudiantes, MYSQLI_BOTH);
-										$porcentajeMatriculados = round(($estadisticasEstudiantes[1]/$estadisticasEstudiantes[0])*100,2);
-										$porcentajeAsistentes = round(($estadisticasEstudiantes[2]/$estadisticasEstudiantes[0])*100,2);
-										$porcentajeCancelados = round(($estadisticasEstudiantes[3]/$estadisticasEstudiantes[0])*100,2);
-										$porcentajeNoMatriculados = round(($estadisticasEstudiantes[4]/$estadisticasEstudiantes[0])*100,2);
-										
-										$porcentajeHombres = round(($estadisticasEstudiantes[5]/$estadisticasEstudiantes[0])*100,2);
-										$porcentajeMujeres = round(($estadisticasEstudiantes[6]/$estadisticasEstudiantes[0])*100,2);
+
+										if ($estadisticasEstudiantes[0] > 0) {
+											$porcentajeMatriculados = round(($estadisticasEstudiantes[1]/$estadisticasEstudiantes[0])*100,2);
+											$porcentajeAsistentes = round(($estadisticasEstudiantes[2]/$estadisticasEstudiantes[0])*100,2);
+											$porcentajeCancelados = round(($estadisticasEstudiantes[3]/$estadisticasEstudiantes[0])*100,2);
+											$porcentajeNoMatriculados = round(($estadisticasEstudiantes[4]/$estadisticasEstudiantes[0])*100,2);
+											
+											$porcentajeHombres = round(($estadisticasEstudiantes[5]/$estadisticasEstudiantes[0])*100,2);
+											$porcentajeMujeres = round(($estadisticasEstudiantes[6]/$estadisticasEstudiantes[0])*100,2);
+										}
 										?>
 										<header class="panel-heading panel-heading-yellow">ESTADOS</header>
 										<div class="panel-body">
@@ -202,7 +205,9 @@ include("../class/Estudiantes.php");
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
+												if ($estadisticasEstudiantes[0] > 0) {
+													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
+												}
 												if(isset($fcurso) AND $curso['gra_id']==$fcurso) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
