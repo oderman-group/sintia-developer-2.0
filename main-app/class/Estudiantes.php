@@ -97,7 +97,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este estudiante no existe";
+                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante;
                 exit();
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
@@ -125,7 +125,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este estudiante no existe";
+                echo "Estás intentado obtener el nombre de un estudiante que no existe: ".$estudiante;
                 exit();
             }
             $datos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
@@ -202,7 +202,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este estudiante no existe";
+                echo "Este estudiante no existe: ".$estudianteIdUsuario;
                 exit();
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
