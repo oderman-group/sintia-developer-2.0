@@ -343,7 +343,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                     $consultaSumaValorMateria=mysqli_query($conexion, "SELECT SUM(mat_valor) FROM academico_materias
                     INNER JOIN academico_cargas ON car_materia=mat_id AND car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'
-                    WHERE mat_area='".$resultado_not_area["ar_id"]."'",$conexion);
+                    WHERE mat_area='".$resultado_not_area["ar_id"]."'");
                     $sumaValorMaterias = mysqli_fetch_array($consultaSumaValorMateria, MYSQLI_BOTH); 
 
             ?>
@@ -372,12 +372,12 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                         $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin 
                         INNER JOIN academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$_GET['periodo']."'",$conexion);
+                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$_GET['periodo']."'");
                         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 
 
                         $consultaNotaFinal=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS def FROM academico_boletin 
-                        WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_carga='".$fila2["car_id"]."'",$conexion);
+                        WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_carga='".$fila2["car_id"]."'");
                         $notaFinal = mysqli_fetch_array($consultaNotaFinal, MYSQLI_BOTH);
 
 
@@ -416,7 +416,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
                                     $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion 
-                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'",$conexion);
+                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
                                     $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                     
