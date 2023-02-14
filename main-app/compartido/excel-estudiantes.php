@@ -104,8 +104,8 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             <td align="center"><?=$resultado[16];?></td>
             <td align="center"><?=$resultado[17];?></td>
             <td><?php
-            if(!empty($resultado['uss_email'])){ 
-                strtolower($resultado['mat_email']);
+            if(!empty($resultado['mat_email'])){ 
+                echo strtolower($resultado['mat_email']);
             }    
             ?></td>
 			<td align="center"><?=$resultado[34];?></td>
@@ -125,7 +125,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             ?></td>
 			<td><?php
             if(!empty($datosA['uss_email'])){ 
-                strtolower($datosA['uss_email']);
+                echo strtolower($datosA['uss_email']);
             }
             ?></td>
         </tr>   
