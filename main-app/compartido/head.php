@@ -23,7 +23,12 @@ if(isset($idPaginaInterna)){
 	}
 }
 
+/*
+* Incluir clases que se usarán en varias paginas de todos los usuarios
+*/
+include("../class/UsuariosPadre.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- BEGIN HEAD -->
