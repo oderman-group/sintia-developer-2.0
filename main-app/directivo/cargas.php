@@ -309,16 +309,17 @@
 													<?php 
 														 $contReg++;
 													  }
-													  ?>
+													  ?>	 
                                                 </tbody>
                                             </table>
                                             </div>
+											<?php include("../cargas-paginacion-listados.php");?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>	
                 </div>
             </div>
             <!-- end page content -->
