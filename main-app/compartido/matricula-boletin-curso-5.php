@@ -207,7 +207,7 @@ ORDER BY mat_grupo, mat_primer_apellido"));
 		$acumulado = mysqli_fetch_array($consultaAcumulado, MYSQLI_BOTH);
 		
 		$consultaAcumuladoDesempeno=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
-		WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND $acumulado[0]>=notip_desde AND $acumulado[0]<=notip_hasta");
+		WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND notip_desde<='".$acumulado[0]."' AND notip_hasta>='".$acumulado[0]."'");
 		$acumuladoDesempeno = mysqli_fetch_array($consultaAcumuladoDesempeno, MYSQLI_BOTH);
 	?>
         <tr>
