@@ -10,7 +10,7 @@ class Usuarios {
 
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
-            WHERE (uss_id='".$usuario."' || uss_usuario='".$usuario."') AND uss_bloqueado=0
+            WHERE (uss_id='".$usuario."' || uss_usuario='".$usuario."')
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
@@ -35,7 +35,7 @@ class Usuarios {
 
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
-            WHERE (uss_id='".$usuario."' || uss_usuario='".$usuario."' || uss_email='".$usuario."') AND uss_bloqueado=0
+            WHERE (uss_id='".$usuario."' || uss_usuario='".$usuario."' || uss_email='".$usuario."')
             ");
             $num = mysqli_num_rows($consulta);
         } catch (Exception $e) {
