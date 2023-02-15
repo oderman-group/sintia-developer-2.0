@@ -81,7 +81,10 @@ if ($acudienteNum > 0) {
 			uss_direccion, 
 			uss_apellido1, 
 			uss_apellido2, 
-			uss_nombre2
+			uss_nombre2,
+			uss_tema_sidebar,
+			uss_tema_header,
+			uss_tema_logo
 			)VALUES(
 			'".$_POST["documentoA"]."',
 			'12345678',
@@ -101,7 +104,10 @@ if ($acudienteNum > 0) {
 			'".$_POST["direccion"]."', 
 			'".$_POST["apellido1A"]."', 
 			'".$_POST["apellido2A"]."', 
-			'".$_POST["nombre2A"]."'
+			'".$_POST["nombre2A"]."',
+			'cyan-sidebar-color',
+			'header-indigo',
+			'logo-indigo'
 			)");
 	} catch (Exception $e) {
 		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
@@ -131,7 +137,10 @@ try{
 		uss_direccion, 
 		uss_apellido1, 
 		uss_apellido2, 
-		uss_nombre2
+		uss_nombre2,
+		uss_tema_sidebar,
+		uss_tema_header,
+		uss_tema_logo
 		)VALUES(
 		'".	$_POST["nDoc"]."',
 		'12345678',
@@ -150,7 +159,10 @@ try{
 		'".$_POST["direccion"]."', 
 		'".$_POST["apellido1"]."', 
 		'".$_POST["apellido2"]."', 
-		'".$_POST["nombre2"]."'
+		'".$_POST["nombre2"]."',
+		'cyan-sidebar-color',
+		'header-indigo',
+		'logo-indigo'
 		)");
 		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {

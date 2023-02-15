@@ -1,5 +1,4 @@
 <?php
-// include("../../conexion-datos.php");
 include("../directivo/session.php");
 $server = $servidorConexion;
 $user = $usuarioConexion;

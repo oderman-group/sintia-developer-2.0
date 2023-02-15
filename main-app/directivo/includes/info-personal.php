@@ -4,7 +4,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Código del Sistema</label>
 												<div class="col-sm-2">
-													<input type="text" name="matricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[1];?>" >
+													<input type="text" name="matricula" class="form-control" readonly autocomplete="off" value="<?=$datosEstudianteActual[1];?>" >
 												</div>
 												
 												<label class="col-sm-2 control-label">Fecha de Matr&iacute;cula</label>

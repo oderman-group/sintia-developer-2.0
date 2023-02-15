@@ -35,6 +35,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Su usuario se encuentra bloqueado. Por favor comúniquese con la administración.';
             break;
 
+            case 7:
+                $tipo = 'danger';
+                $mensaje = 'Verifica que hayas seleccionado la institución y el año correctamente.';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
