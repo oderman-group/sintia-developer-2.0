@@ -9,15 +9,15 @@
   --sidebar-color: #ffffff;
   --sidebar-font-color: #4680ff;
   --logo-color: #222c3c;
-  --header-color: #6673FC;
+  --header-color: #6017dc;
 }
 
 /*
   --white-color: #ffffff;
   --dark-color: #222c3c;
   --blue-color: #1880c9;
-  --indigo-color: #6673FC;
-  --cyan-color: #4ABAD2;
+  --indigo-color: #6017dc;
+  --cyan-color: #41c4c4;
   --green-color: #3FCC7E;
   --red-color: #E44F56;
 */
@@ -157,6 +157,7 @@
 /* White sidebar color */
 .white-sidebar-color .sidemenu-container {
     background-color: #ffffff;
+    margin-top: 45px;
 }
 .white-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .white-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -247,6 +248,7 @@
 /* Dark sidebar color */
 .dark-sidebar-color .sidemenu-container {
     background-color: #222c3c;
+    margin-top: 45px;
 }
 .dark-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .dark-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -328,6 +330,7 @@
 /* Blue sidebar color */
 .blue-sidebar-color .sidemenu-container {
     background-color: #1880c9;
+    margin-top: 45px;
 }
 .blue-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .blue-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -413,7 +416,8 @@
 
 /* Indigo sidebar color */
 .indigo-sidebar-color .sidemenu-container {
-    background-color: #6673FC;
+    background-color: #6017dc;
+    margin-top: 45px;
 }
 .indigo-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .indigo-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -438,7 +442,7 @@
 .indigo-sidebar-color .sidemenu-container .sidemenu>li:hover>a, 
 .indigo-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.open>a, 
 .indigo-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li:hover>a {
-    background-color: #6673FC;
+    background-color: #6017dc;
     color: #fff;
 }
 .indigo-sidebar-color .sidemenu-container .sidemenu>li.open>a>.arrow.open:before, 
@@ -486,7 +490,7 @@
 	color: #fff;
 }
 .indigo-sidebar-color .page-container{
-	background-color : #6673FC;
+	background-color : #6017dc;
 }
 .indigo-sidebar-color .sidemenu-container .sidemenu>li.heading>h3, 
 .indigo-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.heading>h3{
@@ -499,7 +503,8 @@
 
 /* Cyan sidebar color */
 .cyan-sidebar-color .sidemenu-container {
-    background-color: #4ABAD2;
+    background-color: #41c4c4;
+    margin-top: 45px;
 }
 .cyan-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .cyan-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -524,7 +529,7 @@
 .cyan-sidebar-color .sidemenu-container .sidemenu>li:hover>a, 
 .cyan-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.open>a, 
 .cyan-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li:hover>a {
-    background-color: #4ABAD2;
+    background-color: #41c4c4;
     color: #fff;
 }
 .cyan-sidebar-color .sidemenu-container .sidemenu>li.open>a>.arrow.open:before, 
@@ -572,7 +577,7 @@
 	color: #fff;
 }
 .cyan-sidebar-color .page-container{
-	background-color : #4ABAD2;
+	background-color : #41c4c4;
 }
 .cyan-sidebar-color .sidemenu-container .sidemenu>li.heading>h3, 
 .cyan-sidebar-color .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.heading>h3{
@@ -584,6 +589,7 @@
 /* Green sidebar color */
 .green-sidebar-color .sidemenu-container {
     background-color: #3FCC7E;
+    margin-top: 45px;
 }
 .green-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .green-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -669,7 +675,8 @@
 
 /* Red sidebar color */
 .red-sidebar-color .sidemenu-container {
-    background-color: #E44F56
+    background-color: #E44F56;
+    margin-top: 45px;
 }
 .red-sidebar-color .sidemenu-container .sidemenu>li.active.open>a,
 .red-sidebar-color .sidemenu-container .sidemenu>li.active>a,
@@ -767,10 +774,10 @@
 	background: #1880c9;
 }
 .logo-indigo .page-header.navbar .page-logo{
-	background: #6673FC;
+	background: #6017dc;
 }
 .logo-cyan .page-header.navbar .page-logo{
-	background: #4ABAD2;
+	background: #41c4c4;
 }
 .logo-red .page-header.navbar .page-logo{
 	background: #E44F56
@@ -1031,7 +1038,7 @@
 
 /* Header Indigo */
 .header-indigo .page-header.navbar{
-	background-color: #6673FC;
+	background-color: #6017dc;
 }
 .header-indigo form.search-form-opened .btn.submit {
     color: #fff;
@@ -1131,7 +1138,7 @@
 
 /* Header Cyan */
 .header-cyan .page-header.navbar{
-	background-color: #4ABAD2;
+	background-color: #41c4c4;
 }
 .header-cyan form.search-form-opened .btn.submit {
     color: #fff;

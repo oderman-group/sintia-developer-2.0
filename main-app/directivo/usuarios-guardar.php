@@ -16,7 +16,8 @@ if($validarClave!=true){
     echo '<script type="text/javascript">window.location.href="usuarios-agregar.php?error=5&usuario='.$_POST["usuario"].'&nombre='.$_POST["nombre"].'&email='.$_POST["email"].'&celular='.$_POST["celular"].'&genero='.$_POST["genero"].'&tipoUsuario='.$_POST["tipoUsuario"].'";</script>';
     exit();
 }
-mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_ocupacion, uss_intentos_fallidos)VALUES(
+mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_ocupacion, uss_intentos_fallidos, uss_tema_sidebar,
+uss_tema_header, uss_tema_logo)VALUES(
     '" . $_POST["usuario"] . "',
     '" . $_POST["clave"] . "',
     " . $_POST["tipoUsuario"] . ",
@@ -34,7 +35,10 @@ mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo,
     now(),
     '" . $_SESSION["id"] . "', 
     '" . $_POST["ocupacion"] . "',
-    0
+    0,
+    'cyan-sidebar-color',
+	'header-indigo',
+	'logo-indigo'
     )");
 $idRegistro = mysqli_insert_id($conexion);
 $lineaError = __LINE__;
