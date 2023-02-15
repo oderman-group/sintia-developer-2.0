@@ -68,7 +68,7 @@
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(is_numeric($_GET["area"])){$filtro .= " AND mat_area='".$_GET["area"]."'";}
+													 if(isset($_GET["area"]) and is_numeric($_GET["area"])){$filtro .= " AND mat_area='".$_GET["area"]."'";}
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
 													 INNER JOIN academico_areas ON ar_id=mat_area
 													 WHERE mat_id=mat_id $filtro");

@@ -1,7 +1,7 @@
 <fieldset>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Curso</label>
+												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
 													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
@@ -77,9 +77,10 @@
 												<label class="col-sm-2 control-label">Estado del año</label>
 												<div class="col-sm-4">
 													<select class="form-control" name="estadoAgno">
-														<option value="">Seleccione una opción</option>
+														<option value="0">Seleccione una opción</option>
 														<option value="1"<?php if ($datosEstudianteActual['mat_estado_agno']==1){echo "selected";}?>>Ganado</option>
 														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']==2){echo "selected";}?>>Perdido</option>
+														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']=='0'){echo "selected";}?>>En curso</option>
 													</select>
 												</div>
 											</div>
