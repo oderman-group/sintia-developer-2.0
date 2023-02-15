@@ -1,4 +1,4 @@
-						<div class="col-sm-2">
+						<div class="col-sm-3">
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue"><?=$frases[219][$datosUsuarioActual[8]];?></header>
 								<div class="panel-body">
@@ -22,7 +22,7 @@
 							</div>
 						</div>	
 
-						<div class="col-sm-7">
+						<div class="col-sm-9">
 							<div style="background-color: yellow; color:black; padding: 10px;">
 								<h4 style="font-weight: bold;">NOTA IMPORTANTE</h4>
 								Le solicitamos, por favor, llenar los datos faltantes de este formulario y corregir los que están erroneos. Esto es muy importante para usted, para sus acudidos y para la Institución.<br>
@@ -371,10 +371,4 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
-
-						<div class="col-sm-3">
-							<?php include("../compartido/modulo-frases-lateral.php");?>
-							
-                           <?php include("../compartido/publicidad-lateral.php");?> 
                         </div>
