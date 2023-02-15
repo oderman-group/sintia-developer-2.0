@@ -29,6 +29,17 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
+    <script>
+		function mostrar(data) {
+			if(data.value == 0){
+				document.getElementById("ciudadPro").style.display = "block";
+				document.getElementById("ciudadPro2").style.display = "none";
+			}else{
+				document.getElementById("ciudadPro").style.display = "none";
+				document.getElementById("ciudadPro2").style.display = "block";
+			}
+		}
+    </script>
 
 </head>
 <!-- END HEAD -->
