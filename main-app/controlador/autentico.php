@@ -1,9 +1,8 @@
 <?php 
 session_start();
-
 $idPaginaInterna = 'GN0001';
-
-include("../../conexion-datos.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST["bd"]."'");
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 
   $pagina = 'index.php';
@@ -7,7 +8,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
   if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
       $pagina = $_GET["urlDefault"];
 	}
-    include("../conexion-datos.php");
+
     include("modelo/conexion.php");
     $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios 
     WHERE uss_id='" . $_SESSION["id"] . "'");
@@ -38,7 +39,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 		exit();
 }
 
-include("../conexion-datos.php");
+include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
 ?>
