@@ -9,13 +9,14 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 $temName=$_FILES['planilla']['tmp_name'];
 $archivo = $_FILES['planilla']['name'];
 $destino = "../files/excel/";
-$extension = end(explode(".", $archivo));
+$explode = explode(".", $archivo);
+$extension = end($explode);
 $fullArchivo = uniqid('importado_').".".$extension;
 $nombreArchivo= $destino.$fullArchivo;
 
 if($extension == 'xlsx'){
 
-	if (move_uploaded_file($temName, $nombreArchivo)) {
+	if (move_uploaded_file($temName, $nombreArchivo)) {		
 		
 		if ($_FILES['planilla']['error'] === UPLOAD_ERR_OK){
 
@@ -123,8 +124,12 @@ if($extension == 'xlsx'){
 						}
 						
 						$fNacimiento = "0000-00-00";
-						if(isset($H) AND $H!='') {
-							$fecha = explode ("/", $H); 
+						if(!empty($H)) {
+							$arrayBuscar = array('-', '.', ' ', '.-');
+							$arrayReemplazar = array('/', '/', '/', '/');
+							$fechaReplace = str_replace($arrayBuscar, $arrayReemplazar, $H);							
+							$fecha = explode ("/", $fechaReplace);
+
 							$dia   = $fecha[0];  
 							$mes = $fecha[1];  
 							$year  = $fecha[2];
@@ -132,16 +137,20 @@ if($extension == 'xlsx'){
 						}
 
 						$grado = "";
-						if(isset($I) AND $I!='') {
-							
+						if(!empty($I)) {
 							try{
 								$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_nombre='".$I."'");
 							} catch (Exception $e) {
 								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 								exit();
 							}
-							$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
-							$grado = $datos['gra_id'];
+							
+							$num = mysqli_num_rows($consulta);
+							if($num > 0){
+								$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+								$grado = $datos['gra_id'];
+							}
+							
 						}
 						
 						$grupo = 4;
@@ -293,6 +302,11 @@ if($extension == 'xlsx'){
 				}
 				$f++;
 			}
+			
+			if(file_exists($nombreArchivo)){
+				unlink($nombreArchivo);
+			}
+			
 			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&numImportados='.$numImportados.'&numNoImportados='.$numNoImportados.'&numNoImportadosXusuarios='.$numNoImportadosXusuarios.'";</script>';
 			exit();
 		}else{
@@ -329,7 +343,7 @@ if($extension == 'xlsx'){
 	}else{
 		echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_8";</script>';
 		exit();
-	}
+	}	
 }else{
 	$message = "Este archivo no es admitido, por favor verifique que el archivo a importar sea un excel (.xlsx)";
 	echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.$message.'";</script>';
