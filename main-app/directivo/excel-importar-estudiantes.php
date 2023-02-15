@@ -16,7 +16,7 @@ $nombreArchivo= $destino.$fullArchivo;
 
 if($extension == 'xlsx'){
 
-	if (move_uploaded_file($temName, $nombreArchivo)) {
+	if (move_uploaded_file($temName, $nombreArchivo)) {		
 		
 		if ($_FILES['planilla']['error'] === UPLOAD_ERR_OK){
 
@@ -302,6 +302,11 @@ if($extension == 'xlsx'){
 				}
 				$f++;
 			}
+			
+			if(file_exists($nombreArchivo)){
+				unlink($nombreArchivo);
+			}
+			
 			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&numImportados='.$numImportados.'&numNoImportados='.$numNoImportados.'&numNoImportadosXusuarios='.$numNoImportadosXusuarios.'";</script>';
 			exit();
 		}else{
@@ -338,7 +343,7 @@ if($extension == 'xlsx'){
 	}else{
 		echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_8";</script>';
 		exit();
-	}
+	}	
 }else{
 	$message = "Este archivo no es admitido, por favor verifique que el archivo a importar sea un excel (.xlsx)";
 	echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.$message.'";</script>';
