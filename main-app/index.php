@@ -1,44 +1,43 @@
 <?php
 session_start();
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
-	if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
 
-		include("modelo/conexion.php");
-    $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'");
+  $pagina = 'index.php';
+
+  if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
+      $pagina = $_GET["urlDefault"];
+	}
+    include("../conexion-datos.php");
+    include("modelo/conexion.php");
+    $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios 
+    WHERE uss_id='" . $_SESSION["id"] . "'");
 		$sesionAbierta = mysqli_fetch_array($consultaSesion, MYSQLI_BOTH);
 
 		switch ($sesionAbierta[3]) {
 			case 1:
-				$url = 'directivo/' . $_GET["urlDefault"];
+				$url = 'directivo/'.$pagina;
 				break;
 			case 2:
-				$url = 'docente/' . $_GET["urlDefault"];
+				$url = 'docente/'.$pagina;
 				break;
 			case 3:
-				$url = 'acudiente/' . $_GET["urlDefault"];
+				$url = 'acudiente/'.$pagina;
 				break;
 			case 4:
-				$url = 'estudiante/' . $_GET["urlDefault"];
+				$url = 'estudiante/'.$pagina;
 				break;
 			case 5:
-				$url = '../directivo/index.php';
+				$url = 'directivo/'.$pagina;
 				break;
 			default:
 				$url = 'controlador/salir.php';
 				break;
 		}
 
-		header("Location:" . $url);
+    header("Location:" . $url);
 		exit();
-	} else {
-		echo "
-		<div style='font-family:Arial;'>
-		Ya hay una sesi&oacute;n de SINTIA abierta en este navegador: " . $_SESSION["id"] . "<br>
-		<a href='controlador/salir.php'>[Cerrar la sesi&oacute;n actual]</a>
-		</div>";
-		exit();
-	}
 }
+
 include("../conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
