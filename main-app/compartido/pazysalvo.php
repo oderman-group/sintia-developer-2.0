@@ -31,7 +31,6 @@ include("../../config-general/consulta-usuario-actual.php");?>
     <div>&nbsp;</div>
 </div>   
 <?php
- $meses = array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  $consultaUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
  INNER JOIN academico_grados ON gra_id=mat_grado
  WHERE mat_id_usuario='".$_GET["id"]."'");
@@ -62,7 +61,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 ?>
     <div align="justify" style="margin-top: 20px;">
     <p>El <?=$informacion_inst["info_nombre"]?> hace constar que el estudiante <b><?=strtoupper($usuario['mat_primer_apellido']." ".$usuario['mat_segundo_apellido']." ".$usuario['mat_nombres']." ".$usuario['mat_nombre2']);?></b> identificado con <?=$tipoD." ".$usuario['mat_documento']?> se encuentra a PAZ y SALVO por todo concepto.</p>
-    <p>Se expide esta constancia a los <?=date("d");?> días del mes de <?=date("M");?>. del año <?=date("Y");?>.</p>
+    <p>Se expide esta constancia a los <?=date("d");?> días del mes de <?=$mesesAgno[date("m")];?> del año <?=date("Y");?>.</p>
     </div>
     
     <?php
