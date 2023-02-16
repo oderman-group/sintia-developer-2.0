@@ -367,7 +367,7 @@
 									    <fieldset>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Curso<span style="color: red;">*</span></label>
+												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados

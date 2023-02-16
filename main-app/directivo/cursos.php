@@ -30,23 +30,24 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-								<div class="col-md-4 col-lg-3">
-									<div class="panel">
-										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[5][$datosUsuarioActual['uss_idioma']]);?></header>
-										<div class="panel-body">
-											<p><a href="cursos-intensidad.php">I.H por curso</a></p>
-											<p><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></p>
-											<p><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></p>
-											<p><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></p>
-										</div>
-                                	</div>
-
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
-								<div class="col-md-8 col-lg-9">
+								
+								<div class="col-md-12">
 								
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
+
+									<div class="btn-group">
+																  <button type="button" class="btn btn-primary">MÁS ACCIONES</button>
+																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																	  <i class="fa fa-angle-down"></i>
+																  </button>
+																  <ul class="dropdown-menu" role="menu">
+																	  <li><a href="cursos-intensidad.php">I.H por curso</a></li>
+																	  <li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>
+																	  <li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
+																	  <li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
+																  </ul>
+															  </div>
 
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -79,34 +80,31 @@
 														<th>Formato boletín</th>
 														<th>Matrícula</th>
 														<th>Pensión</th>
-														<th>#Periodos</th>
-														<th>Siguiente</th>
+														<th>#P</th>
                                         				<th>Grupos</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php													
-													 $consulta = Grados::listarGrados(1);
+                           							 $consulta = Grados::listarGrados(1);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><a href="../compartido/listado-estudiante.php?grado=<?=$resultado[0];?>" target="_blank" style="text-decoration:underline;" title="Imprimir lista de estudiantes"><?=$resultado[0];?></a></td>
-														<td><a href="estudiantes.php?curso=<?=$resultado[0];?>" style="text-decoration: underline;"><?=$resultado[2];?></a></td>
+														<td><a href="estudiantes.php?curso=<?=$resultado[0];?>" style="text-decoration: underline;"><?=$resultado['gra_nombre'];?></a></td>
 														<td><?=$resultado[3];?></td>
 														<td>$<?=number_format($resultado[4]);?></td>
 														<td>$<?=number_format($resultado[5]);?></td>
 														<td><?=$resultado[11];?></td>
-														<td><?=$resultado[14];?></td>
 														<td>
 															<?php													
 															$consultaGrupo = mysqli_query($conexion, "SELECT * FROM academico_grupos");
 															$contReg = 1;
 															while($resultadoG = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH)){
 															?>
-															<!-- Estos datos están quemados para no hacer un mientras que por cada curso. Lo ideal es consultar la tabla academico_grupos -->
 															<a href="../compartido/informe-consolidado-perdidos.php?curso=<?=$resultado[0];?>&grupo=<?=$resultadoG[0];?>" style="text-decoration:underline;" target="_blank"><?=$resultadoG[2];?></a>
 															<?php 
 															}
