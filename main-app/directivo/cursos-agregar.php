@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0065';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php include("../class/Grados.php");?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -77,7 +78,7 @@
                                             <label class="col-sm-2 control-label">Curso Siguiente</label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal ");
+												$opcionesConsulta = Grados::listarGrados(1);
                                                 $numCursos=mysqli_num_rows($opcionesConsulta);
                                                 $required="required";
                                                 if($numCursos==0){

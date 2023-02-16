@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+include("../class/Grados.php");
 
 $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
 $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
@@ -76,7 +77,7 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Formato Boletin</label>
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2" name="formatoB" required>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
                                                         for($i=1;$i<=4;$i++){
                                                             $select='';
@@ -120,10 +121,10 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Curso Siguiente</label>
                                             <div class="col-sm-10">
                                                 <?php
-                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal ");
+                                                $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
                                                 <select class="form-control  select2" name="graSiguiente" >
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
@@ -139,10 +140,10 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Curso Anterior</label>
                                             <div class="col-sm-10">
                                                 <?php
-                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal ");
+                                                $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
                                                 <select class="form-control  select2" name="graAnterior" >
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
@@ -158,7 +159,7 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Nivel Educativo</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="nivel" >
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($resultadoCurso['gra_nivel']==1){ echo 'selected'; } ?>>Educación Precolar</option>
                                                     <option value="2" <?php if($resultadoCurso['gra_nivel']==2){ echo 'selected'; } ?>>Educación Basica Primaria</option>
                                                     <option value="3" <?php if($resultadoCurso['gra_nivel']==3){ echo 'selected'; } ?>>Educación Basica Secundaria</option>
@@ -171,7 +172,7 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2" name="estado" >
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($resultadoCurso['gra_estado']==1){ echo 'selected'; } ?>>Activo</option>
                                                     <option value="0" <?php if($resultadoCurso['gra_estado']==0){ echo 'selected'; } ?>>Inactivo</option>
                                                 </select>

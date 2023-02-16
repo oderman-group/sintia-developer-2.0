@@ -214,16 +214,17 @@
                             </div>
 
                             <script>
+                            var images = document.getElementsByClassName('imagenes');
                             var modal = document.getElementById('myModal');
-                            var img = document.getElementById('myImg');
                             var modalImg = document.getElementById("img");
                             var captionText = document.getElementById("caption");
-                            img.onclick = function() {
+                            for (var i = 0; i <images.length; i++) {
+                            images[i].onclick = function() {
                                 modal.style.display = "block";
                                 modalImg.src = this.src;
                                 modalImg.alt = this.alt;
 
-                            }
+                            }}
                             var span = document.getElementsByClassName("close")[0];
                             span.onclick = function() {
                                 modal.style.display = "none";
@@ -243,7 +244,7 @@
                             <div class="panel-body">
                                 <p><?=$resultado['not_descripcion'];?></p>
                                 <?php if($resultado[7]!="" and file_exists('../files/publicaciones/'.$resultado[7])){?>
-                                <div class="item"><a><img id="myImg" src="../files/publicaciones/<?=$resultado[7];?>"
+                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado[7];?>"
                                             alt="<?=$resultado['not_titulo'];?>"></ah>
                                 </div>
                                 <p>&nbsp;</p>

@@ -1,17 +1,14 @@
-<?php if(isset($acudiente[0])&&$acudiente[0]==""){?>
-												<span style="color:#F03;">Si este estudiante no tiene acudiente, primero debe crearlo desde la opción <b>Usuarios->Acudientes</b> y asociarlo allá mismo.</span>
-											<?php }else{?>
-												<span style="color:#009;">Esta opción es solo para actualizar los datos del acudiente.<br>
-												En caso de que el acudiente de este estudiante sea otro, debe hacerlo desde la opción <b>Usuarios->Acudientes</b> en el icono correspondiente.</span>
-											<?php }
-											$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'");
-											$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+											<?php 
+											if(!empty($datosEstudianteActual["mat_acudiente"])){
+
+												$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios 
+												WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'");
+												$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+												
+											}
 											?>
-                                                          
+                                            
 											<h2><b>ACUDIENTE 1</b></h2>
-											<p>
-												<a href="usuarios-editar.php?id=<?php if(isset($acudiente[0])){ echo $acudiente[0];}?>" target="_blank" class="btn btn-info">Editar información del acudiente</a>
-											</p>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Tipo de documento</label>

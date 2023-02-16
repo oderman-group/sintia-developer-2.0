@@ -1,5 +1,6 @@
 <?php
-include("../../conexion-datos.php");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+include(ROOT_PATH."/conexion-datos.php");
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 //config
