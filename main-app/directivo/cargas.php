@@ -287,7 +287,6 @@
 														$p++;
 														}
 														?>
-														
 														<td>
 															<div class="btn-group">
 																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
@@ -313,7 +312,7 @@
                                                 </tbody>
                                             </table>
                                             </div>
-											<?php include("../cargas-paginacion-listados.php");?>
+											 <?php include("cargas-paginacion-listados.php");?> 
                                         </div>
                                     </div>
                                 </div>
