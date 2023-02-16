@@ -16,7 +16,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de matrícula</label>
 												<div class="col-sm-4">
-													<input type="text" name="NumMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual["mat_numero_matricula"];?>">
+													<input type="text" name="NumMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual["mat_matricula"];?>">
 												</div>
 											</div>
 
