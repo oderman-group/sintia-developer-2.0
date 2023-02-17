@@ -427,6 +427,19 @@
 													</select>
 												</div>
 											</div>
+												
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Estado Matricula</label>
+												<div class="col-sm-4">
+													<select class="form-control" name="matestM">
+														<option value="">Seleccione una opción</option>
+														<option value="1"  <?php if(1==$datosMatricula["matestM"]) echo 'selected'?>>Matriculado</option>
+														<option value="2"  <?php if(2==$datosMatricula["matestM"]) echo 'selected'?>>Asistente </option>
+														<option value="3"  <?php if(3==$datosMatricula["matestM"]) echo 'selected'?>>Cancelado </option>
+														<option value="4"  <?php if(4==$datosMatricula["matestM"]) echo 'selected'?>>No matriculado </option>
+													</select>
+												</div>
+											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>
@@ -439,8 +452,7 @@
 										   
 										<h3>Información del Acudiente</h3>
 										<fieldset>
-
-
+                      
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-3">
@@ -460,17 +472,26 @@
 														}?>
 													</select>
 												</div>
-												
+                        
 												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['documentoA'];?>">
+                          
+                        <div class="cargando row">       
+                        <div class="d-flex justify-content-center">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Verificando Documento, Espere Por Favor!</span>
+                          </div>
+                        </div>
+                      </div>
+
+													<input type="text" name="documentoA" id="doc" onblur="buscar_datos();" class="form-control"  required value="<?=$datosMatricula['documentoA'];?>">
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de expedición</label>
 												<div class="col-sm-4">
-													<select class="form-control" name="lugarDa">
+													<select class="form-control" id="lugardE" name="lugarDa">
 														<option value="">Seleccione una opción</option>
 														<?php
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
@@ -495,24 +516,24 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Primer Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido1A" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido1A'];?>">
+													<input type="text" name="apellido1A" id="apellido1A" class="form-control"  value="<?=$datosMatricula['apellido1A'];?>">
 												</div>
 																							
 												<label class="col-sm-2 control-label">Segundo Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido2A" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2A'];?>">
+													<input type="text" name="apellido2A" id="apellido2A" class="form-control"  value="<?=$datosMatricula['apellido2A'];?>">
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombreA'];?>">
+													<input type="text" name="nombresA" id="nombresA" class="form-control"  required value="<?=$datosMatricula['nombreA'];?>">
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombre2A" class="form-control" autocomplete="off" value="<?=$datosMatricula['documentoA'];?>">
+													<input type="text" name="nombre2A" id="nombre2A" class="form-control"  value="<?=$datosMatricula['documentoA'];?>">
 												</div>
 											</div>	
 												
@@ -564,6 +585,45 @@
         <?php include("../compartido/footer.php");?>
         <!-- end footer -->
     </div>
+  <script type="text/javascript">
+  $(document).ready(function(){
+        $('.cargando').hide();
+      });  
+  function buscar_datos()
+  {
+    doc = $("#doc").val();
+    var parametros = 
+    {
+      "buscar": "1",
+      "uss_usuario" : doc
+    };
+    $.ajax(
+    {
+      data:  parametros,
+      dataType: 'json',
+      url:   'ajax-comprobar-acudiente.php',
+      type:  'post',
+      beforeSend: function() 
+      {
+        $('.cargando').show();
+      }, 
+      error: function()
+      {alert("Error");},
+      complete: function() 
+      {
+        $('.cargando').hide();
+      },
+      success:  function (valores) 
+      {
+         $("#apellido1A").val(valores.apellido1);
+          $("#apellido2A").val(valores.apellido2);
+          $("#nombresA").val(valores.nombre1);
+          $("#nombre2A").val(valores.nombre2);
+          $("#lugardE").val(valores.lugardE);
+      }
+    }) 
+  }
+  </script>
     <!-- start js include path -->
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
     <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
@@ -588,7 +648,6 @@
 	<script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"  charset="UTF-8"></script>
     <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js"  charset="UTF-8"></script>
     <!-- end js include path -->
-
 </body>
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/wizard.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:55 GMT -->
