@@ -74,23 +74,6 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 
 	<link href="index-nuevo.css" rel="stylesheet" type="text/css" />
   <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-  
-	<!-- <script type="application/javascript">
-		function traerYears(enviada){
-			var idInsti = enviada.value;
-
-      datos = "idInsti="+(idInsti);
-        $.ajax({
-        type: "POST",
-        url: "ajax-detectar-years.php",
-        data: datos,
-        success: function(data){
-						$('years').html(data);
-        }
-
-      });
-		}
-	</script> -->
 </head>
 
 <body>
@@ -105,22 +88,6 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form method="post" action="controlador/autentico.php">
-			
-          <!--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-			
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-facebook-f"></i>
-            </button>
-
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-twitter"></i>
-            </button>
-
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-linkedin-in"></i>
-            </button>
-          </div>-->
           <?php include("../config-general/mensajes-informativos.php"); ?>
 		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
