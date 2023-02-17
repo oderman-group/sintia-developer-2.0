@@ -55,8 +55,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="18" name="id">
+									<form name="formularioGuardar" action="cargas-guardar.php" method="post">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Docente</label>
@@ -84,7 +83,7 @@
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
 												?>
-                                                <select class="form-control  select2" name="curso" required>
+                                                <select id="multiple" class="form-control  select2-multiple" name="curso[]" required multiple>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -121,7 +120,7 @@
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias
 												INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
 												?>
-                                                <select class="form-control  select2" name="asignatura" required>
+                                                <select id="multiple"  class="form-control  select2-multiple" name="asignatura[]" required multiple>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
