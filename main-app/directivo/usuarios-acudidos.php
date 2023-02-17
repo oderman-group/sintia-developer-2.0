@@ -18,26 +18,6 @@ include("../class/Estudiantes.php");
     <!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- <script>
-        $(document).ready(function() {
-        var idA = <?=$_GET['id'];?>;
-        datos = "idA="+(idA);
-            $.ajax({
-                type: "POST",
-                url: 'ajax-usuarios-acudidos.php',
-                data: datos,
-                dataType: 'json',
-                success: function(data) {
-                    var selector = $('#acudidos');
-                    var datosO = JSON.parse(data);
-                    datosO.forEach(function(key, index){
-                        console.log(key.nombre);
-                    // selector.append('<option value="' + opciones.value + '" ' + opciones.select + '>' + opciones.nombre + '</option>');
-                    });
-                }
-            });
-        });
-    </script> -->
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
