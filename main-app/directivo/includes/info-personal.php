@@ -129,15 +129,15 @@
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosEstudianteActual[10]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosEstudianteActual['mat_lugar_nacimiento']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
 												
 												<?php 
 													$lugarPro="";
-													if(!is_numeric($datosEstudianteActual[10])){
-														$lugarPro=$datosEstudianteActual[10];
+													if(!is_numeric($datosEstudianteActual['mat_lugar_nacimiento'])){
+														$lugarPro=$datosEstudianteActual['mat_lugar_nacimiento'];
 													}
 												?>
 												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
