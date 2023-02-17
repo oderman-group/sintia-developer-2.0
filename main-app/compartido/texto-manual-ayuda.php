@@ -11,15 +11,15 @@ $infoIdPagina = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$bas
 </div>
 
 <span style="display: none;"><b># <?=$frases[237][$datosUsuarioActual[8]];?>:</b> <?=$idPaginaInterna;?></span>
-
+<?php if(!empty($infoIdPagina['pagp_url_youtube'])){ ?>
 <p style="color: royalblue;" data-step="7" data-intro="<b>IMPORTANTE - Tutorial de ayuda:</b> En cada pantalla de la plataforma podrás encontrar este anuncio para que veas un corto video tutorial de ayuda sobre las opciones de la pantalla en la cual te encuentras. O también puedes usar la vista guiada inteligente de la plataforma." data-position='bottom'>
 	
 	<i class="fa fa-info-circle"></i> <b><?=$frases[238][$datosUsuarioActual[8]];?>:</b> <?=$frases[239][$datosUsuarioActual[8]];?> <a href="<?=$infoIdPagina['pagp_url_youtube'];?>" style="text-decoration: underline; font-weight: bold;" target="_blank"><?=$frases[240][$datosUsuarioActual[8]];?></a>.<br>
 	
-	<i class="fa fa-life-ring"></i> <a href="javascript:void(0);" onclick="javascript:introJs().addHints();" style="text-decoration: underline; color: teal;"><b>TAMBIÉN PUEDES USAR LA GUÍA INTELIGENTE</b></a>
+	<!-- <i class="fa fa-life-ring"></i> <a href="javascript:void(0);" onclick="javascript:introJs().addHints();" style="text-decoration: underline; color: teal;"><b>TAMBIÉN PUEDES USAR LA GUÍA INTELIGENTE</b></a> -->
 
 </p>
-
+<?php }?>
 <?php if($datosUsuarioActual['uss_bloqueado']==1){?>
 	<div style="margin-bottom: 10px; margin-top: 10px; padding: 5px; background-color: coral;">
 	<b><?=$datosUsuarioActual['uss_nombre'];?></b>,	su usuario se encuentra bloqueado para algunas opciones de la plataforma. Si tiene dudas al respecto, pongase en contacto con la Institución.
