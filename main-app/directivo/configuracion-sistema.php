@@ -144,6 +144,16 @@
 										</div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Mostrar calificaciones a los acudientes?</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="caliAcudientes">
+                                                    <option value="1" <?php if($cfg['conf_calificaciones_acudientes']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_calificaciones_acudientes']==0){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Si un usuario tiene saldo pendiente...</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="saldoPendiente" required>
