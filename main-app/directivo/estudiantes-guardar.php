@@ -34,14 +34,14 @@ if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
 
-$procedencia=$_POST["ciudadPro"];
-if($_POST["extran"]==1){
-	$procedencia=$_POST["ciudadPro2"];
-}
 
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-create-student.php");
+}
+$procedencia=$_POST["lNacM"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
 }
 
 try{
@@ -189,7 +189,7 @@ try{
 		mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
 		mat_inclusion, mat_extranjero, mat_tipo_sangre, 
 		mat_eps, mat_celular2, mat_ciudad_residencia, 
-		mat_nombre2,mat_lugar_procedencia)
+		mat_nombre2)
 		VALUES(
 		".$result_numMat.", now(), ".$_POST["tipoD"].",
 		".$_POST["nDoc"].", ".$_POST["religion"].", '".strtolower($_POST["email"])."',
@@ -197,12 +197,12 @@ try{
 		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
 		'".$_POST["fNac"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', 
 		'".$_POST["nombres"]."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
-		'".$_POST["tipoEst"]."', '".$_POST["lNacM"]."', '".$_POST["lugarD"]."',
+		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
 		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
 		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
-		'".$_POST["nombre2"]."', '".$procedencia."'
+		'".$_POST["nombre2"]."'
 		)");
 } catch (Exception $e) {
 	echo 'Excepción capturada: ',  $e->getMessage(), "\n";

@@ -15,9 +15,9 @@ if($config['conf_id_institucion']==1){
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 
-$procedencia=$_POST["ciudadPro"];
-if($_POST["extran"]==1){
-	$procedencia=$_POST["ciudadPro2"];
+$procedencia=$_POST["lNac"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
 }
 
 try{
@@ -40,7 +40,7 @@ try{
 	mat_grupo='".$_POST["grupo"]."', 
 	mat_tipo='".$_POST["tipoEst"]."',
 	mat_lugar_expedicion='".$_POST["lugarD"]."',
-	mat_lugar_nacimiento='".$_POST["lNac"]."',
+	mat_lugar_nacimiento='".$procedencia."',
 	mat_estado_matricula=".$_POST["matestM"].", 
 	mat_matricula='".$_POST["matricula"]."', 
 	mat_folio='".$_POST["folio"]."', 
@@ -66,8 +66,7 @@ try{
 	mat_eps='".$_POST["eps"]."', 
 	mat_celular2='".$_POST["celular2"]."', 
 	mat_ciudad_residencia='".$_POST["ciudadR"]."', 
-	mat_nombre2='".$_POST["nombre2"]."',
-	mat_lugar_procedencia='".$procedencia."'
+	mat_nombre2='".$_POST["nombre2"]."'
 
 	WHERE mat_id=".$_POST["id"].";");
 
