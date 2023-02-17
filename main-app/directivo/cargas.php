@@ -67,7 +67,10 @@
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -118,7 +121,10 @@
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($docente['uss_id']==$_GET["docente"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -152,7 +158,10 @@
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($docente['mat_id']==$_GET["asignatura"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
