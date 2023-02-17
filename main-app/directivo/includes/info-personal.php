@@ -133,6 +133,17 @@
 														<?php }?>
 													</select>
 												</div>
+												
+												<?php 
+													$lugarPro="";
+													if(!is_numeric($datosEstudianteActual[10])){
+														$lugarPro=$datosEstudianteActual[10];
+													}
+												?>
+												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
+												<div class="col-sm-4" >
+													<input type="text" name="ciudadPro" class="form-control" autocomplete="off" value="<?=$lugarPro;?>">
+												</div>
 											</div>
 												
 											<div class="form-group row">
@@ -202,39 +213,6 @@
 														<option value="1"<?php if ($datosEstudianteActual[39]==1){echo "selected";}?>>Si</option>
 														<option value="0"<?php if ($datosEstudianteActual[39]==0){echo "selected";}?>>No</option>
 													</select>
-												</div>
-													
-												<?php if(($datosEstudianteActual[39] == 0) || ($datosEstudianteActual[39] == "")){ 
-													$displayCol="display: block;";
-													$displayExtr="display: none;";
-												}else{ 
-													$displayCol="display: none;";
-													$displayExtr="display: block;";
-												}?>
-												
-												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
-												<div class="col-sm-4" style="<?=$displayCol;?>" id="ciudadPro">
-													<select class="form-control" name="ciudadPro">
-														<option value="">Seleccione una opción</option>
-														<?php
-														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
-														ORDER BY ciu_nombre
-														");
-														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
-															$selected='';
-															$opg['ciu_codigo'] = trim($opg['ciu_codigo']);
-															if($opg['ciu_codigo']==$datosEstudianteActual['mat_lugar_procedencia']){
-																$selected='selected';
-															}
-															?>
-															<option value="<?=$opg['ciu_codigo'];?>" <?=$selected;?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
-															<?php }?>
-													</select>
-												</div>
-
-												<div class="col-sm-4" style="<?=$displayExtr;?>" id="ciudadPro2" >
-													<input type="text" name="ciudadPro2" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_lugar_procedencia'];?>">
 												</div>
 											</div>
 											
