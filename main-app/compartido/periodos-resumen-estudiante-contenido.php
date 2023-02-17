@@ -136,7 +136,10 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															</td>
 														<?php		
 														 }
-															@$definitiva = ($definitiva / $sumaPorcentaje);
+														 	
+															if(!empty($sumaPorcentaje)){
+																$definitiva = ($definitiva / $sumaPorcentaje);
+															}
 															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual[0]." AND niv_id_asg=".$rCargas[0]);
 															
 															$numN = mysqli_num_rows($consultaN);
@@ -159,8 +162,10 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															 WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$datosEstudianteActual['gra_periodos']."'
 															 "), MYSQLI_BOTH);
 															 $decimal2 = $periodosCursos2['gvp_valor']/100;
-															 
-															@$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']); 
+															
+															if(!empty($decimal2)){ 
+																$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);
+															} 
 															 
 															 if($notaMinima<=0){
 																$notaMinima = "-";

@@ -18,6 +18,14 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple">Resumen </header>
                                         <div class="panel-body">
+											<?php
+											if(empty($resumen[2])){
+												$resumen[2]=0;
+											}
+											if(empty($resumen[0])){
+												$resumen[0]=0;
+											}
+											?>
 											<p><b>COBROS:</b> $<?=number_format($resumen[2],0,",",".");?></p>
 											<p><b>PAGOS:</b> $<?=number_format($resumen[0],0,",",".");?></p>
 											<hr>
