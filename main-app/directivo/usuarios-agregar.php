@@ -6,6 +6,10 @@
 $datosUsuario = [
 	'usuario'     => '',
 	'nombre'      => '',
+	'nombre2'      => '',
+	'apellido1'      => '',
+	'apellido2'      => '',
+	'documento'      => '',
 	'email'       => '',
 	'celular'    => '',
 	'genero'      => '',
@@ -16,6 +20,21 @@ if(isset($_GET['usuario'])){
 }
 if(isset($_GET['nombre'])){
 	$datosUsuario['nombre'] = $_GET['nombre'];
+}
+if(isset($_GET['nombre2'])){
+	$datosUsuario['nombre2'] = $_GET['nombre2'];
+}
+if(isset($_GET['apellido1'])){
+	$datosUsuario['apellido1'] = $_GET['apellido1'];
+}
+if(isset($_GET['apellido2'])){
+	$datosUsuario['apellido2'] = $_GET['apellido2'];
+}
+if(isset($_GET['tipoD'])){
+	$datosUsuario['tipoD'] = $_GET['tipoD'];
+}
+if(isset($_GET['documento'])){
+	$datosUsuario['documento'] = $_GET['documento'];
 }
 if(isset($_GET['email'])){
 	$datosUsuario['email'] = $_GET['email'];
@@ -175,6 +194,53 @@ $(document).ready(function() {
                                         <div class="col-sm-4">
                                             <input type="text" name="nombre" class="form-control"
                                                 value="<?=$datosUsuario['nombre'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Otro Nombre</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="nombre2" class="form-control" value="<?=$datosUsuario['nombre2'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Primer Apellido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Segundo Apellido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="apellido2" class="form-control" value="<?=$datosUsuario['apellido2'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Tipo de documento</label>
+                                        <div class="col-sm-4">
+                                            <?php
+                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+                                            WHERE ogen_grupo=1");
+                                            ?>
+                                            <select class="form-control  select2" name="tipoD">
+                                                <option value="">Seleccione una opción</option>
+                                                <?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                    if($o[0]==$datosUsuario['tipoD'])
+                                                    echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+                                                else
+                                                    echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+                                                }?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Documento</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="documento" class="form-control" value="<?=$datosUsuario['documento'];?>">
                                         </div>
                                     </div>
 

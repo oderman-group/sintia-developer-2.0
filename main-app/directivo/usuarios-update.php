@@ -24,6 +24,11 @@ uss_lugar_expedicion=  '" . $_POST["lExpedicion"] . "',
 uss_direccion=         '" . $_POST["direccion"] . "',
 uss_telefono=          '" . $_POST["telefono"] . "',
 uss_intentos_fallidos= '" . $_POST["intentosFallidos"] . "',
+uss_tipo_documento=    '" . $_POST["tipoD"] . "', 
+uss_apellido1=         '" . $_POST["apellido1"] . "', 
+uss_apellido2=         '" . $_POST["apellido2"] . "', 
+uss_nombre2=           '" . $_POST["nombre2"] . "', 
+uss_documento=         '" . $_POST["documento"] . "',
 
 uss_ultima_actualizacion=now()
 WHERE uss_id='" . $_POST["idR"] . "'");

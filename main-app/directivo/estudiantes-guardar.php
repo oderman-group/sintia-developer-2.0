@@ -87,6 +87,7 @@ if ($acudienteNum > 0) {
 			uss_apellido1, 
 			uss_apellido2, 
 			uss_nombre2,
+			uss_documento, 
 			uss_tema_sidebar,
 			uss_tema_header,
 			uss_tema_logo
@@ -110,6 +111,7 @@ if ($acudienteNum > 0) {
 			'".$_POST["apellido1A"]."', 
 			'".$_POST["apellido2A"]."', 
 			'".$_POST["nombre2A"]."',
+			'".	$_POST["documentoA"]."',
 			'cyan-sidebar-color',
 			'header-indigo',
 			'logo-indigo'
@@ -143,6 +145,7 @@ try{
 		uss_apellido1, 
 		uss_apellido2, 
 		uss_nombre2,
+		uss_documento, 
 		uss_tema_sidebar,
 		uss_tema_header,
 		uss_tema_logo
@@ -165,6 +168,7 @@ try{
 		'".$_POST["apellido1"]."', 
 		'".$_POST["apellido2"]."', 
 		'".$_POST["nombre2"]."',
+		'".	$_POST["nDoc"]."',
 		'cyan-sidebar-color',
 		'header-indigo',
 		'logo-indigo'

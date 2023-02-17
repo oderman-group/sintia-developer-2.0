@@ -102,6 +102,53 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 											</div>
 											
 										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Otro Nombre</label>
+											<div class="col-sm-4">
+												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Primer Apellido</label>
+											<div class="col-sm-4">
+												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Segundo Apellido</label>
+											<div class="col-sm-4">
+												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Tipo de documento</label>
+											<div class="col-sm-4">
+												<?php
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+												WHERE ogen_grupo=1");
+												?>
+												<select class="form-control  select2" name="tipoD">
+													<option value="">Seleccione una opción</option>
+													<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+														if($o[0]==$datosEditar['uss_tipo_documento'])
+														echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+													else
+														echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+													}?>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Documento</label>
+											<div class="col-sm-4">
+												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>">
+											</div>
+										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Email</label>
