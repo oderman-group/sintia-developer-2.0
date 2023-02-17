@@ -67,7 +67,10 @@
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -118,7 +121,10 @@
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($docente['uss_id']==$_GET["docente"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -152,7 +158,10 @@
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												$porcentajePorGrado = 0;
+												if(!empty($estadisticasCargas[0])){
+													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
+												}
 												if($docente['mat_id']==$_GET["asignatura"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
 											
@@ -194,6 +203,8 @@
 								</div>
 								
 								<div class="col-md-8 col-lg-9">
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
+
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></header>
@@ -300,8 +311,9 @@
 																	  <li><a href="periodos-resumen.php?carga=<?=$resultado[0];?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
 																	  <li><a href="cargas-indicadores.php?carga=<?=$resultado['car_id'];?>&docente=<?=$resultado['car_docente'];?>">Indicadores</a></li>
 																	  <li><a href="auto-login.php?user=<?=$resultado['car_docente'];?>&tipe=2&carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>" onClick="if(!confirm('Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?')){return false;}">Ver como docente</a></li>
-																	  <!--
-																	  <li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>-->
+																	  <?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
+																	  	<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	  <?php }?>
 																  </ul>
 															  </div>
 														</td>
