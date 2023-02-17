@@ -34,9 +34,14 @@ if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
 
+
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-create-student.php");
+}
+$procedencia=$_POST["lNacM"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
 }
 
 try{
@@ -192,7 +197,7 @@ try{
 		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
 		'".$_POST["fNac"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', 
 		'".$_POST["nombres"]."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
-		'".$_POST["tipoEst"]."', '".$_POST["lNacM"]."', '".$_POST["lugarD"]."',
+		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
 		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 

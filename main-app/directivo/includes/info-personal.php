@@ -129,9 +129,20 @@
 														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosEstudianteActual[10]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosEstudianteActual['mat_lugar_nacimiento']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 														<?php }?>
 													</select>
+												</div>
+												
+												<?php 
+													$lugarPro="";
+													if(!is_numeric($datosEstudianteActual['mat_lugar_nacimiento'])){
+														$lugarPro=$datosEstudianteActual['mat_lugar_nacimiento'];
+													}
+												?>
+												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
+												<div class="col-sm-4" >
+													<input type="text" name="ciudadPro" class="form-control" autocomplete="off" value="<?=$lugarPro;?>">
 												</div>
 											</div>
 												
@@ -177,17 +188,6 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Extranjero?</label>
-												<div class="col-sm-2">
-													<select class="form-control  select2" name="extran">
-														<option value="">Seleccione una opción</option>
-														<option value="1"<?php if ($datosEstudianteActual[39]==1){echo "selected";}?>>Si</option>
-														<option value="0"<?php if ($datosEstudianteActual[39]==0){echo "selected";}?>>No</option>
-													</select>
-												</div>
-											</div>
-												
-											<div class="form-group row">
 												<label class="col-sm-2 control-label">Religi&oacute;n</label>
 												<?php
 												$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
@@ -201,6 +201,17 @@
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
 														}?>
+													</select>
+												</div>
+											</div>
+												
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Extranjero?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="extran"  onChange="mostrar(this)">
+														<option value="">Seleccione una opción</option>
+														<option value="1"<?php if ($datosEstudianteActual[39]==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosEstudianteActual[39]==0){echo "selected";}?>>No</option>
 													</select>
 												</div>
 											</div>

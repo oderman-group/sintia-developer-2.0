@@ -15,6 +15,11 @@ if($config['conf_id_institucion']==1){
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 
+$procedencia=$_POST["lNac"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
+}
+
 try{
 	mysqli_query($conexion, "UPDATE academico_matriculas SET 
 	mat_tipo_documento='".$_POST["tipoD"]."', 
@@ -35,7 +40,7 @@ try{
 	mat_grupo='".$_POST["grupo"]."', 
 	mat_tipo='".$_POST["tipoEst"]."',
 	mat_lugar_expedicion='".$_POST["lugarD"]."',
-	mat_lugar_nacimiento='".$_POST["lNac"]."',
+	mat_lugar_nacimiento='".$procedencia."',
 	mat_estado_matricula=".$_POST["matestM"].", 
 	mat_matricula='".$_POST["matricula"]."', 
 	mat_folio='".$_POST["folio"]."', 

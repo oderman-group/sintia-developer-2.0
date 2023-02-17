@@ -224,6 +224,11 @@
 														<?php }?>
 													</select>
 												</div>
+												
+												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
+												<div class="col-sm-4" id="ciudadPro2" >
+													<input type="text" name="ciudadPro" class="form-control" autocomplete="off">
+												</div>
 											</div>
 												
 											<div class="form-group row">
@@ -268,17 +273,7 @@
 													</select>
 												</div>
 												
-												<label class="col-sm-2 control-label">Extranjero?</label>
-												<div class="col-sm-2">
-													<select class="form-control  select2" name="extran">
-														<option value="">Seleccione una opción</option>
-														<option value="1"<?php if ($datosMatricula['extran']==1){echo "selected";}?>>Si</option>
-														<option value="0"<?php if ($datosMatricula['extran']==0){echo "selected";}?>>No</option>
-													</select>
-												</div>
-											</div>
 												
-											<div class="form-group row">
 												<label class="col-sm-2 control-label">Religi&oacute;n</label>
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="religion">
@@ -295,6 +290,17 @@
 												</div>
 											</div>
 											<?php }?>
+												
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Extranjero?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="extran">
+														<option value="">Seleccione una opción</option>
+														<option value="1"<?php if ($datosMatricula['extran']==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosMatricula['extran']==0){echo "selected";}?>>No</option>
+													</select>
+												</div>
+											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
