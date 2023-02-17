@@ -167,11 +167,13 @@ include("../class/Estudiantes.php");
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
 																		  
-																		  <?php if($config['conf_sin_nota_numerica']!=1){?>
-																		  		<li><a href="periodos-resumen.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
-																		  <?php }?>
-																		  
-																		  <li><a href="notas-actuales.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
+																	  		<?php if($config['conf_calificaciones_acudientes']==1){?>
+																				<?php if($config['conf_sin_nota_numerica']!=1){?>
+																						<li><a href="periodos-resumen.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																				<?php }?>
+																				<li><a href="notas-actuales.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
+																			<?php }?>
+
 																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>">R. Disciplina</a></li>
 																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
 																		  
