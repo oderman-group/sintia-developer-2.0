@@ -427,6 +427,19 @@
 													</select>
 												</div>
 											</div>
+												
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Estado Matricula</label>
+												<div class="col-sm-4">
+													<select class="form-control" name="matestM">
+														<option value="">Seleccione una opción</option>
+														<option value="1"  <?php if(1==$datosMatricula["matestM"]) echo 'selected'?>>Matriculado</option>
+														<option value="2"  <?php if(2==$datosMatricula["matestM"]) echo 'selected'?>>Asistente </option>
+														<option value="3"  <?php if(3==$datosMatricula["matestM"]) echo 'selected'?>>Cancelado </option>
+														<option value="4"  <?php if(4==$datosMatricula["matestM"]) echo 'selected'?>>No matriculado </option>
+													</select>
+												</div>
+											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>

@@ -72,27 +72,30 @@
                                                     $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
 												?>
                                                 <select class="form-control  select2" name="posicionA" required>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
 													<?php
+                                                    $numDatos=mysqli_num_rows($c_posicionA);
                                                     $cont=0;
                                                     while($r_pos=mysqli_fetch_array($c_posicionA, MYSQLI_BOTH)){
                                                         $cont++;
                                                         $posciones[$cont]=$r_pos["ar_posicion"];
                                                         }
                                                     $cond=0;
-                                                    $exist=0;
                                                     for($i=1;$i<=(20+$cond);$i++){
-                                                        for($j=0;$j<=count($posciones);$j++){
-                                                            if($i==$posciones[$j]){
-                                                                $exist=1;
-                                                            } 
+                                                        
+                                                        $exist=0;
+                                                        if($numDatos>0){
+                                                            for($j=0;$j<=count($posciones);$j++){
+                                                                if($i==$posciones[$j]){
+                                                                    $exist=1;
+                                                                } 
+                                                            }
                                                         }
                                                         if($exist!=1){
                                                             echo '<option value="'.$i.'">'.$i.'</option>';
                                                         }else{
                                                         $cond++;
                                                         }
-                                                        $exist=0;
                                                     }
                                                     ?>
                                                 </select>

@@ -93,21 +93,6 @@ if ($_POST["id"] == 17) {
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
 }
-//CREAR CARGAS ACADEMICAS
-if ($_POST["id"] == 18) {
-	$numero = (count($_POST["grupo"]));
-	$contador = 0;
-	while ($contador < $numero) {
-		mysqli_query($conexion, "INSERT INTO academico_cargas (car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable, car_maximos_indicadores, car_maximas_calificaciones, car_configuracion, car_valor_indicador, car_permiso2, car_indicador_automatico)VALUES('" . $_POST["docente"] . "', '" . $_POST["curso"] . "', '" . $_POST["grupo"][$contador] . "','" . $_POST["asignatura"] . "', '" . $_POST["periodo"] . "', 1, 1, '" . $_POST["dg"] . "', '" . $_POST["ih"] . "', now(), '" . $_SESSION["id"] . "', '" . $_POST["maxIndicadores"] . "', '" . $_POST["maxActividades"] . "', '" . $_POST["valorActividades"] . "', '" . $_POST["valorIndicadores"] . "', '" . $_POST["permiso2"] . "', '" . $_POST["indicadorAutomatico"] . "')");
-		$lineaError = __LINE__;
-
-	include("../compartido/reporte-errores.php");
-		$contador++;
-	}
-
-	echo '<script type="text/javascript">window.location.href="cargas.php";</script>';
-	exit();
-}
 //CREAR INGRESOS-EGRESOS
 if ($_POST["id"] == 19) {
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
