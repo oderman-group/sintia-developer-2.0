@@ -15,7 +15,7 @@ $yearEnd = $yearArray[1];
 
 //CONFIGURACIÓN GENERAL
 $opcionSINO = array ("NO","SI");
-$mesesAgno = array("","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE");
+$mesesAgno = array("01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Septiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
 $opcionEstado = array("INACTIVO", "ACTIVO");
 $estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 $clavePorDefectoUsuarios = '12345678';
