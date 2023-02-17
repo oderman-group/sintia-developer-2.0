@@ -38,7 +38,8 @@ $datosMatricula = [
 	'tipoDocA' => '',
 	'apellido1A'      => '',
 	'apellido2A'       => '',
-	'nombre2A'    => ''
+	'nombre2A'    => '',
+	'matestM'    => 4
 ];
 if(isset($_GET['tipoD'])){
 	$datosMatricula['tipoD'] = $_GET['tipoD'];
@@ -156,4 +157,7 @@ if(isset($_GET['apellido2A'])){
 }
 if(isset($_GET['nombre2A'])){
 	$datosMatricula['nombre2A'] = $_GET['nombre2A'];
+}
+if(isset($_GET['matestM'])){
+	$datosMatricula['matestM'] = $_GET['matestM'];
 }
