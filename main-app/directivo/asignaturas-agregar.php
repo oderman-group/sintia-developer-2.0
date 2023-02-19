@@ -42,12 +42,7 @@
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                                 <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
@@ -59,31 +54,33 @@
 									<form name="formularioGuardar" action="asignaturas-guardar.php" method="post" enctype="multipart/form-data">
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Codigo</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="codigoM" class="form-control" value="">
+                                            <label class="col-sm-2 control-label">Nombre de la Asignatura <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="nombreM" class="form-control" onchange="generarSiglas(this)">
                                             </div>
                                         </div>
+
+                                        <script type="text/javascript">
+                                            function generarSiglas(datos){
+                                                var asignatura = datos.value;
+                                                var siglas = asignatura.substring(0, 3);
+                                                document.getElementById("siglasM").value = siglas.toUpperCase();
+                                            }
+                                        </script>    
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre de la Asignatura</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="nombreM" class="form-control" value="">
-                                            </div>
-                                        </div>
-										
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Siglas</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="siglasM" class="form-control" value="">
+                                            <label class="col-sm-2 control-label">Nombre corto, Abreviatura o Siglas de la asignatura</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="siglasM" id="siglasM" class="form-control">
+                                                <span style="color: #6017dc;">Este valor se usa para mostrar de forma abreviada el nombre de la asignatura en algunos informes.</span>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Area acad&eacute;mica</label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-2 control-label">Área académica a la cual pertenece esta asignatura <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
                                                 <select class="form-control  select2" name="areaM" required>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
                                                     $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
                                                     while($rA=mysqli_fetch_array($cAreas, MYSQLI_BOTH)){
