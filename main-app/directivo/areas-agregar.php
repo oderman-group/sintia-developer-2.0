@@ -59,14 +59,14 @@
 									<form name="formularioGuardar" action="areas-guardar.php" method="post" enctype="multipart/form-data">
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre del Areas</label>
+                                            <label class="col-sm-2 control-label">Nombre del Área <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreA" class="form-control" value="">
+                                                <input type="text" name="nombreA" class="form-control" required>
                                             </div>
                                         </div>	
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Posición</label>
+                                            <label class="col-sm-2 control-label">Orden o posición en los informes</label>
                                             <div class="col-sm-10">
 												<?php
                                                     $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
@@ -99,6 +99,7 @@
                                                     }
                                                     ?>
                                                 </select>
+                                                <span style="color: #6017dc;">Este número se usa para mostrar en una posición específica el área en los informes de la institución.</span>
                                             </div>
                                         </div>
 
