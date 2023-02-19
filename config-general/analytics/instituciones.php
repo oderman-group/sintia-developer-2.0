@@ -16,13 +16,13 @@ switch($_SERVER['HTTP_HOST']){
 
 	case 'developer.plataformasintia.com':
     echo "
-    <script async src='https://www.googletagmanager.com/gtag/js?id=UA-52643833-14'></script>
+    <script async src='https://www.googletagmanager.com/gtag/js?id=G-TRNFMH9RH1'></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'UA-52643833-14');
+      gtag('config', 'G-TRNFMH9RH1');
     </script>
     ";
 	  break;
