@@ -169,54 +169,52 @@ $(document).ready(function() {
                             <div class="panel-body">
 
 
-                                <form name="formularioGuardar" action="usuarios-guardar.php" method="post">
-
+                                <form name="formularioGuardar" id="myForm" action="usuarios-guardar.php" method="post">
+                                
+                                <h4>Credenciales de acceso a la plataforma</h4>
+                                <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Tipo de usuario <span style="color: red;">(*)</span></label>
+                                        <div class="col-sm-4">
+                                            <?php
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+												?>
+                                            <select class="form-control  select2" name="tipoUsuario" required>
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+														if(
+														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 4 || $opcionesDatos[0] == 6) 
+														and $datosUsuarioActual['uss_tipo'==5]){continue;}
+														$select = '';
+														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
+													?>
+                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>>
+                                                    <?=$opcionesDatos['pes_nombre'];?></option>
+                                                <?php }?>
+                                            </select>
+                                            <i class="fa fa-info"></i> <span style="color: #6017dc;"> <b>IMPORTANTE:</b> Este dato define los permisos dentro de la plataforma.</span>
+                                        </div>
+                                    </div>
+                                    
+                                    
                                     <div class="form-group row">
-                                        <label id="" class="col-sm-2 control-label">Usuario</label>
+                                        <label id="" class="col-sm-2 control-label">Usuario de acceso <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                             <input type="text" name="usuario" id="usuario" autofocus
-                                                class="form-control" value="<?=$datosUsuario['usuario'];?>">
-
-                                            
-
+                                                class="form-control" value="<?=$datosUsuario['usuario'];?>" required pattern="[A-Za-z0-9]+">
+                                                <i class="fa fa-info"></i> <span style="color: #6017dc;">Puedes usar letras, números o combinarlos. Pero no se permiten caracteres especiales o espacios en blanco.</span>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Contraseña</label>
+                                        <label class="col-sm-2 control-label">Contraseña <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="clave" class="form-control">
+                                            <input type="text" name="clave" class="form-control" required>
+                                            <i class="fa fa-info"></i> <span style="color: #6017dc;">La contraseña debe ser de 8 caracteres como mínimo y 20 como máximo.</span>
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Nombre</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" name="nombre" class="form-control"
-                                                value="<?=$datosUsuario['nombre'];?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Otro Nombre</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" name="nombre2" class="form-control" value="<?=$datosUsuario['nombre2'];?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Primer Apellido</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Segundo Apellido</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" name="apellido2" class="form-control" value="<?=$datosUsuario['apellido2'];?>">
-                                        </div>
-                                    </div>
+                                    <hr>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Tipo de documento</label>
@@ -245,9 +243,38 @@ $(document).ready(function() {
                                     </div>
 
                                     <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="nombre" class="form-control"
+                                                value="<?=$datosUsuario['nombre'];?>" required pattern="[A-Za-z]+">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Otro Nombre</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="nombre2" class="form-control" value="<?=$datosUsuario['nombre2'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Primer Apellido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Segundo Apellido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="apellido2" class="form-control" value="<?=$datosUsuario['apellido2'];?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">Email</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>">
+                                            <input type="email" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>">
                                             
                                         </div>
                                     </div>
@@ -263,11 +290,12 @@ $(document).ready(function() {
 
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Género</label>
+                                        <label class="col-sm-2 control-label">Género <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                         <?php
-												                 $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-												                  ?>
+										$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales 
+                                        WHERE ogen_grupo=4");
+										?>
                                         <select class="form-control  select2" name="genero" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
@@ -281,30 +309,6 @@ $(document).ready(function() {
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de usuario</label>
-                                        <div class="col-sm-4">
-                                            <?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
-												?>
-                                            <select class="form-control  select2" name="tipoUsuario" required>
-                                                <option value="">Seleccione una opción</option>
-                                                <?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														if(
-														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 4 || $opcionesDatos[0] == 6) 
-														and $datosUsuarioActual['uss_tipo'==5]){continue;}
-														$select = '';
-														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
-													?>
-                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>>
-                                                    <?=$opcionesDatos['pes_nombre'];?></option>
-                                                <?php }?>
-                                            </select>
-                                        </div>
-                                    </div>
-
 
                                     <input type="submit" class="btn btn-primary" id="btnEnviar"
                                         value="Guardar cambios">&nbsp;
