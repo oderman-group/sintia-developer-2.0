@@ -373,7 +373,7 @@
 
 	                            	<?php 
 	                            	//Temporal para que el estudiante no vea notas ni nada de eso.
-	                            	if($config['conf_servidor']==1){}else{?>
+	                            	if($config['conf_mostrar_calificaciones_estudiantes']!=1){}else{?>
 
 	                                <li class="nav-item"><a href="indicadores.php" class="nav-link "> <span class="title"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
