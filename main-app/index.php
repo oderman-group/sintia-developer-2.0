@@ -116,6 +116,8 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
             <option value="">Seleccione el año</option>
           </select>
           <script type="application/javascript">
+            $(document).ready(traerYears(document.getElementById('bd')));
+            
             function traerYears(enviada){
               var idInsti = enviada.value;
 
