@@ -39,8 +39,10 @@ $direccionArchivo = ('../files/archivos');
     $gb= $contadorByte/1073741824;
     "Carpeta: ".$direccionArchivo."<br>";
     global $peso;
-    $porcentaje = ($gb/$peso[0])*100;
-
+    if(!empty($peso[0])){
+        $porcentaje = ($gb/$peso[0])*100;
+    }
+    
     if($porcentaje<=50){$colorGrafico='info';}
     elseif($porcentaje>50 and $porcentaje<=80){$colorGrafico='warning';}
     else{$colorGrafico='danger';}

@@ -42,12 +42,7 @@
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
@@ -58,8 +53,8 @@
 									<form name="formularioGuardar" action="cargas-guardar.php" method="post">
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Docente</label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-2 control-label">Docente <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
 												WHERE uss_tipo=2 ORDER BY uss_nombre");
@@ -78,8 +73,8 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Curso</label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
 												?>
@@ -97,8 +92,8 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Grupo</label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-2 control-label">Grupo <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
 												?>
@@ -114,8 +109,8 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Asignatura - Área</label>
-                                            <div class="col-sm-10">
+                                            <label class="col-sm-2 control-label">Asignatura (Área) <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-8">
 												<?php
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias
 												INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
@@ -125,14 +120,14 @@
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." - ".$opcionesDatos['ar_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
                                                 </select>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Periodo</label>
+                                            <label class="col-sm-2 control-label">Periodo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="periodo" required>
                                                     <option value="">Seleccione una opción</option>
@@ -148,10 +143,10 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Director de grupo</label>
+                                            <label class="col-sm-2 control-label">Director de grupo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="dg" required>
-                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="0">Seleccione una opción</option>
 													<option value="1">SI</option>
 													<option value="0" selected>NO</option>
                                                 </select>
@@ -159,12 +154,15 @@
                                         </div>
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Intensidad H.</label>
+											<label class="col-sm-2 control-label">Intensidad H. <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
 												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>">
 											</div>
 										</div>
-										
+
+										<div style="display:none">
+                                        <hr>
+
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Max. Indicadores</label>
 											<div class="col-sm-2">
@@ -247,6 +245,8 @@
 
                                             </div>
                                             
+                                        </div>
+
                                         </div>
 
 

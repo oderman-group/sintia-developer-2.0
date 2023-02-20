@@ -256,6 +256,9 @@ if ($_POST["id"] == 6) {
 	
 		uss_clave='" . mysqli_real_escape_string($conexion,$_POST["clave"]) . "', 
 		uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
+		uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
+		uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
+		uss_apellido2='" . strtoupper($_POST["apellido2"]) . "', 
 		uss_email='" . strtolower($_POST["email"]) . "', 
 		uss_celular='" . $_POST["celular"] . "', 
 		uss_lugar_nacimiento='" . $_POST["lNacimiento"] . "', 
@@ -279,6 +282,9 @@ if ($_POST["id"] == 6) {
 		
 		uss_clave='" . mysqli_real_escape_string($conexion,$_POST["clave"]) . "', 
 		uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
+		uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
+		uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
+		uss_apellido2='" . strtoupper($_POST["apellido2"]) . "', 
 		uss_email='" . strtolower($_POST["email"]) . "', 
 		uss_genero='" . $_POST["genero"] . "', 
 		uss_fecha_nacimiento='" . $_POST["fechaN"] . "', 

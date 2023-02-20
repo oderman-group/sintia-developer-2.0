@@ -49,15 +49,25 @@
 									<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
 								</div>
 							</div>
+							
+							<li class="nav-item">
+	                            <a href="como-empezar.php" class="nav-link nav-toggle">
+	                                <i class="material-icons">toc</i>
+	                                <span class="title">GUIA PARA EMPEZAR</span>
+                                	<span class="selected"></span>
+	                            </a>
+	                        </li>
+
 							<?php }?>
 							
 							<li class="nav-item start active">
 	                            <a href="javascript:void(0);" onclick="javascript:introJs().start();" class="nav-link nav-toggle">
 	                                <i class="fa fa-life-ring"></i>
-	                                <span class="title">INDUCCIÓN SINTIA</span>
+	                                <span class="title">Tour SINTIA</span>
                                 	<span class="selected"></span>
 	                            </a>
 	                        </li>
+
 							
 							<li class="nav-item">
 	                            <a href="index.php" class="nav-link nav-toggle">

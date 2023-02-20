@@ -34,7 +34,7 @@ include("../class/UsuariosPadre.php");
 <!-- BEGIN HEAD -->
 
 <head>
-	<?php include("../../config-general/analytics/instituciones.php");?>
+	<?php include(ROOT_PATH."/config-general/analytics/instituciones.php");?>
 	<?php //include("../../config-general/chatDrift.php");?>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

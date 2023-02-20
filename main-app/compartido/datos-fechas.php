@@ -9,7 +9,10 @@ $anyoSegunda  = $valoresSegunda[0];
 $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);
 
 //DATOS FECHA DE RENOVACION
-$fechaR=$datosUnicosInstitucion['ins_fecha_renovacion'];
+$fechaR='2014-03-19';
+if(!empty($datosUnicosInstitucion['ins_fecha_renovacion'])){
+  $fechaR=$datosUnicosInstitucion['ins_fecha_renovacion'];
+}
 $fechaRenovacion=date("Y/m/d", strtotime($fechaR));
 $valoresPrimera = explode ("/", $fechaRenovacion);
 $diaPrimera    = $valoresPrimera[2];  
