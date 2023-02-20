@@ -34,16 +34,21 @@ if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
 
+
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-create-student.php");
+}
+$procedencia=$_POST["lNacM"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
 }
 
 try{
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+    $lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
@@ -82,6 +87,7 @@ if ($acudienteNum > 0) {
 			uss_apellido1, 
 			uss_apellido2, 
 			uss_nombre2,
+			uss_documento, 
 			uss_tema_sidebar,
 			uss_tema_header,
 			uss_tema_logo
@@ -105,13 +111,14 @@ if ($acudienteNum > 0) {
 			'".$_POST["apellido1A"]."', 
 			'".$_POST["apellido2A"]."', 
 			'".$_POST["nombre2A"]."',
+			'".	$_POST["documentoA"]."',
 			'cyan-sidebar-color',
 			'header-indigo',
 			'logo-indigo'
 			)");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		$lineaError   = __LINE__;
+		include("../compartido/error-catch-to-report.php");
 	}
 	
 	$idAcudiente = mysqli_insert_id($conexion);
@@ -138,6 +145,7 @@ try{
 		uss_apellido1, 
 		uss_apellido2, 
 		uss_nombre2,
+		uss_documento, 
 		uss_tema_sidebar,
 		uss_tema_header,
 		uss_tema_logo
@@ -160,14 +168,15 @@ try{
 		'".$_POST["apellido1"]."', 
 		'".$_POST["apellido2"]."', 
 		'".$_POST["nombre2"]."',
+		'".	$_POST["nDoc"]."',
 		'cyan-sidebar-color',
 		'header-indigo',
 		'logo-indigo'
 		)");
 		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	$lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 
 //Insertamos la matrícula
@@ -192,7 +201,7 @@ try{
 		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
 		'".$_POST["fNac"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', 
 		'".$_POST["nombres"]."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
-		'".$_POST["tipoEst"]."', '".$_POST["lNacM"]."', '".$_POST["lugarD"]."',
+		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
 		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
@@ -200,16 +209,16 @@ try{
 		'".$_POST["nombre2"]."'
 		)");
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	$lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 $idEstudiante = mysqli_insert_id($conexion);
 
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+    $lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 
 if(!isset($estado) AND !isset($mensaje)){

@@ -74,8 +74,29 @@
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual[8]];?></label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <input type="text" value="<?=$datosUsuarioActual["uss_nombre"];?>" name="nombre" class="form-control" <?php if($datosUsuarioActual['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Otro Nombre</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" value="<?=$datosUsuarioActual["uss_nombre2"];?>" name="nombre2" class="form-control" style="text-transform: uppercase;">
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Primer Apellido</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" value="<?=$datosUsuarioActual["uss_apellido1"];?>" name="apellido1" class="form-control" <?php if($datosUsuarioActual['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Segundo Apellido</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" value="<?=$datosUsuarioActual["uss_apellido2"];?>" name="apellido2" class="form-control" style="text-transform: uppercase;">
                                             </div>
                                         </div>
 										

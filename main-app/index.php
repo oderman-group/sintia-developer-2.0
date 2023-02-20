@@ -73,6 +73,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 />
 
 	<link href="index-nuevo.css" rel="stylesheet" type="text/css" />
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -87,22 +88,6 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form method="post" action="controlador/autentico.php">
-			
-          <!--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-			
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-facebook-f"></i>
-            </button>
-
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-twitter"></i>
-            </button>
-
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-linkedin-in"></i>
-            </button>
-          </div>-->
           <?php include("../config-general/mensajes-informativos.php"); ?>
 		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
@@ -111,9 +96,9 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
           </div>
 
 		   <!-- Colegios input -->
-		   <div class="form-outline mb-4">
+		   <div class="form-outline mb-4 bd">
 		    <label for="bd">Institución</label>
-		    <select class="form-control form-control-lg" name="bd" required>
+		    <select class="form-control form-control-lg" name="bd" required id="bd" onchange="traerYears(this)">
 							<option value="">Seleccione su Institución</option>
 							<?php
 							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
@@ -127,20 +112,27 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
         <!-- Año input -->
 		   <div class="form-outline mb-4">
 		    <label for="agnoIngreso">Año de consulta</label>
-		    <select class="form-control form-control-lg" name="agnoIngreso" required>
-							<option value="">Seleccione el año</option>
-							<?php
-              $yearToShow = 2015;
-							while($yearToShow <= date("Y") + 1){
-                $selected = '';
-                if($yearToShow == date("Y")) $selected = 'selected';
-							?>
-								<option value="<?=$yearToShow;?>" <?=$selected;?>><?=$yearToShow;?></option>
-							<?php 
-                $yearToShow ++;
-              }
-              ?>
-						</select>
+		      <select class="form-control form-control-lg" name="agnoIngreso" id="agnoIngreso" required>
+            <option value="">Seleccione el año</option>
+          </select>
+          <script type="application/javascript">
+            function traerYears(enviada){
+              var idInsti = enviada.value;
+
+              datos = "idInsti="+(idInsti);
+              console.log(datos);
+              $.ajax({
+                      type: "POST",
+                      url: "ajax-detectar-years.php",
+                      data: datos,
+                      success: function(response)
+                      {
+                          $('#agnoIngreso').empty();
+                          $('#agnoIngreso').append(response);
+                      }
+              });
+            }
+          </script>
         </div>
 
 		  <!-- Email input -->

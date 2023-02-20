@@ -283,6 +283,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	  	<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
 																	  <?php }?>
 																	  
+																	<?php if($resultado['uss_tipo']==3){?>
+																		<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																	<?php }?>
+																	  
 																	  <?php if($resultado['uss_tipo']==2){?>
 																	  	<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas Docentes</a></li>
 																	  <?php }?>

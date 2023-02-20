@@ -1,7 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0022';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php 
+include("session.php");
+$idPaginaInterna = 'DT0137';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+include("../class/Estudiantes.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -31,70 +34,53 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Agregar Asignatura</div>
+                                <div class="page-title">Acudidos</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="asignaturas.php" onClick="deseaRegresar(this)"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Agregar Asignatura</li>
+                                <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10&tipo=3" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Acudidos</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
 						
-                        <div class="col-sm-12">
-                                <?php include("../../config-general/mensajes-informativos.php"); ?>
-
-
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
-
-                                   
-									<form name="formularioGuardar" action="asignaturas-guardar.php" method="post" enctype="multipart/form-data">
-										
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre de la Asignatura <span style="color: red;">(*)</span></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" name="nombreM" class="form-control" onchange="generarSiglas(this)">
-                                            </div>
+						<div class="col-sm-3">
+                        </div>
+						
+                        <div class="col-sm-9">
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-purple">Acudidos</header>
+                                <div class="panel-body">
+                                <form name="formularioGuardar" action="usuarios-acudidos-actualizar.php" method="post">
+                                    <input type="hidden" value="<?=$_GET['id'];?>" name="id">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Estudiantes</label>
+                                        <div class="col-sm-8">
+                                            <?php
+                                            $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 10');
+                                            ?>
+                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple>
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+                                                while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                    $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_GET['id']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+                                                    $num = mysqli_num_rows($consultaUsuarioAcudiente);
+                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos['mat_id']);
+                                                    $selected = '';
+                                                    if($opcionesDatos['mat_acudiente']==$_GET['id'] AND $num>0) $selected = 'selected';
+                                                ?>
+                                                    <option value="<?=$opcionesDatos['mat_id'];?>" <?=$selected;?>><?=$nombre;?></option>
+                                                <?php }?>
+                                            </select>
                                         </div>
-
-                                        <script type="text/javascript">
-                                            function generarSiglas(datos){
-                                                var asignatura = datos.value;
-                                                var siglas = asignatura.substring(0, 3);
-                                                document.getElementById("siglasM").value = siglas.toUpperCase();
-                                            }
-                                        </script>    
-										
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre corto, Abreviatura o Siglas de la asignatura</label>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="siglasM" id="siglasM" class="form-control">
-                                                <span style="color: #6017dc;">Este valor se usa para mostrar de forma abreviada el nombre de la asignatura en algunos informes.</span>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Área académica a la cual pertenece esta asignatura <span style="color: red;">(*)</span></label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control  select2" name="areaM" required>
-                                                    <option value="">Seleccione una opción</option>
-                                                    <?php
-                                                    $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
-                                                    while($rA=mysqli_fetch_array($cAreas, MYSQLI_BOTH)){
-                                                        echo'<option value="'.$rA["ar_id"].'">'.$rA["ar_nombre"].'</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                    </form>
-                                </div>
+                                    </div>
+                                    
+                                    <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                    
+                                    <a href="#" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                </form>
                             </div>
                         </div>
 						
