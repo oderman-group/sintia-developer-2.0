@@ -25,7 +25,8 @@ try {
 	conf_ancho_imagen='" . $_POST["logoAncho"] . "',
 	conf_alto_imagen='" . $_POST["logoAlto"] . "', 
 	conf_mostrar_nombre='" . $_POST["mostrarNombre"] . "',
-	conf_calificaciones_acudientes='" . $_POST["caliAcudientes"] . "'
+	conf_calificaciones_acudientes='" . $_POST["caliAcudientes"] . "',
+	conf_mostrar_calificaciones_estudiantes='" . $_POST["caliEstudiantes"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
 	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
