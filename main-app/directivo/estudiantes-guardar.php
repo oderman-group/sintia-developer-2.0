@@ -47,8 +47,8 @@ if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 try{
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+    $lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
@@ -117,8 +117,8 @@ if ($acudienteNum > 0) {
 			'logo-indigo'
 			)");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		$lineaError   = __LINE__;
+		include("../compartido/error-catch-to-report.php");
 	}
 	
 	$idAcudiente = mysqli_insert_id($conexion);
@@ -175,8 +175,8 @@ try{
 		)");
 		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	$lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 
 //Insertamos la matrícula
@@ -209,16 +209,16 @@ try{
 		'".$_POST["nombre2"]."'
 		)");
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	$lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 $idEstudiante = mysqli_insert_id($conexion);
 
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+    $lineaError   = __LINE__;
+	include("../compartido/error-catch-to-report.php");
 }
 
 if(!isset($estado) AND !isset($mensaje)){
