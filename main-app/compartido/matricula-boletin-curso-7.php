@@ -78,7 +78,7 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
             <tr>
                 <td>Jornada:<br> Mañana</td>
                 <td>Sede:<br> <?=$informacion_inst["info_nombre"]?></td>
-                <td>Periodo:<br> <b><?=$config["conf_periodo"]." (".$config["conf_agno"].")";?></b></td>
+                <td>Periodo:<br> <b><?=$periodoActual." (".$config["conf_agno"].")";?></b></td>
                 <td>Fecha Impresión:<br> <?=date("d/m/Y H:i:s");?></td>
             </tr>
         </table>
@@ -92,14 +92,14 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
             <td width="20%" rowspan="2">ASIGNATURAS</td>
             <td width="2%" rowspan="2">I.H.</td>
             
-            <?php  for($j=1;$j<=$config["conf_periodo"];$j++){ ?>
+            <?php  for($j=1;$j<=$periodoActual;$j++){ ?>
                 <td width="3%" colspan="3"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$matriculadosDatos[0];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j?></a></td>
             <?php }?>
             <td width="3%" colspan="3">Final</td>
         </tr> 
         
         <tr style="font-weight:bold; text-align:center;">
-            <?php  for($j=1;$j<=$config["conf_periodo"];$j++){ ?>
+            <?php  for($j=1;$j<=$periodoActual;$j++){ ?>
                 <td width="3%">Fallas</td>
                 <td width="3%">Nota</td>
                 <td width="3%">Nivel</td>
@@ -125,17 +125,18 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
             <td align="center"><?=$datosCargas['car_ih'];?></td> 
             <?php 
 			$promedioMateria = 0;
-			for($j=1;$j<=$config["conf_periodo"];$j++){
+			for($j=1;$j<=$periodoActual;$j++){
 				
                 $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin 
                 INNER JOIN academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
                 WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'");
                 $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
-				
-                $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM academico_clases 
-                INNER JOIN academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='".$matriculadosDatos['mat_id']."'
-                WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$j."'");
-				$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+
+                $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM academico_ausencias
+				INNER JOIN academico_cargas ON car_curso='".$matriculadosDatos['gra_id']."' AND car_materia='".$datosCargas['mat_id']."'
+				INNER JOIN academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+				WHERE aus_id_estudiante='".$matriculadosDatos['mat_id']."'");
+                $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 				
 				$promedioMateria +=$datosBoletin['bol_nota'];
             ?>
@@ -182,15 +183,10 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
             <td>-</td> 
             <?php 
             $promedioFinal = 0;
-            for($j=1;$j<=$config["conf_periodo"];$j++){
+            for($j=1;$j<=$periodoActual;$j++){
                 $consultaPromedioPeriodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) as promedio FROM academico_boletin 
                 WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'");
 				$promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodos, MYSQLI_BOTH);
-				
-                $consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM academico_clases 
-                INNER JOIN academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='".$matriculadosDatos['mat_id']."'
-                WHERE cls_periodo='".$j."'");
-				$sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 				
                 $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
 				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta");
@@ -203,7 +199,7 @@ $numMatriculados = mysqli_num_rows($consultaNumMatriculados);
                 $promedioFinal +=$promediosPeriodos['promedio'];
             }
 
-            $promedioFinal = round($promedioFinal/$config["conf_periodo"],2);
+            $promedioFinal = round($promedioFinal/$periodoActual,2);
             $consultaPromedioFinalEstilioNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
             WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta");
             $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstilioNota, MYSQLI_BOTH);

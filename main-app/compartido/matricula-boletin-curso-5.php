@@ -187,11 +187,6 @@ ORDER BY mat_grupo, mat_primer_apellido"));
         WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$_GET["periodo"]."'");
         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 		
-		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM academico_clases 
-        INNER JOIN academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='".$matriculadosDatos['mat_id']."'
-        WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$_GET["periodo"]."'");
-		$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
-		
 		$indicadores = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
 		INNER JOIN academico_indicadores ON ind_id=ipc_indicador
 		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$_GET["periodo"]."'");
@@ -209,11 +204,30 @@ ORDER BY mat_grupo, mat_primer_apellido"));
 		$consultaAcumuladoDesempeno=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
 		WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND notip_desde<='".$acumulado[0]."' AND notip_hasta>='".$acumulado[0]."'");
 		$acumuladoDesempeno = mysqli_fetch_array($consultaAcumuladoDesempeno, MYSQLI_BOTH);
+                        
+		$sumAusencias=0;
+		$j=1;
+		while($j<=$periodoActual){
+	
+			$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM academico_ausencias
+			INNER JOIN academico_clases ON cls_id=aus_id_clase AND cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$j."'
+			WHERE aus_id_estudiante='".$matriculadosDatos['mat_id']."'");
+			$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+	
+			if($datosAusencias['sumAus']>0){
+				$sumAusencias+=$datosAusencias['sumAus'];
+			}
+			$j++;
+		}
+
+		// if(empty($datosAusencias[0])){
+		// 	$datosAusencias[0]=0;
+		// }
 	?>
         <tr>
             <td><?=$datosCargas['mat_nombre'];?></td>
             <td align="center"><?=$datosCargas['car_ih'];?></td>
-			<td align="center"><?=round($datosAusencias[0],0);?></td>
+			<td align="center"><?=round($sumAusencias,0);?></td>
 			<td align="center" style="font-size: 12px; font-weight: bold;"><?=$datosBoletin['bol_nota'];?><br><?=$datosBoletin['notip_nombre'];?></td>
 			
 			<td>

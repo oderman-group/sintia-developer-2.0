@@ -71,7 +71,7 @@ $contadorPeriodos=0;
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
 $consultaDesempeno1=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM academico_cargas ac
+$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_id, car_ih FROM academico_cargas ac
 INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
@@ -297,8 +297,27 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 				}
 			}
 			mysqli_data_seek($consultaDesempeno1,0);
+
 		 ?></td>
-        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($r_ausencias[0]>0){ echo $r_ausencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
+		<?php
+                        
+			$sumAusencias=0;
+			$j=1;
+			while($j<=$periodoActual){
+		
+				$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM academico_ausencias
+				INNER JOIN academico_cargas ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$fila2['mat_id']."'
+				INNER JOIN academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+				WHERE aus_id_estudiante='".$datosUsr['mat_id']."'");
+				$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+		
+				if($datosAusencias['sumAus']>0){
+					$sumAusencias=$sumAusencias+$datosAusencias['sumAus'];
+				}
+				$j++;
+			}
+		?>
+        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?=$sumAusencias?></td>
 	</tr>
 <?php
 if($numIndicadores>0){
@@ -377,8 +396,8 @@ if($numIndicadores>0){
 
 <p>&nbsp;</p>
 <?php 
-$cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo in(".$condicion.");");
-if(@mysqli_num_rows($cndisiplina)>0){
+$cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo in(".$condicion.")");
+if(mysqli_num_rows($cndisiplina)>0){
 ?>
 <table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
 
@@ -410,9 +429,7 @@ $desempenoND = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
   <tr>
     <td style="font-weight:bold;" align="left">
     
-    <?php if($num_observaciones>0){?>COMPORTAMIENTO:<?php }?> <b><u><?=strtoupper($r_diciplina[3]);?></u></b><br>
-    	<?php
-	?>
+    <!-- <?php if($num_observaciones>0){?>COMPORTAMIENTO:<?php }?> <b><u><?=strtoupper($rndisiplina[3]);?></u></b><br> -->
     </td>
   </tr>
 </table>

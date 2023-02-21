@@ -90,12 +90,12 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
 $consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM academico_cargas ac
+$consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_id, car_ih FROM academico_cargas ac
 INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 //$numero_periodos=$config["conf_periodos_maximos"];
-$numero_periodos=$config["conf_periodo"];
+$numero_periodos=$periodoActual;
  ?>
 
 <div align="center" style="margin-bottom:20px;">
@@ -356,16 +356,33 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 				}
 			}
 			mysqli_data_seek($consulta_desempeno,0);
+
 		 ?></td>
-        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($r_ausencias[0]>0){ echo $r_ausencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
-	
+		<?php
+			$sumAusencias=0;
+			$j=1;
+			while($j<=$periodoActual){
+
+				$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM academico_ausencias
+				INNER JOIN academico_cargas ON car_curso='".$datos_usr['gra_id']."' AND car_materia='".$fila2['mat_id']."'
+				INNER JOIN academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+				WHERE aus_id_estudiante='".$datos_usr['mat_id']."'");
+				$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+
+				if($datosAusencias['sumAus']>0){
+					$sumAusencias+=$datosAusencias['sumAus'];
+				}
+				$j++;
+			}
+		?>
+        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?=$sumAusencias?></td>
 	</tr>
 	
 <?php
 if($numIndicadores>0){
 	 mysqli_data_seek($consulta_a_mat_indicadores,0);
 	 $contador_indicadores=0;
-	 $consultaDesmpenoNotaInd=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota_indicador.">=notip_desde AND ".$nota_indicador."<=notip_hasta");
+	 $consultaDesmpenoNotaInd=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$nota_indicador."' AND notip_hasta>='".$nota_indicador."'");
 	while($fila4=mysqli_fetch_array($consulta_a_mat_indicadores, MYSQLI_BOTH)){
 	if($fila4["mat_id"]==$fila2["mat_id"]){
 		$contador_indicadores++;
@@ -437,8 +454,11 @@ if($numIndicadores>0){
     <tr align="center" style="font-size:12px; font-weight:bold;">
         <td colspan="2" align="right">PROMEDIO</td>
 
-		<?php for($n=1;$n<=$numero_periodos;$n++){ 
-	 $notaFFF = round(($promedios[$n]/$contpromedios[$n]),1);
+		<?php for($n=1;$n<=$numero_periodos;$n++){
+		$notaFFF =0;
+		if(!empty($contpromedios[$n])){
+	 		$notaFFF = round(($promedios[$n]/$contpromedios[$n]),1);
+		}
 		$consultaDesempenoNotaProm=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaFFF.">=notip_desde AND ".$notaFFF."<=notip_hasta");
 		$desempenoNotaProm = mysqli_fetch_array($consultaDesempenoNotaProm, MYSQLI_BOTH);
 		?>
@@ -497,9 +517,7 @@ $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
   <tr>
     <td style="font-weight:bold;" align="left">
     
-    <?php if($num_observaciones>0){?>COMPORTAMIENTO:<?php }?> <b><u><?=strtoupper($r_diciplina[3]);?></u></b><br>
-    	<?php
-	?>
+    <!-- <?php if($num_observaciones>0){?>COMPORTAMIENTO:<?php }?> <b><u><?=strtoupper($r_diciplina[3]);?></u></b><br> -->
     </td>
   </tr>
 </table>
