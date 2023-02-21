@@ -122,7 +122,10 @@
 														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $resultado['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
 														WHERE cal_id_estudiante=" . $datosEstudianteActual['mat_id']), MYSQLI_BOTH);
 
-														$notasResultado = round($sumaNotas[0] / ($sumaNotas[1] / 100), $config['conf_decimales_notas']);
+														$notasResultado = 0;
+														if(!empty($sumaNotas[1])){
+															$notasResultado = round($sumaNotas[0] / ($sumaNotas[1] / 100), $config['conf_decimales_notas']);
+														}
 
 
 

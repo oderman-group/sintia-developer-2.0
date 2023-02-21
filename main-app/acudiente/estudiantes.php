@@ -167,16 +167,18 @@ include("../class/Estudiantes.php");
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
 																		  
-																		  <?php if($config['conf_sin_nota_numerica']!=1){?>
-																		  		<li><a href="periodos-resumen.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
-																		  <?php }?>
-																		  
-																		  <li><a href="notas-actuales.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
+																	  		<?php if($config['conf_calificaciones_acudientes']==1){?>
+																				<?php if($config['conf_sin_nota_numerica']!=1){?>
+																						<li><a href="periodos-resumen.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																				<?php }?>
+																				<li><a href="notas-actuales.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
+																			<?php }?>
+
 																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>">R. Disciplina</a></li>
 																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
 																		  
 																		  <?php if($config['conf_id_institucion'] == 9){?>
-																		  <li><a href="../../maxtrummer/compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		  <li><a href="compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 																		  <?php }?>
 																		  
 																		  <?php if($config['conf_id_institucion'] == 1){
@@ -184,13 +186,13 @@ include("../class/Estudiantes.php");
 																			if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																			?>
 																		  
-																		  	<li><a href="../../icolven/compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		  	<li><a href="compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 
 																		  <?php 
 																			}
 
 																		  if($config['conf_informe_parcial']==1){?>
-																		  	<li><a href="../../icolven/compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
+																		  	<li><a href="compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
 																		  <?php }
 
 																		  if($config['conf_ficha_estudiantil']==1){?>
