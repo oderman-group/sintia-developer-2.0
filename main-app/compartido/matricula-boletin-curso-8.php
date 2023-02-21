@@ -93,7 +93,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <tr>
                         <td>Estudiante: <b><?= strtoupper($matriculadosDatos[3] . " " . $matriculadosDatos[4] . " " . $matriculadosDatos["mat_nombres"]); ?></b></td>
                         <td>Grado: <b><?= $matriculadosDatos["gra_nombre"] . " " . $matriculadosDatos["gru_nombre"]; ?></b></td>
-                        <td>Periodo/Año: <b><?= $config["conf_periodo"] . " / " . date("Y") . ""; ?></b></td>
+                        <td>Periodo/Año: <b><?= $periodoActual . " / " . date("Y") . ""; ?></b></td>
                     </tr>
                 </table>
             </div>
@@ -134,6 +134,11 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
             <?php
             $contador = 1;
+            $ausPer1Total=0;
+            $ausPer2Total=0;
+            $ausPer3Total=0;
+            $ausPer4Total=0;
+            $sumAusenciasTotal=0;
             $conCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas
 	INNER JOIN academico_materias ON mat_id=car_materia
 	WHERE car_curso='" . $matriculadosDatos['mat_grado'] . "' AND car_grupo='" . $matriculadosDatos['mat_grupo'] . "'");
@@ -142,6 +147,40 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     $fondoFila = '#EAEAEA';
                 } else {
                     $fondoFila = '#FFF';
+                }
+                        
+                $sumAusencias=0;
+                $j=1;
+                $ausPer1=0;
+                $ausPer2=0;
+                $ausPer3=0;
+                $ausPer4=0;
+                while($j<=$periodoActual){
+            
+                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM academico_ausencias
+                    INNER JOIN academico_cargas ON car_curso='".$matriculadosDatos['gra_id']."' AND car_materia='".$datosCargas['mat_id']."'
+                    INNER JOIN academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+                    WHERE aus_id_estudiante='".$matriculadosDatos['mat_id']."'");
+                    $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+            
+                    if($datosAusencias['sumAus']>0){
+                        switch($j){
+                            case 1:
+                                $ausPer1+=$datosAusencias['sumAus'];
+                                break;
+                            case 2:
+                                $ausPer2+=$datosAusencias['sumAus'];
+                                break;
+                            case 3:
+                                $ausPer3+=$datosAusencias['sumAus'];
+                                break;
+                            case 4:
+                                $ausPer4+=$datosAusencias['sumAus'];
+                                break;
+                        }
+                        $sumAusencias+=$datosAusencias['sumAus'];
+                    }
+                    $j++;
                 }
             ?>
                 <tbody>
@@ -160,6 +199,9 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                             $promedioMateria += $datosBoletin['bol_nota'];
 
+                            if(empty($datosBoletin['bol_nota'])){
+                                $datosBoletin['bol_nota']=0;
+                            }
                             $notaBoletin = round($datosBoletin['bol_nota'], 1);
 
                             if($notaBoletin == '0'){$notaBoletin='0.0';}
@@ -206,6 +248,11 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                 </tbody>
             <?php
                 $contador++;
+                $ausPer1Total+=$ausPer1;
+                $ausPer2Total+=$ausPer2;
+                $ausPer3Total+=$ausPer3;
+                $ausPer4Total+=$ausPer4;
+                $sumAusenciasTotal+=$sumAusencias;
             }
             ?>
             <tfoot>
@@ -295,6 +342,27 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <td colspan="4">
 
                         “El hogar es la primera escuela del niño. Practíquese en la casa la temperancia en todas las cosas, y apóyese al maestro que está tratando de brindar a sus hijos una verdadera educación” CDD (EGW)
+                        <p>
+                            Ausencias: <?=$sumAusenciasTotal?><br>
+                            <?php
+                            for($j=1;$j<=$periodoActual;$j++){
+                                switch($j){
+                                    case 1:
+                                        echo"Periodo 1: ".$ausPer1Total." Aus.";
+                                        break;
+                                    case 2:
+                                        echo" - Periodo 2: ".$ausPer2Total." Aus.";
+                                        break;
+                                    case 3:
+                                        echo" - Periodo 3: ".$ausPer3Total." Aus.";
+                                        break;
+                                    case 4:
+                                        echo" - Periodo 4: ".$ausPer4Total." Aus.";
+                                        break;
+                                }
+                            }
+                            ?>
+                        </p>
                     </td>
                 </tr>
 
