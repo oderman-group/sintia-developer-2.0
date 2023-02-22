@@ -30,6 +30,5 @@ try {
 	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
 	exit();
 } catch (Exception $e) {
-	$lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }	
