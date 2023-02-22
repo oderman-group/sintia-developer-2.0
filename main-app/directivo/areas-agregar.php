@@ -59,43 +59,47 @@
 									<form name="formularioGuardar" action="areas-guardar.php" method="post" enctype="multipart/form-data">
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre del Areas</label>
+                                            <label class="col-sm-2 control-label">Nombre del Área <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreA" class="form-control" value="">
+                                                <input type="text" name="nombreA" class="form-control" required>
                                             </div>
                                         </div>	
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Posición</label>
+                                            <label class="col-sm-2 control-label">Orden o posición en los informes</label>
                                             <div class="col-sm-10">
 												<?php
                                                     $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
 												?>
                                                 <select class="form-control  select2" name="posicionA" required>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
 													<?php
+                                                    $numDatos=mysqli_num_rows($c_posicionA);
                                                     $cont=0;
                                                     while($r_pos=mysqli_fetch_array($c_posicionA, MYSQLI_BOTH)){
                                                         $cont++;
                                                         $posciones[$cont]=$r_pos["ar_posicion"];
                                                         }
                                                     $cond=0;
-                                                    $exist=0;
                                                     for($i=1;$i<=(20+$cond);$i++){
-                                                        for($j=0;$j<=count($posciones);$j++){
-                                                            if($i==$posciones[$j]){
-                                                                $exist=1;
-                                                            } 
+                                                        
+                                                        $exist=0;
+                                                        if($numDatos>0){
+                                                            for($j=0;$j<=count($posciones);$j++){
+                                                                if($i==$posciones[$j]){
+                                                                    $exist=1;
+                                                                } 
+                                                            }
                                                         }
                                                         if($exist!=1){
                                                             echo '<option value="'.$i.'">'.$i.'</option>';
                                                         }else{
                                                         $cond++;
                                                         }
-                                                        $exist=0;
                                                     }
                                                     ?>
                                                 </select>
+                                                <span style="color: #6017dc;">Este número se usa para mostrar en una posición específica el área en los informes de la institución.</span>
                                             </div>
                                         </div>
 

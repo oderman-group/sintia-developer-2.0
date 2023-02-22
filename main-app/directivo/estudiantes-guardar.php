@@ -8,14 +8,14 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
 
-	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'&matestM='.$_POST["matestM"].'";</script>';
 	exit();
 }
 //VALIDAMOS QUE EL ESTUDIANTE NO SE ENCUENTRE CREADO
 $valiEstudiante = Estudiantes::validarExistenciaEstudiante($_POST["nDoc"]);
 if($valiEstudiante > 0){
 
-	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_5&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_5&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'&matestM='.$_POST["matestM"].'";</script>';
 	exit();
 }
 
@@ -34,16 +34,20 @@ if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
 
+
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-create-student.php");
+}
+$procedencia=$_POST["lNacM"];
+if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+	$procedencia=$_POST["ciudadPro"];
 }
 
 try{
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
@@ -54,7 +58,7 @@ if ($acudienteNum > 0) {
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
 
-		echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_6&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_6&tipoD='.$_POST["tipoD"].'&documento='.$_POST["nDoc"].'&religion='.$_POST["religion"].'&email='.$_POST["email"].'&direcion='.$_POST["direccion"].'&barrio='.$_POST["barrio"].'&telefono='.$_POST["telefono"].'&celular='.$_POST["celular"].'&estrato='.$_POST["estrato"].'&genero='.$_POST["genero"].'&nacimiento='.$_POST["fNac"].'&apellido1='.$_POST["apellido1"].'&apellido2='.$_POST["apellido2"].'&nombre='.$_POST["nombres"].'&grado='.$_POST["grado"].'&grupo='.$_POST["grupo"].'&tipoE='.$_POST["tipoEst"].'&lugarEx='.$_POST["lugarD"].'&lugarNac='.$_POST["lNac"].'&matricula='.$_POST["matricula"].'&folio='.$_POST["folio"].'&tesoreria='.$_POST["codTesoreria"].'&vaMatricula='.$_POST["va_matricula"].'&inclusion='.$_POST["inclusion"].'&extran='.$_POST["extran"].'&tipoSangre='.$_POST["tipoSangre"].'&eps='.$_POST["eps"].'&celular2='.$_POST["celular2"].'&ciudadR='.$_POST["ciudadR"].'&nombre2='.$_POST["nombre2"].'&documentoA='.$_POST["documentoA"].'&nombreA='.$_POST["nombreA"].'&ocupacionA='.$_POST["ocupacionA"].'&generoA='.$_POST["generoA"].'&expedicionA='.$_POST["lugardA"].'&tipoDocA='.$_POST["tipoDAcudiente"].'&apellido1A='.$_POST["apellido1A"].'&apellido2A='.$_POST["apellido2A"].'&nombre2A='.$_POST["nombre2A"].'&matestM='.$_POST["matestM"].'";</script>';
 		exit();
 	}
 
@@ -82,6 +86,7 @@ if ($acudienteNum > 0) {
 			uss_apellido1, 
 			uss_apellido2, 
 			uss_nombre2,
+			uss_documento, 
 			uss_tema_sidebar,
 			uss_tema_header,
 			uss_tema_logo
@@ -105,13 +110,13 @@ if ($acudienteNum > 0) {
 			'".$_POST["apellido1A"]."', 
 			'".$_POST["apellido2A"]."', 
 			'".$_POST["nombre2A"]."',
+			'".	$_POST["documentoA"]."',
 			'cyan-sidebar-color',
 			'header-indigo',
 			'logo-indigo'
 			)");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}
 	
 	$idAcudiente = mysqli_insert_id($conexion);
@@ -138,6 +143,7 @@ try{
 		uss_apellido1, 
 		uss_apellido2, 
 		uss_nombre2,
+		uss_documento, 
 		uss_tema_sidebar,
 		uss_tema_header,
 		uss_tema_logo
@@ -160,14 +166,14 @@ try{
 		'".$_POST["apellido1"]."', 
 		'".$_POST["apellido2"]."', 
 		'".$_POST["nombre2"]."',
+		'".	$_POST["nDoc"]."',
 		'cyan-sidebar-color',
 		'header-indigo',
 		'logo-indigo'
 		)");
 		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }
 
 //Insertamos la matrícula
@@ -192,24 +198,22 @@ try{
 		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
 		'".$_POST["fNac"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', 
 		'".$_POST["nombres"]."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
-		'".$_POST["tipoEst"]."', '".$_POST["lNacM"]."', '".$_POST["lugarD"]."',
-		".$idAcudiente.", 1, '".$idEstudianteU."', 
+		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
+		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
 		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
 		'".$_POST["nombre2"]."'
 		)");
 } catch (Exception $e) {
-	echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }
 $idEstudiante = mysqli_insert_id($conexion);
 
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }
 
 if(!isset($estado) AND !isset($mensaje)){

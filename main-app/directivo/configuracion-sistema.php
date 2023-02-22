@@ -2,6 +2,11 @@
 <?php $idPaginaInterna = 'DT0057';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+$consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion 
+WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+$cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -42,52 +47,53 @@
                     <div class="row">
 						
                         <div class="col-sm-12">
-                                <?php
-                                $consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
-                                $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
-                                ?>
                                 
-                                <script type="application/javascript">
-                                function verPrivado(){
-                                    document.getElementById("privado").style.display="block";
-                                }
-                                </script>
-
-
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
-                                    <div class="header">
-                                    <h4><?=$frases[17][$datosUsuarioActual[8]];?></h4> <a href="#" style="color:rgb(255,255,255);" onDblClick="verPrivado();">...</a>
-                                    </div>
                                    
 									<form name="formularioGuardar" action="configuracion-sistema-guardar.php" method="post">
 										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Periodos a trabajar</label>
-											<div class="col-sm-8">
-												<input type="text" name="periodoTrabajar" class="form-control col-sm-2" value="<?=$cfg[19];?>">
-                                                <span style="color:#F06; font-size:11px;">Las instituciones normalmente manejan 4 periodos. Los colegios semestralizados o de bachillerato acelerado manejan 2 periodos.</span>
-											</div>
-										</div>
-										
-										<div class="form-group row">
+									<div class="form-group row">
 											<label class="col-sm-2 control-label">Año Actual</label>
 											<div class="col-sm-8">
-												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg[1];?>">
+												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg[1];?>" readonly>
 											</div>
 										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Periodos Actual</label>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Periodos a trabajar <span style="color: red;">(*)</span></label>
 											<div class="col-sm-8">
-												<input type="text" name="periodo" class="form-control col-sm-2" value="<?=$cfg[2];?>">
+												<input type="text" name="periodoTrabajar" class="form-control col-sm-2" value="<?=$cfg[19];?>" required pattern="[0-9]+">
+                                                <span style="color:#6017dc;">Las instituciones normalmente manejan 4 periodos. Los colegios semestralizados o de bachillerato acelerado manejan 2 periodos.</span>
+											</div>
+										</div>
+										
+										
+										
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Periodo Actual <span style="color: red;">(*)</span></label>
+											<div class="col-sm-3">
+                                                <select class="form-control  select2" name="periodo" required>
+                                                    <option value="">Seleccione una opción</option>
+													<?php
+													$p = 1;
+													while($p<=$config[19]){
+														if($p==$cfg['conf_periodo'])
+															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
+														else
+															echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
+														$p++;
+													}
+													?>
+                                                </select>
+                                                <span style="color:#6017dc;">Este valor solo se verá reflejado en los informes que obtiene los directivos.</span>
 											</div>
 										</div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estilo de calificación</label>
+                                            <label class="col-sm-2 control-label">Estilo de calificación <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="estiloNotas" required>
                                                     <option value="">Seleccione una opción</option>
@@ -103,7 +109,8 @@
                                                 </select>
                                             </div>
                                         </div>
-										
+
+										<!--
 										<div class="form-group row"  style="background:rgb(255,255,204);">
 											<label class="col-sm-2 control-label">N&uacute;mero m&aacute;ximo de indicadores o tipos de notas que puede crear el docente.</label>
 											<div class="col-sm-10">
@@ -119,9 +126,10 @@
                                                 <a class="btn btn-danger" href="cargas-indicadores-obligatorios.php">Ir a los Indicadores Obligatorios</a>
 											</div>
 										</div>
+                                        -->
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta)</label>
+											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta) <span style="color: red;">(*)</span></label>
 											<div class="col-sm-10">
 												<input type="text"style="margin-top: 20px;" name="desde" class="col-sm-1" value="<?=$cfg[3];?>">
 												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>">
@@ -129,19 +137,40 @@
 										</div>
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Nota minima para aprobar</label>
+											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
 												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>">
 											</div>
 										</div>
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Color de las notas (Perdidas -  Ganadas)</label>
+											<label class="col-sm-2 control-label">Color de las notas (Perdidas -  Ganadas) <span style="color: red;">(*)</span></label>
 											<div class="col-sm-10">
 												<input type="color"style="margin-top: 20px;" name="perdida" class="col-sm-1" value="<?=$cfg[6];?>">
 												<input type="color"style="margin-top: 20px;" name="ganada" class="col-sm-1" value="<?=$cfg[7];?>">
 											</div>
 										</div>
+										
+                                        <hr>
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Mostrar calificaciones a los acudientes?</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="caliAcudientes">
+                                                    <option value="1" <?php if($cfg['conf_calificaciones_acudientes']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_calificaciones_acudientes']==0){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Mostrar calificaciones a los estudiantes?</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="caliEstudiantes">
+                                                    <option value="1" <?php if($cfg['conf_mostrar_calificaciones_estudiantes']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_mostrar_calificaciones_estudiantes']==0){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Si un usuario tiene saldo pendiente...</label>
@@ -172,7 +201,6 @@
 											<div class="col-sm-10">
 												<input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$cfg[30];?>">
 												<input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$cfg[31];?>">
-                                                <span style="color:#F06; font-size:11px;">Coloque solo el n&uacute;mero(Recomendado 200 x 150).</span>
 											</div>
 										</div>
 										

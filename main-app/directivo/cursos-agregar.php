@@ -2,7 +2,6 @@
 <?php $idPaginaInterna = 'DT0065';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php include("../class/Grados.php");?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -60,17 +59,10 @@
                                    
 									<form name="formularioGuardar" action="cursos-guardar.php" method="post">
 										
-										    <div class="form-group row">
-												<label class="col-sm-2 control-label">Codigo</label>
-												<div class="col-sm-2">
-													<input type="text" name="codigoC" class="form-control" value="">
-												</div>
-											</div>	
-										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Nombre Curso</label>
+                                            <label class="col-sm-2 control-label">Nombre Curso <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreC" class="form-control" value="">
+                                                <input type="text" name="nombreC" class="form-control" required>
                                             </div>
                                         </div>	
 										
@@ -99,14 +91,14 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Matricula</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="valorM" class="form-control" value="">
+                                                <input type="text" name="valorM" class="form-control" value="0">
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Pension</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="valorP" class="form-control" value="">
+                                                <input type="text" name="valorP" class="form-control" value="0">
                                             </div>
                                         </div>	
 
