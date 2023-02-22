@@ -66,18 +66,15 @@
                                             </div>
                                         </div>	
 										
+                                        <?php
+                                        $opcionesConsulta = Grados::listarGrados(1);
+                                        $numCursos=mysqli_num_rows($opcionesConsulta);
+                                        if($numCursos>0){
+                                        ?>
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso Siguiente</label>
                                             <div class="col-sm-10">
-												<?php
-												$opcionesConsulta = Grados::listarGrados(1);
-                                                $numCursos=mysqli_num_rows($opcionesConsulta);
-                                                $required="required";
-                                                if($numCursos==0){
-                                                    $required="";
-                                                }
-												?>
-                                                <select class="form-control  select2" name="graSiguiente" <?=$required;?>>
+                                                <select class="form-control  select2" name="graSiguiente">
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -87,6 +84,7 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <?php }?>
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Matricula</label>
