@@ -80,6 +80,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El archivo enviado es invalido. Por favor vuelva a intentarlo.';
             break;
 
+            case 'ER_DT_9':
+                $tipo = 'danger';
+                $mensaje = 'El estudiante o curso seleccionado no existe.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
