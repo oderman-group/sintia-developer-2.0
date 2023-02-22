@@ -3,7 +3,6 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-include("../class/Grados.php");
 
 $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
 $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
