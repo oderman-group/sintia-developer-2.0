@@ -43,6 +43,5 @@ try {
         '".$idLogin."'
     )");
 } catch (Exception $e) {
-	$lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }

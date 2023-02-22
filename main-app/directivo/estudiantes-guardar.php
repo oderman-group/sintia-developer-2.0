@@ -47,7 +47,6 @@ if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 try{
 	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
 } catch (Exception $e) {
-    $lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
@@ -117,7 +116,6 @@ if ($acudienteNum > 0) {
 			'logo-indigo'
 			)");
 	} catch (Exception $e) {
-		$lineaError   = __LINE__;
 		include("../compartido/error-catch-to-report.php");
 	}
 	
@@ -175,7 +173,6 @@ try{
 		)");
 		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
-	$lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }
 
@@ -209,7 +206,6 @@ try{
 		'".$_POST["nombre2"]."'
 		)");
 } catch (Exception $e) {
-	$lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }
 $idEstudiante = mysqli_insert_id($conexion);
@@ -217,7 +213,6 @@ $idEstudiante = mysqli_insert_id($conexion);
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
-    $lineaError   = __LINE__;
 	include("../compartido/error-catch-to-report.php");
 }
 
