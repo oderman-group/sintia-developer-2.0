@@ -87,6 +87,40 @@
                                             </select>
                                         </div>
                                     </div>
+                                        
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Periodo</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" name="periodo">
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+                                                $p = 1;
+                                                while($p<=$config[19]){
+                                                    echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
+                                                    $p++;
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                        
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Año</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" name="year" required>
+                                                <option value="">Seleccione una opción</option>
+                                                <?php
+                                                while($yearStart <= $yearEnd){	
+                                                if($_SESSION["bd"]==$yearStart)
+                                                    echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
+                                                else
+                                                    echo "<option value='".$yearStart."'>".$yearStart."</option>";
+                                                    $yearStart++;
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                     
                                     <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     
