@@ -2,6 +2,9 @@
 <?php $idPaginaInterna = 'DT0126';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+$Plataforma = new Plataforma;
+?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 <!--tagsinput-->
@@ -65,113 +68,43 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                         <div class="col-md-12">
                             <div class="row">
 								
+							<?php
+							$filtro = '';
+							if(is_numeric($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'";}
+							?>
 								
-								
-								<div class="col-md-12 col-lg-3">
-									
-									<?php
-										$filtro = '';
-										if(is_numeric($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'";}
-										if(is_numeric($_GET["bloq"])){$filtro .= " AND uss_bloqueado='".$_GET["bloq"]."'";}
-										if(is_numeric($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
-										if(is_numeric($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
-										
-										$consultaEstadisticasCargas=mysqli_query($conexion, "SELECT (SELECT count(uss_id) FROM usuarios)");
-										$estadisticasCargas = mysqli_fetch_array($consultaEstadisticasCargas, MYSQLI_BOTH);
-										?>
-									
-									<div class="card card-topline-yellow">
-										<div class="card-head">
-                                            <header>Opciones generales</header>
-                                            <div class="tools">
-												<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										<div class="card-body">
-											<p><a href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a></p>
-											<p><a href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a></p>
-											<p><a href="usuarios-importar-excel.php">Importar usuarios</a></p>
-										</div>
-                                    </div>
-									
-									<div class="card card-topline-red">
-										<div class="card-head">
-                                            <header>Tipo de usuarios</header>
-                                            <div class="tools">
-                                                <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-												<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										<div class="card-body">
-											<?php
-											$docentes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles ORDER BY pes_id");
-											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
-												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(uss_id) FROM usuarios WHERE uss_tipo='".$docente['pes_id']."'");
-												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
-												$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
-												if($docente['pes_id']==$_GET["tipo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$docente['pes_id'];?>"><?=strtoupper($docente['pes_nombre']);?>: <b><?=$cargasPorDocente[0];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajePorGrado;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajePorGrado;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$_GET["grupo"];?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-
-									
-									<div class="card card-topline-red">
-										<div class="card-head">
-                                            <header>Cantidades</header>
-                                            <div class="tools">
-												<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										<div class="card-body">
-											<?php
-											for($i=10; $i<=100; $i=$i+10){
-												if($i==$_GET["cantidad"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$_GET['grupo'];?>&curso=<?=$_GET["curso"];?>&cantidad=<?=$i;?>&docente=<?=$_GET["docente"];?>&asignatura=<?=$_GET["asignatura"];?>" <?=$estiloResaltado;?>><?=$i." usuarios";?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$_GET['curso'];?>&grupo=<?=$_GET["grupo"];?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="card card-topline-red">
-										<div class="card-head">
-                                            <header>Más filtros</header>
-                                            <div class="tools">
-												<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										<div class="card-body">
-											<p><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=<?=$_GET["cantidad"];?>&bloq=1" <?=$estiloResaltado;?>>Ver solo Bloqueados</a></p>
-											<p><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=<?=$_GET["cantidad"];?>&bloq=0" <?=$estiloResaltado;?>>Ver solo Desbloqueados</a></p>
-											
-												<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$_GET['curso'];?>&grupo=<?=$_GET["grupo"];?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-12 col-lg-9">
+								<div class="col-md-12">
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
+
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary">MÁS ACCIONES</button>
+										<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+											<i class="fa fa-angle-down"></i>
+										</button>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a></li>
+											<li><a href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a></li>
+											<li><a href="usuarios-importar-excel.php">Importar usuarios</a></li>
+										</ul>
+									</div>
+
+									<div class="btn-group">
+										<button type="button" class="btn btn-info">Filtrar por tipo de usuario</button>
+										<button type="button" class="btn btn-info dropdown-toggle m-r-20" data-toggle="dropdown">
+											<i class="fa fa-angle-down"></i>
+										</button>
+										<ul class="dropdown-menu" role="menu" style="width:250px;">
+											<?php
+											$tiposUsuarios = TipoUsuario::listarTiposUsuarios();
+											while($tipoUsuario = mysqli_fetch_array($tiposUsuarios, MYSQLI_BOTH)){
+												$estiloResaltado = '';
+												if($tipoUsuario['pes_id'] == $_GET["tipo"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
+											?>	
+												<li><a href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a></li>
+											<?php }?>
+												<li><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=100">VER TODO</a></li>
+										</ul>
+									</div>
 									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
