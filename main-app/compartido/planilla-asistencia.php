@@ -12,14 +12,22 @@ include("../class/Estudiantes.php");
 </head>
 <body style="font-family:Arial;">
 <?php
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$_GET["grado"]."' AND gru_id='".$_GET["grupo"]."'");
+  $year=$agnoBD;
+  $BD=$_SESSION["inst"]."_".$agnoBD;
+  if(isset($_POST["agno"])){
+$year=$_POST["agno"];
+$BD=$_SESSION["inst"]."_".$_POST["agno"];
+}
+
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);	
 ?>
 <div align="center" style="margin-bottom:20px;">
     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
     <?=$informacion_inst["info_nombre"]?><br>
     PLANILLA DE ESTUDIANTES</br>
-    <?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?>
+    <?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?><br>
+    <?=$year;?>
 </div>   
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -56,9 +64,9 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <th>&nbsp;</th>
   </tr>
   <?php
-  if(isset($_GET["grado"]) and isset($_GET["grupo"])) $adicional = " AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."'"; else $adicional = "";
+  if(isset($_REQUEST["grado"]) and isset($_REQUEST["grupo"])) $adicional = " AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."'"; else $adicional = "";
   $cont=1;
-  $consulta = Estudiantes::listarEstudiantes(0, $adicional, '');
+  $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $BD);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   ?>
   <tr style="
