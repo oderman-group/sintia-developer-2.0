@@ -19,6 +19,20 @@ $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
 }
+if (!empty($_FILES['fotoMat']['name'])) {
+	$extension = end(explode(".", $_FILES['fotoMat']['name']));
+
+	if($extension != 'jpg' && $extension != 'png'){
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_8";</script>';
+		exit();
+	}
+
+	$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
+	$destino = "../files/fotos";
+	move_uploaded_file($_FILES['fotoMat']['tmp_name'], $destino . "/" . $archivo);
+	mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "'");
+	mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "'");
+}
 
 try{
 	mysqli_query($conexion, "UPDATE academico_matriculas SET 
