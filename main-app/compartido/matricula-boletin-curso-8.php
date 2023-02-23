@@ -141,6 +141,11 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
             <?php
             $contador = 1;
+            $ausPer1Total=0;
+            $ausPer2Total=0;
+            $ausPer3Total=0;
+            $ausPer4Total=0;
+            $sumAusenciasTotal=0;
             $conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN $BD.academico_materias ON mat_id=car_materia
 	WHERE car_curso='" . $matriculadosDatos['mat_grado'] . "' AND car_grupo='" . $matriculadosDatos['mat_grupo'] . "'");
@@ -149,6 +154,39 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     $fondoFila = '#EAEAEA';
                 } else {
                     $fondoFila = '#FFF';
+                }
+                $sumAusencias=0;
+                $j=1;
+                $ausPer1=0;
+                $ausPer2=0;
+                $ausPer3=0;
+                $ausPer4=0;
+                while($j<=$periodoActual){
+
+                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
+                    INNER JOIN $BD.academico_cargas ON car_curso='".$matriculadosDatos['gra_id']."' AND car_materia='".$datosCargas['mat_id']."'
+                    INNER JOIN $BD.academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+                    WHERE aus_id_estudiante='".$matriculadosDatos['mat_id']."'");
+                    $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+
+                    if($datosAusencias['sumAus']>0){
+                        switch($j){
+                            case 1:
+                                $ausPer1+=$datosAusencias['sumAus'];
+                                break;
+                            case 2:
+                                $ausPer2+=$datosAusencias['sumAus'];
+                                break;
+                            case 3:
+                                $ausPer3+=$datosAusencias['sumAus'];
+                                break;
+                            case 4:
+                                $ausPer4+=$datosAusencias['sumAus'];
+                                break;
+                        }
+                        $sumAusencias+=$datosAusencias['sumAus'];
+                    }
+                    $j++;
                 }
             ?>
                 <tbody>
@@ -214,7 +252,12 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     </tr>
                 </tbody>
             <?php
-                $contador++;
+                $contador++;                
+                $ausPer1Total+=$ausPer1;
+                $ausPer2Total+=$ausPer2;
+                $ausPer3Total+=$ausPer3;
+                $ausPer4Total+=$ausPer4;
+                $sumAusenciasTotal+=$sumAusencias;
             }
             ?>
             <tfoot>
@@ -253,6 +296,22 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <td><?=$promedioFinal;?></td>
                     <td><img src="<?= $promedioFinalEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <td>-</td>
+                </tr>
+
+                <tr style="font-weight:bold; text-align:center;">
+                    <td style="text-align:left;">AUSENCIAS</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?=$ausPer1Total?> Aus.</td>
+                    <td>&nbsp;</td>
+                    <td><?=$ausPer2Total?> Aus.</td>
+                    <td>&nbsp;</td>
+                    <td><?=$ausPer3Total?> Aus.</td>
+                    <td>&nbsp;</td>
+                    <td><?=$ausPer4Total?> Aus.</td>
+                    <td>&nbsp;</td>
+                    <td><?=$sumAusenciasTotal?> Aus.</td>
+                    <td>&nbsp;</td>
                 </tr>
             </tfoot>
         </table>
