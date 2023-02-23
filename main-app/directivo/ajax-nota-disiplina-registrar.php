@@ -1,6 +1,5 @@
 <?php
-session_start();
-include("../../config-general/config.php");
+include("session.php");
 $cdnota=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
 
 if(mysqli_num_rows($cdnota)==0){
@@ -27,7 +26,7 @@ if(mysqli_num_rows($cdnota)==0){
 				// (string | mandatory) the heading of the notification
 				title: 'Correcto',
 				// (string | mandatory) the text inside the notification
-				text: 'Los cambios se ha guardado correctamente!',
+				text: 'Los cambios se han guardado correctamente!',
 				// (string | optional) the image to display on the left
 				image: 'files/iconos/Accept-Male-User.png',
 				// (bool | optional) if you want it to fade out on its own or just sit there
@@ -43,7 +42,7 @@ if(mysqli_num_rows($cdnota)==0){
 	</script>
     <div class="alert alert-success">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> Los cambios se ha guardado correctamente!.
+		<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> Los cambios se han guardado correctamente!.
 	</div>
 <?php	
 	exit();
