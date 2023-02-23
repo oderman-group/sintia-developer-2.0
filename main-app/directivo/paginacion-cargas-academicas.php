@@ -1,9 +1,14 @@
 <?php
 $registros_por_pagina = 10;
 $limite_inferior = 0;
-// Calcular el número total de registros en la tabla
-$sql = "SELECT COUNT(*) AS total FROM academico_cargas";
-$resultado = $conn->query($sql);
+
+$sql = "SELECT COUNT(*) AS total FROM academico_cargas
+INNER JOIN academico_grados ON gra_id=car_curso
+INNER JOIN academico_grupos ON gru_id=car_grupo
+INNER JOIN academico_materias ON mat_id=car_materia
+INNER JOIN usuarios ON uss_id=car_docente
+WHERE car_id=car_id";
+$resultado = $conexion->query($sql);
 $fila = $resultado->fetch_assoc();
 $total_registros = $fila['total'];
 
@@ -28,28 +33,38 @@ if ($pagina_actual == 1) {
   $limite_inferior = 0;}
 
 // Consultar los datos de la tabla
-$sql = "SELECT * FROM academico_cargas LIMIT $limite_inferior, $registros_por_pagina";
-$resultado = $conn->query($sql);
+$sql = "SELECT * FROM academico_cargas
+INNER JOIN academico_grados ON gra_id=car_curso
+INNER JOIN academico_grupos ON gru_id=car_grupo
+INNER JOIN academico_materias ON mat_id=car_materia
+INNER JOIN usuarios ON uss_id=car_docente
+WHERE car_id=car_id LIMIT $limite_inferior, $registros_por_pagina";
+$resultado = $conexion->query($sql);
 
 // Mostrar los enlaces de paginación
+$primer_registro = $limite_inferior + 1;
+$ultimo_registro = min($limite_inferior + $registros_por_pagina, $total_registros);
+
+// Mostrar el mensaje con la información de los registros
+echo "<p>Mostrando " . $primer_registro . " a " . $ultimo_registro . " de " . $total_registros . " resultados totales</p>";
 echo "<div class='paginacion'>";
 if ($pagina_actual > 1) {
-    echo "<a href='?pagina=".($pagina_actual - 1)."'>Anterior</a>";
+    echo "<a href='?pagina=".($pagina_actual - 1)."'class='paginacion-enlace'>Anterior</a>";
 }
 for ($i = 1; $i <= $total_paginas; $i++) {
     if ($i == 1 || ($i > ($pagina_actual - 2) && $i < ($pagina_actual + 2)) || $i == $total_paginas) {
     if ($i == $pagina_actual) {
-        echo "<span>$i</span>";
+        echo "<span class='paginacion-actual'>$i</span>";
     } elseif ($i <= 3 || $i >= $total_paginas - 2 || ($i >= $pagina_actual - 2 && $i <= $pagina_actual + 2)) {
-        echo "<a href='?pagina=$i'>$i</a>";
+        echo "<a  class='paginacion-enlace' href='?pagina=$i'>$i</a>";
     } elseif ($i == 4 && $pagina_actual > 6) {
-        echo "<span>...</span>";
+        echo "<span class='paginacion-enlace'>...</span>";
     } elseif ($i == $total_paginas - 3 && $pagina_actual < $total_paginas - 5) {
-        echo "<span>...</span>";
+        echo "<span class='paginacion-enlace'>...</span>";
     }
 }
 }
-if ($pagina_actual < ($total_paginas - 1)) {
-    echo "<a href='?pagina=".($pagina_actual + 1)."'>Siguiente</a>";
+if ($pagina_actual < ($total_paginas - 0)) {
+    echo "<a href='?pagina=".($pagina_actual + 1)."' class='paginacion-enlace'>Siguiente</a>"; 
 }
-echo "</div>";?>
+    ?>
