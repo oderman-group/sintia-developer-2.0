@@ -1,6 +1,10 @@
 <?php
-include("../../conexion.php");
-$consultaEmpresas=mysqli_query($conexion,"SELECT * FROM datos_contacto WHERE dtc_id=1");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+include(ROOT_PATH."/conexion-datos.php");
+$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+
+$consultaEmpresas = mysqli_query($conexionBaseDatosServicios,"SELECT * FROM datos_contacto 
+WHERE dtc_id=1");
 $datosEmpresa = mysqli_fetch_array($consultaEmpresas, MYSQLI_BOTH);
 
 //echo "Envia: ".$datosEmpresa['dtc_clave_email'];
@@ -17,4 +21,3 @@ $mail->Port       = 465;
 
 //Recipients
 $mail->setFrom($datosEmpresa['dtc_email'], $datosEmpresa['dtc_nombre']);
-?>
