@@ -94,7 +94,7 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                                      <header>Matrículas</header>
                                  </div>
                                  <div class="card-body">
-                                 	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-actualizar.php" method="post">
+                                 	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-actualizar.php" method="post" enctype="multipart/form-data">
 									<input type="hidden" name="id" value="<?=$_GET["id"];?>">
 									<input type="hidden" name="idU" value="<?=$datosEstudianteActual["mat_id_usuario"];?>">
 									  
