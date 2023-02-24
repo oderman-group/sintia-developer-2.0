@@ -57,6 +57,7 @@ $Plataforma = new Plataforma;
 										<li><a href="cargas-transferir.php">Transferir cargas</a></li>
 										<li><a href="cargas-estilo-notas.php">Estilo de notas</a></li>
 										<li><a href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a></li>
+										<li><a href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a></li>
 									</ul>
 								</div>
 
@@ -157,7 +158,7 @@ $Plataforma = new Plataforma;
 													<tr>
                           <td><?=$contReg;?></td>
 														<td><a href="../compartido/planilla-asistencia.php?grado=<?=$cargaAcademica["car_curso"];?>&grupo=<?=$cargaAcademica["car_grupo"];?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Imprimir planilla Estudiantes"><?=$resultado['car_id'];?></a></td>
-														<td><?=strtoupper($resultado['uss_nombre']);?></td>
+														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
 														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre']);?></td>
 														<td><?=$resultado['car_ih'];?></td>
