@@ -11,7 +11,8 @@ if($validarClave!=true){
 	exit();
 }
 if (!empty($_FILES['fotoUss']['name'])) {
-	$extension = end(explode(".", $_FILES['fotoUss']['name']));
+	$explode = explode(".", $_FILES['fotoUss']['name']);
+	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
 		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&error=ER_DT_8";</script>';

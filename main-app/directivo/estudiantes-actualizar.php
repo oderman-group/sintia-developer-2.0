@@ -20,7 +20,8 @@ if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
 }
 if (!empty($_FILES['fotoMat']['name'])) {
-	$extension = end(explode(".", $_FILES['fotoMat']['name']));
+	$explode = explode(".", $_FILES['fotoMat']['name']);
+	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
 		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_8";</script>';
