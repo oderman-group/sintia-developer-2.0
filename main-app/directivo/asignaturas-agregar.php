@@ -89,7 +89,16 @@
                                                     ?>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div>   
+                                        
+										<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Porcentaje</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="porcenAsigna" id="porcenAsigna" class="form-control">
+                                                </div>
+                                            </div>
+                                        <?php } ?>
 
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
