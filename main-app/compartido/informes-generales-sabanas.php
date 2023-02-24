@@ -23,12 +23,13 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
     PERIODO: <?=$_GET["per"];?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
 
+    <?php if($informacion_inst["info_institucion"]==1){?>
     <p><a href="reportes-sabanas-indicador.php?curso=<?=$_GET["curso"];?>&grupo=<?=$_GET["grupo"];?>&per=<?=$_GET["per"];?>" target="_blank">VER SABANAS CON INDICADORES</a></p>
-    
+    <?php } ?>
 </div>  
 <div style="margin: 10px;">
   <table bgcolor="#FFFFFF" width="100%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+  <tr style="font-weight:bold; font-size:12px; height:30px; background:#6017dc; color:white;">
         <td align="center">No</b></td>
         <td align="center">C&oacute;digo</td>
         <td align="center">Estudiante</td>

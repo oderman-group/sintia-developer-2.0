@@ -50,7 +50,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Plataforma Educativa SINTIA | Login</title>
+	<title>Plataforma Educativa SINTIA | Recuperar clave</title>
 
   <!-- favicon -->
   <link rel="shortcut icon" href="sintia-icono.png" />
@@ -87,12 +87,12 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
           class="img-fluid" alt="Sample image">
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form method="post" action="controlador/autentico.php">
+        <form method="post" action="recuperar-clave-guardar.php">
+
           <?php include("../config-general/mensajes-informativos.php"); ?>
-		  <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
 
           <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0">Ingreso a la plataforma SINTIA</p>
+            <p class="text-center fw-bold mx-3 mb-0">Recuperar contraseña</p>
           </div>
 
 		   <!-- Colegios input -->
@@ -139,30 +139,20 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 
 		  <!-- Email input -->
           <div class="form-outline mb-4">
-		  <label for="Usuario">Usuario</label>
+		  <label for="Usuario">Usuario, documento o Email</label>
             <input type="text" id="Usuario" name="Usuario" class="form-control form-control-lg"
-              placeholder="Usuario" />
-          </div>
-
-          <!-- Password input -->
-          <div class="form-outline mb-3">
-		  <label for="Clave">Contraseña</label>
-            <input type="password" id="Clave" name="Clave" class="form-control form-control-lg"
-              placeholder="Ingrese la contraseña" />
-            
+              placeholder="Usuario" required />
           </div>
 
           <div class="d-flex justify-content-between align-items-center">
             <!-- Checkbox -->
-            <a href="recuperar-clave.php" class="text-body">¿Olvidaste tu contraseña?</a>
+            <a href="index.php" class="text-body">Regresar al login</a>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body" target="_blank">¿Requieres soporte?</a>
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" class="btn btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem; background-color:#41c4c4; color:#fff;">Empezar la aventura</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Tu institución aún no tiene la plataforma SINTIA? 
-              <a href="https://plataformasintia.com/es/prueba-gratis.php" style="color:#6017dc;" target="_blank">Solicitar prueba gratis</a></p>
+              style="padding-left: 2.5rem; padding-right: 2.5rem; background-color:#41c4c4; color:#fff;">Recuperar contraseña</button>
           </div>
 
         </form>

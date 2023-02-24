@@ -1,5 +1,4 @@
 <?php include("session.php"); ?>
-<?php include("../modelo/conexion.php"); ?>
 <?php
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreCN"]) == "" or trim($_POST["ndesdeCN"]) == "" or trim($_POST["nhastaCN"]) == "" or trim($_POST["idCN"]) == "") {
@@ -11,5 +10,5 @@
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="academico-categoria-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';
 	exit();
