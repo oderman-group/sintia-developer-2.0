@@ -112,26 +112,18 @@ $Plataforma = new Plataforma;
 														<th>Periodo Actual</th>
                                         				<th style="text-align:center;">NOTAS<br>Declaradas - Registradas</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+														</tr>
+													</thead>
+													<tbody>
 													<?php
-													if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
-													$consulta=mysqli_query($conexion,"SELECT * FROM academico_cargas
-													INNER JOIN academico_grados ON gra_id=car_curso
-													INNER JOIN academico_grupos ON gru_id=car_grupo
-													INNER JOIN academico_materias ON mat_id=car_materia
-													INNER JOIN usuarios ON uss_id=car_docente
-													WHERE car_id=car_id 
-													ORDER BY car_id;");
-													$num_registros=@mysqli_num_rows($consulta);
-													$registros= '10';
-													$pagina=$_REQUEST["nume"];
-                          $contReg = 1;
-													if (is_numeric($pagina))
-													$inicio= (($pagina-1)*$registros);
-													else
-													$inicio=1;
+													include("consulta-paginacion.php");
+
+													if (is_numeric($pagina)){
+														$inicio= (($pagina-1)*$registros);
+													}			     
+													else{
+														$inicio=1;
+													}											       
 													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
 													  INNER JOIN academico_grados ON gra_id=car_curso
 													  INNER JOIN academico_grupos ON gru_id=car_grupo
@@ -141,10 +133,9 @@ $Plataforma = new Plataforma;
 												        ORDER BY car_id
 													    LIMIT $inicio,$registros;");
 													$paginas=ceil($num_registros/$registros);													
-													
 													?>
 													
-													  <?php
+													<?php
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 																										
 														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
@@ -155,7 +146,7 @@ $Plataforma = new Plataforma;
 														include("../suma-porcentajes.php");
 														?>
 													<tr>
-                          <td><?=$contReg;?></td>
+                          								<td><?=$contReg;?></td>
 														<td><a href="../compartido/planilla-asistencia.php?grado=<?=$cargaAcademica["car_curso"];?>&grupo=<?=$cargaAcademica["car_grupo"];?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Imprimir planilla Estudiantes"><?=$resultado['car_id'];?></a></td>
 														<td><?=strtoupper($resultado['uss_nombre']);?></td>
 														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
@@ -190,33 +181,7 @@ $Plataforma = new Plataforma;
                           </div>
                       </div>
                       </div>
-                      
-                          <ul class="pagination pg-dark justify-content-center pb-5 pt-5 mb-0" style="float: none;">
-                              <li class="page-item">
-                            <?php
-                            
-                              if($_REQUEST["nume"] == "1" ){
-                              $_REQUEST["nume"] == "0";
-                              echo  "";
-                              }else{
-                              if ($pagina>1)
-                              $ant = $_REQUEST["nume"] - 1;
-                              echo "<a class='page-link' aria-label='Previous' href='cargas.php?nume=1'><span aria-hidden='true'>&laquo;</span><span class='sr-only'>Previous</span></a>"; 
-                              echo "<li class='page-item '><a class='page-link' href='cargas.php?nume=". ($pagina-1) ."' >".$ant."</a></li>"; }
-                              echo "<li class='page-item active'><a class='page-link' >".$_REQUEST["nume"]."</a></li>"; 
-                              $sigui = $_REQUEST["nume"] + 1;
-                              $ultima = $num_registros / $registros;
-                              if ($ultima == $_REQUEST["nume"] +1 ){
-                              $ultima == "";}
-                              if ($pagina<$paginas && $paginas>1)
-                              echo "<li class='page-item'><a class='page-link' href='cargas.php?nume=". ($pagina+1) ."'>".$sigui."</a></li>"; 
-                              if ($pagina<$paginas && $paginas>1)
-                              echo "
-                              <li class='page-item'><a class='page-link' aria-label='Next' href='cargas.php?nume=". ceil($ultima) ."'><span aria-hidden='true'>&raquo;</span><span class='sr-only'>Next</span></a>
-                              </li>";
-                              ?>
-                          </ul>
-                     
+                      <?php include("enlaces-paginacion-cargas.php");?>
                                 </div>
                             </div>
                         </div>
