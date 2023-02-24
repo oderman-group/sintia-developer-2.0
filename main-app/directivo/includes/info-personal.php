@@ -1,5 +1,22 @@
 <fieldset>
 											
+										
+										<div class="form-group row">
+                                            <div class="col-sm-4" style="margin: 0 auto 10px">
+												<div class="item">
+													<img src="../files/fotos/<?=$datosEstudianteActual['mat_foto'];?>" width="300" height="300" />
+												</div>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="fotoMat" class="form-control">
+                                                <span style="color: #6017dc;">La foto debe estar en formato JPG o PNG.</span>
+                                            </div>
+                                        </div>
+										<hr>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Código del Sistema</label>

@@ -49,6 +49,7 @@ include("../class/Estudiantes.php");
                         </div>
 						
                         <div class="col-sm-9">
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple">POR CURSO </header>
                                 	<div class="panel-body">
@@ -106,8 +107,28 @@ include("../class/Estudiantes.php");
                                                 </select>
                                             </div>
                                         </div>
+                                        
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Año</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="year" required>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    $yearStartC=$yearStart;
+                                                    $yearEndC=$yearEnd;
+                                                    while($yearStartC <= $yearEndC){	
+                                                    if($_SESSION["bd"]==$yearStartC)
+                                                        echo "<option value='".$yearStartC."' selected style='color:blue;'>".$yearStartC."</option>";
+                                                    else
+                                                        echo "<option value='".$yearStartC."'>".$yearStartC."</option>";
+                                                        $yearStartC++;
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
 										
-										<input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+										<input type="submit" class="btn btn-primary" value="Generar Boletin">&nbsp;
 										
 										<a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
@@ -169,8 +190,28 @@ include("../class/Estudiantes.php");
                                                 </select>
                                             </div>
                                         </div>
+                                        
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Año</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="year" required>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    $yearStartE=$yearStart;
+                                                    $yearEndE=$yearEnd;
+                                                    while($yearStartE <= $yearEndE){	
+                                                        if($_SESSION["bd"]==$yearStartE)
+                                                            echo "<option value='".$yearStartE."' selected style='color:blue;'>".$yearStartE."</option>";
+                                                        else
+                                                            echo "<option value='".$yearStartE."'>".$yearStartE."</option>";
+                                                            $yearStartE++;
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
 										
-										<input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+										<input type="submit" class="btn btn-primary" value="Generar Boletin">&nbsp;
 										
 										<a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

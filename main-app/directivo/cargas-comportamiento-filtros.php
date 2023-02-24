@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0135';?>
+<?php $idPaginaInterna = 'DT0142';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 
@@ -15,6 +15,8 @@
     <!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -31,25 +33,21 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Libro final</div>
+                                <div class="page-title">Comportamiento</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Libro final</li>
+                                <li><a class="parent-item" href="#" name="cargas.php?cantidad=10" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Comportamiento</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
-						
-						<div class="col-sm-3">
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple">POR CURSO </header>
+                                <header class="panel-heading panel-heading-purple">Filtros </header>
                                 <div class="panel-body">
-                                <form name="formularioGuardar" action="../compartido/matricula-libro-curso.php" method="post" target="_blank">
+                                <form name="formularioGuardar" action="cargas-comportamiento.php" method="post">
                                     
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Curso</label>
@@ -58,7 +56,7 @@
                                             $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
                                             ORDER BY gra_vocal");
                                             ?>
-                                            <select class="form-control  select2" name="curso" required>
+                                            <select class="form-control  select2" name="grado" id="grado" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -77,7 +75,7 @@
                                             <?php
                                             $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
                                             ?>
-                                            <select class="form-control  select2" name="grupo">
+                                            <select class="form-control  select2" id="grupo" name="grupo" onchange="traerCargas(this)">
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -87,19 +85,48 @@
                                             </select>
                                         </div>
                                     </div>
-                                        
+                                    
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Año</label>
+                                        <label class="col-sm-2 control-label">Carga</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control  select2" name="carga" id="carga" required>
+                                            </select>
+                                            <script type="application/javascript">
+                                                $(document).ready(traerCargas(document.getElementById('grupo')));
+                                                
+                                                function traerCargas(enviada){
+                                                var grado = $('#grado').val();
+                                                var grupo = enviada.value;
+
+                                                datos = "grado="+(grado)+
+                                                        "&grupo="+(grupo);
+                                                console.log(datos);
+                                                $.ajax({
+                                                        type: "POST",
+                                                        url: "ajax-traer-cargas.php",
+                                                        data: datos,
+                                                        success: function(response)
+                                                        {
+                                                            $('#carga').empty();
+                                                            $('#carga').append(response);
+                                                        }
+                                                });
+                                                }
+                                            </script>
+                                            <span style="color: #6017dc;">Debe seleccionar primeramente el Curso y el grupo.</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Periodo</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" name="year" required>
+                                            <select class="form-control  select2" name="periodo" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                while($yearStart <= $yearEnd){	
-                                                if($_SESSION["bd"]==$yearStart)
-                                                    echo "<option value='".$yearStart."' selected style='color:blue;'>".$yearStart."</option>";
-                                                else
-                                                    echo "<option value='".$yearStart."'>".$yearStart."</option>";
-                                                    $yearStart++;
+                                                $p = 1;
+                                                while($p<=$config[19]){
+                                                    echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
+                                                    $p++;
                                                 }
                                                 ?>
                                             </select>
@@ -154,6 +181,9 @@
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
 </body>
+<!-- <script type="application/javascript">
+print();
+</script>  -->
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
 </html>

@@ -74,7 +74,7 @@ if(
 						<?php include("info-carga-actual.php");?>
 
 							
-                            <div class="panel">
+                            <!-- <div class="panel">
 								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 <div class="panel-body">
 									<p><b>Banco de datos:</b> Tienes la opción de usar información que ya existe y así no tengas que escribir todo de nuevo. <mark>Sólo debes usar una de las 2 alternativas:</mark> o llenas la información desde cero o escoges la existente. Si usas las 2, <mark>el banco de datos tendrá prioridad</mark> y esta será lo que el sistema use.<br>
@@ -82,7 +82,7 @@ if(
 									</p>
 									<p><b>Compartir:</b> Compartir la información <mark>es una manera de colaborar con tus colegas.</mark> La información irá al banco de datos y podrá ser usada por ti o por otros colegas tuyos más adelante. En caso de que no desees compartirla puedes dar click sobre el botón para que se desactive y la información sólo puedas verla tú.</p>
 								</div>
-							</div>
+							</div> -->
                         </div>
 						
                         <div class="col-sm-9">
@@ -134,7 +134,7 @@ if(
 										<input type="hidden" name="saberes" class="form-control" value="0">
 										<?php }?>
 
-											<div class="form-group row">
+											<!-- <div class="form-group row">
 												<label class="col-sm-2 control-label">Compartir</label>
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
@@ -142,14 +142,14 @@ if(
 														<span class="slider red round"></span>
 													</label>
 												</div>
-											 </div>
+											 </div> -->
 										</div>
 										
 										<!-- div necesario para el Jscript-->
 										<div id="infoCeroDos"></div>
 										
 										
-										<p style="color: blue;">Ó si quieres puedes usar el <b>banco de datos</b>. Tal vez te sirva algo de lo que ya existe.</p>
+										<!-- <p style="color: blue;">Ó si quieres puedes usar el <b>banco de datos</b>. Tal vez te sirva algo de lo que ya existe.</p>
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
@@ -172,7 +172,7 @@ if(
 													<?php }?>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
 
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;

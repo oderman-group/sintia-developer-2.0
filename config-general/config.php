@@ -19,3 +19,4 @@ $mesesAgno = array("01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05
 $opcionEstado = array("INACTIVO", "ACTIVO");
 $estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 $clavePorDefectoUsuarios = '12345678';
+$estadosEtiquetasMatriculas = array("","text-success","text-warning","text-danger","text-warning");

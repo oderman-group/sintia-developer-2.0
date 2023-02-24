@@ -80,6 +80,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El archivo enviado es invalido. Por favor vuelva a intentarlo.';
             break;
 
+            case 'ER_DT_9':
+                $tipo = 'danger';
+                $mensaje = 'El estudiante o curso seleccionado no existe.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -116,6 +121,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $tipo = 'success';
                 $mensaje = 'Excel importado correctamente.<br/>
                             - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoImportadosXusuarios.$numNoImportados;
+            break;
+
+            case 'SC_DT_5':
+                $tipo = 'success';
+                $mensaje = 'Una nueva contraseña fue generada y enviada a tu correo electrónico: <b>' . $_GET["email"] . '</b>';
             break;
 
 

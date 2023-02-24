@@ -54,15 +54,29 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 						
                         <div class="col-sm-12">
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
-
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
-
-                                   
-									<form name="formularioGuardar" action="usuarios-update.php" method="post">
+							<div class="panel">
+								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+								<div class="panel-body">
+									<form name="formularioGuardar" action="usuarios-update.php" method="post" enctype="multipart/form-data">
 
 										<input type="hidden" value="<?=$datosEditar['uss_id'];?>" name="idR">
+										
+										<div class="form-group row">
+                                            <div class="col-sm-4" style="margin: 0 auto 10px">
+												<div class="item">
+													<img src="../files/fotos/<?=$datosEditar['uss_foto'];?>" width="300" height="300" />
+												</div>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="fotoUss" class="form-control">
+                                                <span style="color: #6017dc;">La foto debe estar en formato JPG o PNG.</span>
+                                            </div>
+                                        </div>
+										<hr>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
@@ -279,7 +293,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										
 										<a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
-                                </div>
+								</div>
                             </div>
                         </div>
 						

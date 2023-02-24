@@ -235,4 +235,31 @@ class Estudiantes {
 
     }
 
+    public static function listarEstudiantesParaPlanillas(
+        int    $eliminados      = 0, 
+        string $filtroAdicional = '', 
+        string $BD    = ''
+    )
+    {
+        global $conexion, $baseDatosServicios;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas
+            LEFT JOIN $BD.usuarios ON uss_id=mat_id_usuario
+            LEFT JOIN $BD.academico_grados ON gra_id=mat_grado
+            LEFT JOIN $BD.academico_grupos ON gru_id=mat_grupo
+            LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+            LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
+            WHERE mat_eliminado IN (0, '".$eliminados."')
+            ".$filtroAdicional."
+            ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
 }
