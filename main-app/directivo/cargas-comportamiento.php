@@ -7,27 +7,24 @@
       
 	<script type="text/javascript">
 	function notas(nota,codigoe,observacion){
-	//carga $_SESSION["carga"]
-	//codigo $resultado[0];
-	//periodo $datosCargaActual[5]
 	var codEst =codigoe;
-	var periodo=<?=$datosCargaActual[5]?>;
-	var carga=<?=$_SESSION["carga"]?>;
+	var periodo=<?=$_REQUEST["periodo"]?>;
+	var carga=<?=$_REQUEST["carga"]?>;
 	if(nota!=''){
-	if (nota><?=$config[4];?> || isNaN(nota) || nota><?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+		if (nota < <?=$config[3];?> || Number.isNaN(nota) || nota > <?=$config[4];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
 	}
 	$('#resp').empty().hide().html("esperando...").show(1);
 		
 		if(nota!=''){
 		datos = "nota="+(nota)+
-				"&periodo="+periodo+
-				"&carga="+carga+
+				"&periodo="+(periodo)+
+				"&carga="+(carga)+
 				"&codEst="+(codEst);
 		}
 		if(observacion!=''){
 			datos = "observacion="+(observacion)+
-				"&periodo="+periodo+
-				"&carga="+carga+
+				"&periodo="+(periodo)+
+				"&carga="+(carga)+
 				"&codEst="+(codEst);
 			}
 			$.ajax({
@@ -60,7 +57,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="#" name="cargas-comportamiento-filtros.php" onClick="deseaRegresar(this)">Comportamiento</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Nota de Comportamiento</li>
                             </ol>
                         </div>
@@ -75,7 +72,7 @@
 										<div class="card-body">
 											<div class="alert alert-block alert-warning">
 												<h4 class="alert-heading">Información importante!</h4>
-												<p>Usted est&aacute; registrando las nota de comportamiento del periodo <span style="font-size:20px; font-weight:bold;"><?=$_GET["periodo"];?></span>.</p>
+												<p>Usted est&aacute; registrando las nota de comportamiento del periodo <span style="font-size:20px; font-weight:bold;"><?=$_REQUEST["periodo"];?></span>.</p>
 											</div>
 
 											<div class="table-scrollable">
@@ -111,13 +108,10 @@
 											</div>
 										</div>
 									</div>	
-								</div>
-
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-8 col-lg-9">
+								</div>							
+								<div class="col-md-12">
+									<?php include("../../config-general/mensajes-informativos.php"); ?>
+									<span id="resp"></span>	
 									<div class="card card-topline-purple">
 										<div class="card-head">
 											<header>
@@ -130,8 +124,6 @@
 												<a class="t-close btn-color fa fa-times" href="javascript:;"></a>
 											</div>
 										</div>
-										<span id="resp"></span>
-
 										<div class="card-body">					
 											<div class="table-scrollable">
 												<table id="example1" class="display" style="width:100%;">
@@ -146,13 +138,10 @@
 													<tbody>
 														<?php
 														$con = 1;
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
-														//carga $_SESSION["carga"]
-														//codigo $resultado[0];
-														//periodo $datosCargaActual[5]
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 														
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-															$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_GET["carga"]."' AND dn_periodo='".$_GET["periodo"]."'");
+															$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_REQUEST["carga"]."' AND dn_periodo='".$_REQUEST["periodo"]."'");
 															$rndisiplina=mysqli_fetch_array($consultaRnDisiplina, MYSQLI_BOTH);
 															//LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
 														?>
@@ -162,10 +151,12 @@
 															<td>
 																<input maxlength="2" name="" id="" value="<?=$rndisiplina["dn_nota"]?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;">
 																<?php if($rndisiplina[4]!=""){?>
-																	<a href="guardar.php?get=22&id=<?=$rndisiplina[0];?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Eliminar</a>
+																	<a href="cargas-comportamiento-eliminar.php?get=22&id=<?=$rndisiplina[0];?>&periodo=<?=$_REQUEST["periodo"];?>&carga=<?=$_REQUEST["carga"];?>&grado=<?=$_REQUEST["grado"];?>&grupo=<?=$_REQUEST["grupo"];?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Eliminar</a>
 																<?php }?>
 															</td>
-															<td><textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2"><?=$rndisiplina["dn_observacion"]?></textarea></td>
+															<td style="text-align:center;">
+																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50"><?=$rndisiplina["dn_observacion"]?></textarea>
+															</td>
 														</tr>
 														<?php 
 														}
