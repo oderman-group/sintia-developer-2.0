@@ -135,7 +135,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-4">
 												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="[A-Za-z]+">
-												<span style="color: tomato;"><?=$leyenda;?></span>
+											<span style="color: tomato;"><?=$leyenda;?></span>
 											</div>
 											
 										</div>
@@ -143,21 +143,21 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Otro Nombre</label>
 											<div class="col-sm-4">
-												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>">
+												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>" <?=$readOnly;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Primer Apellido</label>
 											<div class="col-sm-4">
-												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>">
+												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="[A-Za-z]+">
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Segundo Apellido</label>
 											<div class="col-sm-4">
-												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>">
+												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>" <?=$readOnly;?>>
 											</div>
 										</div>
 
@@ -183,7 +183,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Documento</label>
 											<div class="col-sm-4">
-												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>">
+												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?>>
 											</div>
 										</div>
 										
