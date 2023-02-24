@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0135';?>
+<?php $idPaginaInterna = 'DT0141';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 
@@ -31,12 +31,12 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Libro final</div>
+                                <div class="page-title">Planilla de Asistencias</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Libro final</li>
+                                <li class="active">Planilla de Asistencias</li>
                             </ol>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             <div class="panel">
                                 <header class="panel-heading panel-heading-purple">POR CURSO </header>
                                 <div class="panel-body">
-                                <form name="formularioGuardar" action="../compartido/matricula-libro-curso.php" method="post" target="_blank">
+                                <form name="formularioGuardar" action="../compartido/planilla-asistencia.php" method="post" target="_blank">
                                     
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Curso</label>
@@ -58,7 +58,7 @@
                                             $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
                                             ORDER BY gra_vocal");
                                             ?>
-                                            <select class="form-control  select2" name="curso" required>
+                                            <select class="form-control  select2" name="grado" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -87,11 +87,11 @@
                                             </select>
                                         </div>
                                     </div>
-                                        
+                                    
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Año</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" name="year" required>
+                                            <select class="form-control  select2" name="agno" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($yearStart <= $yearEnd){	
@@ -154,6 +154,9 @@
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
 </body>
+<!-- <script type="application/javascript">
+print();
+</script>  -->
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
 </html>

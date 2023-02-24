@@ -3,6 +3,12 @@
 
 <?php
 
+$year=$agnoBD;
+if(isset($_GET["year"])){
+$year=$_GET["year"];
+}
+$BD=$_SESSION["inst"]."_".$year;
+
 $modulo = 1;
 
 if ($_GET["periodo"] == "") {
@@ -42,7 +48,7 @@ if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grup
 
 
 
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
 
 WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
 
@@ -64,11 +70,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 
-    $usr = mysqli_query($conexion, "SELECT * FROM academico_matriculas am
+    $usr = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
 
-INNER JOIN academico_grupos ON mat_grupo=gru_id
+INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
 
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDatos[0]);
+INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDatos[0]);
 
     $num_usr = mysqli_num_rows($usr);
 
@@ -135,11 +141,11 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM academico_cargas ac
+        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
 
-		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
+		INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
 
-		INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
+		INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 
 		WHERE  car_curso=" . $datos_usr["mat_grado"] . " AND car_grupo=" . $datos_usr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
@@ -182,7 +188,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 <td>Sede:<br> <?= $informacion_inst["info_nombre"] ?></td>
 
-                <td>Periodo:<br> <b><?= $periodoActuales . " (" . $config['conf_agno'] . ")"; ?></b></td>
+                <td>Periodo:<br> <b><?= $periodoActuales . " (" . $year . ")"; ?></b></td>
 
                 <td>Fecha Impresión:<br> <?= date("d/m/Y H:i:s"); ?></td>
 
@@ -252,13 +258,13 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
 
-                $consulta_notdef_area = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM academico_materias am
+                $consulta_notdef_area = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM $BD.academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
-				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
+				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
@@ -266,13 +272,13 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 
-                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM academico_materias am
+                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM $BD.academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
-				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
+				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
@@ -282,13 +288,13 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
 
-                $consulta_a_mat_per = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM academico_materias am
+                $consulta_a_mat_per = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM $BD.academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
-				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
+				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
@@ -303,19 +309,19 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
                 //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA
 
                 $consulta_a_mat_indicadores = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
-                ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM academico_materias am
+                ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM $BD.academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
-				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
+				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+				INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
 
-				INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+				INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 
-				INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
+				INNER JOIN $BD.academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
 
-				INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
+				INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 
 				WHERE car_curso=" . $datos_usr["mat_grado"] . "  and car_grupo=" . $datos_usr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . "
 
@@ -383,7 +389,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
-                                    $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion 
+                                    $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion 
                                     WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
                                     $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
@@ -441,7 +447,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                         <?php
 
-                        $consultaObsevacion=mysqli_query($conexion, "SELECT * FROM academico_boletin
+                        $consultaObsevacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
 
 						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
                         $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
@@ -488,7 +494,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
         <?php
 
-        $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND dn_periodo in(" . $condicion . ");");
+        $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND dn_periodo in(" . $condicion . ");");
 
         if (@mysqli_num_rows($cndisiplina) > 0) {
 
@@ -516,7 +522,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
 
-                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $rndisiplina["dn_nota"] . ">=notip_desde AND " . $rndisiplina["dn_nota"] . "<=notip_hasta");
+                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $rndisiplina["dn_nota"] . ">=notip_desde AND " . $rndisiplina["dn_nota"] . "<=notip_hasta");
                     $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 
                 ?>
@@ -553,7 +559,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                         <b><u>
 
-                                <?= strtoupper($r_diciplina[3]); ?>
+                                <!-- <?= strtoupper($r_diciplina[3]); ?> -->
 
                             </u></b><br>
 

@@ -43,10 +43,11 @@
 											<p><a href="informe-parcial-grupo.php">7. Informe parcial por grupo</a></p>
 											<p><a href="../compartido/reporte-pasos.php" target="_blank">8. Informe pasos matrícula</a></p>
 											<p><a href="estudiantes-planilla.php">9. Planilla de Estudiantes</a></p>
-											<p><a href="reportes-academicos-consultas.php">10. Reporte general</a></p>
-											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
-											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">12. Reporte vista observador</a></p>
-											<p><a href="informe-reporte-sabana.php">13. Informe de Sabanas</a></p>
+											<p><a href="asistencia-planilla.php">10. Planilla de Asistencia</a></p>
+											<p><a href="reportes-academicos-consultas.php">11. Reporte general</a></p>
+											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">12. Reporte informe parcial</a></p>
+											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">13. Reporte vista observador</a></p>
+											<p><a href="informe-reporte-sabana.php">14. Informe de Sabanas</a></p>
 										</div>
                                 	</div>
 								</div>

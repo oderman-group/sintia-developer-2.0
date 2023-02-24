@@ -19,6 +19,21 @@ $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
 }
+if (!empty($_FILES['fotoMat']['name'])) {
+	$explode = explode(".", $_FILES['fotoMat']['name']);
+	$extension = end($explode);
+
+	if($extension != 'jpg' && $extension != 'png'){
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_8";</script>';
+		exit();
+	}
+
+	$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
+	$destino = "../files/fotos";
+	move_uploaded_file($_FILES['fotoMat']['tmp_name'], $destino . "/" . $archivo);
+	mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "'");
+	mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "'");
+}
 
 try{
 	mysqli_query($conexion, "UPDATE academico_matriculas SET 
@@ -169,7 +184,7 @@ if($_POST["idAcudiente2"]!=""){
 	if($_POST["documentoA2"]!=""){
 
 		try {
-			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES('".$_POST["documentoA2"]."','12345678',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."','".$_POST["documentoA2"]."')");
+			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES('".$_POST["documentoA2"]."','".$clavePorDefectoUsuarios."',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."','".$_POST["documentoA2"]."')");
 			
 			$idAcudiente2 = mysqli_insert_id($conexion);
 		} catch (Exception $e) {

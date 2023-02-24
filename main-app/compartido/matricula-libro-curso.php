@@ -8,18 +8,6 @@ if(isset($_POST["year"])){
 $year=$_POST["year"];
 }
 $BD=$_SESSION["inst"]."_".$year;
-
-$modulo = 1;
-if($_REQUEST["periodo"]==""){
-	$periodoActual = 1;
-}else{
-	$periodoActual = $_REQUEST["periodo"];
-}
-//$periodoActual=2;
-if($periodoActual==1) $periodoActuales = "Primero";
-if($periodoActual==2) $periodoActuales = "Segundo";
-if($periodoActual==3) $periodoActuales = "Tercero";
-if($periodoActual==4) $periodoActuales = "Final";
 //CONSULTA ESTUDIANTES MATRICULADOS
 $filtro = '';
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
@@ -90,7 +78,7 @@ $numeroPeriodos=$config["conf_periodo"];
     
     <tr>
     	<td>Grado: <b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
-        <td>Periodo: <b><?=strtoupper($periodoActuales);?></b></td>    
+        <td>Periodo: <b>Final</b></td>    
     </tr>
 </table>
 <br>
@@ -110,22 +98,8 @@ $numeroPeriodos=$config["conf_periodo"];
 
         <?php while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
 		
-		if($periodoActual==1){
-			$condicion="1";
-			$condicion2="1";
-			}
-		if($periodoActual==2){
-			$condicion="1,2";
-			$condicion2="2";
-		}
-		if($periodoActual==3){
-			$condicion="1,2,3";
-			$condicion2="3";
-		}
-		if($periodoActual==4){
-			$condicion="1,2,3,4";
-			$condicion2="4";
-		}
+		$condicion="1,2,3,4";
+		$condicion2="4";
 		
 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
 $consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM $BD.academico_materias am

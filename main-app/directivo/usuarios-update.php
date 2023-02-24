@@ -1,4 +1,4 @@
-<?php 
+<?php
 include("session.php");
 $idPaginaInterna = 'DT0131';
 include("../compartido/sintia-funciones.php");
@@ -10,12 +10,29 @@ if($validarClave!=true){
 	echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.$_POST["idR"].'";</script>';
 	exit();
 }
+if (!empty($_FILES['fotoUss']['name'])) {
+	$explode = explode(".", $_FILES['fotoUss']['name']);
+	$extension = end($explode);
+
+	if($extension != 'jpg' && $extension != 'png'){
+		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&error=ER_DT_8";</script>';
+		exit();
+	}
+
+	$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
+	$destino = "../files/fotos";
+	move_uploaded_file($_FILES['fotoUss']['tmp_name'], $destino . "/" . $archivo);
+	mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idR"] . "'");
+	if($_POST["tipoUsuario"]==4){
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id_usuario='" . $_POST["idR"] . "'");
+	}
+}
 
 mysqli_query($conexion, "UPDATE usuarios SET 
 uss_usuario=           '" . $_POST["usuario"] . "', 
 uss_clave=             '" . $_POST["clave"] . "', 
 uss_tipo=              " . $_POST["tipoUsuario"] . ", 
-uss_nombre=            '" . $_POST["nombre"] . "', 
+uss_nombre=            '" . $_POST["nombre"] . "',
 uss_email=             '" . strtolower($_POST["email"]) . "', 
 uss_genero=            '" . $_POST["genero"] . "',
 uss_celular=           '" . $_POST["celular"] . "',
