@@ -150,6 +150,16 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 												<input type="color"style="margin-top: 20px;" name="ganada" class="col-sm-1" value="<?=$cfg[7];?>">
 											</div>
 										</div>
+                                        
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignar porcentaje a las asignaturas?</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="porcenAsigna">
+                                                    <option value="SI" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='SI'){ echo "selected";} ?>>SI</option>
+                                                    <option value="NO" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='NO'){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
 										
                                         <hr>
 										<div class="form-group row">
