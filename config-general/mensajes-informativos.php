@@ -118,6 +118,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                             - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoImportadosXusuarios.$numNoImportados;
             break;
 
+            case 'SC_DT_5':
+                $tipo = 'success';
+                $mensaje = 'Una nueva contraseña fue generada y enviada a tu correo electrónico: <b>' . $_GET["email"] . '</b>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
