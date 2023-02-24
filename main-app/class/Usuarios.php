@@ -1,5 +1,4 @@
 <?php
-
 class Usuarios {
 
     public static function obtenerDatosUsuario($usuario = 0)
@@ -47,5 +46,62 @@ class Usuarios {
 
     }
 
+    public static function datosUsuarioParaRecuperarClave($usuario = '')
+    {
+
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
+            WHERE (uss_email='".$usuario."' || uss_usuario='".$usuario."')
+            ");
+            $num = mysqli_num_rows($consulta);
+            if($num == 0){
+                return $resultado;
+            }
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+
+    }
+
+    public static function guardarRegistroRestaruracion($data)
+    {
+        global $conexion, $baseDatosServicios;
+        $BD = $data['institucion_bd']."_".$data['institucion_agno'];
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".restaurar_clave(resc_id_usuario, resc_fec_solicitud, resc_id_institucion, resc_clave_generada) VALUES('".$data['usuario_id']."', now(), '".$data['institucion_id']."', '".$data['nueva_clave']."')");
+            $idatosUsuarioltimoRegistro = mysqli_insert_id($conexion);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        try {  
+            mysqli_query($conexion, "UPDATE ".$BD.".usuarios SET uss_clave='".$data['nueva_clave']."' 
+            WHERE uss_id='".$data['usuario_id']."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $idatosUsuarioltimoRegistro;
+
+    }
+
+    public static function generatePassword($length)
+    {
+        $key = "";
+        $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
+        $max = strlen($pattern)-1;
+        for($i = 0; $i < $length; $i++){
+            $key .= substr($pattern, mt_rand(0,$max), 1);
+        }
+        return $key;
+    }
 
 }
