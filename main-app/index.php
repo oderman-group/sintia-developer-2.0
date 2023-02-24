@@ -154,7 +154,7 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 
           <div class="d-flex justify-content-between align-items-center">
             <!-- Checkbox -->
-            <a href="#!" class="text-body">¿Olvidaste tu contraseña?</a>
+            <a href="recuperar-clave.php" class="text-body">¿Olvidaste tu contraseña?</a>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body" target="_blank">¿Requieres soporte?</a>
           </div>
 
