@@ -133,7 +133,7 @@ $Plataforma = new Plataforma;
 													  WHERE car_id=car_id 
 												        ORDER BY car_id
 													    LIMIT $inicio,$registros;");
-													$paginas=ceil($num_registros/$registros);													
+													$paginas=ceil($numRegistros/$registros);													
 													?>
 													
 													<?php

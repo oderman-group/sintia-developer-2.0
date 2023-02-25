@@ -8,7 +8,7 @@
     INNER JOIN usuarios ON uss_id=car_docente
     WHERE car_id=car_id 
     ORDER BY car_id;");
-    $num_registros=mysqli_num_rows($consulta);
+    $numRegistros=mysqli_num_rows($consulta);
     $registros= 5;
     $pagina=$_REQUEST["nume"];
     $contReg = 1;
