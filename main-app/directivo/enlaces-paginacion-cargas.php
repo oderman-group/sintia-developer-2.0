@@ -1,26 +1,60 @@
-
-<ul class="pagination pg-dark justify-content-center pb-5 pt-5 mb-0" style="float: none;">
-    <li class="page-item">
 <?php
+    $paginaActual=$_REQUEST["nume"];
+    $ultima = $numRegistros / $registros;
+    $totalPaginas=ceil($ultima);
+    $ant = $paginaActual - 1;
+    $sigui = $paginaActual + 1;
 
-    if($_REQUEST["nume"] == "1" ){
-    $_REQUEST["nume"] == "0";
-    echo  "";
-    }else{
-    if ($pagina>1)
-    $ant = $_REQUEST["nume"] - 1;
-    echo "<a class='page-link' aria-label='Previous' href='cargas.php?nume=1'><span aria-hidden='false'>Anterior</span><span class='sr-only'>Previous</span></a>"; 
-    echo "<li class='page-item '><a class='page-link' href='cargas.php?nume=". ($pagina-1) ."' >".$ant."</a></li>"; }
-    echo "<li class='page-item active'><a class='page-link' >".$_REQUEST["nume"]."</a></li>"; 
-    $sigui = $_REQUEST["nume"] + 1;
-    $ultima = $num_registros / $registros;
-    if ($ultima == $_REQUEST["nume"] +1 ){
-    $ultima == "";}
-    if ($pagina<$paginas && $paginas>1)
-    echo "<li class='page-item'><a class='page-link' href='cargas.php?nume=". ($pagina+1) ."'>".$sigui."</a></li>"; 
-    if ($pagina<$paginas && $paginas>1)
-    echo "
-    <li class='page-item'><a class='page-link' aria-label='Next' href='cargas.php?nume=". ceil($ultima) ."'><span aria-hidden='false'>&raquo;</span><span class='sr-only'>Next</span></a>
-    </li>";
-    ?>
-</ul>
+    $fin=($inicio+$registros);
+    if($paginaActual==$totalPaginas){
+        $fin=$numRegistros;
+    }
+?>
+
+<div style="text-align:center">
+    <ul class="pagination pg-dark justify-content-center pb-5 pt-5 mb-0" style="float: none; padding-bottom: 5px!important;">
+
+        <li class="page-item">
+            <?php if ($paginaActual > 1) { ?>
+                <a class='page-link' aria-label='Previous' href='cargas.php?nume=<?=$ant?>'>Previous</a>
+            <?php } else { ?>
+                <span class='page-link' aria-label='Previous'>Previous</span>
+            <?php } ?>
+        </li>
+
+        <?php
+            for ($i = 1; $i <= $totalPaginas; $i++) {
+                if ($i == 1 || $i == $totalPaginas || ($i >= $paginaActual - 2 && $i <= $paginaActual + 2)) {
+                    if ($i == $paginaActual) {
+        ?>
+            <li class="page-item active" style="padding-left: 5px!important;">
+                <a class="page-link"><?=$i?></a>
+            </li>
+        <?php       } else { ?>
+            <li class="page-item" style="padding-left: 5px!important;">
+                <a href="cargas.php?nume=<?=$i?>" class="page-link"><?=$i?></a>
+            </li>
+        <?php
+                    }
+                } elseif (($i == 2 && $paginaActual > 3) || ($i == $totalPaginas - 1 && $paginaActual < $totalPaginas - 2)) {
+        ?>
+            <li class="page-item" style="padding-left: 5px!important;">
+                <span class="page-link">...</span>
+            </li>
+        <?php
+                }
+            }
+
+        ?>
+
+        <li class="page-item" style="padding-left: 5px!important;">
+            <?php if ($paginaActual < $totalPaginas - 0) { ?>
+                <a class='page-link' aria-label='Next' href='cargas.php?nume=<?=$sigui?>'>Next</a>
+            <?php } else { ?>
+                <span class='page-link' aria-label='Next'>Next</span>
+            <?php } ?>
+        </li>
+    </ul>
+
+    <p>Mostrando <?=($inicio+1)?> a <?=$fin?> de <?=$numRegistros?> resultados totales</p>
+</div>
