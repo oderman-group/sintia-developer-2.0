@@ -23,8 +23,13 @@ if(isset($_REQUEST["agno"])){
     <?=$informacion_inst["info_nombre"]?><br>
     CONSOLIDADO FINAL <?=$year;?></br>
 </div>   
-  <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+<table width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:#6017dc; 
+  font-size:11px;
+  ">
+  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
                                         <th rowspan="2" style="font-size:9px;">Mat</th>
                                         <th rowspan="2" style="font-size:9px;">Estudiante</th>
                                         <?php
@@ -106,10 +111,9 @@ if(isset($_REQUEST["agno"])){
                                       </tr>
                                       <?php }?>
   </table>
-  </center>
-	<div align="center" style="font-size:10px; margin-top:10px;">
-      <img src="../files/images/sintia.png" height="50" width="100"><br>
-      SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
+  <div style="font-size:10px; margin-top:10px; text-align:center;">
+      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
+      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
      </div>
 </body>
 </html>
