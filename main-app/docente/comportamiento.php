@@ -180,7 +180,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                         <td><?=$contReg;?></td>
 														<td width="60%">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td width="15%">
 															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['dn_nota'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="5" onChange="notas(this)" tabindex="<?=$contReg;?>">

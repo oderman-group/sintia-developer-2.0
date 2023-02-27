@@ -93,7 +93,7 @@ include("../class/Estudiantes.php");
 														</td>
 														<td style="color: <?=$colorEstudiante;?>">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td><?=$genero[1];?></td>
 															

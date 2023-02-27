@@ -71,7 +71,7 @@ include("../class/Estudiantes.php");
                                             </div>
                                             
                                             <div class="col-sm-4">
-                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e['mat_id']);?>" readonly>
+                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e);?>" readonly>
                                             </div>
                                         </div>
 

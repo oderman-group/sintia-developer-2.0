@@ -253,7 +253,7 @@ include("../class/Estudiantes.php");
 													 ?>
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
-														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
+														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 														<td><?=$datos1['epe_inicio'];?></td>
 														<td><?=$datos1['epe_fin'];?></td>
 														<td><?php if($datos1[2]>0){echo $datos1[2]." Min. y ";} if($datos1[3]>0){echo $datos1[3]." Seg.";}?></td>

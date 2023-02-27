@@ -147,7 +147,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<td><?=$resultado['mat_id'];?></td>
 														<td width="60%">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														
 														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?=$notas['bol_observaciones'];?></span></td>

@@ -196,7 +196,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
 														<td style="color: <?=$colorEstudiante;?>">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 
 														<?php
