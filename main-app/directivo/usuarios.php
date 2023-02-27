@@ -105,7 +105,27 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 												<li><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=100">VER TODO</a></li>
 										</ul>
 									</div>
-									
+									<!--Buscador en usuarios.-->
+									<div class="btn btn-group">
+									<style>
+											.btn{
+												float: right;
+											}
+									</style>
+									<form action="usuarios.php?cantidad=10" method="get">
+										<input type="text"  name="busqueda" size="30" maxlength="30">
+										<input type="submit" name="enviar" value="Buscar">
+									</form>
+
+									<?php
+									if (isset($_GET['enviar'])) {
+										$busqueda = $_GET['busqueda'];
+										$filtro .= "AND (uss_id LIKE '%$busqueda%' OR uss_nombre LIKE '%$busqueda%' OR uss_usuario LIKE '%$busqueda%' OR uss_email LIKE '%$busqueda%')";
+										
+									}
+									?>
+									</div>
+
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></header>
