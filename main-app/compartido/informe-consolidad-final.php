@@ -103,7 +103,10 @@ if(isset($_REQUEST["agno"])){
 											//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 											$defPorEstudiante += $defPorMateria;   
 										}
+										if($numCargasPorCurso > 0){
 											$defPorEstudiante = round($defPorEstudiante/$numCargasPorCurso,2);
+										}	
+										
 											
 											if($defPorEstudiante<$config[5] and $defPorEstudiante!="")$color = $config[6]; elseif($defPorEstudiante>=$config[5]) $color = $config[7];
 										?>
