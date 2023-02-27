@@ -4,6 +4,17 @@
 <?php include("../compartido/head.php");?>
 <?php
 include("../class/Estudiantes.php");
+
+$Plataforma = new Plataforma;
+
+$filtro = '';
+if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
+	$filtro .= " AND mat_grado='".$_GET["curso"]."'";
+	$fcurso = $_GET["curso"];
+}
+if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
+	$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -33,237 +44,12 @@ include("../class/Estudiantes.php");
                         <div class="col-md-12">
                             <div class="row">
 								
-								
-								
-								<div class="col-md-4 col-lg-3">
-									<div class="panel">
-										<header class="panel-heading panel-heading-red">MENÚ <?=strtoupper($frases[209][$datosUsuarioActual['uss_idioma']]);?></header>
-										<div class="panel-body">
-											<p><a href="estudiantes-promedios.php">Promedios estudiantiles</a></p>
-											<p><a href="estudiantes-importar-excel.php">Importar matrículas excel</a></p>
-											<p><a href="estudiantes-consolidado-final.php">Consolidado final</a></p>
-											<p><a href="estudiantes-nivelaciones.php">Nivelaciones</a></p>
-											
-											<?php if(isset($_GET["curso"]) and is_numeric($_GET["curso"]) and isset($_GET["grupo"]) and is_numeric($_GET["grupo"])){?>
-												<p><a href="../compartido/planilla-estudiantes.php?grado=<?=$_GET["curso"];?>&grupo=<?=$fgrupo;?>" target="_blank">Imprimir Planilla</a></p>
-											<?php }elseif(isset($_GET["curso"]) and is_numeric($_GET["curso"])){ ?>
-												<p><a href="../compartido/planilla-estudiantes.php?grado=<?=$_GET["curso"];?>" target="_blank">Imprimir Planilla</a></p>
-											<?php }?>
-											<hr>
-											<p><a href="estudiantes-matricular-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Matricular todos</a></p>
-											<p><a href="estudiantes-matriculas-cancelar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Cancelar todos</a></p>
-
-											<hr>
-											<p><a href="estudiantes-nuevos-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Todos nuevos</a></p>
-											<p><a href="estudiantes-antiguos-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Todos antiguos</a></p>
-											<hr>
-											<p><a href="estudiantes-grupoa-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Asignar a todos el grupo A</a></p>
-											<hr>
-											<p><a href="estudiantes-documento-usuario-actualizar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Colocar documento como usuario de acceso</a></p>
-											<p><a href="estudiantes-crear-usuarios.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Comprobar y Crear usuario a estudiantes</a></p>
-										</div>
-                                	</div>
-									
-									
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<div class="panel">
-										<?php
-										$filtro = '';
-										if(isset($_GET["curso"]) AND is_numeric($_GET["curso"])){$filtro .= " AND mat_grado='".$_GET["curso"]."'";$fcurso=$_GET["curso"];}
-										if(isset($_GET["grupo"]) AND is_numeric($_GET["grupo"])){$filtro .= " AND mat_grupo='".$_GET["grupo"]."'";$fgrupo=$_GET["grupo"];}
-										if(isset($_GET["genero"]) AND is_numeric($_GET["genero"])){$filtro .= " AND mat_genero='".$_GET["genero"]."'";$fgenero=$_GET["genero"];}
-										
-										$consultaEstadisticasEstudiantes=mysqli_query($conexion, "SELECT
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=2 $filtro),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=3 $filtro),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_estado_matricula=4 $filtro),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=126),
-										(SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_genero=127)");
-										$estadisticasEstudiantes = mysqli_fetch_array($consultaEstadisticasEstudiantes, MYSQLI_BOTH);
-
-										if ($estadisticasEstudiantes[0] > 0) {
-											$porcentajeMatriculados = round(($estadisticasEstudiantes[1]/$estadisticasEstudiantes[0])*100,2);
-											$porcentajeAsistentes = round(($estadisticasEstudiantes[2]/$estadisticasEstudiantes[0])*100,2);
-											$porcentajeCancelados = round(($estadisticasEstudiantes[3]/$estadisticasEstudiantes[0])*100,2);
-											$porcentajeNoMatriculados = round(($estadisticasEstudiantes[4]/$estadisticasEstudiantes[0])*100,2);
-											
-											$porcentajeHombres = round(($estadisticasEstudiantes[5]/$estadisticasEstudiantes[0])*100,2);
-											$porcentajeMujeres = round(($estadisticasEstudiantes[6]/$estadisticasEstudiantes[0])*100,2);
-										}
-										?>
-										<header class="panel-heading panel-heading-yellow">ESTADOS</header>
-										<div class="panel-body">
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=1&genero=<?=$fgenero;?>">Matrículados: <b><?=$estadisticasEstudiantes[1];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeMatriculados;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeMatriculados;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=2&genero=<?=$fgenero;?>">Asistentes: <b><?=$estadisticasEstudiantes[2];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeAsistentes;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeAsistentes;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=3&genero=<?=$fgenero;?>">Cancelados: <b><?=$estadisticasEstudiantes[3];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeCancelados;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeCancelados;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=4&genero=<?=$fgenero;?>">No matrículados: <b><?=$estadisticasEstudiantes[4];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeNoMatriculados;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeNoMatriculados;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-										</div>
-                                	</div>
-									
-									
-									<div class="panel">
-												<?php if(isset($_GET["estadoM"])){$festadoM=$_GET["estadoM"];}?>
-										<header class="panel-heading panel-heading-yellow">GÉNEROS</header>
-										<div class="panel-body">
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=<?=$festadoM;?>&genero=126">Hombres: <b><?=$estadisticasEstudiantes[5];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeHombres;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeHombres;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>&estadoM=<?=$festadoM;?>&genero=127">Mujeres: <b><?=$estadisticasEstudiantes[6];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajeMujeres;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeMujeres;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-										</div>
-                                	</div>
-									
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
-										<div class="panel-body">
-											<?php
-											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal");
-											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
-												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												if ($estadisticasEstudiantes[0] > 0) {
-													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasEstudiantes[0])*100,2);
-												}
-												if(isset($fcurso) AND $curso['gra_id']==$fcurso) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>&grupo=<?=$fgrupo;?>&genero=<?=$fgenero;?>&estadoM=<?=$festadoM;?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?>: <b><?=$estudiantesPorGrado[0];?></b></a></div>
-																	<div class="percent pull-right"><?=$porcentajePorGrado;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajePorGrado;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											<?php }?>
-											<p align="center"><a href="estudiantes.php">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Grupos </header>
-										<div class="panel-body">
-											<?php
-											$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
-											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
-												if(isset($_GET["grupo"]) AND $grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>&curso=<?=$fcurso;?>&genero=<?=$fgenero;?>&estadoM=<?=$festadoM;?>" <?=$estiloResaltado;?>><?=strtoupper($grupo['gru_nombre']);?></a></p>
-											<?php }?>
-											<p align="center"><a href="estudiantes.php">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Cantidades </header>
-										<div class="panel-body">
-											<?php
-											for($i=10; $i<=100; $i=$i+10){
-												if(isset($_GET["cantidad"]) AND $i==$_GET["cantidad"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$fgrupo;?>&curso=<?=$fcurso;?>&cantidad=<?=$i;?>&genero=<?=$fgenero;?>&estadoM=<?=$festadoM;?>" <?=$estiloResaltado;?>><?=$i." estudiantes";?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$fcurso;?>&grupo=<?=$fgrupo;?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
+								<span id="respuestaCambiarEstado"></span>
+
+								<?php include("includes/barra-superior-matriculas.php"); ?>
+
 									<?php
 									if($config['conf_id_institucion']==1){
 										if(isset($_GET['msgsion'])){
@@ -333,20 +119,66 @@ include("../class/Estudiantes.php");
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+													<script type="text/javascript">
+														const estudiantesPorEstados = {};
+
+														function cambiarEstadoMatricula(data) {
+															let idHref = 'estadoMatricula'+data.id_estudiante;
+															let href   = document.getElementById(idHref);
+															
+															if (!estudiantesPorEstados.hasOwnProperty(data.id_estudiante)) {
+																estudiantesPorEstados[data.id_estudiante] = data.estado_matricula;
+															}
+
+															if(estudiantesPorEstados[data.id_estudiante] == 1) {
+																href.innerHTML = `<span class="text-warning">No Matriculado</span>`;
+																estudiantesPorEstados[data.id_estudiante] = 4;
+															} else {
+																href.innerHTML = `<span class="text-success">Matriculado</span>`;
+																estudiantesPorEstados[data.id_estudiante] = 1;
+															}
+
+															let datos = "nuevoEstado="+estudiantesPorEstados[data.id_estudiante]+
+																		"&idEstudiante="+data.id_estudiante;
+
+															$.ajax({
+																type: "POST",
+																url: "ajax-cambiar-estado-matricula.php",
+																data: datos,
+																success: function(data){
+																	$('#respuestaCambiarEstado').empty().hide().html(data).show(1);
+																}
+
+															});
+														}
+													</script>
 													<?php
-													if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
-													
 													$filtroLimite = '';
 													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
 													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													 $contReg = 1;
-													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
-													$estadosEtiquetas = array("","text-success","text-warning","text-danger","text-warning");
+
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaAcudientes=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado["mat_acudiente"]."'");
+
+														$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
+														WHERE uss_id='".$resultado["mat_acudiente"]."'");
 														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
-														$bgColor = '';
-														if($resultado['uss_bloqueado']==1) $bgColor = '#ff572238';
+
+														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
+
+														$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
+
+														$nombreAcudiente = '';
+														if (isset($acudiente[0])) {
+															$nombreAcudiente = strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); 
+															$idAcudiente = $acudiente['uss_id'];
+														}
+
+														$miArray = [
+															'id_estudiante'    => $resultado['mat_id'], 
+															'estado_matricula' => $resultado['mat_estado_matricula']
+														];
+														$dataParaJavascript = json_encode($miArray);
 													 ?>
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
@@ -358,23 +190,24 @@ include("../class/Estudiantes.php");
 															<?=$resultado["mat_id"];?>
 														</td>
                                         				
-														<td><span class="<?=$estadosEtiquetas[$resultado['mat_estado_matricula']];?>"><?=$estadosMatriculas[$resultado['mat_estado_matricula']];?></span></td>
+														<td>
+															<a style="cursor: pointer;" id="estadoMatricula<?=$resultado['mat_id'];?>" 
+															onclick='cambiarEstadoMatricula(<?=$dataParaJavascript;?>)'
+															>
+																<span class="<?=$estadosEtiquetasMatriculas[$resultado['mat_estado_matricula']];?>">
+																	<?=$estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];?>
+																</span>
+															</a>
+														</td>
 														<td><?=$resultado['mat_documento'];?></td>
-														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<?php
-														$color = '';
-														if($resultado["mat_inclusion"] == 1){
-															$color = 'blue';
-														}
-														if(isset($acudiente[0]) AND $acudiente[4]!=''){$nombreAcudiente=strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); $idAcudiente=$acudiente[0];}
-														?>
 														<td style="color:<?=$color;?>;"><?=$nombre;?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
-														<?php if(!empty($acudiente['uss_id']) and !empty($acudiente['uss_email'])){?>
-															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline;">Enviar mensaje</a>
+														<?php if(!empty($acudiente['uss_id']) and !empty($acudiente['uss_email']) and !empty($nombreAcudiente)){?>
+															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
 
