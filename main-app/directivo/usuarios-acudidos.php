@@ -67,7 +67,7 @@ include("../class/Estudiantes.php");
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                     $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_GET['id']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
                                                     $num = mysqli_num_rows($consultaUsuarioAcudiente);
-                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos['mat_id']);
+                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);
                                                     $selected = '';
                                                     if($opcionesDatos['mat_acudiente']==$_GET['id'] AND $num>0) $selected = 'selected';
                                                 ?>

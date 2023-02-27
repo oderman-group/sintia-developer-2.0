@@ -6,7 +6,7 @@ $numDotos=mysqli_num_rows($consultaDoc);
 if ($numDotos > 0) {
     include("../class/Estudiantes.php");
     $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["nDoct"]);
-    $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual['mat_id']);
+    $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
 ?>
     <script type="application/javascript">
         document.getElementById('apellido1').disabled = 'disabled';
