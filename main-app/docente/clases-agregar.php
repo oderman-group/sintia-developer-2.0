@@ -179,7 +179,7 @@ if(
 												</div>	
 											</div>
 
-											<!--
+											
 											<p class="text-info">Para clases en vivo.</p>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Clave para moderadores</label>
@@ -194,7 +194,7 @@ if(
 													<input type="text" name="claveEstudiante" class="form-control" autocomplete="off">
 												</div>
 											</div>
-											-->
+											
 											
 										</div>
 										
