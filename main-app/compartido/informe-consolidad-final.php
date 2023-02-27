@@ -2,6 +2,16 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
+<?php
+include("../class/Estudiantes.php");
+
+$year = $agnoBD;
+$BD   = $_SESSION["inst"]."_".$agnoBD;
+if(isset($_REQUEST["agno"])){
+	$year = $_REQUEST["agno"];
+	$BD   = $_SESSION["inst"]."_".$_REQUEST["agno"];
+}
+?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
