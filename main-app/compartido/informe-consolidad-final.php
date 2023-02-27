@@ -21,7 +21,7 @@ if(isset($_REQUEST["agno"])){
 <div align="center" style="margin-bottom:20px;">
     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
     <?=$informacion_inst["info_nombre"]?><br>
-    CONSOLIDADO FINAL</br>
+    CONSOLIDADO FINAL <?=$year;?></br>
 </div>   
   <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
