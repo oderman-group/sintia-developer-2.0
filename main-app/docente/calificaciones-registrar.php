@@ -390,7 +390,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 															<img src="<?=$fotoEst;?>" width="50">
 
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?>
+															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 
 														</td>
 

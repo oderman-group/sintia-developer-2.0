@@ -367,7 +367,7 @@ code {
 }
 .deepPink-bgcolor,
 .label.deepPink-bgcolor {
-    background-color: #e91e63 !important;
+    background-color: #6017dc !important;
     color: #fff !important;
 }
 .bg-warning{
@@ -4850,8 +4850,8 @@ table.valign-middle tbody tr td {
   border-color: #e1e5ec !important;
 }
 .btn-primary {
-  background-color: #188ae2 !important;
-  border: 1px solid #188ae2 !important;
+  background-color: #41c4c4 !important;
+  border: 1px solid #41c4c4 !important;
   color: #fff !important;
 }
 .btn-primary:hover,
@@ -4863,8 +4863,8 @@ table.valign-middle tbody tr td {
 .btn-primary:focus,
 .btn-primary:hover,
 .open > .dropdown-toggle.btn-primary {
-  background-color: #167ccb !important;
-  border: 1px solid #167ccb !important;
+  background-color: #56ffe4 !important;
+  border: 1px solid #56ffe4 !important;
   color: #fff !important;
 }
 .btn-success {

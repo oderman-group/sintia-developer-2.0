@@ -84,7 +84,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
     	<tr>	
             <td align="center"><?=$conta;?></td>
             <td align="center"><?=$resultado['mat_id'];?></td>
-            <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
+            <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
             <td align="center"><?=$resultado['gra_nombre'];?></td>
             <td align="center"><?=$resultado['gru_nombre'];?></td>
             <td align="center"><?=$estadoM;?></td>

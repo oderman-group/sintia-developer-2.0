@@ -74,7 +74,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   ">
       <td><?=$resultado['mat_id'];?></td>
       <td><?=$resultado[12];?></td>
-      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
+      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>

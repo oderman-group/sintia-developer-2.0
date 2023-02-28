@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0121';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php require_once("../class/Estudiantes.php");?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -48,11 +49,11 @@
 								
 								<div class="col-md-12">
 								<div class="btn-group">
-																<button type="button" class="btn btn-default">Filtrar por cursos</button>
-																<button type="button" class="btn btn-default dropdown-toggle m-r-20" data-toggle="dropdown">
+																<button type="button" class="btn btn-info">Filtrar por cursos</button>
+																<button type="button" class="btn btn-info dropdown-toggle m-r-20" data-toggle="dropdown">
 																	<i class="fa fa-angle-down"></i>
 																</button>
-																<ul class="dropdown-menu" role="menu">
+																<ul class="dropdown-menu" role="menu" style="width:250px;">
 																<?php
 											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
 											WHERE gra_estado=1
@@ -84,6 +85,7 @@
 													<tr>
 														<th>ID</th>
 														<th>Fecha</th>
+														<th>Documento</th>
 														<th>Estudiante</th>
 														<th>Grado</th>
 														<th>Respuesta</th>
@@ -99,7 +101,8 @@
 													<tr>
 														<td><?=$resultado['genc_id'];?></td>
 														<td><?=$resultado['genc_fecha'];?></td>
-														<td><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_nombres']);?></td>
+														<td><?=$resultado['mat_documento'];?></td>
+														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$respuestas[$resultado['genc_respuesta']];?></td>
 														<td><?=$resultado['genc_comentario'];?></td>
@@ -117,7 +120,7 @@
                 </div>
             </div>
             <!-- end page content -->
-             <?php// include("../compartido/panel-configuracion.php");?>
+             <?php //include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
