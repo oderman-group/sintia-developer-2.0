@@ -7,6 +7,9 @@
 		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
+
+	if(empty($_POST["estado"])){$_POST["estado"]=1;}
+	
 	mysqli_query($conexion, "UPDATE academico_grados SET 
 	gra_codigo='" . $_POST["codigoC"] . "', 
 	gra_nombre='" . $_POST["nombreC"] . "', 
