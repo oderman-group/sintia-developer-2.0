@@ -76,56 +76,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								<div class="col-md-12">
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
 
-									<div class="btn-group">
-										<button type="button" class="btn btn-primary">MÁS ACCIONES</button>
-										<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-											<i class="fa fa-angle-down"></i>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li><a href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a></li>
-											<li><a href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a></li>
-											<li><a href="usuarios-importar-excel.php">Importar usuarios</a></li>
-										</ul>
-									</div>
-
-									<div class="btn-group">
-										<button type="button" class="btn btn-info">Filtrar por tipo de usuario</button>
-										<button type="button" class="btn btn-info dropdown-toggle m-r-20" data-toggle="dropdown">
-											<i class="fa fa-angle-down"></i>
-										</button>
-										<ul class="dropdown-menu" role="menu" style="width:250px;">
-											<?php
-											$tiposUsuarios = TipoUsuario::listarTiposUsuarios();
-											while($tipoUsuario = mysqli_fetch_array($tiposUsuarios, MYSQLI_BOTH)){
-												$estiloResaltado = '';
-												if($tipoUsuario['pes_id'] == $_GET["tipo"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
-											?>	
-												<li><a href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a></li>
-											<?php }?>
-												<li><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=100">VER TODO</a></li>
-										</ul>
-									</div>
-									<!--Buscador en usuarios.-->
-									<div class="btn btn-group">
-									<style>
-											.btn{
-												float: right;
-											}
-									</style>
-									<form action="usuarios.php?cantidad=10" method="get">
-										<input type="text"  name="busqueda" size="30" maxlength="30">
-										<input type="submit" name="enviar" value="Buscar">
-									</form>
-
-									<?php
-									if (isset($_GET['enviar'])) {
-										$busqueda = $_GET['busqueda'];
-										$filtro .= "AND (uss_id LIKE '%$busqueda%' OR uss_nombre LIKE '%$busqueda%' OR uss_usuario LIKE '%$busqueda%' OR uss_email LIKE '%$busqueda%')";
-										
-									}
-									?>
-									</div>
-
+									<?php include("includes/usuarios-buscador.php");?>
+									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></header>
