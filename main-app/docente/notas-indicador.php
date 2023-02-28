@@ -185,7 +185,7 @@ include("../class/Estudiantes.php");
 
 																<img src="../files/fotos/<?= $resultado['uss_foto']; ?>" width="50">
 
-																<?= Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']); ?>
+																<?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?>
 
 															</td>
 

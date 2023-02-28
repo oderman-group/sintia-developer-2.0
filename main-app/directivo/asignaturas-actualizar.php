@@ -7,7 +7,7 @@
         exit();
     }
     
-    mysqli_query($conexion, "UPDATE academico_materias SET mat_codigo='".$_POST["codigoM"]."', mat_nombre='".$_POST["nombreM"]."', mat_siglas='".$_POST["siglasM"]."', mat_area=".$_POST["areaM"].", mat_oficial=1 WHERE mat_id='".$_POST["idM"]."'");
+    mysqli_query($conexion, "UPDATE academico_materias SET mat_codigo='".$_POST["codigoM"]."', mat_nombre='".$_POST["nombreM"]."', mat_siglas='".$_POST["siglasM"]."', mat_area=".$_POST["areaM"].", mat_oficial=1, mat_valor='".$_POST["porcenAsigna"]."' WHERE mat_id='".$_POST["idM"]."'");
     
     echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_2&id='.$_POST["idM"].'";</script>';
 		exit();

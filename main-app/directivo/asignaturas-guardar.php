@@ -15,14 +15,16 @@
         mat_nombre, 
         mat_siglas, 
         mat_area, 
-        mat_oficial
+        mat_oficial, 
+        mat_valor
     )
     VALUES (
         '".$codigoAsignatura."', 
         '".$_POST["nombreM"]."', 
         '".strtoupper($_POST["siglasM"])."', 
         '".$_POST["areaM"]."', 
-        1
+        1, 
+        '".$_POST["porcenAsigna"]."'
     )");
 	$idRegistro=mysqli_insert_id($conexion);
     
