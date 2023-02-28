@@ -175,7 +175,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 
 														<td>
 															<div class="btn-group">
-																  <button type="button" class="btn btn-primary">Acciones <?php //echo $frases[54][$datosUsuarioActual[8]];?></button>
+																  <button type="button" class="btn btn-primary">Acciones</button>
 																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
