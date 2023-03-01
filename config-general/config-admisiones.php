@@ -1,4 +1,18 @@
 <?php
+switch($_SERVER['HTTP_HOST']){
+	case 'localhost':
+	$BD_ADMISIONES_MOCK = 'odermangroup_dev_2023';
+	break;
+
+	case 'developer.plataformasintia.com':
+    $BD_ADMISIONES_MOCK = 'mobiliar_dev_2023';
+	break;
+
+	case 'main.plataformasintia.com':
+    $BD_ADMISIONES_MOCK = 'mobiliar_dev_2023';
+	break;
+}
+
 #VARIABLES PARA SUBMODULO DE ADMISIONES
 $estadosSolicitud = array(
 	1 => 'VERIFICACIÓN DE PAGO', 
