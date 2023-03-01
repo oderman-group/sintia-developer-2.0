@@ -1,10 +1,13 @@
 <?php
-include("../directivo/session.php");
-$server = $servidorConexion;
-$user = $usuarioConexion;
-$pass = $claveConexion;
-$dbName = $baseDatosAdmisiones;
-$dbNameInstitucion = $bdActual;
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/conexion-datos.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/config-admisiones.php");
+
+$server 		   = $servidorConexion;
+$user   		   = $usuarioConexion;
+$pass   		   = $claveConexion;
+$dbName 		   = $baseDatosAdmisiones;
+$dbNameInstitucion = $BD_ADMISIONES_MOCK;
 
 try{
 	$pdo = new PDO('mysql:host='.$server.';dbname='.$dbName, $user, $pass);
@@ -21,27 +24,3 @@ try{
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
 }
-
-#CONSTANTES
-$estadosSolicitud = array(
-	1 => 'VERIFICACIÓN DE PAGO', 
-	2 => 'PAGO RECHAZADO', 
-	3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-	4 => 'EN PROCESO',
-	5 => 'EXAMEN Y ENTREVISTA', 
-	6 => 'APROBADO', 
-	7 => 'NO APROBADO',
-	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-	9 => 'MOVIDO AL AÑO SIGUIENTE'
-);
-$progresoSolicitud = array(
-	1 => '15%', 
-	2 => '15%', 
-	3 => '30%', 
-	4 => '60%',
-	5 => '75%', 
-	6 => '90%',
-	7 => '100%',
-	8 => '15%',
-	9 => '100%',
-);
