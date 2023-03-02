@@ -130,7 +130,7 @@ $Plataforma = new Plataforma;
 													  INNER JOIN academico_grupos ON gru_id=car_grupo
 													  INNER JOIN academico_materias ON mat_id=car_materia
 													  INNER JOIN usuarios ON uss_id=car_docente
-													  WHERE car_id=car_id 
+													  WHERE car_id=car_id $filtro
 												        ORDER BY car_id
 													    LIMIT $inicio,$registros;");
 													$paginas=ceil($numRegistros/$registros);													
