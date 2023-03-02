@@ -83,7 +83,13 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																?>
 																<div class="btn-group">
 					                                                <a href="indicadores-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
-					                                                    Agregar nuevo <i class="fa fa-plus"></i>
+					                                                    Agregar nuevo<i class="fa fa-plus"></i>
+					                                                </a>
+					                                            </div>
+
+																<div class="btn-group">
+					                                                <a href="#" id="addRow" class="btn btn-danger" name="indicadores-preestablecidos.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onclick="deseaGenerarIndicadores(this)">
+																	Generar indicadores y actividades preestablecidas <i class="fa fa-plus"></i>
 					                                                </a>
 					                                            </div>
 																<?php }?>
