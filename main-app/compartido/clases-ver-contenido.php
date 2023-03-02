@@ -41,7 +41,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														UNION 
 														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
 														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."'");
+														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
 														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 														
 														if($ingresoClase[0]==""){continue;}
