@@ -968,6 +968,28 @@ function usuariosChat(){
 
 }
 
+function deseaGenerarIndicadores(dato){
+	var respuesta = window.confirm('Al ejecutar esta acción se eliminaran los indicadores y actividades ya creados. Desea continuar bajo su responsabilidad?');
+	var url = dato.name;
+	if(respuesta == true){
+		// window.location.href=url;
+		$.toast({
+
+			heading: 'Acción en proceso', text: 'Estamos creando los indicadores y actividades para ti, te avisaremos encuanto esten creados.', position: 'mid-center',
+			loaderBg:'#26c281', icon: 'warning', hideAfter: 5000, stack: 6
+
+		});
+		axios.get(url).then(function (response) {
+			$.toast({
+
+				heading: 'Acción realizada', text: 'Los indicadores y actividades fueron creados correctamente, Por favor refresque la página.', position: 'mid-center',
+				loaderBg:'#26c281', icon: 'success', hideAfter: 5000, stack: 6
+
+			});
+		})
+	}
+}
+
 	
 
 	
