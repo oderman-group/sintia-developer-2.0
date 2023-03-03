@@ -5,21 +5,6 @@ if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
 
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
-switch($_SERVER['HTTP_HOST']){
-	case 'localhost':
-	$REDIRECT_ROUTE = 'http://localhost/app-sintia/main-app';
-	error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-	break;
-
-	case 'developer.plataformasintia.com':
-	$REDIRECT_ROUTE = 'https://developer.plataformasintia.com/app-sintia/main-app';
-	break;
-
-	case 'main.plataformasintia.com':
-	$REDIRECT_ROUTE = 'https://main.plataformasintia.com/app-sintia/main-app';
-	break;
-}
-
 if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 	$_SESSION["id"] = $_SESSION["id"];
 }
@@ -29,7 +14,7 @@ include(ROOT_PATH."/conexion-datos.php");
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
 	session_destroy();
-	header("Location:".$REDIRECT_ROUTE."?error=4");
+	header("Location:".REDIRECT_ROUTE."?error=4");
 	exit();
 }else{
 	
@@ -56,7 +41,7 @@ if($_SESSION["inst"]==""){
 			break;	
 		}
 
-		header("Location:".$REDIRECT_ROUTE."/index.php?".$exception);
+		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
 

@@ -358,7 +358,7 @@ code {
 }
 .blue-bgcolor,
 .btn.blue-bgcolor {
-    background-color: #2196F3;
+    background-color: #41c4c4;
     color: #fff;
 }
 .cyan-bgcolor {
@@ -389,7 +389,7 @@ code {
 }
 
 .bg-purple {
-    background: #8E44AD;
+    background: #6017dc;
     color: #fff;
 }
 .bg-danger{
@@ -2529,7 +2529,7 @@ form.search-form-opened .btn.submit {
     background: #eee
 }
 .panel-heading-purple {
-    background: #a860c5;
+    background: #6017dc;
     color: white;
 }
 .panel-heading-yellow {
@@ -2537,7 +2537,7 @@ form.search-form-opened .btn.submit {
     color: white;
 }
 .panel-heading-blue {
-    background: #428BCA;
+    background: #41c4c4;
     color: white;
 }
 .panel-heading-red {
@@ -3054,13 +3054,13 @@ textarea.form-control-textarea {
     border-color: #c49f47
 }
 .form-control.purple {
-    border-color: #8E44AD
+    border-color: #6017dc
 }
 .form-control.purple:focus {
     border-color: #703688
 }
 .form-control.focus-purple:focus {
-    border-color: #8E44AD
+    border-color: #6017dc
 }
 .form-inline .rt-chkbox {
     margin-left: 15px;
@@ -5546,7 +5546,7 @@ fieldset[disabled] .btn.yellow:not(.btn-outline):hover {
 }
 .btn.purple:not(.btn-outline) {
     color: #fff;
-    background-color: #8E44AD;
+    background-color: #6017dc;
     border-color: #8E44AE
 }
 .btn.purple:not(.btn-outline).focus,
@@ -5590,16 +5590,16 @@ fieldset[disabled] .btn.yellow:not(.btn-outline):hover {
 fieldset[disabled] .btn.purple:not(.btn-outline).focus,
 fieldset[disabled] .btn.purple:not(.btn-outline):focus,
 fieldset[disabled] .btn.purple:not(.btn-outline):hover {
-    background-color: #8E44AD;
+    background-color: #6017dc;
     border-color: #8E44AE;
 }
 .btn.purple:not(.btn-outline) .badge {
-    color: #8E44AD;
+    color: #6017dc;
     background-color: #fff
 }
 .btn.btn-outline.purple {
-    border-color: #8E44AD;
-    color: #8E44AD;
+    border-color: #6017dc;
+    color: #6017dc;
     background: 0 0
 }
 .btn.btn-outline.purple.active,
@@ -5608,7 +5608,7 @@ fieldset[disabled] .btn.purple:not(.btn-outline):hover {
 .btn.btn-outline.purple:active:hover,
 .btn.btn-outline.purple:focus,
 .btn.btn-outline.purple:hover {
-    border-color: #8E44AD;
+    border-color: #6017dc;
     color: #fff;
     background-color: #8E44AE
 }
@@ -5620,7 +5620,7 @@ fieldset[disabled] .btn.purple:not(.btn-outline):hover {
 .btn.btn-outline.blue-bgcolor:hover {
     border-color: #2196f2;
     color: #fff;
-    background-color: #2196f3;
+    background-color: #41c4c4;
 }
 .btn.btn-outline.deepPink.active, .btn.btn-outline.deepPink:active, .btn.btn-outline.deepPink:active:focus, .btn.btn-outline.deepPink:active:hover, .btn.btn-outline.deepPink:focus, .btn.btn-outline.deepPink:hover {
     border-color: #e91e63;

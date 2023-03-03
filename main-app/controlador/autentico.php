@@ -24,13 +24,13 @@ WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND us
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }
 
@@ -42,7 +42,7 @@ $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
 if($num>0)
 {	
 	if($fila['uss_bloqueado'] == 1){
-		header("Location:".$REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 		exit();
 	}
 
@@ -93,6 +93,6 @@ if($num>0)
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion, uif_year)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."', '".$_SESSION["bd"]."')");
 
 
-	header("Location:".$REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
 	exit();
 }
