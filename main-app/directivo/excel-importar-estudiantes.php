@@ -26,7 +26,7 @@ if($extension == 'xlsx'){
 			$hojaActual= $documento->getSheet(0);
 			$numFilas= $hojaActual->getHighestDataRow();
 			$letraColumnas= $hojaActual->getHighestDataColumn();
-			$f=2;
+			$f=3;
 			$numImportados=0;
 			$numNoImportados=0;
 			$numNoImportadosXusuarios=0;
