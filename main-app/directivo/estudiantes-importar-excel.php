@@ -76,6 +76,18 @@
                                                 <span style="font-size: 12px; color:red;">Tenga en cuenta, para importar un estudiante los campos del Nro. de cédula, Primer Nombre, Primer Apellido y grado, son requeridos.</span>
                                             </div>
                                         </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-3 control-label">Campos a actualizar</label>
+                                            <div class="col-sm-9">
+                                                <select id="multiple" class="form-control  select2-multiple" name="actualizarCampo[]" multiple>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="1">Grado</option>
+                                                    <option value="2">Grupo</option>
+                                                    <option value="3">Tipo de Documento</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
 										<input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
 										
