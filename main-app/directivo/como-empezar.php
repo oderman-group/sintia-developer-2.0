@@ -85,8 +85,7 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple">Video de Guia</header>
 										<div class="panel-body">
-                                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/g2LSYPm7hR4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                                            
+                                            <div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/8eac333b167c48d98ca3b459e78faeac" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 										</div>
                                 	</div>
 								</div>
