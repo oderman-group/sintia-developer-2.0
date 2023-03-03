@@ -11,3 +11,4 @@ main-app/admisiones/error_log
 main-app/files
 main-app/admisiones/bd-conexion.php
 main-app/admisiones/files
+sensitive.php
