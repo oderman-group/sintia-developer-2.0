@@ -81,17 +81,19 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																)
 																{
 																?>
-																<div class="btn-group">
+																<div class="btn-group" id="agregarNuevo">
 					                                                <a href="indicadores-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
 					                                                    Agregar nuevo<i class="fa fa-plus"></i>
 					                                                </a>
 					                                            </div>
 
-																<div class="btn-group">
+																<div class="btn-group" id="preestablecidos">
 					                                                <a href="#" id="addRow" class="btn btn-danger" name="indicadores-preestablecidos.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onclick="deseaGenerarIndicadores(this)">
 																	Generar indicadores y actividades preestablecidas <i class="fa fa-plus"></i>
 					                                                </a>
 					                                            </div>
+																
+																<p style="color: blue; display:none" id="msjPree">Estamos creando los indicadores y actividades para ti, En un momento recargamos la página.</p>
 																<?php }?>
 																
 																<?php if($datosCargaActual['car_valor_indicador']==1 and $porcentajeRestante<=0){?>
