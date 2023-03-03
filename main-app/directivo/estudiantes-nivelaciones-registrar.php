@@ -35,9 +35,9 @@
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		<?php
-		$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_POST["curso"]."'");
+		$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_REQUEST["curso"]."'");
 		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-		$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_POST["grupo"]."'");
+		$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."'");
 		$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 		?>
         <?php include("../compartido/panel-color.php");?>
@@ -66,6 +66,7 @@
 									<h4 class="alert-heading">Información importante!</h4>
 									<p>Digite la Nivelación, el acta y la fecha para cada estudiante en la materia correspondiente y pulse Enter o simplemente cambie de casilla para que los cambios se guarden automaticamente.</p>
 									<p style="font-weight:bold;">Por favor despu&eacute;s de digitar cada dato, espere un momento a que el sistema le indique que estos se guadaron y prosiga.</p>
+									<p style="font-weight:bold;">Para ver los cambios reflejados en pantalla debe actualizar (Tecla F5) la página.</p>
 									</div>
 									<div id="resp"></div>
                                     <div class="card card-topline-purple">
@@ -82,7 +83,7 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="../compartido/informe-nivelaciones.php?curso=<?=$_POST["curso"];?>&grupo=<?=$_POST["grupo"];?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
+														<a href="../compartido/informe-nivelaciones.php?curso=<?=$_REQUEST["curso"];?>&grupo=<?=$_REQUEST["grupo"];?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
 															Sacara Informe <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -96,7 +97,7 @@
 													<th rowspan="2" style="font-size:9px;">Mat</th>
 													<th rowspan="2" style="font-size:9px;">Estudiante</th>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1");
+													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1");
 													//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
@@ -112,7 +113,7 @@
 													
 												<tr>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 													?>	
 													<th style="text-align:center;">DEF</th>
@@ -126,7 +127,7 @@
 												</thead>
                                                 <tbody>
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_POST["curso"]."' AND mat_grupo='".$_POST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+												$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$defPorEstudiante = 0;
 												?>
@@ -134,7 +135,7 @@
 													<td style="font-size:9px;"><?=$resultado[1];?></td>
 													<td style="font-size:9px;"><?=$resultado[3]." ".$resultado[4]." ".$resultado[5];?></td>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 														$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
