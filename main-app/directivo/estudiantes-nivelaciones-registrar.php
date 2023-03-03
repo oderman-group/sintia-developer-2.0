@@ -5,27 +5,27 @@
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">
-  function niv(enviada){
-  var nota = enviada.value;
-  var codEst = enviada.id;
-  var carga = enviada.name;
-  var op = enviada.alt;
- if(op==1){
- 	if (nota><?=$config[4];?> || isNaN(nota) || nota< <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
- }
-	  $('#resp').empty().hide().html("Esperando...").show(1);
+	function niv(enviada){
+		var nota = enviada.value;
+		var codEst = enviada.id;
+		var carga = enviada.name;
+		var op = enviada.alt;
+		if(op==1){
+			if (nota><?=$config[4];?> || isNaN(nota) || nota< <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+		}
+		$('#resp').empty().hide().html("Esperando...").show(1);
 		datos = "nota="+(nota)+
-				   "&carga="+(carga)+
-				   "&codEst="+(codEst)+
-				   "&op="+(op);
-			   $.ajax({
-				   type: "POST",
-				   url: "../compartido/ajax-nivelaciones-registrar.php",
-				   data: datos,
-				   success: function(data){
-				   $('#resp').empty().hide().html(data).show(1);
-				   }
-			   });
+					"&carga="+(carga)+
+					"&codEst="+(codEst)+
+					"&op="+(op);
+				$.ajax({
+					type: "POST",
+					url: "../compartido/ajax-nivelaciones-registrar.php",
+					data: datos,
+					success: function(data){
+					$('#resp').empty().hide().html(data).show(1);
+					}
+				});
 
 	}
 	</script>
@@ -67,6 +67,7 @@
 									<p>Digite la Nivelación, el acta y la fecha para cada estudiante en la materia correspondiente y pulse Enter o simplemente cambie de casilla para que los cambios se guarden automaticamente.</p>
 									<p style="font-weight:bold;">Por favor despu&eacute;s de digitar cada dato, espere un momento a que el sistema le indique que estos se guadaron y prosiga.</p>
 									</div>
+									<div id="resp"></div>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?></header>
