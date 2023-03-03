@@ -2,6 +2,8 @@
 include("session.php");
 include("verificar-carga.php");
 
+mysqli_query($conexion, "UPDATE academico_cargas SET car_valor_indicador=1, car_configuracion=1 WHERE car_id='".$cargaConsultaActual."'");
+
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT count(*) FROM academico_indicadores_carga WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1");
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 
