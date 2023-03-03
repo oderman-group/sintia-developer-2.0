@@ -27,12 +27,6 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-12">
-							<div class="borderBox light bordered">
-								<p>Esta pagina te dará la guía, paso a paso, para empezar a utilizar la plataforma educativa SINTIA.<br>
-                                Es bueno que sepas que esto solo se debe hacer una vez en la plataforma SINTIA y ya en los años siguientes esta información estará disponible para ser reutilizada o hacer pequeños ajustes segun lo requiera tu institución.</p>
-							</div>
-						</div>
 
                         <div class="col-md-12">
 
@@ -42,40 +36,57 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue">PRIMEROS PASOS</header>
 										<div class="panel-body">
+                                            <p>
+                                                <b>1.</b> Primeramente organiceremos la configuración del sistema para tu institución.<br>
+                                                <mark>Menú principal -> Configuración -> del sistema</mark>
+                                            </p>
+
 											<p>
-                                                <b>1.</b> Primeramente te sugerimos que crees los <b>usuarios</b> de tipo <b>Directivo</b> y los usuarios de tipo <b>Docente</b>.<br>
+                                                <b>2.</b> Ahora te sugerimos que crees los <b>usuarios</b> de tipo <b>Directivo</b> y los usuarios de tipo <b>Docente</b>.<br>
                                                 <mark>Menú principal -> G. Administrativa -> Usuarios -> Agregar nuevo</mark>
                                             </p>
 
                                             <p>
-                                                <b>2.</b> Lo siguiente que te recomendamos es ir a la opción de <b>Cursos</b>, revisar los que la plataforma generó automáticamente y comprobar si esos son todos los que tu institución necesita. Si hace falta alguno lo puedes crear allí mismo.<br>
+                                                <b>3.</b> Buen trabajo, en este punto vamos a colocar la <b>Información de la Institución</b>. Esta información es importante porque es la que aparecerá en varios informes que la plataforma te permite generar y aquí podrás definir los cargos o roles de algunos usuarios directivos dentro de la institución.<br>
+                                                <mark>Menú principal -> Configuración -> de la Institución</mark>
+                                            </p>
+
+                                            <p>
+                                                <b>4.</b> Lo siguiente que te recomendamos es ir a la opción de <b>Cursos</b>, revisar los que la plataforma generó automáticamente y comprobar si esos son todos los que tu institución necesita. Si hace falta alguno lo puedes crear allí mismo.<br>
                                                 <mark>Menú principal -> G. Académica -> Cursos -> Agregar nuevo</mark>
                                             </p>
 
                                             <p>
-                                                <b>3.</b> Este paso es parecido al anterior. Te recomendamos ir a la opción de <b>Áreas</b>, revisar las que la plataforma generó automáticamente y comprobar si esas son todas las que tu institución necesita. Si hace falta alguna la puedes crear allí mismo.<br>
+                                                <b>5.</b> Este paso es parecido al anterior. Te recomendamos ir a la opción de <b>Áreas</b>, revisar las que la plataforma generó automáticamente y comprobar si esas son todas las que tu institución necesita. Si hace falta alguna la puedes crear allí mismo.<br>
                                                 <mark>Menú principal -> G. Académica -> Áreas -> Agregar nuevo</mark>
                                             </p>
 
                                             <p>
-                                                <b>4.</b> Este paso es casi igual al anterior. Te recomendamos ir a la opción de <b>Asignaturas</b>, revisar las que la plataforma generó automáticamente y comprobar si esas son todas las que tu institución necesita. Si hace falta alguna la puedes crear allí mismo.<br>
+                                                <b>6.</b> Este paso es casi igual al anterior. Te recomendamos ir a la opción de <b>Asignaturas</b>, revisar las que la plataforma generó automáticamente y comprobar si esas son todas las que tu institución necesita. Si hace falta alguna la puedes crear allí mismo.<br>
                                                 <mark>Menú principal -> G. Académica -> Asignaturas -> Agregar nuevo</mark>
                                             </p>
 
                                             <p>
-                                                <b>5.</b> Felicidades por haber llegado a este punto. Ya casi hemos terminado. En este punto ya deberías tener la información básica para usar la plataforma.<br>
+                                                <b>7.</b> Felicidades por haber llegado a este punto. Ya casi hemos terminado. En este punto ya deberías tener la información básica para usar la plataforma.<br>
                                             Lo siguiente es crear las <b>Cargas Académicas</b> que los docentes trabajarán para este año escolar. Allí debes relacionar al docente con un curso, grupo y asignatura.<br>
                                             <mark>Menú principal -> G. Académica -> Cargas académicas -> Agregar nuevo</mark>
                                             </p>
                                             <p>
-                                                <b>6.</b> Excelente trabajo hasta ahora. Podemos pasar a las <b>Matrículas</b>. Es momento de crear a los estudiantes uno por uno o también puedes importarlos desde un archivo de excel para que te sea más fácil y rápido (La plataforma te da la plantilla adecuada para hacer este llenado de datos y la posterior carga del archivo).<br>
+                                                <b>8.</b> Excelente trabajo hasta ahora. Podemos pasar a las <b>Matrículas</b>. Es momento de crear a los estudiantes uno por uno o también puedes importarlos desde un archivo de excel para que te sea más fácil y rápido (La plataforma te da la plantilla adecuada para hacer este llenado de datos y la posterior carga del archivo).<br>
                                             Recuerda que si has creado cursos nuevos diferentes a los que la plataforma había generado automáticamente entonces después de importar el listado de estudiantes debes relacionarlos con su curso (Esto solo lo debes hacer para los cursos nuevos que hayas creado).<br>
                                             <mark>Menú principal -> G. Académica -> Matrículas -> Agregar nuevo | Importar matrículas excel</mark>
                                             </p>
-                                            <p>
-                                                <b>7.</b> Buen trabajo, hemos llegado al último paso de esta guía. Esta es la parte más sencilla. Vamos a colocar la <b>Información de la Institución</b>. Esta información es importante porque es la que aparecerá en varios informes que la plataforma te permite generar y aquí podrás definir los cargos o roles de algunos usuarios directivos dentro de la institución.<br>
-                                                <mark>Menú principal -> Configuración -> de la Institución</mark>
-                                            </p>
+                                            
+										</div>
+                                	</div>
+								</div>
+
+                                <div class="col-md-4">
+									<div class="panel">
+										<header class="panel-heading panel-heading-purple">Video de Guia</header>
+										<div class="panel-body">
+                                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/g2LSYPm7hR4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                            
 										</div>
                                 	</div>
 								</div>
