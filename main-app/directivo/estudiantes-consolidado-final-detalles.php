@@ -5,6 +5,12 @@
 <?php
 include("../class/Estudiantes.php");
 ?>
+<?php
+  $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_POST["curso"]."'");
+  $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+  $consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_POST["grupo"]."'");
+  $grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+  ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">
@@ -59,13 +65,6 @@ include("../class/Estudiantes.php");
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-								
-								<?php
-								$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_POST["curso"]."'");
-								$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-								$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_POST["grupo"]."'");
-								$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
-								?>
 								
 								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
