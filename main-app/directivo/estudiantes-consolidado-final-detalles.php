@@ -49,7 +49,7 @@ include("../class/Estudiantes.php");
                                 <div class="page-title">Consolidado Final</div>
                           
 								<div>
-									<b>Curso:</b> <?php if(isset($curso[2])){echo $curso[2];}?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?php if(isset($grupo[2])){echo $grupo[2];}?>
+									<b>Curso:</b> <?php if(isset($curso['gra_nombre'])){echo $curso['gra_nombre'];}?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?php if(isset($grupo['gru_nombre'])){echo $grupo['gru_nombre'];}?>
 								</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
