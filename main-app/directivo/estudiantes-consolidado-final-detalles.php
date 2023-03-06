@@ -81,7 +81,7 @@ include("../class/Estudiantes.php");
 											<div class="alert alert-block alert-info">
 												<h4 class="alert-heading">Información importante!</h4>
 												<p>Digite la nota para cada estudiante en el periodo y materia correspondiente y pulse Enter o simplemente cambie de casilla para que los cambios se guarden automaticamente.</p>
-												<p style="font-weight:bold;">Por favor despu&eacute;s de digitar una nota, espere un momento a que el sistema le indique que la nota se guad&oacute; y prosiga con la siguiente.</p>
+												<p style="font-weight:bold;">Por favor despu&eacute;s de digitar una nota, espere un momento a que el sistema le indique que la nota se guard&oacute; y prosiga con la siguiente.</p>
 											</div>
 											<div class="alert alert-block alert-warning">
 												<h4 class="alert-heading">Información importante!</h4>
