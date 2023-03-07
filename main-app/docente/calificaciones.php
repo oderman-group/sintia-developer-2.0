@@ -194,8 +194,12 @@ $porcentajeRestante = 100 - $valores[0];
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 																	<li><a href="calificaciones-registrar.php?idR=<?=$resultado['act_id'];?>">Calificar</a></li>
 																	  <!-- <li><a href="calificaciones-excel-importar.php?idR=<?=$resultado['act_id'];?>">Importar notas de excel</a></li> -->
-																	  <li><a href="calificaciones-editar.php?idR=<?=$resultado['act_id'];?>">Editar</a></li>
-																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="guardar.php?get=12&idR=<?=$resultado['act_id'];?>&idIndicador=<?=$resultado['act_id_tipo'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<?php if($resultado['act_creado']==1){?>
+
+																		<li><a href="calificaciones-editar.php?idR=<?=$resultado['act_id'];?>">Editar</a></li>
+																		<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="guardar.php?get=12&idR=<?=$resultado['act_id'];?>&idIndicador=<?=$resultado['act_id_tipo'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+
+																	<?php } ?>
 																</ul>
 															</div>
 															
