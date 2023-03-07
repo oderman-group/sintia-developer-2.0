@@ -131,6 +131,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Una nueva contraseña fue generada y enviada a tu correo electrónico: <b>' . $_GET["email"] . '</b>';
             break;
 
+            case 'SC_DT_6':
+                $tipo = 'success';
+                $mensaje = 'La contraseña se genero correctamente para los usuarios escogidos.</b>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
