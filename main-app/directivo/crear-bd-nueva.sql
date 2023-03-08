@@ -14,6 +14,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+BEGIN;
+
 --
 -- Table structure for table `academico_actividad_evaluacion_preguntas`
 --
@@ -1416,6 +1418,8 @@ CREATE TABLE `usuarios_por_estudiantes` (
   KEY `Index_ordinario_16` (`upe_id_usuario`,`upe_id_estudiante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+COMMIT;
 
 --
 -- Dumping routines for database 'mobiliar_dev_2022'
