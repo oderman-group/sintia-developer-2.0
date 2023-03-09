@@ -97,8 +97,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante;
-                exit();
+                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante."<br>";
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {

@@ -30,6 +30,7 @@ include("../class/UsuariosPadre.php");
 require_once("../class/Grados.php");
 require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");
+require_once("../class/CargaAcademica.php");
 ?>
 
 <!DOCTYPE html>
