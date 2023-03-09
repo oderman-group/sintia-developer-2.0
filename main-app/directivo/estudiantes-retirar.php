@@ -69,7 +69,7 @@
 											</div>
 										</div>
 
-                                        <input type="submit" class="btn btn-success" value="Reitrar y cancelar matrícula" name="consultas">
+                                        <input type="submit" class="btn btn-success" value="Retirar y cancelar matrícula" name="consultas">
                                     </form>
                                 </div>
                             </div>
