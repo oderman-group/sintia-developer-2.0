@@ -85,6 +85,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El estudiante o curso seleccionado no existe.';
             break;
 
+            case 'ER_DT_10':
+                $tipo = 'danger';
+                $mensaje = 'Lo sentimos este curso no tiene grado siguiente, por favor asígnele uno desde la opción de editar en cursos.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -137,6 +142,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.<br>
                 No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
                 ';
+            break;
+
+            case 'SC_DT_7':
+                $tipo = 'success';
+                $mensaje = 'Los estudiantes fueron promocionados correctamente para el curso: <b>' . $_GET["curso"] . '</b>';
             break;
 
 
