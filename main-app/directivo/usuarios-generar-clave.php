@@ -25,5 +25,5 @@ while ($contUsuarios < $numUsuarios) {
     $contUsuarios++;
 }
 
-echo '<script type="text/javascript">window.location.href="usuarios-generar-clave-filtros.php?success=SC_DT_6";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-generar-clave-filtros.php?success=SC_DT_8";</script>';
 exit();
