@@ -39,13 +39,7 @@
                             </ol>
                         </div>
                     </div>
-                    <div class="row">
-						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
+                   
                           
                                 <?php
                                         $consultaE=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
@@ -56,7 +50,6 @@
 									<header class="panel-heading panel-heading-purple">Retirar estudiante</header>
                                 	<div class="panel-body">
 
-                                   
                                     <form action="estudiantes-retirar-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=$e[0];?>" name="estudiante">
 										
@@ -76,7 +69,7 @@
 											</div>
 										</div>
 
-                                        <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
+                                        <input type="submit" class="btn btn-success" value="Reitrar y cancelar matrícula" name="consultas">
                                     </form>
                                 </div>
                             </div>
