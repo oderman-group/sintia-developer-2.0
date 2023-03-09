@@ -163,6 +163,16 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										
                                         <hr>
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">En qué orden desea ver el nombre de los estudiantes?</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="ordenEstudiantes">
+                                                    <option value="1" <?php if($cfg['conf_orden_nombre_estudiantes']==1){ echo "selected";} ?>>Nombres y Apellidos (Andres David Arias Pertuz)</option>
+                                                    <option value="2" <?php if($cfg['conf_orden_nombre_estudiantes']==2){ echo "selected";} ?>>Apellidos y nombres (Arias Pertuz Andres David)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Mostrar calificaciones a los acudientes?</label>
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2" name="caliAcudientes">

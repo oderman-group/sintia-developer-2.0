@@ -1,17 +1,16 @@
-<?php include("../../config-general/config.php");?>
 <?php
-$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
-$datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
-?>
-<?php
+session_start();
+include("../../config-general/config.php");
+
 if(trim($_POST["nota"])==""){
     echo "<span style='color:red; font-size:16px;'>Digite una nota correcta</span>";
 	exit();
 }
+
 if($_POST["op"]==1){
-	if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
+	if($_POST["nota"]>$config[4]){ $_POST["nota"] = $config[4];} if($_POST["nota"]<1){ $_POST["nota"] = 1;}
 }
-include("../modelo/conexion.php");
+
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$_POST["codEst"]."' AND niv_id_asg='".$_POST["carga"]."'");
 
 $num = mysqli_num_rows($consulta);
@@ -46,7 +45,7 @@ if($num==0 and $_POST["op"]==1){
 				// (string | mandatory) the heading of the notification
 				title: 'Correcto',
 				// (string | mandatory) the text inside the notification
-				text: 'Los cambios se ha guardado correctamente!',
+				text: 'Los cambios se han guardado correctamente!',
 				// (string | optional) the image to display on the left
 				image: 'files/iconos/Accept-Male-User.png',
 				// (bool | optional) if you want it to fade out on its own or just sit there
@@ -62,7 +61,7 @@ if($num==0 and $_POST["op"]==1){
 	</script>
     <div class="alert alert-success">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> Los cambios se ha guardado correctamente!.
+		<i class="icon-exclamation-sign"></i><strong>INFORMACIÓN:</strong> Los cambios se ha guardado correctamente!.
 	</div>
 <?php	
 	exit();
