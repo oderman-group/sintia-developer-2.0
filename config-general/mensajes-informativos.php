@@ -131,6 +131,14 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Una nueva contraseña fue generada y enviada a tu correo electrónico: <b>' . $_GET["email"] . '</b>';
             break;
 
+            case 'SC_DT_6':
+                $tipo = 'success';
+                $mensaje = '
+                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.<br>
+                No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                ';
+            break;
+
 
             default:
                 $tipo = 'secondary';
