@@ -115,7 +115,7 @@ include("../class/Estudiantes.php");
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".Estudiantes::NombreCompletoDelEstudianteParaInformes($dest,$config['conf_orden_nombre_estudiantes']);?>: <b><?=$dest['promedio'];?></b></div>
+																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".Estudiantes::NombreCompletoDelEstudianteParaInformes($dest, $config['conf_orden_nombre_estudiantes']);?>: <b><?=$dest['promedio'];?></b></div>
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 																</div>
 
