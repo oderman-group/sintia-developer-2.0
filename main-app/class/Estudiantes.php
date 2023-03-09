@@ -238,9 +238,10 @@ class Estudiantes {
     }
 
     public static function NombreCompletoDelEstudianteParaInformes(array $estudiante, $orden){
-        if($orden==1){
-            $nombre=strtoupper($estudiante['mat_nombres']." ".$estudiante['mat_nombre2']." ".$estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']);
-        }elseif($orden==2){
+        
+        $nombre=strtoupper($estudiante['mat_nombres']." ".$estudiante['mat_nombre2']." ".$estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']);
+        
+        if($orden==2){
             $nombre=strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
         }
         return $nombre;
