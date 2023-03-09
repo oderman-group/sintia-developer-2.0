@@ -46,7 +46,6 @@
 
                         </div>
 						
-                        <div class="col-sm-9">
                           
                                 <?php
                                         $consultaE=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
