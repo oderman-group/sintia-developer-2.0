@@ -31,12 +31,12 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Importar 1.000 matrículas en 10 segundos ó menos</div>
+                                <div class="page-title">Importar estudiantes desde Excel</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)"><?=$frases[78][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Importar 1.000 matrículas en 10 segundos ó menos</li>
+                                <li class="active">Importar estudiantes desde Excel</li>
                             </ol>
                         </div>
                     </div>
@@ -44,9 +44,17 @@
 						
 						<div class="col-sm-3">
 							<div class="panel">
-								<header class="panel-heading panel-heading-red">1 sólo paso</header>
+								<header class="panel-heading panel-heading-blue">Paso a paso</header>
 									<div class="panel-body">
-										<p><b>1.</b> Suba la planilla donde tiene los 1.000 estudiantes y LISTO!</p>
+                                        <p><b>1.</b> Solicite la plantilla de excel (Google Sheet) a la administración de la Plataforma SINTIA.</p>
+                                        <p><b>2.</b> Llene los campos de los estudiantes y acudientes en el orden que la plantilla los solicita.</p>
+                                        <p><b>3.</b> Finalmente descargue la plantilla ya completada, cargue la plantilla en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar matrículas.</p>
+									</div>
+
+                                    <header class="panel-heading panel-heading-blue">Consideraciones</header>
+									<div class="panel-body">
+                                        <p><b>-></b> Tenga en cuenta, para importar los estudiantes, los campos del Nro. de documento, Primer Nombre, Primer Apellido y grado, son obligatorios.</p>
+                                        <p><b>-></b> Si el estudiante ya existe en la plataforma, usted puede seleccionar los campos que desea actualizar en el campo que dice <mark>Campos a actualizar</mark>. Si no selecciona ningun campo entonces los estudiantes ya existentes se omitirán y solo se ingresarán los que no existan en la plataforma.</p>
 									</div>
 							 </div>
 
@@ -61,30 +69,38 @@
                                    
 									<form name="formularioGuardar" action="excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
 										
-											
+										<!--	
                                         <div class="form-group row">
                                             <label class="col-sm-3 control-label">Descargar formato de plantilla</label>
                                             <div class="col-sm-9">
                                                 <a href="../files/excel/estudiantes.xlsx" target="_blank"><i class="fa fa-download"></i> Plantilla para Matriculas</a>
                                             </div>
-                                        </div>
+                                        </div>-->
 										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Subir la planilla lista</label>
-                                            <div class="col-sm-9">
-                                                <input type="file" name="planilla" required><br>
-                                                <span style="font-size: 12px; color:red;">Tenga en cuenta, para importar un estudiante los campos del Nro. de cédula, Primer Nombre, Primer Apellido y grado, son requeridos.</span>
+                                            <div class="col-sm-6">
+                                                <input type="file" class="form-control" name="planilla" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
+                                            <div class="col-sm-4">
+                                                <input type="number" class="form-control" name="filaFinal" value="200" required><br>
+                                                <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Campos a actualizar</label>
                                             <div class="col-sm-9">
-                                                <select id="multiple" class="form-control  select2-multiple" name="actualizarCampo[]" multiple>
+                                                <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">Grado</option>
                                                     <option value="2">Grupo</option>
                                                     <option value="3">Tipo de Documento</option>
+                                                    <option value="4">Acudiente</option>
                                                 </select>
                                             </div>
                                         </div>

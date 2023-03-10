@@ -23,293 +23,299 @@ if($extension == 'xlsx'){
 			$documento= IOFactory::load($nombreArchivo);
 			$totalHojas= $documento->getSheetCount();
 
-			$hojaActual= $documento->getSheet(0);
-			$numFilas= $hojaActual->getHighestDataRow();
+			$hojaActual = $documento->getSheet(0);
+			$numFilas = $hojaActual->getHighestDataRow();
+			if($_POST["filaFinal"] > 0){
+				$numFilas = $_POST["filaFinal"];
+			}
 			$letraColumnas= $hojaActual->getHighestDataColumn();
-			$f=2;
-			$numImportados=0;
-			$numNoImportados=0;
-			$numNoImportadosXusuarios=0;
+			$f=3;
+			$arrayTodos = [];
+			$claves_validar = array('mat_tipo_documento', 'mat_documento', 'mat_nombres', 'mat_primer_apellido', 'mat_grado');
+			$tiposDocumento = [
+				'RC'   => '108', 'CC'   => '105', 'CE'   => '109', 'TI'   => '107', 'PP'   => '110', 'PE'   => '139', 'NUIP' => '106', 'PPT'   => '139'
+			];
+			$tiposGenero = [
+				'M'   => '126', 'F' => '127'
+			];
+			$estratosArray = array("", 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125);
+			$sql = "INSERT INTO academico_matriculas(mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_id_usuario, mat_acudiente, mat_documento, mat_tipo_documento, mat_grupo, mat_direccion, mat_genero, mat_fecha_nacimiento, mat_barrio, mat_celular, mat_email, mat_estrato, mat_tipo_sangre, mat_eps) VALUES";
+			
+			$estudiantesCreados      = array();
+			$estudiantesActualizados = array();
+			$estudiantesNoCreados    = array();
+
+			$acudientesCreados       = array();
+			$acudientesExistentes    = array();
+			$acudientesNoCreados     = array();
+
 			while($f<=$numFilas){
-				$A= $hojaActual->getCell('A'.$f)->getValue();
-				$B= $hojaActual->getCell('B'.$f)->getValue();
-				$C= $hojaActual->getCell('C'.$f)->getValue();
-				$D= $hojaActual->getCell('D'.$f)->getValue();
-				$E= $hojaActual->getCell('E'.$f)->getValue();
-				$F= $hojaActual->getCell('F'.$f)->getValue();
-				$G= $hojaActual->getCell('G'.$f)->getValue();
-				$H= $hojaActual->getCell('H'.$f)->getFormattedValue();
-				$I= $hojaActual->getCell('I'.$f)->getValue();
-				$J= $hojaActual->getCell('J'.$f)->getValue();
-				$K= $hojaActual->getCell('K'.$f)->getValue();
-				$L= $hojaActual->getCell('L'.$f)->getValue();
-				$M= $hojaActual->getCell('M'.$f)->getValue();
-				$N= $hojaActual->getCell('N'.$f)->getValue();
-				$O= $hojaActual->getCell('O'.$f)->getValue();
-				$P= $hojaActual->getCell('P'.$f)->getValue();
-				$Q= $hojaActual->getCell('Q'.$f)->getValue();
 				
-				if($A!='' OR $B!='' OR $C!='' OR $D!='' OR $E!='' OR $F!='' OR $G!='' OR $H!='' OR $I!='' OR $J!='' OR $K!='' OR $L!='' OR $M!='' OR $N!='' OR $O!='' OR $P!='' OR $Q!=''){
-					if($B!='' OR $C!='' OR $E!='' OR $I!=''){
-						$tDocumento = "";
-						if(isset($A) AND $A!='') {
-							switch($A){
-								case 'RC';
-									$tDocumento = 108;
-								break;
+				/*
+				***************ACUDIENTE********************
+				*/
+				$idAcudiente = '0000';
 
-								case 'CC';
-									$tDocumento = 105;
-								break;
-								
-								case 'CE';
-									$tDocumento = 109;
-								break;
-								
-								case 'TI';
-									$tDocumento = 107;
-								break;
-								
-								case 'PP';
-									$tDocumento = 110;
-								break;
-								
-								case 'PE';
-									$tDocumento = 139;
-								break;
-								
-								case 'NUIP';
-									$tDocumento = 106;
-								break;
-							}
+				//Validamos que el documento y el nombre del acudiente no venga vacío
+				if(!empty($hojaActual->getCell('R'.$f)->getValue()) && !empty($hojaActual->getCell('S'.$f)->getValue())) {
+					$datosAcudiente = [
+						'uss_usuario' => $hojaActual->getCell('R'.$f)->getValue(),
+						'uss_clave'   => '12345678',
+						'uss_tipo'    => 3,
+						'uss_nombre'  => $hojaActual->getCell('S'.$f)->getValue(),
+					];
+
+					$numUsuarioAcudiente  = Usuarios::validarExistenciaUsuario($datosAcudiente['uss_usuario']);
+					if($numUsuarioAcudiente > 0) {
+						$datosAcudienteExistente  = Usuarios::obtenerDatosUsuario($datosAcudiente['uss_usuario']);
+						$idAcudiente = $datosAcudienteExistente['uss_id'];
+						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
+					} else {
+						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."')");
+						$idAcudiente = mysqli_insert_id($conexion);
+						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
+					}
+				} else {
+					$acudientesNoCreados[] = "FILA ".$f;
+				}
+
+				/*
+				***************ESTUDIANTE********************
+				*/
+				$todoBien = true;
+
+				$arrayIndividual = [
+					'mat_matricula'		   => (strtotime("now")+$f),
+					'mat_tipo_documento'   => $hojaActual->getCell('A'.$f)->getValue(),
+					'mat_documento'        => $hojaActual->getCell('B'.$f)->getValue(),
+					'mat_nombres'          => $hojaActual->getCell('C'.$f)->getValue(),
+					'mat_nombre2'          => $hojaActual->getCell('D'.$f)->getValue(),
+					'mat_primer_apellido'  => $hojaActual->getCell('E'.$f)->getValue(),
+					'mat_segundo_apellido' => $hojaActual->getCell('F'.$f)->getValue(),
+					'mat_genero'           => $hojaActual->getCell('G'.$f)->getValue(),
+					'mat_fecha_nacimiento' => $hojaActual->getCell('H'.$f)->getFormattedValue(),
+					'mat_grado'            => $hojaActual->getCell('I'.$f)->getValue(),
+					'mat_grupo'            => $hojaActual->getCell('J'.$f)->getValue(),
+					'mat_direccion'        => $hojaActual->getCell('K'.$f)->getValue(),
+					'mat_barrio'           => $hojaActual->getCell('L'.$f)->getValue(),
+					'mat_celular'          => $hojaActual->getCell('M'.$f)->getValue(),
+					'mat_email'            => $hojaActual->getCell('N'.$f)->getValue(),
+					'mat_estrato'          => $hojaActual->getCell('O'.$f)->getValue(),
+					'mat_tipo_sangre'      => $hojaActual->getCell('P'.$f)->getValue(),
+					'mat_eps'              => $hojaActual->getCell('Q'.$f)->getValue(),
+					'mat_acudiente'        => $idAcudiente,
+					
+				];
+
+				//Validamos que los campos más importantes no vengan vacios
+				foreach ($claves_validar as $clave) {
+					if (empty($arrayIndividual[$clave])) {
+						$todoBien = false;
+					}
+				}
+
+				$tipoDocumento = $tiposDocumento[$arrayIndividual['mat_tipo_documento']];
+
+				$genero = $tiposGenero[$arrayIndividual['mat_genero']];
+
+				$grado = "";
+				if(!empty($arrayIndividual['mat_grado'])) {
+					
+					$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
+					WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+
+					$num = mysqli_num_rows($consulta);
+
+					if($num > 0){
+						$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+						$grado = $datos['gra_id'];
+					}
+					
+				}
+				
+				$grupo = 1;
+				if(!empty($arrayIndividual['mat_grupo'])) {
+					switch($arrayIndividual['mat_grupo']){
+						case 'A';
+							$grupo = 1;
+						break;
+
+						case 'B';
+							$grupo = 2;
+						break;
+
+						case 'C';
+							$grupo = 3;
+						break;
+					}
+				}
+
+				//Si los campos están completos entonces ordenamos los datos del estudiante
+				if($todoBien) {
+
+					$numMatricula = Estudiantes::validarExistenciaEstudiante($arrayIndividual['mat_documento']);
+
+					if($numMatricula > 0) {
+
+						$datosEstudianteExistente = Estudiantes::obtenerDatosEstudiante($arrayIndividual['mat_documento']);
+
+						try {
 							
-						}
-						
-						$documento = "";
-						if(isset($B) AND $B!='') {
-							$documento = $B;
-						}
+							$camposActualizar = "";
+							if(!empty($_POST['actualizarCampo'])) {
+							
+								$camposFormulario = count($_POST['actualizarCampo']);
 
-						$nombre1 = "";
-						if(isset($C) AND $C!='') {
-							$nombre1 = $C;
-						}
-						
-						$nombre2 = "";
-						if(isset($D) AND $D!='') {
-							$nombre2 = $D;
-						}
-						
-						$apellido1 = "";
-						if(isset($E) AND $E!='') {
-							$apellido1 = $E;
-						}
-						
-						$apellido2 = "";
-						if(isset($F) AND $F!='') {
-							$apellido2 = $F;
-						}
-						
-						$genero = "";
-						if(isset($G) AND $G!='') {
-							switch($G){
-								case 'M';
-									$genero = 126;
-								break;
+								if($camposFormulario > 0) {
+									$cont = 0;
+									while ($cont < $camposFormulario) {
+										if($_POST['actualizarCampo'][$cont] == 1) {
+											$camposActualizar .= ", mat_grado='".$grado."'";
+										}
 
-								case 'F';
-									$genero = 127;
-								break;
+										if($_POST['actualizarCampo'][$cont] == 2) {
+											$camposActualizar .= ", mat_grupo='".$grupo."'";
+										}
+
+										if($_POST['actualizarCampo'][$cont] == 3) {
+											$camposActualizar .= ", mat_tipo_documento='".$tipoDocumento."'";
+										}
+
+										if($_POST['actualizarCampo'][$cont] == 4) {
+											$camposActualizar .= ", mat_acudiente='".$idAcudiente."'";
+										}
+										
+										$cont ++;
+									}
+								}
 							}
+
+							//Actualizamos el acudiente y los datos del formulario
+							mysqli_query($conexion, "UPDATE academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
+							WHERE mat_id='".$datosEstudianteExistente['mat_id']."'");
+
+							//Verificamos que el array no venga vacio y adicionalmente que tenga el campo acudiente seleccionado para actualizarce
+							if (!empty($_POST['actualizarCampo']) && in_array(4, $_POST['actualizarCampo'])) {
+								//Borramos si hay alguna asociación igual y creamos la nueva
+								mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."'");
+
+								mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."')");
+							}
+
+							$estudiantesActualizados["FILA_".$f] = $datosEstudianteExistente['mat_documento'];
+
+						} catch (Exception $e) {
+							echo "Excepción catpurada: ".$e->getMessage();
+							exit();
 						}
-						
+
+					} else {
+
 						$fNacimiento = "0000-00-00";
-						if(!empty($H)) {
+						if(!empty($arrayIndividual['mat_fecha_nacimiento'])) {
 							$arrayBuscar = array('-', '.', ' ', '.-');
 							$arrayReemplazar = array('/', '/', '/', '/');
-							$fechaReplace = str_replace($arrayBuscar, $arrayReemplazar, $H);							
+							$fechaReplace = str_replace($arrayBuscar, $arrayReemplazar, $arrayIndividual['mat_fecha_nacimiento']);							
 							$fecha = explode ("/", $fechaReplace);
 
-							$dia   = $fecha[0];  
+							$dia   = $fecha[2];  
 							$mes = $fecha[1];  
-							$year  = $fecha[2];
+							$year  = $fecha[0];
 							$fNacimiento = $year.'-'.$mes.'-'.$dia;
-						}
-
-						$grado = "";
-						if(!empty($I)) {
-							try{
-								$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_nombre='".$I."'");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							
-							$num = mysqli_num_rows($consulta);
-							if($num > 0){
-								$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
-								$grado = $datos['gra_id'];
-							}
-							
-						}
-						
-						$grupo = 4;
-						if(isset($J) AND $J!='') {
-							switch($J){
-								case 'A';
-									$grupo = 1;
-								break;
-
-								case 'B';
-									$grupo = 2;
-								break;
-
-								case 'C';
-									$grupo = 3;
-								break;
-							}
-						}
-						
-						$direccion = "";
-						if(isset($K) AND $K!='') {
-							$direccion = $K;
-						}
-						
-						$barrio = "";
-						if(isset($L) AND $L!='') {
-							$barrio = $L;
-						}
-						
-						$celular = "";
-						if(isset($M) AND $M!='') {
-							$celular = $M;
-						}
-						
-						$email = "notiene@notiene.com";
-						if(isset($N) AND $N!='') {
-							$email = $N;
 						}
 						
 						$estrato = 116;
-						if(isset($O) AND $O!='') {
-							switch($O){
-								case 1;
-									$estrato = 114;
-								break;
-
-								case 2;
-									$estrato = 115;
-								break;
-
-								case 3;
-									$estrato = 116;
-								break;
-								case 4;
-									$estrato = 117;
-								break;
-
-								case 5;
-									$estrato = 118;
-								break;
-
-								case 6;
-									$estrato = 119;
-								break;
-								case 7;
-									$estrato = 120;
-								break;
-
-								case 8;
-									$estrato = 121;
-								break;
-
-								case 9;
-									$estrato = 122;
-								break;
-								case 10;
-									$estrato = 123;
-								break;
-
-								case 11;
-									$estrato = 124;
-								break;
-
-								case 12;
-									$estrato = 125;
-								break;
-							}
-						}
-						
-						$tSangre = "";
-						if(isset($P) AND $P!='') {
-							$tSangre = $P;
-						}
-						
-						$eps = "";
-						if(isset($Q) AND $Q!='') {
-							$eps = $Q;
+						if(!empty($arrayIndividual['mat_estrato'])) {
+							$estrato = $estratosArray[$arrayIndividual['mat_estrato']];
 						}
 
-						$result_numMat = strtotime("now");
-						$numUsuario = Usuarios::validarExistenciaUsuario($documento);
-						$numMatricula = Estudiantes::validarExistenciaEstudiante($documento);
-						if ($numUsuario > 0 AND $numMatricula > 0) {
-							$numNoImportadosXusuarios++;
-						}elseif ($numUsuario > 0 AND $numMatricula==0) {//Si existe el usuario y no la matricula, entonces creamos la matricula del estudiante
-							$datosUsuario = Usuarios::obtenerDatosUsuario($documento);
-							try{
-								mysqli_query($conexion, "INSERT INTO academico_matriculas(mat_matricula,mat_fecha,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_grado,mat_grupo,mat_genero,mat_fecha_nacimiento,mat_tipo_documento,mat_documento,mat_direccion,mat_barrio,mat_celular,mat_estrato,mat_tipo,mat_estado_matricula,mat_id_usuario,mat_eliminado,mat_email,mat_inclusion,mat_extranjero,mat_estado_agno,mat_solicitud_inscripcion,mat_tipo_sangre,mat_eps,mat_nombre2) VALUES ('".$result_numMat."',now(), '".$apellido1."','".$apellido2."','".$nombre1."','".$grado."','".$grupo."', '".$genero."','".$fNacimiento."','".$tDocumento."','".$documento."', '".$direccion."','".$barrio."','".$celular."','".$estrato."',128,4,'".$datosUsuario['uss_id']."',0,'".$email."',0,0,0,0,'".$tSangre."','".$eps."','".$nombre2."')");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							$numImportados++;
-						}elseif ($numUsuario==0 AND $numMatricula > 0) {//Si existe la matricula y no el usuario, entonces creamos el usuario del estudiante
-							$datosMat = Estudiantes::obtenerDatosEstudiante($documento);
-							try{
-								mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario,uss_clave,uss_tipo,uss_nombre,uss_estado,uss_foto,uss_portada,uss_idioma,uss_email,uss_fecha_nacimiento,uss_celular,uss_genero,uss_bloqueado,uss_fecha_registro,uss_responsable_registro,uss_direccion,uss_intentos_fallidos,uss_tipo_documento,uss_apellido1,uss_apellido2,uss_nombre2,uss_documento) VALUES ('".$documento."', '".$clavePorDefectoUsuarios."', 4, '".$nombre1."',0,'default.png','default.png',1,'".$email."','".$fNacimiento."','".$celular."', '".$genero."',0, now(),'".$_SESSION["id"]."', '".$direccion."',0,'".$tDocumento."', '".$apellido1."','".$apellido2."','".$nombre2."','".$documento."')");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							$idRegistro = mysqli_insert_id($conexion);
-							try {
-								mysqli_query($conexion, "UPDATE academico_matriculas SET mat_id_usuario='".$idRegistro."' WHERE mat_id='".$datosMat["mat_id"]."'");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							$numImportados++;
-						}else{
-							try{
-								mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario,uss_clave,uss_tipo,uss_nombre,uss_estado,uss_foto,uss_portada,uss_idioma,uss_email,uss_fecha_nacimiento,uss_celular,uss_genero,uss_bloqueado,uss_fecha_registro,uss_responsable_registro,uss_direccion,uss_intentos_fallidos,uss_tipo_documento,uss_apellido1,uss_apellido2,uss_nombre2,uss_documento) VALUES ('".$documento."', '".$clavePorDefectoUsuarios."', 4, '".$nombre1."',0,'default.png','default.png',1,'".$email."','".$fNacimiento."','".$celular."', '".$genero."',0, now(),'".$_SESSION["id"]."', '".$direccion."',0,'".$tDocumento."', '".$apellido1."','".$apellido2."','".$nombre2."','".$documento."')");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							$idRegistro = mysqli_insert_id($conexion);
-
-							try{
-								mysqli_query($conexion, "INSERT INTO academico_matriculas(mat_matricula,mat_fecha,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_grado,mat_grupo,mat_genero,mat_fecha_nacimiento,mat_tipo_documento,mat_documento,mat_direccion,mat_barrio,mat_celular,mat_estrato,mat_tipo,mat_estado_matricula,mat_id_usuario,mat_eliminado,mat_email,mat_inclusion,mat_extranjero,mat_estado_agno,mat_solicitud_inscripcion,mat_tipo_sangre,mat_eps,mat_nombre2) VALUES ('".$result_numMat."',now(), '".$apellido1."','".$apellido2."','".$nombre1."','".$grado."','".$grupo."', '".$genero."','".$fNacimiento."','".$tDocumento."','".$documento."', '".$direccion."','".$barrio."','".$celular."','".$estrato."',128,4,'".$idRegistro."',0,'".$email."',0,0,0,0,'".$tSangre."','".$eps."','".$nombre2."')");
-							} catch (Exception $e) {
-								echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-								exit();
-							}
-							$numImportados++;
+						$email = $arrayIndividual['mat_matricula'].'@plataformasintia.com';
+						if(!empty($arrayIndividual['mat_email'])) {
+							$email = strtolower($arrayIndividual['mat_email']);
 						}
-					}else{
-						$numNoImportados++;
+
+						$arrayTodos[$f] = $arrayIndividual;
+
+						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
+
+						$idUsuarioEstudiante = mysqli_insert_id($conexion);
+
+						$sql .= "('".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."'),";
+
+						$estudiantesCreados["FILA_".$f] = $arrayIndividual['mat_documento'];
+
 					}
+				} else {
+					$estudiantesNoCreados[] = "FILA ".$f;
 				}
+
 				$f++;
 			}
 			
+			$numeroEstudiantesCreados = 0;
+			if(!empty($estudiantesCreados)){
+				$numeroEstudiantesCreados = count($estudiantesCreados);
+			}
+
+			$numeroEstudiantesActualizados = 0;
+			if(!empty($estudiantesActualizados)){
+				$numeroEstudiantesActualizados = count($estudiantesActualizados);
+			}
+
+			$numeroEstudiantesNoCreados = 0;
+			if(!empty($estudiantesNoCreados)){
+				$numeroEstudiantesNoCreados = count($estudiantesNoCreados);
+			}
+
+			$numeroAcudientesCreados = 0;
+			if(!empty($acudientesCreados)){
+				$numeroAcudientesCreados = count($acudientesCreados);
+			}
+
+			$numeroAcudientesExistentes = 0;
+			if(!empty($acudientesExistentes)){
+				$numeroAcudientesExistentes = count($acudientesExistentes);
+			}
+
+			$numeroAcudientesNoCreados = 0;
+			if(!empty($acudientesNoCreados)){
+				$numeroAcudientesNoCreados = count($acudientesNoCreados);
+			}
+
+			$respuesta = [
+				"summary" => "
+					Resumen del proceso:<br>
+					- Total filas leidas: {$numFilas}<br><br>
+					- Estudiantes creados nuevos: {$numeroEstudiantesCreados}<br>
+					- Estudiantes que ya estaban creados y se les actualizó alguna información seleccionada: {$numeroEstudiantesActualizados}<br>
+					- Estudiantes que les faltó algun campo obligatorio: {$numeroEstudiantesNoCreados}<br><br>
+
+					- Acudientes creados nuevos: {$numeroAcudientesCreados}<br>
+					- Acudientes que ya estaban creados y no hubo necesidad de volverlos a crear: {$numeroAcudientesExistentes}<br>
+					- Acudientes que les faltó el documento o el nombre: {$numeroAcudientesNoCreados}<br><br>
+				"
+			];
+
+			$summary = http_build_query($respuesta);
+
+			if(!empty($estudiantesCreados) && count($estudiantesCreados) > 0) {
+				$sql = substr($sql, 0, -1);
+				try {
+					mysqli_query($conexion, $sql);
+				} catch(Exception $e){
+					print_r($sql);
+					echo "<br>Hubo un error al guardar todo los datos: ".$e->getMessage();
+					exit();
+				}
+			}
+
 			if(file_exists($nombreArchivo)){
 				unlink($nombreArchivo);
 			}
 			
-			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&numImportados='.$numImportados.'&numNoImportados='.$numNoImportados.'&numNoImportadosXusuarios='.$numNoImportadosXusuarios.'";</script>';
+			echo '<script type="text/javascript">window.location.href="estudiantes.php?cantidad=10&success=SC_DT_4&'.$summary.'";</script>';
 			exit();
+
 		}else{
 			switch ($_FILES['planilla']['error']) {
 				case UPLOAD_ERR_INI_SIZE:

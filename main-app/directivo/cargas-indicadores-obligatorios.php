@@ -32,11 +32,9 @@
                     
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="row">
-
-								<div class="col-md-4 col-lg-3">
+                            
 									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
+								
 								  
                                 <?php
                                 $consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor) FROM academico_indicadores WHERE ind_obligatorio=1");
@@ -44,7 +42,7 @@
                                 $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_creado=0");
                                 $indGenerados = mysqli_num_rows($consultaIndGenerados);
                                 ?>
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="alert alert-block alert-warning">
                                         <h4 class="alert-heading">Información importante!</h4>
                                         <p>Una vez termine de crear los indicadores obligatorios, por favor dirijase a la Configuración del Sistema para colocar el porcentaje que tendrán a disposición los docentes.</p>
