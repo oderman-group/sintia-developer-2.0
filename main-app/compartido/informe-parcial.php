@@ -32,8 +32,8 @@ include("../class/UsuariosPadre.php");
 
                                   
                                   <!-- BEGIN TABLE DATA -->
-                                  <table bgcolor="#FFFFFF" width="100%" cellspacing="2" cellpadding="2" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>; font-size:10px;" align="center">
-                                      <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+                                    <table width="100%" cellspacing="5" cellpadding="5" rules="all" style="border:solid; border-color:#6017dc; font-size:11px;">
+                                      <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
                                         <th style="text-align:center;">Cod</th>
                                         <th style="text-align:center;">Docente</th>
                                         <th style="text-align:center;">Asignatura</th>
