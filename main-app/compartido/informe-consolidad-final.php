@@ -4,7 +4,8 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
 include("../class/Estudiantes.php");
-
+include("../class/Grado.php");
+include("../class/Grupos.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
 if(isset($_REQUEST["agno"])){
@@ -13,10 +14,11 @@ if(isset($_REQUEST["agno"])){
 }
 ?>
 <?php
-  $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_REQUEST["curso"]."'");
-  $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-  $consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."'");
-  $grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+  $consultaCurso = Grado::capturarInformacionGrado($curso);
+	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+  
+  $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
+	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
   ?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
