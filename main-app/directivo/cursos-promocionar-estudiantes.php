@@ -1,5 +1,6 @@
 <?php
 	include("session.php");
+	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 	require_once(ROOT_PATH."/main-app/class/Grados.php");
 	
 	$consultaGrado=Grados::obtenerDatosGrados($_POST["curso"]);
@@ -9,17 +10,17 @@
 		exit();
 	}
 
-	$numEstudiantes = (count($_POST["estudiantes"]));
-	$contEstudiantes = 0;
-	while ($contEstudiantes < $numEstudiantes) {
+	$filtro = " AND mat_grado=".$_POST['curso']." AND mat_promocionado=0 AND mat_estado_matricula=1";
+	$consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+	$numEstudiantesPromocionados=0;
+	while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
 
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado=".$grado['gra_grado_siguiente'].", mat_promocionado=1 WHERE mat_id=".$_POST['estudiantes'][$contEstudiantes]."");
+		if(isset($_POST["id".$datosEstudiante['mat_id']])){
 
-		if($_POST["grupo"]!=""){
-			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grupo=".$_POST['grupo']." WHERE mat_id=".$_POST['estudiantes'][$contEstudiantes]."");
+			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado=".$grado['gra_grado_siguiente'].", mat_promocionado=1, mat_grupo=".$_POST['grupo'.$datosEstudiante['mat_id']]." WHERE mat_id=".$_POST["id".$datosEstudiante['mat_id']]."");
+			$numEstudiantesPromocionados++;
 		}
-		$contEstudiantes++;
 	}
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?curso='.$_POST["curso"].'&success=SC_DT_7";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.$grado['gra_nombre'].'&numEstudiantesPromocionados='.$numEstudiantesPromocionados.'";</script>';
 	exit();
