@@ -4,11 +4,10 @@
 <?php include("../compartido/head.php");?>
 <?php
 include("../class/Estudiantes.php");
-include("../class/Grado.php");
 include("../class/Grupos.php");
 ?>
 <?php
-  $consultaCurso = Grado::capturarInformacionGrado($curso);
+  $consultaCurso = Grados::capturarInformacionGrados($curso);
 	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
   
   $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
