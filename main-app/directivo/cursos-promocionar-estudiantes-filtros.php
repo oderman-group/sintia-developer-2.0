@@ -57,56 +57,73 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                     <div class="row">
                         <div class="col-sm-12">
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
-                            <div class="panel">
-                                <header class="panel-heading panel-heading-purple">Filtros </header>
-                                <div class="panel-body">
-                                <form name="formularioGuardar" action="cursos-promocionar-estudiantes.php" method="post">
-                                    <input type="hidden" name="curso" value="<?=$_GET["curso"];?>">
-                                    
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Estudiante</label>
-                                        <div class="col-sm-8">
-                                            <?php
-                                                $filtro = " AND mat_grado=".$_GET['curso']." AND mat_estado_matricula=1";
-                                                $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
-                                            ?>
-                                            <select class="form-control  select2-multiple" name="estudiantes[]" required multiple>
-                                                <option value="">Seleccione una opción</option>
-                                                <?php
-                                                    while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
-                                                        $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
-                                                        $selected="";
-                                                        if($datosEstudiante['mat_promocionado']==0){
-                                                            $selected="selected";
+                            <div class="card card-topline-purple">
+                                <div class="card-head">
+                                    <header>Estudiantes</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                        <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form name="formularioGuardar" action="cursos-promocionar-estudiantes.php" method="post">
+                                        <input type="hidden" name="curso" value="<?=$_GET["curso"];?>">
+                                        <div class="table-scrollable">
+                                            <table id="example1" class="display" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>CHECKBOX</th>
+                                                        <th>DOCUMENTO</th>
+                                                        <th>NOMBRES Y APELLIDOS</th>
+                                                        <th>GRUPO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                        $filtro = " AND mat_grado=".$_GET['curso']." AND mat_promocionado=0 AND mat_estado_matricula=1";
+                                                        $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+                                                        while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
+                                                            $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
+                                                    ?>
+                                                    <tr>
+                                                        <td><input type="checkbox" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>"></td>
+                                                        <td><?=$datosEstudiante['mat_documento'];?></td>
+                                                        <td><?=$nombre;?></td>
+                                                        <td>
+                                                            <div class="form-group row">
+                                                                <div class="col-sm-4">
+                                                                    <?php
+                                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                                    ?>
+                                                                    <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>">
+                                                                        <option value="">Seleccione una opción</option>
+                                                                        <?php
+                                                                        while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                                            $selected="";
+                                                                            if($datosEstudiante['mat_grupo']==$opcionesDatos['gru_id']){
+                                                                                $selected="selected";
+                                                                            }
+                                                                        ?>
+                                                                            <option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                                        <?php }?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
                                                         }
-                                                ?>
-                                                    <option value="<?=$datosEstudiante['mat_id'];?>" <?=$selected;?>><?="[".$datosEstudiante['mat_documento']."] ".$nombre." [".$datosEstudiante['gru_nombre']."]";?></option>
-                                                <?php }?>
-                                            </select>
+                                                    ?>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Grupo</label>
-                                        <div class="col-sm-4">
-                                            <?php
-                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
-                                            ?>
-                                            <select class="form-control  select2" name="grupo">
-                                                <option value="">Seleccione una opción</option>
-                                                <?php
-                                                while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                ?>
-                                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
-                                                <?php }?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <input type="submit" class="btn btn-primary" value="Realizar promoción">
-                                    
-                                    <a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                </form>
+                                        
+                                        <input type="submit" class="btn btn-primary" value="Realizar promoción">
+                                        
+                                        <a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 						
