@@ -105,7 +105,7 @@ Director(a) De Grupo
 <div style="position:relative; margin-top:60px; font-size:12px;" align="center">
 Yo__________________________________________________________________<br>
 
-Doy constancia de haber recibido del INSTITUTO COLOMBO VENEZOLANO el<br>
+Doy constancia de haber recibido del <?=$informacion_inst["info_nombre"]?> el<br>
 informe acad&eacute;mico parcial de mi acudido y a la vez la citaci&oacute;n<br>
 respectiva para la reuni&oacute;n en donde se me informar&aacute; las causas y<br>
 recomendaciones del bajo demsempe&ntilde;o, establecidas pora la comisi&oacute;n de<br>
