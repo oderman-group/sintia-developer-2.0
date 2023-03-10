@@ -121,7 +121,7 @@ Firma Del Padre Y/O Acudiente
                                   
                                   
                                   <div align="center" style="font-size:10px; margin-top:10px;">
-                                        <img src="../files/images/sintia.png" height="50" width="100"><br>
+                                        <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
                                         SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
                                     </div>
  
