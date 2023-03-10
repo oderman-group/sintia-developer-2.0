@@ -182,7 +182,7 @@ include("../class/Estudiantes.php");
 															//DEFINITIVA DE CADA PERIODO
 															
 															$disabled = "";
-															if(isset($boletin[4]) and ($boletin[4]!="" or $carga['car_periodo']<=$p)){
+															if((isset($boletin[4]) and ($boletin[4]!="" or $carga['car_periodo']<=$p)) and $config['conf_editar_definitivas_nivelaciones']!=true){
 																$disabled = "disabled";
 															}
 														?>	
