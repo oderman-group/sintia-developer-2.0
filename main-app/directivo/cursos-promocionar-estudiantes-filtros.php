@@ -43,8 +43,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                             <div class=" pull-left">
                                 <div class="page-title">Promocionar Estudiantes</div>
                                 <div>
-                                    <h4><b>Curso:</b></h4>
-									<b>Actual:</b> <?php if(isset($cursoActual['gra_nombre'])){echo $cursoActual['gra_nombre'];}?> <b>Siguiente:</b> <?php if(isset($cursoSiguiente['gra_nombre'])){echo $cursoSiguiente['gra_nombre'];}?>
+									<b>Desde el Curso:</b> <?php if(isset($cursoActual['gra_nombre'])){echo $cursoActual['gra_nombre'];}?> → <b>se Moverán al Curso:</b> <?php if(isset($cursoSiguiente['gra_nombre'])){echo $cursoSiguiente['gra_nombre'];}?>
 								</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
