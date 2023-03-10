@@ -4,7 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
 include("../class/Estudiantes.php");
-include("../class/Grado.php");
+include("../class/Grados.php");
 include("../class/Grupos.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
@@ -14,7 +14,7 @@ if(isset($_REQUEST["agno"])){
 }
 ?>
 <?php
-  $consultaCurso = Grado::capturarInformacionGrado($curso);
+  $consultaCurso = Grados::capturarInformacionGrados($curso);
 	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
   
   $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
