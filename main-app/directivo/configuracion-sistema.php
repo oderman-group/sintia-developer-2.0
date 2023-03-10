@@ -215,6 +215,16 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 <textarea cols="80" id="editor1" name="descrip" rows="10"><?=$cfg[29];?></textarea>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Permitir descargar informe parcial a acudientes</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="informeParcial">
+                                                    <option value="1" <?php if($cfg['conf_informe_parcial']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_informe_parcial']==0){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho -  Alto)</label>
