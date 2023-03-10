@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/UsuariosPadre.php");
+?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
