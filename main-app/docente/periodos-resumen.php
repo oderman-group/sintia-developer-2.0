@@ -161,7 +161,7 @@ function niv(enviada){
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td style="color: <?=$colorEstudiante;?>"><?=Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);?></td>
+														<td style="color: <?=$colorEstudiante;?>"><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 
 														<?php
 														 $definitiva = 0;

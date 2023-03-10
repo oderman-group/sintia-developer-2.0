@@ -207,7 +207,7 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
   border-color:#41c4c4;
   ">
       <td><?=$resultado["mat_id"];?></td>
-      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado["mat_id"]);?></td>
+      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td><?=$resultado["gra_nombre"];?></td>
       <td><?=$resultado["gru_nombre"];?></td>
       <td><?=$resultado["estado"];?></td>

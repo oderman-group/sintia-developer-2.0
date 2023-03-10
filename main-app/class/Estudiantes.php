@@ -97,8 +97,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante;
-                exit();
+                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante."<br>";
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
@@ -110,33 +109,8 @@ class Estudiantes {
 
     }
 
-    public static function NombreCompletoDelEstudiante($estudiante = 0){
-
-        global $conexion, $baseDatosServicios;
-        $resultado = [];
-
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-            LEFT JOIN usuarios ON uss_id=mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat_grado
-            LEFT JOIN academico_grupos ON gru_id=mat_grupo
-            LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
-            ");
-            $num = mysqli_num_rows($consulta);
-            if($num == 0){
-                echo "Estás intentado obtener el nombre de un estudiante que no existe: ".$estudiante;
-                exit();
-            }
-            $datos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-            $resultado = strtoupper($datos['mat_primer_apellido']." ".$datos['mat_segundo_apellido']." ".$datos['mat_nombres']." ".$datos['mat_nombre2']);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-
-        return $resultado;
-
+    public static function NombreCompletoDelEstudiante(array $estudiante){
+        return strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
     }
 
     public static function listarEstudiantesParaAcudientes($acudiente)

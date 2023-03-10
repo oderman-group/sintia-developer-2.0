@@ -208,7 +208,7 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
 
     <td align="center" width="5%"><?=$e[0];?></td>
 
-    <td width="20%"><?=Estudiantes::NombreCompletoDelEstudiante($e['mat_id']);?></td>
+    <td width="20%"><?=Estudiantes::NombreCompletoDelEstudiante($e);?></td>
 
     <td width="3%">&nbsp;</td>
 

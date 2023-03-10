@@ -81,9 +81,9 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																)
 																{
 																?>
-																<div class="btn-group">
+																<div class="btn-group" id="agregarNuevo">
 					                                                <a href="indicadores-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
-					                                                    Agregar nuevo <i class="fa fa-plus"></i>
+					                                                    Agregar nuevo<i class="fa fa-plus"></i>
 					                                                </a>
 					                                            </div>
 																<?php }?>

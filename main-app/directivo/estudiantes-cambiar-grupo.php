@@ -43,13 +43,8 @@ include("../class/Estudiantes.php");
                         </div>
                     </div>
                     <div class="row">
-						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+					
+                        <div class="col-sm-12">
                           
                                 <?php
                                     $e = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
@@ -71,7 +66,7 @@ include("../class/Estudiantes.php");
                                             </div>
                                             
                                             <div class="col-sm-4">
-                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e['mat_id']);?>" readonly>
+                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e);?>" readonly>
                                             </div>
                                         </div>
 

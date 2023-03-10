@@ -13,7 +13,7 @@
 	
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1")
+WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 
 ?>

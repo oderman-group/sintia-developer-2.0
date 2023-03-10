@@ -58,7 +58,7 @@
 													 $consulta = Estudiantes::listarEstudiantesParaEstudiantes($filtroEstudiantes);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                                                        $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($resultado['mat_id']);
+                                                        $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($resultado);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>

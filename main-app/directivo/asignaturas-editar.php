@@ -31,23 +31,19 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Agregar Asignatura</div>
+                                <div class="page-title">Editar Asignatura</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="asignaturas.php" onClick="deseaRegresar(this)"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Agregar Asignatura</li>
+                                <li class="active">Editar Asignatura</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
+					
 						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                                 <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
@@ -56,7 +52,7 @@
                                 	<div class="panel-body">
 
                                     <?php
-                                    $consultaMateria=mysqli_query($conexion, "SELECT mat_id, mat_codigo, mat_nombre, mat_siglas, mat_area FROM academico_materias WHERE mat_id=".$_GET["id"].";");
+                                    $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$_GET["id"].";");
                                     $rMateria=mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
                                     ?>
                                    
@@ -102,6 +98,15 @@
                                                 </select>
                                             </div>
                                         </div>
+
+										<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Porcentaje</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="porcenAsigna" class="form-control" value="<?=$rMateria["mat_valor"]?>">
+                                                </div>
+                                            </div>
+                                        <?php } ?>
 
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;

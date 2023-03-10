@@ -19,12 +19,13 @@ $yearAnterior=($year-1);//CALCULAMOS AÑO ANTERIOR PARA CUANDO SE CONSULTA LOS D
 $fecha=date("Y-m-d");
 $fechaCompleta = date("Y-m-d H:i:s");
 
-$bd='mobiliar_'.$siglasBD.'_'.$year;//BD NUEVA
-$bdAnterior= 'mobiliar_'.$siglasBD.'_'.$yearAnterior;//BD ANTIGUA PARA EL TRASPASO DE DATOS
+$bd=BD_PREFIX.$siglasBD.'_'.$year;//BD NUEVA
+$bdAnterior= BD_PREFIX.$siglasBD.'_'.$yearAnterior;//BD ANTIGUA PARA EL TRASPASO DE DATOS
 
 //Creamos y seleccionamos BD
 // mysqli_query($conexion, "CREATE DATABASE /*!32312 IF NOT EXISTS*/ $bd");
 mysqli_select_db($conexion, $bd) or die('Error al selccionar la bd');
+echo "<pre>Se estableción la conexión con la BD.</pre>";
 
 $fichero = 'crear-bd-nueva.sql';  // Ruta al fichero que vas a cargar.
 
@@ -65,8 +66,9 @@ foreach ($lineas as $linea) {
         $temp = '';
     }
 }
+echo "<pre>Se creó la estructura de la base de datos.</pre>";
 include('ingresar-datos-bd.php');
-echo "Creacion exitosa";
+echo "Todo el proceso concluyó exitosamente";
 exit();
 
 echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';

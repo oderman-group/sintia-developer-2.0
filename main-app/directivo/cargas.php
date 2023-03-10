@@ -57,6 +57,7 @@ $Plataforma = new Plataforma;
 										<li><a href="cargas-transferir.php">Transferir cargas</a></li>
 										<li><a href="cargas-estilo-notas.php">Estilo de notas</a></li>
 										<li><a href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a></li>
+										<li><a href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a></li>
 									</ul>
 								</div>
 
@@ -112,36 +113,43 @@ $Plataforma = new Plataforma;
 														<th>Periodo Actual</th>
                                         				<th style="text-align:center;">NOTAS<br>Declaradas - Registradas</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+														</tr>
+													</thead>
+													<tbody>
 													<?php
-													if(is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
+													include("consulta-paginacion.php");
+
+													if (is_numeric($pagina)){
+														$inicio= (($pagina-1)*$registros);
+													}			     
+													else{
+														$inicio=1;
+													}											       
+													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
+													  INNER JOIN academico_grados ON gra_id=car_curso
+													  INNER JOIN academico_grupos ON gru_id=car_grupo
+													  INNER JOIN academico_materias ON mat_id=car_materia
+													  INNER JOIN usuarios ON uss_id=car_docente
+													  WHERE car_id=car_id $filtro
+												        ORDER BY car_id
+													    LIMIT $inicio,$registros;");
+													$paginas=ceil($numRegistros/$registros);													
+													?>
 													
-													$filtroLimite = '';
-													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-													 INNER JOIN academico_grados ON gra_id=car_curso
-													 INNER JOIN academico_grupos ON gru_id=car_grupo
-													 INNER JOIN academico_materias ON mat_id=car_materia
-													 INNER JOIN usuarios ON uss_id=car_docente
-													 WHERE car_id=car_id $filtro
-													 ORDER BY car_id
-													 $filtroLimite");
-													 $contReg = 1;
-													$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-													$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
-													$cargaAcademica = mysqli_fetch_array($consultaCargaAcademica, MYSQLI_BOTH);
-													$cargaSP = $resultado[0];
-													$periodoSP = $resultado['car_periodo'];
-													include("../suma-porcentajes.php");
-													 ?>
+													<?php
+													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
+																										
+														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
+														$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
+														$cargaAcademica = mysqli_fetch_array($consultaCargaAcademica, MYSQLI_BOTH);
+														$cargaSP = $resultado[0];
+														$periodoSP = $resultado['car_periodo'];
+														include("../suma-porcentajes.php");
+														?>
 													<tr>
-                                                        <td><?=$contReg;?></td>
+                          								<td><?=$contReg;?></td>
 														<td><a href="../compartido/planilla-asistencia.php?grado=<?=$cargaAcademica["car_curso"];?>&grupo=<?=$cargaAcademica["car_grupo"];?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Imprimir planilla Estudiantes"><?=$resultado['car_id'];?></a></td>
-														<td><?=strtoupper($resultado['uss_nombre']);?></td>
+														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
 														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre']);?></td>
 														<td><?=$resultado['car_ih'];?></td>
@@ -167,16 +175,14 @@ $Plataforma = new Plataforma;
 																  </ul>
 															  </div>
 														</td>
-                                                    </tr>
-													<?php 
-														 $contReg++;
-													  }
-													  ?>
-                                                </tbody>
-                                            </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                            </tr>
+													  <?php $contReg++;} ?>
+                            </tbody>
+                          </table>
+                          </div>
+                      </div>
+                      </div>
+                      <?php include("enlaces-paginacion-cargas.php");?>
                                 </div>
                             </div>
                         </div>

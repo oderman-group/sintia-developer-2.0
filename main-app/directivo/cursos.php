@@ -80,7 +80,6 @@
 														<th>Matrícula</th>
 														<th>Pensión</th>
 														<th>#P</th>
-                                        				<th>Grupos</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
@@ -92,23 +91,12 @@
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><a href="../compartido/listado-estudiante.php?grado=<?=$resultado[0];?>" target="_blank" style="text-decoration:underline;" title="Imprimir lista de estudiantes"><?=$resultado[0];?></a></td>
-														<td><a href="estudiantes.php?curso=<?=$resultado[0];?>" style="text-decoration: underline;"><?=$resultado['gra_nombre'];?></a></td>
+														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['gra_nombre'];?></td>
 														<td><?=$resultado[3];?></td>
 														<td>$<?=number_format($resultado[4]);?></td>
 														<td>$<?=number_format($resultado[5]);?></td>
 														<td><?=$resultado[11];?></td>
-														<td>
-															<?php													
-															$consultaGrupo = mysqli_query($conexion, "SELECT * FROM academico_grupos");
-															$contReg = 1;
-															while($resultadoG = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH)){
-															?>
-															<a href="../compartido/informe-consolidado-perdidos.php?curso=<?=$resultado[0];?>&grupo=<?=$resultadoG[0];?>" style="text-decoration:underline;" target="_blank"><?=$resultadoG[2];?></a>
-															<?php 
-															}
-															?>
-														</td>
 														
 														<td>
 															<div class="btn-group">
@@ -121,7 +109,7 @@
 																	  <li><a href="cursos-eliminar.php?id=<?=$resultado[0];?>">Eliminar</a></li>
 																	  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
 																	  <li><a href="../compartido/matricula-libro-curso.php?curso=<?=$resultado[0];?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
-																	  <li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=$resultado[0];?>" title="Hoja de matrícula por curso" target="_blank">Matrícula por curso</a></li>
+																	  <li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=$resultado[0];?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
 																	  <li><a href="cursos-promocionar-estudiantes.php?curso=<?=$resultado[0];?>" title="Promocionar estudiantes" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Promocionar estudiantes</a></li>
 																  </ul>
 															  </div>

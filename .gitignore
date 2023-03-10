@@ -8,3 +8,7 @@ main-app/compartido/error_log
 main-app/modelo/error_log
 main-app/controlador/error_log
 main-app/admisiones/error_log
+main-app/files
+main-app/admisiones/bd-conexion.php
+main-app/admisiones/files
+sensitive.php
