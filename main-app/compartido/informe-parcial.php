@@ -7,7 +7,7 @@ include("../class/UsuariosPadre.php");
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/logoodermanp.png">
+    <link rel="shortcut icon" href="../sintia-icono.png" />
 </head>
 <body style="font-family:Arial;">
 <div align="center" style="margin-bottom:20px;">
