@@ -93,6 +93,7 @@
                                                     <option value="1">Grado</option>
                                                     <option value="2">Grupo</option>
                                                     <option value="3">Tipo de Documento</option>
+                                                    <option value="4">Acudiente</option>
                                                 </select>
                                             </div>
                                         </div>
