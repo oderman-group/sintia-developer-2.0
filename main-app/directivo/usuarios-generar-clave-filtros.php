@@ -60,17 +60,17 @@ include("../compartido/head.php");
                         <div class="col-sm-12">
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple">Filtros </header>
+                                <header class="panel-heading panel-heading-purple">Generar Contraseña </header>
                                 <div class="panel-body">
                                 <form name="formularioGuardar" action="usuarios-generar-clave.php" method="post">
                                     
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Generar contraseña de forma:</label>
+                                        <label class="col-sm-2 control-label">Cuál desea que sea la nueva contraseña?</label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" name="tipo"required onchange="generarClaveManual(this)">
                                                 <option value="">Seleccione una opción</option>
-                                                <option value="1">Manual</option>
-                                                <option value="2">Automática</option>
+                                                <option value="1">Yo la quiero colocar en este momento</option>
+                                                <option value="2">Que sea el mismo nombre del usuario</option>
                                             </select>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@ include("../compartido/head.php");
                                     </div>
                                     
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Usuarios</label>
+                                        <label class="col-sm-2 control-label">Tipos de Usuarios para aplicar el cambio</label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2-multiple" name="usuario[]" required multiple>
                                                 <option value="">Seleccione una opción</option>
