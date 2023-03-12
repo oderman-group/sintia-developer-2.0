@@ -4,7 +4,8 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
 include("../class/Estudiantes.php");
-
+include("../class/Grados.php");
+include("../class/Grupos.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
 if(isset($_REQUEST["agno"])){
@@ -12,6 +13,13 @@ if(isset($_REQUEST["agno"])){
 	$BD   = $_SESSION["inst"]."_".$_REQUEST["agno"];
 }
 ?>
+<?php
+  $consultaCurso = Grados::capturarInformacionGrados($curso);
+	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+  
+  $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
+	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+  ?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -22,6 +30,7 @@ if(isset($_REQUEST["agno"])){
     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
     <?=$informacion_inst["info_nombre"]?><br>
     CONSOLIDADO FINAL <?=$year;?></br>
+	<b>CURSO:</b> <?php if(isset($curso['gra_nombre'])){echo $curso['gra_nombre'];}?>&nbsp;&nbsp;&nbsp; <b>GRUPO:</b> <?php if(isset($grupo['gru_nombre'])){echo $grupo['gru_nombre'];}?>
 </div>   
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="

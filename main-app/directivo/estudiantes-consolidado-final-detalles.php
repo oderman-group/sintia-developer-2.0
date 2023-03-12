@@ -4,7 +4,15 @@
 <?php include("../compartido/head.php");?>
 <?php
 include("../class/Estudiantes.php");
+include("../class/Grupos.php");
 ?>
+<?php
+  $consultaCurso = Grados::capturarInformacionGrados($curso);
+	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+  
+  $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
+	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+  ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">
@@ -49,7 +57,7 @@ include("../class/Estudiantes.php");
                                 <div class="page-title">Consolidado Final</div>
                           
 								<div>
-									<b>Curso:</b> <?php if(isset($curso[2])){echo $curso[2];}?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?php if(isset($grupo[2])){echo $grupo[2];}?>
+									<b>Curso:</b> <?php if(isset($curso['gra_nombre'])){echo $curso['gra_nombre'];}?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?php if(isset($grupo['gru_nombre'])){echo $grupo['gru_nombre'];}?>
 								</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
@@ -59,13 +67,6 @@ include("../class/Estudiantes.php");
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-								
-								<?php
-								$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_POST["curso"]."'");
-								$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-								$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_POST["grupo"]."'");
-								$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
-								?>
 								
 								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
@@ -81,7 +82,7 @@ include("../class/Estudiantes.php");
 											<div class="alert alert-block alert-info">
 												<h4 class="alert-heading">Información importante!</h4>
 												<p>Digite la nota para cada estudiante en el periodo y materia correspondiente y pulse Enter o simplemente cambie de casilla para que los cambios se guarden automaticamente.</p>
-												<p style="font-weight:bold;">Por favor despu&eacute;s de digitar una nota, espere un momento a que el sistema le indique que la nota se guad&oacute; y prosiga con la siguiente.</p>
+												<p style="font-weight:bold;">Por favor despu&eacute;s de digitar una nota, espere un momento a que el sistema le indique que la nota se guard&oacute; y prosiga con la siguiente.</p>
 											</div>
 											<div class="alert alert-block alert-warning">
 												<h4 class="alert-heading">Información importante!</h4>
