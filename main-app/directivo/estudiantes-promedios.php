@@ -1,7 +1,9 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0002';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+include("../class/Estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -113,7 +115,7 @@
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".strtoupper($dest['mat_nombres']." ".$dest['mat_primer_apellido']);?>: <b><?=$dest['promedio'];?></b></div>
+																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".Estudiantes::NombreCompletoDelEstudianteParaInformes($dest, $config['conf_orden_nombre_estudiantes']);?>: <b><?=$dest['promedio'];?></b></div>
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 																</div>
 

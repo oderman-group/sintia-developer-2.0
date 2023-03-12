@@ -75,7 +75,7 @@ $Plataforma = new Plataforma;
 										?>	
 											<li><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$grado['gra_id'];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a></li>
 										<?php }?>
-											<li><a href="<?=$_SERVER['PHP_SELF'];?>">VER TODO</a></li>
+											<li><a href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a></li>
 									</ul>
 								</div>
 

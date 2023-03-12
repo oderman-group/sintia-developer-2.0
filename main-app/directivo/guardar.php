@@ -1101,7 +1101,7 @@ if ($_GET["get"] == 55) {
 //ELIMINAR NOTA NIVELACION
 if ($_GET["get"] == 57) {
 	mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_id='" . $_GET["idNiv"] . "'");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-nivelaciones-registrar.php?curso='.$_GET["curso"].'&grupo='.$_GET["grupo"].'";</script>';
 	exit();
 }
 //ELIMINAR TODOS LOS ACUDIENTES
