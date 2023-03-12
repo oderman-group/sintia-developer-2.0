@@ -121,14 +121,14 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <td width="20%" rowspan="2">ASIGNATURAS</td>
                     <td width="2%" rowspan="2">I.H.</td>
 
-                    <?php for ($j = 1; $j <= $config["conf_periodo"]; $j++) { ?>
+                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
                         <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $matriculadosDatos[0]; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
                     <?php } ?>
                     <td width="3%" colspan="3">Final</td>
                 </tr>
 
                 <tr style="font-weight:bold; text-align:center;">
-                    <?php for ($j = 1; $j <= $config["conf_periodo"]; $j++) { ?>
+                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
                         <td width="3%">Nota</td>
                         <td width="3%">Nivel</td>
                     <?php } ?>
@@ -195,7 +195,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         <td align="center"><?= $datosCargas['car_ih']; ?></td>
                         <?php
                         $promedioMateria = 0;
-                        for ($j = 1; $j <= $config["conf_periodo"]; $j++) {
+                        for ($j = 1; $j <= $periodoActual; $j++) {
 
                             $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
                             LEFT JOIN $BD.academico_notas_tipos ON notip_categoria='" . $config["conf_notas_categoria"] . "' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
@@ -267,7 +267,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                     <?php
                     $promedioFinal = 0;
-                    for ($j = 1; $j <= $config["conf_periodo"]; $j++) {
+                    for ($j = 1; $j <= $periodoActual; $j++) {
                         $consultaPromedioPeriodoTodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 1) as promedio FROM $BD.academico_boletin 
                         WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' AND bol_periodo='" . $j . "'");
                         $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
@@ -288,7 +288,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         $promedioFinal +=$promediosPeriodos['promedio'];
                     } 
 
-                        $promedioFinal = round($promedioFinal/$config["conf_periodo"],2);
+                        $promedioFinal = round($promedioFinal/$periodoActual,2);
                         $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
                         WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta");
                         $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
@@ -301,14 +301,28 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">AUSENCIAS</td>
                     <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td><?=$ausPer1Total?> Aus.</td>
-                    <td>&nbsp;</td>
-                    <td><?=$ausPer2Total?> Aus.</td>
-                    <td>&nbsp;</td>
-                    <td><?=$ausPer3Total?> Aus.</td>
-                    <td>&nbsp;</td>
-                    <td><?=$ausPer4Total?> Aus.</td>
+                    <?php
+                    for ($j = 1; $j <= $periodoActual; $j++) {
+                        switch($j){
+                            case 1:
+                                echo '<td>&nbsp;</td>
+                                      <td>'.$ausPer1Total.' Aus.</td>';
+                                break;
+                            case 2:
+                                echo '<td>&nbsp;</td>
+                                      <td>'.$ausPer2Total.' Aus.</td>';
+                                break;
+                            case 3:
+                                echo '<td>&nbsp;</td>
+                                      <td>'.$ausPer3Total.' Aus.</td>';
+                                break;
+                            case 4:
+                                echo '<td>&nbsp;</td>
+                                      <td>'.$ausPer4Total.' Aus.</td>';
+                                break;
+                        }
+                    }
+                    ?>
                     <td>&nbsp;</td>
                     <td><?=$sumAusenciasTotal?> Aus.</td>
                     <td>&nbsp;</td>

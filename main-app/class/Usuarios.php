@@ -104,4 +104,15 @@ class Usuarios {
         return $key;
     }
 
+    public static function validarClave($clave) {
+        $regex = "/^[a-zA-Z0-9\.\$\*]{8,20}$/";
+        $validarClave = preg_match($regex, $clave);
+    
+        if($validarClave === 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }
