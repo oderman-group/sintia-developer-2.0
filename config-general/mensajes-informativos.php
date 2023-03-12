@@ -129,6 +129,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case 'SC_DT_8':
+                $tipo = 'success';
+                $mensaje = 'La contraseña se genero correctamente para los usuarios escogidos.</b>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
