@@ -1,11 +1,13 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/UsuariosPadre.php");
+?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/logoodermanp.png">
+    <link rel="shortcut icon" href="../sintia-icono.png" />
 </head>
 <body style="font-family:Arial;">
 <div align="center" style="margin-bottom:20px;">
@@ -30,8 +32,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
 
                                   
                                   <!-- BEGIN TABLE DATA -->
-                                  <table bgcolor="#FFFFFF" width="100%" cellspacing="2" cellpadding="2" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>; font-size:10px;" align="center">
-                                      <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+                                    <table width="100%" cellspacing="5" cellpadding="5" rules="all" style="border:solid; border-color:#6017dc; font-size:11px;">
+                                      <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
                                         <th style="text-align:center;">Cod</th>
                                         <th style="text-align:center;">Docente</th>
                                         <th style="text-align:center;">Asignatura</th>
@@ -66,8 +68,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas[0];?></td>
-                                        <td><?=$rDatos[5];?></td>
-                                        <td><?=$rDatos[1];?></td>
+                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos['uss_id']);?></td>
+                                        <td><?=$rDatos['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
                                         <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
                                       </tr>
@@ -103,7 +105,7 @@ Director(a) De Grupo
 <div style="position:relative; margin-top:60px; font-size:12px;" align="center">
 Yo__________________________________________________________________<br>
 
-Doy constancia de haber recibido del INSTITUTO COLOMBO VENEZOLANO el<br>
+Doy constancia de haber recibido del <?=$informacion_inst["info_nombre"]?> el<br>
 informe acad&eacute;mico parcial de mi acudido y a la vez la citaci&oacute;n<br>
 respectiva para la reuni&oacute;n en donde se me informar&aacute; las causas y<br>
 recomendaciones del bajo demsempe&ntilde;o, establecidas pora la comisi&oacute;n de<br>
@@ -119,7 +121,7 @@ Firma Del Padre Y/O Acudiente
                                   
                                   
                                   <div align="center" style="font-size:10px; margin-top:10px;">
-                                        <img src="../files/images/sintia.png" height="50" width="100"><br>
+                                        <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
                                         SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
                                     </div>
  

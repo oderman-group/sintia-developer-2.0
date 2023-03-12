@@ -102,7 +102,7 @@ INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
 INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 //$numero_periodos=$config["conf_periodos_maximos"];
-$numero_periodos=$config["conf_periodo"];
+$numero_periodos=$periodoActual;
  ?>
 
 <div align="center" style="margin-bottom:20px;">

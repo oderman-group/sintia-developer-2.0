@@ -72,7 +72,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_7':
                 $tipo = 'danger';
-                $mensaje = $_GET['msj'];;
+                $mensaje = $_GET['msj'];
             break;
 
             case 'ER_DT_8':
@@ -112,23 +112,26 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
 
             case 'SC_DT_4':
-                if($_GET["numNoImportadosXusuarios"]>0){
-                    $numNoImportadosXusuarios= '<br>- '.$_GET["numNoImportadosXusuarios"].' estudiantes no se importaron, Sus documentos ya se encuentran registrados.';
-                }
-                if($_GET["numNoImportados"]>0){
-                    $numNoImportados= '<br>- No se importaron '.$_GET["numNoImportados"].' estudiantes por falta de información requerida.';
-                }
-                if($_GET["numActualizados"]>0){
-                    $numActualizados= '<br>- Se Actualizaron '.$_GET["numActualizados"].' estudiantes.';
-                }
-                $tipo = 'success';
-                $mensaje = 'Excel importado correctamente.<br/>
-                            - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoImportadosXusuarios.$numNoImportados.$numActualizados;
+                $tipo = 'primary';
+                $mensaje = $_GET["summary"];
             break;
 
             case 'SC_DT_5':
                 $tipo = 'success';
                 $mensaje = 'Una nueva contraseña fue generada y enviada a tu correo electrónico: <b>' . $_GET["email"] . '</b>';
+            break;
+
+            case 'SC_DT_6':
+                $tipo = 'success';
+                $mensaje = '
+                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.<br>
+                No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                ';
+            break;
+
+            case 'SC_DT_8':
+                $tipo = 'success';
+                $mensaje = 'La contraseña se genero correctamente para los usuarios escogidos.</b>';
             break;
 
 
