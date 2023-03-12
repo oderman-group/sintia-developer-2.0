@@ -72,7 +72,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_7':
                 $tipo = 'danger';
-                $mensaje = $_GET['msj'];;
+                $mensaje = $_GET['msj'];
             break;
 
             case 'ER_DT_8':
@@ -117,18 +117,8 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
 
             case 'SC_DT_4':
-                if($_GET["numNoImportadosXusuarios"]>0){
-                    $numNoImportadosXusuarios= '<br>- '.$_GET["numNoImportadosXusuarios"].' estudiantes no se importaron, Sus documentos ya se encuentran registrados.';
-                }
-                if($_GET["numNoImportados"]>0){
-                    $numNoImportados= '<br>- No se importaron '.$_GET["numNoImportados"].' estudiantes por falta de información requerida.';
-                }
-                if($_GET["numActualizados"]>0){
-                    $numActualizados= '<br>- Se Actualizaron '.$_GET["numActualizados"].' estudiantes.';
-                }
-                $tipo = 'success';
-                $mensaje = 'Excel importado correctamente.<br/>
-                            - Se importaron '.$_GET["numImportados"].' estudiantes correctamente.'.$numNoImportadosXusuarios.$numNoImportados.$numActualizados;
+                $tipo = 'primary';
+                $mensaje = $_GET["summary"];
             break;
 
             case 'SC_DT_5':
@@ -147,6 +137,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_7':
                 $tipo = 'success';
                 $mensaje = 'Se promovieron <b>'.$_GET["numEstudiantesPromocionados"].'</b> estudiantes correctamente para el curso: <b>' . $_GET["curso"] . '</b>';
+            break;
+
+            case 'SC_DT_8':
+                $tipo = 'success';
+                $mensaje = 'La contraseña se genero correctamente para los usuarios escogidos.</b>';
             break;
 
 

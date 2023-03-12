@@ -23,6 +23,7 @@ if (isset($_GET['enviar'])) {
         <a class="dropdown-item" href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
         <a class="dropdown-item" href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
         <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
+        <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
         
         </div>
       </li>
