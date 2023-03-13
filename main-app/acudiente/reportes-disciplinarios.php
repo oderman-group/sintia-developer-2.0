@@ -30,7 +30,7 @@
                         <div class="col-md-12">
                             <div class="row">
 									
-								<div class="col-md-9">
+								<div class="col-md-12">
 									
 									<?php if($_GET["req"]==1){?>
 										<div class="card card-topline-red">
@@ -78,6 +78,7 @@
 														<th><?=$frases[222][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[186][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Observaciones</th>
 														<th title="Firma y aprobación del estudiante">F.E</th>
 														<th title="Firma y aprobación del acudiente">F.A</th>
@@ -104,6 +105,7 @@
 														<td><?=$resultado['dcat_nombre'];?></td>
 														<td><?=$resultado['dfal_codigo'];?></td>
 														<td><?=$resultado['dfal_nombre'];?></td>
+														<td><?=$resultado['uss_nombre'];?></td>
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
@@ -130,10 +132,6 @@
                                         </div>
                                     </div>
                                 </div>
-								
-								<div class="col-md-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
 							
                             </div>
