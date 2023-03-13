@@ -71,7 +71,7 @@ if($extension == 'xlsx'){
 						$idAcudiente = $datosAcudienteExistente['uss_id'];
 						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 					} else {
-						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."')");
+						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
 						$idAcudiente = mysqli_insert_id($conexion);
 						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 					}
