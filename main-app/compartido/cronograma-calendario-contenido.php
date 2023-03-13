@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="row">
-                    	<div class="col-md-9 col-sm-12">
+                    	<div class="col-md-12">
 							
 							
                              <div class="card-box">
@@ -33,11 +33,6 @@
                                     </div>
                                  </div>
                              </div>
-                         </div>
-                         <div class="col-md-3 col-sm-12">
-							 
-							 <?php include("../compartido/publicidad-lateral.php");?>
-							 
                          </div>
                     </div>
                 </div>

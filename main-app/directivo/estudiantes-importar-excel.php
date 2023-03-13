@@ -79,20 +79,28 @@
 										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Subir la planilla lista</label>
-                                            <div class="col-sm-9">
-                                                <input type="file" name="planilla" required><br>
-                                                <span style="font-size: 12px; color:red;"></span>
+                                            <div class="col-sm-6">
+                                                <input type="file" class="form-control" name="planilla" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
+                                            <div class="col-sm-4">
+                                                <input type="number" class="form-control" name="filaFinal" value="200" required><br>
+                                                <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Campos a actualizar</label>
                                             <div class="col-sm-9">
-                                                <select id="multiple" class="form-control  select2-multiple" name="actualizarCampo[]" multiple>
+                                                <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">Grado</option>
                                                     <option value="2">Grupo</option>
                                                     <option value="3">Tipo de Documento</option>
+                                                    <option value="4">Acudiente</option>
                                                 </select>
                                             </div>
                                         </div>

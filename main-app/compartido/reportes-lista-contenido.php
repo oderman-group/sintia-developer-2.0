@@ -85,9 +85,9 @@
 													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta
 													 INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
 													 INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
-													 INNER JOIN academico_grados ON gra_id=mat_grado
-													 INNER JOIN academico_grupos ON gru_id=mat_grupo
-													 INNER JOIN usuarios ON uss_id=dr_usuario
+													 LEFT JOIN academico_grados ON gra_id=mat_grado
+													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
+													 LEFT JOIN usuarios ON uss_id=dr_usuario
 													 WHERE dr_id=dr_id
 													 $filtro
 													 ");

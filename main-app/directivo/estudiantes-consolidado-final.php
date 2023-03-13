@@ -41,21 +41,11 @@
                             </ol>
                         </div>
                     </div>
-                    <div class="row">
-						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
-
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple">Datos</header>
                                 	<div class="panel-body">
-
-                                   
+                 
 									<form name="formularioGuardar" action="estudiantes-consolidado-final-detalles.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="37">
 										

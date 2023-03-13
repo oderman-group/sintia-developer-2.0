@@ -28,7 +28,10 @@ try {
 	conf_alto_imagen='" . $_POST["logoAlto"] . "', 
 	conf_mostrar_nombre='" . $_POST["mostrarNombre"] . "',
 	conf_calificaciones_acudientes='" . $_POST["caliAcudientes"] . "',
-	conf_mostrar_calificaciones_estudiantes='" . $_POST["caliEstudiantes"] . "'
+	conf_mostrar_calificaciones_estudiantes='" . $_POST["caliEstudiantes"] . "',
+	conf_orden_nombre_estudiantes='" . $_POST["ordenEstudiantes"] . "',
+	conf_editar_definitivas_nivelaciones='" . $_POST["permisoConsolidado"] . "',
+	conf_informe_parcial='" . $_POST["informeParcial"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
 	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
