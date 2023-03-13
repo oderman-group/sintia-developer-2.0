@@ -11,5 +11,5 @@
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
-	echo '<script type="text/javascript">window.location.href="academico-categoria-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';
 	exit();
