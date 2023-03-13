@@ -100,6 +100,9 @@ $(document).ready(function() {
 	 }
     });
 
+    /*
+    Comentado temporalmente mientras se coloca configurable
+
     $("#email").on("blur", function() {
         var email = $("#email").val();
         var dataString = 'email=' + email;
@@ -126,6 +129,7 @@ $(document).ready(function() {
             }
         });
     });
+    */
 });
 </script>
 </head>

@@ -124,9 +124,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_6':
                 $tipo = 'success';
                 $mensaje = '
-                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.<br>
-                No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.
                 ';
+                if($_GET["noCreadas"] > 0) {
+                    $mensaje .= '
+                    <br>No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                    ';
+                }
             break;
 
             case 'SC_DT_8':

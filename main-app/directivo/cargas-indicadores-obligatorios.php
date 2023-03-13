@@ -43,10 +43,6 @@
                                 $indGenerados = mysqli_num_rows($consultaIndGenerados);
                                 ?>
 								<div class="col-md-12">
-                                    <div class="alert alert-block alert-warning">
-                                        <h4 class="alert-heading">Información importante!</h4>
-                                        <p>Una vez termine de crear los indicadores obligatorios, por favor dirijase a la Configuración del Sistema para colocar el porcentaje que tendrán a disposición los docentes.</p>
-                                    </div>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Indicadores Obligatorios</header>
