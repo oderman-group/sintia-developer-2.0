@@ -196,8 +196,8 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Permiso de actualizar las definitivas en consolidado final?</label>
                                             <div class="col-sm-8">
                                                 <select class="form-control col-sm-2 select2" name="permisoConsolidado">
-                                                    <option value="1" <?php if($cfg['conf_editar_definitivas_nivelaciones']==1){ echo "selected";} ?>>SI</option>
-                                                    <option value="0" <?php if($cfg['conf_editar_definitivas_nivelaciones']==0){ echo "selected";} ?>>NO</option>
+                                                    <option value="1" <?php if($cfg['conf_editar_definitivas_consolidado']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_editar_definitivas_consolidado']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
                                                 <span style="color:#6017dc;">Esta acción permite o no actualizar las definitivas, en el consolidado final, en cualquier momento.</span>
                                             </div>
