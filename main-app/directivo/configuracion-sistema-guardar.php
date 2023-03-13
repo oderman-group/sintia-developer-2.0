@@ -30,6 +30,7 @@ try {
 	conf_calificaciones_acudientes='" . $_POST["caliAcudientes"] . "',
 	conf_mostrar_calificaciones_estudiantes='" . $_POST["caliEstudiantes"] . "',
 	conf_orden_nombre_estudiantes='" . $_POST["ordenEstudiantes"] . "',
+	conf_editar_definitivas_nivelaciones='" . $_POST["permisoConsolidado"] . "',
 	conf_informe_parcial='" . $_POST["informeParcial"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 

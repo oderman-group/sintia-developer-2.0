@@ -13,7 +13,7 @@
 								if($saldo>0){$mensajeSaldo='Tienes saldo a favor.';}
 								if($saldo<0){$mensajeSaldo='Tienes un saldo pendiente por pagar. Trata de ponerte al día lo antes posible.';}
 								?>
-								<div class="col-md-4 col-lg-3">
+								<div class="col-md-3">
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple">Resumen </header>
@@ -44,7 +44,7 @@
 
 								</div>
 									
-								<div class="col-md-4 col-lg-6">
+								<div class="col-md-9">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[104][$datosUsuarioActual['uss_idioma']];?></header>
@@ -93,10 +93,6 @@
                                         </div>
                                     </div>
                                 </div>
-								
-								<div class="col-md-4 col-lg-3">
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
 							
                             </div>
