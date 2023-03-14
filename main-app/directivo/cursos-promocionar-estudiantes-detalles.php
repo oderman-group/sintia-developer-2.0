@@ -25,6 +25,20 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('all').addEventListener('change', function(e) {
+                document.querySelectorAll('#formularioPromocionar #check').forEach(function(checkElement) {
+                    if(document.getElementById('all').checked){
+                        checkElement.checked = true;
+                    }else{
+                        checkElement.checked = false;
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -66,13 +80,15 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form name="formularioGuardar" action="cursos-promocionar-estudiantes.php" method="post">
+                                    <form name="formularioGuardar" id="formularioPromocionar" action="cursos-promocionar-estudiantes.php" method="post">
                                         <input type="hidden" name="curso" value="<?=$_GET["curso"];?>">
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>SELECCIONAR</th>
+                                                        <th style="text-align: center; padding: 10px;">
+                                                        <input type="checkbox" checked="checked" id="all">
+                                                        </th>
                                                         <th>DOCUMENTO</th>
                                                         <th>NOMBRES Y APELLIDOS</th>
                                                         <th>GRUPO</th>
@@ -86,7 +102,9 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                             $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
                                                     ?>
                                                     <tr>
-                                                        <td><input type="checkbox" checked="checked" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>"></td>
+                                                        <td style="text-align: center; padding: 10px;">
+                                                            <input type="checkbox" checked="checked" id="check" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>">
+                                                        </td>
                                                         <td><?=$datosEstudiante['mat_documento'];?></td>
                                                         <td><?=$nombre;?></td>
                                                         <td>
