@@ -6,7 +6,7 @@
 	$consultaGrado=Grados::obtenerDatosGrados($_POST["curso"]);
 	$grado = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
 	if ($grado['gra_grado_siguiente']=="") {
-		echo '<script type="text/javascript">window.location.href="cursos-promocionar-estudiantes-filtros.php?curso='.$_POST["curso"].'&error=ER_DT_10";</script>';
+		echo '<script type="text/javascript">window.location.href="cursos-promocionar-estudiantes-detalles.php?curso='.$_POST["curso"].'&error=ER_DT_10";</script>';
 		exit();
 	}
 
