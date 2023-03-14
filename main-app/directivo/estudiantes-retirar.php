@@ -69,6 +69,7 @@
 
                                     <form action="estudiantes-retirar-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=$e[0];?>" name="estudiante">
+                                        <input type="hidden" value="<?=$e['mat_estado_matricula'];?>" name="estadoMatricula">
 										
 											
                                         <div class="form-group row">
