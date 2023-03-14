@@ -1,7 +1,7 @@
 <?php
-include("geoiploc.php");
+//include("geoiploc.php");
 $ip=$_SERVER["REMOTE_ADDR"];
-$paisIP=getCountryFromIP($ip);
+//$paisIP=getCountryFromIP($ip);
 $tiempo_final = microtime(true);
 $tiempo = $tiempo_final - $tiempo_inicial;
 $tiempoMostrar = round($tiempo,3);
@@ -23,7 +23,6 @@ try {
         hil_usuario, 
         hil_url, 
         hil_titulo, 
-        hil_pais, 
         hil_ip, 
         hil_so, 
         hil_institucion, 
@@ -34,7 +33,6 @@ try {
         '".$_SESSION['id']."', 
         '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'].":".__FILE__.":".__LINE__."', 
         '".$idPaginaInterna."', 
-        '".$paisIP."', 
         '".$ip."', 
         '".$_SERVER['HTTP_USER_AGENT']."', 
         '".$config['conf_id_institucion']."', 

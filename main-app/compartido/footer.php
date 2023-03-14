@@ -1,4 +1,5 @@
 <?php
+/*
 $numOP = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 WHERE pubxub_ubicacion=2 AND pubxub_id_institucion='".$config['conf_id_institucion']."' AND pubxub_id_pagina='".$idPaginaInterna."'
@@ -28,7 +29,8 @@ LIMIT ".$empezar.",1
 			<p>&nbsp;</p>
 		<?php }?>
 	</div>
-<?php }?>
+<?php }*/?>
+
 <?php include("../compartido/guardar-historial-acciones.php");?>
 
 <!-- start footer -->
