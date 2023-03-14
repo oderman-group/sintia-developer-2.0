@@ -932,6 +932,8 @@ if ($_GET["get"] == 1) {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_idioma='" . $_GET["idioma"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+	
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
@@ -940,6 +942,8 @@ if ($_GET["get"] == 2) {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
@@ -948,6 +952,9 @@ if ($_GET["get"] == 3) {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_tema_sidebar='" . $_GET["temaSidebar"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+	
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
@@ -956,6 +963,8 @@ if ($_GET["get"] == 4) {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
@@ -964,6 +973,8 @@ if ($_GET["get"] == 5) {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "', uss_tema_sidebar='" . $_GET["temaSidebar"] . "', uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();
 }
