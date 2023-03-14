@@ -45,7 +45,9 @@
                                         $consultaE=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
 										$e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
                     
-                                        $consultaMotivo=mysqli_query($conexion, "SELECT * FROM academico_matriculas_retiradas WHERE matret_estudiante='".$_GET["id"]."'ORDER BY matret_id DESC LIMIT 1");
+                                        $consultaMotivo=mysqli_query($conexion, "SELECT * FROM academico_matriculas_retiradas WHERE matret_estudiante='".$_GET["id"]."'
+                                        ORDER BY matret_id DESC 
+                                        LIMIT 1");
 										$motivo = mysqli_fetch_array($consultaMotivo, MYSQLI_BOTH);
                                
                                         $motivoEstudiante=$motivo['matret_motivo'];
