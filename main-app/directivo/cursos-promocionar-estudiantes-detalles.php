@@ -86,7 +86,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                             $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
                                                     ?>
                                                     <tr>
-                                                        <td><input type="checkbox" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>"></td>
+                                                        <td><input type="checkbox" checked="checked" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>"></td>
                                                         <td><?=$datosEstudiante['mat_documento'];?></td>
                                                         <td><?=$nombre;?></td>
                                                         <td>
