@@ -246,14 +246,24 @@ class Estudiantes {
         return $nombre;
     }
 
-    public static function ActualizarEstadoMatricula()
+    public static function ActualizarEstadoMatricula($idEstudiante, $estadoMatricula)
     {
         global $conexion;
 
         try {
-            mysqli_query($conexion, "INSERT INTO academico_matriculas_retiradas (matret_estudiante, matret_fecha, matret_motivo, matret_responsable)VALUES('".$_POST["estudiante"]."', now(), '".$_POST["motivo"]."', '".$_SESSION["id"]."')");
+            mysqli_query($conexion, "UPDATE academico_matriculas SET mat_estado_matricula='".$estadoMatricula."' WHERE mat_id='".$idEstudiante."'");
+        } catch (Exception $e) {
+            echo "Excepción capturada: ".$e->getMessage();
+            exit();
+        }
+    }
 
-            mysqli_query($conexion, "UPDATE academico_matriculas SET mat_estado_matricula=3 WHERE mat_id='".$_POST["estudiante"]."'");
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo)
+    {
+        global $conexion;
+
+        try {
+            mysqli_query($conexion, "INSERT INTO academico_matriculas_retiradas (matret_estudiante, matret_fecha, matret_motivo, matret_responsable)VALUES('".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."')");
         } catch (Exception $e) {
             echo "Excepción capturada: ".$e->getMessage();
             exit();
