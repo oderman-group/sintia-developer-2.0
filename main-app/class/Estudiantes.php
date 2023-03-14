@@ -246,4 +246,18 @@ class Estudiantes {
         return $nombre;
     }
 
+    public static function ActualizarEstadoMatricula()
+    {
+        global $conexion;
+
+        try {
+            mysqli_query($conexion, "INSERT INTO academico_matriculas_retiradas (matret_estudiante, matret_fecha, matret_motivo, matret_responsable)VALUES('".$_POST["estudiante"]."', now(), '".$_POST["motivo"]."', '".$_SESSION["id"]."')");
+
+            mysqli_query($conexion, "UPDATE academico_matriculas SET mat_estado_matricula=3 WHERE mat_id='".$_POST["estudiante"]."'");
+        } catch (Exception $e) {
+            echo "Excepción capturada: ".$e->getMessage();
+            exit();
+        }
+    }
+
 }
