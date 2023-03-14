@@ -100,7 +100,7 @@ $institucionNombre = $institucion['ins_siglas'];
  						<li class="dropdown dropdown-user" data-step="6" data-intro="<b>Cuenta personal:</b> Aquí puedes acceder a tu perfil a cambiar tus datos personales, y en la opción salir podrás cerrar tu sesión con seguirdad cuando hayas terminado de trabajar con la plataforma." data-position='bottom' data-scrollTo='tooltip'>
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <img alt="" class="img-circle " src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>"/>
-                                <span class="username username-hide-on-mobile"> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual['uss_id']);?> </span>
+                                <span class="username username-hide-on-mobile"> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?> </span>
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
