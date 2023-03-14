@@ -46,8 +46,19 @@
 										$e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
                                 ?>
 
+                                <?php                                          
+                                        if ($e['mat_estado_matricula']==3){
+                                            $retirarRestaurar='Restaurar Matrícula';
+                                            $readonly="readonly";
+                                            $cambiarNombre='Restaurar Estudiante';
+                                    } elseif ($e['mat_estado_matricula']==1){
+                                            $retirarRestaurar='Retirar y cancelar matrícula';
+                                            $readonly="";
+                                            $cambiarNombre='Retirar Estudiante';
+                                    }
+                                ?>
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple">Retirar estudiante</header>
+									<header class="panel-heading panel-heading-purple"><?=$cambiarNombre?></header>
                                 	<div class="panel-body">
 
                                     <form action="estudiantes-retirar-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -68,8 +79,7 @@
                                                 <textarea cols="80" id="editor1" name="motivo" rows="10"></textarea>
 											</div>
 										</div>
-
-                                        <input type="submit" class="btn btn-success" value="Retirar y cancelar matrícula" name="consultas">
+                                        <input type="submit" class="btn btn-success" value="<?=$retirarRestaurar?>" name="consultas">
                                     </form>
                                 </div>
                             </div>
