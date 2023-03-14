@@ -26,42 +26,10 @@
                         </div>
                     </div>
 
-					<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav mr-auto">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-								    Menú movimiento financiero
-									<span class="fa fa-angle-down"></span>
-								</a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="movimientos-importar.php">Importar saldos</a>
-								</div>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-								    Resúmen
-									<span class="fa fa-angle-down"></span>
-								</a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-									<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$_GET["usuario"];?>&tipo=1">Ingresos</a>
-									<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$_GET["usuario"];?>&tipo=2">Egresos</a>
-									<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Ver todos</a>
-          
-								</div>
-							</li>
-						</ul> 
-					</div>
-				</nav>
-					
-                    
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="row">
-								
+
+						<?php include("includes/barra-superior-movimientos-financieros.php");?>
 								
 									<?php
 										$filtro = '';
@@ -83,74 +51,9 @@
 										}
 										if(empty($estadisticasCuentas[0])){ $estadisticasCuentas[0]=0; }
 										?>
-									
-									
-									<!--<div class="panel">
-										<header class="panel-heading panel-heading-purple">Resúmen </header>
-										<div class="panel-body">
 
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<//?=$_SERVER['PHP_SELF'];?>?usuario=<//?=$_GET["usuario"];?>&tipo=1" <//?=$estiloResaltado;?>>Ingresos: <b>$<//?=number_format($estadisticasCuentas[0],0,",",".");?></b></a></div>
-																	<div class="percent pull-right" title="de los cobros realizados"><//?=$porcentajeIngreso;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <//?=$porcentajeIngreso;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-											<//?php if($estadisticasCuentas[1]>0){?>
-											<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<//?=$_SERVER['PHP_SELF'];?>?usuario=<//?=$_GET["usuario"];?>&tipo=2" <//?=$estiloResaltado;?>>Egreso: <b>$<//?=number_format($estadisticasCuentas[1],0,",",".");?></b></a></div>
-																	<div class="percent pull-right" title="de los pagos pendientes"><//?=$porcentajeEgreso;?>%</div>
-																</div>
-
-																<div class="progress progress-xs">
-																	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <//?=$porcentajeEgreso;?>%">
-																		<span class="sr-only">90% </span>
-																	</div>
-																</div>
-															</div>
-														</div>
-												<//?php }?>		
-
-												<//?php if($estadisticasCuentas[2]>0){?>
-													<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<//?=$_SERVER['PHP_SELF'];?>?usuario=<//?=$_GET["usuario"];?>&tipo=3" <//?=$estiloResaltado;?>>Cuentas por cobrar: <b>$<//?=number_format($estadisticasCuentas[2],0,",",".");?></b></a></div>
-																</div>
-															</div>
-														</div>
-											<//?php }?>
-											
-											<//?php if($estadisticasCuentas[3]>0){?>
-											<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<//?=$_SERVER['PHP_SELF'];?>?usuario=<//?=$_GET["usuario"];?>&tipo=4" <//?=$estiloResaltado;?>>Cuentas por pagar: <b>$<//?=number_format($estadisticasCuentas[3],0,",",".");?></b></a></div>
-																</div>
-															</div>
-														</div>
-											<//?php }?>			
-
-											<p align="center"><a href="<//?=$_SERVER['PHP_SELF'];?>">VER TODOS</a></p>
-										</div>
-                                    </div>-->
-									
-									
-									
 									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
-								<div class="col-md12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></header>
@@ -244,10 +147,7 @@
                                         </div>
                                     </div>
                                 </div>
-								
-								
-								
-							
+
                             </div>
                         </div>
                     </div>
