@@ -44,6 +44,12 @@
                                 <?php
                                         $consultaE=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
 										$e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
+                    
+                                        $consultaMotivo=mysqli_query($conexion, "SELECT * FROM academico_matriculas_retiradas WHERE matret_estudiante='".$_GET["id"]."'ORDER BY matret_id DESC LIMIT 1");
+										$motivo = mysqli_fetch_array($consultaMotivo, MYSQLI_BOTH);
+                               
+                                        $motivoEstudiante=$motivo['matret_motivo'];
+                                        
                                 ?>
 
                                 <?php                                          
@@ -76,7 +82,7 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Motivo de retiro</label>
 											<div class="col-sm-10">
-                                                <textarea cols="80" id="editor1" name="motivo" rows="10"></textarea>
+                                                <textarea cols="80" id="editor1" name="motivo" rows="10" <?php echo $readonly; ?> ><?=$motivoEstudiante?></textarea>
 											</div>
 										</div>
                                         <input type="submit" class="btn btn-success" value="<?=$retirarRestaurar?>" name="consultas">
