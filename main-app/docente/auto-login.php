@@ -1,14 +1,14 @@
 <?php
 include("session.php");
+include("../class/UsuariosPadre.php");
+
 $idPaginaInterna = 'DC0065';
 
 $_SESSION['docente'] = $_SESSION['id'];
 
 $_SESSION['id'] = $_GET['user'];
 
-$consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_SESSION['id']."'");
-$datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
-$_SESSION["datosUsuario"] = $datosUsuarioAuto;
+$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 include("../compartido/guardar-historial-acciones.php");
 

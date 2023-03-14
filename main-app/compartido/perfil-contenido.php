@@ -1,9 +1,14 @@
-						<div class="col-sm-3">
+						<?php
+                        $usuarioPerfilConsulta = mysqli_query($conexion, "SELECT * FROM usuarios 
+                        WHERE uss_id='".$_SESSION["id"]."'");
+                        $usuarioPerfil = mysqli_fetch_array($usuarioPerfilConsulta, MYSQLI_BOTH);
+                        ?>
+                        <div class="col-sm-3">
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue"><?=$frases[219][$datosUsuarioActual[8]];?></header>
 								<div class="panel-body">
 									<div class="item">
-	                                    <img src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>" />
+	                                    <img src="../files/fotos/<?=$usuarioPerfil['uss_foto'];?>" />
 	                                </div>
 									<h4>Especificaciones</h4>
 									<p><b>1.</b> La foto deber ser cuadrada en cualquier tamaño <mark>(Ejemplo: 600 x 600)</mark> y en cualquier formato (PNG, JPG, JPEG); de lo contrario (o sea, si la foto no es cuadrada) la foto debe estar en formato: <mark>(JPG ó  JPEG)</mark> para poder recortarla.</p>
@@ -16,7 +21,7 @@
 								<header class="panel-heading panel-heading-blue">Firma digital</header>
 								<div class="panel-body">
 									<div class="item">
-	                                    <img src="../files/fotos/<?=$datosUsuarioActual['uss_firma'];?>" />
+	                                    <img src="../files/fotos/<?=$usuarioPerfil['uss_firma'];?>" />
 	                                </div>
 								</div>
 							</div>
@@ -35,19 +40,19 @@
                                 <div class="card-body " id="bar-parent6">
                                     <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="id" value="6">
-										<input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
+										<input type="hidden" name="tipoUsuario" value="<?=$usuarioPerfil['uss_tipo'];?>">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[49][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_id"];?>" name="usuarioID" class="form-control" disabled>
+                                                <input type="text" value="<?=$usuarioPerfil["uss_id"];?>" name="usuarioID" class="form-control" disabled>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[186][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_usuario"];?>" name="usuario" class="form-control" disabled>
+                                                <input type="text" value="<?=$usuarioPerfil["uss_usuario"];?>" name="usuario" class="form-control" disabled>
                                             </div>
                                         </div>
 										
@@ -68,56 +73,56 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[152][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="password" value="<?=$datosUsuarioActual["uss_clave"];?>" name="clave" class="form-control" required>
+                                                <input type="password" value="<?=$usuarioPerfil["uss_clave"];?>" name="clave" class="form-control" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_nombre"];?>" name="nombre" class="form-control" <?php if($datosUsuarioActual['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_nombre"];?>" name="nombre" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Otro Nombre</label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_nombre2"];?>" name="nombre2" class="form-control" style="text-transform: uppercase;">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_nombre2"];?>" name="nombre2" class="form-control" style="text-transform: uppercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Primer Apellido</label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_apellido1"];?>" name="apellido1" class="form-control" <?php if($datosUsuarioActual['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_apellido1"];?>" name="apellido1" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Segundo Apellido</label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_apellido2"];?>" name="apellido2" class="form-control" style="text-transform: uppercase;">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_apellido2"];?>" name="apellido2" class="form-control" style="text-transform: uppercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[181][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <input type="email" value="<?=$datosUsuarioActual["uss_email"];?>" name="email" class="form-control" style="text-transform: lowercase;">
+                                                <input type="email" value="<?=$usuarioPerfil["uss_email"];?>" name="email" class="form-control" style="text-transform: lowercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[188][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_celular"];?>" name="celular" data-mask="(999) 999-9999" class="form-control">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_celular"];?>" name="celular" data-mask="(999) 999-9999" class="form-control">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[182][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_telefono"];?>" name="telefono" class="form-control">
+                                                <input type="text" value="<?=$usuarioPerfil["uss_telefono"];?>" name="telefono" class="form-control">
                                             </div>
                                         </div>
 										
@@ -130,7 +135,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_genero"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_genero"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -140,18 +145,18 @@
                                             <label class="col-sm-2 control-label"><?=$frases[189][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
                                                 <div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-                                                <input class="form-control" size="16" type="text" value="<?=$datosUsuarioActual["uss_fecha_nacimiento"];?>">
+                                                <input class="form-control" size="16" type="text" value="<?=$usuarioPerfil["uss_fecha_nacimiento"];?>">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                                             	</div>
                                             </div>
-											<input type="hidden" id="dtp_input1" value="<?=$datosUsuarioActual["uss_fecha_nacimiento"];?>" name="fechaN" required>
+											<input type="hidden" id="dtp_input1" value="<?=$usuarioPerfil["uss_fecha_nacimiento"];?>" name="fechaN" required>
                                         </div>
 										
 										<div class="form-group row">
                                                 <label class="col-sm-2 control-label">Mostrar edad</label>
 												<div class="input-group spinner col-sm-10">
 											<label class="switchToggle">
-                                                <input type="checkbox" name="mostrarEdad" value="1" <?php if($datosUsuarioActual["uss_mostrar_edad"]==1){echo "checked";}?>>
+                                                <input type="checkbox" name="mostrarEdad" value="1" <?php if($usuarioPerfil["uss_mostrar_edad"]==1){echo "checked";}?>>
                                                 <span class="slider aqua round"></span>
                                             </label>
 												</div>
@@ -168,13 +173,13 @@
 													");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosUsuarioActual["uss_lugar_nacimiento"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$usuarioPerfil["uss_lugar_nacimiento"]){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
                                         </div>
 										
-										<?php if($datosUsuarioActual["uss_tipo"]!=4){?>
+										<?php if($usuarioPerfil["uss_tipo"]!=4){?>
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[191][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
@@ -184,7 +189,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=7");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_nivel_academico"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_nivel_academico"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -200,7 +205,7 @@
 													");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_profesion"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_profesion"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -226,7 +231,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=9");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estado_laboral"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estado_laboral"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -245,7 +250,7 @@
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=10");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_tipo_negocio"]){echo "selected";}?>><?=$opg[1];?></option>
+															<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_tipo_negocio"]){echo "selected";}?>><?=$opg[1];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -254,7 +259,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Sitio web</label>
 												<div class="col-sm-10">
-													<input type="text" value="<?=$datosUsuarioActual["uss_sitio_web_negocio"];?>" name="web" class="form-control" placeholder="https://www.tunegocio.com">
+													<input type="text" value="<?=$usuarioPerfil["uss_sitio_web_negocio"];?>" name="web" class="form-control" placeholder="https://www.tunegocio.com">
 												</div>
 											</div>
 											
@@ -270,7 +275,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_religion"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_religion"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -285,7 +290,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=8");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estado_civil"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estado_civil"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -294,7 +299,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Direccion</label>
                                             <div class="col-sm-8">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_direccion"];?>" name="direccion" class="form-control" required>
+                                                <input type="text" value="<?=$usuarioPerfil["uss_direccion"];?>" name="direccion" class="form-control" required>
                                             </div>
                                         </div>
 										
@@ -307,7 +312,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_estrato"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estrato"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -322,7 +327,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=12");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_tipo_vivienda"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_tipo_vivienda"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -337,7 +342,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=13");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$datosUsuarioActual["uss_medio_transporte"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_medio_transporte"]){echo "selected";}?>><?=$opg[1];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -348,8 +353,8 @@
 										
 										
 										<?php
-										$numHijos = $datosUsuarioActual["uss_numero_hijos"];
-										if($datosUsuarioActual["uss_numero_hijos"]=="") $numHijos = '0';
+										$numHijos = $usuarioPerfil["uss_numero_hijos"];
+										if($usuarioPerfil["uss_numero_hijos"]=="") $numHijos = '0';
 										?>
 										
                                                 <div class="form-group row">
@@ -374,7 +379,7 @@
                                                 <label class="col-sm-2 control-label">Recibir <?=$frases[218][$datosUsuarioActual[8]];?></label>
 												<div class="input-group spinner col-sm-10">
 											<label class="switchToggle">
-                                                <input type="checkbox" name="notificaciones" value="1" <?php if($datosUsuarioActual["uss_notificacion"]==1){echo "checked";}?>>
+                                                <input type="checkbox" name="notificaciones" value="1" <?php if($usuarioPerfil["uss_notificacion"]==1){echo "checked";}?>>
                                                 <span class="slider red round"></span>
                                             </label>
 												</div>
@@ -383,7 +388,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Última actualización</label>
                                             <div class="col-sm-4">
-                                                <input type="text" value="<?=$datosUsuarioActual["uss_ultima_actualizacion"];?>" class="form-control" disabled>
+                                                <input type="text" value="<?=$usuarioPerfil["uss_ultima_actualizacion"];?>" class="form-control" disabled>
                                             </div>
                                         </div>
 

@@ -5,9 +5,8 @@ $_SESSION['admin'] = '';
 unset( $_SESSION["admin"] );
 
 include("../../config-general/config.php");
+include("../class/UsuariosPadre.php");
 
-$consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_SESSION['id']."'");
-$datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
-$_SESSION["datosUsuario"] = $datosUsuarioAuto;
+$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 header("Location:../directivo/usuarios.php?tipo=".$_GET['tipo']);

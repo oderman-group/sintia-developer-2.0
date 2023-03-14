@@ -14,6 +14,8 @@ include("../compartido/sintia-funciones.php");
 $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
+include("../class/UsuariosPadre.php");
+
 
 //include("../modelo/conexion.php");
 //GUARDAR NOTICIA RÁPIDA
@@ -366,7 +368,9 @@ if ($_POST["id"] == 6) {
 
 	$destinos = validarUsuarioActual($datosUsuarioActual);
 
-	echo '<script type="text/javascript">window.location.href="' .$destinos. 'index.php";</script>';
+	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
+	echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil.php";</script>';
 	exit();
 }
 //ENVIAR MENSAJE
