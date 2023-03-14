@@ -1,4 +1,4 @@
-<?php if(isset($publicidadPopUp['pubxub_id']) AND $publicidadPopUp['pubxub_id']!="" and $numMostrarPopUp<$publicidadPopUp['pubxub_muestras_popup']){
+<?php /*if(isset($publicidadPopUp['pubxub_id']) AND $publicidadPopUp['pubxub_id']!="" and $numMostrarPopUp<$publicidadPopUp['pubxub_muestras_popup']){
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
 	VALUES('".$publicidadPopUp['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 3, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 	
@@ -33,7 +33,7 @@
 		  </div>
 	   </div>
 	</div>
-<?php }?>
+<?php }*/?>
 
 
 <?php

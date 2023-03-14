@@ -100,7 +100,7 @@
                                                     break;
 
                                                 }
-                                                $nombre = UsuariosPadre::nombreCompletoDelUsuario($resultado['uss_id']);
+                                                $nombre = UsuariosPadre::nombreCompletoDelUsuario($resultado);
                                                 $descripcion=$resultado['uss_usuario']." - ".$usuarioTipo."";
                                                 $nombreRuta="";
                                                 break;

@@ -166,7 +166,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 															<br><pre><?=$resultado['uss_clave'];?></pre>
 														</td>
-														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado['uss_id']);?></td>
+														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td><?=$resultado['pes_nombre'];?></td>
 														<td>
 															<?=$resultado['uss_estado'];?><br>

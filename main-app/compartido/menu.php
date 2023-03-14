@@ -34,7 +34,7 @@
 	                                    <img src="<?=$fotoPerfilUsr;?>" class="img-circle user-img-circle" alt="User Image" />
 	                                </div>
 	                                <div class="pull-left info">
-	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual['uss_id']);?></p>
+	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?></p>
 	                                    <a href="#"><i class="fa fa-circle user-online"></i><span class="txtOnline"> <?=$_SESSION["bd"];?></span></a>
 	                                </div>
 	                            </div>
@@ -91,7 +91,7 @@
 							if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){							
 							
 							//MÓDULO ACADÉMICO
-							if($arregloModulos[1]==1){?>
+							if(array_key_exists(1, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -111,7 +111,7 @@
 							
 							<?php 
 							//MÓDULO FINANCIERO
-							if($arregloModulos[2]==1){?>
+							if(array_key_exists(2, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
 	                                <span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -125,7 +125,7 @@
 							
 							<?php 
 							//MÓDULO DISCIPLINARIO
-							if($arregloModulos[3]==1){?>
+							if(array_key_exists(3, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
 	                                <span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -141,7 +141,7 @@
 							
 							<?php 
 							//MÓDULO ADMINISTRTIVO
-							if($arregloModulos[4]==1){?>
+							if(array_key_exists(4, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-tachometer"></i>
 	                                <span class="title"><?=$frases[87][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -157,7 +157,7 @@
 							
 							<?php 
 							//MÓDULO MERCADEO
-							if(isset($arregloModulos[6]) and $arregloModulos[6]==1){?>
+							if(array_key_exists(6, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
 	                                <span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
