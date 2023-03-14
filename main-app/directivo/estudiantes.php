@@ -20,9 +20,9 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php");?>
+<?php include("../compartido/body.php"); //6 consultas para optmizar: Enuar ?>
     <div class="page-wrapper">
-        <?php include("../compartido/encabezado.php");?>
+        <?php include("../compartido/encabezado.php"); //1 por otimizar, parece estar repetida ?>
 		
         <?php include("../compartido/panel-color.php");?>
         <!-- start page container -->
@@ -35,7 +35,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[209][$datosUsuarioActual['uss_idioma']];?></div>
-								<?php include("../compartido/texto-manual-ayuda.php");?>
+								<?php include("../compartido/texto-manual-ayuda.php"); //1 por otimizar, parece estar repetida ?>
                             </div>
                         </div>
                     </div>
