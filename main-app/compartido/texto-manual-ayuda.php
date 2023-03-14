@@ -28,6 +28,7 @@ $infoIdPagina = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$bas
 
 
 <?php
+/*
 $numOP = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 WHERE pubxub_ubicacion=4 AND pubxub_id_institucion='".$config['conf_id_institucion']."' AND pubxub_id_pagina='".$idPaginaInterna."'
@@ -43,7 +44,7 @@ WHERE pubxub_ubicacion=4 AND pubxub_id_institucion='".$config['conf_id_instituci
 LIMIT ".$empezar.",1
 "), MYSQLI_BOTH);
 ?>
-<?php if(isset($publicidadTop['pubxub_id']) AND $publicidadTop['pubxub_id']!=""){
+<?php /*if(isset($publicidadTop['pubxub_id']) AND $publicidadTop['pubxub_id']!=""){
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
 	VALUES('".$publicidadTop['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 4, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
 	
@@ -58,4 +59,6 @@ LIMIT ".$empezar.",1
 		<?php if($publicidadTop['pub_video']!=""){?>
 		<p><iframe width="450" height="315" src="https://www.youtube.com/embed/<?=$publicidadTop['pub_video'];?>?rel=0&amp;mute=<?=$publicidadTop['pub_mute'];?>&start=<?=$publicidadTop['pub_start'];?>&end=<?=$publicidadTop['pub_end'];?>&autoplay=<?=$publicidadTop['pub_autoplay'];?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen volume="0"></iframe></p><?php }?>
 	</div>
-<?php }?>
+<?php } 
+*/
+?>

@@ -1,4 +1,5 @@
 <?php
+/*
 if(isset($idPaginaInterna)){
 	$numOPConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 	INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
@@ -22,6 +23,7 @@ if(isset($idPaginaInterna)){
 		$numMostrarPopUp = mysqli_num_rows($numMostrarPopUpConsulta);
 	}
 }
+*/
 
 /*
 * Incluir clases que se usarán en varias paginas de todos los usuarios
