@@ -1,12 +1,29 @@
 <?php
 	include("session.php");
-	include("../modelo/conexion.php");
+	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+	require_once(ROOT_PATH."/main-app/class/Grados.php");
 	
-	mysqli_query($conexion, "UPDATE academico_matriculas SET mat_promocionado=0 WHERE mat_grado='" . $_GET["curso"] . "'");
-	$consultaG=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='" . $_GET["curso"] . "'");
-	$g = mysqli_fetch_array($consultaG, MYSQLI_BOTH);
-	if ($g[7] != "") {
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado='" . $g[7] . "', mat_promocionado=1 WHERE mat_grado='" . $g[0] . "' AND mat_promocionado=0 AND mat_eliminado=0");
+	$consultaGrado=Grados::obtenerDatosGrados($_POST["curso"]);
+	$grado = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
+	if ($grado['gra_grado_siguiente']=="") {
+		echo '<script type="text/javascript">window.location.href="cursos-promocionar-estudiantes-detalles.php?curso='.$_POST["curso"].'&error=ER_DT_10";</script>';
+		exit();
 	}
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+
+	$filtro = " AND mat_grado=".$_POST['curso']." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
+	$consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+	$numEstudiantesPromocionados=0;
+	while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
+
+		if(isset($_POST["id".$datosEstudiante['mat_id']])){
+
+			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado=".$grado['gra_grado_siguiente'].", mat_promocionado=1, mat_grupo=".$_POST['grupo'.$datosEstudiante['mat_id']]." WHERE mat_id=".$_POST["id".$datosEstudiante['mat_id']]."");
+			$numEstudiantesPromocionados++;
+		}
+	}
+
+	$consultaGrado=Grados::obtenerDatosGrados($grado['gra_grado_siguiente']);
+	$gradoSiguiente = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
+
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.$grado['gra_nombre'].'&siguiente='.$gradoSiguiente['gra_nombre'].'&numEstudiantesPromocionados='.$numEstudiantesPromocionados.'";</script>';
 	exit();

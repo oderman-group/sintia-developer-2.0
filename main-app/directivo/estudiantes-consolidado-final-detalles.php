@@ -7,10 +7,10 @@ include("../class/Estudiantes.php");
 include("../class/Grupos.php");
 ?>
 <?php
-  $consultaCurso = Grados::capturarInformacionGrados($curso);
+  $consultaCurso = Grados::obtenerDatosGrados($_POST["curso"]);
 	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
   
-  $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
+  $consultaGrupo = Grupos::obtenerDatosGrupos($_POST["grupo"]);
 	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
   ?>
 	<!-- data tables -->
