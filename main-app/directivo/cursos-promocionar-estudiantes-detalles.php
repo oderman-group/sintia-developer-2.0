@@ -98,6 +98,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                     <?php
                                                         $filtro = " AND mat_grado=".$_GET['curso']." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
                                                         $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+                                                        $numeroEstudiantes=mysqli_num_rows($consultaEstudiantes);
                                                         while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
                                                             $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
                                                     ?>
@@ -135,9 +136,13 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+                                        <?php
+                                            if($numeroEstudiantes>0){
+                                        ?>
                                         <input type="submit" class="btn btn-primary" value="Realizar promoción">
-                                        
+                                        <?php
+                                            }
+                                        ?>
                                         <a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
