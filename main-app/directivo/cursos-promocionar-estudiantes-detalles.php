@@ -72,7 +72,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>CHECKBOX</th>
+                                                        <th>SELECCIONAR</th>
                                                         <th>DOCUMENTO</th>
                                                         <th>NOMBRES Y APELLIDOS</th>
                                                         <th>GRUPO</th>
