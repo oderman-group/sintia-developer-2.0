@@ -80,7 +80,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $filtro = " AND mat_grado=".$_GET['curso']." AND mat_promocionado=0 AND mat_estado_matricula=1";
+                                                        $filtro = " AND mat_grado=".$_GET['curso']." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
                                                         $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                                         while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
                                                             $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
