@@ -227,7 +227,13 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																	<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
 																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
 																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
-																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank">Retirar</a></li>
+																	<?php 
+																	$retirarRestaurar='Retirar';
+																	  if($resultado['mat_estado_matricula']==3){
+																		    $retirarRestaurar='Restaurar';
+																	}
+																	?>
+																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank"><?=$retirarRestaurar?></a></li>
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
