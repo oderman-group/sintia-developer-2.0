@@ -14,10 +14,10 @@ if(isset($_REQUEST["agno"])){
 }
 ?>
 <?php
-  $consultaCurso = Grados::capturarInformacionGrados($curso);
+  $consultaCurso = Grados::obtenerDatosGrados($_REQUEST["curso"]);
 	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
   
-  $consultaGrupo = Grupos::capturarInformacionGrupos($grupo);
+  $consultaGrupo = Grupos::obtenerDatosGrupos($_REQUEST["grupo"]);
 	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
   ?>
 <head>
