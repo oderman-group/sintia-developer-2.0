@@ -22,5 +22,8 @@
 		}
 	}
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.$grado['gra_nombre'].'&numEstudiantesPromocionados='.$numEstudiantesPromocionados.'";</script>';
+	$consultaGrado=Grados::obtenerDatosGrados($grado['gra_grado_siguiente']);
+	$gradoSiguiente = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
+
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.$grado['gra_nombre'].'&siguiente='.$gradoSiguiente['gra_nombre'].'&numEstudiantesPromocionados='.$numEstudiantesPromocionados.'";</script>';
 	exit();

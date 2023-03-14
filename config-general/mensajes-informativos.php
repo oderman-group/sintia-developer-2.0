@@ -140,7 +140,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'SC_DT_7':
                 $tipo = 'success';
-                $mensaje = 'Se promovieron <b>'.$_GET["numEstudiantesPromocionados"].'</b> estudiantes correctamente para el curso: <b>' . $_GET["curso"] . '</b>';
+                $mensaje = 'Del curso <b>'.$_GET["curso"].'</b> se promovieron <b>'.$_GET["numEstudiantesPromocionados"].'</b> estudiantes al curso <b>'.$_GET["siguiente"].'</b> correctamente.';
             break;
 
             case 'SC_DT_8':
