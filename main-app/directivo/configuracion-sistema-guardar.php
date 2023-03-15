@@ -34,6 +34,10 @@ try {
 	conf_informe_parcial='" . $_POST["informeParcial"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
+	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
+	$_SESSION["configuracion"] = $config;
+
 	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
 	exit();
 } catch (Exception $e) {
