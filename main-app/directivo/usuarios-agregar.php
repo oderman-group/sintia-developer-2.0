@@ -250,7 +250,7 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                             <input type="text" name="nombre" class="form-control"
-                                                value="<?=$datosUsuario['nombre'];?>" required pattern="[A-Za-z]+">
+                                                value="<?=$datosUsuario['nombre'];?>" required pattern="^[A-Za-zñÑ]+$">
                                         </div>
                                     </div>
 
@@ -264,7 +264,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Primer Apellido</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>">
+                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>" pattern="^[A-Za-zñÑ]+$">
                                         </div>
                                     </div>
 
