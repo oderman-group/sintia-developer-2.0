@@ -1,11 +1,15 @@
 <?php
 include("session.php");
+include("../class/UsuariosPadre.php");
 
 $idPaginaInterna = 'DT0129';
 
 $_SESSION['admin'] = $_SESSION['id'];
 
 $_SESSION['id'] = $_GET['user'];
+
+
+$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 include("../compartido/guardar-historial-acciones.php");
 

@@ -246,4 +246,28 @@ class Estudiantes {
         return $nombre;
     }
 
+    public static function ActualizarEstadoMatricula($idEstudiante, $estadoMatricula)
+    {
+        global $conexion;
+
+        try {
+            mysqli_query($conexion, "UPDATE academico_matriculas SET mat_estado_matricula='".$estadoMatricula."' WHERE mat_id='".$idEstudiante."'");
+        } catch (Exception $e) {
+            echo "Excepción capturada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo)
+    {
+        global $conexion;
+
+        try {
+            mysqli_query($conexion, "INSERT INTO academico_matriculas_retiradas (matret_estudiante, matret_fecha, matret_motivo, matret_responsable)VALUES('".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."')");
+        } catch (Exception $e) {
+            echo "Excepción capturada: ".$e->getMessage();
+            exit();
+        }
+    }
+
 }

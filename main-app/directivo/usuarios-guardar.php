@@ -17,7 +17,7 @@ if($validarClave!=true){
     exit();
 }
 mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_ocupacion, uss_intentos_fallidos, uss_tema_sidebar,
-uss_tema_header, uss_tema_logo,uss_tipo_documento,uss_apellido1,uss_apellido2,uss_nombre2,uss_documento)VALUES(
+uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES(
     '" . $_POST["usuario"] . "',
     '" . $_POST["clave"] . "',
     " . $_POST["tipoUsuario"] . ",

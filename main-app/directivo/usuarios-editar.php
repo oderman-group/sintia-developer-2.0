@@ -134,7 +134,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-4">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="[A-Za-z]+">
+												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
 											<span style="color: tomato;"><?=$leyenda;?></span>
 											</div>
 											
@@ -150,7 +150,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Primer Apellido</label>
 											<div class="col-sm-4">
-												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="[A-Za-z]+">
+												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
 											</div>
 										</div>
 

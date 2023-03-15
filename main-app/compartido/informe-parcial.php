@@ -68,7 +68,7 @@ include("../class/UsuariosPadre.php");
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas[0];?></td>
-                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos['uss_id']);?></td>
+                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
                                         <td><?=$rDatos['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
                                         <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>

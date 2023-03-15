@@ -16,9 +16,14 @@
 		$archivo = $_POST["logoAnterior"];
 	}
 	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_informacion SET info_rector='" . $_POST["rectorI"] . "', info_secretaria_academica='" . $_POST["secretarioI"] . "', info_logo='" . $archivo . "', info_nit='" . $_POST["nitI"] . "', info_nombre='" . $_POST["nomInstI"] . "', info_direccion='" . $_POST["direccionI"] . "', info_telefono='" . $_POST["telI"] . "', info_clase='" . $_POST["calseI"] . "', info_caracter='" . $_POST["caracterI"] . "',info_calendario='" . $_POST["calendarioI"] . "', info_jornada='" . $_POST["jornadaI"] . "', info_horario='" . $_POST["horarioI"] . "', info_niveles='" . $_POST["nivelesI"] . "', info_modalidad='" . $_POST["modalidadI"] . "', info_propietario='" . $_POST["propietarioI"] . "', info_coordinador_academico='" . $_POST["coordinadorI"] . "', info_tesorero='" . $_POST["tesoreroI"] . "'
-WHERE info_id=" . $_POST["idCI"] . ";");
+	WHERE info_id=" . $_POST["idCI"] . ";");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
+
+	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
+	$informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+	$_SESSION["informacionInstConsulta"] = $informacion_inst;
+
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
