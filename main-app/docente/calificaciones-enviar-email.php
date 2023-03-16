@@ -114,32 +114,5 @@ if($datosUnicosInstitucion['ins_notificaciones_acudientes']==1){
             ';
         }
 
-        /*
-        include("../../config-general/plantilla-email-1.php");
-        // Instantiation and passing `true` enables exceptions
-        $mail = new PHPMailer(true);
-        echo '<div style="display:none;">';
-            try {
-                include("../../config-general/mail.php");
-
-                $mail->addAddress(strtolower($datosRelacionados['uss_email']), $datosRelacionados['uss_nombre']);    
-                //$mail->addAddress('tecmejia2010@gmail.com', 'Plataforma SINTIA');
-
-                // Attachments
-                //$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-                // Content
-                $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->Subject = 'Nota registrada para '.strtoupper($datosRelacionados["mat_nombres"]);
-                $mail->Body = $fin;
-                $mail->CharSet = 'UTF-8';
-
-                $mail->send();
-                echo 'Mensaje enviado correctamente.';
-            } catch (Exception $e) {echo "Error: {$mail->ErrorInfo}"; exit();}
-        echo '</div>';
-        //FIN ENVÍO DE MENSAJE
-        */
-
     }
 }
