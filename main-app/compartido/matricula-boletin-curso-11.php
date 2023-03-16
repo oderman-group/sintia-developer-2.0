@@ -96,7 +96,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         ?>
         <div align="center" style="margin-bottom:20px;">
             <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150" width="200"><br>
-            <<?= $informacion_inst["info_nombre"] ?><br>BOLETÍN DE CALIFICACIONES<br>
+            <?= $informacion_inst["info_nombre"] ?><br>BOLETÍN DE CALIFICACIONES<br>
         </div>
         <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
             <tr>
