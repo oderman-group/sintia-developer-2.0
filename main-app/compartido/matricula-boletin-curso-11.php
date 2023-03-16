@@ -430,7 +430,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         </table>
         <p>&nbsp;</p>
         <?php
-        $cndisiplina = Boletin::obtenerNotaDiciplina($matriculadosDatos[0], $condicion, $BD);
+        $cndisiplina = Boletin::obtenerNotaDisciplina($matriculadosDatos[0], $condicion, $BD);
         if (@mysqli_num_rows($cndisiplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">

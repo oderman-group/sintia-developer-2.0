@@ -168,7 +168,7 @@ class Boletin {
         return $resultado;
     }
 
-    public static function obtenerNotaDiciplina(
+    public static function obtenerNotaDisciplina(
         $estudiante,
         $condicion,
         string $BD    = ''
