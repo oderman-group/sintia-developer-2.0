@@ -42,12 +42,7 @@
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
@@ -55,7 +50,7 @@
                                 	<div class="panel-body">
 
                                     <?php 
-                                    $consultaCategoriaNota=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
+                                    $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
                                     $rCategoriaN=mysqli_fetch_array($consultaCategoriaNota, MYSQLI_BOTH);
                                     ?>
 

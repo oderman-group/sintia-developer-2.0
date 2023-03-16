@@ -48,13 +48,15 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 						
                         <div class="col-sm-12">
 
+						<?php include("../../config-general/mensajes-informativos.php"); ?>
+
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="17" name="id">
+									<form name="formularioGuardar" action="cargas-actualizar.php" method="post">
+
 										<input type="hidden" value="<?=$datosEditar['car_id'];?>" name="idR">
 
 										<div class="form-group row">
@@ -261,6 +263,21 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                 </select>
 
                                                 <span class="text-info">Si selecciona SI, el docente no llenará indicadores; solo las calificaciones. Habrá un solo indicador definitivo con el 100%.</span>
+
+                                            </div>
+                                            
+                                        </div>
+
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Observaciones en el boletin de los estudiantes ? </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="observacionesBoletin">
+                                                    <option value="">Seleccione una opción</option>
+													<option value="1" <?php if($datosEditar["car_observaciones_boletin"]==1){echo 'selected';} ?>>SI</option>
+													<option value="0" <?php if($datosEditar["car_observaciones_boletin"]==0){echo 'selected';} ?>>NO</option>
+                                                </select>
+
+                                                <span class="text-info">Si selecciona SI, el docente podrá colocar observaciones que aparecerán en el boletín de los estudiantes.</span>
 
                                             </div>
                                             

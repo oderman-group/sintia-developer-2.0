@@ -171,9 +171,9 @@
 									<div class="row">
 										
 										<?php
-										$carpetasCompartidas = mysqli_query($conexion, "SELECT * FROM general_folders
+										$carpetasCompartidas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders
 										INNER JOIN ".$baseDatosServicios.".general_folders_usuarios_compartir ON (fxuc_folder=fold_id OR fxuc_folder=fold_padre) AND fxuc_usuario='".$_SESSION["id"]."'
-										WHERE fold_activo=1 AND fold_categoria=2 AND fold_estado=1 $filtro
+										WHERE fold_activo=1 AND fold_categoria=2 AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "' $filtro
 										ORDER BY fold_tipo, fold_nombre
 										");
 										while($carpetaCompartida = mysqli_fetch_array($carpetasCompartidas, MYSQLI_BOTH)){

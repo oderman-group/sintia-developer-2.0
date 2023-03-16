@@ -74,9 +74,32 @@ if($num>0)
 		  $url = 'salir.php';
 		break;
 	}
+	
+	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
+	$_SESSION["configuracion"] = $config;
+
+	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
+	$informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+	$_SESSION["informacionInstConsulta"] = $informacion_inst;
+
+	$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$config['conf_id_institucion']."'");
+	$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
+	$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
+
+	$arregloModulos = array();
+	$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos
+	INNER JOIN ".$baseDatosServicios.".instituciones_modulos ON ipmod_institucion='".$config['conf_id_institucion']."' AND ipmod_modulo=mod_id
+	WHERE mod_estado=1");
+	while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
+		$arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
+	}
+
+	$_SESSION["modulos"] = $arregloModulos;
 
 	//INICIO SESION
 	$_SESSION["id"] = $fila[0];
+	$_SESSION["datosUsuario"] = $fila;
 
 	include("navegador.php");
 	include("ip.php");

@@ -20,9 +20,9 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php");?>
+<?php include("../compartido/body.php"); //6 consultas para optmizar: Enuar ?>
     <div class="page-wrapper">
-        <?php include("../compartido/encabezado.php");?>
+        <?php include("../compartido/encabezado.php"); //1 por otimizar, parece estar repetida ?>
 		
         <?php include("../compartido/panel-color.php");?>
         <!-- start page container -->
@@ -35,7 +35,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[209][$datosUsuarioActual['uss_idioma']];?></div>
-								<?php include("../compartido/texto-manual-ayuda.php");?>
+								<?php include("../compartido/texto-manual-ayuda.php"); //1 por otimizar, parece estar repetida ?>
                             </div>
                         </div>
                     </div>
@@ -206,7 +206,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
-														<?php if(!empty($acudiente['uss_id']) and !empty($acudiente['uss_email']) and !empty($nombreAcudiente)){?>
+														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
 															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
@@ -227,7 +227,13 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																	<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
 																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
 																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
-																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank">Retirar</a></li>
+																	<?php 
+																	$retirarRestaurar='Retirar';
+																	  if($resultado['mat_estado_matricula']==3){
+																		    $retirarRestaurar='Restaurar';
+																	}
+																	?>
+																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank"><?=$retirarRestaurar?></a></li>
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
 																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>

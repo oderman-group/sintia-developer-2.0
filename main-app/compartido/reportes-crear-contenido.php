@@ -1,3 +1,5 @@
+<?php include("../class/Estudiantes.php");?>
+
 					<div class="row">
                         <div class="col-sm-9">
                             <div class="card card-box">
@@ -19,17 +21,14 @@
                                             <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-												INNER JOIN usuarios ON uss_id=mat_id_usuario
-												WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido
-												");
+												$datosConsulta = Estudiantes::listarEstudiantesParaDocentes('');
 												?>
                                                 <select class="form-control  select2" name="estudiante" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$datos['uss_id'];?>"><?="[".$datos['uss_id']."] ".$datos['uss_nombre']?></option>
+                                                    	<option value="<?=$datos['uss_id'];?>"><?="[".$datos['uss_id']."] ".Estudiantes::NombreCompletoDelEstudiante($datos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>

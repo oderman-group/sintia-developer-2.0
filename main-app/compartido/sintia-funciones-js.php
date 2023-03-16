@@ -761,6 +761,27 @@ $(document).ready(function(){
     	localStorage.setItem("modalDeuda", 1);
 
     });
+	
+
+	$('#boton-cerrar-modalTerminos').click(function(){                    
+
+    	localStorage.setItem("modalTerminos", 1);
+
+    });
+	
+
+	$('#boton-cerrar-modalTratamientos').click(function(){                    
+
+    	localStorage.setItem("modalTratamientos", 1);
+
+    });
+	
+
+	$('#boton-cerrar-modalPoliticas').click(function(){                    
+
+    	localStorage.setItem("modalPoliticas", 1);
+
+    });
 
 });	
 
@@ -844,25 +865,38 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 	
 	<?php }?>
 
-
 /* Mostrar términos y condiciones */
-function mostrarModalTerminos(){$("#modalTerminos").modal("show");}
+<?php
+	for($i=1;$i<=3;$i++){
 
-setTimeout('mostrarModalTerminos()', 2000);
+		$datosTerminos = Plataforma::mostrarModalTerminos($i);
 
+		if($datosTerminos['ttp_visible']==='SI'){
 
-/* Mostrar TRATAMIENTOS DE DATOS */
-function mostrarModalTratamientos(){$("#modalTratamientos").modal("show");}
+			switch($datosTerminos['ttp_id']){
+				case 1:
+					$modal="modalTerminos";
+					break;
+				case 2:
+					$modal="modalTratamientos";
+					break;
+				case 3:
+					$modal="modalPoliticas";
+					break;
+			}
 
-setTimeout('mostrarModalTratamientos()', 2000);
+			$aceptacion= mysqli_query($conexion, "SELECT ttpxu_fecha_aceptacion FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios WHERE ttpxu_id_usuario='".$idSession."' AND ttpxu_id_termino_tratamiento_politicas='".$datosTerminos['ttp_id']."' AND ttpxu_id_institucion='".$config['conf_id_institucion']."'");
+			$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
+			//Condición para mostrar o no el modal de T&C
+			if(empty($datosAceptacion[0]) AND $datosTerminos['ttp_fecha_modificacion'] > $datosAceptacion[0]){
+?>
+	if(localStorage.getItem("<?=$modal;?>")!=1){
+		function mostrar<?=$modal;?>(){$("#<?=$modal;?>").modal("show");}
 
-
-/* Mostrar POLITICAS */
-function mostrarModalPoliticas(){$("#modalPoliticas").modal("show");}
-
-setTimeout('mostrarModalPoliticas()', 2000);
-	
+		setTimeout('mostrar<?=$modal;?>()', 2000);
+	}
+<?php }}} ?>
 
 <?php
 //Mostrar modal de ACEPTACION DE CONTRATO a DIRECTIVOS
