@@ -33,6 +33,7 @@ require_once("../class/Grados.php");
 require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");
 require_once("../class/CargaAcademica.php");
+require_once("../class/Grupos.php");
 ?>
 
 <!DOCTYPE html>
