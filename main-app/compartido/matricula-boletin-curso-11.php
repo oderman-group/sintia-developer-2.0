@@ -96,7 +96,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         ?>
         <div align="center" style="margin-bottom:20px;">
             <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150" width="200"><br>
-            <!-- <?= $informacion_inst["info_nombre"] ?><br>BOLETÍN DE CALIFICACIONES<br> -->
+            <<?= $informacion_inst["info_nombre"] ?><br>BOLETÍN DE CALIFICACIONES<br>
         </div>
         <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
             <tr>
@@ -132,7 +132,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <td width="3%">Nota</td>
                     <td width="3%">Desempeño</td>
                 </tr>
-            <!-- Aca ira un while con los indiracores, dentro de los cuales debera ir otro while con las notas de los indicadores-->
             <?php
             $contador = 1;
             $ausPer1Total=0;
@@ -439,7 +438,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 </tr>
                 <tr style="font-weight:bold; background:#e0e0153b; height:25px; color:#000; font-size:12px; text-align:center">
                     <td width="8%">Periodo</td>
-                    <!--<td width="8%">Nota</td>-->
                     <td>Observaciones</td>
                 </tr>
                 <?php
@@ -449,7 +447,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 ?>
                     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
                         <td><?= $rndisiplina["dn_periodo"] ?></td>
-                        <!--<td><?= $desempenoND[1] ?></td>-->
                         <td align="left"><?= $rndisiplina["dn_observacion"] ?></td>
                     </tr>
                 <?php } ?>
