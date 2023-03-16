@@ -254,7 +254,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     }
                                     $notaEstudiante = round($estudianteNota, 2);
                                     
-                                    $notaEstudiante= Boletin::añadirDecimales($notaEstudiante);
+                                    $notaEstudiante= Boletin::agregarDecimales($notaEstudiante);
 
                                     $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante, $BD);
 
@@ -279,7 +279,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     }
                                 }
                                 
-                                $promedioMateriaFinal= Boletin::añadirDecimales($promedioMateriaFinal);
+                                $promedioMateriaFinal= Boletin::agregarDecimales($promedioMateriaFinal);
 
                                 $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
                             ?>
@@ -313,7 +313,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                                     $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                                 }
                                 
-                                                $notaIndicador= Boletin::añadirDecimales($notaIndicador);
+                                                $notaIndicador= Boletin::agregarDecimales($notaIndicador);
 
                                                 $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador, $BD);
                                                 $desempeno=$desempenoNotaP['notip_nombre'];

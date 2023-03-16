@@ -25,7 +25,7 @@ class Boletin {
         return $resultado;
     }
 
-    public static function añadirDecimales($nota){
+    public static function agregarDecimales($nota){
         
     
         if(strlen($nota) === 1 || $nota == 10){
