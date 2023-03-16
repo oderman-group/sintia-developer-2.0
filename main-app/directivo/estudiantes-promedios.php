@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
 include("../class/Estudiantes.php");
+$Plataforma = new Plataforma;
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -30,61 +31,13 @@ include("../class/Estudiantes.php");
                     
                     <div class="row">
                         <div class="col-md-12">
+							
                             <div class="row">
 								
-								<div class="col-md-3">
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
-										<div class="panel-body">
-											<?php
-											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal");
-											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-												if(isset($_GET["curso"])&&$curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>&grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Grupos </header>
-										<div class="panel-body">
-											<?php
-											$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
-											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
-												if(isset($_GET["grupo"])&&$grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>" <?=$estiloResaltado;?>><?=strtoupper($grupo['gru_nombre']);?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Periodos </header>
-										<div class="panel-body">
-											<?php
-											for($i=1; $i<=4; $i++){
-												if(isset($_GET["periodo"])&&$i==$_GET["periodo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?periodo=<?=$i;?>&grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>&carga=<?php if (isset($_GET["carga"])){echo $_GET["carga"];}?>?>" <?=$estiloResaltado;?>><?=$i." periodo";?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>&carga=<?php if (isset($carga['car_id'])){echo $carga['car_id'];}?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									
-									
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								<div class="col-md-6">
-                                    <div class="panel">
+								<div class="col-md-12">
+								<?php include("includes/barra-superior-promedios.php");?>
+
+                                    <div class="panel mt-3">
 										<header class="panel-heading panel-heading-blue">PROMEDIOS GENERALES </header>
 										<div class="panel-body">
 											<?php
@@ -130,57 +83,8 @@ include("../class/Estudiantes.php");
 										</div>
                                     </div>
                                 </div>
-								
-								<div class="col-md-3">
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Cantidades </header>
-										<div class="panel-body">
-											<?php
-											for($i=10; $i<=50; $i=$i+10){
-												if(isset($_GET["cantidad"])&&$i==$_GET["cantidad"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?cantidad=<?=$i;?>&grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>&carga=<?php if (isset($_GET["carga"])){echo $_GET["carga"];}?>?>" <?=$estiloResaltado;?>><?=$i." estudiantes";?></a></p>
-											<?php }?>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>&carga=<?php if (isset($carga['car_id'])){echo $carga['car_id'];}?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Orden </header>
-										<div class="panel-body">
-											<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=DESC&carga=<?php if (isset($_GET["carga"])){echo $_GET["carga"];}?>?>" <?php if($filtroOrden=='DESC') echo 'style="color: orange;"';?> >De mayor a menor</a></p>
-											<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=ASC&carga=<?php if (isset($_GET["carga"])){echo $_GET["carga"];}?>?>" <?php if($filtroOrden=='ASC') echo 'style="color: orange;"';?>>De menor a mayor</a></p>
-											<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&carga=<?php if (isset($carga['car_id'])){echo $carga['car_id'];}?>">VER TODOS</a></p>
-										</div>
-                                    </div>
-									
-									<?php if(isset($_GET["curso"])&&is_numeric($_GET["curso"]) and isset($_GET["grupo"])&&is_numeric($_GET["grupo"])){?>
-										<div class="panel">
-											<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
-											<div class="panel-body">
-												<?php
-												$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
-												WHERE car_curso='".$_GET["curso"]."' AND car_grupo='".$_GET["grupo"]."'
-												ORDER BY mat_nombre");
-												while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-													if($carga['car_id']==$_GET["carga"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-												?>
-													<p><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>&carga=<?php if (isset($carga['car_id'])){echo $carga['car_id'];}?>" <?=$estiloResaltado;?>><?=strtoupper($carga['mat_nombre']);?></a></p>
-												<?php }?>
-												<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?php if (isset($_GET["grupo"])){echo $_GET["grupo"];}?>&curso=<?php if (isset($_GET["curso"])){echo $_GET["curso"];}?>&periodo=<?php if (isset($_GET["periodo"])){echo $_GET["periodo"];}?>&cantidad=<?php if (isset($_GET["cantidad"])){echo $_GET["cantidad"];}?>&orden=<?php if (isset($_GET["orden"])){echo $_GET["orden"];}?>">VER TODOS</a></p>
-											</div>
-										</div>
-									<?php }?>
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
-								
-								
-								
-							
+
+
                             </div>
                         </div>
                     </div>
