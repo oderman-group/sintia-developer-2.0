@@ -247,8 +247,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     
                                         $sumaNotaEstudiante += $nota;
                                     }
-                                            
-                                    $estudianteNota=($sumaNotaEstudiante/$numIndicadoresPorPeriodo);
+                                    
+                                    $estudianteNota=0;
+                                    if($numIndicadoresPorPeriodo!=0){
+                                        $estudianteNota=($sumaNotaEstudiante/$numIndicadoresPorPeriodo);
+                                    }
                                     $notaEstudiante = round($estudianteNota, 2);
                                     
                                     $notaEstudiante= Boletin::añadirDecimales($notaEstudiante);
