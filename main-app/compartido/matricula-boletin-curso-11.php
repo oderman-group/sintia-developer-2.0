@@ -429,8 +429,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         </table>
         <p>&nbsp;</p>
         <?php
-        $cndisiplina = Boletin::obtenerNotaDisciplina($matriculadosDatos[0], $condicion, $BD);
-        if (@mysqli_num_rows($cndisiplina) > 0) {
+        $cndisciplina = Boletin::obtenerNotaDisciplina($matriculadosDatos[0], $condicion, $BD);
+        if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
                 <tr style="font-weight:bold; background:#4c9858; border-color:#036; height:40px; font-size:12px; text-align:center">
@@ -441,13 +441,13 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <td>Observaciones</td>
                 </tr>
                 <?php
-                while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
+                while ($rndisciplina = mysqli_fetch_array($cndisciplina, MYSQLI_BOTH)) {
 
-                    $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisiplina["dn_nota"], $BD);
+                    $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisciplina["dn_nota"], $BD);
                 ?>
                     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-                        <td><?= $rndisiplina["dn_periodo"] ?></td>
-                        <td align="left"><?= $rndisiplina["dn_observacion"] ?></td>
+                        <td><?= $rndisciplina["dn_periodo"] ?></td>
+                        <td align="left"><?= $rndisciplina["dn_observacion"] ?></td>
                     </tr>
                 <?php } ?>
             </table>
@@ -458,7 +458,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <td style="font-weight:bold;" align="left">
                     <?php if ($num_observaciones > 0) { ?>
                         COMPORTAMIENTO:
-                        <b><u><?= strtoupper($r_diciplina[3]); ?></u></b><br>
+                        <b><u><?= strtoupper($r_disciplina[3]); ?></u></b><br>
                     <?php } ?>
                     </td>
                 </tr>
