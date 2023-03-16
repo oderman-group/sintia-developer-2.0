@@ -15,3 +15,4 @@ PES2023-116 - [MATRICULAS] Crear el formato del boletín de nuevo gandhy.
 
 ### Carlos Herazo
 PES2023-36 - [CARGAS] Hay un delay al cargar las cargas académicas en la opción de las notas de comportamiento.
+PES2023-58 - [INFORMES] Desarrollar un informe que me muestre las cargas duplicadas (Docente, curso, grupo, asignatura)
