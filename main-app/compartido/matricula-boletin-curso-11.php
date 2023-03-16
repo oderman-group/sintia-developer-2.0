@@ -482,8 +482,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <?php
 } // FIN DE TODOS LOS MATRICULADOS
     ?>
-    <!-- <script type="application/javascript">
+    <script type="application/javascript">
         print();
-    </script> -->
+    </script>
     </body>
     </html>
