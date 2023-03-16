@@ -13,4 +13,16 @@ class Grupos {
         return $resultado;
     }
 
+    public static function listarGrupos(){
+        global $conexion;
+        $resultado = [];
+        try {
+            $resultado = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+        } catch (Exception $e){
+            echo "Excepción capturada: ".$e->getMessage();
+            exit();
+        }
+        return $resultado;
+    }
+
 }
