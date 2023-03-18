@@ -4,6 +4,7 @@
 <?php include("verificar-carga.php");?>
 <?php
 include("../class/Estudiantes.php");
+include("../class/Plataforma.php");
 ?>
 
 <!-- Axios -->

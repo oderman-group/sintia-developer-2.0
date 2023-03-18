@@ -8,8 +8,8 @@ if ($_POST["estadoMatricula"] == 1){
    Estudiantes::retirarRestaurarEstudiante($_POST["estudiante"], $_POST["motivo"]);
    Estudiantes::ActualizarEstadoMatricula($_POST["estudiante"], 3);
 
-} elseif ($_POST["estadoMatricula"] == 3){
-   $motivo = 'El Estudiante Estaba Retirado, Pero Fue Restaurado Exitosamente!';
+} else {
+   $motivo = 'El estudiante estaba en estado '.$_POST["estadoNombre"].', pero fue restaurado exitosamente!';
    Estudiantes::retirarRestaurarEstudiante($_POST["estudiante"], $motivo);
    Estudiantes::ActualizarEstadoMatricula($_POST["estudiante"], 1);
 
