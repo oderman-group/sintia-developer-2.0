@@ -46,7 +46,7 @@
     if(is_numeric($_REQUEST["grupo"])){
         $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
     }
-    $matriculadosPorCurso = Estudiantes::obtenerDatosEstudiantesParaBoletin($filtro, $BD);
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
     if ($numeroEstudiantes == 0) {
     ?>
