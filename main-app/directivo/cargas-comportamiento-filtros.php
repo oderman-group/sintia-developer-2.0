@@ -93,6 +93,21 @@
                                             </select>
                                             <script type="application/javascript">
                                                 $(document).ready(traerCargas(document.getElementById('grupo')));
+                                                function habilitarGrupoPeriodo() {
+                                                    var curso = document.getElementById('grado').value;
+                                                    var grupo = document.getElementById('grupo');
+                                                    var periodo = document.getElementById('periodo');
+
+                                                    if (curso) {
+                                                        grupo.removeAttribute('disabled');
+                                                        periodo.removeAttribute('disabled');
+                                                        traerCargas(grupo);
+                                                    } else {
+                                                        periodo.setAttribute('disabled', true);
+                                                        grupo.setAttribute('disabled', true);
+                                                        $('#carga-container').hide();
+                                                    }
+                                                }
                                                 
                                                 function traerCargas(enviada){
                                                 var grado = $('#grado').val();
