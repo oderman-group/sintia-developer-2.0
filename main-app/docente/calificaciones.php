@@ -49,8 +49,6 @@ $porcentajeRestante = 100 - $valores[0];
 									
 									<?php include("filtros-cargas.php");?>
 									
-									<?php include("../compartido/publicidad-lateral.php");?>
-									
 								</div>
 									
 								<div class="col-md-8 col-lg-9">
