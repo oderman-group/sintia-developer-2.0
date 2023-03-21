@@ -83,6 +83,7 @@
                                                     <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
                                                 <?php }?>
                                             </select>
+                                             <span id="mensaje" style="color: #6017dc; display:none;">Espere un momento por favor.</span> 
                                         </div>
                                     </div>
                                     
@@ -116,12 +117,15 @@
                                                 datos = "grado="+(grado)+
                                                         "&grupo="+(grupo);
                                                 console.log(datos);
+                                                $('#mensaje').show();
                                                 $.ajax({
                                                         type: "POST",
                                                         url: "ajax-traer-cargas.php",
                                                         data: datos,
                                                         success: function(response)
                                                         {
+                                                            $('#mensaje').hide();
+                                                            $('#carga-container').show();
                                                             $('#carga').empty();
                                                             $('#carga').append(response);
                                                         }
