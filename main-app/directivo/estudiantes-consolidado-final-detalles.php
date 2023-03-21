@@ -4,7 +4,6 @@
 <?php include("../compartido/head.php");?>
 <?php
 include("../class/Estudiantes.php");
-include("../class/Grupos.php");
 ?>
 <?php
   $consultaCurso = Grados::obtenerDatosGrados($_POST["curso"]);

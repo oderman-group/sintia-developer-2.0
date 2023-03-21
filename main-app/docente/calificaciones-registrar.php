@@ -28,7 +28,38 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 <script type="application/javascript">
 
-//CALIFICACIONES	
+//CALIFICACIONES
+function notasGuardar(enviada){
+
+	var codNota = <?=$_GET["idR"];?>;	 
+	var nota = enviada.value;
+	var notaAnterior = enviada.name;	
+	var codEst = enviada.id;
+	var nombreEst = enviada.alt;
+
+	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
+		alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); 
+		return false;
+	}
+
+	$('#respNota').empty().hide().html("Guardando la nota, espere por favor...").show(1);
+
+	datos = "nota="+(nota)+
+			"&codNota="+(codNota)+
+			"&notaAnterior="+(notaAnterior)+
+			"&nombreEst="+(nombreEst)+
+			"&codEst="+(codEst);
+			$.ajax({
+				type: "POST",
+				url: "ajax-notas-guardar.php",
+				data: datos,
+				success: function(data){
+					$('#respNota').empty().hide().html(data).show(1);
+				}
+			});
+}
+
+
 
 function notas(enviada){
 
@@ -262,10 +293,6 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 									
 
-									<?php include("../compartido/publicidad-lateral.php");?>
-
-									
-
 								</div>
 
 									
@@ -317,6 +344,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 											
 
 										<span style="color: blue; font-size: 15px;" id="respRC"></span>
+										<span style="color: blue; font-size: 15px;" id="respNota"></span>
 
 											
 
@@ -396,7 +424,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['cal_nota'];?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['cal_nota'];?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
 
 															<?php if($notas['cal_nota']!=""){?>
 
