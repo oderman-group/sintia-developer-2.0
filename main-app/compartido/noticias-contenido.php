@@ -125,7 +125,7 @@
 											INNER JOIN usuarios ON uss_id=not_usuario
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
-											AND not_year='" . $_SESSION["bd"] . "'
+											AND not_year='" . $_SESSION["bd"] . "' AND not_institucion='".$config['conf_id_institucion']."'
 											$filtro
 											ORDER BY not_id DESC
 											");
