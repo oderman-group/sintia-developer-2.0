@@ -113,7 +113,7 @@
                                                 });
                                                 }
                                             </script>
-                                            <span style="color: #6017dc;">Debe seleccionar primeramente el Curso y el grupo.</span>
+                                            
                                         </div>
                                     </div>
                                     
