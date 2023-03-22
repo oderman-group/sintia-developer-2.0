@@ -1,10 +1,26 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-include(ROOT_PATH."/conexion-datos.php");
+
+define('ENVIROMENT', 'PROD');
+
+switch (ENVIROMENT) {
+	case 'LOCAL':
+		include(ROOT_PATH."/conexion-datos.php");
+		break;
+
+	case 'DEV':
+		include(ROOT_PATH."/conexion-datos-developer.php");
+		break;
+
+	case 'PROD':
+		include(ROOT_PATH."/conexion-datos-production.php");
+		break;
+}
+
 
 //AGREGAR/MODIFICAR COLUMNAS
 $sql = "
-ALTER TABLE academico_matriculas ADD mat_tipo_matricula varchar(45) DEFAULT 'grupal' NOT NULL COMMENT 'Se requiere para definir si el estudiante podrá estar en varios cursos a la vez';
+ALTER TABLE academico_matriculas_retiradas MODIFY COLUMN matret_fecha datetime DEFAULT NULL NULL;
 ";
 echo "<pre>".$sql."</pre>";
 
@@ -18,29 +34,33 @@ try {
     if(empty($_GET["continue"]) || $_GET["continue"]!=1 || empty($_SERVER['HTTP_REFERER'])){
         
         echo "<h3>Este es el listado de instituciones, con sus años, a los cuales se aplicará el script mostrado arriba</h3>";
-
+		$num = 1;
         while($listaInstituciones = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH)) {
-            echo "{$listaInstituciones['ins_siglas']} - {$listaInstituciones['ins_bd']} ({$listaInstituciones['ins_years']})<br>";
+            echo $num.") {$listaInstituciones['ins_siglas']} - {$listaInstituciones['ins_bd']} ({$listaInstituciones['ins_years']})<br>";
+			$num++;
         }
 ?>
         <p><a href="sintia-consultas.php?continue=1">CONTINUAR</a></p>
 <?php 
         exit();
     }
+} catch (Exception $e) {
+	echo $e->getMessage();
+}
 
+$num = 1;
+while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH)){
+	
+	if(empty($datosInstitucion['ins_years']) || empty($datosInstitucion['ins_bd'])) {
+		continue;
+	}
 
-	$num = 1;
-	while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH)){
-		
-		if(empty($datosInstitucion['ins_years']) || empty($datosInstitucion['ins_bd'])) {
-			continue;
-		}
-
-		$yearArray = explode(",", $datosInstitucion['ins_years']);
-		$yearStart = $yearArray[0];
-		$yearEnd = $yearArray[1];
-		
-		while($yearStart <= $yearEnd){
+	$yearArray = explode(",", $datosInstitucion['ins_years']);
+	$yearStart = $yearArray[0];
+	$yearEnd = $yearArray[1];
+	
+	while($yearStart <= $yearEnd){
+		try {
 			$CURRENTDB = $datosInstitucion['ins_bd']."_".$yearStart;
 
 			$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $CURRENTDB);
@@ -63,11 +83,20 @@ try {
 				echo $num." <span style='color:red; font-weight:bold;'>La base de datos no existe: ".$CURRENTDB."</span><br>";
 			}
 
-			echo "<hr>";
+			echo "<br>";
+			$num ++;
+			$yearStart ++;
+
+		} catch (Exception $e) {
+			echo "<span style='color:black; background-color:gold;'>Exception caught for database: </span> <b>{$CURRENTDB}</b>:  CODE: {$e->getCode()} - MESSAGE: ".$e->getMessage()."<br>";
+
+			echo "<br>";
 			$num ++;
 			$yearStart ++;
 		}
+
+		
 	}
-} catch (Exception $e) {
-	echo "Exception caught for database <b>{$CURRENTDB}</b>:  CODE: {$e->getCode()} - MESSAGE: ".$e->getMessage();
+
+	echo "<hr>";
 }

@@ -6,7 +6,7 @@
 											$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
 											INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 											ORDER BY uss_nombre
-											LIMIT 0,1000
+											LIMIT 0,100
 											");
 											while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												$fileFoto = "../files/fotos/".$datos['uss_foto'];
