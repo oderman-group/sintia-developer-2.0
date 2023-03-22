@@ -143,7 +143,6 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
             <input type="text" id="Usuario" name="Usuario" class="form-control form-control-lg"
               placeholder="Usuario" />
           </div>
-<!--Comentario de prueba-->
           <!-- Password input -->
           <div class="form-outline mb-3">
 		  <label for="Clave">Contraseña</label>
