@@ -328,46 +328,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN PUBLICITARIA -->
-                <?php 
-												if($not==3){
-													$inicioPublicidad = ($contReg / $not) - 1;
-													$publicidadNoticias = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
-													INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
-													WHERE pubxub_ubicacion=5 AND pubxub_id_institucion='".$config['conf_id_institucion']."'
-													LIMIT $inicioPublicidad, 1
-													"), MYSQLI_BOTH);
-												?>
-                <?php if(isset($publicidadNoticias['pubxub_id']) AND $publicidadNoticias['pubxub_id']!=""){
-														mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".publicidad_estadisticas(pest_publicidad, pest_institucion, pest_usuario, pest_pagina, pest_ubicacion, pest_fecha, pest_ip, pest_accion)
-														VALUES('".$publicidadNoticias['pub_id']."', '".$config['conf_id_institucion']."', '".$_SESSION["id"]."', '".$idPaginaInterna."', 5, now(), '".$_SERVER["REMOTE_ADDR"]."', 1)");
-														
-													?>
-                <div align="center" style="padding-top: 5px; padding-bottom: 10px;">
-                    <span style="color: blue; font-size: 10px;">Promociado</span>
-                    <?php if($publicidadNoticias['pub_titulo']!=""){?><h4><?=$publicidadNoticias['pub_titulo'];?></h4>
-                    <?php }?>
-                    <?php if($publicidadNoticias['pub_descripcion']!=""){?><p>
-                        <?=$publicidadNoticias['pub_descripcion'];?></p><?php }?>
-                    <?php if($publicidadNoticias['pub_imagen']!=""){?>
-                    <div class="item"><a
-                            href="../compartido/guardar.php?get=14&idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadNoticias['pub_id'];?>&idUb=5&url=<?=$publicidadNoticias['pub_url'];?>"
-                            target="_blank"><img
-                                src="http://plataformasintia.com/files-general/publicidad/<?=$publicidadNoticias['pub_imagen'];?>"></a>
-                    </div>
-                    <p>&nbsp;</p>
-                    <?php }?>
-                    <?php if($publicidadNoticias['pub_video']!=""){?><p>
-                        <iframe width="450" height="415"
-                            src="https://www.youtube.com/embed/<?=$publicidadNoticias['pub_video'];?>?rel=0&amp;mute=<?=$publicidadNoticias['pub_mute'];?>&start=<?=$publicidadNoticias['pub_start'];?>&end=<?=$publicidadNoticias['pub_end'];?>&autoplay=<?=$publicidadNoticias['pub_autoplay'];?>"
-                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen volume="0"></iframe>
-                    </p>
-                    <?php }?>
-                </div>
-                <?php }?>
-
-                <?php $not=0;}?>
-                <!-- SECCIÓN PUBLICITARIA -->
+               
 
                 <?php
 												$not++;
