@@ -244,8 +244,8 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
             <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;">&raquo;<?php echo $fila2["mat_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numeroPeriodos;$l++){ ?>
-			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?php 
-			$consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta");
+			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
+			<?php $consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta");
 			$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
 			if($datosUsr["mat_grado"]>11){
 				$notaF = ceil($notas[$l]);
