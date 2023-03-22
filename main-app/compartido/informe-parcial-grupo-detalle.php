@@ -5,16 +5,13 @@ include("../../config-general/consulta-usuario-actual.php");?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/logoodermanp.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
-<div align="center" style="margin-bottom:20px;"> 
-    <?=$informacion_inst["info_nombre"]?><br>
-    INFORME PARCIAL - PERIODO: <?php echo $config[2];?><br>
-    <?php echo $config["conf_fecha_parcial"];?><br>
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="100" width="150"><br>
-    <?php echo $config["conf_descripcion_parcial"];?><br>
-</div> 
+<?php
+$nombre_informe =  "INFORME PARCIAL "."<br>"." PERIODO:".$config[2]."<br>".$config["conf_fecha_parcial"];
+include("../compartido/head_informes.php") ?>
+
 
 <?php
 $matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND mat_eliminado=0 AND (mat_estado_matricula=1) ORDER BY mat_primer_apellido");
@@ -32,8 +29,8 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 
                                   
                                   <!-- BEGIN TABLE DATA -->
-                                  <table bgcolor="#FFFFFF" width="100%" cellspacing="2" cellpadding="2" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>; font-size:10px;" align="center">
-                                      <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+                                  <table width="100%" cellspacing="2" cellpadding="2" rules="all" style="border:solid; border-color:<?=$Plataforma->colorUno;?>; font-size:10px;" >
+                                      <tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
                                         <th style="text-align:center;">Cod</th>
                                         <th style="text-align:center;">Docente</th>
                                         <th style="text-align:center;">Asignatura</th>
@@ -121,10 +118,7 @@ Firma Del Padre Y/O Acudiente
                                   
                                     
  <?php }?>
- <div align="center" style="font-size:10px; margin-top:10px;">
-                                        <img src="../files/images/sintia.png" height="50" width="100"><br>
-                                        SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
-                                    </div>
+ <?php include("../compartido/footer_informes.php") ?>;	
 </body>
 
 </html>

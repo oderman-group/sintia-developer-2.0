@@ -45,10 +45,9 @@ include("../class/Estudiantes.php");
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-                        </div>
+					
 						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple">POR CURSO </header>
@@ -66,8 +65,7 @@ include("../class/Estudiantes.php");
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$disabled = '';
-														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
-													?>
+														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';?>
                                                     	<option value="<?=$opcionesDatos[0];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
 													<?php }?>
                                                 </select>
