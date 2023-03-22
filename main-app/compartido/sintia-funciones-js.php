@@ -601,7 +601,7 @@ function realizando(){
 
 }
 
-setInterval('realizando()',20000);
+//setInterval('realizando()',20000);
 
 	
 
@@ -635,7 +635,7 @@ function finalizado(){
 
 }
 
-setInterval('finalizado()',20000);
+//setInterval('finalizado()',20000);
 
 	
 
