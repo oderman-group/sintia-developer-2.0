@@ -28,6 +28,7 @@ if($saldoEC>0){
 
 <!-- PUBLICIDAD -->
 <?php
+/*
 $numOP = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad_ubicacion
 INNER JOIN ".$baseDatosServicios.".publicidad ON pub_id=pubxub_id_publicidad AND pub_estado=1
 WHERE pubxub_ubicacion=1 AND pubxub_id_institucion='".$config['conf_id_institucion']."' AND pubxub_id_pagina='".$idPaginaInterna."'
@@ -84,7 +85,7 @@ LIMIT ".$empezar.",1
 		<?php }?>
 	</div>
 </div>
-<?php }?>
+<?php } */?>
 
 
 
