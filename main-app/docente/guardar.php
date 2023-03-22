@@ -1,21 +1,13 @@
 <?php
-
 include("session.php");
 $idPaginaInterna = 'DC0089';
 
 include("../compartido/sintia-funciones.php");
 
 $archivoSubido = new Archivos;
-
 $operacionBD = new BaseDatos;
 
-?>
-
-<?php
 include("../compartido/guardar-historial-acciones.php");
-?>
-
-<?php
 
 //SELECCIONAR UNA CARGA - DEBE ESTAR ARRIBA POR LAS COOKIES QUE CREA.
 
@@ -26,6 +18,22 @@ if($_GET["get"]==100){
 		setcookie("carga",$_GET["carga"]);
 
 		setcookie("periodo",$_GET["periodo"]);
+
+		$infoCargaActual = [];
+
+		$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+		INNER JOIN academico_materias ON mat_id=car_materia
+		INNER JOIN academico_grados ON gra_id=car_curso
+		INNER JOIN academico_grupos ON gru_id=car_grupo
+		WHERE car_id='".$_GET["carga"]."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
+
+		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
+
+		$infoCargaActual = [
+			'datosCargaActual'  => $datosCargaActual
+		];
+
+		$_SESSION["infoCargaActual"] = $infoCargaActual;
 
 		echo '<script type="text/javascript">window.location.href="pagina-opciones.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'";</script>';
 

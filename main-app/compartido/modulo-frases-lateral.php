@@ -1,4 +1,5 @@
 <?php
+/*
 $numOPMF = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".publicidad
 INNER JOIN ".$baseDatosServicios.".general_categorias ON gcat_id=pub_categoria_especifica
 WHERE pub_estado=1 AND pub_tipo=2 AND pub_tipo_usuario='".$datosUsuarioActual['uss_tipo']."'
@@ -48,4 +49,4 @@ LIMIT ".$empezarMF.",1
 		
 	</div>
 </div>
-<?php }?>
+<?php } */?>

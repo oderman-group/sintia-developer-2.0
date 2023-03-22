@@ -1,0 +1,1 @@
+ALTER TABLE odermangroup_dev_2023.academico_matriculas_retiradas MODIFY COLUMN matret_fecha datetime DEFAULT NULL NULL;

@@ -1,4 +1,6 @@
 conexion-datos.php
+conexion-datos-developer.php
+conexion-datos-production.php
 main-app/error_log
 main-app/directivo/error_log
 main-app/docente/error_log
