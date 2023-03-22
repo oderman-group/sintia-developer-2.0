@@ -1,11 +1,6 @@
 <?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
 
-<?php
-
-$modulo = 1;
-
-?>
+<?php $modulo = 1; ?>
 
 <!doctype html>
 
@@ -22,7 +17,7 @@ $modulo = 1;
 <head>
 
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
     <title>SINTIA - Certificados</title>
 
 </head>
@@ -32,12 +27,12 @@ $modulo = 1;
 <body style="font-family:Arial;">
 
 
-
+<?php
+$nombre_informe = "CERTIFICADO DE ESTUDIOS"."<br>"." No. 12114";
+include("../compartido/head_informes.php") ?>
 
 
 <div align="left" style="margin-bottom:20px;">
-
-    <b>CERTIFICADO DE ESTUDIOS No. 12114<br>
 
     CÓDIGO DEL DANE 305001003513</b><br><br>
 
@@ -409,14 +404,7 @@ Se expide el presente certificado en Medellín el <?=date("d");?> de <?=date("M"
 			                   
 
  
-
-<div align="center" style="font-size:10px; margin-top:10px;">
-
-    <img src="../files/images/sintia.png" height="50" width="100"><br>
-
-    SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
-
-</div>
+<?php include("../compartido/footer_informes.php") ?>;		
 
                           
 

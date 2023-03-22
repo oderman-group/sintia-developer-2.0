@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
+
 <?php
 $filtro = '';
 if(is_numeric($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}
@@ -22,18 +23,18 @@ ORDER BY car_docente");
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Informes SINTIA</title>
-	<link rel="shortcut icon" href="../files/images/ico.png">
+	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 
 <body style="font-family:Arial; font-size: 10px;">
 	
-	<div style="margin: 10px;">
-		<img src="../../files-general/main-app/informes/docentes-cargas.jpg" style="width: 100%;">
-	</div>
+<?php
+$nombre_informe = "CARGA GENERAL DE DOCENTES";
+include("../compartido/head_informes.php") ?>
 	
 	<div style="margin: 10px;">
-		<table width="100%" border="1" rules="all" align="center">    
-			<tr style="font-weight:bold; font-size:12px; height:30px; text-align: center; text-transform: uppercase; background-color: #4086f4; color: #FFF;">
+		<table width="100%" border="1" style=" border:solid;border-color:<?=$Plataforma->colorUno;?>;" rules="all" align="center">    
+			<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
 				<td>No</td>
 				<td>#CARGA</td>
 				<td>Docente</td>
@@ -48,8 +49,8 @@ ORDER BY car_docente");
 			while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 				$colorFondo = '';
 				if($datos[5]==1) $colorFondo = '#4086f48a';
-			?>	
-			<tr style="text-transform: uppercase; background-color: <?=$colorFondo;?>">
+			?>
+			<tr style="text-transform: uppercase; border-color: <?=$Plataforma->colorDos;?>">
 				<td align="center"><?=$i;?></td>
 				<td align="center"><?=$datos[0];?></td>
 				<td><?=$datos[1];?></td>
@@ -64,7 +65,10 @@ ORDER BY car_docente");
 			}
 			?>  
 		</table>
-	</div>	
+	</div>
+	<?php include("../compartido/footer_informes.php") ?>;
+
+</div>	
 
 </body>
 </html>

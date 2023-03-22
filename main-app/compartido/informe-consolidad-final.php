@@ -23,22 +23,31 @@ if(isset($_REQUEST["agno"])){
 <head>
 	<title>SINTIA | Consolidado Final</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    CONSOLIDADO FINAL <?=$year;?></br>
-	<b>CURSO:</b> <?php if(isset($curso['gra_nombre'])){echo $curso['gra_nombre'];}?>&nbsp;&nbsp;&nbsp; <b>GRUPO:</b> <?php if(isset($grupo['gru_nombre'])){echo $grupo['gru_nombre'];}?>
-</div>   
+<?php
+$curso_string =""; 
+$grupo_string =""; 
+if(isset($curso['gra_nombre'])){
+	$curso_string= $curso['gra_nombre'];
+}
+if(isset($grupo['gru_nombre'])){
+	$grupo_string= $grupo['gru_nombre'];
+}
+$nombre_informe = "CONSOLIDADO FINAL " .$year."<br>" . "CURSO: " . $curso_string . "<br>" . "GRUPO: ".$grupo_string;
+include("../compartido/head_informes.php") ?>
+
+
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
   border:solid; 
-  border-color:#6017dc; 
+  border-color:<?=$Plataforma->colorUno;?>; 
   font-size:11px;
   ">
-  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+
+<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
+
                                         <th rowspan="2" style="font-size:9px;">Mat</th>
                                         <th rowspan="2" style="font-size:9px;">Estudiante</th>
                                         <?php
@@ -77,7 +86,7 @@ if(isset($_REQUEST["agno"])){
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									 $defPorEstudiante = 0;
 									 ?>
-									<tr style="font-size:13px;">
+									<tr style="border-color:<?=$Plataforma->colorDos;?>;">
 										<td style="font-size:9px;"><?=$resultado[1];?></td>
                                         <td style="font-size:9px;"><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
                                         <?php
@@ -124,9 +133,6 @@ if(isset($_REQUEST["agno"])){
                                       </tr>
                                       <?php }?>
   </table>
-  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
-      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
-     </div>
+  <?php include("../compartido/footer_informes.php") ?>;
 </body>
 </html>
