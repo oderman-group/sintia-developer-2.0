@@ -2,6 +2,8 @@
 $tiempo_inicial = microtime(true);
 include("../modelo/conexion.php");
 include("../class/Plataforma.php");
+include("../../librerias/Utilidades/util.php");
+
 $Plataforma = new Plataforma; // Variable que manejará los datos de configuracion de la visualizacionde la plataforma icono y colores
 //$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
 $config = $_SESSION["configuracion"];

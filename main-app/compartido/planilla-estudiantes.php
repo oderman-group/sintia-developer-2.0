@@ -28,13 +28,13 @@ include("../../config-general/consulta-usuario-actual.php");
 	}
 ?>
 <?php
-$subombre="";
+$subNombre="";
  if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
-$subombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
+$subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
 }elseif(is_numeric($_REQUEST["grado"])) {
-  $subombre=$grados["gra_nombre"]."<br>".$year;
+  $subNombre=$grados["gra_nombre"]."<br>".$year;
 }
-$nombre_informe =  "PLANILLA DE ESTUDIANTES ".$subombre;
+$nombre_informe =  "PLANILLA DE ESTUDIANTES ".$subNombre;
 include("../compartido/head_informes.php") ?>
 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
