@@ -3,21 +3,17 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 include("../class/Estudiantes.php");
-include("../class/Plataforma.php");
-$Plataforma = new Plataforma;
 ?>
 <head>
 	<title>LISTADO DE ESTUDIANTES</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
 
-<div style="margin-bottom:20px; text-align:center;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    LISTADO DE ESTUDIANTES</br>
-</div> 
+<?php
+$nombre_informe = "LISTADO ESTUDIANTES";
+include("../compartido/head_informes.php") ?>
 
   <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -50,9 +46,7 @@ $Plataforma = new Plataforma;
   $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
   ?>
-  <tr style="
-  border-color:<?=$Plataforma->colorDos;?>;
-  ">
+  <tr style="border-color:<?=$Plataforma->colorDos;?>;">
       <td style="text-align:center"><?=$cont;?></td>  
       <td style="text-align:center"><?=$resultado['mat_id'];?></td>
       <td style="text-align:center"><?=$resultado["uss_id"];?></td>
@@ -71,11 +65,8 @@ $Plataforma = new Plataforma;
   }//Fin mientras que
   ?>
   </table>
-
-	  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="<?=$Plataforma->logo;?>" width="150"><br>
-      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
-     </div>
+	<?php include("../compartido/footer_informes.php") ?>;
+	 
 
 </body>
 </html>
