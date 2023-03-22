@@ -261,7 +261,27 @@
                     <td colspan="<?=$colspan?>"></td>
                 </tr>
                 <tr style="background: #EAEAEA">
-                    <td colspan="2">PROMEDIO GENERAR SEGÚN EL PORCENTAJE DE LAS MATERIAS</td>
+                    <td colspan="2">PROMEDIO GENERAR</td>
+                    <?php
+                    $promedioGeneral = 0;
+                    for ($j = 1; $j <= $periodoActual; $j++) {
+                        $consultaPromedioPeriodoTodos=Boletin::obtenerPromedioPorTodosLosPeriodos($matriculadosDatos['mat_id'], $j, $BD);
+                        $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
+                    ?>
+                    <td align="center"><?=$promediosPeriodos['promedio'];?></td>
+                    <?php 
+                        $promedioGeneral +=$promediosPeriodos['promedio'];
+                    }// FIN FOR
+
+                    $promedioGeneral = round($promedioGeneral/$periodoActual,1);
+
+                    $promedioGeneralEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral, $BD);
+                    ?>
+                    <td align="center"><?=$promedioGeneral;?></td>
+                    <td align="center"><?= $promedioGeneralEstiloNota['notip_nombre']; ?></td>
+                </tr>
+                <tr style="background: #9ed8ed">
+                    <td colspan="2">PROMEDIO FINAL SEGUN EL PORCENTAJE DE LAS MATERIAS</td>
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
