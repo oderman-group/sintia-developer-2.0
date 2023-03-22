@@ -104,7 +104,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div >
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
