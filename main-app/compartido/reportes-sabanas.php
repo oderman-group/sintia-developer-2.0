@@ -91,7 +91,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					$nota = mysqli_fetch_array($notas, MYSQLI_BOTH);
 					$defini = $nota[4];
 					if ($defini < $config[5]) $color = 'red';
-					else $color = 'blue';
+					else $color = '#417BC4';
 					$suma = ($suma + $defini);
 				?>
 					<td align="center" style="color:<?= $color; ?>;"><?php echo $nota[4]; ?></td>
@@ -106,7 +106,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				if ($def == 4)	$def = "4.0";
 				if ($def == 5)	$def = "5.0";
 				if ($def < $cde[5]) $color = 'red';
-				else $color = 'blue';
+				else $color = '#417BC4';
 				$notas1[$cont] = $def;
 				$grupo1[$cont] = strtoupper($fila[3] . " " . $fila[4] . " " . $fila[5]);
 				?>
@@ -156,7 +156,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					$color = '#FFFFCC';
 					$puesto = 'Tercero';
 				}
-				if ($cambios == 4)
+				if ($cambios == 4)					
 					break;
 		?>
 				<tr style="border-color:#41c4c4; background-color:<?= $color; ?>">
