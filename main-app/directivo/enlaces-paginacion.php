@@ -16,7 +16,7 @@
 
         <li class="page-item">
             <?php if ($paginaActual > 1) { ?>
-                <a class='page-link' aria-label='Previous' href='cargas.php?nume=<?=$ant?>'>Previous</a>
+                <a class='page-link' aria-label='Previous' href='<?=$nombrePagina?>?nume=<?=$ant?>'>Previous</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Previous'>Previous</span>
             <?php } ?>
@@ -32,7 +32,7 @@
             </li>
         <?php       } else { ?>
             <li class="page-item" style="padding-left: 5px!important;">
-                <a href="cargas.php?nume=<?=$i?>" class="page-link"><?=$i?></a>
+                <a href="<?=$nombrePagina?>?nume=<?=$i?>" class="page-link"><?=$i?></a>
             </li>
         <?php
                     }
@@ -49,7 +49,7 @@
 
         <li class="page-item" style="padding-left: 5px!important;">
             <?php if ($paginaActual < $totalPaginas - 0) { ?>
-                <a class='page-link' aria-label='Next' href='cargas.php?nume=<?=$sigui?>'>Next</a>
+                <a class='page-link' aria-label='Next' href='<?=$nombrePagina?>?nume=<?=$sigui?>'>Next</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Next'>Next</span>
             <?php } ?>
