@@ -1,7 +1,7 @@
 <?php
-if (isset($_GET['enviar'])) {
+if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
-    $filtro .= " AND (uss_id LIKE '%".$busqueda."%' OR uss_nombre LIKE '%".$busqueda."%' OR uss_usuario LIKE '%".$busqueda."%' OR uss_email LIKE '%".$busqueda."%')";
+    $filtro .= " AND (uss_id LIKE '%".$busqueda."%' OR uss_nombre LIKE '%".$busqueda."%' OR uss_nombre2 LIKE '%".$busqueda."%' OR uss_apellido1 LIKE '%".$busqueda."%' OR uss_apellido2 LIKE '%".$busqueda."%' OR uss_usuario LIKE '%".$busqueda."%' OR uss_email LIKE '%".$busqueda."%')";
     
 }
 ?>
@@ -48,10 +48,9 @@ if (isset($_GET['enviar'])) {
       </li>
   </ul> 
 
-    <form class="form-inline my-2 my-lg-0" action="usuarios.php?cantidad=10" method="get">
-        <input type="hidden" name="cantidad" value="10">
+    <form class="form-inline my-2 my-lg-0" action="usuarios.php" method="get">
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET['busqueda'];?>">
-      <button class="btn my-2 my-sm-0" type="submit" name="enviar">Buscar</button>
+      <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
 
   </div>

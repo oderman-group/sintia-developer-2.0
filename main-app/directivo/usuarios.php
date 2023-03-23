@@ -76,7 +76,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								<div class="col-md-12">
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
 
-									<?php include("includes/usuarios-buscador.php");?>
+									<?php include("includes/barra-superior-usuarios.php");?>
 									
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
