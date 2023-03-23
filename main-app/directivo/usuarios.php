@@ -120,16 +120,13 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                 </thead>
 												
 												<?php
-													
-													$filtroLimite = '';
-													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													 INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-													 WHERE uss_id=uss_id $filtro
-													 ORDER BY uss_id
-													 $filtroLimite");
-													 $contReg = 1;
+													include("consulta-paginacion-usuarios.php");	
+													$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
+													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+													WHERE uss_id=uss_id $filtro
+													ORDER BY uss_id
+													LIMIT $inicio,$registros;");
+													$contReg = 1;
 													$bloqueado = array("NO","SI");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $bgColor = '';
@@ -215,6 +212,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
 								
 								
