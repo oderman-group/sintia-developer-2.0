@@ -4,6 +4,22 @@ if($_GET["get"]==100){
 	if(is_numeric($_GET["carga"]) and is_numeric($_GET["periodo"])){
 		setcookie("carga",$_GET["carga"]);
 		setcookie("periodo",$_GET["periodo"]);
+		
+		$infoCargaActual = [];
+
+		$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+		INNER JOIN academico_materias ON mat_id=car_materia
+		INNER JOIN academico_grados ON gra_id=car_curso
+		INNER JOIN academico_grupos ON gru_id=car_grupo
+		WHERE car_id='".$_GET["carga"]."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
+
+		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
+
+		$infoCargaActual = [
+			'datosCargaActual'  => $datosCargaActual
+		];
+
+		$_SESSION["infoCargaActual"] = $infoCargaActual;
 	}
 }
 
