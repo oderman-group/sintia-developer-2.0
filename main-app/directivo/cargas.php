@@ -117,14 +117,7 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("consulta-paginacion.php");
-
-													if (is_numeric($pagina)){
-														$inicio= (($pagina-1)*$registros);
-													}			     
-													else{
-														$inicio=1;
-													}											       
+													include("consulta-paginacion-cargas.php");											       
 													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
 													  INNER JOIN academico_grados ON gra_id=car_curso
 													  INNER JOIN academico_grupos ON gru_id=car_grupo
@@ -133,10 +126,7 @@ $Plataforma = new Plataforma;
 													  WHERE car_id=car_id $filtro
 												        ORDER BY car_id
 													    LIMIT $inicio,$registros;");
-													$paginas=ceil($numRegistros/$registros);													
-													?>
-													
-													<?php
+    												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 																										
 														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
@@ -182,7 +172,7 @@ $Plataforma = new Plataforma;
                           </div>
                       </div>
                       </div>
-                      <?php include("enlaces-paginacion-cargas.php");?>
+                      <?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>
