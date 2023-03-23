@@ -2,11 +2,8 @@
 include("session.php");
 $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
 WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
-$numDotos=mysqli_num_rows($consultaDoc);
-if ($numDotos > 0) {
-    include("../class/Estudiantes.php");
-    $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["nDoct"]);
-    $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
+$numDatos=mysqli_num_rows($consultaDoc);
+if ($numDatos > 0) {
 ?>
     <script type="application/javascript">
         document.getElementById('apellido1').disabled = 'disabled';
@@ -19,7 +16,7 @@ if ($numDotos > 0) {
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 
         <p>
-            Este número de documento se encuentra registrado y asociado al estudiante <b><?=$nombreEstudiante;?></b>.<br>
+         Este número de documento(<b><?=$_POST["nDoct"];?></b>) ya se encuentra registrado y asociado a un estudiante .<br>
         </p>
         
 
