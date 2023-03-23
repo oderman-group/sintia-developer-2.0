@@ -1,5 +1,5 @@
 <?php
-
+    $nombrePagina="cargas.php";
     if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
     $consulta=mysqli_query($conexion,"SELECT * FROM academico_cargas
     INNER JOIN academico_grados ON gra_id=car_curso
@@ -9,7 +9,11 @@
     WHERE car_id=car_id $filtro
     ORDER BY car_id;");
     $numRegistros=mysqli_num_rows($consulta);
-    $registros= 100;
+    $registros= 20;
     $pagina=$_REQUEST["nume"];
-    $contReg = 1;
-    ?>
+    if (is_numeric($pagina)){
+        $inicio= (($pagina-1)*$registros);
+    }			     
+    else{
+        $inicio=1;
+    }
