@@ -23,8 +23,8 @@ $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);	
 ?>
 <?php
-$nombre_informe = "PLANILLA DE ESTUDIANTES"."<br>".$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "PLANILLA DE ESTUDIANTES"."<br>".$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
+include("../compartido/head-informes.php") ?>
  
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -105,7 +105,7 @@ include("../compartido/head_informes.php") ?>
   }//Fin mientras que
   ?>
   </table>
-  <?php include("../compartido/footer_informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>
 

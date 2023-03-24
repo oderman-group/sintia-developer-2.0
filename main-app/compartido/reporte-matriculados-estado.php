@@ -11,8 +11,8 @@ include("../class/Estudiantes.php");?>
 </head>
 <body style="font-family:Arial;">
 <?php
-$nombre_informe = "INFORME DE ESTUDIANTES";
-include("../compartido/head_informes.php") ?> 
+$nombreInforme = "INFORME DE ESTUDIANTES";
+include("../compartido/head-informes.php") ?> 
     <?php
   $condicionw="";
   $condicion="";
@@ -222,7 +222,7 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
   ?>
   </table>
 
-  <?php include("../compartido/footer_informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>
 

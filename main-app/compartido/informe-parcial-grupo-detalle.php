@@ -9,8 +9,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
 </head>
 <body style="font-family:Arial;">
 <?php
-$nombre_informe =  "INFORME PARCIAL "."<br>"." PERIODO:".$config[2]."<br>".$config["conf_fecha_parcial"];
-include("../compartido/head_informes.php") ?>
+$nombreInforme =  "INFORME PARCIAL "."<br>"." PERIODO:".Utilidades::getToString($config[2])."<br>".Utilidades::getToString($config["conf_fecha_parcial"]);
+include("../compartido/head-informes.php") ?>
 
 
 <?php
@@ -118,7 +118,7 @@ Firma Del Padre Y/O Acudiente
                                   
                                     
  <?php }?>
- <?php include("../compartido/footer_informes.php") ?>;	
+ <?php include("../compartido/footer-informes.php") ?>;	
 </body>
 
 </html>

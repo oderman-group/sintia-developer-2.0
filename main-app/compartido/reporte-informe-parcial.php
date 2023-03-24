@@ -14,8 +14,8 @@ include("../class/Estudiantes.php");
 
 <body style="font-family:Arial;">
   <?php
-  $nombre_informe = "REPORTE DE INFORME PARCIAL"."<br><p class="."mb-2 mt-2".">"."<a href="."reporte-informe-parcial.php".">VER TODO</a>"."</p>";
-  include("../compartido/head_informes.php") ?>
+  $nombreInforme = "REPORTE DE INFORME PARCIAL"."<br><p class="."mb-2 mt-2".">"."<a href="."reporte-informe-parcial.php".">VER TODO</a>"."</p>";
+  include("../compartido/head-informes.php") ?>
 
   <div class="container-fluid">
         <div class="row">
@@ -81,7 +81,7 @@ include("../class/Estudiantes.php");
       } //Fin mientras que
       ?>
     </table>
-    <?php include("../compartido/footer_informes.php") ?>
+    <?php include("../compartido/footer-informes.php") ?>
 
   </div>
 

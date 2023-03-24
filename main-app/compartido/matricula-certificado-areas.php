@@ -30,8 +30,8 @@
 
 
 <?php
-$nombre_informe = "CERTIFICADO DE ESTUDIOS "."<br>"."No. 12114";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "CERTIFICADO DE ESTUDIOS "."<br>"."No. 12114";
+include("../compartido/head-informes.php") ?>
 
 	<div align="justify" style="margin-bottom:20px; margin-top:20px;">
 
@@ -136,6 +136,40 @@ include("../compartido/head_informes.php") ?>
 		$matricula = mysqli_fetch_array($consultaMatricula, MYSQLI_BOTH);
 
 	?>
+<<<<<<< HEAD
+<<<<<<< HEAD
+		<p align="center" style="font-weight:bold;">
+			<?= strtoupper(Utilidades::getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
+			MATRÍCULA <?= strtoupper(Utilidades::getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(Utilidades::getToString($matricula["mat_folio"])); ?>
+		</p>
+
+
+
+		<?php
+		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_base_datos='" . $_SESSION["inst"] . "' AND conf_agno='" . $_SESSION["bd"] . "'");
+		$configAA = mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
+		if ($inicio <= $config[1] and $configAA[2] == 5) { ?>
+
+			<table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
+
+				<tr style="font-weight:bold; font-size:11px;">
+
+					<td>ÁREAS/ASIGNATURAS</td>
+
+					<td>CALIFICACIONES</td>
+
+					<td>HORAS</td>
+
+				</tr>
+
+				<?php
+
+				//SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
+
+=======
+
+=======
+>>>>>>> f4e6a02 (PES2023-96 -correcion y validacion de datos null)
 		<p align="center" style="font-weight:bold;">
 			<?= strtoupper(getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
 			MATRÍCULA <?= strtoupper(getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(getToString($matricula["mat_folio"])); ?>
@@ -170,7 +204,15 @@ include("../compartido/head_informes.php") ?>
 
                                             INNER JOIN academico_areas ON ar_id=mat_area
 
+<<<<<<< HEAD
+<<<<<<< HEAD
                                             WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "' GROUP BY mat_area");
+=======
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . $matricula["mat_grupo"] . "' GROUP BY mat_area");
+>>>>>>> 1aa06fc (PES2023-96 -creacion de  header and footer para los informes)
+=======
+                                            WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "' GROUP BY mat_area");
+>>>>>>> f4e6a02 (PES2023-96 -correcion y validacion de datos null)
 
 				$materiasPerdidas = 0;
 
@@ -220,7 +262,18 @@ include("../compartido/head_informes.php") ?>
 
 					<?php
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
+<<<<<<< HEAD
+<<<<<<< HEAD
 					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+=======
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . $matricula["mat_grado"] . "' AND ipc_materia=mat_id");
+>>>>>>> 1aa06fc (PES2023-96 -creacion de  header and footer para los informes)
+=======
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+>>>>>>> f4e6a02 (PES2023-96 -correcion y validacion de datos null)
+=======
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+>>>>>>> e297a4f (pes2023-96 - se tienen encuenta la conbenciones y se realizan los ajustes correspondientes)
 
 					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
@@ -293,7 +346,15 @@ include("../compartido/head_informes.php") ?>
 
 			<?php
 			// SABER QUE MATERIAS TIENE PERDIDAS
+<<<<<<< HEAD
+<<<<<<< HEAD
 			$cargasAcademicasC = mysqli_query($conexion, "SELECT car_id FROM academico_cargas WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+=======
+			$cargasAcademicasC = mysqli_query($conexion, "SELECT car_id FROM academico_cargas WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . $matricula["mat_grupo"] . "'");
+>>>>>>> 1aa06fc (PES2023-96 -creacion de  header and footer para los informes)
+=======
+			$cargasAcademicasC = mysqli_query($conexion, "SELECT car_id FROM academico_cargas WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+>>>>>>> f4e6a02 (PES2023-96 -correcion y validacion de datos null)
 			$materiasPerdidas = 0;
 			$vectorMP = array();
 			while ($cargasC = mysqli_fetch_array($cargasAcademicasC, MYSQLI_BOTH)) {
@@ -375,7 +436,15 @@ include("../compartido/head_informes.php") ?>
 
                                             INNER JOIN academico_areas ON ar_id=mat_area
 
+<<<<<<< HEAD
+<<<<<<< HEAD
                                             WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+=======
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . $matricula["mat_grupo"] . "'");
+>>>>>>> 1aa06fc (PES2023-96 -creacion de  header and footer para los informes)
+=======
+                                            WHERE car_curso='" . getToString($matricula["mat_grado"]) . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+>>>>>>> f4e6a02 (PES2023-96 -correcion y validacion de datos null)
 
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
