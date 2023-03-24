@@ -1,4 +1,6 @@
 conexion-datos.php
+conexion-datos-developer.php
+conexion-datos-production.php
 main-app/error_log
 main-app/directivo/error_log
 main-app/docente/error_log
@@ -12,3 +14,4 @@ main-app/files
 main-app/admisiones/bd-conexion.php
 main-app/admisiones/files
 sensitive.php
+.vscode

@@ -487,7 +487,7 @@ function archivoPeso(dato){
 
 
 	
-
+/*
 function notificaciones(){
 
 	var usuario = <?=$_SESSION["id"];?>;
@@ -523,11 +523,11 @@ function notificaciones(){
 setInterval('notificaciones()',300000);
 
 window.onload = notificaciones();
-
+*/
 	
 
 
-
+/*
 function mensajes(){
 
 	var usuario = <?=$_SESSION["id"];?>;
@@ -563,7 +563,7 @@ function mensajes(){
 setInterval('mensajes()',300000);
 
 window.onload = mensajes();			
-
+*/
 	
 
 
@@ -601,7 +601,7 @@ function realizando(){
 
 }
 
-setInterval('realizando()',20000);
+//setInterval('realizando()',20000);
 
 	
 
@@ -635,7 +635,7 @@ function finalizado(){
 
 }
 
-setInterval('finalizado()',20000);
+//setInterval('finalizado()',20000);
 
 	
 

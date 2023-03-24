@@ -56,7 +56,7 @@
                                             $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
                                             ORDER BY gra_vocal");
                                             ?>
-                                            <select class="form-control  select2" name="grado" id="grado" required>
+                                            <select class="form-control  select2" style="width: 810.666px;" name="grado" id="grado" required onchange="habilitarGrupoPeriodo()">
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -75,7 +75,7 @@
                                             <?php
                                             $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
                                             ?>
-                                            <select class="form-control  select2" id="grupo" name="grupo" onchange="traerCargas(this)">
+                                            <select class="form-control  select2" style="width: 810.666px;" id="grupo" name="grupo" onchange="traerCargas(this)" disabled>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -83,44 +83,67 @@
                                                     <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
                                                 <?php }?>
                                             </select>
+                                             <span id="mensaje" style="color: #6017dc; display:none;">Espere un momento por favor.</span> 
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row">
+                                    <div class="form-group row" id="carga-container">
                                         <label class="col-sm-2 control-label">Carga</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control  select2" name="carga" id="carga" required>
+                                            <select class="form-control  select2" style="width: 810.666px;" name="carga" id="carga" required>
                                             </select>
                                             <script type="application/javascript">
-                                                $(document).ready(traerCargas(document.getElementById('grupo')));
+                                                 $(document).ready(traerCargas(document.getElementById('grupo')));
+                                                function habilitarGrupoPeriodo() {
+                                                    var curso = document.getElementById('grado').value;
+                                                    var grupo = document.getElementById('grupo');
+                                                    var periodo = document.getElementById('periodo');
+
+                                                    if (curso) {
+                                                        grupo.removeAttribute('disabled');
+                                                        periodo.removeAttribute('disabled');
+                                                        traerCargas(grupo);
+                                                    } else {
+                                                        periodo.setAttribute('disabled', true);
+                                                        grupo.setAttribute('disabled', true);
+                                                        $('#carga-container').hide();
+                                                    }
+                                                }
                                                 
                                                 function traerCargas(enviada){
                                                 var grado = $('#grado').val();
                                                 var grupo = enviada.value;
+                                                if (!grupo) {
+                                                    $('#carga-container').hide();
+                                                    return;
+                                                }
 
                                                 datos = "grado="+(grado)+
                                                         "&grupo="+(grupo);
                                                 console.log(datos);
+                                                $('#mensaje').show();
                                                 $.ajax({
                                                         type: "POST",
                                                         url: "ajax-traer-cargas.php",
                                                         data: datos,
                                                         success: function(response)
                                                         {
+                                                            $('#mensaje').hide();
+                                                            $('#carga-container').show();
                                                             $('#carga').empty();
                                                             $('#carga').append(response);
                                                         }
                                                 });
                                                 }
                                             </script>
-                                            <span style="color: #6017dc;">Debe seleccionar primeramente el Curso y el grupo.</span>
+                                            
                                         </div>
                                     </div>
                                     
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Periodo</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" name="periodo" required>
+                                            <select class="form-control  select2" style="width: 810.666px;" name="periodo" id="periodo" required disabled>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 $p = 1;
