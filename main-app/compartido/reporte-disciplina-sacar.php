@@ -19,8 +19,8 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 
 <body style="font-family:Arial;">
   <?php
-  $nombre_informe = "REPORTES DISCIPLINARIOS" . "<br>" . strtoupper($datos['gra_nombre'] . " " . $datos['gru_nombre']) . "<br>DE " . $_POST["desde"] . " HASTA " . $_POST["hasta"];;
-  include("../compartido/head_informes.php") ?>
+  $nombreInforme = "REPORTES DISCIPLINARIOS" . "<br>" . strtoupper(Utilidades::getToString($datos['gra_nombre']). " " . Utilidades::getToString($datos['gru_nombre'])) . "<br> DESDE " . $_POST["desde"] . " HASTA " . $_POST["hasta"];;
+  include("../compartido/head-informes.php") ?>
 
   <table width="100%" cellspacing="5" cellpadding="5" rules="all" style="
   border:solid; 
@@ -106,5 +106,5 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
   </table>
   </center>
 </body>
-<?php include("../compartido/footer_informes.php") ?>;
+<?php include("../compartido/footer-informes.php") ?>;
 </html>

@@ -14,7 +14,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 <body style="font-family:Arial;">
 <div class="container-fluid">
 <?php
-$nombre_informe =  "INFORME DE MATRÍCULAS"."<br>"."PASO A PASO";
+$nombreInforme =  "INFORME DE MATRÍCULAS"."<br>"."PASO A PASO";
 include("../compartido/head_informes.php") ?>
   <div align="center" style="margin-bottom:20px;">
       <p class="mb-2 mt-2">
@@ -120,7 +120,7 @@ include("../compartido/head_informes.php") ?>
     ?>
   </table>
   </center>
-  <?php include("../compartido/footer_informes.php") ?>;	
+  <?php include("../compartido/footer-informes.php") ?>;	
   
   </div>
 

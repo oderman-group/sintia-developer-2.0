@@ -66,8 +66,8 @@ $numeroPeriodos=$config["conf_periodo"];
  ?>
 
 <?php
-$nombre_informe = "REGISTRO DE VALORACIÓN";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "REGISTRO DE VALORACIÓN";
+include("../compartido/head-informes.php") ?>
 
 
 
@@ -288,7 +288,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
     </tr>
 </table> 
 
-<?php include("../compartido/footer_informes.php") ?>;
+<?php include("../compartido/footer-informes.php") ?>;
 
 
 
