@@ -44,5 +44,10 @@ if($_SESSION["inst"]==""){
 		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
+	if (!mysqli_set_charset($conexion, "utf8")) 
+    {
+      printf("Error cargando el conjunto de caracteres utf8: %s\n", mysqli_error($link));
+      exit();
+    }
 
 }
