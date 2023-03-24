@@ -11,3 +11,6 @@ PES2023-168 - [BUG] No hay nombre de botón para estudiantes con ciertos estados
 
 ### Enuar Lara
 PES2023-116 - [MATRICULAS] Crear el formato del boletín de nuevo gandhy.
+
+### Carlos Herazo
+PES2023-36 - [CARGAS] Hay un delay al cargar las cargas académicas en la opción de las notas de comportamiento.
