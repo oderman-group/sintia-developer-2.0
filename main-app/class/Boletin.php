@@ -369,4 +369,26 @@ class Boletin {
         return $resultado;
     }
 
+    public static function obtenerPuestoEstudianteEnInstitucion(
+        int    $periodo      = 0,
+        string $BD    = ''
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM $BD.academico_matriculas
+            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodo."'
+            WHERE  mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
+            GROUP BY mat_id 
+            ORDER BY prom DESC");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
 }
