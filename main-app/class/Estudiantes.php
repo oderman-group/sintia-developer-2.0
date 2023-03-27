@@ -270,4 +270,45 @@ class Estudiantes {
         }
     }
 
+    public static function estudiantesMatriculados(
+        string    $filtro      = '',
+        string $BD    = ''
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
+            WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
+            GROUP BY mat_id
+            ORDER BY mat_grupo, mat_primer_apellido");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
+    public static function obtenerDatosEstudiantesParaBoletin(
+        int    $estudiante      = 0,
+        string $BD    = ''
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
+            INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
+            INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $estudiante);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
 }
