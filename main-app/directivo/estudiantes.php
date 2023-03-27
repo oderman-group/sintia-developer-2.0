@@ -153,12 +153,12 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														}
 													</script>
 													<?php
-													$filtroLimite = '';
-													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
-													 $contReg = 1;
+													include("consulta-paginacion-estudiantes.php");
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$contReg = 1;
 
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
 														WHERE uss_id='".$resultado["mat_acudiente"]."'");
@@ -179,7 +179,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 															'estado_matricula' => $resultado['mat_estado_matricula']
 														];
 														$dataParaJavascript = json_encode($miArray);
-													 ?>
+													?>
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
@@ -259,6 +259,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
 								
 								
