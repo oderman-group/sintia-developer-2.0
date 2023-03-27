@@ -5,7 +5,6 @@
 <?php
 include("../class/Estudiantes.php");
 
-$Plataforma = new Plataforma;
 
 $filtro = '';
 if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
@@ -217,7 +216,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	<i class="fa fa-angle-down"></i>
 																</button>
-																<ul class="dropdown-menu" role="menu">
+																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<li><a href="estudiantes-editar.php?id=<?=$resultado['mat_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																	<?php if($config['conf_id_institucion']==1){ ?>
 																		<li><a href="estudiantes-crear-sion.php?id=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
