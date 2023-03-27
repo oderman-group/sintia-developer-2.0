@@ -1,7 +1,6 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_POST["year"])){
@@ -15,18 +14,18 @@ if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grup
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas WHERE mat_eliminado=0 $filtro AND mat_estado_matricula=1 ORDER BY mat_grupo, mat_primer_apellido LIMIT 0,5");
+
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $contPeriodos=0;
 $contadorIndicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
-INNER JOIN academico_grupos ON mat_grupo=gru_id
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 $numUsr=mysqli_num_rows($usr);
-$datosUsr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 if($numUsr==0)
 {
 ?>
@@ -74,7 +73,7 @@ include("../compartido/head-informes.php") ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:10px;">
     <tr>
     	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"]);?></b></td>   
+        <td>Nombre: <b><?=$nombre?></b></td>   
     </tr>
     
     <tr>
@@ -129,7 +128,10 @@ ORDER BY mat_id,bol_periodo
 
 $resultadoNotArea=mysqli_fetch_array($consultaNotdefArea, MYSQLI_BOTH);
 $numfilasNotArea=mysqli_num_rows($consultaNotdefArea);
-$totalPromedio=round( $resultadoNotArea["suma"],1);
+$totalPromedio = 0;
+if(!empty($resultadoNotArea["suma"])){
+	$totalPromedio = round($resultadoNotArea["suma"],1);
+}
 
 
 if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio="2.0";		if($totalPromedio==3)	$totalPromedio="3.0";	if($totalPromedio==4)	$totalPromedio="4.0";	if($totalPromedio==5)	$totalPromedio="5.0";
@@ -283,8 +285,8 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 
 <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
 	<tr>
-		<td align="center">_________________________________<br>Victor Cabrera<br>Rector(a)</td>
-		<td align="center">_________________________________<br>Cristhell Orozco<br>Secretaria Académica</td>
+		<td align="center">_________________________________<br>Rector(a)</td>
+		<td align="center">_________________________________<br>Secretaria Académica</td>
     </tr>
 </table> 
 

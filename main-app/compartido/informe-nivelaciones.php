@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -42,15 +44,15 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                                <th style="text-align:center;">Fecha</th>
                                            	<?php
                                             }
-                                            ?>
- <?php
-									 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+									$filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+									$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 									 $defPorEstudiante = 0;
 									 ?>
                                       <tr id="data1" class="odd gradeX">
                                         <td style="font-size:9px;"><?=$resultado[1];?></td>
-                                        <td style="font-size:9px;"><?=$resultado[3]." ".$resultado[4]." ".$resultado[5];?></td>
+                                        <td style="font-size:9px;"><?=$nombreCompleto?></td>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_GET["curso"]."' AND car_grupo='".$_GET["grupo"]."' AND car_activa=1"); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){

@@ -1,7 +1,5 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
 $modulo = 1;
 
@@ -70,14 +68,9 @@ $grados = "";
 while($i<=$restaAgnos){
 
 	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
-
-	$estudianteC = mysqli_query($conexion, "SELECT mat_id, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, gra_nombre, gru_nombre FROM academico_matriculas
-	INNER JOIN academico_grados ON gra_id=mat_grado
-	INNER JOIN academico_grupos ON gru_id=mat_grupo
-	WHERE mat_id='".$_POST["id"]."' AND mat_eliminado=0");
 	
-	
-	$estudiante = mysqli_fetch_array($estudianteC, MYSQLI_BOTH);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	
 	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
 	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=9) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
@@ -102,7 +95,7 @@ while($i<=$restaAgnos){
 
 	
 
-    <p>Que, <b><?=strtoupper($estudiante["mat_primer_apellido"]." ".$estudiante["mat_segundo_apellido"]." ".$estudiante["mat_nombres"]);?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=$estudiante?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
 
     
 
@@ -119,12 +112,7 @@ while($i<=$restaAgnos){
 	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
 
 	//SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
-
-	$consultaMatricula=mysqli_query($conexion, "SELECT mat_id, mat_matricula, mat_folio, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, gra_nombre, gru_nombre, gra_id, gru_id FROM academico_matriculas
-	INNER JOIN academico_grados ON gra_id=mat_grado
-	INNER JOIN academico_grupos ON gru_id=mat_grupo
-	WHERE mat_id='".$_POST["id"]."' AND mat_eliminado=0");
-	$matricula = mysqli_fetch_array($consultaMatricula, MYSQLI_BOTH);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
 ?>
 

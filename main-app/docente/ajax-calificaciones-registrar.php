@@ -55,9 +55,9 @@ if($_POST["operacion"]==2){
 }
 
 //Para la misma nota para todos los estudiantes
-if($_POST["operacion"]==3){	
-	$consultaE = mysqli_query($conexion, "SELECT academico_matriculas.mat_id FROM academico_matriculas
-	WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+if($_POST["operacion"]==3){
+	$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+	$consultaE =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	
 	
 	$accionBD = 0;
@@ -159,10 +159,8 @@ if($_POST["operacion"]==6 || $_POST["operacion"]==12){
 
 //Para la misma nota de comportamiento para todos los estudiantes
 if($_POST["operacion"]==7){
-	
-	$consultaE = mysqli_query($conexion, "SELECT academico_matriculas.mat_id FROM academico_matriculas
-	WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
-	
+	$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+	$consultaE =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");	
 	
 	$accionBD = 0;
 	$datosInsert = '';

@@ -1,6 +1,5 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -29,21 +28,17 @@ if (is_numeric($_REQUEST["curso"])) {
 }
 if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
-GROUP BY mat_id
-ORDER BY mat_grupo, mat_primer_apellido");
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $cont_periodos=0;
 $contador_indicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
-INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
-INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 $num_usr=mysqli_num_rows($usr);
-$datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 if($num_usr==0)
 {
 ?>
@@ -83,12 +78,12 @@ $contador_periodos=0;
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
-    	<td>C&oacute;digo: <b><?=$datos_usr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
+    	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
+        <td>Nombre: <b><?=$nombre?></b></td>   
     </tr>
     
     <tr>
-    	<td>Grado: <b><?=$datos_usr["gra_nombre"]." ".$datos_usr["gru_nombre"];?></b></td>
+    	<td>Grado: <b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
         <td>Periodo: <b><?=strtoupper($periodoActuales);?></b></td>    
     </tr>
 </table>
@@ -103,7 +98,7 @@ $contador_periodos=0;
 	<?php
 	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN $BD.academico_materias ON mat_id=car_materia
-	WHERE car_curso='".$datos_usr["mat_grado"]."' AND car_grupo='".$datos_usr["mat_grupo"]."'");
+	WHERE car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."'");
 	$i=1;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga
@@ -112,7 +107,7 @@ $contador_periodos=0;
 		");
 		
 		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$datos_usr["mat_id"]."'");
+		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
 		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 		
 		$colorFondo = '#FFF;';

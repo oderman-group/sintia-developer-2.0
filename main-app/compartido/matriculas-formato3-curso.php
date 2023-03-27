@@ -4,9 +4,11 @@ if($_SERVER['HTTP_REFERER']==""){
 	exit();
 }
 ?>
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-<?php include("head.php");?>
+<?php
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+include("head.php");
+?>
 <style>
 #saltoPagina
 {
@@ -16,15 +18,10 @@ if($_SERVER['HTTP_REFERER']==""){
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
-  $curso = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."'");
+  $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."'";
+  $curso = Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
   while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-	  
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  INNER JOIN academico_grados ON gra_id=mat_grado
-  INNER JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN $baseDatosServicios.opciones_generales ON ogen_id=mat_genero
-  WHERE mat_id='".$c[0]."'");
-  $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+  $resultado = Estudiantes::obtenerDatosEstudiante($c[0]);
   $consultaTipo=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
@@ -51,7 +48,7 @@ if($_SERVER['HTTP_REFERER']==""){
     
     <tr>
         <td>Apellidos:&nbsp;<b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
-        <td>Nombres:&nbsp;<b><?=strtoupper($resultado[5]);?></b></td>
+        <td>Nombres:&nbsp;<b><?=strtoupper($resultado[5]." ".$resultado[77]);?></b></td>
         <td>Curso:&nbsp;<b><?=$resultado['gra_nombre'];?></b></td>
         <td colspan="2">Grupo:&nbsp;<b><?=$resultado['gru_nombre'];?></b></td>
     </tr>

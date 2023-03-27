@@ -1,5 +1,9 @@
-<?php include("../directivo/session.php"); ?>
-<?php $modulo = 1; ?>
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
+
+$modulo = 1;
+
+?>
 
 <!doctype html>
 
@@ -70,16 +74,9 @@
 
     while ($i <= $restaAgnos) {
 
-        mysqli_select_db($conexion, $config['conf_base_datos'] . "_" . $inicio);
-
-        $consultaEstudiante = mysqli_query($conexion, "SELECT mat_id, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, gra_nombre, gru_nombre FROM academico_matriculas
-
-    INNER JOIN academico_grados ON gra_id=mat_grado
-
-    INNER JOIN academico_grupos ON gru_id=mat_grupo 
-
-    WHERE mat_id='" . $_POST["id"] . "' AND mat_eliminado=0");
-        $estudiante = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
+	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 
         if ($i < $restaAgnos)
 
@@ -98,7 +95,7 @@
 
 
 
-    <p>Que, <b><?= strtoupper($estudiante["mat_primer_apellido"] . " " . $estudiante["mat_segundo_apellido"] . " " . $estudiante["mat_nombres"]); ?></b> cursó en esta Institución <b><?= $grados; ?></b> grado(s) de educación básica primaria y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=$grados;?></b> grado(s) de educación básica primaria  y obtuvo las siguientes calificaciones:</p>
 
 
 
@@ -112,18 +109,8 @@
 
     while ($i <= $restaAgnos) {
 
-        mysqli_select_db($conexion, $config['conf_base_datos'] . "_" . $inicio);
-
-        //SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
-
-        $consultaMatricula = mysqli_query($conexion, "SELECT mat_id, mat_matricula, mat_folio, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, gra_nombre, gru_nombre FROM academico_matriculas
-
-    INNER JOIN academico_grados ON gra_id=mat_grado
-
-    INNER JOIN academico_grupos ON gru_id=mat_grupo 
-
-    WHERE mat_id='" . $_POST["id"] . "' AND mat_eliminado=0");
-        $matricula = mysqli_fetch_array($consultaMatricula, MYSQLI_BOTH);
+	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
     ?>
 
@@ -172,7 +159,10 @@
                     $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "'");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
-                    $nota = round($boletin[0], 1);
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
 
                     if ($nota < $config[5]) {
 
@@ -303,7 +293,10 @@
                     $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
-                    $nota = round($boletin[0], 1);
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
 
                     $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
                     $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);

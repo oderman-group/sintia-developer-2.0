@@ -1,10 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0054';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0054';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
@@ -131,11 +133,12 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
 															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$_GET["idR"]."'");
@@ -145,7 +148,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                     
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td><?=$nombre?></td>
 														<td>
 															<input type="number" style="text-align: center;" size="5" maxlength="3" value="<?=$notas['aus_ausencias'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)">
 															<?php if($notas['aus_ausencias']!=""){?>

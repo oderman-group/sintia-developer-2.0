@@ -4,18 +4,15 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 	exit();
 }
 ?>
-<?php include("../../config-general/config.php");?>
-<?php include("../directivo/session.php");?>
-<?php include("../head.php");?>
+<?php 
+include("../../config-general/config.php");
+include("../class/Estudiantes.php");
+include("../head.php");
+?>
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  INNER JOIN academico_grados ON gra_id=mat_grado
-  INNER JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-  WHERE mat_matricula='".$_GET["ref"]."'");
-  $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+  $resultado = Estudiantes::obtenerDatosEstudiante($_GET["ref"]);
   $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
@@ -42,7 +39,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
     
     <tr>
         <td>Apellidos:&nbsp;<b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
-        <td>Nombres:&nbsp;<b><?=strtoupper($resultado[5]);?></b></td>
+        <td>Nombres:&nbsp;<b><?=strtoupper($resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></b></td>
         <td>Curso:&nbsp;<b><?=$resultado['gra_nombre'];?></b></td>
         <td colspan="2">Grupo:&nbsp;<b><?=$resultado['gru_nombre'];?></b></td>
     </tr>

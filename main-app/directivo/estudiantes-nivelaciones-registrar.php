@@ -1,7 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0076';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0076';
+include("../compartido/historial-acciones-guardar.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">
@@ -127,13 +130,15 @@
 												</thead>
                                                 <tbody>
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+												$filtroAdicional= "AND mat_grado='".$_REQUEST['curso']."' AND mat_grupo='".$_REQUEST['grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+												$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 												$defPorEstudiante = 0;
 												?>
 												<tr id="data1" class="odd gradeX">
 													<td style="font-size:9px;"><?=$resultado[1];?></td>
-													<td style="font-size:9px;"><?=$resultado[3]." ".$resultado[4]." ".$resultado[5];?></td>
+													<td style="font-size:9px;"><?=$nombre?></td>
 													<?php
 													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){

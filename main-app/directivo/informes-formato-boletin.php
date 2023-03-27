@@ -1,6 +1,6 @@
 <?php
     include("session.php");
-    include("../modelo/conexion.php");
+    include("../class/Estudiantes.php");
     
     $year=$agnoBD;
     if(isset($_POST["year"])){
@@ -23,7 +23,7 @@
     }
 
     if(isset($_POST["estudiante"]) AND $_POST["estudiante"]!=""){
-    $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas INNER JOIN $BD.academico_grados ON gra_id=mat_grado WHERE mat_id=$id");
+    $consulta =Estudiantes::obtenerDatosEstudiantesParaBoletin($id,$BD);
     }
 
     $boletin = mysqli_fetch_array($consulta, MYSQLI_BOTH);

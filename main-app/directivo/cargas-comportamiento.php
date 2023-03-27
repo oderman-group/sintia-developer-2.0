@@ -1,7 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0051';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0051';
+include("../compartido/historial-acciones-guardar.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
       
@@ -138,16 +141,18 @@
 													<tbody>
 														<?php
 														$con = 1;
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+														$filtroAdicional= "AND mat_grado='".$_REQUEST['grado']."' AND mat_grupo='".$_REQUEST['grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+														$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 														
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+															$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 															$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_REQUEST["carga"]."' AND dn_periodo='".$_REQUEST["periodo"]."'");
 															$rndisiplina=mysqli_fetch_array($consultaRnDisiplina, MYSQLI_BOTH);
 															//LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
 														?>
 														<tr id="data1">
 															<td style="text-align:right;"><?=$resultado[0];?></td>
-															<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+															<td><?=$nombre?></td>
 															<td>
 																<input maxlength="2" name="" id="" value="<?=$rndisiplina["dn_nota"]?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;">
 																<?php if($rndisiplina[4]!=""){?>

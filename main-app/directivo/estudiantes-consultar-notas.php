@@ -22,10 +22,13 @@ if(isset($_POST["consultas"])){
 	}
 }
 ?>
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0079';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0079';
+include("../compartido/historial-acciones-guardar.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+?>
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
@@ -72,9 +75,9 @@ if(isset($_POST["consultas"])){
                         <div class="col-sm-9">
                           
                                 <?php
-                                if(isset($_POST["idE"]) or isset($_GET["idE"])){
-                                    $consultaE = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_matricula='".$_POST["idE"]."' OR mat_id='".$_GET["idE"]."'");
-                                    $e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
+                                if(!empty($_REQUEST["idE"])){
+                                    $e =Estudiantes::obtenerDatosEstudiante($_REQUEST["idE"]);
+                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($e);	
                                 }
                                 ?>
 
@@ -110,7 +113,7 @@ if(isset($_POST["consultas"])){
                                             </div>
                                             
                                             <div class="col-sm-4">
-                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=$e['mat_primer_apellido']." ".$e['mat_segundo_apellido']." ".$e['mat_nombres']." ".$e['mat_nombre2'];?>" readonly>
+                                                <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=$nombre?>" readonly>
                                             </div>
                                         </div>
 
