@@ -1,12 +1,24 @@
 <?php 
 include("session.php");
 include("../modelo/conexion.php");
+include("../class/Estudiantes.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
 	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
 	exit();
 }
+$datosEstudiantes = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+if($_POST["nDoc"]!=$datosEstudiantes['mat_documento']){
+
+	$validacionEstudiante = Estudiantes::validarExistenciaEstudiante($_POST["nDoc"]);
+
+if($validacionEstudiante > 0){
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&documento='.$_POST["nDoc"].'&error=ER_DT_11";</script>';
+	exit();
+} 
+}
+
 
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-modify-student.php");
