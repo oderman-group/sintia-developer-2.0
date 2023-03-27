@@ -152,6 +152,14 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'La contraseña se genero correctamente para los usuarios escogidos.</b>';
             break;
 
+            case 'SC_DT_9':
+                $tipo = 'success';
+                $mensaje = '
+                Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.$_GET['numRegistros'].'</b><br>
+                Ahora la plataforma está más limpia y puedes trabajar con los estudiantes que necesitas para este año.</b>
+                ';
+            break;
+
 
             default:
                 $tipo = 'secondary';
