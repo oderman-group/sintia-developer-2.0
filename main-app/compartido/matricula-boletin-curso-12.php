@@ -351,19 +351,39 @@
 
         <p>&nbsp;</p>
 
-        <table style="font-size: 15px;" width="50%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
+        <table style="font-size: 15px;" width="80%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
             <tr style="background-color: #EAEAEA;">
                 <?php
-                    $puestoCurso = 0;
-                    $puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual, $BD);
+                    if(empty($_REQUEST["curso"])){
+                        $filtro = " AND mat_grado='" . $gradoActual . "' AND mat_grupo='".$grupoActual."'";
+                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+                        $numeroEstudiantes = mysqli_num_rows($matriculadosDelCurso);
+                    }
+                    //Buscamos Puesto del estudiante en el curso
+                    $puestoEstudiantesCurso = 0;
+                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual, $BD);
                     
-                    while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
-                        if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){
-                            $puestoCurso = $puesto['puesto'];
+                    while($puestoCurso = mysqli_fetch_array($puestosCursos, MYSQLI_BOTH)){
+                        if($puestoCurso['bol_estudiante']==$matriculadosDatos['mat_id']){
+                            $puestoEstudiantesCurso = $puestoCurso['puesto'];
+                        }
+                    }
+                    
+                    //Buscamos Puesto del estudiante en la institución
+                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $BD);
+                    $numeroEstudiantesInstitucion = mysqli_num_rows($matriculadosDeLaInstitucion);
+
+                    $puestoEstudiantesInstitucion = 0;
+                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $BD);
+                    
+                    while($puestoInstitucion = mysqli_fetch_array($puestosInstitucion, MYSQLI_BOTH)){
+                        if($puestoInstitucion['bol_estudiante']==$matriculadosDatos['mat_id']){
+                            $puestoEstudiantesInstitucion = $puestoInstitucion['puesto'];
                         }
                     }
                 ?>
-                <td align="center">Puesto en el curso <b><?=$puestoCurso?></b><?php if(!empty($_REQUEST["curso"])){ ?> entre <b><?=$numeroEstudiantes?></b> Estudiantes<?php } ?>.</td>
+                <td align="center" width="40%">Puesto en el curso <b><?=$puestoEstudiantesCurso?></b> entre <b><?=$numeroEstudiantes?></b> Estudiantes.</td>
+                <td align="center" width="40%">Puesto en el colegio <b><?=$puestoEstudiantesInstitucion?></b> entre <b><?=$numeroEstudiantesInstitucion?></b> Estudiantes.</td>
             </tr>
         </table>
 
