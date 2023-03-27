@@ -12,3 +12,6 @@ PES2023-82 - [MATRICULAS] Opción de remover estudiantes que no continuarán est
 
 ### Enuar Lara
 PES2023-116 - [MATRICULAS] Crear el formato del boletín de nuevo gandhy.
+
+### Carlos Herazo
+PES2023-36 - [CARGAS] Hay un delay al cargar las cargas académicas en la opción de las notas de comportamiento.
