@@ -1,9 +1,11 @@
 <?php
 session_start();
 include("../../config-general/config.php");
+include("../class/Estudiantes.php");
  
 //Consultamos los estudiantes del grado y grupo
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+$filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 $lineaError = __LINE__;
 include("../compartido/reporte-errores.php");
 

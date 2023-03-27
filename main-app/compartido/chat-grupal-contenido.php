@@ -1,4 +1,6 @@
-				
+<?php
+include("../class/Estudiantes.php");
+?>
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class="pull-left">
@@ -31,15 +33,14 @@
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
+														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 													?>
 													<li class="list-group-item">
-														<a href="chat-grupal.php?usuario=<?=$resultado['mat_id_usuario'];?>"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></a> 
+														<a href="chat-grupal.php?usuario=<?=$resultado['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right">&nbsp;</div>
 													</li>
 													<?php }?>

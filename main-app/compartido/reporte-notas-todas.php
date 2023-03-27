@@ -1,7 +1,7 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>TODAS LAS CALIFICACIONES</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -19,9 +19,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 
                                   <?php
 								  //ESTUDIANTE ACTUAL
-								  $consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["estudiante"]."'");
-								  
-								  $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
+                  $datosEstudianteActual =Estudiantes::obtenerDatosEstudiante($_GET["estudiante"]);
 								  ?>
                                   <!-- BEGIN TABLE DATA -->
                                   <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">

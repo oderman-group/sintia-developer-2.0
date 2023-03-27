@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("../../config-general/config.php");
+include("../class/Estudiantes.php");
 $consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
@@ -33,9 +34,8 @@ if($num==0){
 		if($usuarioResponsable[1]=="") $usuarioResponsable[1]=0;
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia, alr_institucion, alr_year)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable[1]."',now(),0,1,2,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		
-		$consultaEstudiantes=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_POST["codEst"]."'");
-		$estudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);
-		$nombreCompleto = strtoupper($estudiante[3]." ".$estudiante[4]." ".$estudiante[5]);
+		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
+		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, academico_materias WHERE car_id='".$datosCargaActual[0]."' AND mat_id=car_materia");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 		$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$usuarioResponsable[1]."'");

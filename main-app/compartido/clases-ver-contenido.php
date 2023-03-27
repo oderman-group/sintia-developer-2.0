@@ -1,4 +1,5 @@
 <?php
+include("../class/Estudiantes.php");
 $consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_clases 
 WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
@@ -26,15 +27,11 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												<ul class="list-group list-group-unbordered">
 													<?php
 													$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 
-													GROUP BY mat_id_usuario
-													ORDER BY mat_primer_apellido");
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaGenero=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado[8]."'");
-														$genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
+														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 														$consultaIngresoClase=mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
 														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'
@@ -47,7 +44,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														if($ingresoClase[0]==""){continue;}
 													?>
 													<li class="list-group-item">
-														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['mat_id_usuario'];?>"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></a> 
+														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
 													<?php }?>

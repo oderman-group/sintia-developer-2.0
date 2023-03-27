@@ -1,7 +1,7 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
@@ -11,11 +11,9 @@ $contadorIndicadores=0;
 $materiasPerdidas=0;
 $contadorMaterias=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM academico_matriculas am
-INNER JOIN academico_grupos ON mat_grupo=gru_id
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$_GET["id"]);
-$numUsr=mysqli_num_rows($usr);
-$datosUsr=mysqli_fetch_array($usr, MYSQLI_BOTH);
+$numUsr=Estudiantes::validarExistenciaEstudiante($_GET["id"]);
+$datosUsr=Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 if($numUsr==0)
 {
 ?>
@@ -74,7 +72,7 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
     </tr>
     
     <tr>
-    	<td width="30%" height="30" style="border-top-width:2;border-top-style:solid;border-bottom-width:2;border-bottom-style:solid"><b><?=strtoupper($datosUsr["mat_primer_apellido"]." ".$datosUsr["mat_segundo_apellido"]." ".$datosUsr["mat_nombres"]);?></b></td>
+    	<td width="30%" height="30" style="border-top-width:2;border-top-style:solid;border-bottom-width:2;border-bottom-style:solid"><b><?=$nombre?></b></td>
     	<td width="40%" style="border-top-width:2;border-top-style:solid;border-bottom-width:2;border-bottom-style:solid"><b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
    	  <td width="20%" style="border-top-width:2;border-top-style:solid;border-bottom-width:2;border-bottom-style:solid">&nbsp;</td>
         <td colspan="2" style="border-top-width:2;border-top-style:solid;border-bottom-width:2;border-bottom-style:solid">Matrícula: <b>71075</b></td>
@@ -85,7 +83,7 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
 
 <br>
 <p>
-<table width="70%" id="tblBoletin" style="" cellspacing="0" cellpadding="0" border="0" align="left">
+<table width="70%" id="tblBoletin" cellspacing="0" cellpadding="0" border="0" align="left">
 <tr style="font-weight:bold; background:#ECECEC; height:10px; color:#000; font-size:12px;">
 <td width="20%" height="30" align="center" style="border-bottom-style:solid;border-bottom-width:2">AREAS/ ASIGNATURAS</td>
 <td width="2%" align="center" style="border-bottom-style:solid;border-bottom-width:2" >I.H</td>
@@ -155,8 +153,6 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 			mysqli_data_seek($consultaDesempeno,0);
 		 ?></td>
         <td align='center' style="border-bottom-style:solid;border-bottom-width:2;font-size:12px;"><?php echo 1;?></td>
-      <td ></td>
-      <td ></td>
 <?php
 }else{
 // font-weight:bold;
@@ -165,7 +161,7 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 	  <td class="area" height="30" id="" style="font-size:12px;font-weight:<?php if($numMaterias>1){echo "bold";}?>"><?php echo $resultadoNotArea["ar_nombre"];?></td>
       <td align="center" style="font-size:11px;"><?php if($numMaterias==1){echo 1;
 	  }?></td>
-       <td align="center" style='font-size:12px;'><?php echo "hola";?></td>
+       <td align="center" style='font-size:12px;'><?php echo $totalPromedio;?></td>
         <td  align="center"  style="font-size:12px;"><?php //DESEMPEÑO
 		while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
 			if($totalPromedio>=$rDesempeno["notip_desde"] && $totalPromedio<=$rDesempeno["notip_hasta"]){
@@ -176,8 +172,6 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 			mysqli_data_seek($consultaDesempeno,0);
 		 ?></td>
         <td align='center' style="font-size:12px;"><?php echo 0;?></td>
-      <td align="center"></td>
-      <td align="center"></td>
    
     <?php
 }
@@ -225,8 +219,6 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 			mysqli_data_seek($consultaDesempeno,0);
 		 ?></td>
         <td align='center' style=""><?php echo 0;?></td>
-      <td align="center"></td>
-      <td align="center"></td>
         </tr>
     
 
@@ -238,7 +230,7 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 	 ?>	
       	
 </table>
-<table table width="30%" id="tblBoletin" style="" cellspacing="0" cellpadding="0" border="0" align="left">
+<table table width="30%" id="tblBoletin" cellspacing="0" cellpadding="0" border="0" align="left">
   <tr style="font-weight:bold; height:10px; color:#000; font-size:12px;">
     <td  height="30" colspan="3" align="center"><b>OBSERVACIONES</b></td>
   </tr>

@@ -1,8 +1,11 @@
-<?php include("../directivo/session.php");?>
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
-<?php include("../../config-general/config.php");?>
-
-<?php
+$year=$agnoBD;
+if(isset($_GET["year"])){
+$year=$_GET["year"];
+}
+$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 
@@ -29,8 +32,9 @@ if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <?php
+$filtro = " AND mat_grado='".$_REQUEST["curso"]."'";
 
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_eliminado=0 AND mat_estado_matricula!=3 ORDER BY mat_grupo, mat_primer_apellido");
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 
@@ -43,16 +47,10 @@ $contador_indicadores=0;
 $materiasPerdidas=0;
 
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-
-$usr=mysqli_query($conexion, "SELECT * FROM academico_matriculas am
-
-INNER JOIN academico_grupos ON mat_grupo=gru_id
-
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
-
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 $num_usr=mysqli_num_rows($usr);
-
-$datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 
 if($num_usr==0)
 
@@ -126,7 +124,7 @@ INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 
 INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 
-WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
 $numero_periodos=$config["conf_periodos_maximos"];
 
@@ -150,9 +148,9 @@ $numero_periodos=$config["conf_periodos_maximos"];
 
     <tr>
 
-    	<td>C&oacute;digo: <b><?=$datos_usr["mat_matricula"];?></b></td>
+    	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
 
-        <td>Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
+        <td>Nombre: <b><?=$nombre?></b></td>   
 
     </tr>
 
@@ -160,7 +158,7 @@ $numero_periodos=$config["conf_periodos_maximos"];
 
     <tr>
 
-    	<td>Grado: <b><?=$datos_usr["gra_nombre"]." ".$datos_usr["gru_nombre"];?></b></td>
+    	<td>Grado: <b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
 
         <td>Periodo: <b><?=$periodoActuales;?></b></td>    
 
@@ -310,7 +308,7 @@ INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_
 
 INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 
-WHERE car_curso=".$datos_usr["mat_grado"]."  and car_grupo=".$datos_usr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2."
+WHERE car_curso=".$datosUsr["mat_grado"]."  and car_grupo=".$datosUsr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2."
 
 group by act_id_tipo, act_id_carga
 
@@ -714,15 +712,15 @@ if($periodoActual==4){
 
 	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
 
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
 	elseif($materiasPerdidas<3 and $materiasPerdidas>0)
 
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 
 	else
 
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 
 }
 

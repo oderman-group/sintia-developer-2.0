@@ -1,6 +1,5 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -26,25 +25,18 @@ $filtro = '';
 if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
 if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-INNER JOIN $BD.academico_grados ON gra_id=mat_grado
-INNER JOIN $BD.academico_grupos ON gru_id=mat_grupo
-LEFT JOIN $BD.academico_cargas ON car_curso=mat_grado AND car_grupo=mat_grupo AND car_director_grupo=1
-LEFT JOIN $BD.usuarios ON uss_id=car_docente
-WHERE mat_eliminado=0 $filtro 
-GROUP BY mat_id
-ORDER BY mat_grupo, mat_primer_apellido");
+
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $cont_periodos=0;
 $contador_indicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
-INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
-INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
+    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
 $num_usr=mysqli_num_rows($usr);
-$datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
+$datosUsr=mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 if($num_usr==0)
 {
 ?>
@@ -100,7 +92,7 @@ $consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, noti
 $consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
 INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
 INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
-WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 //$numero_periodos=$config["conf_periodos_maximos"];
 $numero_periodos=$periodoActual;
  ?>
@@ -113,12 +105,12 @@ $numero_periodos=$periodoActual;
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
-    	<td>C&oacute;digo: <b><?=$datos_usr["mat_matricula"];?></b></td>
-        <td colspan="2">Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
+    	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
+        <td colspan="2">Nombre: <b><?=$nombre?></b></td>   
     </tr>
     
     <tr>
-    	<td>Grado: <b><?=$datos_usr["gra_nombre"]." ".$datos_usr["gru_nombre"];?></b></td>
+    	<td>Grado: <b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
         <td>Periodo: <b><?=strtoupper($periodoActuales);?></b></td>
         <td>Puesto Curso:<br> <?=$puestoCurso?></td>    
     </tr>
@@ -199,7 +191,7 @@ INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
 INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 INNER JOIN $BD.academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id
 INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
-WHERE car_curso=".$datos_usr["mat_grado"]."  and car_grupo=".$datos_usr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2."
+WHERE car_curso=".$datosUsr["mat_grado"]."  and car_grupo=".$datosUsr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2."
 group by act_id_tipo, act_id_carga
 order by mat_id,ipc_periodo,ind_id;");
 
@@ -226,7 +218,7 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 		$consultaDesempenoNotaPromArea=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio.">=notip_desde AND ".$total_promedio."<=notip_hasta");
 		$desempenoNotaPromArea = mysqli_fetch_array($consultaDesempenoNotaPromArea, MYSQLI_BOTH);
 		
-		if($datos_usr["mat_grado"]>11){
+		if($datosUsr["mat_grado"]>11){
 				$notaFA = ceil($total_promedio);
 			/*
 				switch($notaFA){
@@ -273,7 +265,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 			if($notaDelEstudiante['bol_nota']!=""){
 				$consultaDesmpenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta");
 				$desempenoNotaP = mysqli_fetch_array($consultaDesmpenoNotaP, MYSQLI_BOTH);
-				if($datos_usr["mat_grado"]>11){
+				if($datosUsr["mat_grado"]>11){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
 					/*
 					switch($notaF){
@@ -324,7 +316,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 		$consultaDesmpenoNotaXasig=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio2.">=notip_desde AND ".$total_promedio2."<=notip_hasta");
 		$desempenoNotaXasig = mysqli_fetch_array($consultaDesmpenoNotaXasig, MYSQLI_BOTH);
 	
-					if($datos_usr["mat_grado"]>11){
+					if($datosUsr["mat_grado"]>11){
 				$notaFI = ceil($total_promedio2);
 						/*
 				switch($notaFI){
@@ -345,7 +337,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php //DESEMPEÑO
 		while($r_desempeno=mysqli_fetch_array($consulta_desempeno, MYSQLI_BOTH)){
 			if($total_promedio2>=$r_desempeno["notip_desde"] && $total_promedio2<=$r_desempeno["notip_hasta"]){
-				if($datos_usr["mat_grado"]>11){
+				if($datosUsr["mat_grado"]>11){
 					/*
 					$notaFD = ceil($total_promedio2);
 				switch($notaFD){
@@ -390,7 +382,7 @@ if($numIndicadores>0){
 			$desempenoNotaInd = mysqli_fetch_array($consultaDesmpenoNotaInd, MYSQLI_BOTH);
 			?>
 			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){
-				if($datos_usr["mat_grado"]>11){
+				if($datosUsr["mat_grado"]>11){
 				$notaFII = ceil($nota_indicador);
 					/*
 				switch($notaFII){
@@ -457,7 +449,7 @@ if($numIndicadores>0){
         <td style="font-size:16px;">
         	<?php 
 		if($promedios[$n]!=0){
-			if($datos_usr["mat_grado"]>11){
+			if($datosUsr["mat_grado"]>11){
 				$notaFF = ceil(round(($promedios[$n]/$contpromedios[$n]),1));
 				echo $desempenoNotaProm['notip_nombre'];
 			}else{
@@ -565,11 +557,11 @@ $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 <?php 
 if($periodoActual==4){
 	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 	elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 }
 ?>
 

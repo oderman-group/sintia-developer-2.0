@@ -1,6 +1,13 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
 <?php
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+
+$year=$agnoBD;
+if(isset($_GET["year"])){
+$year=$_GET["year"];
+}
+$BD=$_SESSION["inst"]."_".$year;
+
 $modulo = 1;
 if($_GET["periodo"]==""){
 	$periodoActual = 1;
@@ -19,9 +26,7 @@ $contPeriodos=0;
 $contadorIndicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM academico_matriculas am
-INNER JOIN academico_grupos ON mat_grupo=gru_id
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$_GET["id"]);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($_GET["id"],$BD);
 $numUsr=mysqli_num_rows($usr);
 $datosUsr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 if($numUsr==0)
