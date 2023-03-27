@@ -31,8 +31,8 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 <body style="font-family:Arial;">
 	<?php
-	$nombre_informe = "INFORME DE SABANAS" . "<br>" . "PERIDODO " . $_REQUEST["per"] . "<br>" . $grados["gra_nombre"] . " " . $grados["gru_nombre"] . " " . $year;
-	include("../compartido/head_informes.php") ?>
+	$nombreInforme = "INFORME DE SABANAS" . "<br>" . "PERIDODO " . $_REQUEST["per"] . "<br>" . $grados["gra_nombre"] . " " . $grados["gru_nombre"] . " " . $year;
+	include("../compartido/head-informes.php") ?>
 
 
 	<table width="100%" cellspacing="5" cellpadding="5" rules="all" style="
@@ -174,7 +174,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	</table>
 
 
-	<?php include("../compartido/footer_informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>;
 </body>
 
 </html>

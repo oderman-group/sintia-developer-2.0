@@ -1,6 +1,7 @@
 <?php
-function getToString($valor)
-{
+class Utilidades {
+    public static  function getToString($valor)
+    {   
     // validammos que las variables no sean null 
     if (isset($valor)) {
         return  $valor;
@@ -8,4 +9,5 @@ function getToString($valor)
         return "";
     }
     
+}
 }

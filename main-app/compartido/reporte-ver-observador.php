@@ -13,8 +13,8 @@ include("../class/Estudiantes.php");?>
 
 <body style="font-family:Arial;">
   <?php
-  $nombre_informe = "REPORTE OBSERVADOR" . "<br><p class=" . "mb-2 mt-2" . ">" . "<a href=" . "reporte-ver-observador.php" . ">VER TODO</a>" . "</p>";
-  include("../compartido/head_informes.php") ?>
+  $nombreInforme = "REPORTE OBSERVADOR" . "<br><p class=" . "mb-2 mt-2" . ">" . "<a href=" . "reporte-ver-observador.php" . ">VER TODO</a>" . "</p>";
+  include("../compartido/head-informes.php") ?>
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm">
@@ -79,7 +79,7 @@ include("../class/Estudiantes.php");?>
       ?>
     </table>
 
-    <?php include("../compartido/footer_informes.php") ?>;
+    <?php include("../compartido/footer-informes.php") ?>;
 
   </div>
 

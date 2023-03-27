@@ -12,8 +12,8 @@ include("../class/Estudiantes.php");
 <body style="font-family:Arial;">
 
 <?php
-$nombre_informe = "LISTADO ESTUDIANTES";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "LISTADO ESTUDIANTES";
+include("../compartido/head-informes.php") ?>
 
   <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -65,7 +65,7 @@ include("../compartido/head_informes.php") ?>
   }//Fin mientras que
   ?>
   </table>
-	<?php include("../compartido/footer_informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>;
 	 
 
 </body>

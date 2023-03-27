@@ -1,5 +1,4 @@
 <?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
 <?php
 
 $year=$agnoBD;
@@ -106,8 +105,8 @@ $numero_periodos=$periodoActual;
  ?>
 
 <?php
-$nombre_informe = "BOLETÍN DE CALIFICACIONES";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "BOLETÍN DE CALIFICACIONES";
+include("../compartido/head-informes.php") ?>
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
@@ -572,7 +571,7 @@ if($periodoActual==4){
 ?>
 
 
-<?php include("../compartido/footer_informes.php") ?>;
+<?php include("../compartido/footer-informes.php") ?>;
 				                   
 <!-- 
 <div align="center" style="font-size:10px; margin-top:10px;">

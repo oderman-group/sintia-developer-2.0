@@ -27,16 +27,8 @@ if(isset($_REQUEST["agno"])){
 </head>
 <body style="font-family:Arial;">
 <?php
-$curso_string =""; 
-$grupo_string =""; 
-if(isset($curso['gra_nombre'])){
-	$curso_string= $curso['gra_nombre'];
-}
-if(isset($grupo['gru_nombre'])){
-	$grupo_string= $grupo['gru_nombre'];
-}
-$nombre_informe = "CONSOLIDADO FINAL " .$year."<br>" . "CURSO: " . $curso_string . "<br>" . "GRUPO: ".$grupo_string;
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "CONSOLIDADO FINAL " .$year."<br>" . "CURSO: " .Utilidades::getToString($curso['gra_nombre']). "<br>" . "GRUPO: ".Utilidades::getToString($grupo['gru_nombre']);
+include("../compartido/head-informes.php") ?>
 
 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
@@ -133,6 +125,6 @@ include("../compartido/head_informes.php") ?>
                                       </tr>
                                       <?php }?>
   </table>
-  <?php include("../compartido/footer_informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>

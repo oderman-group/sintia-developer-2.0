@@ -29,8 +29,8 @@ ORDER BY car_docente");
 <body style="font-family:Arial; font-size: 10px;">
 	
 <?php
-$nombre_informe = "CARGA GENERAL DE DOCENTES";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "CARGA GENERAL DE DOCENTES";
+include("../compartido/head-informes.php") ?>
 	
 	<div style="margin: 10px;">
 		<table width="100%" border="1" style=" border:solid;border-color:<?=$Plataforma->colorUno;?>;" rules="all" align="center">    
@@ -66,7 +66,7 @@ include("../compartido/head_informes.php") ?>
 			?>  
 		</table>
 	</div>
-	<?php include("../compartido/footer_informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>;
 
 </div>	
 

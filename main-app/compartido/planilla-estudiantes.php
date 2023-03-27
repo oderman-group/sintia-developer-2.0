@@ -34,8 +34,8 @@ $subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
 }elseif(is_numeric($_REQUEST["grado"])) {
   $subNombre=$grados["gra_nombre"]."<br>".$year;
 }
-$nombre_informe =  "PLANILLA DE ESTUDIANTES ".$subNombre;
-include("../compartido/head_informes.php") ?>
+$nombreInforme =  "PLANILLA DE ESTUDIANTES ".$subNombre;
+include("../compartido/head-informes.php") ?>
 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -85,7 +85,7 @@ include("../compartido/head_informes.php") ?>
   ?>
   </table>
   Total Estudiantes:<?=$numE;?>
-  <?php include("../compartido/footer_informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 <script type="application/javascript">
 print();

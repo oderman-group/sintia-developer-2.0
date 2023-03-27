@@ -11,8 +11,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
 
 <body style="font-family:Arial;">
 <?php
-$nombre_informe = "ESTUDIANTES CON ASIGNATURAS PERDIDAS";
-include("../compartido/head_informes.php") ?>
+$nombreInforme = "ESTUDIANTES CON ASIGNATURAS PERDIDAS";
+include("../compartido/head-informes.php") ?>
 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
@@ -91,7 +91,7 @@ include("../compartido/head_informes.php") ?>
         <?php }?>
     </table>
     </center>
-	<?php include("../compartido/footer_informes.php") ?>;		
+	<?php include("../compartido/footer-informes.php") ?>;		
 </body>
 
 </html>

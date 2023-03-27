@@ -14,7 +14,7 @@
 		</div>
 		<div class="col-sm-4">
 			<div class="col-sm-12" style="margin:10px;"></div>
-			<div class="col-sm-12" align="center" style="margin-bottom:20px;font-weight:bold;color:<?=$Plataforma->colorUno;?>"><b><?= $nombre_informe ?></br></div>
+			<div class="col-sm-12" align="center" style="margin-bottom:20px;font-weight:bold;color:<?=$Plataforma->colorUno;?>"><b><?= $nombreInforme ?></br></div>
 			<div class="col-sm-12" style="margin:10px;"></div>
 		</div>
 		<div class="col-sm-2"></div>
