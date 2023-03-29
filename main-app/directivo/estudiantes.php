@@ -5,7 +5,6 @@
 <?php
 include("../class/Estudiantes.php");
 
-$Plataforma = new Plataforma;
 
 $filtro = '';
 if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
@@ -104,7 +103,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div >
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
@@ -153,12 +152,12 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														}
 													</script>
 													<?php
-													$filtroLimite = '';
-													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													 $consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
-													 $contReg = 1;
+													include("consulta-paginacion-estudiantes.php");
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$contReg = 1;
 
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
 														WHERE uss_id='".$resultado["mat_acudiente"]."'");
@@ -179,7 +178,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 															'estado_matricula' => $resultado['mat_estado_matricula']
 														];
 														$dataParaJavascript = json_encode($miArray);
-													 ?>
+													?>
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
@@ -217,7 +216,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	<i class="fa fa-angle-down"></i>
 																</button>
-																<ul class="dropdown-menu" role="menu">
+																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<li><a href="estudiantes-editar.php?id=<?=$resultado['mat_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																	<?php if($config['conf_id_institucion']==1){ ?>
 																		<li><a href="estudiantes-crear-sion.php?id=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
@@ -259,6 +258,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
 								
 								

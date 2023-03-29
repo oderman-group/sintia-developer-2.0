@@ -30,6 +30,28 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
 
+    <script type="application/javascript">
+		function validarEstudiante(enviada){
+			var nDoct = enviada.value;
+
+			if(nDoct!=""){
+				$('#nDocu').empty().hide().html("Validando documento...").show(1);
+
+				datos = "nDoct="+(nDoct);
+					$.ajax({
+					type: "POST",
+					url: "ajax-estudiantes-editar.php",
+					data: datos,
+					success: function(data){
+						$('#nDocu').empty().hide().html(data).show(1);
+					}
+
+				});
+
+			}
+		}
+	</script>
+
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -55,7 +77,7 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                         </div>
                     </div>
 
-                         
+                    <span style="color: blue; font-size: 15px;" id="nDocu"></span>
                     <!-- wizard with validation-->
                     <div class="row">
                     	<div class="col-sm-12">

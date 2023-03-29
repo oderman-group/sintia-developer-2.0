@@ -58,7 +58,7 @@
 												
 												<label class="col-sm-2 control-label">Número de documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nDoc" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[12];?>">
+													<input type="text" name="nDoc" id="nDoc" required class="form-control" autocomplete="off" onChange="validarEstudiante(this)" value="<?=$datosEstudianteActual[12];?>">
 												</div>
 											</div>	
 												
@@ -95,19 +95,19 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="apellido1" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[3];?>">
+													<input type="text" name="apellido1" id="apellido1" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[3];?>">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-2">
-													<input type="text" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[4];?>">
+													<input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[4];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nombres" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[5];?>">
+													<input type="text" name="nombres" id="nombres" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[5];?>">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -301,3 +301,4 @@
 											<?php include("includes/pasos-matricula.php");?>
 
 										</fieldset>
+

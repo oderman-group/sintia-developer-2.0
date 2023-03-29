@@ -8,7 +8,7 @@ include("../class/Estudiantes.php");
 <head>
 	<title>PLANILLA DE ESTUDIANTES</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
 <?php
@@ -22,13 +22,10 @@ $BD=$_SESSION["inst"]."_".$_POST["agno"];
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);	
 ?>
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    PLANILLA DE ESTUDIANTES</br>
-    <?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?><br>
-    <?=$year;?>
-</div>   
+<?php
+$nombreInforme = "PLANILLA DE ESTUDIANTES"."<br>".$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
+include("../compartido/head-informes.php") ?>
+ 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
   border:solid; 
@@ -101,10 +98,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   }//Fin mientras que
   ?>
   </table>
-  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
-      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
-     </div>
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>
 
