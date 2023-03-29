@@ -49,6 +49,7 @@
 											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">13. Reporte vista observador</a></p>
 											<p><a href="informe-reporte-sabana.php">14. Informe de Sabanas</a></p>
 											<p><a href="consolidado-final-filtro.php">15. Informe de Consolidado Final</a></p>
+											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">16. Informe de Cargas Duplicadas</a></p>
 										</div>
                                 	</div>
 								</div>

@@ -1,5 +1,4 @@
 <?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
 <?php
 
 $year=$agnoBD;
@@ -105,11 +104,9 @@ WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_gru
 $numero_periodos=$periodoActual;
  ?>
 
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
-    <!-- <?=$informacion_inst["info_nombre"]?><br>
-    BOLETÍN DE CALIFICACIONES<br> -->
-</div> 
+<?php
+$nombreInforme = "BOLETÍN DE CALIFICACIONES";
+include("../compartido/head-informes.php") ?>
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
@@ -574,11 +571,8 @@ if($periodoActual==4){
 ?>
 
 
-<p align="center">
-
-<div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center"><?=$msj;?></div>
-
-</p>					                   
+<?php include("../compartido/footer-informes.php") ?>;
+				                   
 <!-- 
 <div align="center" style="font-size:10px; margin-top:10px;">
                                         <img src="../files/images/sintia.png" height="50" width="100"><br>
