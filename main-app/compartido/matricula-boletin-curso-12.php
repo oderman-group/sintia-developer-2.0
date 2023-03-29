@@ -387,6 +387,7 @@
 
         <p>&nbsp;</p>
         <p>&nbsp;</p>
+        <p>&nbsp;</p>
 
         <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
@@ -395,15 +396,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="color:#000; text-align:center">
-                    <td>
+                <tr style="color:#000;">
+                    <td style="padding-left: 20px;">
                         <?php 
-                        for ($j = 1; $j <= $periodoActual; $j++) {
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$j."'");
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$periodoActual."'");
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-                                echo $rndisiplina["dn_periodo"]." Per. - ".$rndisiplina["dn_observacion"].".<br>";
+
+                                if(!empty($rndisiplina['dn_observacion'])){
+                                    $explode=explode(",",$rndisiplina['dn_observacion']);
+                                    $numDatos=count($explode);
+                                    if($numDatos>0 && ctype_digit($explode[0])){
+                                        for($i=0;$i<$numDatos;$i++){
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM academico_observaciones WHERE obser_id=$explode[$i]");
+                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+                                            echo "- ".$observaciones['obser_descripcion']."<br>";
+                                        }
+                                    }else{
+                                        echo "- ".$rndisiplina["dn_observacion"]."<br>";
+                                    }
+                                }
                             }
-                        }
                         ?>
                         <p>&nbsp;</p>
                     </td>
