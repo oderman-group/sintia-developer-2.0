@@ -1,12 +1,10 @@
 <?php 
 include("session.php");
-$consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
+$consultaDoc=mysqli_query($conexion, "SELECT * FROM academico_matriculas
 WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
-$numDotos=mysqli_num_rows($consultaDoc);
-if ($numDotos > 0) {
-    include("../class/Estudiantes.php");
-    $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["nDoct"]);
-    $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
+$datosEstudiantes = mysqli_fetch_array($consultaDoc, MYSQLI_BOTH);
+$numDatos=mysqli_num_rows($consultaDoc);
+if ($numDatos > 0) {
 ?>
     <script type="application/javascript">
         document.getElementById('apellido1').disabled = 'disabled';
@@ -19,7 +17,15 @@ if ($numDotos > 0) {
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 
         <p>
-            Este número de documento se encuentra registrado y asociado al estudiante <b><?=$nombreEstudiante;?></b>.<br>
+         Este número de documento ya se encuentra registrado y asociado al estudiante <b><?=$datosEstudiantes["mat_nombres"]?></b> <b><?=$datosEstudiantes["mat_nombre2"]?></b> <b><?=$datosEstudiantes["mat_primer_apellido"];?></b> <b><?=$datosEstudiantes["mat_segundo_apellido"];?></b> <br>
+         ¿Desea mostrar toda la información del estudiante?.
+        </p>
+        <p style="margin-top:10px;">
+            <div class="btn-group">
+                <a href="estudiantes-editar.php?id=<?=$datosEstudiantes['mat_id'];?>" id="addRow" class="btn deepPink-bgcolor">
+                    Sí, deseo mostrar la información
+                </a>
+            </div>
         </p>
         
 
