@@ -124,8 +124,6 @@ class BaseDatos {
 
 		include('../modelo/conexion.php');
 
-		include("../../config-general/config.php");
-
 		
 
 		mysqli_query($conexion, "DELETE FROM ".$tabla." WHERE ".$clave."='".$id."'");
