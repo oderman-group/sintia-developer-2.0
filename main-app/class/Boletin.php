@@ -239,7 +239,7 @@ class Boletin {
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_valor,mat_id,car_id FROM $BD.academico_materias am
+            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_valor,mat_id,car_id,car_ih,car_director_grupo FROM $BD.academico_materias am
             INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
@@ -361,6 +361,28 @@ class Boletin {
             WHERE car_curso=" . $grado . "  and car_grupo=" . $grupo . " and mat_area=" . $area . " AND ipc_periodo= " . $periodo . " AND cal_id_estudiante='" . $estudiante . "' and act_periodo=" . $periodo . "
             group by act_id_tipo, act_id_carga
             order by mat_id,ipc_periodo,ind_id;");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
+    public static function obtenerPuestoEstudianteEnInstitucion(
+        int    $periodo      = 0,
+        string $BD    = ''
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM $BD.academico_matriculas
+            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodo."'
+            WHERE  mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
+            GROUP BY mat_id 
+            ORDER BY prom DESC");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();

@@ -2,6 +2,7 @@
 <?php
     include("../directivo/session.php");
     include("../class/Plataforma.php");
+    include("../class/Usuarios.php");
     include("../class/Estudiantes.php");
     include("../class/Boletin.php");
     $Plataforma = new Plataforma;
@@ -22,13 +23,13 @@
 
     switch($periodoActual){
         case 1:
-            $periodoActuales = "Primero";
+            $periodoActuales = "Uno";
             break;
         case 2:
-            $periodoActuales = "Segundo";
+            $periodoActuales = "Dos";
             break;
         case 3:
-            $periodoActuales = "Tercero";
+            $periodoActuales = "Tres";
             break;
         case 4:
             $periodoActuales = "Final";
@@ -54,8 +55,26 @@
     <?php
         exit();
     }
-    $colspan=4+$periodoActual;
+
+    $periodosCursados=$periodoActual-1;
+    $colspan=8+$periodosCursados;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
+        $gradoActual = $matriculadosDatos['mat_grado'];
+        $grupoActual = $matriculadosDatos['mat_grupo'];
+        switch($matriculadosDatos["gru_id"]){
+            case 1:
+                $grupo= "Uno";
+            break;
+            case 2:
+                $grupo= "Dos";
+            break;
+            case 3:
+                $grupo= "Tres";
+            break;
+            case 4:
+                $grupo= "Sin Grupo";
+            break;
+        }
         //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
         $nombreEstudainte=Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
         //CONSULTA QUE ME TRAE LAS AREAS DEL ESTUDIANTE
@@ -80,26 +99,23 @@
         <div style="margin: 15px 0;">
             <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
                 <tr>
-                    <td rowspan="2"><?=$informacion_inst["info_nombre"]?></td>
-                    <td colspan="2">Nombre: <b><?=$nombreEstudainte?></b></td>
                     <td rowspan="2" width="20%"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"></td>
+                    <td align="center" rowspan="2" width="25%">
+                        <h3 style="font-weight:bold; color: #00adefad; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></h3><br>
+                        <?=$informacion_inst["info_direccion"]?><br>
+                        Informes: <?=$informacion_inst["info_telefono"]?>
+                    </td>
+                    <td>Documento:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_documento"],0,",",".");?></b></td>
+                    <td>Nombre:<br> <b style="color: #00adefad;"><?=$nombreEstudainte?></b></td>
+                    <td>Grado:<br> <b style="color: #00adefad;"><?=strtoupper($matriculadosDatos["gra_nombre"]." ".$grupo)?></b></td>
                 </tr>
                 <tr>
-                    <td width="20%">Codigo: <b><?=$matriculadosDatos["mat_id"]?></b></td>
-                    <td width="25%">Sede: <b><?=$informacion_inst["info_nombre"]?></b></td>
+                    <td>E. Básica:<br> <b style="color: #00adefad;">PRIMARIA</b></td>
+                    <td>Sede:<br> <b style="color: #00adefad;"><?=strtoupper($informacion_inst["info_nombre"])?></b></td>
+                    <td>Jornada:<br> <b style="color: #00adefad;"><?=strtoupper($informacion_inst["info_jornada"])?></b></td>
                 </tr>
             </table>
-            <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
-                <tr>
-                    <td width="25%">Periodo: <b><?=$periodoActuales?></b></td>
-                    <td width="25%">Grado: <b><?=$matriculadosDatos["gra_nombre"]." ".$matriculadosDatos["gru_nombre"]?></b></td>
-                    <td width="25%">Nivel: <b>Bachiller</b></td>
-                    <td width="25%">Jornada: <b><?=$informacion_inst["info_jornada"]?></b></td>
-                </tr>
-                <tr style="text-align:center; font-size: 13px;">
-                    <td colspan="4"><h3 style="margin: 0 10%;"><b>AÑO LECTIVO <?=$year?> - INFORME DEFINITIVO DE NOTAS</b></h3></td>
-                </tr>
-            </table>
+            <p>&nbsp;</p>
         </div>
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" style="font-size: 13px;">
             <tr style="text-align:center; font-size: 13px;">
@@ -125,17 +141,33 @@
                 <tr style="font-weight:bold; text-align:center;">
                     <td width="2%" rowspan="2">Nº</td>
                     <td width="20%" rowspan="2">ASIGNATURAS</td>
-                    <td width="3%" colspan="<?=$periodoActual?>"><a href="#" style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
-                    <td width="3%" colspan="2">Valoración Final</td>
+                    <td width="3%" rowspan="2">I.H</td>
+                    <?php
+                        if($periodoActual!=1){
+                    ?>
+                    <td width="3%" colspan="<?=$periodosCursados?>"><a href="#" style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
+                    <?php
+                        }
+                    ?>
+                    <td width="3%" colspan="2">Periodo Actual (<?=strtoupper($periodoActuales)?>)</td>
+                    <td width="3%" colspan="3">TOTAL ACUMULADO</td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
                     <?php
                         for($i=1;$i<=$periodoActual;$i++){
+                            if($i!=$periodoActual){
                     ?>
                         <td width="3%"><?=$i?></td>
                     <?php
+                        }else{
+                    ?>
+                    <td width="3%">Nota</td>
+                    <td width="3%">Desempeño</td>
+                    <?php
+                            }
                         }
                     ?>
+                    <td width="3%">Fallas</td>
                     <td width="3%">Nota</td>
                     <td width="3%">Desempeño</td>
                 </tr>
@@ -181,12 +213,14 @@
                 <tr>
                     <td align="center" style="background: #9ed8ed"><?=$contador?></td>
                     <td><?=$materia["mat_nombre"]?></td>
+                    <td align="center"><?=$materia["car_ih"]?></td>
                     <?php
                         $notaGeneral1=0;
                         $notaGeneral2=0;
                         $notaGeneral3=0;
                         $notaGeneral4=0;
                         $promedioMateria = 0;
+                        $formula=($materia['mat_valor']/100);
                         for($i=1;$i<=$periodoActual;$i++){
                             $consultaBoletin=Boletin::obtenerObservaciones($materia["car_id"], $i, $matriculadosDatos['mat_id'], $BD);
                             $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
@@ -195,28 +229,40 @@
                             if (!empty($datosBoletin['bol_nota'])) {
                                 $notaBoletin = (round($datosBoletin['bol_nota'], 1));
                             }
-                            $formula=($materia['mat_valor']/100);
                             switch($i){
                                 case 1:
                                     $notaGeneral1+=($notaBoletin*$formula);
+                                    $notaMateria=round($notaGeneral1, 1);
                                     break;
                                 case 2:
                                     $notaGeneral2+=($notaBoletin*$formula);
+                                    $notaMateria=round($notaGeneral2, 1);
                                     break;
                                 case 3:
                                     $notaGeneral3+=($notaBoletin*$formula);
+                                    $notaMateria=round($notaGeneral3, 1);
                                     break;
                                 case 4:
                                     $notaGeneral4+=($notaBoletin*$formula);
+                                    $notaMateria=round($notaGeneral4, 1);
                                     break;
                             }
 
-                            $promedioMateria += $notaBoletin;
+                            $promedioMateria += $notaMateria;
+                            if($i!=$periodoActual){
                     ?>
-                    <td align="center"><?=$notaBoletin?></td>
+                    <td align="center" style="background: #9ed8ed"><?=$notaMateria?></td>
                     <?php
+                        }else{
+                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                    ?>
+                    <td align="center"><?=$notaMateria?></td>
+                    <td align="center"><?=$estiloNota['notip_nombre']?></td>
+                    <?php
+                            }
                         }//FIN FOR
-                        $promedioMateria = round($promedioMateria / ($i - 1), 1);
+                        $promedioMateria = ($promedioMateria / $periodoActual);
+                        $promedioMateria = round($promedioMateria, 1);
                         $promedioMateriaFinal = $promedioMateria;
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -225,28 +271,23 @@
                             $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 
                             $promedioMateriaFinal = $nivelacion['niv_definitiva'];
+                            $promedioMateriaFinal = ($promedioMateriaFinal*$formula);
                         }
 
                         $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
+                        
+                        $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $materia['mat_id'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
+                        $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+                        $ausencia="";
+                        if ($datosAusencias[0]>0) {
+                            $ausencia= round($datosAusencias[0],0);
+                        } 
                     ?>
+                    <td align="center"><?=$ausencia;?></td>
                     <td align="center"><?=$promedioMateriaFinal;?></td>
                     <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
                 </tr>
                 <?php
-                    $consultaObsevacion=Boletin::obtenerObservaciones($materia["car_id"], $periodoActual, $matriculadosDatos['mat_id'], $BD);
-                    $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
-                    if (!empty($observacion['bol_observaciones_boletin'])) {
-                ?>
-                <tr style="background: #9ed8ed">
-                    <td colspan="<?=$colspan?>">
-                        <h5 align="center" style="margin: 0 10%;">Observaciones</h5>
-                        <p style="margin-left: 5px; font-size: 11px; margin-top: 5px; margin-bottom: 5px; font-style: italic;">
-                            <?=$observacion['bol_observaciones_boletin']?>
-                        </p>
-                    </td>
-                </tr>
-                <?php
-                            }//FIN IF OBSERVACIONES
                         $contador++;
                         $promedioGeneral1+=$notaGeneral1;
                         $promedioGeneral2+=$notaGeneral2;
@@ -260,28 +301,11 @@
                 <tr style="background: #9ed8ed">
                     <td colspan="<?=$colspan?>"></td>
                 </tr>
-                <tr style="background: #EAEAEA">
-                    <td colspan="2">PROMEDIO GENERAR</td>
-                    <?php
-                    $promedioGeneral = 0;
-                    for ($j = 1; $j <= $periodoActual; $j++) {
-                        $consultaPromedioPeriodoTodos=Boletin::obtenerPromedioPorTodosLosPeriodos($matriculadosDatos['mat_id'], $j, $BD);
-                        $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
-                    ?>
-                    <td align="center"><?=$promediosPeriodos['promedio'];?></td>
-                    <?php 
-                        $promedioGeneral +=$promediosPeriodos['promedio'];
-                    }// FIN FOR
-
-                    $promedioGeneral = round($promedioGeneral/$periodoActual,1);
-
-                    $promedioGeneralEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral, $BD);
-                    ?>
-                    <td align="center"><?=$promedioGeneral;?></td>
-                    <td align="center"><?= $promedioGeneralEstiloNota['notip_nombre']; ?></td>
-                </tr>
                 <tr style="background: #9ed8ed">
-                    <td colspan="2">PROMEDIO FINAL SEGUN EL PORCENTAJE DE LAS MATERIAS</td>
+                    <td colspan="<?=$colspan?>"></td>
+                </tr>
+                <tr style="background: #EAEAEA">
+                    <td colspan="3">PROMEDIO GENERAL</td>
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
@@ -301,15 +325,24 @@
                         }
                         $promediosPeriodos = $promediosPeriodos/($contador-1);
                         $promediosPeriodos = round($promediosPeriodos,1);
+                        if($j!=$periodoActual){
                     ?>
                     <td align="center"><?=$promediosPeriodos;?></td>
-                    <?php 
+                    <?php
+                        }else{
+                        $promedioEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos, $BD);
+                    ?>
+                    <td align="center"><?=$promediosPeriodos;?></td>
+                    <td align="center"><?=$promedioEstiloNota['notip_nombre'];?></td>
+                    <?php
+                            }
                         $promedioFinal +=$promediosPeriodos;
                     }// FIN FOR
 
                     $promedioFinal = round($promedioFinal/$periodoActual,1);
                     $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $BD);
                     ?>
+                    <td align="center"></td>
                     <td align="center"><?=$promedioFinal;?></td>
                     <td align="center"><?= $promedioFinalEstiloNota['notip_nombre']; ?></td>
                 </tr>
@@ -318,7 +351,46 @@
 
         <p>&nbsp;</p>
 
-        <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
+        <table style="font-size: 15px;" width="80%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
+            <tr style="background-color: #EAEAEA;">
+                <?php
+                    if(empty($_REQUEST["curso"])){
+                        $filtro = " AND mat_grado='" . $gradoActual . "' AND mat_grupo='".$grupoActual."'";
+                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+                        $numeroEstudiantes = mysqli_num_rows($matriculadosDelCurso);
+                    }
+                    //Buscamos Puesto del estudiante en el curso
+                    $puestoEstudiantesCurso = 0;
+                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual, $BD);
+                    
+                    while($puestoCurso = mysqli_fetch_array($puestosCursos, MYSQLI_BOTH)){
+                        if($puestoCurso['bol_estudiante']==$matriculadosDatos['mat_id']){
+                            $puestoEstudiantesCurso = $puestoCurso['puesto'];
+                        }
+                    }
+                    
+                    //Buscamos Puesto del estudiante en la institución
+                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $BD);
+                    $numeroEstudiantesInstitucion = mysqli_num_rows($matriculadosDeLaInstitucion);
+
+                    $puestoEstudiantesInstitucion = 0;
+                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $BD);
+                    
+                    while($puestoInstitucion = mysqli_fetch_array($puestosInstitucion, MYSQLI_BOTH)){
+                        if($puestoInstitucion['bol_estudiante']==$matriculadosDatos['mat_id']){
+                            $puestoEstudiantesInstitucion = $puestoInstitucion['puesto'];
+                        }
+                    }
+                ?>
+                <td align="center" width="40%">Puesto en el curso <b><?=$puestoEstudiantesCurso?></b> entre <b><?=$numeroEstudiantes?></b> Estudiantes.</td>
+                <td align="center" width="40%">Puesto en el colegio <b><?=$puestoEstudiantesInstitucion?></b> entre <b><?=$numeroEstudiantesInstitucion?></b> Estudiantes.</td>
+            </tr>
+        </table>
+
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+
+        <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
                 <tr style="font-weight:bold; text-align:left; background-color: #00adefad;">
                     <td><b>Observaciones:</b></td>
@@ -335,10 +407,55 @@
                             }
                         }
                         ?>
+                        <p>&nbsp;</p>
                     </td>
                 </tr>
             </tbody>
-        </table>  
+        </table>
+
+        <p>&nbsp;</p>
+
+        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
+            <thead>
+                <tr style="font-weight:bold; text-align:center; background-color: #00adefad;">
+                    <td width="30%">Asignatura</td>
+                    <td width="70%">Indicadores de desempeño</td>
+                </tr>
+            </thead>
+
+            <?php
+            $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
+	        INNER JOIN academico_materias ON mat_id=car_materia
+	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
+            while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
+
+                
+            ?>
+                <tbody>
+                    <tr style="color:#000;">
+                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= $datosCargasDos['uss_nombre']; ?></span></td>
+                        <td>
+                        
+                            <?php
+                            //INDICADORES
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
+		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
+		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
+                            while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
+                            ?>
+                   
+                        <?= $indicador['ind_nombre']; ?><br>
+                    
+                <?php
+                            }
+                ?>
+                    </td>
+                </tr>
+                </tbody>
+            <?php
+            }
+            ?>
+        </table>
 
         <p>&nbsp;</p>
         <p>&nbsp;</p>
@@ -347,7 +464,7 @@
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
                 <td align="center"><br>_________________________________<br><?= strtoupper(""); ?><br>Rector(a)</td>
-                <td align="center"><p style="height:0px;"></p>_________________________________<br><?= strtoupper(""); ?><br>Director(a) de grupo</td>
+                <td align="center"><p style="height:0px;"></p>_________________________________<br><?=strtoupper("")?><br>Director(a) de grupo</td>
             </tr>
         </table>
 
