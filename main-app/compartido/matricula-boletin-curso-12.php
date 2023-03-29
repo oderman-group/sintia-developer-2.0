@@ -1,8 +1,6 @@
 
 <?php
     include("../directivo/session.php");
-    include("../class/Plataforma.php");
-    include("../class/Usuarios.php");
     include("../class/Estudiantes.php");
     include("../class/Boletin.php");
     $Plataforma = new Plataforma;
