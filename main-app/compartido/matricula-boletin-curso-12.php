@@ -484,10 +484,15 @@
                         $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
                         $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
                         if(!empty($directorGrupo["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
                     ?>
-                    <img src="../files/fotos/<?=$directorGrupo["uss_firma"]?>" width="100">><br>
-                    <?php } ?>
                     <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
                     <?=$nombreDirectorGrupo?><br>
                     Director(a) de grupo
                 </td>
@@ -496,10 +501,15 @@
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
                         if(!empty($rector["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
                     ?>
-                    <img src="../files/fotos/<?=$rector["uss_firma"]?>" width="100">><br>
-                    <?php } ?>
                     <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
                     <?=$nombreRector?><br>
                     Rector(a)
                 </td>
