@@ -405,7 +405,7 @@
                 <tr style="color:#000;">
                     <td style="padding-left: 20px;">
                         <?php 
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$periodoActual."'");
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo='".$periodoActual."'");
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
 
                                 if(!empty($rndisiplina['dn_observacion'])){
@@ -413,7 +413,7 @@
                                     $numDatos=count($explode);
                                     if($numDatos>0 && ctype_digit($explode[0])){
                                         for($i=0;$i<$numDatos;$i++){
-                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM academico_observaciones WHERE obser_id=$explode[$i]");
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM $BD.academico_observaciones WHERE obser_id=$explode[$i]");
                                             $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
                                             echo "- ".$observaciones['obser_descripcion']."<br>";
                                         }
@@ -440,8 +440,8 @@
             </thead>
 
             <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
-	        INNER JOIN academico_materias ON mat_id=car_materia
+            $conCargasDos = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+	        INNER JOIN $BD.academico_materias ON mat_id=car_materia
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
