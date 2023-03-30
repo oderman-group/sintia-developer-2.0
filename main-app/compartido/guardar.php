@@ -14,7 +14,7 @@ include("../compartido/sintia-funciones.php");
 $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 
 
 //include("../modelo/conexion.php");

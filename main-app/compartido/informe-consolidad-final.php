@@ -3,9 +3,9 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
-include("../class/Estudiantes.php");
-include("../class/Grados.php");
-include("../class/Grupos.php");
+require_once("../class/Estudiantes.php");
+require_once("../class/Grados.php");
+require_once("../class/Grupos.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
 if(isset($_REQUEST["agno"])){

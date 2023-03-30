@@ -8,7 +8,7 @@ include("../modelo/conexion.php");
 ?>
 <?php include("verificar-carga.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <head>
 	<title>Planilla de notas</title>

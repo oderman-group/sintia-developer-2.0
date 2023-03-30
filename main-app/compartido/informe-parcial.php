@@ -2,7 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>

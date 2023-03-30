@@ -1,6 +1,6 @@
 <?php 
 include("session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
 $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 100');
 // $jsonData['acudidos'] = array();

@@ -1,7 +1,7 @@
 <?php
 include("../directivo/session.php");
-include("../class/Estudiantes.php");
-include("../class/Boletin.php");
+require_once("../class/Estudiantes.php");
+require_once("../class/Boletin.php");
 $Plataforma = new Plataforma;
 
 $year = $agnoBD;

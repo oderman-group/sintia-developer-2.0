@@ -4,7 +4,7 @@ $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matric
 WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
 $numDotos=mysqli_num_rows($consultaDoc);
 if ($numDotos > 0) {
-    include("../class/Estudiantes.php");
+    require_once("../class/Estudiantes.php");
     $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["nDoct"]);
     $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
 ?>

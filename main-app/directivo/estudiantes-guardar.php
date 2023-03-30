@@ -1,7 +1,7 @@
 <?php
 include("session.php");
 include("../modelo/conexion.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 

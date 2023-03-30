@@ -11,7 +11,7 @@
 <?php include("../compartido/head.php");?>
 
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 
 <?php
