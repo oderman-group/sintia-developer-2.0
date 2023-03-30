@@ -1,7 +1,6 @@
 <?php
 include("../directivo/session.php");
 include("../class/Estudiantes.php");
-include("../class/Plataforma.php");
 include("../class/Boletin.php");
 $Plataforma = new Plataforma;
 
@@ -433,10 +432,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-                <tr style="font-weight:bold; background:#4c9858; border-color:#036; height:40px; font-size:12px; text-align:center">
+                <tr style="font-weight:bold; background:#00adefad; border-color:#036; height:40px; font-size:12px; text-align:center">
                     <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
                 </tr>
-                <tr style="font-weight:bold; background:#e0e0153b; height:25px; color:#000; font-size:12px; text-align:center">
+                <tr style="font-weight:bold; background:#EAEAEA; height:25px; color:#000; font-size:12px; text-align:center">
                     <td width="8%">Periodo</td>
                     <td>Observaciones</td>
                 </tr>
