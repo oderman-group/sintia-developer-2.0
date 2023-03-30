@@ -246,7 +246,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)"><?=$observacion?></textarea>
 														</td>
                                                         <td style="text-align: center; padding: 10px;">
-                                                            <input type="checkbox" name="Ob<?=$resultado['mat_id'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="12" onChange="notas(this)">
+                                                            <button class="btn deepPink-bgcolor" type="submit" name="Ob<?=$resultado['mat_id'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="12" onclick="notas(this)"><i class="fa fa-check"></i></button>
                                                         </td>
                                                     </tr>
 													<?php 
