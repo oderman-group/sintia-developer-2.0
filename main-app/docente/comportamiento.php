@@ -31,17 +31,28 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
-  var carga = <?=$cargaConsultaActual;?>;
-  var periodo = <?=$periodoConsultaActual;?>; 
-  var nota = enviada.value;
-  var codEst = enviada.id;
-  var nombreEst = enviada.alt;
-  var operacion = enviada.title;
- 
+	var carga = <?=$cargaConsultaActual;?>;
+	var periodo = <?=$periodoConsultaActual;?>; 
+	var nota = enviada.value;
+	var codEst = enviada.id;
+	var nombreEst = enviada.alt;
+	var operacion = enviada.title;
+
+if(operacion == 12){
+	var nameId = enviada.name;
+	var observaciones = document.getElementById(nameId);
+	var nota = [];
+	for (let i = 0; i < observaciones.options.length; i++) {
+		if (observaciones.options[i].selected) {
+			nota.push(observaciones.options[i].value);
+		}
+	}
+}
+
 if(operacion == 1 || operacion == 3 || operacion == 5){
 	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
 }
-	  
+
 $('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
 	datos = "nota="+(nota)+
 			"&operacion="+(operacion)+
@@ -162,6 +173,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<th>Guardar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -173,9 +185,17 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado[0]." AND dn_periodo='".$periodoConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
-														
-													 ?>
-                                                    
+
+														$observacion="";
+														if(!empty($notas['dn_observacion'])){
+															$observacion=$notas['dn_observacion'];
+															$explode=explode(",",$notas['dn_observacion']);
+															$numDatos=count($explode);
+															if(ctype_digit($explode[0])){
+																$observacion="";
+															}
+														}
+													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td width="60%">
@@ -190,6 +210,26 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														</td>
 														<td width="25%">
 															<p>
+																<?php
+																$consultaObservaciones = mysqli_query($conexion, "SELECT * FROM academico_observaciones ORDER BY obser_id");
+																?>
+																<select class="form-control  select2-multiple" name="Ob<?=$resultado['mat_id'];?>[]" id="Ob<?=$resultado['mat_id'];?>" multiple>
+																	<option value="0" disabled>--Observaciones Institucionales--</option>
+																	<?php
+																	while($observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH)){
+																		$selected="";
+																		for($i=0;$i<$numDatos;$i++){
+																			if($observaciones['obser_id']==$explode[$i] && $notas['dn_cod_estudiante']==$resultado['mat_id']){
+																				$selected="selected";
+																			}
+																		}
+																	?>
+																		<option value="<?=$observaciones['obser_id'];?>" <?=$selected?>><?="[".$observaciones['obser_id']."] - ".$observaciones['obser_descripcion'];?></option>
+																	<?php }?>
+																</select>
+															</p>
+															
+															<p>
 															<?php
 															$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_id_carga='".$cargaConsultaActual."' AND dn_observacion IS NOT NULL");
 															?>
@@ -203,9 +243,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 																<?php }?>
 															</select>
 															</p>
-															
-															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)"><?=$notas['dn_observacion'];?></textarea>
+															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)"><?=$observacion?></textarea>
 														</td>
+                                                        <td style="text-align: center; padding: 10px;">
+                                                            <input type="checkbox" name="Ob<?=$resultado['mat_id'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="12" onChange="notas(this)">
+                                                        </td>
                                                     </tr>
 													<?php 
 														 $contReg++;
