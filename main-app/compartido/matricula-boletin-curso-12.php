@@ -3,6 +3,8 @@
     include("../directivo/session.php");
     include("../class/Estudiantes.php");
     include("../class/Boletin.php");
+    include("../class/Usuarios.php");
+    include("../class/UsuariosPadre.php");
     $Plataforma = new Plataforma;
 
     $year=$agnoBD;
@@ -54,6 +56,7 @@
         exit();
     }
 
+    $idDirector="";
     $periodosCursados=$periodoActual-1;
     $colspan=8+$periodosCursados;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
@@ -207,6 +210,9 @@
                     //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
                     $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
                     while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
+                        if($materia["car_director_grupo"]==1){
+                            $idDirector=$materia["car_docente"];
+                        }
                 ?>
                 <tr>
                     <td align="center" style="background: #9ed8ed"><?=$contador?></td>
@@ -473,8 +479,30 @@
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center"><br>_________________________________<br><?= strtoupper(""); ?><br>Rector(a)</td>
-                <td align="center"><p style="height:0px;"></p>_________________________________<br><?=strtoupper("")?><br>Director(a) de grupo</td>
+                <td align="center">
+                    <?php
+                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+                        if(!empty($directorGrupo["uss_firma"])){
+                    ?>
+                    <img src="../files/fotos/<?=$directorGrupo["uss_firma"]?>" width="100">><br>
+                    <?php } ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <?=$nombreDirectorGrupo?><br>
+                    Director(a) de grupo
+                </td>
+                <td align="center">
+                    <?php
+                        $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                        $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                        if(!empty($rector["uss_firma"])){
+                    ?>
+                    <img src="../files/fotos/<?=$rector["uss_firma"]?>" width="100">><br>
+                    <?php } ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <?=$nombreRector?><br>
+                    Rector(a)
+                </td>
             </tr>
         </table>
 
