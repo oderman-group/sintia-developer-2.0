@@ -3,7 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <?php
 $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);

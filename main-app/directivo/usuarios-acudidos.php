@@ -3,7 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0137';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 
 	<!--bootstrap -->

@@ -2,7 +2,7 @@
 <?php $idPaginaInterna = 'DT0002';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 $Plataforma = new Plataforma;
 ?>
 	<!-- data tables -->
