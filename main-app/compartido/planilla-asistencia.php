@@ -64,7 +64,14 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <th>&nbsp;</th>
   </tr>
   <?php
-  if(isset($_REQUEST["grado"]) and isset($_REQUEST["grupo"])) $adicional = " AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."'"; else $adicional = "";
+  $adicional = "";
+  if(isset($_REQUEST["grado"]) and isset($_REQUEST["grupo"])) {
+    $adicional = " 
+    AND mat_grado='".$_REQUEST["grado"]."' 
+    AND mat_grupo='".$_REQUEST["grupo"]."'
+    AND mat_estado_matricula=1
+    ";
+  }
   $cont=1;
   $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $BD);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){

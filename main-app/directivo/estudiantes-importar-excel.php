@@ -101,6 +101,7 @@
                                                     <option value="2">Grupo</option>
                                                     <option value="3">Tipo de Documento</option>
                                                     <option value="4">Acudiente</option>
+                                                    <option value="5">Segundo nombre del estudiante</option>
                                                 </select>
                                             </div>
                                         </div>

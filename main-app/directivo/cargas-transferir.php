@@ -61,7 +61,7 @@
                                                     $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
-                                                        echo "<option value='".$nDocen["uss_id"]."'>".$nDocen["uss_nombre"]."</option>";
+                                                        echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";
                                                     }
                                                     ?>
                                                 </select>
@@ -77,7 +77,7 @@
                                                     $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
-                                                        echo "<option value='".$nDocen["uss_id"]."'>".$nDocen["uss_nombre"]."</option>";
+                                                        echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";
                                                     }
                                                     ?>
                                                 </select>
