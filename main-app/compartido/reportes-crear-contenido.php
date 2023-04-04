@@ -1,7 +1,7 @@
 <?php include("../class/Estudiantes.php");?>
 
 					<div class="row">
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
                                     <header><?=$frases[96][$datosUsuarioActual[8]];?></header>
