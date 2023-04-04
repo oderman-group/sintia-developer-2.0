@@ -1,9 +1,9 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0082';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
-<?php
-include("../class/Estudiantes.php");
+<?php 
+include("session.php");
+$idPaginaInterna = 'DT0082';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+require_once("../class/Estudiantes.php");
 ?>
 
 	<!--bootstrap -->
@@ -67,7 +67,7 @@ include("../class/Estudiantes.php");
                                                     $c=Estudiantes::listarEstudiantesEnGrados('', '');
                                                     while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
-                                                        <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>
+                                                        <option value="<?php echo $r['mat_id']; ?>"><?=Estudiantes::NombreCompletoDelEstudiante($r)?></option>
                                                     <?php 
                                                     }
                                                     ?>
@@ -131,7 +131,7 @@ include("../class/Estudiantes.php");
                                                     $c=Estudiantes::listarEstudiantesEnGrados('', '');
                                                     while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                     ?>
-                                                        <option value="<?php echo $r['mat_id']; ?>"><?php echo strtoupper($r["mat_primer_apellido"].' '.$r["mat_segundo_apellido"].' '.$r["mat_nombres"]);?></option>
+                                                        <option value="<?php echo $r['mat_id']; ?>"><?=Estudiantes::NombreCompletoDelEstudiante($r)?></option>
                                                     <?php 
                                                     }
                                                     ?>

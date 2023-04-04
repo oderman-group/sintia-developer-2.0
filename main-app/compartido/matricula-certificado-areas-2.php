@@ -1,7 +1,7 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-
 <?php
+include("../directivo/session.php");
+date_default_timezone_set("America/New_York");//Zona horaria
+$Plataforma = new Plataforma;
 
 $modulo = 1;
 
@@ -24,6 +24,8 @@ $modulo = 1;
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
 
     <title>SINTIA - Certificados</title>
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../sintia-icono.png" />
 
 </head>
 
@@ -37,7 +39,7 @@ $modulo = 1;
 
 <div align="center" style="margin-bottom:20px; margin-top:20px;">
 
-<img src="https://plataformasintia.com/innovadores/files/images/logo/WhatsApp%20Image%202022-01-19%20at%2011.21.24%20AM.jpeg" width="100"><br><br>
+<img src="https://main.plataformasintia.com/app-sintia/main-app/files/images/logo/WhatsApp%20Image%202022-01-19%20at%2011.21.24%20AM.jpeg" width="100"><br><br>
     
 <b>LICEO INFANTIL GRANDES INNOVADORES</b><br>
 Carácter Privado en Jornada Diurna<br>
@@ -79,10 +81,10 @@ while($i<=$restaAgnos){
 	
 	$estudiante = mysqli_fetch_array($estudianteC, MYSQLI_BOTH);
 	
-	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
-	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=9) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
-	elseif($estudiante["mat_grado"]>=10 and $estudiante["mat_grado"]<=11) {$educacion = "MEDIA"; $horasT = 35;}	
-	elseif($estudiante["mat_grado"]>=12 and $estudiante["mat_grado"]<=15) {$educacion = "PREESCOLAR"; $horasT = 25;}											
+	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "PREESCOLAR"; $horasT = 25;}	
+	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=10) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
+	elseif($estudiante["mat_grado"]>=11 and $estudiante["mat_grado"]<=14) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
+	elseif($estudiante["mat_grado"]>=15 and $estudiante["mat_grado"]<=16) {$educacion = "MEDIA"; $horasT = 35;}											
 
 	if($i<$restaAgnos)
 
@@ -102,7 +104,7 @@ while($i<=$restaAgnos){
 
 	
 
-    <p>Que, <b><?=strtoupper($estudiante["mat_primer_apellido"]." ".$estudiante["mat_segundo_apellido"]." ".$estudiante["mat_nombres"]);?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=strtoupper($estudiante["mat_primer_apellido"]." ".$estudiante["mat_segundo_apellido"]." ".$estudiante["mat_nombres"]);?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion?></b>  y obtuvo las siguientes calificaciones:</p>
 
     
 
@@ -130,7 +132,7 @@ while($i<=$restaAgnos){
 
     <p align="center" style="font-weight:bold;">
 
-    	<?=strtoupper($matricula["gra_nombre"]);?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?=$inicio;?><br>  
+    	<?=strtoupper($matricula["gra_nombre"]);?> GRADO DE EDUCACIÓN <?=$educacion." ".$inicio?><br>  
 
 		MATRÍCULA <?=strtoupper($matricula["mat_matricula"]);?> FOLIO <?=strtoupper($matricula["mat_folio"]);?>
 
@@ -480,13 +482,16 @@ Se expide el presente certificado en el Carmen de Chucurí  el <?=date("d");?> d
 
 <div align="center" style="font-size:10px; margin-top:10px;">
 
-    <img src="../files/images/sintia.png" height="50" width="100"><br>
+    <img src="<?=$Plataforma->logo?>" height="100"><br>
 
     SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
 
 </div>
 
-                          
+
+<script type="application/javascript">
+	print();
+</script>
 
 </body>
 

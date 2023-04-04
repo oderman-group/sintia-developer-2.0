@@ -26,14 +26,14 @@
 												
 												<label class="col-sm-2 control-label">Fecha de Matr&iacute;cula</label>
 												<div class="col-sm-2">
-													<input type="text" name="matricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[2];?>" disabled>
+													<input type="text" name="fechaMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[2];?>" disabled>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de matrícula</label>
 												<div class="col-sm-4">
-													<input type="text" name="NumMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual["mat_matricula"];?>">
+													<input type="text" name="NumMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual["mat_numero_matricula"];?>">
 												</div>
 											</div>
 
