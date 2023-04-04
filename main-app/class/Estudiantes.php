@@ -280,6 +280,8 @@ class Estudiantes {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
+            INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
+            INNER JOIN $BD.academico_grados ON mat_grado=gra_id 
             WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
             GROUP BY mat_id
             ORDER BY mat_grupo, mat_primer_apellido");
