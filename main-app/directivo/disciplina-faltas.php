@@ -31,6 +31,7 @@
                             <div class="row">
 								
 								<div class="col-md-12">
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Faltas</header>
@@ -88,6 +89,7 @@
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="disciplina-faltas-editar.php?idR=<?=$resultado['dfal_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                      <li><a href="disciplina-faltas-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
 																  </ul>
 															  </div>
 														</td>
