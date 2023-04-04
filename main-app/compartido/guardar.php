@@ -15,6 +15,7 @@ $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
 include("../class/UsuariosPadre.php");
+require_once("../class/Estudiantes.php");
 
 
 //include("../modelo/conexion.php");
@@ -525,11 +526,7 @@ if ($_POST["id"] == 11) {
 //GUARDAR REPORTE DISCIPLINARIO
 if ($_POST["id"] == 12) {
 
-	$acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-	INNER JOIN usuarios ON uss_id=mat_acudiente
-	WHERE mat_id_usuario='" . $_POST["estudiante"] . "'"), MYSQLI_BOTH);
-
-
+	$acudiente = Estudiantes::obtenerDatosEstudiante($_POST["estudiante"]);
 
 	$cont = count($_POST["faltas"]);
 	$i = 0;
@@ -550,43 +547,6 @@ if ($_POST["id"] == 12) {
 		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_alertas SET alr_url_acceso='reportes-disciplinarios.php?idNotify=" . $idNotify . "&usrEstud=" . $_POST["estudiante"] . "' WHERE alr_id='" . $idNotify . "'");
 	}
 
-	if ($acudiente['mat_notificacion1'] == 1) {
-		//INICIO ENVÍO DE MENSAJE
-		$tituloMsj = "REPORTE DISCIPLINARIO - " . $acudiente['mat_nombres'];
-		$bgTitulo = "#4086f4";
-		$contenidoMsj = '
-			<p>
-				Hola!<br>
-				<b>' . strtoupper($acudiente["uss_nombre"]) . '</b>, a tu acudido ' . $acudiente['mat_nombres'] . ' le han hecho un nuevo reporte disciplinario.<br>
-				Te sugerimos ingresar a la plataforma SINTIA para revisar el reporte y realizar tu firma de forma digital.
-			</p>
-		';
-
-		include("../../config-general/plantilla-email-1.php");
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-		try {
-			include("../../config-general/mail.php");
-
-			$mail->addAddress($acudiente['uss_email'], $acudiente['uss_nombre']);     // Add a recipient con copia oculta
-
-			// Attachments
-			//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-			// Content
-			$mail->isHTML(true);                                  // Set email format to HTML
-			$mail->Subject = 'REPORTE DISCIPLINARIO - ' . $acudiente['mat_nombres'];
-			$mail->Body = $fin;
-			$mail->CharSet = 'UTF-8';
-
-			$mail->send();
-			echo 'Mensaje enviado correctamente.';
-		} catch (Exception $e) {
-			echo "Error: {$mail->ErrorInfo}";
-			exit();
-		}
-		//FIN ENVÍO DE MENSAJE
-	}
 	$destinos = validarUsuarioActual($datosUsuarioActual);
 
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'reportes-lista.php";</script>';
