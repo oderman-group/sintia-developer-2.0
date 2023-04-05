@@ -1,14 +1,10 @@
 <?php
     $modulo = 4;
     include("session.php");
-    include("../modelo/conexion.php");
-    include("../compartido/config.php");
+    include("../class/Estudiantes.php");
         
     //ESTUDIANTE ACTUAL
-    $consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
-    
-    $numEstudianteActual = mysqli_num_rows($consultaEstudianteActual);
-    $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
+    $datosEstudianteActual =Estudiantes::obtenerDatosEstudiante($_GET["id"]);
     
     $datosEstudianteActual["mat_ciudad_residencia"]=trim($datosEstudianteActual["mat_ciudad_residencia"]);
     

@@ -1,6 +1,7 @@
-<?php include("session.php");?>
-<?php include("verificar-carga.php");?>
 <?php
+include("session.php");
+include("../class/Estudiantes.php");
+include("verificar-carga.php");
 $consultaNum=mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
 WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
 $num = mysqli_num_rows($consultaNum);
@@ -50,8 +51,8 @@ if($_POST["operacion"]==2){
 //Para la misma nota para todos los estudiantes
 if($_POST["operacion"]==3){
 	
-	$consultaE = mysqli_query($conexion, "SELECT academico_matriculas.mat_id FROM academico_matriculas
-	WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+	$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+	$consultaE =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	
 
 	while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){

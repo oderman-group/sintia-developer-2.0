@@ -1,7 +1,7 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>Informes</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -22,15 +22,17 @@ include("../../config-general/consulta-usuario-actual.php");?>
   </tr>
   <?php
 									 $con = 1;
-									 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                                     $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+                                     $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                        $nombre =Estudiantes::NombreCompletoDelEstudiante($resultado);
 										 //LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
 										 $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$_GET["idActividad"]);
 										 $notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 									 ?>
   <tr style="font-size:13px;">
       <td class="center"><?=$resultado[0];?></td>
-                                        <td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+                                        <td><?=$nombre?></td>
                                         <td class="center" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>"><?=$notasResultado[3];?></td>
                                         <td class="center"><?=$notasResultado[4];?></td>
 </tr>

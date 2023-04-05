@@ -1,8 +1,6 @@
 <?php
-$datosEditar = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_matriculas
-LEFT JOIN usuarios ON uss_id=mat_acudiente
-INNER JOIN academico_grados ON gra_id=mat_grado
-WHERE mat_id_usuario='".$_GET["idR"]."'"), MYSQLI_BOTH);
+include("../class/Estudiantes.php");
+$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["idR"]);
 
 
 $usuarioEstudiante = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios

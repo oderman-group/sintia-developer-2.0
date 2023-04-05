@@ -1,4 +1,5 @@
 <?php
+include("../class/Estudiantes.php");
 $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">
@@ -26,20 +27,23 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 												<ul class="list-group list-group-unbordered">
 													<?php
 													$urlRecurso = 'foros-detalles.php?idR='.$_GET["idR"];
-													$consultas = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													INNER JOIN usuarios ON uss_id=mat_id_usuario
-													INNER JOIN ".$baseDatosServicios.".seguridad_historial_acciones ON hil_url LIKE '%".$urlRecurso."%' AND hil_usuario=uss_id
-													WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 
-													GROUP BY mat_id_usuario
-													ORDER BY mat_primer_apellido
-													");
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													$contReg = 1;
-													while($resultados = mysqli_fetch_array($consultas, MYSQLI_BOTH)){
-														$genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultados[8]."'"), MYSQLI_BOTH);
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
+														$consultaIngresoClase=mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
+														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+														WHERE hil_url LIKE '%".$urlRecurso."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'
+														UNION 
+														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
+														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+														WHERE hil_url LIKE '%".$urlRecurso."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
+														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
-														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=strtoupper($resultados[3]." ".$resultados[4]." ".$resultados[5]);?></a> 
-														<div class="profile-desc-item pull-right"><?=$resultados['hil_fecha'];?></div>
+														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
+														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
 													<?php }?>
 												</ul>

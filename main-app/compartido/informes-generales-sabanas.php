@@ -2,7 +2,9 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-$asig=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");			
+include("../class/Estudiantes.php");
+$filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");	
 $num_asg=mysqli_num_rows($asig);
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$_GET["curso"]."' AND gru_id='".$_GET["grupo"]."'");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
@@ -50,8 +52,8 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $cont=1;
   $mayor=0;
   $nombreMayor="";
-  while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH))
-  {
+  while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);	  
   		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$_GET["per"]." GROUP BY bol_carga");
 		$numero=mysqli_num_rows($cuentaest);
 		$def='0.0';
@@ -60,7 +62,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
       <td align="center"> <?php echo $fila[1];?></td>
-      <td><?=strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);?></td> 
+      <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;

@@ -2,7 +2,16 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
+<<<<<<< HEAD
 include("../class/UsuariosPadre.php");
+=======
+<<<<<<< HEAD
+require_once("../class/UsuariosPadre.php");
+=======
+include("../class/UsuariosPadre.php");
+include("../class/Estudiantes.php");
+>>>>>>> b6a2cba (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
+>>>>>>> 15fedfe (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -14,10 +23,9 @@ include("../class/UsuariosPadre.php");
 
 <?php
 								  //ESTUDIANTE ACTUAL
-								  $consultaEstudianteActual = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["estudiante"]."'");
 								  
-								  $datosEstudianteActual = mysqli_fetch_array($consultaEstudianteActual, MYSQLI_BOTH);
-								  $nombre = strtoupper($datosEstudianteActual['mat_primer_apellido']." ".$datosEstudianteActual['mat_segundo_apellido']." ".$datosEstudianteActual['mat_nombres']." ".$datosEstudianteActual['mat_nombre2']);
+								  $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["estudiante"]);
+								  $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
 								  ?>
     
     <?=$informacion_inst["info_nombre"]?><br>

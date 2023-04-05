@@ -1,9 +1,8 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
+include("../class/Estudiantes.php");
 
-	$consultaEst=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='" . $_GET["id"] . "'");
-	$est = mysqli_fetch_array($consultaEst, MYSQLI_BOTH);
+    $est =Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");

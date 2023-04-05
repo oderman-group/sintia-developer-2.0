@@ -1,6 +1,5 @@
-<?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -25,14 +24,8 @@ if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
 if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-INNER JOIN $BD.academico_grados ON gra_id=mat_grado
-INNER JOIN $BD.academico_grupos ON gru_id=mat_grupo
-INNER JOIN $BD.academico_cargas ON car_curso=mat_grado
-INNER JOIN $BD.usuarios ON uss_id=car_docente
-WHERE mat_eliminado=0 $filtro 
-GROUP BY mat_id
-ORDER BY mat_grupo, mat_primer_apellido");
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+$numMatriculados = mysqli_num_rows($matriculadosPorCurso);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 	//contadores
 	$contador_periodos = 0;
@@ -51,7 +44,11 @@ WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' GROUP BY mat_id ORDER BY 
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
 	$contp ++;
-}	
+}
+//======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 ?>
 <!doctype html>
 <html class="no-js" lang="en">
@@ -77,9 +74,9 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	<div style="width:100%">
         <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all">
             <tr>
-                <td>C&oacute;digo:<br> <?=number_format($matriculadosDatos["mat_documento"],0,",",".");?></td>
-                <td>Nombre:<br> <?=strtoupper($matriculadosDatos[3]." ".$matriculadosDatos[4]." ".$matriculadosDatos["mat_nombres"]);?></td>
-                <td>Grado:<br> <?=$matriculadosDatos["gra_nombre"]." ".$matriculadosDatos["gru_nombre"];?></td>
+                <td>C&oacute;digo:<br> <?=number_format($datosUsr["mat_documento"],0,",",".");?></td>
+                <td>Nombre:<br> <?=$nombre?></td>
+                <td>Grado:<br> <?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></td>
                 <td>Puesto Curso:<br> <?=$puestoCurso;?></td>
             </tr>
             
@@ -103,11 +100,11 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
             <?php  
 			for($j=1;$j<=$_GET["periodo"];$j++){
 			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-			WHERE gvp_grado='".$matriculadosDatos['gra_id']."' AND gvp_periodo='".$j."'");
+			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
 			$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 			$periodosCursos['gvp_valor'] = 25;
 			?>
-                <td width="3%" colspan="2"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$matriculadosDatos[0];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j."<br>(".$periodosCursos['gvp_valor']."%)"?></a></td>
+                <td width="3%" colspan="2"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$datosUsr[0];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j."<br>(".$periodosCursos['gvp_valor']."%)"?></a></td>
             <?php }?>
             <td width="3%" colspan="2">Acumulado</td>
         </tr> 
@@ -131,7 +128,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	$conAreas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN $BD.academico_materias ON mat_id=car_materia
 	INNER JOIN $BD.academico_areas ON ar_id=mat_area
-	WHERE car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'
+	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
 	GROUP BY mat_area
 	ORDER BY ar_posicion
 	");
@@ -150,7 +147,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 		$contador=1;
 		$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 		INNER JOIN $BD.academico_materias ON mat_id=car_materia AND mat_area='".$datosAreas['ar_id']."'
-		WHERE car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'
+		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
 		");
 		while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 		?>
@@ -163,7 +160,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 			$sumaPorcentaje = 0;
 			for($j=1;$j<=$_GET["periodo"];$j++){
 				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-				WHERE gvp_grado='".$matriculadosDatos['gra_id']."' AND gvp_periodo='".$j."'");
+				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
 				$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 				
 				$periodosCursos['gvp_valor'] = 25;
@@ -172,11 +169,11 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 				
 				$consultaBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
                 INNER JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-                WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'");
+                WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."'");
                 $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 				
 				$consultaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM $BD.academico_clases 
-                INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante<='".$matriculadosDatos['mat_id']."'
+                INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante<='".$datosUsr['mat_id']."'
                 WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$j."'");
 				$datosAusencias = mysqli_fetch_array($consultaAusencias, MYSQLI_BOTH);
 				
@@ -214,7 +211,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 		while($ind = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 			$consultaCalificacionesIndicadores=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),2) FROM $BD.academico_calificaciones
 			INNER JOIN $BD.academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='".$ind['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$_GET["periodo"]."' AND act_estado=1
-			WHERE cal_id_estudiante='".$matriculadosDatos['mat_id']."'");
+			WHERE cal_id_estudiante='".$datosUsr['mat_id']."'");
 			$calificacionesIndicadores = mysqli_fetch_array($consultaCalificacionesIndicadores, MYSQLI_BOTH);
 		?>
 		<!-- INDICADORES -->
@@ -254,7 +251,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
             <?php 
             for($j=1;$j<=$_GET['periodo'];$j++){
 				$consultaPromediosPeriodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) as promedio FROM $BD.academico_boletin 
-                WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$j."'");
+                WHERE bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."'");
 				$promediosPeriodos = mysqli_fetch_array($consultaPromediosPeriodos, MYSQLI_BOTH);
 				
 				$consultaPromediosEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
@@ -275,7 +272,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 
 <?php
 $estadoAgno = '';
-if($_GET["periodo"]==$matriculadosDatos['gra_periodos']){
+if($_GET["periodo"]==$datosUsr['gra_periodos']){
 	if($materiasPerdidas==0){$estadoAgno = 'PROMOVIDO';}
 	elseif($materiasPerdidas>0 and $materiasPerdidas<$config["conf_num_materias_perder_agno"]){$estadoAgno = 'DEBE NIVELAR';}
 	elseif($materiasPerdidas>=$config["conf_num_materias_perder_agno"]){$estadoAgno = 'NO FUE PROMOVIDO';}
@@ -286,7 +283,6 @@ if($_GET["periodo"]==$matriculadosDatos['gra_periodos']){
 	<tr>
         <td width="40%">
             ________________________________________________________________<br>
-            <?=strtoupper($matriculadosDatos['uss_nombre']);?><br>
             DIRECTOR DE GRADO
         </td>
         <td width="20%">
