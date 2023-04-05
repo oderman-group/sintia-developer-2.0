@@ -14,6 +14,7 @@ PES2023-82 - [MATRICULAS] Opción de remover estudiantes que no continuarán est
 PES2023-116 - [MATRICULAS] Crear el formato del boletín de nuevo gandhy.
 PES2023-117 - [MATRICULAS] Crear el formato del boletín de El tagui. (Con porcentaje por asignatura)
 PES2023-183 - Multiples observaciones para el boletín, por estudiante, por periodo.
+PES2023-173 - Implementar buscador y paginación en paginas principales del directivo.
 
 ### Carlos Herazo
 PES2023-36 - [CARGAS] Hay un delay al cargar las cargas académicas en la opción de las notas de comportamiento.

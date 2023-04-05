@@ -46,38 +46,10 @@ $Plataforma = new Plataforma;
 								?>
 								
 								<div class="col-md-12">
-								<?php include("../../config-general/mensajes-informativos.php"); ?>
-
-								<div class="btn-group">
-									<button type="button" class="btn btn-primary">MÁS ACCIONES</button>
-									<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-										<i class="fa fa-angle-down"></i>
-									</button>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="cargas-transferir.php">Transferir cargas</a></li>
-										<li><a href="cargas-estilo-notas.php">Estilo de notas</a></li>
-										<li><a href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a></li>
-										<li><a href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a></li>
-									</ul>
-								</div>
-
-								<div class="btn-group">
-									<button type="button" class="btn btn-info">Filtrar por curso</button>
-									<button type="button" class="btn btn-info dropdown-toggle m-r-20" data-toggle="dropdown">
-										<i class="fa fa-angle-down"></i>
-									</button>
-									<ul class="dropdown-menu" role="menu" style="width:250px;">
-										<?php
-										$grados = Grados::listarGrados(1);
-										while($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)){
-											$estiloResaltado = '';
-											if($grado['gra_id'] == $_GET["curso"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
-										?>	
-											<li><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$grado['gra_id'];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a></li>
-										<?php }?>
-											<li><a href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a></li>
-									</ul>
-								</div>
+								<?php
+									include("../../config-general/mensajes-informativos.php");
+									include("includes/barra-superior-cargas.php");
+								?>
 
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -117,14 +89,7 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("consulta-paginacion.php");
-
-													if (is_numeric($pagina)){
-														$inicio= (($pagina-1)*$registros);
-													}			     
-													else{
-														$inicio=1;
-													}											       
+													include("consulta-paginacion-cargas.php");											       
 													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
 													  INNER JOIN academico_grados ON gra_id=car_curso
 													  INNER JOIN academico_grupos ON gru_id=car_grupo
@@ -133,10 +98,7 @@ $Plataforma = new Plataforma;
 													  WHERE car_id=car_id $filtro
 												        ORDER BY car_id
 													    LIMIT $inicio,$registros;");
-													$paginas=ceil($numRegistros/$registros);													
-													?>
-													
-													<?php
+    												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 																										
 														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
@@ -182,7 +144,7 @@ $Plataforma = new Plataforma;
                           </div>
                       </div>
                       </div>
-                      <?php include("enlaces-paginacion-cargas.php");?>
+                      <?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>
