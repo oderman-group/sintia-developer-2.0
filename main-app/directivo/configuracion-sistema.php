@@ -109,24 +109,6 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 </select>
                                             </div>
                                         </div>
-
-										<!--
-										<div class="form-group row"  style="background:rgb(255,255,204);">
-											<label class="col-sm-2 control-label">N&uacute;mero m&aacute;ximo de indicadores o tipos de notas que puede crear el docente.</label>
-											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="numIndicadores" class="form-control col-sm-2" value="<?=$cfg[20];?>">
-											</div>
-										</div>
-										
-										<div class="form-group row"  style="background:rgb(255,255,204);">
-											<label class="col-sm-2 control-label">Valor m&aacute;ximo que tendr&aacute; la suma de los indicadores o tipos de notas creados por el docente.</label>
-											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="valorIndicadores" class="form-control col-sm-2" value="<?=$cfg[21];?>">
-                                                <span style="color:#F06; font-size:11px;">Este valor m&aacute;s la suma de los indicadores obligatorios debe ser igual a 100.</span>
-                                                <a class="btn btn-danger" href="cargas-indicadores-obligatorios.php">Ir a los Indicadores Obligatorios</a>
-											</div>
-										</div>
-                                        -->
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta) <span style="color: red;">(*)</span></label>
@@ -140,6 +122,14 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
 												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>">
+											</div>
+										</div>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Cantidad de decimales en las notas <span style="color: red;">(*)</span></label>
+											<div class="col-sm-2">
+												<input type="text" name="decimalesNotas" class="form-control" value="<?=$cfg['conf_decimales_notas'];?>">
+                                                <span style="color:#6017dc;">Indica cuántos decimales aparecerán en los cálculos de las notas.</span>
 											</div>
 										</div>
 										
