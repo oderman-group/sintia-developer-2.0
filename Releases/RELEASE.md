@@ -16,6 +16,7 @@ PES2023-117 - [MATRICULAS] Crear el formato del boletín de El tagui. (Con porce
 
 ### Carlos Herazo
 PES2023-36 - [CARGAS] Hay un delay al cargar las cargas académicas en la opción de las notas de comportamiento.
+PES2023-58 - [INFORMES] Desarrollar un informe que me muestre las cargas duplicadas (Docente, curso, grupo, asignatura)
 
 ### Luis Castro
 PES2023-72 - [MATRÍCULAS] Que sea vean todas las opciones así haya un solo estudiante en matriculas, en el botón de acciones
