@@ -90,6 +90,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Lo sentimos este curso no tiene grado siguiente, por favor asígnele uno desde la opción de editar en cursos.';
             break;
 
+            case 'ER_DT_11':
+                $tipo = 'danger';
+                $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
