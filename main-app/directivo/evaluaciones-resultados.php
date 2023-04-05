@@ -156,10 +156,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 														$consultaDatos1=mysqli_query($conexion, "SELECT epe_inicio, epe_fin, MOD(TIMESTAMPDIFF(MINUTE, epe_inicio, epe_fin),60), MOD(TIMESTAMPDIFF(SECOND, epe_inicio, epe_fin),60) FROM academico_actividad_evaluaciones_estudiantes 
 														WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$_GET["idE"]."'");
 														 $datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
@@ -183,7 +184,7 @@
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td><?=$nombre?></td>
 														<td><?=$datos1['epe_inicio'];?></td>
 														<td><?=$datos1['epe_fin'];?></td>
 														<td><?php if($datos1[2]>0){echo $datos1[2]." Min. y ";} if($datos1[3]>0){echo $datos1[3]." Seg.";}?></td>

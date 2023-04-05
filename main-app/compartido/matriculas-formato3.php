@@ -5,18 +5,13 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 }
 
 include("../directivo/session.php");
-include("../../config-general/config.php");
+include("../class/Estudiantes.php");
 include("head.php");
 ?>
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  INNER JOIN academico_grados ON gra_id=mat_grado
-  INNER JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-  WHERE mat_matricula='".$_GET["ref"]."'");
-  $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+  $resultado = Estudiantes::obtenerDatosEstudiante($_GET["ref"]);
   $consultaAcudiente1=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'");
   $acudiente1 = mysqli_fetch_array($consultaAcudiente1, MYSQLI_BOTH);
   $consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente2']."'");

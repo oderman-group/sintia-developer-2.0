@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -14,12 +16,11 @@ include("../compartido/head-informes.php") ?>
 
 
 <?php
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND mat_eliminado=0 AND (mat_estado_matricula=1) ORDER BY mat_primer_apellido");
-?>
+$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1)";
+$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
-<?php
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
-	$nombre = strtoupper($matriculadosDatos[3]." ".$matriculadosDatos[4]." ".$matriculadosDatos[5]);	  
+	$nombre = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);	  
 ?>
 <div align="center" style="margin-bottom:20px;">
     ESTUDIANTE: <?=$nombre;?></br>

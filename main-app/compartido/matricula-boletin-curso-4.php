@@ -1,7 +1,6 @@
-<?php include("../directivo/session.php"); ?>
-<?php include("../../config-general/config.php");?>
-
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
+    
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -50,18 +49,7 @@ if (is_numeric($_REQUEST["grupo"])) {
     $filtro .= " AND mat_grupo='" . $_REQUEST["grupo"] . "'";
 }
 
-
-
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-
-WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
-
-GROUP BY mat_id
-
-ORDER BY mat_grupo, mat_primer_apellido");
-
-
-
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
 
     //contador materias
@@ -73,16 +61,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $materiasPerdidas = 0;
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-
-    $usr = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
-
-INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
-
-INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDatos[0]);
-
+    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
     $num_usr = mysqli_num_rows($usr);
 
-    $datos_usr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+    $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
     if ($num_usr == 0) {
 
@@ -151,7 +134,7 @@ INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculad
 
 		INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 
-		WHERE  car_curso=" . $datos_usr["mat_grado"] . " AND car_grupo=" . $datos_usr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+		WHERE  car_curso=" . $datosUsr["mat_grado"] . " AND car_grupo=" . $datosUsr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
         //$numero_periodos=$config["conf_periodos_maximos"];
 
@@ -174,11 +157,11 @@ INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculad
 
             <tr>
 
-                <td>Documento:<br> <?= number_format($datos_usr["mat_documento"], 0, ",", "."); ?></td>
+                <td>Documento:<br> <?= number_format($datosUsr["mat_documento"], 0, ",", "."); ?></td>
 
-                <td>Nombre:<br> <?= strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]); ?></td>
+                <td>Nombre:<br> <?=$nombre?></td>
 
-                <td>Grado:<br> <?= $datos_usr["gra_nombre"] . " " . $datos_usr["gru_nombre"]; ?></td>
+                <td>Grado:<br> <?= $datosUsr["gra_nombre"] . " " . $datosUsr["gru_nombre"]; ?></td>
 
                 <td>&nbsp;</td>
 
@@ -329,7 +312,7 @@ INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculad
 
 				INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 
-				WHERE car_curso=" . $datos_usr["mat_grado"] . "  and car_grupo=" . $datos_usr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . "
+				WHERE car_curso=" . $datosUsr["mat_grado"] . "  and car_grupo=" . $datosUsr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . "
 
 				group by act_id_tipo, act_id_carga
 
@@ -705,15 +688,15 @@ INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculad
 
             if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
             elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 
             else
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
         }*/
 
         ?>

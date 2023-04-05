@@ -4,8 +4,11 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 	exit();
 }
 ?>
-<?php include("../directivo/session.php");?>
-<?php include("../head.php");?>
+<?php
+ include("../directivo/session.php");
+ include("../class/Estudiantes.php");
+ include("../head.php");
+ ?>
   <style type="text/css">
   @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
   /* Based on The MailChimp Reset INLINE: Yes. */
@@ -110,7 +113,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
     <!-- ***********************************************
       ****************************************************
       END MOBILE TARGETING
-      ****************************************************
+      ***************************************************
       ************************************************ -->
     <!--[if gte mso 9]>
     <style>
@@ -120,8 +123,8 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
   <?php
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_matricula='".$_GET["ref"]."'");
-  $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+  $resultado = Estudiantes::obtenerDatosEstudiante($_GET["ref"]);
+  $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
   ?>
     <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#1fbba6">
       <tbody>
@@ -158,7 +161,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
                             <td valign="top" style="padding: 15px;">
                               <div>
                                 <h2>Confirmaci&oacute;n de la matricula</h2>
-                                <strong>Estimado(a), <?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></strong>
+                                <strong>Estimado(a), <?=$nombre?></strong>
                                 <br />
                                 Este es el comprobante de su matr&iacute;cula!
                                 <br />
@@ -188,7 +191,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
                                     <b>Nombres y apellidos : </b>
                                   </td>
                                   <td width="380">
-                                    <div style="margin:0 0 0 10px"><?=strtoupper($resultado[3]." ".$resultado[4]." " .$resultado[5]);?></div>
+                                    <div style="margin:0 0 0 10px"><?=$nombre?></div>
                                   </td>
                                 </tr>
                                 

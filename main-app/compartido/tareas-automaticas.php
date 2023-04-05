@@ -1,5 +1,6 @@
 <?php
-include("../modelo/conexion.php");
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
 //PARA DOCENTES
 //Generar informes
 $cargasConsulta = mysqli_query($conexion, "SELECT DATEDIFF(car_fecha_generar_informe_auto, now()), car_id, car_periodo, car_curso, car_grupo, car_docente FROM academico_cargas
@@ -11,9 +12,8 @@ while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 		
 		mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_carga=".$cargasDatos['car_id']." AND bol_periodo='".$cargasDatos['car_periodo']."'");
 		
-		
-		$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-		WHERE mat_grado='".$cargasDatos['car_curso']."' AND mat_grupo='".$cargasDatos['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+		$filtroAdicional= "AND mat_grado='".$cargasDatos["car_curso"]."' AND mat_grupo='".$cargasDatos["car_grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 		
 		
 		 $pararProceso = 2;

@@ -93,7 +93,7 @@ class Estudiantes {
             LEFT JOIN academico_grados ON gra_id=mat_grado
             LEFT JOIN academico_grupos ON gru_id=mat_grupo
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
+            WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."' || mat_matricula='".$estudiante."') AND mat_eliminado=0
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){

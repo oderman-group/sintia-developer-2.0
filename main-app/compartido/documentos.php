@@ -12,12 +12,7 @@ switch($_POST["documento"]){
 	case 7: $titulo = "OBSERVADOR DEL ESTUDIANTE 2018"; break;
 }
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-INNER JOIN academico_grados ON gra_id=mat_grado
-INNER JOIN academico_grupos ON gru_id=mat_grupo
-INNER JOIN usuarios ON uss_id=mat_acudiente
-WHERE mat_id='".$_POST["estudiante"]."'");
-$datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+$datos = Estudiantes::obtenerDatosEstudiante($_POST["estudiante"]);
 
 $consultaDg=mysqli_query($conexion, "SELECT * FROM academico_cargas
 INNER JOIN usuarios ON uss_id=car_docente

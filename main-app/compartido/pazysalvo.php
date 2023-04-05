@@ -1,7 +1,7 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>SINTIA | Saldos</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -31,10 +31,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
     <div>&nbsp;</div>
 </div>   
 <?php
- $consultaUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
- INNER JOIN academico_grados ON gra_id=mat_grado
- WHERE mat_id_usuario='".$_GET["id"]."'");
- $usuario = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH);
+$usuario = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["id"]);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($usuario);
     switch($usuario['mat_tipo_documento']){
         case 105:
             $tipoD='CC.';
@@ -60,7 +58,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
     }
 ?>
     <div align="justify" style="margin-top: 20px;">
-    <p>El <?=$informacion_inst["info_nombre"]?> hace constar que el estudiante <b><?=strtoupper($usuario['mat_primer_apellido']." ".$usuario['mat_segundo_apellido']." ".$usuario['mat_nombres']." ".$usuario['mat_nombre2']);?></b> identificado con <?=$tipoD." ".$usuario['mat_documento']?> se encuentra a PAZ y SALVO por todo concepto.</p>
+    <p>El <?=$informacion_inst["info_nombre"]?> hace constar que el estudiante <b><?=$nombre?></b> identificado con <?=$tipoD." ".$usuario['mat_documento']?> se encuentra a PAZ y SALVO por todo concepto.</p>
     <p>Se expide esta constancia a los <?=date("d");?> días del mes de <?=$mesesAgno[date("m")];?> del año <?=date("Y");?>.</p>
     </div>
     
