@@ -1,10 +1,10 @@
 
 <?php
     include("../directivo/session.php");
-    include("../class/Plataforma.php");
-    include("../class/Usuarios.php");
     include("../class/Estudiantes.php");
     include("../class/Boletin.php");
+    include("../class/Usuarios.php");
+    include("../class/UsuariosPadre.php");
     $Plataforma = new Plataforma;
 
     $year=$agnoBD;
@@ -56,6 +56,7 @@
         exit();
     }
 
+    $idDirector="";
     $periodosCursados=$periodoActual-1;
     $colspan=8+$periodosCursados;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
@@ -209,6 +210,9 @@
                     //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
                     $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
                     while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
+                        if($materia["car_director_grupo"]==1){
+                            $idDirector=$materia["car_docente"];
+                        }
                 ?>
                 <tr>
                     <td align="center" style="background: #9ed8ed"><?=$contador?></td>
@@ -389,6 +393,7 @@
 
         <p>&nbsp;</p>
         <p>&nbsp;</p>
+        <p>&nbsp;</p>
 
         <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
@@ -397,15 +402,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="color:#000; text-align:center">
-                    <td>
+                <tr style="color:#000;">
+                    <td style="padding-left: 20px;">
                         <?php 
-                        for ($j = 1; $j <= $periodoActual; $j++) {
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$j."'");
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo='".$periodoActual."'");
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-                                echo $rndisiplina["dn_periodo"]." Per. - ".$rndisiplina["dn_observacion"].".<br>";
+
+                                if(!empty($rndisiplina['dn_observacion'])){
+                                    $explode=explode(",",$rndisiplina['dn_observacion']);
+                                    $numDatos=count($explode);
+                                    if($numDatos>0 && ctype_digit($explode[0])){
+                                        for($i=0;$i<$numDatos;$i++){
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM $BD.academico_observaciones WHERE obser_id=$explode[$i]");
+                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+                                            echo "- ".$observaciones['obser_descripcion']."<br>";
+                                        }
+                                    }else{
+                                        echo "- ".$rndisiplina["dn_observacion"]."<br>";
+                                    }
+                                }
                             }
-                        }
                         ?>
                         <p>&nbsp;</p>
                     </td>
@@ -424,8 +440,8 @@
             </thead>
 
             <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
-	        INNER JOIN academico_materias ON mat_id=car_materia
+            $conCargasDos = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+	        INNER JOIN $BD.academico_materias ON mat_id=car_materia
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
@@ -463,8 +479,40 @@
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center"><br>_________________________________<br><?= strtoupper(""); ?><br>Rector(a)</td>
-                <td align="center"><p style="height:0px;"></p>_________________________________<br><?=strtoupper("")?><br>Director(a) de grupo</td>
+                <td align="center">
+                    <?php
+                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+                        if(!empty($directorGrupo["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreDirectorGrupo?><br>
+                    Director(a) de grupo
+                </td>
+                <td align="center">
+                    <?php
+                        $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                        $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                        if(!empty($rector["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreRector?><br>
+                    Rector(a)
+                </td>
             </tr>
         </table>
 

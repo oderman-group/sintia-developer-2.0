@@ -143,7 +143,7 @@ if($_POST["operacion"]==5){
 }
 
 //Para guardar observaciones de disciplina
-if($_POST["operacion"]==6){
+if($_POST["operacion"]==6 || $_POST["operacion"]==12){
 	if($numD==0){
 		mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
 		

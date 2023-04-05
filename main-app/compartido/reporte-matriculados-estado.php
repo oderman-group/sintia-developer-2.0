@@ -2,20 +2,17 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-include("../class/Estudiantes.php");
-?>
+include("../class/Estudiantes.php");?>
 
 <head>
 	<title>Estudiantes</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/logoodermanp.png">
+	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="100" width="200"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    INFORME DE ESTUDIANTES</br>
-</div>   
+<?php
+$nombreInforme = "INFORME DE ESTUDIANTES";
+include("../compartido/head-informes.php") ?> 
     <?php
   $condicionw="";
   $condicion="";
@@ -153,12 +150,8 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
  Total Estudiantes: <?=$numE;?>
  </div>
   <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
-  style="
-  border:solid; 
-  border-color:#6017dc; 
-  font-size:11px;
-  ">
-  <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+  style="border:solid; border-color:<?=$Plataforma->colorUno;?>;font-size:11px;">
+  <tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
         <th>ID</th>
         <th>Nombre</th>
         <th>Curso</th>
@@ -203,9 +196,7 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
 		$color="#000";
 	}
   ?>
-  <tr style="
-  border-color:#41c4c4;
-  ">
+ <tr style="border-color:<?=$Plataforma->colorDos;?>;">
       <td><?=$resultado["mat_id"];?></td>
       <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td><?=$resultado["gra_nombre"];?></td>
@@ -231,10 +222,7 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
   ?>
   </table>
 
-  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
-      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
-     </div>
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>
 
