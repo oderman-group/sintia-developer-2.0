@@ -1,24 +1,27 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
-?>
+include("../../config-general/consulta-usuario-actual.php");?>
 
 <head>
     <title>SINTIA | Defintivas del año</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 
 <body style="font-family:Arial;">
-    <div align="center" style="margin-bottom:20px;">
-        <!--<img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>-->
-        <?=$informacion_inst["info_nombre"]?><br>
-        ESTUDIANTES CON ASIGNATURAS PERDIDAS</br>
-    </div>
-    <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>"
-        style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-        <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+<?php
+$nombreInforme = "ESTUDIANTES CON ASIGNATURAS PERDIDAS";
+include("../compartido/head-informes.php") ?>
+
+<table width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:<?=$Plataforma->colorUno;?>; 
+  font-size:11px;
+  ">
+
+        <tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
             <th style="font-size:9px;">Mat</th>
             <th style="font-size:9px;">Estudiante</th>
             <?php
@@ -44,7 +47,7 @@ include("../../config-general/consulta-usuario-actual.php");
 		$defPorEstudiante = 0;
 		$materiasPerdidas = 0;	 
 		?>
-        <tr style="font-size:13px;">
+        <tr style="border-color:<?=$Plataforma->colorDos;?>;">
             <td style="font-size:9px;"><?=$resultado[1];?></td>
             <td style="font-size:9px;"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
             <?php
@@ -88,10 +91,7 @@ include("../../config-general/consulta-usuario-actual.php");
         <?php }?>
     </table>
     </center>
-    <div align="center" style="font-size:10px; margin-top:10px;">
-        <img src="../files/images/sintia.png" height="50" width="100"><br>
-        SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
-    </div>
+	<?php include("../compartido/footer-informes.php") ?>;		
 </body>
 
 </html>

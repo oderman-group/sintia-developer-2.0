@@ -1,11 +1,12 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+?>
 <head>
 	<title>PLANILLA DE ESTUDIANTES</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
+    <link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 </head>
 <body style="font-family:Arial;">
 <?php
@@ -26,18 +27,16 @@ include("../../config-general/consulta-usuario-actual.php");?>
 		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	}
 ?>
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    PLANILLA DE ESTUDIANTES</br>
-    <?php
-        if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
-            echo strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year);
-		}elseif(is_numeric($_REQUEST["grado"])) {
-			echo strtoupper($grados["gra_nombre"]."<br>".$year);
-		}
-	?>
-</div>   
+<?php
+$subNombre="";
+ if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+$subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
+}elseif(is_numeric($_REQUEST["grado"])) {
+  $subNombre=$grados["gra_nombre"]."<br>".$year;
+}
+$nombreInforme =  "PLANILLA DE ESTUDIANTES ".$subNombre;
+include("../compartido/head-informes.php") ?>
+
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
   border:solid; 
@@ -86,10 +85,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
   ?>
   </table>
   Total Estudiantes:<?=$numE;?>
-  <div style="font-size:10px; margin-top:10px; text-align:center;">
-      <img src="https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png" width="150"><br>
-      PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
-     </div>
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 <script type="application/javascript">
 print();

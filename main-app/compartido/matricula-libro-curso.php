@@ -43,6 +43,7 @@ $contadorPeriodos=0;
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
+	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 <style>
 #saltoPagina
 {
@@ -64,11 +65,11 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
 $numeroPeriodos=$config["conf_periodo"];
  ?>
 
-<div align="center" style="margin-bottom:20px; font-weight:bold;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br><br>
-    <!--<?=$informacion_inst["info_nombre"]?><br>-->
-    REGISTRO DE VALORACIÓN<br>
-</div> 
+<?php
+$nombreInforme = "REGISTRO DE VALORACIÓN";
+include("../compartido/head-informes.php") ?>
+
+
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:10px;">
     <tr>
@@ -83,7 +84,7 @@ $numeroPeriodos=$config["conf_periodo"];
 </table>
 <br>
 <table width="100%" align="left">
-<tr style="border:solid; font-weight:bold; color:#000; font-size:10px;">
+<tr style="border:solid; font-weight:bold; color:#000; font-size:10px;border-color:<?=$Plataforma->colorUno;?>;">
     <td width="20%" align="center">AREAS/ ASIGNATURAS</td>
     <td width="2%" align="center">I.H</td>
     <td width="4%" align="center">DEF</td>
@@ -287,7 +288,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
     </tr>
 </table> 
 
-
+<?php include("../compartido/footer-informes.php") ?>;
 
 
 

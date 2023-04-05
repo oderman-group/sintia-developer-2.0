@@ -5,7 +5,6 @@
 <?php
 include("../class/Estudiantes.php");
 
-$Plataforma = new Plataforma;
 
 $filtro = '';
 if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {

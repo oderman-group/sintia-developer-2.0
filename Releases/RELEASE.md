@@ -23,3 +23,4 @@ PES2023-100 - [MATRICULAS] Validar el documento del estudiante al momento de edi
 
 ### Luis Castro
 PES2023-72 - [MATRÍCULAS] Que sea vean todas las opciones así haya un solo estudiante en matriculas, en el botón de acciones
+PES2023-96 - [GENERAL] Poner logo nuevo de la plataforma al final de todos los informes.

@@ -1,7 +1,5 @@
 <?php include("../directivo/session.php");?>
-<?php include("../../config-general/config.php");?>
 <?php
-    
 $year=$agnoBD;
 if(isset($_GET["year"])){
 $year=$_GET["year"];
@@ -55,6 +53,8 @@ if($numUsr==0)
 	exit();
 }
 
+
+
 $contadorPeriodos=0;
 ?>
 <!doctype html>
@@ -65,6 +65,7 @@ $contadorPeriodos=0;
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
+	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 <style>
 #saltoPagina
 {
@@ -86,14 +87,14 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
 $numeroPeriodos=2;
  ?>
 
-<div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    BOLETÍN DE CALIFICACIONES<br>
-</div> 
 
-<table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
-    <tr>
+<?php
+$nombreInforme = "BOLETÍN DE CALIFICACIONES";
+include("../compartido/head_informes.php") ?>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px; border:solid; 
+  border-color:<?=$Plataforma->colorUno;?>; ">
+	<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
     	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
         <td>Nombre: <b><?=strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"]);?></b></td>   
     </tr>
@@ -104,8 +105,8 @@ $numeroPeriodos=2;
     </tr>
 </table>
 <br>
-<table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
-<tr style="font-weight:bold; background:#EAEAEA; border-color:#000; height:20px; color:#000; font-size:12px;">
+<table width="100%" id="tblBoletin"  style="border:solid;border-color:<?=$Plataforma->colorUno;?>;" pacing="0" cellpadding="0" rules="all" border="1" align="left">
+<tr style="font-weight:bold; height:20px;background:<?=$Plataforma->colorUno;?>; color:#FFF; font-size:12px;">
 <td width="20%" align="center">AREAS/ ASIGNATURAS</td>
 <td width="2%" align="center">I.H</td>
 
@@ -124,7 +125,7 @@ $numeroPeriodos=2;
 <td width="5%" align="center">AUS</td>
 </tr> 
 
-    <tr style="background:#F06;">
+<tr style="border-color:<?=$Plataforma->colorUno;?>;">
     	<td class="area" id="" colspan="6" style="font-size:12px; font-weight:bold;"></td>
         <td colspan="3"></td>
     </tr>
@@ -197,7 +198,7 @@ if(!empty($resultadoNotArea['suma'])){
 if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio="2.0";		if($totalPromedio==3)	$totalPromedio="3.0";	if($totalPromedio==4)	$totalPromedio="4.0";	if($totalPromedio==5)	$totalPromedio="5.0";
 	if($numfilasNotArea>0){
 			?>
-  <tr bgcolor="#ABABAB" style="font-size:12px;">
+  <tr   style="border:solid;border-color:<?=$Plataforma->colorUno;?>;font-size:12px;">
             <td style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultadoNotArea["ar_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;"></td>
             <?php for($k=1;$k<=$numeroPeriodos;$k++){ 
@@ -243,8 +244,8 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
             <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;">&raquo;<?php echo $fila2["mat_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numeroPeriodos;$l++){ ?>
-			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?php 
-			$consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta");
+			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
+			<?php $consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta");
 			$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
 			if($datosUsr["mat_grado"]>11){
 				$notaF = ceil($notas[$l]);
@@ -488,7 +489,8 @@ if($periodoActual==4){
 
 <div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center"><?=$msj;?></div>
 
-</p>					                   
+</p>
+<?php include("../compartido/footer-informes.php") ?>;				                   
 <!-- 
 <div align="center" style="font-size:10px; margin-top:10px;">
                                         <img src="../files/images/sintia.png" height="50" width="100"><br>
@@ -500,6 +502,7 @@ if($periodoActual==4){
 <?php
  }// FIN DE TODOS LOS MATRICULADOS
 ?>
+
 <script type="application/javascript">
 print();
 </script>                                    
