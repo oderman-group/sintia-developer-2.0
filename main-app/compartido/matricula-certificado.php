@@ -28,8 +28,8 @@
 
 
     <?php
-    $nombre_informe = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
-    include("../compartido/head_informes.php") ?>
+     $nombreInforme = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
+     include("../compartido/head_informes.php") ?>	    include("../compartido/head-informes.php") ?>
 
     <div align="left" style="margin-bottom:20px;">
 
@@ -128,10 +128,10 @@
     ?>
 
 
-         <?= strtoupper(getToString($matricula["mat_grupo"])); ?>
+         <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?>
         <p align="center" style="font-weight:bold;">
-            <?= strtoupper(getToString($matricula["mat_grupo"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
-            MATRÍCULA <?= strtoupper(getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(getToString($matricula["mat_folio"])); ?>
+            <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
+            MATRÍCULA <?= strtoupper(Utilidades::getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(Utilidades::getToString($matricula["mat_folio"])); ?>
         </p>
 
 
@@ -161,7 +161,7 @@
 
                                             INNER JOIN academico_areas ON ar_id=mat_area
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
                 $materiasPerdidas = 0;
 
@@ -294,7 +294,7 @@
 
                                             INNER JOIN academico_areas ON ar_id=mat_area
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
@@ -402,7 +402,7 @@
 
 
 
-    <?php include("../compartido/footer_informes.php") ?>;
+    <?php include("../compartido/footer-informes.php") ?>;
 
 
 

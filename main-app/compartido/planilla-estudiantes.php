@@ -34,13 +34,8 @@ $subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
 }elseif(is_numeric($_REQUEST["grado"])) {
   $subNombre=$grados["gra_nombre"]."<br>".$year;
 }
-<<<<<<< HEAD
-$nombre_informe =  "PLANILLA DE ESTUDIANTES ".$subNombre;
-include("../compartido/head_informes.php") ?>
-=======
 $nombreInforme =  "PLANILLA DE ESTUDIANTES ".$subNombre;
 include("../compartido/head-informes.php") ?>
->>>>>>> e297a4f (pes2023-96 - se tienen encuenta la conbenciones y se realizan los ajustes correspondientes)
 
 <table width="100%" cellspacing="5" cellpadding="5" rules="all" 
   style="
