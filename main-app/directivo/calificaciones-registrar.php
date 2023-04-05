@@ -1,10 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0026';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0026';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
@@ -163,11 +165,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-													 WHERE mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+	
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 														 if($calificacion['act_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
 															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
@@ -178,7 +182,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                     
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+														<td><?=$nombre?></td>
 														<td>
 															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['cal_nota'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)">
 															<?php if($notas['cal_nota']!=""){?>

@@ -134,6 +134,7 @@ th {
 													$contReg = 1; 
 													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;
 														$periodo = $periodoConsultaActual;
@@ -156,7 +157,7 @@ th {
 													<tr style="background-color: <?=$colorFondo;?>">
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
 														<td style="color: <?=$colorEstudiante;?>">
-															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
+														<?=$nombreCompleto?>
 														</td>
 
 														<?php

@@ -1,10 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0093';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaE = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id_usuario='".$_GET["id"]."'");
-$e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
+include("session.php");
+$idPaginaInterna = 'DT0093';
+include("../compartido/historial-acciones-guardar.php");
+include("../class/Estudiantes.php");
+include("../compartido/head.php");
+
+$e =Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["id"]);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($e);	
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -60,7 +62,7 @@ $e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
 												<tbody style="text-align: right;">
 													<tr class="warning">
 														<td colspan="2"></td>
-														<td><strong>A nombre de:  </strong><?=strtoupper($e['mat_primer_apellido']." ".$e['mat_segundo_apellido']." ".$e['mat_nombres']." ".$e['mat_nombre2']);?></td>
+														<td><strong>A nombre de:  </strong><?=$nombre?></td>
 													</tr>
 													<tr>
 														<td colspan="2"></td>

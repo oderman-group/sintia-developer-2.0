@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+include("../class/Estudiantes.php");
+?>
 
 <head>
     <title>SINTIA | Defintivas del año</title>
@@ -42,14 +44,16 @@ include("../compartido/head-informes.php") ?>
             <th style="text-align:center;">#MP</th>
         </tr>
         <?php
-		$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+		$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 		while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+		$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 		$defPorEstudiante = 0;
 		$materiasPerdidas = 0;	 
 		?>
         <tr style="border-color:<?=$Plataforma->colorDos;?>;">
             <td style="font-size:9px;"><?=$resultado[1];?></td>
-            <td style="font-size:9px;"><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+            <td style="font-size:9px;"><?=$nombreCompleto?></td>
             <?php
 			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1"); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){

@@ -4,19 +4,16 @@ if($_GET["periodo"]==""){
 }else{
 	$periodoActual = $_GET["periodo"];
 }
-include("../../config-general/config.php");
-//include("verificar_periodo.php");
-//include("verificar_asignacion.php");
-//include("../modell/conexion.php");
-//include("../institucion.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id=".$_GET["id"]);
+$datosUsr =Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
-$num_usr=mysqli_num_rows($usr);
-$datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
-if($num_usr==0)
+if(empty($datosUsr))
 {
 ?>
 	<script type="text/javascript">
@@ -26,7 +23,7 @@ if($num_usr==0)
 	exit();
 }
 //=============================== MATERIAS DEL ESTUDIANTE =================
-$mat=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$datos_usr[6]." AND car_grupo='".$datos_usr[7]."' ORDER BY car_materia");
+$mat=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$datosUsr[6]." AND car_grupo='".$datosUsr[7]."' ORDER BY car_materia");
 
 $num_mat=mysqli_num_rows($mat);
 if($num_mat==0)
@@ -64,8 +61,8 @@ if($periodoActual==4) $periodoActuales = "Final";
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:11px;">
     <tr>
-    	<td>C&oacute;digo: <b><?=$datos_usr[1];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr[5]);?></b></td>   
+    	<td>C&oacute;digo: <b><?=$datosUsr[1];?></b></td>
+        <td>Nombre: <b><?=$nombre?></b></td>   
     </tr>
 </table>
 
@@ -89,7 +86,7 @@ $cont=1;
 $contador = 0;  //para que solo halla un while en area
 $totalDefini=0;
 $materiasPerdidas=0;
-$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia) AND (car_curso=".$datos_usr[6]." AND car_grupo=".$datos_usr[7].") AND ar_id=mat_area GROUP BY ar_id ORDER BY ar_posicion");
+$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia) AND (car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") AND ar_id=mat_area GROUP BY ar_id ORDER BY ar_posicion");
 
 $ii = 1;
 while($fila_mat=mysqli_fetch_array($materia, MYSQLI_BOTH)){
@@ -99,7 +96,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td class="area" id="<?=$fila_mat[0]?>" colspan="9" style="font-size:10px; font-weight:bold;"><?php if(strtoupper(substr($fila_mat[1],0,4))=='ESPA') echo "ESPA&Ntilde;OL"; else echo strtoupper($fila_mat[1]);?></td>
     </tr>
 <?php 
-	$consulta = mysqli_query($conexion, "SELECT  mat_nombre, mat_area, mat_id, car_id FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia)AND(car_curso=".$datos_usr[6]." AND car_grupo=".$datos_usr[7].") and ar_id=mat_area and mat_area=".$fila_mat[4]);
+	$consulta = mysqli_query($conexion, "SELECT  mat_nombre, mat_area, mat_id, car_id FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia)AND(car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") and ar_id=mat_area and mat_area=".$fila_mat[4]);
 	
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
@@ -328,11 +325,11 @@ $ii++;
 <?php 
 if($periodoActual==4){
 	if($materiasPerdidas>=3)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 	elseif($materiasPerdidas<3 and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 ?>
 	<!--Materias Perdidas = --><?php //echo $materiasPerdidas;?>
 <?php
@@ -378,7 +375,7 @@ $(function () {
                 margin: [ 50, 50, 100, 80]
             },
             title: {
-                text: '<?=strtoupper($datos_usr[4]);?> - Promedio por periodos'
+                text: '<?=strtoupper($datosUsr[4]);?> - Promedio por periodos'
             },
             xAxis: {
                 categories: [

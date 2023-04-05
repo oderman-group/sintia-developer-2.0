@@ -1,7 +1,7 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+?>
 <head>
 	<title>Notas</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -25,7 +25,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
   </tr>
   <?php
   //ESTUDIANTES ACTUALES
-  $consultaNumEstudiantes=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+  $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
   $cont=1;
   $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_estado=1 AND act_periodo='".$_GET["per"]."'");

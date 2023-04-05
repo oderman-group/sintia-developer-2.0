@@ -1,7 +1,6 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
 ?>
 <head>
 	<title>PLANILLA DE ESTUDIANTES</title>
@@ -56,25 +55,24 @@ include("../compartido/head-informes.php") ?>
 
   <?php
   if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
-		$adicional = "mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND ";
+		$adicional = "AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."'";
   }elseif(is_numeric($_REQUEST["grado"])) {
-		$adicional = "mat_grado='".$_REQUEST["grado"]."' AND ";
+		$adicional = "AND mat_grado='".$_REQUEST["grado"]."'";
 	}else{
 		$adicional = "";
 	}
   $cont=1;
-  $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am 
-  INNER JOIN $BD.academico_grados ag ON am.mat_grado=ag.gra_id
-	INNER JOIN $BD.academico_grupos agr ON am.mat_grupo=agr.gru_id 
-  WHERE ".$adicional." (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+  $filtroAdicional= $adicional." AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+  $consulta =Estudiantes::listarEstudiantesParaPlanillas(0,$filtroAdicional,$BD);
   $numE=mysqli_num_rows($consulta);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
   ?>
   <tr style="
   border-color:#41c4c4;
   ">
       <td><?=$resultado[12];?></td>
-      <td><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></td>
+      <td><?=$nombre?></td>
       <td><?=$resultado["gra_nombre"];?></td>
       <td><?=$resultado["gru_nombre"];?></td>
       <td>&nbsp;</td>

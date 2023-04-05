@@ -1,5 +1,6 @@
-<?php include("../directivo/session.php");?>
-<?php
+<?php include("../directivo/session.php");
+include("../class/Estudiantes.php");
+    
 $year=$agnoBD;
 if(isset($_GET["year"])){
 $year=$_GET["year"];
@@ -24,25 +25,18 @@ $filtro = '';
 if(is_numeric($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
 if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
 if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
-$matriculadosPorCurso = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-INNER JOIN $BD.academico_grados ON gra_id=mat_grado
-INNER JOIN $BD.academico_grupos ON gru_id=mat_grupo
-LEFT JOIN $BD.academico_cargas ON car_curso=mat_grado AND car_grupo=mat_grupo AND car_director_grupo=1
-LEFT JOIN $BD.usuarios ON uss_id=car_docente
-WHERE mat_eliminado=0 $filtro 
-GROUP BY mat_id
-ORDER BY mat_grupo, mat_primer_apellido");
+
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $contPeriodos=0;
 $contadorIndicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr=mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas am
-INNER JOIN $BD.academico_grupos ON mat_grupo=gru_id
-INNER JOIN $BD.academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
 $numUsr=mysqli_num_rows($usr);
 $datosUsr=mysqli_fetch_array($usr, MYSQLI_BOTH);
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);	
 if($numUsr==0)
 {
 ?>
@@ -96,7 +90,7 @@ include("../compartido/head_informes.php") ?>
   border-color:<?=$Plataforma->colorUno;?>; ">
 	<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
     	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datosUsr[3]." ".$datosUsr[4]." ".$datosUsr["mat_nombres"]);?></b></td>   
+        <td>Nombre: <b><?=$nombre?></b></td>   
     </tr>
     
     <tr>

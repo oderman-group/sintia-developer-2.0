@@ -2,10 +2,9 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-$consultaResultado=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='".$_GET["id"]."'");
-$resultado = mysqli_fetch_array($consultaResultado, MYSQLI_BOTH);
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$resultado[6]."' AND gru_id='".$resultado[7]."'");
-$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
+include("../class/Estudiantes.php");
+$resultado = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($resultado);
 ?>
 <head>
 	<title>SINTIA | Carnet Estudiantil</title>
@@ -29,14 +28,14 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         </tr>
         
         <tr>
-            <td align="center" colspan="2"><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></td>
+            <td align="center" colspan="2"><?=$nombreCompleto?></td>
         </tr>
         <tr>
             <td align="center" colspan="2"><b>IDENTIFICACIÓN</b><br><?=number_format($resultado[12],0,",",".");?></td>
         </tr>
         <tr>
-            <td align="center"><b>Grado:</b> <?=$grados["gra_nombre"];?></td>
-            <td align="center"><b>Grupo:</b> <?=$grados["gru_nombre"];?></td>
+            <td align="center"><b>Grado:</b> <?=$resultado["gra_nombre"];?></td>
+            <td align="center"><b>Grupo:</b> <?=$resultado["gru_nombre"];?></td>
         </tr>
     
         

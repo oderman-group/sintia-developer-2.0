@@ -1,21 +1,15 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
-?>
-<?php
-$year = $agnoBD;
-if (isset($_POST["year"])) {
-	$year = $_POST["year"];
+include("../directivo/session.php");
+include("../class/Estudiantes.php");
+
+$year=$agnoBD;
+if(isset($_POST["year"])){
+	$year=$_POST["year"];
 }
 $BD = $_SESSION["inst"] . "_" . $year;
 
-$asig = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas 
-WHERE mat_grado='" . $_REQUEST["curso"] . "' 
-AND mat_grupo='" . $_REQUEST["grupo"] . "' 
-AND (mat_estado_matricula=1 OR mat_estado_matricula=2) 
-AND mat_eliminado=0 
-ORDER BY mat_primer_apellido");
+$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."'";
+$asig =Estudiantes::estudiantesMatriculados($filtroAdicional,$BD);		
 $num_asg = mysqli_num_rows($asig);
 $consultaGrados = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, academico_grupos 
 WHERE gra_id='" . $_REQUEST["curso"] . "' 
@@ -37,44 +31,46 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 	<table width="100%" cellspacing="5" cellpadding="5" rules="all" style="
   border:solid; 
-  border-color:<?= $Plataforma->colorUno; ?>; 
-  font-size:11px;">
-		<tr style="font-weight:bold; height:30px; background:<?= $Plataforma->colorUno; ?>; color:#FFF;">
-			<td align="center">No</b></td>
-			<td align="center">ID</td>
-			<td align="center">Estudiante</td>
-			<?php
-			$materias1 = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas 
-		WHERE car_curso=" . $_REQUEST["curso"] . " 
-		AND car_grupo='" . $_REQUEST["grupo"] . "'");
-			while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
-				$nombresMat = mysqli_query($conexion, "SELECT * FROM $BD.academico_materias 
-			WHERE mat_id=" . $mat1[4]);
-				$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
-			?>
-				<td align="center"><?= $Mat[3]; ?></td>
-			<?php
-			}
-			?>
-			<td align="center" style="font-weight:bold;">PROM</td>
-		</tr>
-		<?php
-		$cont = 1;
-		$mayor = 0;
-		$nombreMayor = "";
-		while ($fila = mysqli_fetch_array($asig, MYSQLI_BOTH)) {
-			$cuentaest = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-		WHERE bol_estudiante=" . $fila[0] . " 
-		AND bol_periodo=" . $_REQUEST["per"] . " 
-		GROUP BY bol_carga");
-			$numero = mysqli_num_rows($cuentaest);
-			$def = '0.0';
-
+  border-color:#6017dc; 
+  font-size:11px;
+  ">
+  	 <tr style="font-weight:bold; height:30px; background:#6017dc; color:#FFF;">
+        <td align="center">No</b></td>
+        <td align="center">ID</td>
+        <td align="center">Estudiante</td>
+        <?php
+		$materias1 = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas 
+		WHERE car_curso=".$_REQUEST["curso"]." 
+		AND car_grupo='".$_REQUEST["grupo"]."'");
+		while($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)){
+			$nombresMat = mysqli_query($conexion, "SELECT * FROM $BD.academico_materias 
+			WHERE mat_id=".$mat1[4]);
+			$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
-			<tr style="border-color:<?= $Plataforma->colorDos; ?>;">
-				<td align="center"> <?php echo $cont; ?></td>
-				<td align="center"> <?php echo $fila['mat_id']; ?></td>
-				<td><?= strtoupper($fila['mat_primer_apellido'] . " " . $fila['mat_segundo_apellido'] . " " . $fila['mat_nombres'] . " " . $fila['mat_nombre2']); ?></td>
+        	<td align="center"><?=$Mat[3];?></td>      
+  		<?php
+		}
+		?>
+        <td align="center" style="font-weight:bold;">PROM</td>
+  </tr>
+  <?php
+  $cont = 1;
+  $mayor = 0;
+  $nombreMayor = "";
+  while($fila = mysqli_fetch_array($asig, MYSQLI_BOTH)){
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
+  		$cuentaest = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
+		WHERE bol_estudiante=".$fila[0]." 
+		AND bol_periodo=".$_REQUEST["per"]." 
+		GROUP BY bol_carga");
+		$numero = mysqli_num_rows($cuentaest);
+		$def = '0.0';
+		
+  ?>
+  <tr style="border-color:#41c4c4;">
+      <td align="center"> <?php echo $cont;?></td>
+      <td align="center"> <?php echo $fila['mat_id'];?></td>
+      <td><?=$nombre?></td> 
 
 				<?php
 				$suma = 0;
