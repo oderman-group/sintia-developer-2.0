@@ -91,7 +91,7 @@
 												<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$_GET['curso'];?>&grupo=<?=$_GET["grupo"];?>&docente=<?=$docente['uss_id'];?>&asignatura=<?=$_GET["asignatura"];?>" <?=$estiloResaltado;?>><?=strtoupper($docente['uss_nombre']);?>: <b><?=$cargasPorDocente[0];?></b></a></div>
+																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$_GET['curso'];?>&grupo=<?=$_GET["grupo"];?>&docente=<?=$docente['uss_id'];?>&asignatura=<?=$_GET["asignatura"];?>" <?=$estiloResaltado;?>><?=UsuariosPadre::nombreCompletoDelUsuario($docente);?>: <b><?=$cargasPorDocente[0];?></b></a></div>
 																	<div class="percent pull-right"><?=$porcentajePorGrado;?>%</div>
 																</div>
 

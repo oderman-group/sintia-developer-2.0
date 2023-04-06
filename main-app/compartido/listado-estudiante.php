@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 include("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 ?>
 <head>
 	<title>LISTADO DE ESTUDIANTES</title>
@@ -58,7 +59,7 @@ include("../compartido/head-informes.php") ?>
       <td><?=$resultado["ogen_nombre"];?></td>
       <td><?=$resultado["mat_telefono"];?></td>
       <td><?=$resultado["mat_celular"];?></td>
-     <td><?=strtoupper($acudiente['uss_nombre']." ".$acudiente['uss_nombre2']." ".$acudiente['uss_apellido1']." ".$acudiente['uss_apellido2']);?></td> 
+     <td><?=UsuariosPadre::nombreCompletoDelUsuario($acudiente);?></td> 
 </tr>
   <?php
   $cont++;

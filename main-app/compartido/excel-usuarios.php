@@ -35,7 +35,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 ?>    
     	<tr>	
             <td align="center"><?=$conta;?></td>
-            <td><?=$resultado['uss_nombre'];?></td>
+            <td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
             <td><?=$resultado['pes_nombre'];?></td>
             <td><?=strtolower($resultado['uss_email']);?></td>
         </tr>   

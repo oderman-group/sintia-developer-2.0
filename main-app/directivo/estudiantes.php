@@ -169,7 +169,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 
 														$nombreAcudiente = '';
 														if (isset($acudiente[0])) {
-															$nombreAcudiente = strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]); 
+															$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente); 
 															$idAcudiente = $acudiente['uss_id'];
 														}
 

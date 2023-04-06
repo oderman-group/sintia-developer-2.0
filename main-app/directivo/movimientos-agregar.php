@@ -117,7 +117,7 @@
 													<?php
 													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$resultadosDatos[0];?>"><?=$resultadosDatos['uss_nombre']." (".$resultadosDatos['pes_nombre'].")"?></option>
+                                                    	<option value="<?=$resultadosDatos[0];?>"><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos) ."(".$resultadosDatos['pes_nombre'].")";?></option>
 													<?php }?>
                                                 </select>
                                             </div>

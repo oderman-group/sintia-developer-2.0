@@ -1,5 +1,6 @@
 <?php
-include("conexion-datos.php");
+require_once("conexion-datos.php");
+require_once("main-app/class/UsuariosPadre.php");
 
 //DATOS DE FECHA ACTUAL
 date_default_timezone_set("America/New_York");
@@ -56,7 +57,7 @@ while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH))
       $tituloMsj = "¡Faltan ".$falta." para vencer su licencia!";
       $bgTitulo = "#4086f4";
       $contenidoMsj = '
-      Hola! <b>'.$datosDirectivos['uss_nombre'].'</b><br>
+      Hola! <b>'.UsuariosPadre::nombreCompletoDelUsuario($datosDirectivos).'</b><br>
       <b>'.strtoupper($datosInstituciones['ins_nombre']).'</b>, su licencia con la plataforma SINTIA esta por vencer<br>
       faltan <b>'.$falta.'</b> para su vencimiento<br>
       puede hacer la renovacion atraves de la plataforma.';

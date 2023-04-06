@@ -35,7 +35,7 @@
 																while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 																	
 																?>
-																  <option value="<?=$datos['uss_id'];?>" <?php if(isset($_GET["para"])&&$datos['uss_id']==$_GET["para"]){echo "selected";}?>><?=strtoupper($datos['uss_nombre']." (".$datos['pes_nombre']." ".$datos['gra_nombre'].")");?></option>	
+																  <option value="<?=$datos['uss_id'];?>" <?php if(isset($_GET["para"])&&$datos['uss_id']==$_GET["para"]){echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($datos)." (".$datos['pes_nombre']." ".$datos['gra_nombre'].")";?></option>	
 																<?php }?>
 																</select>
 		                                                        
