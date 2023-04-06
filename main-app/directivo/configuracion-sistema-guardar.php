@@ -32,7 +32,8 @@ try {
 	conf_orden_nombre_estudiantes='" . $_POST["ordenEstudiantes"] . "',
 	conf_editar_definitivas_consolidado='" . $_POST["permisoConsolidado"] . "',
 	conf_informe_parcial='" . $_POST["informeParcial"] . "',
-	conf_decimales_notas='" . $_POST["decimalesNotas"] . "'
+	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
+	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
 	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");

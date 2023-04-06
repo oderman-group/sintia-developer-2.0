@@ -199,6 +199,17 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 <span style="color:#6017dc;">Esta acción permite o no actualizar las definitivas, en el consolidado final, en cualquier momento.</span>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Observaciones multiples en comportamiento?</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="observacionesMultiples">
+                                                    <option value="1" <?php if($cfg['conf_observaciones_multiples_comportamiento']==1){ echo "selected";} ?>>SI</option>
+
+                                                    <option value="0" <?php if($cfg['conf_observaciones_multiples_comportamiento'] == 0 || $cfg['conf_observaciones_multiples_comportamiento'] == null){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fecha que aparecerá en el proximo Informe Parcial</label>

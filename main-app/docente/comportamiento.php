@@ -173,7 +173,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 														<th>Guardar</th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -198,7 +200,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td width="60%">
+														<td width="30%">
 															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
@@ -208,7 +210,8 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<a href="#" name="guardar.php?get=31&id=<?=$notas['dn_id'];?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
-														<td width="25%">
+														<td width="50%">
+														<?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 															<p>
 																<?php
 																$consultaObservaciones = mysqli_query($conexion, "SELECT * FROM academico_observaciones ORDER BY obser_id");
@@ -228,6 +231,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 																	<?php }?>
 																</select>
 															</p>
+														<?php } else {?>	
 															
 															<p>
 															<?php
@@ -244,10 +248,14 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															</select>
 															</p>
 															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)"><?=$observacion?></textarea>
+
+															<?php }?>
 														</td>
-                                                        <td style="text-align: center; padding: 10px;">
+                                                        <?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
+														<td style="text-align: center; padding: 10px;">
                                                             <button class="btn deepPink-bgcolor" type="submit" name="Ob<?=$resultado['mat_id'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="12" onclick="notas(this)"><i class="fa fa-check"></i></button>
                                                         </td>
+														<?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;
