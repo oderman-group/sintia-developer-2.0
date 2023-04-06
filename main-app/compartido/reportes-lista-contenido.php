@@ -104,7 +104,7 @@
 														<td><?=$resultado['dcat_nombre'];?></td>
 														<td><?=$resultado['dfal_codigo'];?></td>
 														<td><a href="reportes-lista.php?falta=<?=$resultado['dfal_codigo'];?>&filtros=1"><?=$resultado['dfal_nombre'];?></a></td>
-														<td><?=$resultado['uss_nombre'];?></td>
+														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){ echo "-"; }else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_estudiante_fecha'];?>"></i>
