@@ -245,6 +245,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
 																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
 																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
+																	<li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>&tipe=4">Autologin</a></li>
 																</ul>
 															</div>
 														</td>
