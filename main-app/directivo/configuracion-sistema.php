@@ -154,6 +154,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                     <option value="SI" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='SI'){ echo "selected";} ?>>SI</option>
                                                     <option value="NO" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='NO'){ echo "selected";} ?>>No</option>
                                                 </select>
+                                                <span style="color:#6017dc;">Indica si las asignaturas tendrán un porcentaje diferente dentro del área al momento de calcular las notas en el boletín.</span>
                                             </div>
                                         </div>
 										
