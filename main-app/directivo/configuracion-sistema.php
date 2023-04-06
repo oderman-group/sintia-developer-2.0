@@ -200,16 +200,6 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Si un usuario tiene saldo pendiente...</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control  select2" name="saldoPendiente" required>
-                                                    <option value="1">Restringir acceso a la plataforma</option>
-                                                    <option value="2">No hacer nada</option>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fecha que aparecerá en el proximo Informe Parcial</label>
 											<div class="col-sm-2">
 												<input type="text" name="fechapa" class="form-control" value="<?=$cfg[28];?>">
