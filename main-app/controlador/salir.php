@@ -4,6 +4,7 @@ include("../modelo/conexion.php");
 $idPaginaInterna = 'GN0002';
 
 if($_SESSION["id"]==""){
+	session_destroy();
 	header("Location:../index.php?error=4");
 	exit();
 }

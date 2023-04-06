@@ -41,6 +41,7 @@ if($_SESSION["inst"]==""){
 			break;	
 		}
 
+		session_destroy();
 		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
