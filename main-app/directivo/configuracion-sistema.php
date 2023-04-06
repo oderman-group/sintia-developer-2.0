@@ -79,11 +79,17 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
-													while($p<=$config[19]){
+                                                    $pFinal = $config[19] + 1;
+													while($p <= $pFinal){
+                                                        $label = 'Periodo '.$p;
+                                                        if($p == $pFinal) {
+                                                            $label = 'AÑO FINALIZADO';
+                                                        }
+
 														if($p==$cfg['conf_periodo'])
-															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
+															echo '<option value="'.$p.'" selected>'.$label.'</option>';
 														else
-															echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
+															echo '<option value="'.$p.'">'.$label.'</option>';	
 														$p++;
 													}
 													?>
@@ -236,9 +242,12 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										</div>
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Mostrar Nombre del colegio en el encabezado de los informes (0=NO - 1=SI)</label>
-											<div class="col-sm-2">
-												<input type="text" name="mostrarNombre" class="form-control" value="<?=$cfg[32];?>">
+											<label class="col-sm-2 control-label">Mostrar Nombre del colegio en el encabezado de los informes</label>
+											<div class="col-sm-4">
+                                                <select class="form-control  select2" name="mostrarNombre">
+                                                    <option value="1" <?php if($cfg[32]==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="2" <?php if($cfg[32]==2){ echo "selected";} ?>>NO</option>
+                                                </select>
 											</div>
 										</div>
 
