@@ -8,7 +8,7 @@ if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nom
 	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
 	exit();
 }
-$validacionEstudiante = Estudiantes::validarExistenciaEstudiante($_POST["nDoc"]);
+$validacionEstudiante = Estudiantes::validarRepeticionDocumento($_POST["nDoc"], $_POST["id"]);
 
 if($validacionEstudiante > 0){
 	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&documento='.$_POST["nDoc"].'&error=ER_DT_11";</script>';
