@@ -1,14 +1,22 @@
 <?php
-    $paginaActual=$_REQUEST["nume"];
-    $ultima = $numRegistros / $registros;
-    $totalPaginas=ceil($ultima);
-    $ant = $paginaActual - 1;
-    $sigui = $paginaActual + 1;
+$paginaActual=$_REQUEST["nume"];
+$ultima = $numRegistros / $registros;
+$totalPaginas=ceil($ultima);
+$ant = $paginaActual - 1;
+$sigui = $paginaActual + 1;
 
-    $fin=($inicio+$registros);
-    if($paginaActual==$totalPaginas){
-        $fin=$numRegistros;
+$fin=($inicio+$registros);
+if($paginaActual==$totalPaginas){
+    $fin=$numRegistros;
+}
+
+if ( isset($_GET) ) {
+    foreach ($_GET as $key => $value) {
+        if ($key != 'nume') {
+            $parametros = "&{$key}={$value}";
+        }    
     }
+}
 ?>
 
 <div style="text-align:center">
@@ -16,7 +24,7 @@
 
         <li class="page-item">
             <?php if ($paginaActual > 1) { ?>
-                <a class='page-link' aria-label='Previous' href='<?=$nombrePagina?>?nume=<?=$ant?>'>Previous</a>
+                <a class='page-link' aria-label='Previous' href='<?=$nombrePagina?>?nume=<?=$ant."".$parametros;?>'>Previous</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Previous'>Previous</span>
             <?php } ?>
@@ -32,7 +40,7 @@
             </li>
         <?php       } else { ?>
             <li class="page-item" style="padding-left: 5px!important;">
-                <a href="<?=$nombrePagina?>?nume=<?=$i?>" class="page-link"><?=$i?></a>
+                <a href="<?=$nombrePagina?>?nume=<?=$i."".$parametros;?>" class="page-link"><?=$i?></a>
             </li>
         <?php
                     }
@@ -49,7 +57,7 @@
 
         <li class="page-item" style="padding-left: 5px!important;">
             <?php if ($paginaActual < $totalPaginas - 0) { ?>
-                <a class='page-link' aria-label='Next' href='<?=$nombrePagina?>?nume=<?=$sigui?>'>Next</a>
+                <a class='page-link' aria-label='Next' href='<?=$nombrePagina?>?nume=<?=$sigui."".$parametros;?>'>Next</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Next'>Next</span>
             <?php } ?>
