@@ -1,18 +1,14 @@
 <?php
 $tiempo_inicial = microtime(true);
-include("../modelo/conexion.php");
-include("../class/Plataforma.php");
-include("../class/Utilidades.php");  // Calse que manejará funciones basicas para la unificacion de validaciones y conceptos 
+require_once("../modelo/conexion.php");
+require_once("../class/Plataforma.php");
+require_once("../class/Utilidades.php");
 $Utilidades = new Utilidades; 
-
-$Plataforma = new Plataforma; // Variable que manejará los datos de configuracion de la visualizacionde la plataforma icono y colores
-//$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+$Plataforma = new Plataforma;
 $config = $_SESSION["configuracion"];
 
-//$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
 $informacion_inst = $_SESSION["informacionInstConsulta"];
 
-//$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$config['conf_id_institucion']."'");
 $datosUnicosInstitucion = $_SESSION["datosUnicosInstitucion"];
 $yearArray = explode(",", $datosUnicosInstitucion['ins_years']);
 $yearStart = $yearArray[0];
