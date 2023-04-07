@@ -20,7 +20,7 @@
 				                                            <img src="../files/fotos/<?=$datos['uss_foto'];?>" class="doctor-pic" alt=""> 
 					                                        <div class="profile-usertitle">
 					                                            <div class="doctor-name"><?=$datos['pes_nombre'];?></div>
-					                                            <div class="name-center"><?=strtoupper(substr($datos['uss_nombre'],0,60));?></div>
+					                                            <div class="name-center"><?=substr(UsuariosPadre::nombreCompletoDelUsuario($datos),0,60);?></div>
 					                                        </div>
 				                                        </div>
 				                                    </div>

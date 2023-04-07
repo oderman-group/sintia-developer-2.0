@@ -66,7 +66,7 @@
 														$disabled = '';
 														if($opcionesDatos['uss_bloqueado']==1) $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".strtoupper($opcionesDatos['uss_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>

@@ -43,7 +43,7 @@ include("../class/Estudiantes.php");
   <tr style="font-size:13px;">
       <td><?=$resultado['mat_id'];?></td>
       <td><?=$resultado[12];?></td>
-      <td><?=strtoupper($resultado["mat_primer_apellido"].' '.$resultado["mat_segundo_apellido"].' '.$resultado["mat_nombres"].' '.$resultado["mat_nombre2"]);?></td>
+      <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td><?=$grados["gra_nombre"];?></td>
       <td><?=$grados["gru_nombre"];?></td>
       <td><?=$resultado[9];?></td>

@@ -117,7 +117,7 @@ if($config['conf_activar_encuesta']==1){
 										
 		                            </div>
 		                            <p><span><i class="fa fa-clock-o"></i> <?=$frases[101][$datosUsuarioActual['uss_idioma']];?>: <?=$rCargas['car_periodo'];?></span></p>
-		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=strtoupper($rCargas['uss_nombre']);?></span></p>
+		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></span></p>
 									
 									<!--
 		                            <a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>

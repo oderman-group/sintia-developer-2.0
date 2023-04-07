@@ -187,11 +187,11 @@
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_rector"]==$r["uss_id"]){
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo $r["uss_nombre"];?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo UsuariosPadre::nombreCompletoDelUsuario($r);?></option>
                                                    <?php }else{ 
                                                    
                                                    ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo $r["uss_nombre"]; ?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?></option>
                                                      <?php 
                                                    }
                                                    }
@@ -210,11 +210,11 @@
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_secretaria_academica"]==$r["uss_id"]){
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo $r["uss_nombre"];?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo UsuariosPadre::nombreCompletoDelUsuario($r);?></option>
                                                     <?php }else{ 
                                                     
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo $r["uss_nombre"]; ?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?></option>
                                                         <?php 
                                                     }
                                                     }
@@ -233,11 +233,11 @@
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_coordinador_academico"]==$r["uss_id"]){
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo $r["uss_nombre"];?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo UsuariosPadre::nombreCompletoDelUsuario($r);?></option>
                                                     <?php }else{ 
                                                     
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo $r["uss_nombre"]; ?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?></option>
                                                         <?php 
                                                     }
                                                     }
@@ -256,11 +256,11 @@
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_tesorero"]==$r["uss_id"]){
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo $r["uss_nombre"];?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>" selected><?php echo UsuariosPadre::nombreCompletoDelUsuario($r);?></option>
                                                     <?php }else{ 
                                                     
                                                     ?>
-                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo $r["uss_nombre"]; ?></option>
+                                                    <option value="<?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?>"><?php echo $r["uss_nombre"]; ?></option>
                                                         <?php 
                                                     }
                                                     }

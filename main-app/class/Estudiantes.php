@@ -313,4 +313,24 @@ class Estudiantes {
         return $resultado;
     }
 
+    public static function validarRepeticionDocumento($documento, $idEstudiante)
+    {
+
+        global $conexion;
+        $num = 0;
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            WHERE mat_id!='".$idEstudiante."' AND mat_documento='".$documento."' AND mat_eliminado=0
+            ");
+            $num = mysqli_num_rows($consulta);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $num;
+
+    }
+
 }

@@ -1,7 +1,7 @@
 <?php 
 include("session.php");
 $consultaDoc=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
+WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_id!='".$_POST["idEstudiante"]."' AND mat_eliminado=0");
 $datosEstudiantes = mysqli_fetch_array($consultaDoc, MYSQLI_BOTH);
 $numDatos=mysqli_num_rows($consultaDoc);
 if ($numDatos > 0) {

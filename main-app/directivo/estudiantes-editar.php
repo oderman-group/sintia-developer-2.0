@@ -33,11 +33,12 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
     <script type="application/javascript">
 		function validarEstudiante(enviada){
 			var nDoct = enviada.value;
+			var idEstudiante = <?php echo $datosEstudianteActual["mat_id"];?>;
 
 			if(nDoct!=""){
 				$('#nDocu').empty().hide().html("Validando documento...").show(1);
 
-				datos = "nDoct="+(nDoct);
+				datos = "nDoct="+(nDoct)+"&idEstudiante="+(idEstudiante);
 					$.ajax({
 					type: "POST",
 					url: "ajax-estudiantes-editar.php",
@@ -76,6 +77,16 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                             </ol>
                         </div>
                     </div>
+
+					<div class="row mb-3">
+                    	<div class="col-sm-12">
+							<div class="btn-group">
+								<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+									Agregar nuevo <i class="fa fa-plus"></i>
+								</a>
+							</div>
+						</div>
+					</div>
 
                     <span style="color: blue; font-size: 15px;" id="nDocu"></span>
                     <!-- wizard with validation-->

@@ -47,11 +47,13 @@
 							 $nCargas = mysqli_num_rows($cCargas);
 							 $mensajeCargas = new Cargas;
 							 $mensajeCargas->verificarNumCargas($nCargas);
+							 if ($nCargas > 0) {
 							 ?>
 								
 							 <p>
 								 	<a href="../compartido/planilla-docentes.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
 							 </p>
+							 <?php }?>
 							 <div class="row">
 								 
 								 
@@ -108,19 +110,6 @@
                                     </p>
 									
 		                            
-									<!--
-									<p><span><i class="fa fa-clock-o"></i> <b><?=$frases[101][$datosUsuarioActual[8]];?>:</b> <?=$rCargas['car_periodo'];?></span></p>
-									
-									
-									<p><span><i class="fa fa-hourglass-half"></i> <b>Notas declaradas:</b> </span></p>
-									<p><span><i class="fa fa-hourglass-half"></i> <b>Notas registradas:</b> </span></p>
-									-->
-
-									<!--
-		                            <div align="center">
-										<a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
-									</div>
-									-->
 									
 									<div class="text">
 										<span class="m-r-10" style="font-size: 10px;"><b>Notas:</b> <?=$spcd[0];?>% / <?=$spcr[0];?>% | <b>Periodo:</b> <?=$rCargas['car_periodo'];?> | <b>Posición:</b> <?=$rCargas['car_posicion_docente'];?></span> 

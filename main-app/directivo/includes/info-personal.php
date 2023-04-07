@@ -1,13 +1,14 @@
 <fieldset>
 											
-										
+										<?php if(!empty($datosEstudianteActual['mat_foto'])) {?>
 										<div class="form-group row">
                                             <div class="col-sm-4" style="margin: 0 auto 10px">
 												<div class="item">
-													<img src="../files/fotos/<?=$datosEstudianteActual['mat_foto'];?>" width="300" height="300" />
+													<img src="../files/fotos/<?=$datosEstudianteActual['mat_foto'];?>" width="150" height="150" />
 												</div>
                                             </div>
                                         </div>
+										<?php }?>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>

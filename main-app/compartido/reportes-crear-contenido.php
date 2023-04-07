@@ -65,7 +65,7 @@
 														<?php
 														while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$datos['uss_id'];?>"><?=$datos['uss_nombre']?></option>
+															<option value="<?=$datos['uss_id'];?>"><?=UsuariosPadre::nombreCompletoDelUsuario($datos);?></option>
 														<?php }?>
 													</select>
 												</div>

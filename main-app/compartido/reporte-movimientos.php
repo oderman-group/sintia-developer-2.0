@@ -1,7 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+require_once("../class/UsuariosPadre.php");
+?>
 <head>
 	<title>Movimientos Financieros</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -32,7 +34,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 $u = mysqli_fetch_array($consultaU, MYSQLI_BOTH);
                      $consultaCerrado=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[11]."'");
 										 $cerrado = mysqli_fetch_array($consultaCerrado, MYSQLI_BOTH);
-										 $nombreCompleto = strtoupper($u[4]);
+										 $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
 										 switch($resultado[4]){case 1: $tipo = "Ingreso"; break; case 2: $tipo = "Egreso"; break; case 3: $tipo = "Cuenta por cobrar"; break; case 4: $tipo = "Cuenta por pagar"; break;}
 										 switch($resultado[8]){case 1: $forma = "Efectivo"; break; case 2: $forma = "Cheque"; break; case 3: $forma = "T. D&eacute;bito"; break; case 4: $forma = "T. Cr&eacute;dito"; break; case 5: $forma = "N/A"; break; default: $forma = "N/A"; break;}
 									 ?>
@@ -46,7 +48,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                         <td><?=$forma;?></td>
                                         
                                         <td><?=$resultado[5];?></td>
-                                        <td><?=$resultado[10];?> <br> <?=strtoupper($cerrado[4]);?></td>
+                                        <td><?=$resultado[10];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado[4]);?></td>
 </tr>
   <?php
   $cont++;

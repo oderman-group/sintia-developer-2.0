@@ -105,7 +105,7 @@
 														<td><?=$resultado['dcat_nombre'];?></td>
 														<td><?=$resultado['dfal_codigo'];?></td>
 														<td><?=$resultado['dfal_nombre'];?></td>
-														<td><?=$resultado['uss_nombre'];?></td>
+														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
