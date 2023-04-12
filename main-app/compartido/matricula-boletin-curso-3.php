@@ -507,8 +507,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
 
-                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $rndisiplina["dn_nota"] . ">=notip_desde AND " . $rndisiplina["dn_nota"] . "<=notip_hasta");
-                    $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
+                    // $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $rndisiplina["dn_nota"] . ">=notip_desde AND " . $rndisiplina["dn_nota"] . "<=notip_hasta");
+                    // $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 
                 ?>
 
