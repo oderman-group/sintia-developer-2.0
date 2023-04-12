@@ -1,7 +1,7 @@
 <?php
 include("session.php");
-include("../class/Usuarios.php");
-include("../class/Estudiantes.php");
+require_once("../class/Usuarios.php");
+require_once("../class/Estudiantes.php");
 require '../../librerias/Excel/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;

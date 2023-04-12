@@ -5,7 +5,7 @@ $_SESSION['docente'] = '';
 unset( $_SESSION["docente"] );
 
 include("../../config-general/config.php");
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 
 $_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 

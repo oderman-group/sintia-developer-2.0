@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
  
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";

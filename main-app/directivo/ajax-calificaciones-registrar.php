@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("verificar-carga.php");
 $consultaNum=mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
 WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");

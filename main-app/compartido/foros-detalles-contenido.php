@@ -1,5 +1,5 @@
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">

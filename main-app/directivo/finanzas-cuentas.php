@@ -2,7 +2,7 @@
 include("session.php");
 $idPaginaInterna = 'DT0093';
 include("../compartido/historial-acciones-guardar.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
 $e =Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["id"]);

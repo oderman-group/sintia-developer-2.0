@@ -26,7 +26,7 @@ if(isset($_POST["consultas"])){
 include("session.php");
 $idPaginaInterna = 'DT0079';
 include("../compartido/historial-acciones-guardar.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 ?>
 	<!--bootstrap -->

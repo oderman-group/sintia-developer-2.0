@@ -5,7 +5,7 @@
 <?php //include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");

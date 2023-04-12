@@ -5,7 +5,7 @@ $_SESSION['acudiente'] = '';
 unset( $_SESSION["acudiente"] );
 
 include("../../config-general/config.php");
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 
 $_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 

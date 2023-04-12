@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 
 $idPaginaInterna = 'DC0065';
 

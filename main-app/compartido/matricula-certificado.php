@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 15fedfe (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
-<?php include("../directivo/session.php"); ?>
-<?php $modulo = 1; ?>
-=======
-<?php include("../directivo/session.php");
-include("../class/Estudiantes.php");
+<?php
+include("../directivo/session.php");
+require_once("../class/Estudiantes.php");
 
 $modulo = 1;
 
 ?>
->>>>>>> 0193ac4 (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
 
 <!doctype html>
 

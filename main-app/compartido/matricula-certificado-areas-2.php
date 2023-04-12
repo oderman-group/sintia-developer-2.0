@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 <?php
-include("../directivo/session.php");
 date_default_timezone_set("America/New_York");//Zona horaria
+include("../directivo/session.php");
+require_once("../class/Estudiantes.php");
 $Plataforma = new Plataforma;
-=======
-<?php include("../directivo/session.php");
-include("../class/Estudiantes.php");
->>>>>>> 0193ac4 (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
 
 $modulo = 1;
 
@@ -104,11 +100,8 @@ while($i<=$restaAgnos){
 
 	
 
-<<<<<<< HEAD
-    <p>Que, <b><?=strtoupper($estudiante["mat_primer_apellido"]." ".$estudiante["mat_segundo_apellido"]." ".$estudiante["mat_nombres"]);?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion?></b>  y obtuvo las siguientes calificaciones:</p>
-=======
-    <p>Que, <b><?=$estudiante?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
->>>>>>> 0193ac4 (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
+
+    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
 
     
 

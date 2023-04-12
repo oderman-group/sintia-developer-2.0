@@ -1,10 +1,10 @@
 
 <?php
     include("../directivo/session.php");
-    include("../class/Estudiantes.php");
-    include("../class/Boletin.php");
-    include("../class/Usuarios.php");
-    include("../class/UsuariosPadre.php");
+    require_once("../class/Estudiantes.php");
+    require_once("../class/Boletin.php");
+    require_once("../class/Usuarios.php");
+    require_once("../class/UsuariosPadre.php");
     $Plataforma = new Plataforma;
 
     $year=$agnoBD;

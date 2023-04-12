@@ -1,7 +1,7 @@
 <?php
     $modulo = 4;
     include("session.php");
-    include("../class/Estudiantes.php");
+    require_once("../class/Estudiantes.php");
         
     //ESTUDIANTE ACTUAL
     $datosEstudianteActual =Estudiantes::obtenerDatosEstudiante($_GET["id"]);

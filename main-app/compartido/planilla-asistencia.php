@@ -3,7 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <head>
 	<title>PLANILLA DE ESTUDIANTES</title>

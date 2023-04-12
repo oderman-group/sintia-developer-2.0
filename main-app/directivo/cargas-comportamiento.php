@@ -2,7 +2,7 @@
 include("session.php");
 $idPaginaInterna = 'DT0051';
 include("../compartido/historial-acciones-guardar.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 ?>
 	<!-- data tables -->

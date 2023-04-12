@@ -1,17 +1,8 @@
 <?php
-<<<<<<< HEAD
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
-<<<<<<< HEAD
-=======
-include("../class/Plataforma.php");
-$Plataforma = new Plataforma;
-=======
 include("../directivo/session.php");
-include("../class/Estudiantes.php");
->>>>>>> 0193ac4 (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
->>>>>>> 15fedfe (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
+require_once("../class/Estudiantes.php");
+require_once("../class/Plataforma.php");
+$Plataforma = new Plataforma;
 
 $year=$agnoBD;
 if(isset($_POST["year"])){

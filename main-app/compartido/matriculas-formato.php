@@ -6,7 +6,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
 ?>
 <?php
  include("../directivo/session.php");
- include("../class/Estudiantes.php");
+ require_once("../class/Estudiantes.php");
  include("../head.php");
  ?>
   <style type="text/css">

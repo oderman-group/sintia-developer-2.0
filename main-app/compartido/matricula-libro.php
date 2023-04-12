@@ -1,6 +1,6 @@
 <?php
 include("../directivo/session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>

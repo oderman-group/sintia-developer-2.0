@@ -1,6 +1,6 @@
 <?php
 include("../directivo/session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 //PARA DOCENTES
 //Generar informes
 $cargasConsulta = mysqli_query($conexion, "SELECT DATEDIFF(car_fecha_generar_informe_auto, now()), car_id, car_periodo, car_curso, car_grupo, car_docente FROM academico_cargas

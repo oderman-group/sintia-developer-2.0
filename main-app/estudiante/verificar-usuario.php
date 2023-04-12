@@ -12,5 +12,5 @@ if($datosUsuarioActual[3]==4){
 }
 
 //ESTUDIANTE ACTUAL
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 $datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($usuarioEstudianteConsultaActual);

@@ -2,16 +2,8 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-<<<<<<< HEAD
-include("../class/UsuariosPadre.php");
-=======
-<<<<<<< HEAD
 require_once("../class/UsuariosPadre.php");
-=======
-include("../class/UsuariosPadre.php");
-include("../class/Estudiantes.php");
->>>>>>> b6a2cba (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
->>>>>>> 15fedfe (PES2023-133 - Se utiliza clase Estudiantes en paginas que consultan a academico_matriculas)
+require_once("../class/Estudiantes.php");
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>

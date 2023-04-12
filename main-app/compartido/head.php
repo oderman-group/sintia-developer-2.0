@@ -28,7 +28,7 @@ if(isset($idPaginaInterna)){
 /*
 * Incluir clases que se usarán en varias paginas de todos los usuarios
 */
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 require_once("../class/Grados.php");
 require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");

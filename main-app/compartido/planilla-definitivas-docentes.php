@@ -1,6 +1,6 @@
 <?php
 include("../docente/session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
 $filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");

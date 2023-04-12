@@ -1,7 +1,7 @@
 <?php 
 include("session.php");
 include("../modelo/conexion.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
