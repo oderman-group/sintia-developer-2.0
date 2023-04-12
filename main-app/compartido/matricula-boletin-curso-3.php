@@ -43,7 +43,9 @@ if (is_numeric($_REQUEST["curso"])) {
 
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
-if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(is_numeric($_REQUEST["grupo"])){
+    $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
+}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
@@ -139,7 +141,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         ?>
 
         <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150"><br>
     <!-- <?=$informacion_inst["info_nombre"]?><br>
     BOLETÍN DE CALIFICACIONES<br> -->
 
