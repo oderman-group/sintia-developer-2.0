@@ -121,7 +121,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['car_grupo']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -140,7 +140,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['car_materia']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
                                                 </select>
                                             </div>
