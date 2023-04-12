@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-include("../class/CargaAcademica.php");
+require_once("../class/CargaAcademica.php");
 
 $cargasNoCreadas = 0;
 $cargasCreadas = 0;

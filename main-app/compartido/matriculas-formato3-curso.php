@@ -6,7 +6,7 @@ if($_SERVER['HTTP_REFERER']==""){
 ?>
 <?php
 include("../directivo/session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("head.php");
 ?>
 <style>

@@ -4,7 +4,7 @@ $idPaginaInterna = 'DT0016';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>

@@ -6,7 +6,7 @@ header("content-disposition: attachment;filename=Estudiantes_".date("d/m/Y")."-S
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
 $consulta = Estudiantes::listarEstudiantes(0, '', '');
 ?>

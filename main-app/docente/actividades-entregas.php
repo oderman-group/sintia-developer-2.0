@@ -5,7 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->

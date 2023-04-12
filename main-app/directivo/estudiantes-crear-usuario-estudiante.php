@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 
     $est =Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 	$lineaError = __LINE__;

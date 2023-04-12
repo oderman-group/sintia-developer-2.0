@@ -7,7 +7,7 @@
 include("verificar-periodos-iguales.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores

@@ -1,5 +1,5 @@
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 $datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["idR"]);
 
 

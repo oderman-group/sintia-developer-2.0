@@ -5,7 +5,7 @@ $_SESSION['admin'] = '';
 unset( $_SESSION["admin"] );
 
 include("../../config-general/config.php");
-include("../class/UsuariosPadre.php");
+require_once("../class/UsuariosPadre.php");
 
 $_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 

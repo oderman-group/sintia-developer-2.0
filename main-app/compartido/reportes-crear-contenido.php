@@ -1,4 +1,4 @@
-<?php include("../class/Estudiantes.php");?>
+<?php require_once("../class/Estudiantes.php");?>
 
 					<div class="row">
                         <div class="col-sm-12">

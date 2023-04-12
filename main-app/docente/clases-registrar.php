@@ -5,7 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 ?>
 <?php
 $consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");

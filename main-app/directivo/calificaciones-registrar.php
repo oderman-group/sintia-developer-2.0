@@ -4,7 +4,7 @@ $idPaginaInterna = 'DT0026';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");

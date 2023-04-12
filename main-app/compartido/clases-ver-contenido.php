@@ -1,5 +1,5 @@
 <?php
-include("../class/Estudiantes.php");
+require_once("../class/Estudiantes.php");
 $consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_clases 
 WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
