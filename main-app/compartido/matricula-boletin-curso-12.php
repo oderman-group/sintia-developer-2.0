@@ -426,7 +426,7 @@
             </tbody>
         </table>
 
-        <p>&nbsp;</p>
+        <div id="saltoPagina"></div>
 
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
