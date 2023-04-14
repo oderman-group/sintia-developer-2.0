@@ -199,9 +199,6 @@
                             $condicion2 = "4";
                             break;
                     }
-                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-                    $consultaArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
-                    $datosArea = mysqli_fetch_array($consultaArea, MYSQLI_BOTH);
                 ?>
                 <tr style="background: #EAEAEA">
                     <td colspan="<?=$colspan?>"><?=$datosArea["ar_nombre"]?></td>
