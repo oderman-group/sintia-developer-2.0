@@ -59,6 +59,7 @@
     $idDirector="";
     $periodosCursados=$periodoActual-1;
     $colspan=8+$periodosCursados;
+    $contadorEstudiantes=0;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
         $gradoActual = $matriculadosDatos['mat_grado'];
         $grupoActual = $matriculadosDatos['mat_grupo'];
@@ -199,13 +200,7 @@
                             $condicion2 = "4";
                             break;
                     }
-                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-                    $consultaArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
-                    $datosArea = mysqli_fetch_array($consultaArea, MYSQLI_BOTH);
                 ?>
-                <tr style="background: #EAEAEA">
-                    <td colspan="<?=$colspan?>"><?=$datosArea["ar_nombre"]?></td>
-                </tr>
                 <?php
                     //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
                     $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
@@ -429,7 +424,7 @@
             </tbody>
         </table>
 
-        <p>&nbsp;</p>
+        <div id="saltoPagina"></div>
 
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
@@ -523,9 +518,14 @@
             SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
         </div>
 
-        <div id="saltoPagina"></div>
+        <?php
+            $contadorEstudiantes++;
+            if($contadorEstudiantes!=$numeroEstudiantes){
+        ?>
 
+        <div id="saltoPagina"></div>
 <?php
+            }
     }//FIN WHILE MATRICULADOS
 ?>
 
