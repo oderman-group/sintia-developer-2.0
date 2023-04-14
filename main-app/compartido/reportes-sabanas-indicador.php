@@ -20,7 +20,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 <body style="font-family:Arial;">
 	<div align="center" style="margin-bottom:20px;">
-		<img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150" width="250"><br>
+		<img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150"><br>
 		<?= $informacion_inst["info_nombre"] ?><br>
 		INFORME DE SABANAS CON INDICADOR - PERIODO: <?= $_GET["per"]; ?></br>
 		<b><?= strtoupper($grados["gra_nombre"] . " " . $grados["gru_nombre"]); ?></b><br>
