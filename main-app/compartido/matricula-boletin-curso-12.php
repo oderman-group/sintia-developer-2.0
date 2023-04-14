@@ -59,6 +59,7 @@
     $idDirector="";
     $periodosCursados=$periodoActual-1;
     $colspan=8+$periodosCursados;
+    $contadorEstudiantes=0;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
         $gradoActual = $matriculadosDatos['mat_grado'];
         $grupoActual = $matriculadosDatos['mat_grupo'];
@@ -200,9 +201,6 @@
                             break;
                     }
                 ?>
-                <tr style="background: #EAEAEA">
-                    <td colspan="<?=$colspan?>"><?=$datosArea["ar_nombre"]?></td>
-                </tr>
                 <?php
                     //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
                     $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
@@ -520,9 +518,14 @@
             SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
         </div>
 
-        <div id="saltoPagina"></div>
+        <?php
+            $contadorEstudiantes++;
+            if($contadorEstudiantes!=$numeroEstudiantes){
+        ?>
 
+        <div id="saltoPagina"></div>
 <?php
+            }
     }//FIN WHILE MATRICULADOS
 ?>
 
