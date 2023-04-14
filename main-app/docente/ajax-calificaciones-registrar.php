@@ -1,4 +1,7 @@
-<?php include("session.php");?>
+<?php 
+include("session.php");
+require_once("../class/Estudiantes.php");
+?>
 
 <?php include("verificar-carga.php");?>
 <?php
