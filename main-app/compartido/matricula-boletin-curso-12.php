@@ -262,6 +262,9 @@
                                         //ACOMULADO PARA LAS MATERIAS
                                         $notaAcomuladoMateria=$notaMateria*$acomulado;
                                         $notaAcomuladoMateria= round($notaAcomuladoMateria,1);
+                                        if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
+                                            $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
+                                        }
                                         $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $BD);
                                     ?>
                                     <td align="center"><?=$ausencia?></td>
@@ -283,6 +286,9 @@
                         //ACOMULADO PARA LAS AREAS
                         $notaAcomuladoArea=$notaArea*$acomulado;
                         $notaAcomuladoArea= round($notaAcomuladoArea,1);
+                        if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
+                            $notaAcomuladoArea = $notaAcomuladoArea.".0";
+                        }
                         $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
                     ?>
                     <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
