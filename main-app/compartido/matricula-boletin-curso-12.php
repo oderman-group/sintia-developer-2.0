@@ -208,7 +208,8 @@
                     ORDER BY ar_posicion");
                     $numAreas=mysqli_num_rows($consultaAreas);
                     while($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)){
-                        $consultaMaterias= mysqli_query($conexion,"SELECT car_id, car_ih, car_materia, 
+
+                        $consultaMaterias= mysqli_query($conexion,"SELECT car_id, car_ih, car_materia, car_docente, car_director_grupo,
                         mat_nombre, mat_area, mat_valor,
                         ar_nombre, ar_posicion
                         bol_estudiante, bol_periodo, bol_nota,
@@ -224,15 +225,19 @@
                             if($datosMaterias["car_director_grupo"]==1){
                                 $idDirector=$datosMaterias["car_docente"];
                             }
-                            
+
                             //NOTA PARA LAS MATERIAS
                             $notaMateria=round($datosMaterias['bol_nota'], 1);
                             $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                            if($notaMateria<10){
+                                $estiloNota['notip_nombre']="Bajo";
+                            }
 
                             //AUSENCIAS EN ESTA MATERIA
                             $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
                             $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
                             $ausencia="";
+
                             if ($datosAusencias[0]>0) {
                                 $ausencia= round($datosAusencias[0],0);
                             }
@@ -266,6 +271,9 @@
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
                                         $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $BD);
+                                        if($notaAcomuladoMateria<10){
+                                            $estiloNotaAcomuladoMaterias['notip_nombre']="Bajo";
+                                        }
                                     ?>
                                     <td align="center"><?=$ausencia?></td>
                                     <td align="center"><?=$notaAcomuladoMateria?></td>
@@ -280,6 +288,9 @@
                             //NOTA PARA LAS AREAS
                             $notaArea+=round($datosMaterias['notaArea'], 1);
                             $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
+                            if($notaArea<10){
+                                $estiloNotaAreas['notip_nombre']="Bajo";
+                            }
 
                         } //FIN WHILE DE LAS MATERIAS
                         
@@ -290,6 +301,9 @@
                             $notaAcomuladoArea = $notaAcomuladoArea.".0";
                         }
                         $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
+                        if($notaAcomuladoArea<10){
+                            $estiloNotaAcomuladoAreas['notip_nombre']="Bajo";
+                        }
                     ?>
                     <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
                         <tr>
@@ -324,6 +338,9 @@
                         $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
                         $promedioGeneral= round($promedioGeneral,1);
                         $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral, $BD);
+                        if($promedioGeneral<10){
+                            $estiloNotaPromedioGeneral['notip_nombre']="Bajo";
+                        }
                     ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
