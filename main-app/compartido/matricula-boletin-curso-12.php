@@ -321,12 +321,6 @@
                     ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
-                <tr style="background: #9ed8ed">
-                    <td colspan="<?=$colspan?>"></td>
-                </tr>
-                <tr style="background: #9ed8ed">
-                    <td colspan="<?=$colspan?>"></td>
-                </tr>
                 <tr style="background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
