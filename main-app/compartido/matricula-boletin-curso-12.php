@@ -220,6 +220,11 @@
                         WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND mat_area = ".$datosAreas['ar_id']."");
                         $notaArea=0;
                         while($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)){
+                            //DIRECTOR DE GRUPO
+                            if($datosMaterias["car_director_grupo"]==1){
+                                $idDirector=$datosMaterias["car_docente"];
+                            }
+                            
                             //NOTA PARA LAS MATERIAS
                             $notaMateria=round($datosMaterias['bol_nota'], 1);
                             $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
