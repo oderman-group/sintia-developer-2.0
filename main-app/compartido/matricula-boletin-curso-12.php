@@ -182,10 +182,6 @@
                 <?php
                 $contador=1;
                 $contadorAreas=1;
-                $promedioGeneral1=0;
-                $promedioGeneral2=0;
-                $promedioGeneral3=0;
-                $promedioGeneral4=0;
                 while ($area = mysqli_fetch_array($consultaAreaEstudiante, MYSQLI_BOTH)) {
                     switch($periodoActual){
                         case 1:
@@ -205,33 +201,22 @@
                             $condicion2 = "4";
                             break;
                     }
-                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-                    $consultaArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
-                    $datosArea = mysqli_fetch_array($consultaArea, MYSQLI_BOTH);
 
                     //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
                     $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
                     $numMateria=mysqli_num_rows($consultaDefinitivaNombreMateria);
-                    $notaArea=0;
-                    while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
-                        if($materia["car_director_grupo"]==1){
-                            $idDirector=$materia["car_docente"];
-                        }
-                        $ih=$materia["car_ih"];
-                        if($numMateria>1){
-                            $ih='';
+                    if($numMateria>1){
+                        while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
+                            if($materia["car_director_grupo"]==1){
+                                $idDirector=$materia["car_docente"];
+                            }
                 ?>
+                <!--********SE IMPRIME LO REFERENTE A LAS MATERIAS*******-->
                 <tr>
                     <td><?=$materia["mat_nombre"]?></td>
                     <td align="center"><?=$materia["car_ih"]?></td>
                     <?php
-                        }
-                        $notaGeneral1=0;
-                        $notaGeneral2=0;
-                        $notaGeneral3=0;
-                        $notaGeneral4=0;
                         $promedioMateria = 0;
-                        $formula=($materia['mat_valor']/100);
                         for($i=1;$i<=$periodoActual;$i++){
                             $consultaBoletin=Boletin::obtenerObservaciones($materia["car_id"], $i, $matriculadosDatos['mat_id'], $BD);
                             $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
@@ -240,41 +225,20 @@
                             if (!empty($datosBoletin['bol_nota'])) {
                                 $notaBoletin = (round($datosBoletin['bol_nota'], 1));
                             }
-                            switch($i){
-                                case 1:
-                                    $notaGeneral1+=($notaBoletin*$formula);
-                                    $notaMateria=round($notaGeneral1, 1);
-                                    break;
-                                case 2:
-                                    $notaGeneral2+=($notaBoletin*$formula);
-                                    $notaMateria=round($notaGeneral2, 1);
-                                    break;
-                                case 3:
-                                    $notaGeneral3+=($notaBoletin*$formula);
-                                    $notaMateria=round($notaGeneral3, 1);
-                                    break;
-                                case 4:
-                                    $notaGeneral4+=($notaBoletin*$formula);
-                                    $notaMateria=round($notaGeneral4, 1);
-                                    break;
-                            }
 
-                            $promedioMateria += $notaMateria;
-                            if($numMateria>1){
-                                if($i!=$periodoActual){
+                            $promedioMateria += $notaBoletin;
+                            if($i!=$periodoActual){
                     ?>
-                    <td align="center" style="background: #9ed8ed"><?=$notaMateria?></td>
+                    <td align="center" style="background: #9ed8ed"><?=$notaBoletin?></td>
                     <?php
                                 }else{
-                                $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                                $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaBoletin, $BD);
                     ?>
-                    <td align="center"><?=$notaMateria?></td>
+                    <td align="center"><?=$notaBoletin?></td>
                     <td align="center"><?=$estiloNota['notip_nombre']?></td>
                     <?php
-                                }
                             }
                         }//FIN FOR
-                        $notaArea+=$notaMateria;
                         $promedioMateria = ($promedioMateria / $periodoActual);
                         $promedioMateria = round($promedioMateria, 1);
                         $promedioMateriaFinal = $promedioMateria;
@@ -296,28 +260,46 @@
                         if ($datosAusencias[0]>0) {
                             $ausencia= round($datosAusencias[0],0);
                         }
-                        $background='';
-                        if($numMateria>1){
-                            $background='style="background: #EAEAEA"';
                     ?>
                     <td align="center"><?=$ausencia;?></td>
                     <td align="center"><?=$promedioMateriaFinal;?></td>
                     <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
                 </tr>
                 <?php
-                        }
                         $contador++;
-                        $promedioGeneral1+=$notaGeneral1;
-                        $promedioGeneral2+=$notaGeneral2;
-                        $promedioGeneral3+=$notaGeneral3;
-                        $promedioGeneral4+=$notaGeneral4;
                         }//FIN WHILE MATERIAS
+                    }
+                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
+                    $consultaArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
+                    $datosArea = mysqli_fetch_array($consultaArea, MYSQLI_BOTH);
+                    
+                    $background='';
+                    $ih=$datosArea["car_ih"];
+                    if($numMateria>1){
+                        $ih="";
+                        $background='style="background: #EAEAEA"';
+                    }
                 ?>
+                <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
                 <tr>
                     <td <?=$background?>><?=$datosArea["ar_nombre"]?></td>
                     <td align="center"><?=$ih?></td>
                     <?php
                         for($i=1;$i<=$periodoActual;$i++){
+                            // while($materiaArea = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)){
+                            // $formula=($materiaArea['mat_valor']/100);
+                            
+                            // if($numMateria==1){
+                                $consultaBoletinArea=Boletin::obtenerObservaciones($datosArea["car_id"], $i, $matriculadosDatos['mat_id'], $BD);
+                                $datosBoletinArea = mysqli_fetch_array($consultaBoletinArea, MYSQLI_BOTH);
+
+                                $notaBoletinArea=0;
+                                if (!empty($datosBoletinArea['bol_nota'])) {
+                                    $notaBoletinArea = (round($datosBoletinArea['bol_nota'], 1));
+                                }
+                                $notaGeneralArea=($notaBoletinArea*$formula);
+                                $notaArea=round($notaGeneralArea, 1);
+                            // }
                             if($i!=$periodoActual){
                     ?>
                     <td align="center" style="background: #9ed8ed"><?=$notaArea?></td>
