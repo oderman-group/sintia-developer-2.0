@@ -115,7 +115,7 @@ class Boletin {
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM $BD.academico_materias am
+            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,car_id,car_ih FROM $BD.academico_materias am
             INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
@@ -239,7 +239,7 @@ class Boletin {
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_valor,mat_id,car_id,car_docente,car_ih,car_director_grupo FROM $BD.academico_materias am
+            $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_area,mat_valor,mat_id,car_id,car_docente,car_ih,car_director_grupo FROM $BD.academico_materias am
             INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
