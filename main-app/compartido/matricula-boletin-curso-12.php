@@ -24,15 +24,19 @@
     switch($periodoActual){
         case 1:
             $periodoActuales = "Uno";
+            $acomulado=0.25;
             break;
         case 2:
             $periodoActuales = "Dos";
+            $acomulado=0.50;
             break;
         case 3:
             $periodoActuales = "Tres";
+            $acomulado=0.75;
             break;
         case 4:
             $periodoActuales = "Final";
+            $acomulado=0.10;
             break;
     }
 
@@ -79,8 +83,6 @@
         }
         //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
         $nombreEstudainte=Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
-        //CONSULTA QUE ME TRAE LAS AREAS DEL ESTUDIANTE
-        $consultaAreaEstudiante = Boletin::obtenerAreasDelEstudiante($matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD);
 	
         if($matriculadosDatos["mat_grado"]>=12 && $matriculadosDatos["mat_grado"]<=15) {$educacion = "PREESCOLAR";}	
         elseif($matriculadosDatos["mat_grado"]>=1 && $matriculadosDatos["mat_grado"]<=5) {$educacion = "PRIMARIA";}	
@@ -180,9 +182,6 @@
             </thead>
             <tbody>
                 <?php
-                $contador=1;
-                $contadorAreas=1;
-                while ($area = mysqli_fetch_array($consultaAreaEstudiante, MYSQLI_BOTH)) {
                     switch($periodoActual){
                         case 1:
                             $condicion = "1";
@@ -201,126 +200,120 @@
                             $condicion2 = "4";
                             break;
                     }
+                    $sumaPromedioGeneral=0;
+                    $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM $BD.academico_materias
+                    INNER join $BD.academico_areas ON ar_id = mat_area
+                    INNER JOIN $BD.academico_cargas on car_materia = mat_id and car_curso = $gradoActual AND car_grupo = $grupoActual
+                    GROUP by mat_area
+                    ORDER BY ar_posicion");
+                    $numAreas=mysqli_num_rows($consultaAreas);
+                    while($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)){
+                        $consultaMaterias= mysqli_query($conexion,"SELECT car_id, car_ih, car_materia, 
+                        mat_nombre, mat_area, mat_valor,
+                        ar_nombre, ar_posicion
+                        bol_estudiante, bol_periodo, bol_nota,
+                        bol_nota * (mat_valor/100) AS notaArea
+                        FROM $BD.academico_cargas
+                        INNER JOIN $BD.academico_materias ON mat_id = car_materia
+                        INNER JOIN $BD.academico_areas ON ar_id = mat_area
+                        INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo in ($condicion) AND bol_estudiante = ".$matriculadosDatos['mat_id']."
+                        WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND mat_area = ".$datosAreas['ar_id']."");
+                        $notaArea=0;
+                        while($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)){
+                            //NOTA PARA LAS MATERIAS
+                            $notaMateria=round($datosMaterias['bol_nota'], 1);
+                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
 
-                    //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
-                    $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
-                    $numMateria=mysqli_num_rows($consultaDefinitivaNombreMateria);
-                    if($numMateria>1){
-                        while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
-                            if($materia["car_director_grupo"]==1){
-                                $idDirector=$materia["car_docente"];
+                            //AUSENCIAS EN ESTA MATERIA
+                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
+                            $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+                            $ausencia="";
+                            if ($datosAusencias[0]>0) {
+                                $ausencia= round($datosAusencias[0],0);
                             }
+
+                            //VARIABLES NECESARIAS
+                            $background='';
+                            $ih=$datosMaterias["car_ih"];
+                            if($datosAreas['numMaterias']>1){
                 ?>
-                <!--********SE IMPRIME LO REFERENTE A LAS MATERIAS*******-->
-                <tr>
-                    <td><?=$materia["mat_nombre"]?></td>
-                    <td align="center"><?=$materia["car_ih"]?></td>
-                    <?php
-                        $promedioMateria = 0;
-                        for($i=1;$i<=$periodoActual;$i++){
-                            $consultaBoletin=Boletin::obtenerObservaciones($materia["car_id"], $i, $matriculadosDatos['mat_id'], $BD);
-                            $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+                                <tr>
+                                    <td><?=$datosMaterias['mat_nombre']?></td>
+                                    <td align="center"><?=$datosMaterias['car_ih']?></td>
+                                    <?php
+                                        for($i=1;$i<=$periodoActual;$i++){
+                                            if($i!=$periodoActual){
+                                    ?>
+                                    <td align="center" style="background: #9ed8ed"><?=$notaMateria?></td>
+                                    <?php
+                                                }else{
+                                    ?>
+                                    <td align="center"><?=$notaMateria?></td>
+                                    <td align="center"><?=$estiloNota['notip_nombre']?></td>
+                                    <?php
+                                            }
+                                        }//FIN FOR
 
-                            $notaBoletin=0;
-                            if (!empty($datosBoletin['bol_nota'])) {
-                                $notaBoletin = (round($datosBoletin['bol_nota'], 1));
+                                        //ACOMULADO PARA LAS MATERIAS
+                                        $notaAcomuladoMateria=$notaMateria*$acomulado;
+                                        $notaAcomuladoMateria= round($notaAcomuladoMateria,1);
+                                        $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $BD);
+                                    ?>
+                                    <td align="center"><?=$ausencia?></td>
+                                    <td align="center"><?=$notaAcomuladoMateria?></td>
+                                    <td align="center"><?=$estiloNotaAcomuladoMaterias['notip_nombre']?></td>
+                                </tr>
+                    <?php
+                            $ih="";
+                            $ausencia="";
+                            $background='style="background: #EAEAEA"';
                             }
 
-                            $promedioMateria += $notaBoletin;
-                            if($i!=$periodoActual){
-                    ?>
-                    <td align="center" style="background: #9ed8ed"><?=$notaBoletin?></td>
-                    <?php
-                                }else{
-                                $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaBoletin, $BD);
-                    ?>
-                    <td align="center"><?=$notaBoletin?></td>
-                    <td align="center"><?=$estiloNota['notip_nombre']?></td>
-                    <?php
-                            }
-                        }//FIN FOR
-                        $promedioMateria = ($promedioMateria / $periodoActual);
-                        $promedioMateria = round($promedioMateria, 1);
-                        $promedioMateriaFinal = $promedioMateria;
+                            //NOTA PARA LAS AREAS
+                            $notaArea+=round($datosMaterias['notaArea'], 1);
+                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
 
-                        // SI PERDIÓ LA MATERIA A FIN DE AÑO
-                        if ($promedioMateria < $config["conf_nota_minima_aprobar"]) {
-                            $consultaNivelacion = Boletin::obtenerNivelaciones($materia['car_id'], $matriculadosDatos['mat_id'], $BD);
-                            $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
-
-                            $promedioMateriaFinal = $nivelacion['niv_definitiva'];
-                            $promedioMateriaFinal = ($promedioMateriaFinal*$formula);
-                        }
-
-                        $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
+                        } //FIN WHILE DE LAS MATERIAS
                         
-                        $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $materia['mat_id'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
-                        $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
-                        $ausencia="";
-                        if ($datosAusencias[0]>0) {
-                            $ausencia= round($datosAusencias[0],0);
-                        }
+                        //ACOMULADO PARA LAS AREAS
+                        $notaAcomuladoArea=$notaArea*$acomulado;
+                        $notaAcomuladoArea= round($notaAcomuladoArea,1);
+                        $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
                     ?>
-                    <td align="center"><?=$ausencia;?></td>
-                    <td align="center"><?=$promedioMateriaFinal;?></td>
-                    <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
-                </tr>
-                <?php
-                        $contador++;
-                        }//FIN WHILE MATERIAS
-                    }
-                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-                    $consultaArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD);
-                    $datosArea = mysqli_fetch_array($consultaArea, MYSQLI_BOTH);
-                    
-                    $background='';
-                    $ih=$datosArea["car_ih"];
-                    if($numMateria>1){
-                        $ih="";
-                        $background='style="background: #EAEAEA"';
-                    }
-                ?>
-                <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
-                <tr>
-                    <td <?=$background?>><?=$datosArea["ar_nombre"]?></td>
-                    <td align="center"><?=$ih?></td>
-                    <?php
-                        for($i=1;$i<=$periodoActual;$i++){
-                            // while($materiaArea = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)){
-                            // $formula=($materiaArea['mat_valor']/100);
-                            
-                            // if($numMateria==1){
-                                $consultaBoletinArea=Boletin::obtenerObservaciones($datosArea["car_id"], $i, $matriculadosDatos['mat_id'], $BD);
-                                $datosBoletinArea = mysqli_fetch_array($consultaBoletinArea, MYSQLI_BOTH);
-
-                                $notaBoletinArea=0;
-                                if (!empty($datosBoletinArea['bol_nota'])) {
-                                    $notaBoletinArea = (round($datosBoletinArea['bol_nota'], 1));
+                    <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
+                        <tr>
+                            <td <?=$background?>><?=$datosAreas['ar_nombre']?></td>
+                            <td align="center"><?=$ih?></td>
+                            <?php
+                                for($i=1;$i<=$periodoActual;$i++){
+                                    if($i!=$periodoActual){
+                            ?>
+                            <td align="center" style="background: #9ed8ed"><?=$notaArea?></td>
+                            <?php
+                                    }else{
+                            ?>
+                            <td align="center"><?=$notaArea?></td>
+                            <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
+                            <?php
+                                    }
                                 }
-                                $notaGeneralArea=($notaBoletinArea*$formula);
-                                $notaArea=round($notaGeneralArea, 1);
-                            // }
-                            if($i!=$periodoActual){
-                    ?>
-                    <td align="center" style="background: #9ed8ed"><?=$notaArea?></td>
+                            ?>
+                            <td align="center"><?=$ausencia?></td>
+                            <td align="center"><?=$notaAcomuladoArea?></td>
+                            <td align="center"><?=$estiloNotaAcomuladoAreas['notip_nombre']?></td>
+                        </tr>
                     <?php
-                            }else{
-                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
+
+                            //SUMA NOTAS DE LAS AREAS
+                            $sumaPromedioGeneral+=$notaArea;
+                            
+                        } //FIN WHILE DE LAS AREAS
+
+                        //PROMEDIO DE LAS AREAS
+                        $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
+                        $promedioGeneral= round($promedioGeneral,1);
+                        $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral, $BD);
                     ?>
-                    <td align="center"><?=$notaArea?></td>
-                    <td align="center"><?=$estiloNota['notip_nombre'];?></td>
-                    <?php
-                            }
-                        }
-                    ?>
-                    <td align="center"><?=$ausencia;?></td>
-                    <td align="center"><?=$promedioMateriaFinal;?></td>
-                    <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
-                </tr>
-                <?php
-                    $contadorAreas++;
-                    }//FIN WHILE AREAS
-                ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
                 <tr style="background: #9ed8ed">
@@ -332,50 +325,28 @@
                 <tr style="background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
-                    $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
-                        switch($j){
-                            case 1:
-                                $promediosPeriodos=$promedioGeneral1;
-                                break;
-                            case 2:
-                                $promediosPeriodos=$promedioGeneral2;
-                                break;
-                            case 3:
-                                $promediosPeriodos=$promedioGeneral3;
-                                break;
-                            case 4:
-                                $promediosPeriodos=$promedioGeneral4;
-                                break;
-                        }
-                        $promediosPeriodos = $promediosPeriodos/($contador-1);
-                        $promediosPeriodos = round($promediosPeriodos,1);
                         if($j!=$periodoActual){
                     ?>
-                    <td align="center"><?=$promediosPeriodos;?></td>
+                    <td align="center"><?=$promedioGeneral?></td>
                     <?php
                         }else{
-                        $promedioEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos, $BD);
                     ?>
-                    <td align="center"><?=$promediosPeriodos;?></td>
-                    <td align="center"><?=$promedioEstiloNota['notip_nombre'];?></td>
+                    <td align="center"><?=$promedioGeneral?></td>
+                    <td align="center"><?=$estiloNotaPromedioGeneral['notip_nombre']?></td>
                     <?php
-                            }
-                        $promedioFinal +=$promediosPeriodos;
+                        }
                     }// FIN FOR
-
-                    $promedioFinal = round($promedioFinal/$periodoActual,1);
-                    $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $BD);
                     ?>
                     <td align="center"></td>
-                    <td align="center"><?=$promedioFinal;?></td>
-                    <td align="center"><?= $promedioFinalEstiloNota['notip_nombre']; ?></td>
+                    <td align="center"></td>
+                    <td align="center"></td>
                 </tr>
             </tfoot>
         </table>
 
         <p>&nbsp;</p>
-
+        <!--******PUESTO DEL ESTUDIANTE******-->
         <table style="font-size: 15px;" width="80%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
             <tr style="background-color: #EAEAEA;">
                 <?php
@@ -415,6 +386,7 @@
         <p>&nbsp;</p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
+        <!--******OBSERVACIONES******-->
 
         <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
@@ -451,8 +423,10 @@
         </table>
 
         <div id="saltoPagina"></div>
+        <!--******SEGUNDA PAGINA******-->
         <p>&nbsp;</p>
         <p>&nbsp;</p>
+        <!--******INDICADORES POR ASIGNATURA******-->
 
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
             <thead>
@@ -498,7 +472,8 @@
 
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <p>&nbsp;</p>      
+        <p>&nbsp;</p>   
+        <!--******FIRMAS******-->   
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
