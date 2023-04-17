@@ -120,7 +120,7 @@
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['mat_valor']."%) (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
                                                 </select>
                                             </div>

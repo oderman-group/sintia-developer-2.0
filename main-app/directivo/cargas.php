@@ -113,7 +113,7 @@ $Plataforma = new Plataforma;
 														<td><?=$resultado['car_id'];?></td>
 														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
 														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
-														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre']);?></td>
+														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
 														<td><?=$resultado['car_ih'];?></td>
 														<td><?=$resultado['car_periodo'];?></td>
                                         				<td><a href="../compartido/reporte-notas.php?carga=<?=$resultado[0];?>&per=<?=$resultado['car_periodo'];?>&grado=<?=$resultado["car_curso"];?>&grupo=<?=$resultado["car_grupo"];?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Calificaciones"><?=$spcd[0];?>%&nbsp;&nbsp;-&nbsp;&nbsp;<?=$spcr[0];?>%</a></td>
