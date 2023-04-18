@@ -13,8 +13,7 @@ class Usuarios {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este usuario no existe";
-                exit();
+                $resultado = "";
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
