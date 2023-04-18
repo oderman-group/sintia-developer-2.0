@@ -54,7 +54,7 @@
             $estiloResaltado = '';
             if($p == $_GET["periodo"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?periodo=<?=$p;?>" <?=$estiloResaltado;?>>Periodo <?=$p;?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?periodo=<?=$p;?>&grupo=<?=$_GET["grupo"];?>&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Periodo <?=$p;?></a>
         <?php $p++; }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -84,8 +84,8 @@
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?orden=DESC" <?=$estiloResaltado;?>>De mayor a menor</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?orden=ASC" <?=$estiloResaltado;?>>De menor a mayor</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?orden=DESC&periodo=<?=$_GET["periodo"];?>&grupo=<?=$_GET["grupo"];?>&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>De mayor a menor</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?orden=ASC&periodo=<?=$_GET["periodo"];?>&grupo=<?=$_GET["grupo"];?>&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>De menor a mayor</a>
         </div>
       </li>
 
