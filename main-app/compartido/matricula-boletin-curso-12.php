@@ -65,6 +65,7 @@
     $colspan=7+$periodosCursados;
     $contadorEstudiantes=0;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
+        $promedioGeneral = 0;
         $gradoActual = $matriculadosDatos['mat_grado'];
         $grupoActual = $matriculadosDatos['mat_grupo'];
         switch($matriculadosDatos["gru_id"]){
@@ -350,11 +351,11 @@
                     for ($j = 1; $j <= $periodoActual; $j++) {
                         if($j!=$periodoActual){
                     ?>
-                    <td align="center"><?=$promedioGeneral?></td>
+                    <td align="center"><?=$promedioGeneral;?></td>
                     <?php
                         }else{
                     ?>
-                    <td align="center"><?=$promedioGeneral?></td>
+                    <td align="center"><?=$promedioGeneral;?></td>
                     <td align="center"><?=$estiloNotaPromedioGeneral['notip_nombre']?></td>
                     <?php
                         }
@@ -535,13 +536,6 @@
                 </td>
             </tr>
         </table>
-
-        <p>&nbsp;</p>
-        <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">
-            <img src="<?=$Plataforma->logo;?>" height="50"><br>
-            ESTE DOCUMENTO FUE GENERADO POR:<br>
-            SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
-        </div>
 
         <?php
             $contadorEstudiantes++;
