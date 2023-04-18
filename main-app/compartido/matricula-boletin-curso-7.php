@@ -1,5 +1,7 @@
-<?php include("../directivo/session.php");
+<?php 
+include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -222,7 +224,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	<tr>
         <td width="40%">
             ________________________________________________________________<br>
-            <?=strtoupper($datosUsr['uss_nombre']);?><br>
+            <?php if(!empty($datosUsr['uss_nombre'])) echo strtoupper($datosUsr['uss_nombre']);?><br>
             DIRECTOR DE CURSO
         </td>
         <td width="20%">
@@ -280,7 +282,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	?>
     <tbody>
         <tr style="color:#585858;">
-            <td><?=$datosCargas['mat_nombre'];?><br><span style="color:#C1C1C1;"><?=$datosCargas['uss_nombre'];?></span></td>
+            <td><?=$datosCargas['mat_nombre'];?><br>
+            <span style="color:#C1C1C1;"><?=UsuariosPadre::nombreCompletoDelUsuario($datosCargas);?></span></td>
             <td><?=$datosCargas['ind_nombre'];?></td> 
         </tr>
     </tbody>
