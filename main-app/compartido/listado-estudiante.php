@@ -41,6 +41,8 @@ include("../compartido/head-informes.php") ?>
   if(isset($_POST["grado"])) { $filtro = " AND mat_grado = '".$_POST["grado"]."'";}
   if(isset($_GET["grado"]))  { $filtro = " AND mat_grado = '".$_GET["grado"]."'";}
   if(isset($_POST["grupo"]) AND $_POST["grupo"]!=""){ $filtro .= " AND mat_grupo='".$_POST["grupo"]."'";}
+  if(isset($_POST["estadoM"]) AND $_POST["estadoM"]==1){ $filtro .= " AND mat_estado_matricula=1";}
+
   $cont=1;
   $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
