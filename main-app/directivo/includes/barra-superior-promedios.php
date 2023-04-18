@@ -36,7 +36,7 @@
             $estiloResaltado = '';
             if($grupo['gru_id'] == $_GET["grupo"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>" <?=$estiloResaltado;?>><?=$grupo['gru_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=$grupo['gru_id'];?>&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>><?=$grupo['gru_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
