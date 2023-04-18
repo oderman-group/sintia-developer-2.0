@@ -108,6 +108,7 @@
 																	  <li><a href="cursos-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																	  <li><a href="cursos-eliminar.php?id=<?=$resultado[0];?>">Eliminar</a></li>
 																	  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
+																	  <li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
 																	  <li><a href="../compartido/matricula-libro-curso.php?curso=<?=$resultado[0];?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
 																	  <li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=$resultado[0];?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
 																	  <li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=$resultado[0];?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
