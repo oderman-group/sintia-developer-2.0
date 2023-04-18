@@ -85,6 +85,17 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Estados de matricula</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" name="estadoM">
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="1">Solo matrículados</option>
+                                                <option value="2">Todos</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     
                                     <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     
