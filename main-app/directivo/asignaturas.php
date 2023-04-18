@@ -60,7 +60,9 @@
                                                         <th>#</th>
 														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[73][$datosUsuarioActual[8]];?></th>
-														<th>Valor(%)</th>
+														<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
+															<th>Valor(%)</th>
+														<?php }?>	
 														<th><?=$frases[93][$datosUsuarioActual[8]];?></th>
 														<th>Cargas</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
@@ -82,7 +84,9 @@
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['mat_id'];?></td>
 														<td><?=$resultado['mat_nombre'];?></td>
-														<td><?=$resultado['mat_valor'];?></td>
+														<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
+															<td><?=$resultado['mat_valor'];?></td>
+														<?php }?>	
 														<td><?=$resultado['ar_nombre'];?></td>
 														<td><a href="cargas.php?asignatura=<?=$resultado['mat_id'];?>" style="text-decoration: underline;"><?=$numeros[0];?></a></td>
 														
