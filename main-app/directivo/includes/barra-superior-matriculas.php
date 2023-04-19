@@ -1,7 +1,19 @@
 <?php
   if (isset($_GET['busqueda'])) {
       $busqueda = $_GET['busqueda'];
-      $filtro .= " AND (mat_id LIKE '%".$busqueda."%' OR mat_nombres LIKE '%".$busqueda."%' OR mat_nombre2 LIKE '%".$busqueda."%' OR mat_primer_apellido LIKE '%".$busqueda."%' OR mat_segundo_apellido LIKE '%".$busqueda."%' OR mat_documento LIKE '%".$busqueda."%' OR mat_email LIKE '%".$busqueda."%')";
+      $filtro .= " AND (
+      mat_id LIKE '%".$busqueda."%' 
+      OR mat_nombres LIKE '%".$busqueda."%' 
+      OR mat_nombre2 LIKE '%".$busqueda."%' 
+      OR mat_primer_apellido LIKE '%".$busqueda."%' 
+      OR mat_segundo_apellido LIKE '%".$busqueda."%' 
+      OR mat_documento LIKE '%".$busqueda."%' 
+      OR mat_email LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_segundo_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      )";
       
   }
 ?>
@@ -59,7 +71,7 @@
             $estiloResaltado = '';
             if($grado['gra_id'] == $_GET["curso"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$grado['gra_id'];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$grado['gra_id'];?>&estadoM=<?=$_GET["estadoM"];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -71,10 +83,10 @@
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1" <?=$estiloResaltado;?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2" <?=$estiloResaltado;?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3" <?=$estiloResaltado;?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4" <?=$estiloResaltado;?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Asistentes</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Cancelados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>No Matriculados</a>
         </div>
       </li>
 

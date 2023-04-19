@@ -1,7 +1,19 @@
 <?php
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
-    $filtro .= " AND (uss_id LIKE '%".$busqueda."%' OR uss_nombre LIKE '%".$busqueda."%' OR uss_nombre2 LIKE '%".$busqueda."%' OR uss_apellido1 LIKE '%".$busqueda."%' OR uss_apellido2 LIKE '%".$busqueda."%' OR uss_usuario LIKE '%".$busqueda."%' OR uss_email LIKE '%".$busqueda."%')";
+    $filtro .= " AND (
+      uss_id LIKE '%".$busqueda."%' 
+      OR uss_nombre LIKE '%".$busqueda."%' 
+      OR uss_nombre2 LIKE '%".$busqueda."%' 
+      OR uss_apellido1 LIKE '%".$busqueda."%' 
+      OR uss_apellido2 LIKE '%".$busqueda."%' 
+      OR uss_usuario LIKE '%".$busqueda."%' 
+      OR uss_email LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+      )";
     
 }
 ?>

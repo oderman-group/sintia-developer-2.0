@@ -1,7 +1,19 @@
 <?php
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
-    $filtro .= " AND (car_id LIKE '%" . $busqueda . "%' OR uss_nombre LIKE '%".$busqueda."%' OR uss_nombre2 LIKE '%".$busqueda."%' OR uss_apellido1 LIKE '%".$busqueda."%' OR uss_apellido2 LIKE '%".$busqueda."%' OR gra_nombre LIKE '%" . $busqueda . "%' OR mat_nombre LIKE '%" . $busqueda . "%')";
+    $filtro .= " AND (
+        car_id LIKE '%" . $busqueda . "%' 
+        OR uss_nombre LIKE '%".$busqueda."%' 
+        OR uss_nombre2 LIKE '%".$busqueda."%' 
+        OR uss_apellido1 LIKE '%".$busqueda."%' 
+        OR uss_apellido2 LIKE '%".$busqueda."%' 
+        OR gra_nombre LIKE '%" . $busqueda . "%' 
+        OR mat_nombre LIKE '%" . $busqueda . "%'
+        OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+        OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+        OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+        OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+        )";
 }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">

@@ -109,33 +109,6 @@ $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FRO
 						</select>
         </div>
 
-        <!-- Año input -->
-		   <div class="form-outline mb-4">
-		    <label for="agnoIngreso">Año de consulta</label>
-		      <select class="form-control form-control-lg" name="agnoIngreso" id="agnoIngreso" required>
-            <option value="">Seleccione el año</option>
-          </select>
-          <script type="application/javascript">
-            $(document).ready(traerYears(document.getElementById('bd')));
-            
-            function traerYears(enviada){
-              var idInsti = enviada.value;
-
-              datos = "idInsti="+(idInsti);
-              console.log(datos);
-              $.ajax({
-                      type: "POST",
-                      url: "ajax-detectar-years.php",
-                      data: datos,
-                      success: function(response)
-                      {
-                          $('#agnoIngreso').empty();
-                          $('#agnoIngreso').append(response);
-                      }
-              });
-            }
-          </script>
-        </div>
 
 		  <!-- Email input -->
           <div class="form-outline mb-4">
