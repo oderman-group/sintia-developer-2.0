@@ -7,11 +7,14 @@ $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion
 $institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST["bd"]."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
+$yearArray = explode(",", $institucion['ins_years']);
+$yearStart = $yearArray[0];
+$yearEnd = $yearArray[1];
 
 $_SESSION["inst"] = $institucion['ins_bd'];
 
-if(isset($_POST["agnoIngreso"]) and is_numeric($_POST["agnoIngreso"])){
-	$_SESSION["bd"] = $_POST["agnoIngreso"];
+if(isset($yearEnd) and is_numeric($yearEnd)){
+	$_SESSION["bd"] = $yearEnd;
 }else{
 	$_SESSION["bd"] = date("Y");
 }
@@ -24,13 +27,13 @@ WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND us
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]);
 	exit();
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]);
 	exit();
 }
 
@@ -42,7 +45,7 @@ $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
 if($num>0)
 {	
 	if($fila['uss_bloqueado'] == 1){
-		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]);
 		exit();
 	}
 
@@ -116,6 +119,6 @@ if($num>0)
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion, uif_year)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."', '".$_SESSION["bd"]."')");
 
 
-	header("Location:".REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]);
 	exit();
 }
