@@ -76,11 +76,10 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="formatoB" required>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                        for($i=1;$i<=4;$i++){
-                                                            $select='';
-					                                        if($resultadoCurso["gra_formato_boletin"]==$i){$select='selected';}
+                                                        $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
+                                                        while($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)){
                                                     ?>
-                                                        <option value="<?=$i; ?>" <?=$select; ?>><?=$i; ?></option>
+                                                        <option value="<?=$datosBoletin['ogen_id'];?>" <?php if($resultadoCurso["gra_formato_boletin"]==$datosBoletin['ogen_id']){ echo 'selected';} ?>><?=$datosBoletin['ogen_nombre'];?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>

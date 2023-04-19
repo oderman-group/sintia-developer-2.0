@@ -425,11 +425,11 @@
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
 
                                 if(!empty($rndisiplina['dn_observacion'])){
-                                    $explode=explode(",",$rndisiplina['dn_observacion']);
-                                    $numDatos=count($explode);
-                                    if($numDatos>0 && ctype_digit($explode[0])){
+                                    if($config['conf_observaciones_multiples_comportamiento'] == '1'){
+                                        $explode=explode(",",$rndisiplina['dn_observacion']);
+                                        $numDatos=count($explode);
                                         for($i=0;$i<$numDatos;$i++){
-                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM $BD.academico_observaciones WHERE obser_id=$explode[$i]");
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
                                             $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
                                             echo "- ".$observaciones['obser_descripcion']."<br>";
                                         }

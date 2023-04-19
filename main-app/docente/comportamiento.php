@@ -214,7 +214,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 															<p>
 																<?php
-																$consultaObservaciones = mysqli_query($conexion, "SELECT * FROM academico_observaciones ORDER BY obser_id");
+																$consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']." ORDER BY obser_id");
 																?>
 																<select class="form-control  select2-multiple" name="Ob<?=$resultado['mat_id'];?>[]" id="Ob<?=$resultado['mat_id'];?>" multiple>
 																	<option value="0" disabled>--Observaciones Institucionales--</option>
