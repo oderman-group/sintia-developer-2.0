@@ -42,7 +42,7 @@ if (is_numeric($_REQUEST["curso"])) {
 if (is_numeric($_REQUEST["grupo"])) {
     $filtro .= " AND mat_grupo='" . $_REQUEST["grupo"] . "'";
 }
-
+$contadorEstudiantes=0;
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
     //contador materias
@@ -94,7 +94,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         $consultaAreaEstudiante = Boletin::obtenerAreasDelEstudiante($matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD);
         ?>
         <div align="center" style="margin-bottom:20px;">
-            <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150" width="200"><br>
+            <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="50"><br>
             <?= $informacion_inst["info_nombre"] ?><br>BOLETÍN DE CALIFICACIONES<br>
         </div>
         <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
@@ -113,7 +113,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         </table>
         <p>&nbsp;</p>
         <table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
-                <tr style="font-weight:bold; background-color:#00adefad; border-color:#000; height:40px; color:#000; font-size:12px;">
+                <tr style="font-weight:bold; background-color:#00adefad; border-color:#000; color:#000; font-size:12px;">
                     <td width="2%" align="center" rowspan="2">Nº</td>
                     <td width="20%" align="center" rowspan="2">AREAS/ ASIGNATURAS</td>
                     <td width="2%" align="center" rowspan="2">I.H</td>
@@ -123,7 +123,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <td width="3%" colspan="3" align="center">Acumulado</td>
                 </tr>
 
-                <tr style="font-weight:bold; text-align:center; background-color:#00adefad; border-color:#000; height:40px; color:#000; font-size:12px;">
+                <tr style="font-weight:bold; text-align:center; background-color:#00adefad; border-color:#000; color:#000; font-size:12px;">
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
                         <td width="3%">Nota</td>
                         <td width="3%">Desempeño</td>
@@ -432,7 +432,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-                <tr style="font-weight:bold; background:#00adefad; border-color:#036; height:40px; font-size:12px; text-align:center">
+                <tr style="font-weight:bold; background:#00adefad; border-color:#036; font-size:12px; text-align:center">
                     <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
                 </tr>
                 <tr style="font-weight:bold; background:#EAEAEA; height:25px; color:#000; font-size:12px; text-align:center">
@@ -472,11 +472,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 </td>
             </tr>
         </table>
-        <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">
-            <img src="<?=$Plataforma->logo;?>" height="100"><br>
-            ESTE DOCUMENTO FUE GENERADO POR:<br>
-            SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
-        </div>
+
         <div id="saltoPagina"></div>
     <?php
 } // FIN DE TODOS LOS MATRICULADOS
