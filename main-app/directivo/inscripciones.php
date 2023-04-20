@@ -29,37 +29,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-								<div class="col-md-4 col-lg-3">
-
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
-										<div class="panel-body">
-											<?php
-											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal");
-											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-                                                $consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
-												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												if(isset($_GET["curso"])&&$curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-											
-												<div class="work-monitor work-progress">
-															<div class="states">
-																<div class="info">
-																	<div class="desc pull-left"><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></div>
-																</div>
-															</div>
-														</div>
-											<?php }?>
-											<p align="center"><a href="reservar-cupo.php">VER TODOS</a></p>
-										</div>
-                                    </div>
-									<?php include("../compartido/publicidad-lateral.php");?>
-								</div>
 								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
+
+                                <?php include("includes/barra-superior-inscripciones.php");?>
 
                                     <?php if (isset($_GET["msg"]) and $_GET["msg"] == 1) { ?>
                                     <div class="alert alert-block alert-success">
