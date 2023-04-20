@@ -9,7 +9,7 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 	$_SESSION["id"] = $_SESSION["id"];
 }
 
-include(ROOT_PATH."/conexion-datos.php");
+//include(ROOT_PATH."/conexion-datos.php");
 
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){

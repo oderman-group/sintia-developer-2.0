@@ -1,5 +1,6 @@
 <?php
-require_once("conexion-datos.php");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+//require_once("conexion-datos.php");
 require_once("main-app/class/UsuariosPadre.php");
 
 //DATOS DE FECHA ACTUAL

@@ -1,6 +1,6 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-include(ROOT_PATH."/conexion-datos.php");
+//include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 $consultaEmpresas = mysqli_query($conexionBaseDatosServicios,"SELECT * FROM datos_contacto 
