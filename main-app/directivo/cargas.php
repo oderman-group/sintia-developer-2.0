@@ -134,6 +134,7 @@ $Plataforma = new Plataforma;
 																	  <?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
 																	  	<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	  <?php }?>
+																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla</a></li>
 																  </ul>
 															  </div>
 														</td>
