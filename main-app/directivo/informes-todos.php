@@ -50,6 +50,7 @@
 											<p><a href="informe-reporte-sabana.php">14. Informe de Sabanas</a></p>
 											<p><a href="consolidado-final-filtro.php">15. Informe de Consolidado Final</a></p>
 											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">16. Informe de Cargas Duplicadas</a></p>
+											<p><a href="asistencia-entrega-informes-filtros.php">17. Reporte de asistencia a entrega de informes</a></p>
 										</div>
                                 	</div>
 								</div>
