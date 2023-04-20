@@ -260,7 +260,7 @@
                                                     <?php }else{ 
                                                     
                                                     ?>
-                                                    <option value="<?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?>"><?php echo $r["uss_nombre"]; ?></option>
+                                                    <option value="<?php echo $r["uss_id"]; ?>"><?php echo UsuariosPadre::nombreCompletoDelUsuario($r); ?></option>
                                                         <?php 
                                                     }
                                                     }
