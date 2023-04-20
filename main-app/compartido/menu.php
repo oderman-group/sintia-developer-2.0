@@ -97,13 +97,20 @@
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
+									
+									<?php if(array_key_exists(8, $arregloModulos)){?>
+	                                	<li class="nav-item"><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
+									<?php }?>
+
 	                                <li class="nav-item"><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
 									<li class="nav-item"><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
+
+									<?php if(array_key_exists(9, $arregloModulos)){?>
+										<li class="nav-item"><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
+									<?php }?>
 									
 	                            </ul>
 	                        </li>
@@ -186,6 +193,29 @@
 	                                <span class="title">Informes</span> 
 	                            </a>
 	                        </li>
+
+							<?php
+								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION){
+							?>
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-database"></i>
+										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu">
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Log de errores</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Instituciones</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Módulos</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Páginas</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Contratos</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
+									</ul>
+								</li>
+							<?php }?>
 
 							<div class="nav-item">
 							<?php include("../compartido/peso.php");?>
