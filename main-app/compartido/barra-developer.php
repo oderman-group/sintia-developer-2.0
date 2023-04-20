@@ -38,6 +38,7 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
 		<b>V PHP:&nbsp;</b> <?=phpversion(); ?>&nbsp;|&nbsp; 
 		<b>Host:&nbsp;</b> <?=$_SERVER['HTTP_HOST']." (".http_response_code().")"; ?>&nbsp;|&nbsp;
     <b>Peso página:&nbsp;</b> <?php echo number_format(filesize($nombre_fichero)) . ' bytes'; ?>&nbsp;|&nbsp;
+    <b>ENV:&nbsp;</b> <?=ENVIROMENT;?>&nbsp;|&nbsp;
 
     <?php if( isset($_SESSION['admin']) ){?>
 			<b>User Admin:&nbsp;</b> <?=$_SESSION['admin']; ?>&nbsp;|&nbsp;
