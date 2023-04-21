@@ -7,10 +7,6 @@ define('NAME_SENDER', 'Plataforma Sintia');
 
 define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 
-define('CODE_DEV_MODULE_PERMISSION', '1298');
-
-define('ENVIROMENT', 'LOCAL');
-
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
