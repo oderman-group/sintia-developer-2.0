@@ -33,6 +33,7 @@ try {
 	conf_editar_definitivas_consolidado='" . $_POST["permisoConsolidado"] . "',
 	conf_informe_parcial='" . $_POST["informeParcial"] . "',
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
+	conf_num_registros='" . $_POST["numRegistros"] . "',
 	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 

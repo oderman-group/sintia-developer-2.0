@@ -210,6 +210,19 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Numero de registros en listados?</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="numRegistros">
+                                                    <option value="20" <?php if($cfg['conf_num_registros']==20){ echo "selected";} ?>>20</option>
+                                                    <option value="30" <?php if($cfg['conf_num_registros']==30){ echo "selected";} ?>>30</option>
+                                                    <option value="50" <?php if($cfg['conf_num_registros']==50){ echo "selected";} ?>>50</option>
+                                                    <option value="100" <?php if($cfg['conf_num_registros']==100){ echo "selected";} ?>>100</option>
+                                                </select>
+                                                <span style="color:#6017dc;">Esta acción permite escoger la cantidad de registros que desea que se listen al entrar a matrículas, cargas o usuarios.</span>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fecha que aparecerá en el proximo Informe Parcial</label>
