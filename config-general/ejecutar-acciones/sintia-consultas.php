@@ -1,9 +1,9 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
-define('ENVIROMENT', 'PROD');
+define('ENVIROMENT_TWO', 'PROD');
 
-switch (ENVIROMENT) {
+switch (ENVIROMENT_TWO) {
 	case 'LOCAL':
 		include(ROOT_PATH."/conexion-datos.php");
 		break;

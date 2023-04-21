@@ -9,7 +9,7 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 	$_SESSION["id"] = $_SESSION["id"];
 }
 
-include(ROOT_PATH."/conexion-datos.php");
+//include(ROOT_PATH."/conexion-datos.php");
 
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
@@ -33,11 +33,11 @@ if($_SESSION["inst"]==""){
 
 		switch($e->getCode()){
 			case 1044:
-				$exception = "error=7&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"];
+				$exception = "error=7&inst=".$_POST["bd"];
 			break;
 
 			default:
-				$exception = "error=".$e->getMessage()."&inst=".$_POST["bd"]."&year=".$_POST["agnoIngreso"];
+				$exception = "error=".$e->getMessage()."&inst=".$_POST["bd"];
 			break;	
 		}
 

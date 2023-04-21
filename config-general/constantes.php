@@ -7,6 +7,20 @@ define('NAME_SENDER', 'Plataforma Sintia');
 
 define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 
+switch (ENVIROMENT) {
+        case 'LOCAL':
+	include(ROOT_PATH."/conexion-datos.php");
+	break;
+
+	case 'TEST':
+	include(ROOT_PATH."/conexion-datos-developer.php");
+	break;
+
+        default:
+        include(ROOT_PATH."/conexion-datos.php");
+        break;
+}
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');

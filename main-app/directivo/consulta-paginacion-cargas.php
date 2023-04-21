@@ -9,7 +9,7 @@
     WHERE car_id=car_id $filtro
     ORDER BY car_id;");
     $numRegistros=mysqli_num_rows($consulta);
-    $registros= 20;
+    $registros= $config['conf_num_registros'];
     $pagina=$_REQUEST["nume"];
     if (is_numeric($pagina)){
         $inicio= (($pagina-1)*$registros);

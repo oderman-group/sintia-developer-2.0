@@ -189,8 +189,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
 																	<?php }?>
 																	  
-																	  <?php if($resultado['uss_tipo']==2){?>
-																	  	<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas Docentes</a></li>
+																	  <?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
+																	  	<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas de las cargas</a></li>
 																	  <?php }?>
 
 																	  <?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>

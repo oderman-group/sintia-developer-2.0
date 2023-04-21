@@ -39,7 +39,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 		exit();
 }
 
-include(ROOT_PATH."/conexion-datos.php");
+//include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
 ?>

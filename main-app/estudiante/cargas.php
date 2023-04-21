@@ -14,7 +14,8 @@ if(isset($_GET["carga"]) and $_GET["carga"]!="" and is_numeric($_GET["carga"])){
 	$enlaceNext = 'calificaciones.php';
 	if($config['conf_sin_nota_numerica']==1){
 		$enlaceNext = 'calificaciones.php';
-	}elseif($config['conf_mostrar_calificaciones_estudiantes']!=1){
+	}
+	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
 		$enlaceNext = 'ausencias.php';
 	}
 	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'";</script>';
