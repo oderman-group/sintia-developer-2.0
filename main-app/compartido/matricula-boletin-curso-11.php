@@ -19,17 +19,22 @@ if ($_GET["periodo"] == "") {
 switch($periodoActual){
     case 1:
         $periodoActuales = "Primero";
+        $celdas = 2;
         break;
     case 2:
         $periodoActuales = "Segundo";
+        $celdas = 4;
         break;
     case 3:
         $periodoActuales = "Tercero";
+        $celdas = 6;
         break;
     case 4:
         $periodoActuales = "Final";
+        $celdas = 8;
         break;
 }
+$colspan=5+$celdas;
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
@@ -44,6 +49,7 @@ if (is_numeric($_REQUEST["grupo"])) {
 }
 $contadorEstudiantes=0;
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+$numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
     //contador materias
     $contPeriodos = 0;
@@ -51,9 +57,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $materiasPerdidas = 0;
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
     $consultaEstudiantes = Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
-    $numeroEstudiantes = mysqli_num_rows($consultaEstudiantes);
+    $numEstudiantes = mysqli_num_rows($consultaEstudiantes);
     $datosEstudiantes = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);
-    if ($numeroEstudiantes == 0) {
+    if ($numEstudiantes == 0) {
     ?>
         <script type="text/javascript">
             window.close();
@@ -111,10 +117,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 <td>Fecha Impresión:<br> <?= date("d/m/Y H:i:s"); ?></td>
             </tr>
         </table>
-        <p>&nbsp;</p>
         <table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
                 <tr style="font-weight:bold; background-color:#00adefad; border-color:#000; color:#000; font-size:12px;">
-                    <td width="2%" align="center" rowspan="2">Nº</td>
+                    <td width="1%" align="center" rowspan="2">Nº</td>
                     <td width="20%" align="center" rowspan="2">AREAS/ ASIGNATURAS</td>
                     <td width="2%" align="center" rowspan="2">I.H</td>
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
@@ -125,11 +130,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 <tr style="font-weight:bold; text-align:center; background-color:#00adefad; border-color:#000; color:#000; font-size:12px;">
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="3%">Nota</td>
-                        <td width="3%">Desempeño</td>
+                        <td width="1%">Nota</td>
+                        <td width="1%">Desempeño</td>
                     <?php } ?>
-                    <td width="3%">Nota</td>
-                    <td width="3%">Desempeño</td>
+                    <td width="1%">Nota</td>
+                    <td width="1%">Desempeño</td>
                 </tr>
             <?php
             $contador = 1;
@@ -177,8 +182,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 
                 
                     <tr style="background-color: #EAEAEA" style="font-size:12px;">
-                        <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultadoNotaArea["ar_nombre"]; ?></td>
-                        <td align="center" style="font-weight:bold; font-size:12px;"></td>
+                        <td colspan="2" style="font-size:12px; font-weight:bold;"><?php echo $resultadoNotaArea["ar_nombre"]; ?></td>
+                        <td align="center" style=" font-size:12px;"></td>
                         <?php
                             for ($j = 1; $j <= $periodoActual; $j++) {
                         ?>
@@ -225,10 +230,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         $contadorPeriodos = 0;
                         mysqli_data_seek($consultaDefinitivaPeriodo, 0);
                     ?>
-                        <tr bgcolor="#EAEAEA" style="font-size:12px;">
+                        <tr bgcolor="#EAEAEA">
                             <td align="center"><?= $contador; ?></td>
-                            <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;"><?php echo $materia["mat_nombre"]; ?></td>
-                            <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $area["car_ih"]; ?></td>
+                            <td style="font-size:12px; background:#EAEAEA; font-weight:bold;"><?php echo $materia["mat_nombre"]; ?></td>
+                            <td align="center" style="font-size:12px;background:#EAEAEA;"><?php echo $area["car_ih"]; ?></td>
                             <?php
                                 $promedioMateria = 0;
                                 for ($j = 1; $j <= $periodoActual; $j++) {
@@ -258,8 +263,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                     $promedioMateria += $notaEstudiante;
                             ?>
-                                <td align="center" style="font-weight:bold; font-size:12px;"><?=$notaEstudiante;?></td>
-                                <td align="center" style="font-weight:bold; font-size:12px;"><?=$desempenoNotaP['notip_nombre'];?></td>
+                                <td align="center" style=" font-size:12px;"><?=$notaEstudiante;?></td>
+                                <td align="center" style=" font-size:12px;"><?=$desempenoNotaP['notip_nombre'];?></td>
                             <?php
                                 }
                                 $promedioMateria = round($promedioMateria / ($j - 1), 2);
@@ -281,8 +286,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                 $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
                             ?>
-                            <td align="center" style="font-weight:bold; font-size:12px;"><?=$promedioMateriaFinal;?></td>
-                            <td align="center" style="font-weight:bold; font-size:12px;"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
+                            <td align="center" style=" font-size:12px;"><?=$promedioMateriaFinal;?></td>
+                            <td align="center" style=" font-size:12px;"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
                         </tr>
                         <?php
                         if ($numIndicadores > 0) {
@@ -292,9 +297,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 if ($indicadores["mat_id"] == $materia["mat_id"]) {
                         ?>
                                     <tr bgcolor="#FFF" style="font-size:12px;">
-                                        <td align="center">&nbsp;</td>
-                                        <td style="font-size:12px; height:15px;"><?php echo $contadorIndicadores . "." . $indicadores["ind_nombre"]; ?></td>
-                                        <td>&nbsp;</td>
+                                        <td colspan="3" style="font-size:12px; padding-left: 5px;"><?=$contadorIndicadores.". ".$indicadores["ind_nombre"]?></td>
                                         <?php
                                         for ($j = 1; $j <= $periodoActual; $j++) {
                                             $leyendaRI = '';
@@ -317,8 +320,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                                 $desempeno=$desempenoNotaP['notip_nombre'];
                                             }
                                         ?>
-                                            <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicador . "<br>" . $leyendaRI; ?></td>
-                                            <td align="center" style="font-weight:bold; font-size:12px;"><?=$desempeno;?></td>
+                                            <td align="center" style=" font-size:12px;"><?= $notaIndicador . "<br>" . $leyendaRI; ?></td>
+                                            <td align="center" style=" font-size:12px;"><?=$desempeno;?></td>
                                         <?php
                                             }
                                         ?>
@@ -335,9 +338,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         if ($observacion['bol_observaciones_boletin'] != "") {
                             ?>
                             <tr>
-                                <td colspan="4">
-                                    <h5 align="center">Observaciones</h5>
-                                    <p style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+                                <td colspan="<?=$colspan?>">
+                                    <h5 align="center" style="margin: 0">Observaciones</h5>
+                                    <p style="margin: 0 0 0 10px; font-size: 11px; font-style: italic;">
                                         <?= $observacion['bol_observaciones_boletin']; ?>
                                     </p>
                                 </td>
@@ -356,13 +359,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             <?php }
             } //while fin areas
             ?>
-            <tr>
-                <td>
-                    <p>&nbsp;</p>
-                </td>
-            </tr>
             <tr bgcolor="#EAEAEA" style="font-size:12px; text-align:center;">
-                <td colspan="3" style="text-align:left; font-weight:bold; font-size:12px;">PROMEDIO GENERAL</td>
+                <td colspan="3" style="text-align:left;  font-size:12px;">PROMEDIO GENERAL</td>
 
                 <?php
                 $promedioFinal = 0;
@@ -373,8 +371,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $BD);
                 ?>
 
-                    <td style="font-weight:bold; font-size:12px;"><?= $promediosPeriodos['promedio']; ?></td>
-                    <td style="font-weight:bold; font-size:12px;"><?= $promediosEstiloNota['notip_nombre']; ?></td>
+                    <td style=" font-size:12px;"><?= $promediosPeriodos['promedio']; ?></td>
+                    <td style=" font-size:12px;"><?= $promediosEstiloNota['notip_nombre']; ?></td>
                 <?php 
                     $promedioFinal +=$promediosPeriodos['promedio'];
                 } 
@@ -383,11 +381,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                     $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $BD);
                 ?>
-                <td style="font-weight:bold; font-size:12px;"><?=$promedioFinal;?></td>
-                <td style="font-weight:bold; font-size:12px;"><?= $promedioFinalEstiloNota['notip_nombre']; ?></td>
+                <td style=" font-size:12px;"><?=$promedioFinal;?></td>
+                <td style=" font-size:12px;"><?= $promedioFinalEstiloNota['notip_nombre']; ?></td>
             </tr>
 
-            <tr bgcolor="#EAEAEA" style="font-size:12px; font-weight:bold; text-align:center;">
+            <tr bgcolor="#EAEAEA" style="font-size:12px;  text-align:center;">
                 <td colspan="3" style="text-align:left;">AUSENCIAS</td>
                 <?php
                 for ($j = 1; $j <= $periodoActual; $j++) {
@@ -415,7 +413,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         <p>&nbsp;</p>
         <table width="100%" cellspacing="2" cellpadding="2" rules="all" border="1">
             <tr>
-                <td style="font-weight:bold; font-size:12px;">Tabla de desempeño:</td>
+                <td style=" font-size:12px;">Tabla de desempeño:</td>
                 <?php
                     $consulta = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $BD);
                     while($estiloNota = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -432,10 +430,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-                <tr style="font-weight:bold; background:#00adefad; border-color:#036; font-size:12px; text-align:center">
+                <tr style=" background:#00adefad; border-color:#036; font-size:12px; text-align:center">
                     <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
                 </tr>
-                <tr style="font-weight:bold; background:#EAEAEA; height:25px; color:#000; font-size:12px; text-align:center">
+                <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
                     <td width="8%">Periodo</td>
                     <td>Observaciones</td>
                 </tr>
@@ -444,25 +442,13 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                     $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisciplina["dn_nota"], $BD);
                 ?>
-                    <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
+                    <tr align="center" style=" font-size:12px;">
                         <td><?= $rndisciplina["dn_periodo"] ?></td>
                         <td align="left"><?= $rndisciplina["dn_observacion"] ?></td>
                     </tr>
                 <?php } ?>
             </table>
         <?php } ?>
-        <div align="center">
-            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="text-align:center; font-size:12px;">
-                <tr>
-                    <td style="font-weight:bold;" align="left">
-                    <?php if ($num_observaciones > 0) { ?>
-                        COMPORTAMIENTO:
-                        <b><u><?= strtoupper($r_disciplina[3]); ?></u></b><br>
-                    <?php } ?>
-                    </td>
-                </tr>
-            </table>
-        </div>
         <p>&nbsp;</p>
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
@@ -473,9 +459,14 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             </tr>
         </table>
 
+        <?php
+            $contadorEstudiantes++;
+            if($contadorEstudiantes!=$numeroEstudiantes && empty($_GET['id'])){
+        ?>
         <div id="saltoPagina"></div>
     <?php
-} // FIN DE TODOS LOS MATRICULADOS
+            }
+    } // FIN DE TODOS LOS MATRICULADOS
     ?>
     <script type="application/javascript">
         print();

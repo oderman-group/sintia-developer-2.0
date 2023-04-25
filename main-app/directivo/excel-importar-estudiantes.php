@@ -188,6 +188,25 @@ if($extension == 'xlsx'){
 										if($_POST['actualizarCampo'][$cont] == 5) {
 											$camposActualizar .= ", mat_nombre2='".$hojaActual->getCell('D'.$f)->getValue()."'";
 										}
+
+										if($_POST['actualizarCampo'][$cont] == 6) {
+
+											$matFechaNacimiento=$hojaActual->getCell('H'.$f)->getFormattedValue();
+											$fNacimiento = "0000-00-00";
+											if(!empty($matFechaNacimiento)) {
+												$arrayBuscar = array('-', '.', ' ', '.-');
+												$arrayReemplazar = array('/', '/', '/', '/');
+												$fechaReplace = str_replace($arrayBuscar, $arrayReemplazar, $matFechaNacimiento);							
+												$fecha = explode ("/", $fechaReplace);
+
+												$dia   = $fecha[2];  
+												$mes = $fecha[1];  
+												$year  = $fecha[0];
+												$fNacimiento = $year.'-'.$mes.'-'.$dia;
+											}
+
+											$camposActualizar .= ", mat_fecha_nacimiento='".$fNacimiento."'";
+										}
 										
 										$cont ++;
 									}
