@@ -69,14 +69,6 @@
                                    
 									<form name="formularioGuardar" action="excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
 										
-										<!--	
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 control-label">Descargar formato de plantilla</label>
-                                            <div class="col-sm-9">
-                                                <a href="../files/excel/estudiantes.xlsx" target="_blank"><i class="fa fa-download"></i> Plantilla para Matriculas</a>
-                                            </div>
-                                        </div>-->
-										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Subir la planilla lista</label>
                                             <div class="col-sm-6">
@@ -102,6 +94,7 @@
                                                     <option value="3">Tipo de Documento</option>
                                                     <option value="4">Acudiente</option>
                                                     <option value="5">Segundo nombre del estudiante</option>
+                                                    <option value="6">Fecha de nacimiento</option>
                                                 </select>
                                             </div>
                                         </div>
