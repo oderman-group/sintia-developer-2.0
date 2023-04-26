@@ -1,7 +1,10 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DC0033';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php 
+include("../compartido/head.php");
+require_once("../class/UsuariosPadre.php");
+?>
 </head>
  <!-- END HEAD -->
 <?php include("../compartido/body.php");?>

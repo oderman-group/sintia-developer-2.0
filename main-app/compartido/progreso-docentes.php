@@ -8,12 +8,13 @@
 												</p>
 												
 												<?php
-												$docentesProgreso = mysqli_query($conexion, "SELECT uss_id, uss_nombre FROM usuarios 
+												$docentesProgreso = mysqli_query($conexion, "SELECT * FROM usuarios 
 												WHERE uss_tipo=2 AND uss_bloqueado='0'
 												ORDER BY uss_nombre");
 												$profes = array();
 												$profesNombre = array();
 												while($docProgreso = mysqli_fetch_array($docentesProgreso, MYSQLI_BOTH)){
+													$nombreDocente= UsuariosPadre::nombreCompletoDelUsuario($docProgreso);
 													$consultaDatosProgreso=mysqli_query($conexion, "SELECT
 													(SELECT count(car_id) FROM academico_cargas cargas WHERE car_docente='".$docProgreso['uss_id']."' AND car_periodo='".$config['conf_periodo']."'),
 													(SELECT sum(act_valor) FROM academico_actividades INNER JOIN academico_cargas ON car_id=act_id_carga AND car_periodo='".$config['conf_periodo']."' AND car_docente='".$docProgreso['uss_id']."' WHERE act_estado=1 AND act_periodo='".$config['conf_periodo']."'),
@@ -26,7 +27,7 @@
 													
 													if($sumasProgreso>0){
 														$profes[$docProgreso['uss_id']] = $sumasProgreso;
-														$profesNombre[$docProgreso['uss_id']] = strtoupper($docProgreso['uss_nombre']);
+														$profesNombre[$docProgreso['uss_id']] = $nombreDocente;
 													}else{
 														continue;
 													}
