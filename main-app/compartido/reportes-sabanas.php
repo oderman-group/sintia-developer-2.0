@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Boletin.php");
 
 $year=$agnoBD;
 if(isset($_POST["year"])){
@@ -39,6 +40,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">ID</td>
         <td align="center">Estudiante</td>
         <?php
+		$numero=0;
 		$materias1 = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas 
 		WHERE car_curso=".$_REQUEST["curso"]." 
 		AND car_grupo='".$_REQUEST["grupo"]."'");
@@ -49,6 +51,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		?>
         	<td align="center"><?=$Mat[3];?></td>      
   		<?php
+			$numero++;
 		}
 		?>
         <td align="center" style="font-weight:bold;">PROM</td>
@@ -63,7 +66,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		WHERE bol_estudiante=".$fila[0]." 
 		AND bol_periodo=".$_REQUEST["per"]." 
 		GROUP BY bol_carga");
-		$numero = mysqli_num_rows($cuentaest);
+		// $numero = mysqli_num_rows($cuentaest);
 		$def = '0.0';
 		
   ?>
@@ -79,18 +82,54 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		AND car_grupo='" . $_REQUEST["grupo"] . "'");
 
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
-					$notas = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-			WHERE bol_estudiante=" . $fila[0] . " 
-			AND bol_carga=" . $mat1[0] . " 
-			AND bol_periodo=" . $_REQUEST["per"]);
 
-					$nota = mysqli_fetch_array($notas, MYSQLI_BOTH);
-					$defini = $nota[4];
+					if($config['conf_id_institucion']!=23){
+						$notas = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
+						WHERE bol_estudiante=" . $fila[0] . " 
+						AND bol_carga=" . $mat1[0] . " 
+						AND bol_periodo=" . $_REQUEST["per"]);
+
+						$nota = mysqli_fetch_array($notas, MYSQLI_BOTH);
+						$defini = $nota[4];
+					}else{
+						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
+						$consultaNotaMateriaIndicadoresxPeriodo = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
+						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM academico_materias am
+						INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+						INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
+						INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+						INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+						INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
+						INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
+						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila[0]." and act_periodo=".$_REQUEST["per"]."
+						group by act_id_tipo, act_id_carga
+						order by mat_id,ipc_periodo,ind_id;");
+
+						$numIndicadoresPorPeriodo=mysqli_num_rows($consultaNotaMateriaIndicadoresxPeriodo);
+						$sumaNotaEstudiante=0;
+						while ($datosIndicadores = mysqli_fetch_array($consultaNotaMateriaIndicadoresxPeriodo, MYSQLI_BOTH)) {
+							if ($datosIndicadores["mat_id"] == $mat1['car_materia']) {
+									$notaMateria = $datosIndicadores["nota"];
+							}
+
+							$sumaNotaEstudiante += $notaMateria;
+						}
+						
+						$estudianteNota=0;
+						if($numIndicadoresPorPeriodo!=0){
+							$estudianteNota=($sumaNotaEstudiante/$numIndicadoresPorPeriodo);
+						}
+						$defini = round($estudianteNota, 2);
+                                    
+						$defini= Boletin::agregarDecimales($defini);
+					}
+
+					$notaFinal=$defini;
 					if ($defini < $config[5]) $color = 'red';
 					else $color = '#417BC4';
 					$suma = ($suma + $defini);
 				?>
-					<td align="center" style="color:<?= $color; ?>;"><?php echo $nota[4]; ?></td>
+					<td align="center" style="color:<?=$color;?>;"><?=$notaFinal;?></td>
 				<?php
 				}
 				if ($numero > 0) {
@@ -104,7 +143,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				if ($def < $cde[5]) $color = 'red';
 				else $color = '#417BC4';
 				$notas1[$cont] = $def;
-				$grupo1[$cont] = strtoupper($fila[3] . " " . $fila[4] . " " . $fila[5]);
+				$grupo1[$cont] = $nombre;
 				?>
 				<td align="center" style="font-weight:bold; color:<?= $color; ?>;"><?= $def; ?></td>
 			</tr>

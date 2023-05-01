@@ -143,6 +143,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $ausPer3Total=0;
             $ausPer4Total=0;
             $sumAusenciasTotal=0;
+            $sumaNota = 0;
             while ($area = mysqli_fetch_array($consultaAreaEstudiante, MYSQLI_BOTH)) {
                 switch($periodoActual){
                     case 1:
@@ -182,18 +183,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 
                 
                     <tr style="background-color: #EAEAEA" style="font-size:12px;">
-                        <td colspan="2" style="font-size:12px; font-weight:bold;"><?php echo $resultadoNotaArea["ar_nombre"]; ?></td>
-                        <td align="center" style=" font-size:12px;"></td>
-                        <?php
-                            for ($j = 1; $j <= $periodoActual; $j++) {
-                        ?>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <?php
-                            }
-                        ?>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td colspan="<?=$colspan?>" style="font-size:12px; font-weight:bold;"><?php echo $resultadoNotaArea["ar_nombre"]; ?></td>
                     </tr>
                     <?php
                     while ($materia = mysqli_fetch_array($consultaDefinitivaNombreMateria, MYSQLI_BOTH)) {
@@ -262,6 +252,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante, $BD);
 
                                     $promedioMateria += $notaEstudiante;
+                                    $sumaNota += $notaEstudiante;
                             ?>
                                 <td align="center" style=" font-size:12px;"><?=$notaEstudiante;?></td>
                                 <td align="center" style=" font-size:12px;"><?=$desempenoNotaP['notip_nombre'];?></td>
@@ -365,16 +356,16 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 <?php
                 $promedioFinal = 0;
                 for ($j = 1; $j <= $periodoActual; $j++) {
-                    $consultaPromedioPeriodoTodos=Boletin::obtenerPromedioPorTodosLosPeriodos($matriculadosDatos['mat_id'], $j, $BD);
-                    $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
+                    $promediosPeriodos = ($sumaNota/($contador-1));
+                    $promediosPeriodos = round($promediosPeriodos, 2);
 
-                    $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $BD);
+                    $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos, $BD);
                 ?>
 
-                    <td style=" font-size:12px;"><?= $promediosPeriodos['promedio']; ?></td>
+                    <td style=" font-size:12px;"><?= $promediosPeriodos; ?></td>
                     <td style=" font-size:12px;"><?= $promediosEstiloNota['notip_nombre']; ?></td>
                 <?php 
-                    $promedioFinal +=$promediosPeriodos['promedio'];
+                    $promedioFinal +=$promediosPeriodos;
                 } 
 
                     $promedioFinal = round($promedioFinal/$periodoActual,2);
