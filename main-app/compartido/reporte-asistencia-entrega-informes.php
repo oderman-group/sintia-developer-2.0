@@ -140,7 +140,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                     INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
                     ORDER BY mat_id;");
                     while($notaMaterias = mysqli_fetch_array($consultaNotaMaterias, MYSQLI_BOTH)){
-                        $notaMateria= round($notaMaterias['bol_nota'],0);
+                        $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
                         $estiloNota="";
                         if($notaMateria<$config['conf_nota_minima_aprobar']){
                             $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
