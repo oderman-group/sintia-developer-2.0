@@ -141,6 +141,17 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                     ORDER BY mat_id;");
                     while($notaMaterias = mysqli_fetch_array($consultaNotaMaterias, MYSQLI_BOTH)){
                         $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
+                        
+                        if(strlen($notaMateria) === 1 || $notaMateria == 10){
+                            $notaMateria = $notaMateria.".00";
+                        }
+                
+                        $explode = explode(".", $notaMateria);
+                        $decimales = end($explode);
+                        if(!empty($decimales) && strlen($decimales) === 1){
+                            $notaMateria = $notaMateria."0";
+                        }
+
                         $estiloNota="";
                         if($notaMateria<$config['conf_nota_minima_aprobar']){
                             $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
