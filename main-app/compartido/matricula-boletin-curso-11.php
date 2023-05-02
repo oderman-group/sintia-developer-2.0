@@ -59,6 +59,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $consultaEstudiantes = Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
     $numEstudiantes = mysqli_num_rows($consultaEstudiantes);
     $datosEstudiantes = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);
+    //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
+    $nombreEstudainte=Estudiantes::NombreCompletoDelEstudiante($datosEstudiantes);
     if ($numEstudiantes == 0) {
     ?>
         <script type="text/javascript">
@@ -106,7 +108,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
             <tr>
                 <td>Documento:<br> <?= number_format($datosEstudiantes["mat_documento"], 0, ",", "."); ?></td>
-                <td>Nombre:<br> <?= strtoupper($datosEstudiantes[3] . " " . $datosEstudiantes[4] . " " . $datosEstudiantes["mat_nombres"]); ?></td>
+                <td>Nombre:<br> <?= $nombreEstudainte; ?></td>
                 <td>Grado:<br> <?= $datosEstudiantes["gra_nombre"] . " " . $datosEstudiantes["gru_nombre"]; ?></td>
                 <td>Puesto Curso:<br> <?=$puestoCurso?></td>    
             </tr>
