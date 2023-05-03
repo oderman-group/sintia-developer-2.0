@@ -1,5 +1,7 @@
 <?php include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Usuarios.php");
+require_once("../class/UsuariosPadre.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -30,6 +32,7 @@ if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grup
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 $numMatriculados = mysqli_num_rows($matriculadosPorCurso);
+$idDirector="";
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
 
     $gradoActual = $matriculadosDatos['mat_grado'];
@@ -141,6 +144,11 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 	INNER JOIN $BD.academico_materias ON mat_id=car_materia
 	WHERE car_curso='" . $datosUsr['mat_grado'] . "' AND car_grupo='" . $datosUsr['mat_grupo'] . "'");
             while ($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
+                //DIRECTOR DE GRUPO
+                if($datosCargas["car_director_grupo"]==1){
+                    $idDirector=$datosCargas["car_docente"];
+                }
+
                 if ($contador % 2 == 1) {
                     $fondoFila = '#EAEAEA';
                 } else {
@@ -351,9 +359,13 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
         <p>&nbsp;</p>
 
         <table width="100%" cellspacing="2" cellpadding="2" rules="all" border="1">
+            <?php
+                $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+                $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+            ?>
             <thead>
                 <tr>
-                    <td style="width: 40%;">Dir. Curso </td>
+                    <td style="width: 40%;">Dir. Curso: <?=$nombreDirectorGrupo?></td>
                     <td style="width: 15%;"><img src="../files/iconos/sup.png" width="10"> SUP 4.7 – 5.0 </td>
                     <td style="width: 15%;"><img src="../files/iconos/alto.png" width="10"> ALT 4.0 – 4.6 </td>
                     <td style="width: 15%;"><img src="../files/iconos/bas.png" width="10"> BAS 3.0 – 3.9 </td>
