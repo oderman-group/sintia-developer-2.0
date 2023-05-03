@@ -208,7 +208,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             if($notaBoletin == 5){$notaBoletin='5.0';}
                         ?>
                             <td align="center"><?= $notaBoletin; ?></td>
-                            <td align="center"><img src="<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
+                            <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
                         <?php
                         }
                         $promedioMateria = round($promedioMateria / ($j - 1), 1);
@@ -238,7 +238,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                         ?>
                         <td align="center"><?= $promedioMateriaFinal; ?></td>
-                        <td align="center"><img src="<?= $promediosMateriaEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
+                        <td align="center"><img src="../files/iconos/<?= $promediosMateriaEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                         <td align="center">&nbsp;</td>
                     </tr>
                 </tbody>
@@ -274,7 +274,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     ?>
 
                         <td><?= $promediosPeriodos['promedio']; ?></td>
-                        <td><img src="<?= $promediosEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
+                        <td><img src="../files/iconos/<?= $promediosEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <?php 
                         $promedioFinal +=$promediosPeriodos['promedio'];
                     } 
@@ -285,7 +285,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
                     ?>
                     <td><?=$promedioFinal;?></td>
-                    <td><img src="<?= $promedioFinalEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
+                    <td><img src="../files/iconos/<?= $promedioFinalEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <td>-</td>
                 </tr>
 
