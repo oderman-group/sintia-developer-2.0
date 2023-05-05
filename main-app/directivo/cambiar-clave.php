@@ -31,7 +31,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[10][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[253][$datosUsuarioActual[8]];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -39,62 +39,7 @@
 
                     <div class="row">
                         
-                                            <div class="col-sm-4">
-                            <div class="panel">
-                                <header class="panel-heading panel-heading-blue"><?=$frases[219][$datosUsuarioActual[8]];?></header>
-                                <div class="panel-body">
-                                    <h4>Especificaciones</h4>
-                                    <p><b>1.</b> Debe tener entre 8 y 20 caracteres.</p>
-                                    <p><b>2.</b> Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos <mark>(. y $)</mark>.</p>
-                                </div>
-                            </div>
-
-                            
-                        </div>  
-
-                        <div class="col-sm-8">
-                            <div class="card card-box">
-                                <div class="card-head">
-                                    <header><?=$frases[10][$datosUsuarioActual[8]];?></header>
-                                </div>
-                                <div class="card-body " id="bar-parent6">
-                                    <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="6">
-                                        <input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
-                                        
-                                        
-                                        
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[188][$datosUsuarioActual[8]];?></label>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="celular" class="form-control">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[182][$datosUsuarioActual[8]];?></label>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="telefono" class="form-control">
-                                            </div>
-                                        </div>
-                                        
-                                        
-                                        
-                                        
-                                        
-
-                                                
-                                        <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3">
-                            <?php include("../compartido/modulo-frases-lateral.php");?>
-                            
-                           <?php include("../compartido/publicidad-lateral.php");?> 
-                        </div>
+                        <?php include("../compartido/cambiar-clave-contenido.php");?>
 						
                     </div>
 					
