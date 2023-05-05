@@ -90,8 +90,6 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <img src="../files/images/logo/encabezadoellen.png" width="95%">
                 <?php }else{?>
                     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="200"><br>
-                    <!-- <?=$informacion_inst["info_nombre"]?><br>
-                    BOLETÍN DE CALIFICACIONES<br> -->
                 <?php }?>
             </div>
 
