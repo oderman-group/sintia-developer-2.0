@@ -95,6 +95,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
             break;
 
+            case 'ER_DT_12':
+                $tipo = 'danger';
+                $mensaje = 'La clave actual no es correcta. Por favor verifique.';
+            break;
+
+            case 'ER_DT_13':
+                $tipo = 'danger';
+                $mensaje = 'La clave nueva no coincide. Por favor verifique.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -159,6 +169,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.$_GET['numRegistros'].'</b><br>
                 Ahora la plataforma está más limpia y puedes trabajar con los estudiantes que necesitas para este año.</b>
                 ';
+            break;
+
+            case 'SC_DT_10':
+                $tipo = 'success';
+                $mensaje = 'La contraseña se cambió correctamente.</b>';
             break;
 
 
