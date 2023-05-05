@@ -206,9 +206,6 @@ if ($_POST["id"] == 5) {
 //EDITAR PERFIL
 if ($_POST["id"] == 6) {
 
-	validarClave($_POST["clave"]);
-
-
 	if ($_POST["tipoUsuario"] != 4) {
 		$mensaje = '';
 		if ($_POST["profesion"] == "") {
@@ -256,8 +253,7 @@ if ($_POST["id"] == 6) {
 	//Si es estudiante
 	if ($_POST["tipoUsuario"] == 4) {
 		mysqli_query($conexion, "UPDATE usuarios SET 
-	
-		uss_clave='" . mysqli_real_escape_string($conexion,$_POST["clave"]) . "', 
+
 		uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
 		uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
 		uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
@@ -282,8 +278,7 @@ if ($_POST["id"] == 6) {
 		include("../compartido/reporte-errores.php");
 	} else {
 		mysqli_query($conexion, "UPDATE usuarios SET 
-		
-		uss_clave='" . mysqli_real_escape_string($conexion,$_POST["clave"]) . "', 
+
 		uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
 		uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
 		uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
