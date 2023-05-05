@@ -153,7 +153,7 @@ $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServ
         <?php include("../compartido/footer.php");?>
     </div>
     <!-- start js include path -->
-    <!-- <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script> -->
+    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
     <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
     <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js" ></script>
 	<script src="../../config-general/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
