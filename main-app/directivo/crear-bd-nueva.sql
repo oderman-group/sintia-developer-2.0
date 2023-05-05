@@ -1063,7 +1063,7 @@ CREATE TABLE `academico_notas_tipos` (
 
 LOCK TABLES `academico_notas_tipos` WRITE;
 /*!40000 ALTER TABLE `academico_notas_tipos` DISABLE KEYS */;
-INSERT INTO `academico_notas_tipos` VALUES (1,'Bajo',1.00,3.40,1,NULL,NULL),(2,'Basico',3.50,3.90,1,NULL,NULL),(3,'Alto',4.00,4.50,1,NULL,NULL),(4,'Superior',4.60,5.00,1,NULL,NULL);
+INSERT INTO `academico_notas_tipos` VALUES (1,'Bajo',1.00,3.49,1,NULL,'bajo.png'),(2,'Basico',3.50,3.99,1,NULL,'bas.png'),(3,'Alto',4.00,4.59,1,NULL,'alto.png'),(4,'Superior',4.60,5.00,1,NULL,'sup.png');
 /*!40000 ALTER TABLE `academico_notas_tipos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
