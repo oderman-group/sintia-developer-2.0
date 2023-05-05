@@ -31,13 +31,15 @@
                                         OR pagp_ruta LIKE '%".$_GET["query"]."%' 
                                         OR pagp_palabras_claves LIKE '%".$_GET["query"]."%')";}
                                     
-                                    $tipoUsuario=$datosUsuarioActual['uss_tipo'];
-                                    if($datosUsuarioActual['uss_tipo']==1){
-                                        $tipoUsuario=5;
-                                    }
                                     $dato = 1;
                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad 
-                                    WHERE pagp_tipo_usuario='".$tipoUsuario."' $filtro ORDER BY pagp_id");
+                                    WHERE pagp_tipo_usuario='".$datosUsuarioActual['uss_tipo']."' $filtro ORDER BY pagp_id");
+                                    $tipoUsuario=$datosUsuarioActual['uss_tipo'];
+                                    
+                                    if($datosUsuarioActual['uss_tipo']==1){
+                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad 
+                                        WHERE (pagp_tipo_usuario=1 OR pagp_tipo_usuario=5) $filtro ORDER BY pagp_id");
+                                    }
                                     $numDatos=mysqli_num_rows($consulta);
                                     if($tipoUsuario == 5){
                                         //buscador usuarios
