@@ -1,6 +1,13 @@
-<?php include("session.php"); ?>
-<?php include("../modelo/conexion.php"); ?>
 <?php
+include("session.php");
+include("../modelo/conexion.php");
+if($_SERVER['HTTP_REFERER']=="" and $_GET["idmsg"]!=303){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
+	exit();
+}
+$idPaginaInterna = 'DT0148';
+include("../compartido/guardar-historial-acciones.php");
+
 try{
 	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones WHERE eva_id_carga='" . $_GET["id"] . "'");	
 	mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id_carga='" . $_GET["id"] . "'");
