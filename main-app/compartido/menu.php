@@ -212,7 +212,7 @@
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Instituciones</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Módulos</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Páginas</span></a></li>
+										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Contratos</span></a></li>
