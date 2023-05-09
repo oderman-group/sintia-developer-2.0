@@ -1,6 +1,11 @@
 <?php
 include("session.php");
 
+if($datosUsuarioActual['uss_permiso1'] != CODE_DEV_MODULE_PERMISSION){
+    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=302";</script>';
+    exit();
+}
+
 $idPaginaInterna = 'DV0006';
 
 include("../compartido/historial-acciones-guardar.php");
