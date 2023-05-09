@@ -1,4 +1,4 @@
-<?php include("session.php"); ?>
+<?php /*include("session.php"); ?>
 <?php include("../modelo/conexion.php"); ?>
 <?php
 	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones");
@@ -26,3 +26,4 @@
 	include("../compartido/reporte-errores.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
+	*/
