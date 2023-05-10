@@ -5,7 +5,7 @@ $idPaginaInterna = 'DV0001';
 
 include("../compartido/historial-acciones-guardar.php");
 
-Modulos::verificarPermisoDev($datosUsuarioActual['uss_permiso1']);
+Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
