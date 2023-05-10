@@ -3,12 +3,10 @@ include("session.php");
 
 $idPaginaInterna = 'DV0001';
 
-if($datosUsuarioActual['uss_permiso1'] != CODE_DEV_MODULE_PERMISSION){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();	
-}
-
 include("../compartido/historial-acciones-guardar.php");
+
+Modulos::verificarPermisoDev($datosUsuarioActual['uss_permiso1']);
+
 include("../compartido/head.php");
 
 $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
