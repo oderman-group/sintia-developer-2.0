@@ -18,4 +18,12 @@ class Modulos {
         return true;
     }
 
+    public static function verificarPermisoDev($permisoDev){
+
+        if($permisoDev != CODE_DEV_MODULE_PERMISSION){
+            echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+            exit();	
+        }
+    }
+
 }
