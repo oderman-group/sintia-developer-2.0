@@ -3,9 +3,10 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require("../class/AcademicoGradoServicios.php");
 
-$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
-$resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+$resultadoCurso=AcademicoGradoServicios::ConsultarCurso($_GET["id"]);
+$resultadoCargaCurso=AcademicoGradoServicios::CantidadCursos($_GET["id"]);
 ?>
 
 	<!--bootstrap -->
@@ -183,6 +184,30 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($resultadoCurso['gra_estado']==1){ echo 'selected'; } ?>>Activo</option>
                                                     <option value="0" <?php if($resultadoCurso['gra_estado']==0){ echo 'selected'; } ?>>Inactivo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <?php }?>
+                                        <?php if(array_key_exists(10,$_SESSION["modulos"]) && $resultadoCargaCurso["cargas_curso"]<=0){?>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Tipo de grado</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="tipoG" >
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="grupal" <?php if($resultadoCurso['gra_tipo']=='grupal'){ echo 'selected'; } ?>>Grupal</option>
+                                                    <option value="individual" <?php if($resultadoCurso['gra_tipo']=='individual'){ echo 'selected'; } ?>>Individual</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <?php }?>                                       
+                                        <?php if(array_key_exists(10,$_SESSION["modulos"]) && $resultadoCargaCurso["cargas_curso"]>=1){?>
+                                        <div class="form-group row ">
+                                            <label class="col-sm-2 control-label">Tipo de grado</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2"  disabled>
+                                                    <option  <?php if($resultadoCurso['gra_tipo']!=''){ echo 'selected'; } ?>>
+                                                    <?php if($resultadoCurso['gra_tipo']=='grupal'){ echo 'Grupal'; }else{ echo 'Individual';}?>
+                                                    </option>
                                                 </select>
                                             </div>
                                         </div>
