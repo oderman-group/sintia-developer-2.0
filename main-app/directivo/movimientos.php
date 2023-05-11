@@ -28,11 +28,10 @@
 
                     <div class="row">
                         <div class="col-md-12">
-
-						<?php include("includes/barra-superior-movimientos-financieros.php");?>
 								
 									<?php
 										$filtro = '';
+										include("includes/barra-superior-movimientos-financieros.php");
 										if(is_numeric($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
 										if(is_numeric($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
 										if(is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
