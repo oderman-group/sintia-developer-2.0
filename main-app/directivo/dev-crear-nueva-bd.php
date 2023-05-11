@@ -101,10 +101,10 @@ $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServ
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la Base de datos (Siglas)</label>
+                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b></label>
                                                 <div class="col-sm-6">
                                                     <input type="text" name="siglasBD" class="form-control col-sm-6" autocomplete="off" value="">
-                                                    <span style="color:#6017dc;">Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{[$siglasBD]}_{[$year]}</span>
+                                                    <span style="color:#6017dc;">Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_<b>SiglasBD</b>_year</span>
                                                 </div>
                                             </div>
 
