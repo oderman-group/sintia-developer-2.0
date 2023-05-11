@@ -24,6 +24,8 @@ if($nueva==0){//PARA ANTIGUAS
 
     $bd=$siglasBD.'_'.$year;//BD NUEVA
     $bdAnterior=$siglasBD.'_'.$yearAnterior;//BD ANTIGUA PARA EL TRASPASO DE DATOS
+
+    $bdInstitucion=$siglasBD;//SE USARA PARA VALIDAR EXISTENCIA DE LA INSTITUCIÓN
 }
 
 if($nueva==1){//PARA NUEVAS
@@ -35,12 +37,33 @@ if($nueva==1){//PARA NUEVAS
     $year = $_POST['yearN'];//AQUI COLOCAMOS EL AÑO QUE VAN AL FINAL DEL NOMBRE DE LA BD EJE: monbiliar_{[$siglasBD]}_{[$year]}
 
     $bd=BD_PREFIX.$siglasBD.'_'.$year;//BD NUEVA
+
+    $bdInstitucion=BD_PREFIX.$siglasBD;//SE USARA PARA VALIDAR EXISTENCIA DE LA INSTITUCIÓN
+}
+
+try {
+    //CONSULTA EXISTENCIA DE LA INSTITUCIÓN
+    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND ins_years LIKE '%".$year."%'");
+    $numInstituciones=mysqli_num_rows($consultaInstituciones);
+
+    if(empty($_POST["continue"]) || $_POST["continue"]!=1 || empty($_SERVER['HTTP_REFERER'])){
+
+        $texto="";
+        if($numInstituciones>0){
+            $texto="<br> Si continúa con el proceso se sobrescribirá toda la información ya existente.";
+        }
+
+        include("dev-crear-bd-informacion.php");
+        exit();
+
+    }
+} catch (Exception $e) {
+	echo $e->getMessage();
 }
 
 //Creamos y seleccionamos BD
 // mysqli_query($conexion, "CREATE DATABASE /*!32312 IF NOT EXISTS*/ $bd");
 mysqli_select_db($conexion, $bd) or die('Error al selccionar la bd');
-echo "<pre>Se estableción la conexión con la BD.</pre>";
 
 $fichero = 'crear-bd-nueva.sql';  // Ruta al fichero que vas a cargar.
 
@@ -81,9 +104,6 @@ foreach ($lineas as $linea) {
         $temp = '';
     }
 }
-echo "<pre>Se creó la estructura de la base de datos.</pre>";
 include('ingresar-datos-bd.php');
-echo "Todo el proceso concluyó exitosamente";
-// exit();
 
 echo '<script type="text/javascript">window.location.href="dev-crear-nueva-bd.php?success=SC_DT_10";</script>';
