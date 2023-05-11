@@ -38,6 +38,7 @@ if($_POST["religion"]=="")     $_POST["religion"]     = 112;
 if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
+if($_POST["tipoMatricula"]=="")$_POST["tipoMatricula"]    = 'grupal';
 
 
 //Api solo para Icolven
@@ -196,7 +197,7 @@ try{
 		mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
 		mat_inclusion, mat_extranjero, mat_tipo_sangre, 
 		mat_eps, mat_celular2, mat_ciudad_residencia, 
-		mat_nombre2)
+		mat_nombre2,mat_tipo_matricula)
 		VALUES(
 		".$result_numMat.", now(), ".$_POST["tipoD"].",
 		".$_POST["nDoc"].", ".$_POST["religion"].", '".strtolower($_POST["email"])."',
@@ -209,7 +210,7 @@ try{
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
 		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
-		'".$_POST["nombre2"]."'
+		'".$_POST["nombre2"]."','".$_POST["tipoMatricula"]."'
 		)");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
