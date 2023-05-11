@@ -5,13 +5,13 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0173';
 include("../compartido/historial-acciones-guardar.php");
 
-	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
-		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
-		exit();
-	}
+//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
+if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
+	echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
+	exit();
+}
 
-	if(empty($_POST["estado"])){$_POST["estado"]=1;}
+if(empty($_POST["estado"])){$_POST["estado"]=1;}
 
 try{
 	mysqli_query($conexion, "UPDATE academico_grados SET 
@@ -25,7 +25,8 @@ try{
 	gra_nota_minima='" . $_POST["notaMin"] . "', 
 	gra_periodos='" . $_POST["periodosC"] . "', 
 	gra_nivel='" . $_POST["nivel"] . "', 
-	gra_estado='" . $_POST["estado"] . "' 
+	gra_estado='" . $_POST["estado"] . "',
+	gra_tipo='" . $Post["tipoG"] . "' 
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
