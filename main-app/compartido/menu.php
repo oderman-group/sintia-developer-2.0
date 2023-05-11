@@ -43,13 +43,17 @@
 							<?php
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
 							?>
-							<div class="nav-item">
-								<div align="center" style="color:#FC0; font-weight:bold;">
-									AÑO CONSULTADO<br />
-									<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
+								<div class="nav-item">
+									<div align="center" style="color:#FC0; font-weight:bold;">
+										AÑO CONSULTADO<br />
+										<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
+									</div>
 								</div>
-							</div>
+							<?php }?>
 							
+							<?php
+								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3){
+							?>
 							<li class="nav-item">
 	                            <a href="como-empezar.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">toc</i>
