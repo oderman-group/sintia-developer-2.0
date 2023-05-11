@@ -120,7 +120,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                 </thead>
 												
 												<?php
-													include("consulta-paginacion-usuarios.php");	
+													include("includes/consulta-paginacion-usuarios.php");	
 													$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
 													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 													WHERE uss_id=uss_id $filtro
