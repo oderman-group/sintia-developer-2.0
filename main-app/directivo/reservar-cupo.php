@@ -29,44 +29,13 @@
                     
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="row">
 								<?php
 									$filtro = '';
 									$filtroMat = '';
 									if(isset($_GET["curso"]) AND is_numeric($_GET["curso"])){$filtroMat .= " AND mat_grado='".$_GET["curso"]."'";}
 									if(isset($_GET["resp"]) AND is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
-						
-									$SQL = "SELECT * FROM ".$baseDatosServicios.".general_encuestas
-									INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
-									INNER JOIN academico_grados ON gra_id=mat_grado
-									INNER JOIN academico_grupos ON gru_id=mat_grupo
-									WHERE genc_id=genc_id $filtro";
+									include("includes/barra-superior-reservar-cupo.php");
 								?>
-								
-								
-								
-							
-								
-								<div class="col-md-12">
-								<div class="btn-group">
-																<button type="button" class="btn btn-info">Filtrar por cursos</button>
-																<button type="button" class="btn btn-info dropdown-toggle m-r-20" data-toggle="dropdown">
-																	<i class="fa fa-angle-down"></i>
-																</button>
-																<ul class="dropdown-menu" role="menu" style="width:250px;">
-																<?php
-											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal");
-											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(mat_id) FROM academico_matriculas WHERE mat_eliminado=0 AND mat_grado='".$curso['gra_id']."'");
-												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
-												if(isset($_GET["curso"]) AND $curso['gra_id']==$_GET["curso"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
-											?>
-												<li><a href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$curso['gra_id'];?>" <?=$estiloResaltado;?>><?=strtoupper($curso['gra_nombre']);?></a></li>
-											<?php }?>
-																</ul>
-															</div>
 								
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -94,8 +63,14 @@
 												</thead>
                                                 <tbody>
 													<?php
+													include("includes/consulta-paginacion-reservar-cupo.php");
 													$respuestas = array("","SI","NO");
-													$consulta = mysqli_query($conexion, $SQL);
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas
+													INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
+													INNER JOIN academico_grados ON gra_id=mat_grado
+													INNER JOIN academico_grupos ON gru_id=mat_grupo
+													WHERE genc_id=genc_id $filtro
+													LIMIT $inicio,$registros");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 													?>
 													<tr>
@@ -113,6 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>
