@@ -10,6 +10,10 @@
                     
                     <div class="row">
                         <div class="col-md-12">
+							<?php
+								$filtro = '';
+								include("../directivo/includes/barra-superior-reportes-lista.php");
+							?>
                             <div class="row">
 								
 								<div class="col-md-12">
@@ -73,24 +77,24 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $filtro = '';
-													 if($_GET["est"]){$filtro .= " AND dr_estudiante='".$_GET["est"]."'";}
-													 if($_GET["falta"]){$filtro .= " AND dr_falta='".$_GET["falta"]."'";}
+													if($_GET["est"]){$filtro .= " AND dr_estudiante='".$_GET["est"]."'";}
+													if($_GET["falta"]){$filtro .= " AND dr_falta='".$_GET["falta"]."'";}
+												
+													if($datosUsuarioActual[3]!=5 and !isset($_GET["fest"])){
+													$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";
+													}
+
+													include("../directivo/includes/consulta-paginacion-reportes-lista.php");
 													
-													 if($datosUsuarioActual[3]!=5 and !isset($_GET["fest"])){
-													 	$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";
-													 }
-													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-													 INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-													 INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
-													 LEFT JOIN academico_grados ON gra_id=mat_grado
-													 LEFT JOIN academico_grupos ON gru_id=mat_grupo
-													 LEFT JOIN usuarios ON uss_id=dr_usuario
-													 WHERE dr_id=dr_id
-													 $filtro
-													 ");
+													$consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+													INNER JOIN disciplina_faltas ON dfal_id=dr_falta
+													INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+													INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
+													LEFT JOIN academico_grados ON gra_id=mat_grado
+													LEFT JOIN academico_grupos ON gru_id=mat_grupo
+													LEFT JOIN usuarios ON uss_id=dr_usuario
+													WHERE dr_id=dr_id $filtro
+													LIMIT $inicio,$registros");
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 	
@@ -157,6 +161,7 @@
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("../directivo/enlaces-paginacion.php");?>
                                 </div>
 								
 							
