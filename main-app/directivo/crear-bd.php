@@ -42,16 +42,8 @@ if($nueva==1){//PARA NUEVAS
 }
 
 try {
-    //CONSULTA EXISTENCIA DE LA INSTITUCIÓN
-    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND ins_years LIKE '%".$year."%'");
-    $numInstituciones=mysqli_num_rows($consultaInstituciones);
 
     if(empty($_POST["continue"]) || $_POST["continue"]!=1 || empty($_SERVER['HTTP_REFERER'])){
-
-        $texto="";
-        if($numInstituciones>0){
-            $texto="<br> Si continúa con el proceso se sobrescribirá toda la información ya existente.";
-        }
 
         include("dev-crear-bd-informacion.php");
         exit();
