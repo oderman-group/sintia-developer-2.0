@@ -32,9 +32,6 @@ try {
 		mysqli_query($conexion, "DELETE FROM $bd.academico_cargas");
 		mysqli_query($conexion, "INSERT INTO $bd.academico_cargas(car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable)SELECT car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable FROM $bdAnterior.academico_cargas");
 		mysqli_query($conexion, "UPDATE $bd.academico_cargas SET car_periodo=1");
-		
-		//ELIMINAMOS UNA CONFIGURACIÓN SI YA EXISTE UNA PARA EL MISMO AÑO
-		mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".configuracion WHERE conf_agno='".$year."' AND conf_id_institucion='".$idInsti."'");
 
 		//BUSCAMOS DATOS DE CONFIGURACIÓN DEL AÑO ANTERIOR
 		$confAnterior=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_agno='".$yearAnterior."' AND conf_id_institucion='".$idInsti."'");
@@ -51,9 +48,6 @@ try {
 
         //AÑADIMOS EL NUEVO AÑO AL CAMPO ins_years
 		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".instituciones SET ins_years='".$yearStart.",".$year."' WHERE ins_id='".$idInsti."'");
-		
-		//ELIMINAMOS UNA INFORMACIÓN SI YA EXISTE UNA PARA EL MISMO AÑO
-		mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_informacion WHERE info_year='".$year."' AND info_institucion='".$idInsti."'");
 
 		//BUSCAMOS DATOS DE LA INFORMACIÓN DEL AÑO ANTERIOR
 		$infoAnterior=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='".$idInsti."' AND info_year='".$yearAnterior."'");
@@ -63,9 +57,6 @@ try {
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_informacion (info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info,info_institucion,info_year) VALUES ('".$datosInfoAnterior['info_rector']."','".$datosInfoAnterior['info_secretaria_academica']."','".$datosInfoAnterior['info_logo']."','".$datosInfoAnterior['info_nit']."','".$datosInfoAnterior['info_nombre']."','".$datosInfoAnterior['info_direccion']."','".$datosInfoAnterior['info_telefono']."','".$datosInfoAnterior['info_clase']."','".$datosInfoAnterior['info_caracter']."','".$datosInfoAnterior['info_calendario']."','".$datosInfoAnterior['info_jornada']."','".$datosInfoAnterior['info_horario']."','".$datosInfoAnterior['info_niveles']."','".$datosInfoAnterior['info_modalidad']."','".$datosInfoAnterior['info_propietario']."','".$datosInfoAnterior['info_coordinador_academico']."','".$datosInfoAnterior['info_tesorero']."','".$datosInfoAnterior['info']."','".$idInsti."','".$year."')");
 
 	}else{//SI ES 1 LA INSTITUCION ES NUEVA Y SE EJECUTA EL SIGUIENTE SCRIPT
-		
-		//ELIMINAMOS UNA INSTITUCIÓN SI EXISTE
-		mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND ins_years LIKE '%".$year."%'");
 
 		//CREAMOS LA INSTITUCIÓN
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".instituciones (ins_nombre,ins_fecha_inicio,ins_telefono_principal,ins_contacto_principal,ins_cargo_contacto,ins_celular_contacto,ins_email_contacto,ins_email_institucion,ins_ciudad,ins_url_carpeta,ins_nit,ins_medio_info,ins_estado,ins_url_acceso,ins_bd,ins_deuda,ins_valor_deuda,ins_concepto_deuda,ins_bloqueada,ins_years,ins_notificaciones_acudientes,ins_siglas,ins_fecha_renovacion,ins_id_plan) VALUES ('".$nombreInsti."','".$fechaCompleta."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'".$bdInstitucion."',NULL,NULL,NULL,0,'".$year.",".$year."',0,'".$siglasInst."','".$fechaCompleta."',1)");
@@ -73,9 +64,6 @@ try {
 
 		//ASIGNAMOS MODULOS A LA INSTITUCIÓN
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ($idInsti,1),($idInsti,2),($idInsti,3),($idInsti,4),($idInsti,5),($idInsti,6),($idInsti,7)");
-		
-		//ELIMINAMOS UNA CONFIGURACIÓN SI EXISTE
-		mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".configuracion WHERE conf_agno='".$year."' AND conf_base_datos='".$bdInstitucion."'");
 
 		//CREAMOS CONFIGURACIÓN DE LA INSTITUCIÓN
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado) VALUES ('".$year."',1,1,5,3,'#e10000','#0000d5',NULL,NULL,NULL,'#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,NULL,NULL,NULL,'".$idInsti."','".$bdInstitucion."',NULL,20,'NO',NULL,NULL,'200','150',1,NULL,'NO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'5',0,0,0,'NO',1,1,1,1,0)");
