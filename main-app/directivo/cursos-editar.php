@@ -3,10 +3,10 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-require("../class/AcademicoGradoServicios.php");
+require("../class/servicios/GradoServicios.php");
 
-$resultadoCurso=AcademicoGradoServicios::ConsultarCurso($_GET["id"]);
-$resultadoCargaCurso=AcademicoGradoServicios::CantidadCursos($_GET["id"]);
+$resultadoCurso=GradoServicios::ConsultarCurso($_GET["id"]);
+$resultadoCargaCurso=GradoServicios::CantidadCursos($_GET["id"]);
 ?>
 
 	<!--bootstrap -->

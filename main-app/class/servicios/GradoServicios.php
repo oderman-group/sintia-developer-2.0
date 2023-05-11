@@ -2,7 +2,7 @@
 require("Servicios.php");
 $Servicio = new Servicios;
 
-class AcademicoGradoServicios
+class GradoServicios
 {
     public static function CantidadCursos($idCurso = 1)
     {

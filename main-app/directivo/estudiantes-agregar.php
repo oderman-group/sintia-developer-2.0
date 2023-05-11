@@ -452,7 +452,18 @@
 												<div class="col-sm-2">
 													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>">
 												</div>
-											</div>	
+											</div>
+										<?php if (array_key_exists(10, $_SESSION["modulos"])) { ?>
+												<div class="form-group row">
+													<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
+													<div class="col-sm-2">
+														<select class="form-control  select2" name="tipoMatricula">
+															<option value="grupal" selectd >NO</option>
+															<option value="individual" >SI</option>
+														</select>
+													</div>
+												</div>
+										<?php } ?>	
 											
 									    </fieldset>
 										   
