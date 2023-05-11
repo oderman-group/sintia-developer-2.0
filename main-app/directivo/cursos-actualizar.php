@@ -1,7 +1,7 @@
 <?php
 	include("session.php");
 	include("../modelo/conexion.php");
-	require("../class/AcademicoGradoServicios.php");
+	require("../class/servicios/GradoServicios.php");
 	
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
