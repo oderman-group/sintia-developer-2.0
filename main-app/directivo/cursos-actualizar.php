@@ -1,7 +1,7 @@
 <?php
 	include("session.php");
 	include("../modelo/conexion.php");
-	require("../class/servicios/GradoServicios.php");
+	require_once("../class/servicios/GradoServicios.php");
 	
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
@@ -23,9 +23,9 @@
 	gra_periodos='" . $_POST["periodosC"] . "', 
 	gra_nivel='" . $_POST["nivel"] . "', 
 	gra_estado='" . $_POST["estado"] . "',
-	gra_tipo='" . $Post["tipoG"] . "' 
+	gra_tipo='" . $_POST["tipoG"] . "'
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
-	// AcademicoGradoServicios::Editar($_POST);
+	// GradoServicios::editar($_POST);
 
 	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
 	exit();

@@ -37,6 +37,6 @@
 		 '".$_POST["tipoG"]."')"
 	);
 	$idRegistro=mysqli_insert_id($conexion);
-	// $idRegistro=GradoServicios::Guardar($_POST,$codigoCurso,$config);
+	// $idRegistro=GradoServicios::guardar($_POST,$codigoCurso,$config);
 	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
 	exit();	

@@ -4,7 +4,7 @@
 		<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 		<div class="col-sm-4">
 			<?php
-			$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+			$cv = mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_tipo ='grupal'");
 			?>
 			<select class="form-control" name="grado">
 				<option value="">Seleccione una opción</option>
@@ -94,12 +94,17 @@
 		<div class="form-group row">
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
-				<select class="form-control  select2" name="tipoMatricula">
-					<option value="grupal" <?php if($datosEstudianteActual['mat_tipo_matricula']=='grupal'){ echo 'selected'; } ?> >NO</option>
-					<option value="individual" <?php if($datosEstudianteActual['mat_tipo_matricula']=='individual'){ echo 'selected'; } ?> >SI</option>
+				<select class="form-control  select2" id="tipoMatricula" name="tipoMatricula" onchange="javascript:mostrarCursosAdicionales()">
+					<option value="grupal" 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'grupal') {echo 'selected';} ?>
+					>NO</option>
+					<option value="individual" 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'individual') {echo 'selected';} ?>
+					>SI</option>
 				</select>
 			</div>
 		</div>
 	<?php } ?>
-	
+
 </fieldset>
+

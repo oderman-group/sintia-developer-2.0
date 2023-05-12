@@ -96,7 +96,7 @@ try{
 } catch (Exception $e) {
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 	exit();
-}	
+}
 
 try {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' 
