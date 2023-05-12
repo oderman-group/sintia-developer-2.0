@@ -1,9 +1,12 @@
 <?php
 include("session.php");
 
-$idPaginaInterna = 'DV0008';
+$idPaginaInterna = 'DV0009';
 
 include("../compartido/historial-acciones-guardar.php");
+
+Modulos::verificarPermisoDev();
+
 include("../compartido/head.php");
 
 $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id=".$_GET["id"].";");
