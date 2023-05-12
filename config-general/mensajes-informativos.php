@@ -161,6 +161,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case 'SC_DT_10':
+                $tipo = 'success';
+                $mensaje = '
+                El proceso de creación de BD nueva se concluyó exitosamente
+                ';
+            break;
+
 
             default:
                 $tipo = 'secondary';
