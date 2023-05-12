@@ -69,6 +69,16 @@ $Plataforma = new Plataforma;
                                         </div>
                                     </div>
                                     <div class="card-body">
+											
+                                        <div class="row" style="margin-bottom: 10px;">
+                                            <div class="col-sm-12">
+                                                <div class="btn-group">
+                                                    <a href="dev-modulos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                        Agregar nuevo <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
@@ -114,7 +124,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="#<?= $resultado['mod_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-modulos-editar.php?id=<?= $resultado['mod_id']; ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
