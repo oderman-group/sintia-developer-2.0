@@ -52,7 +52,7 @@
 							<?php }?>
 							
 							<?php
-								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3){
+								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3 || $datosUsuarioActual[3]==4){
 							?>
 							<li class="nav-item">
 	                            <a href="como-empezar.php" class="nav-link nav-toggle">
