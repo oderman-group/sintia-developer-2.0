@@ -477,6 +477,43 @@
 															</select>
 														</div>
 													</div>
+													<script>
+														mostrarCursosAdicionales();
+														function mostrarCursosAdicionales() {
+															// 	elemento = document.getElementById("divCursosAdicionales");
+															valor = document.getElementById("tipoMatricula");
+															if (valor.value == 'individual') {
+																$(document).ready(function() {
+																	$('.divCursosAdicionales').show();
+																});
+															} else {
+																$(document).ready(function() {
+																	$('.divCursosAdicionales').hide();
+																});
+															}
+														}
+													</script>
+													<div class="form-group row divCursosAdicionales" >
+														<label class="col-sm-2 control-label" >Cursos adicionales <span style="color: red;">(*)</span></label>
+														<div class="col-sm-4" >
+															<?php
+															$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
+															$listaIndividuales = GradoServicios::listarCursos($parametros);
+															?>
+															<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>
+																<option value="">Seleccione una opción</option>
+																<?php
+																foreach ($listaIndividuales as $clave => $dato) {
+																	$disabled = '';
+																	if ($dato['gra_estado'] == '0') {
+																		$disabled = 'disabled';
+																	};
+																	echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+																}
+																?>
+															</select>
+														</div>
+													</div>
 												<?php } ?>
 
 											</fieldset>
