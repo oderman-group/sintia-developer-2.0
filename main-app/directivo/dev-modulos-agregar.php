@@ -1,7 +1,14 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DV0008';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+
+$idPaginaInterna = 'DV0008';
+
+include("../compartido/historial-acciones-guardar.php");
+
+Modulos::verificarPermisoDev();
+
+include("../compartido/head.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
