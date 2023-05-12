@@ -59,7 +59,7 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple">Video de Guia</header>
 										<div class="panel-body">
-                                            <!-- WIP (Falta el video) -->
+                                            <div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/a1559aa348c6446cb002e212779252df" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 										</div>
                                 	</div>
 								</div>
