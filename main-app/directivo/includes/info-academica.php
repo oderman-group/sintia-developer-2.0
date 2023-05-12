@@ -5,7 +5,7 @@
 		<div class="col-sm-4">
 			<?php
 			try {
-				$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+				$cv = mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_tipo ='grupal'");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -98,12 +98,17 @@
 		<div class="form-group row">
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
-				<select class="form-control  select2" name="tipoMatricula">
-					<option value="grupal" <?php if($datosEstudianteActual['mat_tipo_matricula']=='grupal'){ echo 'selected'; } ?> >NO</option>
-					<option value="individual" <?php if($datosEstudianteActual['mat_tipo_matricula']=='individual'){ echo 'selected'; } ?> >SI</option>
+				<select class="form-control  select2" id="tipoMatricula" name="tipoMatricula" onchange="javascript:mostrarCursosAdicionales()">
+					<option value="grupal" 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'grupal') {echo 'selected';} ?>
+					>NO</option>
+					<option value="individual" 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'individual') {echo 'selected';} ?>
+					>SI</option>
 				</select>
 			</div>
 		</div>
 	<?php } ?>
-	
+
 </fieldset>
+
