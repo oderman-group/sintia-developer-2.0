@@ -95,6 +95,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
             break;
 
+            case 'ER_DT_12':
+                $tipo = 'danger';
+                $mensaje = 'La clave actual no es correcta. Por favor verifique.';
+            break;
+
+            case 'ER_DT_13':
+                $tipo = 'danger';
+                $mensaje = 'La clave nueva no coincide. Por favor verifique.';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -165,6 +175,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $tipo = 'success';
                 $mensaje = '
                 El proceso de creación de BD nueva se concluyó exitosamente
+                ';
+            break;
+
+            case 'SC_DT_11':
+                $tipo = 'success';
+                $mensaje = '
+                La contraseña se cambió correctamente.
                 ';
             break;
 
