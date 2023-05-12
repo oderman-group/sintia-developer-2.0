@@ -1,20 +1,27 @@
 <?php
-require("Servicios.php");
+require_once("Servicios.php");
 $Servicio = new Servicios;
 
 class GradoServicios
 {
-    public static function CantidadCursos($idCurso = 1)
+    public static function listarCursos($parametrosArray=null)
     {
-        return Servicios::SelectSql("SELECT COUNT(*) AS cargas_curso FROM academico_cargas WHERE car_curso=" . $idCurso);
+      $sqlInicial="SELECT * FROM academico_grados";
+      if($parametrosArray && count($parametrosArray)>1){
+        $parametrosValidos=array('gra_tipo','gra_estado');
+        $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
+      };
+      $sqlFinal =" ORDER BY gra_vocal";
+      $sql=$sqlInicial.$sqlFinal;
+      return Servicios::SelectSql($sql);         
     }
 
-    public static function ConsultarCurso($idCurso = 1)
+    public static function consultarCurso($idCurso = 1)
     {
-        return Servicios::SelectSql("SELECT * FROM academico_grados WHERE gra_id=" . $idCurso);
+        return Servicios::getSql("SELECT * FROM academico_grados WHERE gra_id=" . $idCurso);
     }
 
-    public static function Editar($Post)
+    public static function editar($Post)
     {
        Servicios::UpdateSql(
             "UPDATE academico_grados SET 
@@ -34,7 +41,7 @@ class GradoServicios
         );
     }
 
-    public static function Guardar($Post, $codigoCurso, $config)
+    public static function guardar($Post, $codigoCurso, $config)
     {
         $idRegistro = Servicios::InsertSql(
             "INSERT INTO academico_grados 
