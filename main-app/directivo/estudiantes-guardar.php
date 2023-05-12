@@ -40,7 +40,6 @@ if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
 if($_POST["tipoMatricula"]=="")$_POST["tipoMatricula"]    = 'grupal';
 
-
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-create-student.php");
@@ -215,6 +214,7 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+
 $idEstudiante = mysqli_insert_id($conexion);
 
 try{

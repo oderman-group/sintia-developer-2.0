@@ -1,11 +1,12 @@
 <?php
 class Servicios
 {
-    public static function SelectSql($sql)
+    public static function getSql($sql)// funcion para obtener un dato especifico de una consulta
     {
         global $conexion;
         try {
-            $resulsConsulta = mysqli_query($conexion, $sql);
+            $resulsConsulta = mysqli_query($conexion, $sql."limit 1");
+            
         } catch (Exception $e) {
             echo "Excepción catpurada: " . $e->getMessage();
             exit();
@@ -13,8 +14,27 @@ class Servicios
         return mysqli_fetch_array($resulsConsulta, MYSQLI_BOTH);
     }
 
-    public static function InsertSql($sql)
+    public static function selectSql($sql) // funcion para obtener datos en un array de una consulta
     {
+        global $conexion;
+        try {
+            $resulsConsulta = mysqli_query($conexion, $sql);
+            if($resulsConsulta->num_rows>0){
+                $index=0;
+                while($fila=$resulsConsulta->fetch_assoc()){
+                      $arraysDatos[$index]=$fila;
+                      $index++;
+                }                
+             }
+            
+        } catch (Exception $e) {
+            echo "Excepción catpurada: " . $e->getMessage();
+            exit();
+        }
+        return $arraysDatos;
+    }
+
+    public static function insertSql($sql) { // funcion para insertar en una tabla 
         global $conexion;
         try {
             mysqli_query($conexion, $sql);
@@ -25,7 +45,7 @@ class Servicios
         }        
     }
 
-    public static function UpdateSql($sql)
+    public static function updateSql($sql) // funcion para actualizar Insert en una tabla 
     {
         global $conexion;
         try {
@@ -35,4 +55,28 @@ class Servicios
             exit();
         }
     }
+
+    public static function concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray)// funcion para concatenar los parametros WHERE o AND en una Consulta
+    {
+        $contador=0;//contará cuantos parametros validos existen
+        foreach($parametrosValidos as $clave => $parametro){
+            $valor=$parametrosArray[$parametro];
+            if(!is_null($valor)){
+               $contador++;
+               if(is_numeric($valor)) 
+                    $condicion=$parametro." = ".$valor;
+                else
+                    $condicion=$parametro." = '".$valor."'";
+
+                if ($contador == 1) {
+                    $sqlInicial = $sqlInicial . " WHERE ";
+                } else {
+                    $sqlInicial = $sqlInicial . " AND ";
+                }
+                $sqlInicial = $sqlInicial . $condicion;
+            }
+            
+        }
+        return $sqlInicial;
+        }
 }

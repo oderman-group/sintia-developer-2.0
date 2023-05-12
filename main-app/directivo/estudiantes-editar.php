@@ -4,6 +4,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <?php
 $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);

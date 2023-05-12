@@ -26,7 +26,7 @@ try{
 	gra_periodos='" . $_POST["periodosC"] . "', 
 	gra_nivel='" . $_POST["nivel"] . "', 
 	gra_estado='" . $_POST["estado"] . "',
-	gra_tipo='" . $Post["tipoG"] . "' 
+	gra_tipo='" . $_POST["tipoG"] . "'
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");

@@ -3,10 +3,11 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-require("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/CargaServicios.php");
 
-$resultadoCurso=GradoServicios::ConsultarCurso($_GET["id"]);
-$resultadoCargaCurso=GradoServicios::CantidadCursos($_GET["id"]);
+$resultadoCurso=GradoServicios::consultarCurso($_GET["id"]);
+$resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
 ?>
 
 	<!--bootstrap -->
@@ -217,7 +218,7 @@ $resultadoCargaCurso=GradoServicios::CantidadCursos($_GET["id"]);
                                         <div class="form-group row ">
                                             <label class="col-sm-2 control-label">Tipo de grado</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2"  disabled>
+                                                <select class="form-control  select2"  name="tipoG" disabled>
                                                     <option  <?php if($resultadoCurso['gra_tipo']!=''){ echo 'selected'; } ?>>
                                                     <?php if($resultadoCurso['gra_tipo']=='grupal'){ echo 'Grupal'; }else{ echo 'Individual';}?>
                                                     </option>
