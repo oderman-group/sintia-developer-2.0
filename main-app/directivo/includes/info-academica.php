@@ -94,7 +94,21 @@
 			</select>
 		</div>
 	</div>
-	<?php if (array_key_exists(10, $_SESSION["modulos"])) { ?>
+	<?php if (array_key_exists(10, $_SESSION["modulos"])) { 
+			require_once("../class/servicios/MediaTecnicaServicios.php");
+			$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
+			$listaIndividuales = GradoServicios::listarCursos($parametros);
+			$parametros = ['matcur_id_matricula' => $_GET["id"]];
+			$listaMediaTenicaActual=MediaTecnicaServicios::listar($parametros);
+			
+			if(count($listaMediaTenicaActual)>0){
+				foreach($listaMediaTenicaActual as $llave=> $valor){
+					$listaMediaActual[$valor["matcur_id_curso"]]='id_curso';
+					
+				}
+				
+			}
+			?>
 		<div class="form-group row">
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
@@ -127,18 +141,21 @@
 			<label class="col-sm-2 control-label">Cursos adicionales <span style="color: red;">(*)</span></label>
 			<div class="col-sm-4">
 				<?php
-				$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
-				$listaIndividuales = GradoServicios::listarCursos($parametros);
+				
 				?>
 				<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>
 					<option value="">Seleccione una opción</option>
 					<?php
-					foreach ($listaIndividuales as $clave => $dato) {
+					foreach ($listaIndividuales as $dato) {
 						$disabled = '';
+						$selected = '';
+						if (array_key_exists($dato["gra_id"], $listaMediaActual)){
+							$selected = 'selected';
+						}
 						if ($dato['gra_estado'] == '0') {
 							$disabled = 'disabled';
 						};
-						echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+						echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . ' ' . $selected . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
 					}
 					?>
 				</select>

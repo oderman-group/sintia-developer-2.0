@@ -7,6 +7,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0174';
 include("../compartido/historial-acciones-guardar.php");
 
+require_once("../class/servicios/MediaTecnicaServicios.php");
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
 	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
@@ -108,6 +109,12 @@ try{
 
 	WHERE mat_id=".$_POST["id"].";");
 
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
+//Insertamos las matrículas Adicionales
+try{
+	MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }	
