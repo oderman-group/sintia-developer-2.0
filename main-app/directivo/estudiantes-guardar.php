@@ -208,31 +208,14 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+$idEstudiante = mysqli_insert_id($conexion);
+
 //Insertamos las matrículas Adicionales
 try{
-	foreach ($_POST["cursosAdicionales"] as $clave => $cursoId) {
-		$ver=$cursoId;
-	// mysqli_query($conexion, "INSERT INTO mediatecnica_matricula_cursos(
-	// 	matcur_id_curso, 
-	// 	matcur_id_matricula,
-	// 	matcur_id_institusion,
-	// 	matcur_years
-	// 	)
-	// 	VALUES(
-	// 	".$result_numMat.",
-	// 	".$result_numMat.",
-	// 	".$config['conf_id_institucion'].",
-	// 	".$result_numMat."
-	// 	)
-	// ");
-		
-	}
-
+	MediaTecnicaServicios::guardar($_POST["id"],$_POST["cursosAdicionales"],$config);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-$idEstudiante = mysqli_insert_id($conexion);
-
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {

@@ -7,7 +7,7 @@ class GradoServicios
     public static function listarCursos($parametrosArray=null)
     {
       $sqlInicial="SELECT * FROM academico_grados";
-      if($parametrosArray && count($parametrosArray)>1){
+      if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('gra_tipo','gra_estado');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
