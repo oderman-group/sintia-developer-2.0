@@ -49,7 +49,7 @@ if ($newId > 0) {
     //Guardar información en SINTIA COLEGIOS
 
     //Estudiante
-    $estuQuery = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_permiso1, uss_foto, uss_portada, uss_idioma, uss_tema, uss_tipo_documento, uss_apellido1)VALUES(:ussDocumento, '1234', 4, :ussNombres, 0, 0, 'default.png', 'default.png', 1, 'green', :ussTipoDocumento, :ussApellido1)";
+    $estuQuery = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_permiso1, uss_foto, uss_portada, uss_idioma, uss_tema, uss_tipo_documento, uss_apellido1)VALUES(:ussDocumento, SHA1('12345678'), 4, :ussNombres, 0, 0, 'default.png', 'default.png', 1, 'green', :ussTipoDocumento, :ussApellido1)";
     $estu = $pdoI->prepare($estuQuery);
     $estu->bindParam(':ussDocumento', $_POST['documento'], PDO::PARAM_STR);
     $estu->bindParam(':ussNombres', $_POST['nombreEstudiante'], PDO::PARAM_STR);

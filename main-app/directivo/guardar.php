@@ -920,7 +920,7 @@ if ($_GET["get"] == 30) {
 }
 //ACTUALIZAR CLAVE
 if ($_GET["get"] == 31) {
-	mysqli_query($conexion, "UPDATE usuarios SET uss_clave='sintia1234'");
+	mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1('sintia1234')");
 	$lineaError = __LINE__;
 
 	include("../compartido/reporte-errores.php");
