@@ -19,7 +19,6 @@ try {
 	WHERE mat_eliminado=0 $filtro
 	ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres");
 
-	$folio = 1;
 	while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 		mysqli_query($conexion,"UPDATE ".$BD.".academico_matriculas SET mat_folio='".$folio."' 
 		WHERE mat_id='".$datos['mat_id']."'");
