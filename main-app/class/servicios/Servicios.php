@@ -5,7 +5,7 @@ class Servicios
     {
         global $conexion;
         try {
-            $resulsConsulta = mysqli_query($conexion, $sql."limit 1");
+            $resulsConsulta = mysqli_query($conexion, $sql." limit 1");
             
         } catch (Exception $e) {
             echo "Excepción catpurada: " . $e->getMessage();
