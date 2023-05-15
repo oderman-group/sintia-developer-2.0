@@ -87,9 +87,9 @@ include("../compartido/head.php");
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+                                    <input type="submit" class="btn btn-primary" value="Generar Folios">&nbsp;
 
-                                    <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>
