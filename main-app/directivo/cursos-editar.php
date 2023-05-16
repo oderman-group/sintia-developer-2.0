@@ -189,7 +189,7 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                             </div>
                                         </div>
                                         <?php }?>
-                                        <?php if(array_key_exists(10,$_SESSION["modulos"]) && $resultadoCargaCurso["cargas_curso"]<=0){?>
+                                        <?php if(array_key_exists(10,$arregloModulos) && $resultadoCargaCurso["cargas_curso"]<=0){?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de grado</label>
                                             <div class="col-sm-2">
@@ -201,7 +201,7 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                             </div>
                                         </div>
                                         <?php }?>                                       
-                                        <?php if(array_key_exists(10,$_SESSION["modulos"]) && $resultadoCargaCurso["cargas_curso"]>=1){?>
+                                        <?php if(array_key_exists(10,$arregloModulos) && $resultadoCargaCurso["cargas_curso"]>=1){?>
                                         <div class="form-group row ">
                                             <label class="col-sm-2 control-label">Tipo de grado</label>
                                             <div class="col-sm-2">

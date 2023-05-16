@@ -1,7 +1,5 @@
 <?php
 require_once("Servicios.php");
-$Servicio = new Servicios;
-
 class CargaServicios
 {
     public static function cantidadCursos($idCurso = 1)
