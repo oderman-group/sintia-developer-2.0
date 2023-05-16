@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                       
-                                        <?php if(array_key_exists(10,$_SESSION["modulos"])){?>
+                                        <?php if(array_key_exists(10,$arregloModulos)){?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de grado</label>
                                             <div class="col-sm-2">

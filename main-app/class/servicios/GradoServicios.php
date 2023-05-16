@@ -1,8 +1,6 @@
 <?php
 require_once("Servicios.php");
-$Servicio = new Servicios;
-
-class GradoServicios
+class GradoServicios 
 {
     public static function listarCursos($parametrosArray=null)
     {
