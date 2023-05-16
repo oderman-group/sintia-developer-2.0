@@ -99,7 +99,10 @@ try{
 }
 //Insertamos las matrículas Adicionales
 try{
+	if($_POST["tipoMatricula"] =="individual")
 	MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
+	else
+	MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
