@@ -209,6 +209,7 @@
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
 										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Log de errores</span></a></li>
+										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Instituciones</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Módulos</span></a></li>
