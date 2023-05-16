@@ -2,54 +2,54 @@
 <?php
 $_SESSION["bd"] = date("Y");
 ?>
-<?php include("verificar-usuario.php"); ?>
-<?php include("verificar-sanciones.php"); ?>
-<?php $idPaginaInterna = 'ES0010'; ?>
-<?php include("../compartido/historial-acciones-guardar.php"); ?>
+<?php include("verificar-usuario.php");?>
+<?php include("verificar-sanciones.php");?>
+<?php $idPaginaInterna = 'ES0010';?>
+<?php include("../compartido/historial-acciones-guardar.php");?>
 <?php require_once("../class/servicios/CargaServicios.php"); ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <?php require_once("../class/servicios/GradoServicios.php"); ?>
 <?php
-if (isset($_GET["carga"]) and $_GET["carga"] != "" and is_numeric($_GET["carga"])) {
-	setcookie("cargaE", $_GET["carga"]);
-	setcookie("periodoE", $_GET["periodo"]);
+if(isset($_GET["carga"]) and $_GET["carga"]!="" and is_numeric($_GET["carga"])){
+	setcookie("cargaE",$_GET["carga"]);
+	setcookie("periodoE",$_GET["periodo"]);
 
 	$enlaceNext = 'calificaciones.php';
-	if ($config['conf_sin_nota_numerica'] == 1) {
+	if($config['conf_sin_nota_numerica']==1){
 		$enlaceNext = 'calificaciones.php';
 	}
-	if ($config['conf_mostrar_calificaciones_estudiantes'] != 1) {
+	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
 		$enlaceNext = 'ausencias.php';
 	}
-	echo '<script type="text/javascript">window.location.href="' . $enlaceNext . '?carga=' . $_GET["carga"] . '&periodo=' . $_GET["periodo"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'";</script>';
 	exit();
 }
 ?>
 
 <?php
-if ($config['conf_activar_encuesta'] == 1) {
-	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".general_encuestas 
-	WHERE genc_estudiante='" . $datosEstudianteActual['mat_id'] . "'"));
-	if ($respuesta == 0 and $datosEstudianteActual[6] != 11) {
+if($config['conf_activar_encuesta']==1){
+	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
+	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."'"));
+	if($respuesta==0 and $datosEstudianteActual[6]!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();
 	}
 }
 ?>
 
-<?php include("../compartido/head.php"); ?>
+<?php include("../compartido/head.php");?>
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php"); ?>
+<?php include("../compartido/body.php");?>
 <div class="page-wrapper">
 
-	<?php include("../compartido/encabezado.php"); ?>
+        <?php include("../compartido/encabezado.php");?>
 
-	<?php include("../compartido/panel-color.php"); ?>
+        <?php include("../compartido/panel-color.php");?>
 	<!-- start page container -->
 	<div class="page-container">
 
-		<?php include("../compartido/menu.php"); ?>
+			<?php include("../compartido/menu.php");?>
 
 		<!-- start page content -->
 		<div class="page-content-wrapper">
@@ -57,8 +57,8 @@ if ($config['conf_activar_encuesta'] == 1) {
 				<div class="page-bar">
 					<div class="page-title-breadcrumb">
 						<div class=" pull-left">
-							<div class="page-title"><?= $frases[73][$datosUsuarioActual['uss_idioma']]; ?></div>
-							<?php include("../compartido/texto-manual-ayuda.php"); ?>
+                                <div class="page-title"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></div>
+								<?php include("../compartido/texto-manual-ayuda.php");?>
 						</div>
 					</div>
 				</div>
@@ -68,9 +68,7 @@ if ($config['conf_activar_encuesta'] == 1) {
 						INNER JOIN academico_materias ON mat_id=car_materia
 						INNER JOIN academico_grados ON gra_id=car_curso
 						INNER JOIN usuarios ON uss_id=car_docente
-						WHERE car_curso='" . $datosEstudianteActual[6] . "' AND car_grupo='" . $datosEstudianteActual[7] . "'");
-				$parametros = ['car_curso' => $datosEstudianteActual[6], 'car_grupo' => $datosEstudianteActual[7]];
-				$listaCargas = CargaServicios::listar($parametros);
+						WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
 				$nCargas = mysqli_num_rows($cCargas);
 				$mensajeCargas = new Cargas;
 				$mensajeCargas->verificarNumCargas($nCargas, $datosUsuarioActual['uss_idioma']);
@@ -81,27 +79,25 @@ if ($config['conf_activar_encuesta'] == 1) {
 				<!-- start course list -->
 				<div class="row">
 					<?php
-					while ($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)) {
+									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 						//Verificar si el estudiante está matriculado en cursos de extensión o complementarios
-						if ($rCargas['car_curso_extension'] == 1) {
-							$cursoExt = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_cargas_estudiantes WHERE carpest_carga='" . $rCargas['car_id'] . "' AND carpest_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND carpest_estado=1"));
-							if ($cursoExt == 0) {
-								continue;
-							}
+										if($rCargas['car_curso_extension']==1){
+											$cursoExt = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_cargas_estudiantes WHERE carpest_carga='".$rCargas['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1"));
+											if($cursoExt==0){continue;}
 						}
 
 						$ultimoAcceso = 'Nunca';
 						$fondoCargaActual = '#FFF';
 						$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cargas_acceso 
-											WHERE carpa_id_carga='" . $rCargas[0] . "' AND carpa_id_estudiante='" . $datosEstudianteActual['mat_id'] . "'"), MYSQLI_BOTH);
-						if ($cargaHistorial['carpa_id'] != "") {
-							$ultimoAcceso = "(" . $cargaHistorial['carpa_cantidad'] . ") " . $cargaHistorial['carpa_ultimo_acceso'];
+										WHERE carpa_id_carga='".$rCargas[0]."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+										if($cargaHistorial['carpa_id']!=""){
+											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 						}
-						if ($rCargas[0] == $_COOKIE["cargaE"]) {
+										if($rCargas[0]==$_COOKIE["cargaE"]){
 							$fondoCargaActual = 'cornsilk';
 						}
 						//PLAN DE CLASE
-						$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='" . $rCargas[0] . "' AND pc_periodo='" . $_COOKIE["periodoE"] . "'");
+										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$_COOKIE["periodoE"]."'");
 						$Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
 						$Npc = mysqli_num_rows($Cpc);
 						//DEFINITIVAS
@@ -112,94 +108,92 @@ if ($config['conf_activar_encuesta'] == 1) {
 					?>
 						<div class="col-lg-3 col-md-6 col-12 col-sm-6">
 
-							<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
+							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="cargas.php?carga=<?= $rCargas[0]; ?>&periodo=<?= $rCargas[5]; ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+									<a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
 								</div>
 								<div class="course-box">
-									<h4><a href="cargas.php?carga=<?= $rCargas[0]; ?>&periodo=<?= $rCargas[5]; ?>" style="text-decoration: underline;"><?= strtoupper($rCargas['mat_nombre']); ?></a></h4>
+	                        	<h4><a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
 									<div class="text-muted">
-										<span class="m-r-10" style="font-size: 10px;"><?= $ultimoAcceso; ?></span>
+										<span class="m-r-10" style="font-size: 10px;"><?=$ultimoAcceso;?></span> 
 
-										<?php if ($datosUsuarioActual['uss_bloqueado'] != 1 and $config['conf_sin_nota_numerica'] != 1) { ?><a class="course-likes m-l-10" href="#"> <?= $definitiva; ?></a><?php } ?>
+		                            	<?php if($datosUsuarioActual['uss_bloqueado']!=1 and $config['conf_sin_nota_numerica']!=1){?><a class="course-likes m-l-10" href="#"> <?=$definitiva;?></a><?php }?>
 
 									</div>
-									<p><span><i class="fa fa-clock-o"></i> <?= $frases[101][$datosUsuarioActual['uss_idioma']]; ?>: <?= $rCargas['car_periodo']; ?></span></p>
-									<p><span><i class="fa  fa-user"></i> <?= $frases[28][$datosUsuarioActual['uss_idioma']]; ?>: <?= UsuariosPadre::nombreCompletoDelUsuario($rCargas); ?></span></p>
+		                            <p><span><i class="fa fa-clock-o"></i> <?=$frases[101][$datosUsuarioActual['uss_idioma']];?>: <?=$rCargas['car_periodo'];?></span></p>
+		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></span></p>
 
 									<!--
-										<a href="cargas.php?carga=<?= $rCargas[0]; ?>&periodo=<?= $rCargas[5]; ?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?= $frases[103][$datosUsuarioActual['uss_idioma']]; ?></a>
+		                            <a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
 										-->
 
 								</div>
 							</div>
 
 						</div>
-					<?php } ?>
-
-				</div>
-				<!-- End course list  and start list mediatecnica-->
-				<?php if (array_key_exists(10, $_SESSION["modulos"])) { ?>
-					<?php
-					$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
-					$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
-					foreach ($listaCursosMediaTecnica as $dato) {
-						$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>
-						<div class="row">
-							<div class="col-12">
-								<div class="page-title"><?= $cursoMediaTecnica["gra_nombre"]; ?></div>
-							</div>
-						</div>
-						<div class="row">
-						<?php
-						$parametros = [
-							'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
-							'matcur_id_curso'     => $dato["matcur_id_curso"]
-						];
-						$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
-						if ($listacargaMediaTecnica != null) { 
-							foreach ($listacargaMediaTecnica as $cargaMediaTecnica) {
-							?>
-							<div class="col-lg-3 col-md-6 col-6 col-sm-6">
-								<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
-									<div class="thumb-center">
-										<a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
-									</div>
-									<div class="course-box">
-										<h4><a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>" style="text-decoration: underline;"><?= strtoupper($cargaMediaTecnica['mat_nombre']); ?></a></h4>
-										<div class="text-muted">
-											<span class="m-r-10" style="font-size: 10px;"><?= $ultimoAcceso; ?></span>
-
-											<?php if ($datosUsuarioActual['uss_bloqueado'] != 1 and $config['conf_sin_nota_numerica'] != 1) { ?><a class="course-likes m-l-10" href="#"> <?= $definitiva; ?></a><?php } ?>
+						 <?php }?> 
 
 										</div>
-										<p><span><i class="fa fa-clock-o"></i> <?= $frases[101][$datosUsuarioActual['uss_idioma']]; ?>: <?= $cargaMediaTecnica['car_periodo']; ?></span></p>
-										<p><span><i class="fa  fa-user"></i> <?= $frases[28][$datosUsuarioActual['uss_idioma']]; ?>: <?= UsuariosPadre::nombreCompletoDelUsuario($cargaMediaTecnica); ?></span></p>
-
-
-									</div>
+			        <!-- End course list -->
+						<?php if (array_key_exists(10, $arregloModulos)) { ?>
+						<?php
+						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+						foreach ($listaCursosMediaTecnica as $dato) {
+							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>
+							<div class="row">
+								<div class="col-12">
+									<div class="page-title"><?= $cursoMediaTecnica["gra_nombre"]; ?></div>
 								</div>
 							</div>
-							<?php }} else {
-							echo '<div class="col-lg-3 col-md-6 col-12 col-sm-6"> El curso ' . $cursoMediaTecnica["gra_nombre"] . ' no tiene carga academica.</div>';
-						} ?>
-						</div>
+							<div class="row">
+							<?php
+							$parametros = [
+								'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+								'matcur_id_curso'     => $dato["matcur_id_curso"]
+							];
+							$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
+							if ($listacargaMediaTecnica != null) { 
+								foreach ($listacargaMediaTecnica as $cargaMediaTecnica) {
+								?>
+								<div class="col-lg-3 col-md-6 col-6 col-sm-6">
+									<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
+										<div class="thumb-center">
+											<a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+										</div>
+										<div class="course-box">
+											<h4><a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>" style="text-decoration: underline;"><?= strtoupper($cargaMediaTecnica['mat_nombre']); ?></a></h4>
+											<div class="text-muted">
+												<span class="m-r-10" style="font-size: 10px;"><?= $ultimoAcceso; ?></span>
+
+												<?php if ($datosUsuarioActual['uss_bloqueado'] != 1 and $config['conf_sin_nota_numerica'] != 1) { ?><a class="course-likes m-l-10" href="#"> <?= $definitiva; ?></a><?php } ?>
+
+											</div>
+											<p><span><i class="fa fa-clock-o"></i> <?= $frases[101][$datosUsuarioActual['uss_idioma']]; ?>: <?= $cargaMediaTecnica['car_periodo']; ?></span></p>
+											<p><span><i class="fa  fa-user"></i> <?= $frases[28][$datosUsuarioActual['uss_idioma']]; ?>: <?= UsuariosPadre::nombreCompletoDelUsuario($cargaMediaTecnica); ?></span></p>
+
+
+										</div>
+									</div>
+								</div>
+								<?php }} else {
+								echo '<div class="col-lg-3 col-md-6 col-12 col-sm-6"> El curso ' . $cursoMediaTecnica["gra_nombre"] . ' no tiene carga academica.</div>';
+							} ?>
+							</div>
+							<?php } ?>
 						<?php } ?>
-					<?php } ?>
-				</div>
 			</div>
 		</div>
 		<!-- end page content -->
-		<?php // include("../compartido/panel-configuracion.php");
-		?>
+            <?php // include("../compartido/panel-configuracion.php");?>
 	</div>
 	<!-- end page container -->
-	<?php include("../compartido/footer.php"); ?>
+        <?php include("../compartido/footer.php");?>
 </div>
 <!-- start js include path -->
-<script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
-<script src="../../config-general/assets/plugins/popper/popper.js"></script>
-<script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
+    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
+    <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+    <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js" ></script>
 <script src="../../config-general/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <!-- bootstrap -->
 <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js"></script>

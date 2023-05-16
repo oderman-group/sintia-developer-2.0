@@ -1,8 +1,6 @@
 <?php
 require_once("Servicios.php");
-$Servicio = new Servicios;
-
-class MediaTecnicaServicios
+class MediaTecnicaServicios extends Servicios
 {
     public static function listar($parametrosArray=null)
     {
@@ -49,11 +47,11 @@ class MediaTecnicaServicios
         MediaTecnicaServicios::guardar($idMatricula,$cursosId,$config);
     }
 
-    public static function guardar($idMatricula,$cursosId,$config)
+    public static function guardar($idMatricula,$arregloCursos,$config)
     {
         global $baseDatosServicios;
-        foreach ($cursosId as $clave => $curso) {
-            $idRegistro = Servicios::InsertSql(
+        foreach ($arregloCursos as $clave => $curso) {
+            Servicios::InsertSql(
                 " INSERT INTO ".$baseDatosServicios.".mediatecnica_matriculas_cursos(
                  matcur_id_curso, 
                  matcur_id_matricula,

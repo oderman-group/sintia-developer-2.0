@@ -12,12 +12,12 @@
 			?>
 			<select class="form-control" name="grado">
 				<option value="">Seleccione una opción</option>
-				<?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-					if ($rv[0] == $datosEstudianteActual[6])
-						echo '<option value="' . $rv[0] . '" selected>' . $rv[2] . '</option>';
+														<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+															if($rv[0]==$datosEstudianteActual[6])
+																echo '<option value="'.$rv[0].'" selected>'.$rv[2].'</option>';
 					else
-						echo '<option value="' . $rv[0] . '">' . $rv[2] . '</option>';
-				} ?>
+																echo '<option value="'.$rv[0].'">'.$rv[2].'</option>';	
+														}?>
 			</select>
 		</div>
 	</div>
@@ -29,12 +29,12 @@
 			$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
 			?>
 			<select class="form-control" name="grupo">
-				<?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-					if ($rv[0] == $datosEstudianteActual[7])
-						echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
+													<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+														if($rv[0]==$datosEstudianteActual[7])
+															echo '<option value="'.$rv[0].'" selected>'.$rv[1].'</option>';
 					else
-						echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
-				} ?>
+															echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';	
+													}?>
 			</select>
 		</div>
 	</div>
@@ -43,16 +43,16 @@
 		<label class="col-sm-2 control-label">Tipo estudiante</label>
 		<div class="col-sm-4">
 			<?php
-			$op = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".opciones_generales WHERE ogen_grupo=5");
+													$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5");
 			?>
 			<select class="form-control" name="tipoEst">
 				<option value="">Seleccione una opción</option>
-				<?php while ($o = mysqli_fetch_array($op, MYSQLI_BOTH)) {
-					if ($o[0] == $datosEstudianteActual[21])
-						echo '<option value="' . $o[0] . '" selected>' . $o[1] . '</option>';
+														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosEstudianteActual[21])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 					else
-						echo '<option value="' . $o[0] . '">' . $o[1] . '</option>';
-				} ?>
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
 			</select>
 		</div>
 	</div>
@@ -62,10 +62,10 @@
 		<div class="col-sm-4">
 			<select class="form-control" name="matestM">
 				<option value="">Seleccione una opción</option>
-				<option value="1" <?php if (1 == $datosEstudianteActual["mat_estado_matricula"]) echo 'selected' ?>>Matriculado</option>
-				<option value="2" <?php if (2 == $datosEstudianteActual["mat_estado_matricula"]) echo 'selected' ?>>Asistente </option>
-				<option value="3" <?php if (3 == $datosEstudianteActual["mat_estado_matricula"]) echo 'selected' ?>>Cancelado </option>
-				<option value="4" <?php if (4 == $datosEstudianteActual["mat_estado_matricula"]) echo 'selected' ?>>No matriculado </option>
+														<option value="1"  <?php if(1==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Matriculado</option>
+														<option value="2"  <?php if(2==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Asistente </option>
+														<option value="3"  <?php if(3==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Cancelado </option>
+														<option value="4"  <?php if(4==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>No matriculado </option>
 			</select>
 		</div>
 	</div>
@@ -82,26 +82,20 @@
 		<div class="col-sm-4">
 			<select class="form-control" name="estadoAgno">
 				<option value="0">Seleccione una opción</option>
-				<option value="1" <?php if ($datosEstudianteActual['mat_estado_agno'] == 1) {
-										echo "selected";
-									} ?>>Ganado</option>
-				<option value="2" <?php if ($datosEstudianteActual['mat_estado_agno'] == 2) {
-										echo "selected";
-									} ?>>Perdido</option>
-				<option value="2" <?php if ($datosEstudianteActual['mat_estado_agno'] == '0') {
-										echo "selected";
-									} ?>>En curso</option>
-			</select>
+														<option value="1"<?php if ($datosEstudianteActual['mat_estado_agno']==1){echo "selected";}?>>Ganado</option>
+														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']==2){echo "selected";}?>>Perdido</option>
+														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']=='0'){echo "selected";}?>>En curso</option>
+				</select>
+			</div>
 		</div>
-	</div>
-	<?php if (array_key_exists(10, $_SESSION["modulos"])) { 
+	<?php if (array_key_exists(10, $arregloModulos)) { 
 			require_once("../class/servicios/MediaTecnicaServicios.php");
 			$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
 			$listaIndividuales = GradoServicios::listarCursos($parametros);
 			$parametros = ['matcur_id_matricula' => $_GET["id"]];
 			$listaMediaTenicaActual=MediaTecnicaServicios::listar($parametros);
-			
-			if(count($listaMediaTenicaActual)>0){
+			$listaMediaActual=array();		
+			if(!is_null($listaMediaTenicaActual) && count($listaMediaTenicaActual)>0){
 				foreach($listaMediaTenicaActual as $llave=> $valor){
 					$listaMediaActual[$valor["matcur_id_curso"]]='id_curso';
 					
@@ -140,9 +134,6 @@
 		<div class="form-group row divCursosAdicionales" >
 			<label class="col-sm-2 control-label">Cursos adicionales <span style="color: red;">(*)</span></label>
 			<div class="col-sm-4">
-				<?php
-				
-				?>
 				<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>
 					<option value="">Seleccione una opción</option>
 					<?php
@@ -161,8 +152,5 @@
 				</select>
 			</div>
 		</div>
-
 	<?php } ?>
-
 </fieldset>
-
