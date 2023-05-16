@@ -18,3 +18,5 @@ while (count($lines) <= 20) {
     $lines = array_filter($lines);
     $lines = array_slice($lines, -20);
 }
+
+$lines=array_reverse($lines);
