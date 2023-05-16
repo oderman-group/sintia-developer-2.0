@@ -39,16 +39,18 @@ $Plataforma = new Plataforma;
                     <div class="col-md-12">
                         <div class="row">
                             <?php
-                                $filtro = '';
-                                if (is_numeric($_GET["insti"])) {
-                                    $filtro .= " AND hil_institucion='" . $_GET["insti"] . "'";
+                                $instID=$config['conf_id_institucion'];
+                                if (!empty($_GET["insti"])) {
+                                    $instID=$_GET["insti"];
                                 }
+                                $year=$agnoBD;
+                                if (!empty($_GET["year"])) {
+                                    $year=$_GET["year"];
+                                } 
+                                $filtro = '';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
                                     $filtro .= " AND (hil_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR hil_fecha LIKE '%" . $_GET["hasta"] . "%')";
-                                }
-                                if (!empty($_GET["year"])) {
-                                    $filtro .= " AND YEAR(hil_fecha) =".$_GET["year"];
-                                }                         
+                                }                        
                             ?>
 
                             <div class="col-md-12">
@@ -90,19 +92,30 @@ $Plataforma = new Plataforma;
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones
                                                     LEFT JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion
                                                     LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-                                                    LEFT JOIN usuarios ON uss_id=hil_usuario
-                                                    WHERE hil_id=hil_id $filtro
+                                                    WHERE  hil_institucion='".$instID."' AND YEAR(hil_fecha) =".$year." ".$filtro."
                                                     ORDER BY hil_id DESC
                                                     LIMIT $inicio,$registros;");
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $responsable=UsuariosPadre::nombreCompletoDelUsuario($resultado);
+                                                        $BD=$_SESSION["inst"]."_".$year;
+                                                        if (!empty($_GET["insti"])) {
+                                                            $BD=$resultado["ins_bd"]."_".$year;
+                                                        }
+
+                                                        $responsable="";
+                                                        if($resultado['hil_usuario']!=0){
+
+                                                            $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario']."'");
+                                                            $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
+                                                            $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable);
+
+                                                        }
                                                         
                                                         $ussAutologin="NO";
                                                         if($resultado['hil_usuario_autologin']!=0){
 
-                                                            $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
+                                                            $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
                                                             $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
                                                             $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
 
