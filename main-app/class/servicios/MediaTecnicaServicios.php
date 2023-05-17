@@ -23,7 +23,7 @@ class MediaTecnicaServicios extends Servicios
       INNER JOIN academico_cargas ON car_curso=matcur_id_curso
       INNER JOIN academico_materias ON academico_materias.mat_id=car_materia
       INNER JOIN academico_grados ON gra_id=car_curso
-	  INNER JOIN usuarios ON uss_id=car_docente
+	    INNER JOIN usuarios ON uss_id=car_docente
       ";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
@@ -60,10 +60,10 @@ class MediaTecnicaServicios extends Servicios
                  )
                  VALUES
                  (
-                 ".$curso.",
-                 ".$idMatricula.",
-                 ".(int)$config['conf_id_institucion'].",
-                 ".(int)$config['conf_agno']."
+                  '".$curso."',
+                  '".$idMatricula."',
+                  '".$config['conf_id_institucion']."',
+                  '".$config['conf_agno']."'
                  )"
              );
         }        
