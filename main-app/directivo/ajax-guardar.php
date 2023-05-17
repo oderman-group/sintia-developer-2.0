@@ -1,12 +1,18 @@
-<?php include("session.php");?>
-<?php //include("verificar-carga.php");?>
 <?php
+include("session.php");
+
 $mensajeNot = 'Hubo un error al guardar las cambios';
 //Bloquear y desbloquear
 if($_POST["operacion"]==1){
 	mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='".$_POST["valor"]."' WHERE uss_id='".$_POST["idR"]."'");
 	
 	$mensajeNot = 'El usuario ha cambiado de estado correctamente.';
+}
+
+if($_POST["operacion"]==3){
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".instituciones SET ins_bloqueada='".$_POST["valor"]."' WHERE ins_id='".$_POST["idR"]."'");
+	
+	$mensajeNot = 'La institución ha cambiado de estado correctamente.';
 }
 ?>
 
@@ -26,7 +32,7 @@ setTimeout ("notifica()", 100);
 </script>
 
 <?php 
-if($_POST["operacion"]<1){
+if($_POST["operacion"]==1 || $_POST["operacion"]==3){
 ?>
 <div class="alert alert-success">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
