@@ -4,6 +4,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+LEFT JOIN usuarios ON uss_id=mat_id_usuario 
 INNER JOIN academico_grados ON gra_id=mat_grado 
 INNER JOIN academico_grupos ON gru_id=mat_grupo
 WHERE mat_eliminado=0
@@ -42,9 +43,8 @@ ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres");
       <?php
         $i = 1;
         while ($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
-          
-          $numUsuario=Usuarios::validarExistenciaUsuario($datos['mat_id_usuario']);
-          if($numUsuario<1 || $datos['mat_id_usuario']==NULL || $datos['mat_id_usuario']==""){
+
+          if($datos['uss_id']==NULL || $datos['uss_id']==""){
             $nombreCompleto=Estudiantes::NombreCompletoDelEstudiante($datos);
       ?>
         <tr>
