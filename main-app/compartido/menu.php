@@ -52,7 +52,7 @@
 							<?php }?>
 							
 							<?php
-								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3){
+								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3 || $datosUsuarioActual[3]==4){
 							?>
 							<li class="nav-item">
 	                            <a href="como-empezar.php" class="nav-link nav-toggle">
@@ -206,12 +206,13 @@
 										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu">
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
+										<li class="nav-item"><a href="dev-ejecutar-scripts.php" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
 										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
 										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title">Log de errores</span></a></li>
+										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Instituciones</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Módulos</span></a></li>
+										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title">Módulos</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Páginas</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>

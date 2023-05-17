@@ -18,7 +18,10 @@ if($validacionEstudiante > 0){
 if($config['conf_id_institucion']==1){
 	require_once("apis-sion-modify-student.php");
 }
-
+$fechaNacimiento="";
+if(!empty($_POST["fNac"])){
+	$fechaNacimiento="mat_fecha_nacimiento='" . $_POST["fNac"] . "', ";
+}
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 
@@ -53,8 +56,8 @@ try{
 	mat_telefono='".$_POST["telefono"]."', 
 	mat_celular='".$_POST["celular"]."', 
 	mat_estrato='".$_POST["estrato"]."', 
-	mat_genero='".$_POST["genero"]."', 
-	mat_fecha_nacimiento='".$_POST["fNac"]."', 
+	mat_genero='".$_POST["genero"]."',
+	$fechaNacimiento
 	mat_primer_apellido='".$_POST["apellido1"]."', 
 	mat_segundo_apellido='".$_POST["apellido2"]."', 
 	mat_nombres='".$_POST["nombres"]."', 
