@@ -47,6 +47,7 @@
 											<p><a href="reportes-academicos-consultas.php">10. Reporte general de estudiantes</a></p>
 											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
 											<p><a href="asistencia-entrega-informes-filtros.php">12. Reporte de asistencia a entrega de informes</a></p>
+                                            <p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
 										</div>
                                 	</div>
 								</div>
@@ -89,11 +90,20 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-yellow">EXPORTAR A EXCEL</header>
 										<div class="panel-body">
-                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">Exportar inscripciones</a></p>
-                                            <p><a href="../compartido/excel-estudiantes.php" target="_blank">Exportar matrículas</a></p>
+                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">1. Exportar inscripciones</a></p>
+                                            <p><a href="../compartido/excel-estudiantes.php" target="_blank">2. Exportar matrículas</a></p>
 										</div>
                                 	</div>
-									
+								</div>
+								
+								<div class="col-md-4">
+									<div class="panel">
+										<header class="panel-heading panel-heading-green">INFORMES ADMINISTRATIVOS</header>
+										<div class="panel-body">
+                                            <p><a href="../compartido/informe-usuarios-repetidos.php" target="_blank">1. Informe usuarios repetidos</a></p>
+                                            <p><a href="../compartido/informe-estudiantes-sin-usuarios.php" target="_blank">2. Informe estudiantes sin usuario</a></p>
+										</div>
+                                	</div>
 								</div>
                             </div>
                         </div>

@@ -28,4 +28,17 @@ class Modulos {
         }
     }
 
+    public static function verificarModulosDeInstitucion($idInstitucion,$idModulos)
+    {
+        global $conexion, $baseDatosServicios;
+
+        $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones_modulos 
+        WHERE ipmod_institucion='".$idInstitucion."' AND ipmod_modulo='".$idModulos."'");
+        $modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH);
+        if ($modulos[0]=="") { 
+            return false;
+        }
+        return true;
+    }
+
 }
