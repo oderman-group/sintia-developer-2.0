@@ -10,6 +10,7 @@ GROUP_CONCAT( gra_nombre SEPARATOR ', ') as gra_nombre,
 mat_documento, mat_estado_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, COUNT(*) as duplicados 
 FROM academico_matriculas 
 INNER JOIN academico_grados ON gra_id=mat_grado
+WHERE mat_eliminado=0
 GROUP BY mat_documento
 HAVING COUNT(*) > 1 
 ORDER BY mat_id ASC");
