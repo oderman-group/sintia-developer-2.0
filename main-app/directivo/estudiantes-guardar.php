@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/MediaTecnicaServicios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0192';
@@ -218,7 +219,7 @@ $idEstudiante = mysqli_insert_id($conexion);
 
 //Insertamos las matrículas Adicionales
 try{
-	MediaTecnicaServicios::guardar($_POST["id"],$_POST["cursosAdicionales"],$config);
+	MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
