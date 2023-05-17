@@ -141,11 +141,14 @@ if($config['conf_activar_encuesta']==1){
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 						foreach ($listaCursosMediaTecnica as $dato) {
 							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>
+								
+							<hr  noshade="noshade" size="3" width="100%" />
+
 							<div class="row">
 								<div class="col-12">
 									<div class="page-title"><?= $cursoMediaTecnica["gra_nombre"]; ?></div>
 								</div>
-							</div>
+							</div>							
 							<div class="row">
 							<?php
 							$parametros = [
