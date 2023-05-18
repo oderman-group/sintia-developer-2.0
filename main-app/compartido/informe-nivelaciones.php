@@ -13,8 +13,13 @@ require_once("../class/Estudiantes.php");
 <?php
 $nombreInforme = "INFORME NIVELACIONES";
 include("../compartido/head-informes.php") ?>  
-  <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+  <table  width="100%" cellspacing="5" cellpadding="5" rules="all" 
+  style="
+  border:solid; 
+  border-color:<?=$Plataforma->colorUno;?>; 
+  font-size:11px;
+  " align="center">
+<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
                                         <th rowspan="2" style="font-size:9px;">Mat</th>
                                         <th rowspan="2" style="font-size:9px;">Estudiante</th>
                                         <?php
@@ -48,7 +53,7 @@ include("../compartido/head-informes.php") ?>
 									$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 									 $defPorEstudiante = 0;
 									 ?>
-                                      <tr id="data1" class="odd gradeX">
+                                      <tr style="border-color:<?=$Plataforma->colorDos;?>;">
                                         <td style="font-size:9px;"><?=$resultado[1];?></td>
                                         <td style="font-size:9px;"><?=$nombreCompleto?></td>
                                         <?php
