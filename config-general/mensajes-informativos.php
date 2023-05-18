@@ -185,6 +185,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case 'SC_DT_12':
+                $tipo = 'success';
+                $mensaje = '
+                Los folios fueron generados correctamente.
+                ';
+            break;
+
 
             default:
                 $tipo = 'secondary';

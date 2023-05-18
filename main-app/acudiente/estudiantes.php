@@ -117,7 +117,7 @@ require_once("../class/Estudiantes.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Credenciales</th>
+                                                        <th>Usuario</th>
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
@@ -141,8 +141,7 @@ require_once("../class/Estudiantes.php");
                                                         <td><?=$contReg;?></td>
                                                         <td>
                                                         	<?php 
-                                                        	echo $resultado['uss_usuario']."<br>";
-                                                        	echo '<span style="font-size:10px; color:tomato;">'.$resultado['uss_clave'].'</span>';
+                                                        	echo $resultado['uss_usuario'];
                                                         	?>
                                                         	
                                                         </td>
