@@ -1,6 +1,6 @@
 <?php
 require_once("Servicios.php");
-class MediaTecnicaServicios extends Servicios
+class MediaTecnicaServicios 
 {
     public static function listar($parametrosArray=null)
     {
