@@ -51,7 +51,7 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 		exit();
 	}
 
-	mysqli_query($conexion, "UPDATE usuarios SET uss_clave= '" . $_POST["clave"] . "'
+	mysqli_query($conexion, "UPDATE usuarios SET uss_clave= SHA1('" . $_POST["clave"] . "')
 	WHERE uss_id='" . $_POST["idR"] . "'");
 
 }
