@@ -18,6 +18,19 @@ if(isset($_SESSION['acudiente'])){
 }
 
 try {
+    
+    $post = ""; 
+    if ( isset($_POST) && !empty($_POST) ) {
+        $post = " | ";
+        foreach ($_POST as $key => $value) {
+            $post .= "&{$key}={$value}";
+        }
+    }
+
+    if (empty($idPaginaInterna)) {
+        $idPaginaInterna = 'GN0003';
+    }
+    
     //HISTORIAL DE ACCIONES
     mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(
         hil_usuario, 
@@ -31,7 +44,7 @@ try {
         hil_usuario_autologin)
     VALUES(
         '".$_SESSION['id']."', 
-        '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'].":".__FILE__.":".__LINE__."', 
+        '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."".$post."', 
         '".$idPaginaInterna."', 
         '".$ip."', 
         '".$_SERVER['HTTP_USER_AGENT']."', 
