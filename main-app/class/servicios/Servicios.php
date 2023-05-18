@@ -14,11 +14,11 @@ class Servicios
         return mysqli_fetch_array($resulsConsulta, MYSQLI_BOTH);
     }
 
-    public static function selectSql($sql) // funcion para obtener datos en un array de una consulta
+    public static function selectSql($sql,$limite ='LIMIT 20') // funcion para obtener datos en un array de una consulta
     {
         global $conexion;
         try {
-            $resulsConsulta = mysqli_query($conexion, $sql);
+            $resulsConsulta = mysqli_query($conexion, $sql.' '.$limite);
             if($resulsConsulta->num_rows>0){
                 $index=0;
                 while($fila=$resulsConsulta->fetch_assoc()){
