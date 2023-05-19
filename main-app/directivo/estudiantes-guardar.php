@@ -218,16 +218,19 @@ try{
 $idEstudiante = mysqli_insert_id($conexion);
 
 //Insertamos las matrículas Adicionales
-try{
-	MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
+if (array_key_exists(10, $arregloModulos)) { 
+	try{
+		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 }
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+
 
 if(!isset($estado) AND !isset($mensaje)){
 	$estado="";
