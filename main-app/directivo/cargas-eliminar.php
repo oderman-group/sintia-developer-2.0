@@ -1,12 +1,9 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
-if($_SERVER['HTTP_REFERER']=="" and $_GET["idmsg"]!=303){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
-	exit();
-}
+
+Modulos::validarAccesoPaginas();
 $idPaginaInterna = 'DT0148';
-include("../compartido/guardar-historial-acciones.php");
+include("../compartido/historial-acciones-guardar.php");
 
 try{
 	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones WHERE eva_id_carga='" . $_GET["id"] . "'");	
@@ -25,11 +22,11 @@ try{
 	mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_id_carga='" . $_GET["id"] . "'");
 	mysqli_query($conexion, "DELETE FROM academico_cargas WHERE car_id='" . $_GET["id"] . "'");
 } catch (Exception $e) {
-	echo $e->getMessage();
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }	
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
+	include("../compartido/guardar-historial-acciones.php");
 
 	echo '<script type="text/javascript">window.location.href="cargas.php?success=SC_DT_3&id='.$_GET["id"].'";</script>';
 	exit();

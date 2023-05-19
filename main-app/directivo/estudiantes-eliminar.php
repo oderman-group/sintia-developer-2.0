@@ -1,6 +1,10 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
+
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DT0162';
+include("../compartido/historial-acciones-guardar.php");
+
 try{
     mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados WHERE res_id_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $_GET["idE"] . "'");
@@ -22,10 +26,12 @@ try{
     mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_id='" . $_GET["idU"] . "'");
     mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $_GET["idE"] . "'");
     mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".social_emails WHERE ema_de='" . $_GET["idU"] . "' OR ema_para='" . $_GET["idU"] . "'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+	$lineaError = __LINE__;
+	include("../compartido/reporte-errores.php");
+	include("../compartido/guardar-historial-acciones.php");
 
     echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_3&id='.$_GET["idE"].'";</script>';
     exit();
-}catch(Exception $e){
-    echo 'Caught exception: ',  $e->getMessage(), "\n";
-    exit();
-}  

@@ -1,9 +1,16 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 
-$consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
-$documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DT0163';
+include("../compartido/historial-acciones-guardar.php");
+
+try{
+    $consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
+    $documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 
 $ruta = '../admisiones/files/otros';
@@ -16,11 +23,16 @@ if(file_exists($ruta."/".$documentos['matd_boletines_actuales'])){	unlink($ruta.
 if(file_exists($ruta."/".$documentos['matd_documento_identidad'])){	unlink($ruta."/".$documentos['matd_documento_identidad']);	}
 if(file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$documentos['matd_certificados']);	}
 
-mysqli_query($conexion, "DELETE FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
+try{
+    mysqli_query($conexion, "DELETE FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
 
-
-mysqli_query($conexion, "DELETE FROM academico_matriculas WHERE mat_id='".$_GET["matricula"]."'");
-
+    mysqli_query($conexion, "DELETE FROM academico_matriculas WHERE mat_id='".$_GET["matricula"]."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+	$lineaError = __LINE__;
+	include("../compartido/reporte-errores.php");
+	include("../compartido/guardar-historial-acciones.php");
 
 echo '<script type="text/javascript">window.location.href="inscripciones.php?msg=2";</script>';
 exit();
