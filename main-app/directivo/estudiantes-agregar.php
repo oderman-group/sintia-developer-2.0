@@ -378,8 +378,7 @@
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1 AND gra_tipo='grupal'
-													");
+													WHERE gra_estado=1 AND gra_tipo=".GRADO_GRUPAL."");
 													?>
 													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
@@ -460,8 +459,8 @@
 														<div class="col-sm-2">
 
 															<select class="form-control  select2" id="tipoMatricula" onchange="javascript:mostrarCursosAdicionales();" name="tipoMatricula">
-																<option value="grupal" selectd>NO</option>
-																<option value="individual">SI</option>
+																<option value=<?=GRADO_GRUPAL?> selectd>NO</option>
+																<option value=<?=GRADO_INDIVIDUAL?>>SI</option>
 															</select>
 														</div>
 													</div>
@@ -470,7 +469,7 @@
 														function mostrarCursosAdicionales() {
 															// 	elemento = document.getElementById("divCursosAdicionales");
 															valor = document.getElementById("tipoMatricula");
-															if (valor.value == 'individual') {
+															if (valor.value == GRADO_INDIVIDUAL) {
 																$(document).ready(function() {
 																	$('.divCursosAdicionales').show();
 																});
@@ -485,7 +484,7 @@
 														<label class="col-sm-2 control-label" >Cursos adicionales <span style="color: red;">(*)</span></label>
 														<div class="col-sm-4" >
 															<?php
-															$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
+															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
 															$listaIndividuales = GradoServicios::listarCursos($parametros);
 															?>
 															<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>

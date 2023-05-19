@@ -30,7 +30,7 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 $esMediaTecnica=!is_null($_POST["tipoMatricula"]);
 if(!$esMediaTecnica){
-	$_POST["tipoMatricula"]='grupal';
+	$_POST["tipoMatricula"]=GRADO_GRUPAL;
 }
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
@@ -110,7 +110,7 @@ try{
 //Insertamos las matrículas Adicionales
 if ($esMediaTecnica) { 
 	try{
-		if($_POST["tipoMatricula"] =="individual")
+		if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL)
 		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
 		else
 		MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);

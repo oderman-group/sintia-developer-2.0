@@ -31,7 +31,7 @@ $result_numMat = strtotime("now");
 
 $esMediaTecnica=!is_null($_POST["tipoMatricula"]);
 if(!$esMediaTecnica){
-	$_POST["tipoMatricula"]='grupal';
+	$_POST["tipoMatricula"]=GRADO_GRUPAL;
 }
 
 //Establecer valores por defecto cuando los campos vengan vacíos
@@ -46,7 +46,7 @@ if($_POST["religion"]=="")     $_POST["religion"]     = 112;
 if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
-if($_POST["tipoMatricula"]=="")$_POST["tipoMatricula"]    = 'grupal';
+if($_POST["tipoMatricula"]=="")$_POST["tipoMatricula"]    = GRADO_GRUPAL;
 
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
