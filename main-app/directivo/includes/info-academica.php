@@ -4,7 +4,8 @@
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
 													<select class="form-control" name="grado">
 														<option value="">Seleccione una opción</option>
