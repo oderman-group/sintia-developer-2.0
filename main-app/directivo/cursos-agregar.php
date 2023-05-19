@@ -102,7 +102,7 @@
                                             <div class="col-sm-2">
                                             <select class="form-control  select2" name="tipoG" >
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value="grupal" >Grupal</option>
+                                                    <option value=<?=GRADO_GRUPAL?> >Grupal</option>
                                                     <option value="individual" >Individual</option>
                                                 </select>
                                             </div>
