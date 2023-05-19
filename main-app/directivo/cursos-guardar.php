@@ -15,6 +15,7 @@ include("../compartido/historial-acciones-guardar.php");
 	if(empty($_POST["valorM"])) {$_POST["valorM"] = '0';}
 	if(empty($_POST["valorP"])) {$_POST["valorP"] = '0';}
 	if(empty($_POST["graSiguiente"])) {$_POST["graSiguiente"] = 1;}
+	if($_POST["tipoG"]=="")$_POST["tipoG"]= GRADO_GRUPAL;
 	$codigoCurso = "GRA".strtotime("now");
 	
 	try{
