@@ -21,24 +21,12 @@ class MatriculaServicios
 
     public static function listarEstudianteNombre($nombre='')
     {
-      global $baseDatosServicios;
-      // $sqlInicial="SELECT * 
-      // FROM academico_matriculas
-      // LEFT JOIN usuarios ON uss_id=mat_id_usuario
-      // LEFT JOIN academico_grados ON gra_id=mat_grado
-      // LEFT JOIN academico_grupos ON gru_id=mat_grupo
-      // LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-      // LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
-      // WHERE CONCAT(mat_primer_apellido,' ',mat_segundo_apellido,' ',mat_nombres) LIKE '%".$nombre."%'";  
-      $sqlInicial= "SELECT mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2 FROM academico_matriculas
+      $sqlInicial= "SELECT mat_id,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2 FROM academico_matriculas
       WHERE CONCAT(mat_primer_apellido,' ',mat_segundo_apellido,' ',mat_nombres,' ',mat_nombre2) LIKE '%".$nombre."%'"; 	  
-      $sqlFinal =" ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
+      $sqlFinal ="AND mat_eliminado IN (0) ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
       $sql=$sqlInicial.$sqlFinal;
       return Servicios::SelectSql($sql,'LIMIT 5');         
     }
-
-
-
 
     public static function apellidos($matricula){
         return strtoupper($matricula['mat_primer_apellido']." ".$matricula['mat_segundo_apellido']);
