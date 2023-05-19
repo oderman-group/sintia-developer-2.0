@@ -122,20 +122,20 @@ if($config['conf_activar_encuesta']==1){
 		                            </div>
 		                            <p><span><i class="fa fa-clock-o"></i> <?=$frases[101][$datosUsuarioActual['uss_idioma']];?>: <?=$rCargas['car_periodo'];?></span></p>
 		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></span></p>
-
+									
 									<!--
 		                            <a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
-										-->
-
-								</div>
-							</div>
-
-						</div>
+									-->
+									
+	                        	</div>
+	                        </div>	
+								 
+                    	</div>
 						 <?php }?> 
-
-										</div>
+	                    
+			        </div>
 			        <!-- End course list -->
-					<?php if (array_key_exists(10, $arregloModulos)) { ?>
+			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
 						<hr  noshade="noshade" size="3" width="100%" />	
 						<?php
 						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
@@ -184,7 +184,7 @@ if($config['conf_activar_encuesta']==1){
 							</div>
 							<?php } ?>
 					<?php } ?>
-				</div>
+                </div>
             </div>
             <!-- end page content -->
             <?php // include("../compartido/panel-configuracion.php");?>
