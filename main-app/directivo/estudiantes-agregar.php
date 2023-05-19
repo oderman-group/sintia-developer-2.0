@@ -378,7 +378,7 @@
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1 AND gra_tipo=".GRADO_GRUPAL."");
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
 													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
