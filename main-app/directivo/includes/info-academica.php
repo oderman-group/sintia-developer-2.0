@@ -1,17 +1,14 @@
 <fieldset>
 
-	<div class="form-group row">
-		<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
-		<div class="col-sm-4">
-			<?php
-			try {
-				$cv = mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_tipo ='grupal'");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			?>
-			<select class="form-control" name="grado">
-				<option value="">Seleccione una opción</option>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
+												<div class="col-sm-4">
+													<?php
+													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
+													?>
+													<select class="form-control" name="grado">
+														<option value="">Seleccione una opción</option>
 														<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
 															if($rv[0]==$datosEstudianteActual[6])
 																echo '<option value="'.$rv[0].'" selected>'.$rv[2].'</option>';
