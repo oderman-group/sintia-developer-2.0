@@ -6,6 +6,7 @@ require_once("../class/servicios/MediaTecnicaServicios.php");
 
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 
+
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
 
@@ -21,6 +22,12 @@ if($valiEstudiante > 0){
 }
 
 $result_numMat = strtotime("now");
+
+
+$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
+if(!$esMediaTecnica){
+	$_POST["tipoMatricula"]='grupal';
+}
 
 //Establecer valores por defecto cuando los campos vengan vacíos
 if($_POST["va_matricula"]=="") $_POST["va_matricula"] = 0;
@@ -212,7 +219,7 @@ try{
 $idEstudiante = mysqli_insert_id($conexion);
 
 //Insertamos las matrículas Adicionales
-if (array_key_exists(10, $arregloModulos)) { 
+if ($esMediaTecnica) { 
 	try{
 		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
 	} catch (Exception $e) {

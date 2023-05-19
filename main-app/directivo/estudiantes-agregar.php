@@ -54,60 +54,7 @@
 <!-- END HEAD -->
 
 <?php include("../compartido/body.php");?>
-<div class="page-wrapper">
-	<!-- start header -->
-		<?php include("../compartido/encabezado.php");?>
-
-        <?php include("../compartido/panel-color.php");?>
-	<!-- start page container -->
-	<div class="page-container">
- 			<?php include("../compartido/menu.php");?>
-
-		<div class="page-content-wrapper">
-			<div class="page-content">
-				<div class="page-bar">
-					<div class="page-title-breadcrumb">
-						<div class=" pull-left">
-							<div class="page-title">Crear matrículas</div>
-						</div>
-						<ol class="breadcrumb page-breadcrumb pull-right">
-							<li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-							<li class="active">Crear matrículas</li>
-						</ol>
-					</div>
-				</div>
-
-
-				<div class="card-body">
-
-					<div class="row" style="margin-bottom: 10px;">
-						<div class="col-sm-12" align="center">
-							<p style="color: darkblue;"></p>
-						</div>
-					</div>
-					<span style="color: blue; font-size: 15px;" id="nDocu"></span>
-
-					<!-- wizard with validation-->
-					<div class="row">
-						<div class="col-sm-12">
-							<?php include("../../config-general/mensajes-informativos.php"); ?>
-							<div class="card-box">
-								<div class="card-head">
-									<header>Matrículas</header>
-								</div>
-
-								<div class="card-body">
-
-
-
-									<div class="card-body">
-										<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-guardar.php" method="post">
-
-											<h3>Información personal</h3>
-											<fieldset>
-
-
-											<div class="page-wrapper">
+    <div class="page-wrapper">
         <!-- start header -->
 		<?php include("../compartido/encabezado.php");?>
 		
@@ -431,7 +378,7 @@
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1
+													WHERE gra_estado=1 AND gra_tipo='grupal'
 													");
 													?>
 													<select class="form-control" name="grado" required>
@@ -506,8 +453,8 @@
 												<div class="col-sm-2">
 													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>">
 												</div>
-											</div>	
-												<?php if (array_key_exists(10, $arregloModulos)) { ?>
+											</div>
+											<?php if (array_key_exists(10, $arregloModulos)) { ?>
 													<div class="form-group row">
 														<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 														<div class="col-sm-2">
@@ -555,209 +502,209 @@
 															</select>
 														</div>
 													</div>
-												<?php } ?>
+												<?php } ?>	
 											
-												</fieldset>
+									    </fieldset>
 										   
-										   <h3>Información del Acudiente</h3>
-										   <fieldset>
-						 
-											   <div class="form-group row">
-												   <label class="col-sm-2 control-label">Tipo de documento</label>
-												   <div class="col-sm-3">
-													   <?php
-													   $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-													   WHERE ogen_grupo=1
-													   ");
-													   ?>
-													   <select class="form-control" name="tipoDAcudiente">
-														   <option value="">Seleccione una opción</option>
-														   <?php
-														   while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															   if($o[0]==$datosMatricula['tipoDocA'])
-															   echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
-														   else
-															   echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
-														   }?>
-													   </select>
-												   </div>
-						   
-												   <label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
-												   <div class="col-sm-3">
-							 
-						   <div class="cargando row">       
-						   <div class="d-flex justify-content-center">
-							 <div class="spinner-border text-primary" role="status">
-							   <span class="visually-hidden">Verificando Documento, Espere Por Favor!</span>
-							 </div>
-						   </div>
-						 </div>
-   
-													   <input type="text" name="documentoA" id="doc" onblur="buscar_datos();" class="form-control"  required value="<?=$datosMatricula['documentoA'];?>">
-												   </div>
-											   </div>
-												   
-											   <div class="form-group row">
-												   <label class="col-sm-2 control-label">Lugar de expedición</label>
-												   <div class="col-sm-4">
-													   <select class="form-control" id="lugardE" name="lugarDa">
-														   <option value="">Seleccione una opción</option>
-														   <?php
-														   $opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														   INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-														   ");
-														   while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
-														   ?>
-														   <option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['expedicionA']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
-														   <?php }?>
-													   </select>
-												   </div>
-   
-												   <?php if($config['conf_id_institucion']==1){ ?>
-												   <label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
-												   <div class="col-sm-3">
-													   <input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>">
-												   </div>
-												   <?php }?>
-   
-											   </div>
-   
-											   <div class="form-group row">												
-												   <label class="col-sm-2 control-label">Primer Apellido</label>
-												   <div class="col-sm-3">
-													   <input type="text" name="apellido1A" id="apellido1A" class="form-control"  value="<?=$datosMatricula['apellido1A'];?>">
-												   </div>
-																							   
-												   <label class="col-sm-2 control-label">Segundo Apellido</label>
-												   <div class="col-sm-3">
-													   <input type="text" name="apellido2A" id="apellido2A" class="form-control"  value="<?=$datosMatricula['apellido2A'];?>">
-												   </div>
-											   </div>
-   
-											   <div class="form-group row">												
-												   <label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
-												   <div class="col-sm-3">
-													   <input type="text" name="nombresA" id="nombresA" class="form-control"  required value="<?=$datosMatricula['nombreA'];?>">
-												   </div>
-																								   
-												   <label class="col-sm-2 control-label">Otro Nombre</label>
-												   <div class="col-sm-3">
-													   <input type="text" name="nombre2A" id="nombre2A" class="form-control"  value="<?=$datosMatricula['documentoA'];?>">
-												   </div>
-											   </div>	
-												   
-											   <?php if($config['conf_id_institucion']==1){ ?>
-											   <div class="form-group row">
-												   <label class="col-sm-2 control-label">Fecha de nacimiento</label>
-												   <div class="col-sm-3">
-													   <div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-													   <input class="form-control" size="16" type="text">
-													   <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-													   </div>
-												   </div>
-												   <input type="hidden" id="dtp_input1" name="fechaNA">
-   
-												   <label class="col-sm-2 control-label">Genero</label>
-												   <div class="col-sm-3">
-													   <select class="form-control  select2" name="generoA">
-														   <option value="">Seleccione una opción</option>
-														   <?php
-															 $op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-														   while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															   if($o[0]==$datosMatricula['generoA'])
-																   echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
-															   else
-																   echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
-														   }?>
-													   </select>
-												   </div>
-											   </div>
-											   <?php }?>									   
-											  
-										   </fieldset>
-										   
-									   </form>
-									</div>
-								</div>
-							</div>
-					   </div>
-					   
-					   <div id="wizard" style="display: none;"></div>
-						
-				   </div>
-			   </div>
-			   <!-- end page content -->
-			   <?php // include("../compartido/panel-configuracion.php");?>
-		   </div>
-		   <!-- end page container -->
-		   <!-- start footer -->
-		   <?php include("../compartido/footer.php");?>
-		   <!-- end footer -->
-	   </div>
-	 <script type="text/javascript">
-	 $(document).ready(function(){
-		   $('.cargando').hide();
-		 });  
-	 function buscar_datos()
-	 {
-	   doc = $("#doc").val();
-	   var parametros = 
-	   {
-		 "buscar": "1",
-		 "uss_usuario" : doc
-	   };
-	   $.ajax(
-	   {
-		 data:  parametros,
-		 dataType: 'json',
-		 url:   'ajax-comprobar-acudiente.php',
-		 type:  'post',
-		 beforeSend: function() 
-		 {
-		   $('.cargando').show();
-		 }, 
-		 error: function()
-		 {alert("Error");},
-		 complete: function() 
-		 {
-		   $('.cargando').hide();
-		 },
-		 success:  function (valores) 
-		 {
-			$("#apellido1A").val(valores.apellido1);
-			 $("#apellido2A").val(valores.apellido2);
-			 $("#nombresA").val(valores.nombre1);
-			 $("#nombre2A").val(valores.nombre2);
-			 $("#lugardE").val(valores.lugardE);
-		 }
-	   }) 
-	 }
-	 </script>
-	   <!-- start js include path -->
-	   <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
-	   <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
-	   <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js" ></script>
-	   <script src="../../config-general/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-	   <script src="../../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
-	   <!-- bootstrap -->
-	   <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
-	   <!-- steps -->
-	   <script src="../../config-general/assets/plugins/steps/jquery.steps.js" ></script>
-	   <script src="../../config-general/assets/js/pages/steps/steps-data.js" ></script>
-	   <!-- Common js-->
-	   <script src="../../config-general/assets/js/app.js" ></script>
-	   <script src="../../config-general/assets/js/layout.js" ></script>
-	   <script src="../../config-general/assets/js/theme-color.js" ></script>
-	   <!-- Material -->
-	   <script src="../../config-general/assets/plugins/material/material.min.js"></script>
-	   <!--select2-->
-	   <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
-	   <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
-   
-	   <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"  charset="UTF-8"></script>
-	   <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js"  charset="UTF-8"></script>
-	   <!-- end js include path -->
-   </body>
-   
-   <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/wizard.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:55 GMT -->
-   </html>
+										<h3>Información del Acudiente</h3>
+										<fieldset>
+                      
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Tipo de documento</label>
+												<div class="col-sm-3">
+													<?php
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=1
+													");
+													?>
+													<select class="form-control" name="tipoDAcudiente">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['tipoDocA'])
+															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+														else
+															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
+													</select>
+												</div>
+                        
+												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
+												<div class="col-sm-3">
+                          
+                        <div class="cargando row">       
+                        <div class="d-flex justify-content-center">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Verificando Documento, Espere Por Favor!</span>
+                          </div>
+                        </div>
+                      </div>
+
+													<input type="text" name="documentoA" id="doc" onblur="buscar_datos();" class="form-control"  required value="<?=$datosMatricula['documentoA'];?>">
+												</div>
+											</div>
+												
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Lugar de expedición</label>
+												<div class="col-sm-4">
+													<select class="form-control" id="lugardE" name="lugarDa">
+														<option value="">Seleccione una opción</option>
+														<?php
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+														");
+														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
+														?>
+														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['expedicionA']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+														<?php }?>
+													</select>
+												</div>
+
+												<?php if($config['conf_id_institucion']==1){ ?>
+												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
+												<div class="col-sm-3">
+													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>">
+												</div>
+												<?php }?>
+
+											</div>
+
+											<div class="form-group row">												
+												<label class="col-sm-2 control-label">Primer Apellido</label>
+												<div class="col-sm-3">
+													<input type="text" name="apellido1A" id="apellido1A" class="form-control"  value="<?=$datosMatricula['apellido1A'];?>">
+												</div>
+																							
+												<label class="col-sm-2 control-label">Segundo Apellido</label>
+												<div class="col-sm-3">
+													<input type="text" name="apellido2A" id="apellido2A" class="form-control"  value="<?=$datosMatricula['apellido2A'];?>">
+												</div>
+											</div>
+
+											<div class="form-group row">												
+												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
+												<div class="col-sm-3">
+													<input type="text" name="nombresA" id="nombresA" class="form-control"  required value="<?=$datosMatricula['nombreA'];?>">
+												</div>
+																								
+												<label class="col-sm-2 control-label">Otro Nombre</label>
+												<div class="col-sm-3">
+													<input type="text" name="nombre2A" id="nombre2A" class="form-control"  value="<?=$datosMatricula['documentoA'];?>">
+												</div>
+											</div>	
+												
+											<?php if($config['conf_id_institucion']==1){ ?>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
+												<div class="col-sm-3">
+													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+													<input class="form-control" size="16" type="text">
+													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+													</div>
+												</div>
+												<input type="hidden" id="dtp_input1" name="fechaNA">
+
+												<label class="col-sm-2 control-label">Genero</label>
+												<div class="col-sm-3">
+													<select class="form-control  select2" name="generoA">
+														<option value="">Seleccione una opción</option>
+														<?php
+										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
+															if($o[0]==$datosMatricula['generoA'])
+																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															else
+																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+														}?>
+													</select>
+												</div>
+											</div>
+											<?php }?>									   
+									       
+									    </fieldset>
+										
+									</form>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+					
+					<div id="wizard" style="display: none;"></div>
+                     
+                </div>
+            </div>
+            <!-- end page content -->
+            <?php // include("../compartido/panel-configuracion.php");?>
+        </div>
+        <!-- end page container -->
+        <!-- start footer -->
+        <?php include("../compartido/footer.php");?>
+        <!-- end footer -->
+    </div>
+  <script type="text/javascript">
+  $(document).ready(function(){
+        $('.cargando').hide();
+      });  
+  function buscar_datos()
+  {
+    doc = $("#doc").val();
+    var parametros = 
+    {
+      "buscar": "1",
+      "uss_usuario" : doc
+    };
+    $.ajax(
+    {
+      data:  parametros,
+      dataType: 'json',
+      url:   'ajax-comprobar-acudiente.php',
+      type:  'post',
+      beforeSend: function() 
+      {
+        $('.cargando').show();
+      }, 
+      error: function()
+      {alert("Error");},
+      complete: function() 
+      {
+        $('.cargando').hide();
+      },
+      success:  function (valores) 
+      {
+         $("#apellido1A").val(valores.apellido1);
+          $("#apellido2A").val(valores.apellido2);
+          $("#nombresA").val(valores.nombre1);
+          $("#nombre2A").val(valores.nombre2);
+          $("#lugardE").val(valores.lugardE);
+      }
+    }) 
+  }
+  </script>
+    <!-- start js include path -->
+    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
+    <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+    <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js" ></script>
+	<script src="../../config-general/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+	<script src="../../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <!-- bootstrap -->
+    <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+    <!-- steps -->
+    <script src="../../config-general/assets/plugins/steps/jquery.steps.js" ></script>
+    <script src="../../config-general/assets/js/pages/steps/steps-data.js" ></script>
+    <!-- Common js-->
+	<script src="../../config-general/assets/js/app.js" ></script>
+    <script src="../../config-general/assets/js/layout.js" ></script>
+	<script src="../../config-general/assets/js/theme-color.js" ></script>
+	<!-- Material -->
+	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
+	<!--select2-->
+    <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
+    <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
+
+	<script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"  charset="UTF-8"></script>
+    <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js"  charset="UTF-8"></script>
+    <!-- end js include path -->
+</body>
+
+<!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/wizard.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:55 GMT -->
+</html>
