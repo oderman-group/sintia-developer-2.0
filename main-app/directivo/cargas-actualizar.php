@@ -1,6 +1,11 @@
-<?php include("session.php"); ?>
-<?php include("../modelo/conexion.php"); ?>
 <?php
+include("session.php");
+
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DT0167';
+include("../compartido/historial-acciones-guardar.php");
+
+try{
 mysqli_query($conexion, "UPDATE academico_cargas SET 
 car_docente='" . $_POST["docente"] . "', 
 car_curso='" . $_POST["curso"] . "', 
@@ -20,16 +25,13 @@ car_indicador_automatico='" . $_POST["indicadorAutomatico"] . "',
 car_observaciones_boletin='" . $_POST["observacionesBoletin"] . "' 
 WHERE car_id='" . $_POST["idR"] . "'");
 
-
-mysqli_query($conexion, "DELETE FROM academico_intensidad_curso 
-WHERE ipc_curso='" . $_POST["curso"] . "' AND ipc_materia='" . $_POST["asignatura"] . "'");
-$lineaError = __LINE__;
-
-
+mysqli_query($conexion, "DELETE FROM academico_intensidad_curso WHERE ipc_curso='" . $_POST["curso"] . "' AND ipc_materia='" . $_POST["asignatura"] . "'");
 
 mysqli_query($conexion, "INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('" . $_POST["curso"] . "','" . $_POST["asignatura"] . "','" . $_POST["ih"] . "')");
-$lineaError = __LINE__;
-
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+	include("../compartido/guardar-historial-acciones.php");
 
 echo '<script type="text/javascript">window.location.href="cargas-editar.php?idR='.$_POST["idR"].'&success=SC_DT_2&id='.$_POST["idR"].'";</script>';
 exit();

@@ -1,7 +1,10 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
+
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DT0176';
+include("../compartido/historial-acciones-guardar.php");
 
 if ($_POST["estadoMatricula"] == 1){
 
@@ -14,6 +17,7 @@ if ($_POST["estadoMatricula"] == 1){
    Estudiantes::ActualizarEstadoMatricula($_POST["estudiante"], 1);
 
 }
+include("../compartido/guardar-historial-acciones.php");
 
 echo '<script type="text/javascript">window.location.href="estudiantes-retirar.php?id='.$_POST["estudiante"].'"</script>';
 exit();    
