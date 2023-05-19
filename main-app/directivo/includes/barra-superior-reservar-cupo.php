@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['busqueda'])) {
+if (!empty($_GET['busqueda'])) {
   $busqueda = $_GET['busqueda'];
   $filtro .= " AND (
   mat_id LIKE '%" . $busqueda . "%' 
@@ -14,10 +14,6 @@ if (isset($_GET['busqueda'])) {
   OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
   OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
   OR gra_nombre LIKE '%" . $busqueda . "%'
-  OR asp_email_acudiente LIKE '%" . $busqueda . "%'
-  OR asp_nombre_acudiente LIKE '%" . $busqueda . "%'
-  OR asp_nombre LIKE '%" . $busqueda . "%'
-  OR asp_documento_acudiente LIKE '%" . $busqueda . "%'
   )";
 }
 ?>
@@ -56,6 +52,11 @@ if (isset($_GET['busqueda'])) {
       if (!empty($_GET["curso"])) {
       ?>
         <input type="hidden" name="curso" value="<?= $_GET['curso']; ?>" />
+      <?php
+      }
+      if (!empty($_GET["resp"])) {
+      ?>
+        <input type="hidden" name="resp" value="<?= $_GET['resp']; ?>" />
       <?php
       }
       ?>
