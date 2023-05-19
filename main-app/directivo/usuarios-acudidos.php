@@ -73,7 +73,7 @@ require_once("../class/servicios/MatriculaServicios.php");
                                 <form name="formularioGuardar" action="usuarios-acudidos-actualizar.php" method="post">
                                     <input type="hidden" value="<?=$_GET['id'];?>" name="id">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label"><b>Estudiantes:</b></label>
+                                        <label class="col-sm-2 control-label"><b>Estudiantes: </b></label>
                                         <div class="col-sm-10">
                                             <?php
                                             $parametros = array("upe_id_usuario"=>$acudienteActural["uss_id"]);

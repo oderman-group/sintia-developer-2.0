@@ -136,7 +136,7 @@ if($config['conf_activar_encuesta']==1){
 			        </div>
 			        <!-- End course list -->
 			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
-						<hr  noshade="noshade" size="3" width="100%" />	
+						<hr  noshade="noshade"  width="100%" />	
 						<?php
 						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
