@@ -4,7 +4,8 @@
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
 													<select class="form-control" name="grado">
 														<option value="">Seleccione una opción</option>
@@ -86,7 +87,8 @@
 											</div>
 	<?php if (array_key_exists(10, $arregloModulos)) { 
 			require_once("../class/servicios/MediaTecnicaServicios.php");
-			$parametros = ['gra_tipo' => 'individual', 'gra_estado' => 1];
+			$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+			
 			$listaIndividuales = GradoServicios::listarCursos($parametros);
 			$parametros = ['matcur_id_matricula' => $_GET["id"]];
 			$listaMediaTenicaActual=MediaTecnicaServicios::listar($parametros);
@@ -103,11 +105,11 @@
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
 				<select class="form-control  select2" id="tipoMatricula" name="tipoMatricula" onchange="javascript:mostrarCursosAdicionales()">
-					<option value="grupal" 
-					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'grupal') {echo 'selected';} ?>
+					<option value=<?=GRADO_GRUPAL?> 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_GRUPAL) {echo 'selected';} ?>
 					>NO</option>
-					<option value="individual" 
-					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == 'individual') {echo 'selected';} ?>
+					<option value=<?=GRADO_INDIVIDUAL;?>
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {echo 'selected';} ?>
 					>SI</option>
 				</select>
 			</div>
@@ -116,7 +118,7 @@
 			mostrarCursosAdicionales();
 			function mostrarCursosAdicionales() {
 				valor = document.getElementById("tipoMatricula");
-				if (valor.value == 'individual') {
+				if (valor.value == "<?php echo GRADO_INDIVIDUAL ?>") {
 					$(document).ready(function() {
 						$('.divCursosAdicionales').show();
 					});
