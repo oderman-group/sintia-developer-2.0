@@ -21,7 +21,10 @@ if($config['conf_id_institucion']==1){
 
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
-
+$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
+if(!$esMediaTecnica){
+	$_POST["tipoMatricula"]='grupal';
+}
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
@@ -97,14 +100,17 @@ try{
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 	exit();
 }
+
 //Insertamos las matrículas Adicionales
-try{
-	if($_POST["tipoMatricula"] =="individual")
-	MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
-	else
-	MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
+if ($esMediaTecnica) { 
+	try{
+		if($_POST["tipoMatricula"] =="individual")
+		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
+		else
+		MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 }
 
 try {
