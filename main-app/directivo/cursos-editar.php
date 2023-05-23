@@ -183,8 +183,8 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2" name="tipoG" >
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value=<?=GRADO_GRUPAL?> <?php if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){ echo 'selected'; } ?>>Grupal</option>
-                                                    <option value=<?=GRADO_INDIVIDUAL?> <?php if($resultadoCurso['gra_tipo']=='individual'){ echo 'selected'; } ?>>Individual</option>
+                                                    <option value=<?=GRADO_GRUPAL;?> <?php if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){ echo 'selected'; } ?>>Grupal</option>
+                                                    <option value=<?=GRADO_INDIVIDUAL;?> <?php if($resultadoCurso['gra_tipo']==GRADO_INDIVIDUAL){ echo 'selected'; } ?>>Individual</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -195,7 +195,9 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2"  name="tipoG" disabled>
                                                     <option  <?php if($resultadoCurso['gra_tipo']!=''){ echo 'selected'; } ?>>
-                                                    <?php if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){ echo 'Grupal'; }else{ echo 'Individual';}?>
+                                                    <?php if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){ echo 'Grupal'; } else
+                                                          if($resultadoCurso['gra_tipo']==GRADO_INDIVIDUAL){ echo 'Individual';}
+                                                          else{ echo ' ';}?>
                                                     </option>
                                                 </select>
                                             </div>

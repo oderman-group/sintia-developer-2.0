@@ -49,18 +49,18 @@ require_once("../class/servicios/MatriculaServicios.php");
                     <div class="col-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                     </div>
-                    <?php $acudienteActural = UsuarioServicios::consultar($_GET['id']); ?>
+                    <?php $acudienteActual = UsuarioServicios::consultar($_GET['id']); ?>
                     <div class="col-sm-3">
                         <div class="panel">
                             <header class="panel-heading panel-heading-purple"><b>Datos del acudiente</b></header>
                             <div class="panel-body">
                                 <div class="form-group row">
                                     <label class="col-sm-3 control-label "><b>Nombre: </b></label>
-                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::nombres($acudienteActural) ?></label>
+                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::nombres($acudienteActual) ?></label>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 control-label"><b>Apellido:</b></label>
-                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::apellidos($acudienteActural) ?></label>
+                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::apellidos($acudienteActual) ?></label>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@ require_once("../class/servicios/MatriculaServicios.php");
                                         <label class="col-sm-2 control-label"><b>Estudiantes: </b></label>
                                         <div class="col-sm-10">
                                             <?php
-                                            $parametros = array("upe_id_usuario"=>$acudienteActural["uss_id"]);
+                                            $parametros = array("upe_id_usuario"=>$acudienteActual["uss_id"]);
                                             $listaAcudidos = UsuarioServicios::listarUsuariosEstudiante($parametros);
                                             ?>
                                             <select id="select_estudiante" class="form-control  select2-multiple"  name="acudidos[]" required multiple>
@@ -165,5 +165,5 @@ require_once("../class/servicios/MatriculaServicios.php");
     <!-- end js include path -->
 </body>
 
-<!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
-</html>
+        <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
+        </html>

@@ -23,8 +23,10 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 $esMediaTecnica=!is_null($_POST["tipoMatricula"]);
 if(!$esMediaTecnica){
-	$_POST["tipoMatricula"]=GRADO_GRUPAL;
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$_POST["tipoMatricula"]=$datosEstudianteActual["mat_tipo_matricula"];
 }
+if($_POST["tipoMatricula"]==""){$_POST["tipoMatricula"]=GRADO_GRUPAL;}
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
