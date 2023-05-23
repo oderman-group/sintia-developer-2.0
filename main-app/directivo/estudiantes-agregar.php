@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php include("includes/variables-estudiantes-agregar.php");?>
+<?php require_once("../class/servicios/GradoServicios.php"); ?>
     <!-- Material Design Lite CSS -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
 	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
@@ -377,8 +378,7 @@
 												<div class="col-sm-4">
 													<?php
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1
-													");
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
 													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
@@ -452,7 +452,56 @@
 												<div class="col-sm-2">
 													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>">
 												</div>
-											</div>	
+											</div>
+											<?php if (array_key_exists(10, $arregloModulos)) { ?>
+													<div class="form-group row">
+														<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
+														<div class="col-sm-2">
+
+															<select class="form-control  select2" id="tipoMatricula" onchange="javascript:mostrarCursosAdicionales();" name="tipoMatricula">
+																<option value=<?=GRADO_GRUPAL;?> selectd>NO</option>
+																<option value=<?=GRADO_INDIVIDUAL;?>>SI</option>
+															</select>
+														</div>
+													</div>
+													<script>
+														mostrarCursosAdicionales();
+														function mostrarCursosAdicionales() {
+															
+															valor = document.getElementById("tipoMatricula");
+															if (valor.value == GRADO_INDIVIDUAL) {
+																$(document).ready(function() {
+																	$('.divCursosAdicionales').show();
+																});
+															} else {
+																$(document).ready(function() {
+																	$('.divCursosAdicionales').hide();
+																});
+															}
+														}
+													</script>
+													<div class="form-group row divCursosAdicionales" >
+														<label class="col-sm-2 control-label" >Cursos adicionales <span style="color: red;">(*)</span></label>
+														<div class="col-sm-4" >
+															<?php
+															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+															$listaIndividuales = GradoServicios::listarCursos($parametros);
+															?>
+															<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>
+																<option value="">Seleccione una opción</option>
+																<?php
+																foreach ($listaIndividuales as $clave => $dato) {
+																	$disabled = '';
+																	if ($dato['gra_estado'] == '0') {
+																		$disabled = 'disabled';
+																	};
+																	echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+																}
+																?>
+															</select>
+														</div>
+													</div>
+												<?php } ?>	
 											
 									    </fieldset>
 										   

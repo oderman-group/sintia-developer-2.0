@@ -1,13 +1,19 @@
 <?php
 	include("session.php");
 	include("../modelo/conexion.php");
+	require_once("../class/servicios/GradoServicios.php");
 	
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
 		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
-
+	$esMediaTecnica=!is_null($_POST["tipoG"]);
+	if(!$esMediaTecnica){
+		$resultadoCurso=GradoServicios::consultarCurso($_POST["id_curso"]);
+		$_POST["tipoG"]=$resultadoCurso['gra_tipo'];
+	}
+	if(empty($_POST["tipoG"])) {$_POST["tipoG"] = GRADO_GRUPAL;}
 	if(empty($_POST["estado"])){$_POST["estado"]=1;}
 	
 	mysqli_query($conexion, "UPDATE academico_grados SET 
@@ -21,9 +27,10 @@
 	gra_nota_minima='" . $_POST["notaMin"] . "', 
 	gra_periodos='" . $_POST["periodosC"] . "', 
 	gra_nivel='" . $_POST["nivel"] . "', 
-	gra_estado='" . $_POST["estado"] . "' 
+	gra_estado='" . $_POST["estado"] . "',
+	gra_tipo='" . $_POST["tipoG"] . "'
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
-
+	// GradoServicios::editar($_POST);
 
 	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
 	exit();

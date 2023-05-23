@@ -2,7 +2,7 @@
 include("session.php");
 include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
-
+require_once("../class/servicios/MediaTecnicaServicios.php");
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
 	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
@@ -24,7 +24,12 @@ if(!empty($_POST["fNac"])){
 }
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
-
+$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
+if(!$esMediaTecnica){
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$_POST["tipoMatricula"]=$datosEstudianteActual["mat_tipo_matricula"];
+}
+if($_POST["tipoMatricula"]==""){$_POST["tipoMatricula"]=GRADO_GRUPAL;}
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
@@ -91,14 +96,27 @@ try{
 	mat_eps='".$_POST["eps"]."', 
 	mat_celular2='".$_POST["celular2"]."', 
 	mat_ciudad_residencia='".$_POST["ciudadR"]."', 
-	mat_nombre2='".$_POST["nombre2"]."'
+	mat_nombre2='".$_POST["nombre2"]."',
+	mat_tipo_matricula='".$_POST["tipoMatricula"]."'
 
 	WHERE mat_id=".$_POST["id"].";");
 
 } catch (Exception $e) {
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 	exit();
-}	
+}
+
+//Insertamos las matrículas Adicionales
+if ($esMediaTecnica) { 
+	try{
+		if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL)
+		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
+		else
+		MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+}
 
 try {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' 

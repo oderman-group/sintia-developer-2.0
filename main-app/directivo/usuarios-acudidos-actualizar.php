@@ -5,6 +5,7 @@ include("../compartido/guardar-historial-acciones.php");
 
 try {
     mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_POST["id"]."'");
+    mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente=NULL  WHERE mat_acudiente='".$_POST["id"]."'");
 } catch (Exception $e) {
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
     exit();

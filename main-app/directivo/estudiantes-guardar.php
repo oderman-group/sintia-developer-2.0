@@ -2,8 +2,10 @@
 include("session.php");
 include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/MediaTecnicaServicios.php");
 
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
+
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
@@ -21,6 +23,12 @@ if($valiEstudiante > 0){
 
 $result_numMat = strtotime("now");
 
+
+$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
+if(!$esMediaTecnica){
+	$_POST["tipoMatricula"]=GRADO_GRUPAL;
+}
+
 //Establecer valores por defecto cuando los campos vengan vacíos
 if($_POST["va_matricula"]=="") $_POST["va_matricula"] = 0;
 if($_POST["grupo"]=="")        $_POST["grupo"]        = 4;
@@ -33,7 +41,7 @@ if($_POST["religion"]=="")     $_POST["religion"]     = 112;
 if($_POST["estrato"]=="")      $_POST["estrato"]      = 116;
 if($_POST["extran"]=="")       $_POST["extran"]       = 0;
 if($_POST["inclusion"]=="")    $_POST["inclusion"]    = 0;
-
+if($_POST["tipoMatricula"]=="")$_POST["tipoMatricula"]    = GRADO_GRUPAL;
 
 //Api solo para Icolven
 if($config['conf_id_institucion']==1){
@@ -190,7 +198,7 @@ try{
 		mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
 		mat_inclusion, mat_extranjero, mat_tipo_sangre, 
 		mat_eps, mat_celular2, mat_ciudad_residencia, 
-		mat_nombre2)
+		mat_nombre2,mat_tipo_matricula)
 		VALUES(
 		".$result_numMat.", now(), ".$_POST["tipoD"].",
 		".$_POST["nDoc"].", ".$_POST["religion"].", '".strtolower($_POST["email"])."',
@@ -203,18 +211,27 @@ try{
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
 		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
-		'".$_POST["nombre2"]."'
+		'".$_POST["nombre2"]."','".$_POST["tipoMatricula"]."'
 		)");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 $idEstudiante = mysqli_insert_id($conexion);
 
+//Insertamos las matrículas Adicionales
+if ($esMediaTecnica) { 
+	try{
+		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+}
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+
 
 if(!isset($estado) AND !isset($mensaje)){
 	$estado="";
