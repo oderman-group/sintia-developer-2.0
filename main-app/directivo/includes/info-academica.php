@@ -105,7 +105,7 @@
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
 				<select class="form-control  select2" id="tipoMatricula" name="tipoMatricula" onchange="javascript:mostrarCursosAdicionales()">
-					<option value=<?=GRADO_GRUPAL?> 
+					<option value=<?=GRADO_GRUPAL;?> 
 					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_GRUPAL) {echo 'selected';} ?>
 					>NO</option>
 					<option value=<?=GRADO_INDIVIDUAL;?>
@@ -118,7 +118,7 @@
 			mostrarCursosAdicionales();
 			function mostrarCursosAdicionales() {
 				valor = document.getElementById("tipoMatricula");
-				if (valor.value == "<?php echo GRADO_INDIVIDUAL ?>") {
+				if (valor.value == "<?php echo GRADO_INDIVIDUAL ;?>") {
 					$(document).ready(function() {
 						$('.divCursosAdicionales').show();
 					});
