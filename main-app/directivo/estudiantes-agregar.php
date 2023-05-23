@@ -459,15 +459,15 @@
 														<div class="col-sm-2">
 
 															<select class="form-control  select2" id="tipoMatricula" onchange="javascript:mostrarCursosAdicionales();" name="tipoMatricula">
-																<option value=<?=GRADO_GRUPAL?> selectd>NO</option>
-																<option value=<?=GRADO_INDIVIDUAL?>>SI</option>
+																<option value=<?=GRADO_GRUPAL;?> selectd>NO</option>
+																<option value=<?=GRADO_INDIVIDUAL;?>>SI</option>
 															</select>
 														</div>
 													</div>
 													<script>
 														mostrarCursosAdicionales();
 														function mostrarCursosAdicionales() {
-															// 	elemento = document.getElementById("divCursosAdicionales");
+															
 															valor = document.getElementById("tipoMatricula");
 															if (valor.value == GRADO_INDIVIDUAL) {
 																$(document).ready(function() {
