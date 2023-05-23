@@ -8,7 +8,12 @@
 		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
 		exit();
 	}
-
+	$esMediaTecnica=!is_null($_POST["tipoG"]);
+	if(!$esMediaTecnica){
+		$resultadoCurso=GradoServicios::consultarCurso($_POST["id_curso"]);
+		$_POST["tipoG"]=$resultadoCurso['gra_tipo'];
+	}
+	if(empty($_POST["tipoG"])) {$_POST["tipoG"] = GRADO_GRUPAL;}
 	if(empty($_POST["estado"])){$_POST["estado"]=1;}
 	
 	mysqli_query($conexion, "UPDATE academico_grados SET 
