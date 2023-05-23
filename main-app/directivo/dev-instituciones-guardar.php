@@ -1,7 +1,12 @@
 <?php 
 include("session.php");
 
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DC0190';
+include("../compartido/historial-acciones-guardar.php");
+
 if (trim($_POST["nombreInstitucion"]) == "") {
+	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="dev-instituciones-editar.php?error=ER_DT_4";</script>';
 	exit();
 }
@@ -29,20 +34,30 @@ try {
 	ins_valor_deuda='" . $_POST["valorDeuda"] . "',
 	ins_concepto_deuda='" . $_POST["conceptoDeuda"] . "'
 	WHERE ins_id='".$_POST['id']."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 	
 	$numModulos = (count($_POST["modulos"]));
-	mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".instituciones_modulos WHERE ipmod_institucion='".$_POST['id']."'");
+	try{
+		mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".instituciones_modulos WHERE ipmod_institucion='".$_POST['id']."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+
 	if($numModulos>0){
 		$contModulos = 0;
 		while ($contModulos < $numModulos) {
-			mysqli_query($conexion,"INSERT INTO ".$baseDatosServicios.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ('".$_POST['id']."', '".$_POST["modulos"][$contModulos]."')");
+			try{
+				mysqli_query($conexion,"INSERT INTO ".$baseDatosServicios.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ('".$_POST['id']."', '".$_POST["modulos"][$contModulos]."')");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
 			$contModulos++;
 		}
 	}
-
+	
+	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="dev-instituciones.php";</script>';
 	exit();
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}	

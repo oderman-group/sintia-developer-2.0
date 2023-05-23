@@ -1,6 +1,10 @@
-<?php include("session.php"); ?>
-<?php include("../modelo/conexion.php"); ?>
-<?php
+<?php 
+include("session.php");
+
+Modulos::validarAccesoPaginas();
+$idPaginaInterna = 'DC0189';
+include("../compartido/historial-acciones-guardar.php");
+
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
 define('ENVIROMENT_TWO', $_POST['enviroment']);
@@ -56,7 +60,7 @@ try {
         exit();
     }
 } catch (Exception $e) {
-	echo $e->getMessage();
+	include("../compartido/error-catch-to-report.php");
 }
 
 $num = 1;
@@ -74,9 +78,12 @@ while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH
 		try {
 			$CURRENTDB = $datosInstitucion['ins_bd']."_".$yearStart;
 
-			$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $CURRENTDB);
-
-			$resultado = mysqli_query($conexion, "SHOW DATABASES LIKE '{$CURRENTDB}';");
+			try{
+				$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $CURRENTDB);
+				$resultado = mysqli_query($conexion, "SHOW DATABASES LIKE '{$CURRENTDB}';");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
 			
 			if(mysqli_num_rows($resultado) > 0){
 
@@ -111,6 +118,7 @@ while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH
 
 	echo "<hr>";
 }
-	
+
+	include("../compartido/guardar-historial-acciones.php");
 	echo '<a href="dev-ejecutar-scripts.php">Volver</a>';
 	exit();
