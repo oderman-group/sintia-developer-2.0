@@ -3,7 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 
-Modulos::validarAccesoPaginas();
+Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0004';
 include("../compartido/historial-acciones-guardar.php");
 

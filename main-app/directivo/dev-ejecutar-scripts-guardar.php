@@ -1,8 +1,8 @@
 <?php 
 include("session.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0189';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0189';
 include("../compartido/historial-acciones-guardar.php");
 
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");

@@ -1,8 +1,8 @@
 <?php
 include("session.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0178';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0178';
 include("../compartido/historial-acciones-guardar.php");
 
 $mensajeNot = 'Hubo un error al guardar las cambios';

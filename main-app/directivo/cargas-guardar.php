@@ -2,8 +2,8 @@
 include("session.php");
 require_once("../class/CargaAcademica.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0183';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0183';
 include("../compartido/historial-acciones-guardar.php");
 
 $cargasNoCreadas = 0;

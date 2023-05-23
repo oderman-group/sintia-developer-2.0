@@ -5,7 +5,7 @@ require_once("../../config-general/consulta-usuario-actual.php");
 require_once("../compartido/sintia-funciones.php");
 require_once("../class/UsuariosPadre.php");
 
-Modulos::validarAccesoPaginas();
+Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0001';
 include("../compartido/historial-acciones-guardar.php");
 

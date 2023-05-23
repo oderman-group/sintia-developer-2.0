@@ -1,8 +1,8 @@
 <?php 
 include("session.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0190';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0190';
 include("../compartido/historial-acciones-guardar.php");
 
 if (trim($_POST["nombreInstitucion"]) == "") {

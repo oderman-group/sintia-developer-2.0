@@ -1,8 +1,8 @@
 <?php 
 include("session.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0187';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0187';
 include("../compartido/historial-acciones-guardar.php");
 
 if (trim($_POST["periodo"]) == "" or trim($_POST["perdida"]) == "" or trim($_POST["ganada"]) == "" or trim($_POST["estiloNotas"]) == "") {

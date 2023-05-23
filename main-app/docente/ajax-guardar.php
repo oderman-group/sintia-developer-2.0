@@ -2,7 +2,7 @@
 include("session.php");
 include("verificar-carga.php");
 
-Modulos::validarAccesoPaginas();
+Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0091';
 include("../compartido/historial-acciones-guardar.php");
 

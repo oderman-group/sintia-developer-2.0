@@ -2,7 +2,7 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 
-Modulos::validarAccesoPaginas();
+Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0176';
 include("../compartido/historial-acciones-guardar.php");
 

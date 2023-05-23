@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 
-Modulos::validarAccesoPaginas();
+Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0002';
 include("../compartido/historial-acciones-guardar.php");
 

@@ -2,8 +2,8 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 
-Modulos::validarAccesoPaginas();
-$idPaginaInterna = 'DC0192';
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0192';
 include("../compartido/historial-acciones-guardar.php");
 
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
