@@ -1,7 +1,7 @@
 <?php
     include("session.php");
 
-    // Modulos::validarAccesoDirectoPaginas();
+    Modulos::validarAccesoDirectoPaginas();
     $idPaginaInterna = 'DV0018';
     include("../compartido/historial-acciones-guardar.php");
 
