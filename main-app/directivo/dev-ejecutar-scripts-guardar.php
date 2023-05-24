@@ -2,7 +2,7 @@
 include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
-$idPaginaInterna = 'DT0189';
+$idPaginaInterna = 'DV0014';
 include("../compartido/historial-acciones-guardar.php");
 
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
