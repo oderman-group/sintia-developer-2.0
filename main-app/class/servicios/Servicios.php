@@ -8,8 +8,8 @@ class Servicios
             $resulsConsulta = mysqli_query($conexion, $sql." limit 1");
             
         } catch (Exception $e) {
-            return "Excepción catpurada: " . $e->getMessage();
-            exit();
+            echo "Excepción catpurada: " . $e->getMessage();
+            throw $e; 
         }
         return mysqli_fetch_array($resulsConsulta, MYSQLI_BOTH);
     }
@@ -29,7 +29,7 @@ class Servicios
             
         } catch (Exception $e) {
             echo "Excepción catpurada: " . $e->getMessage();
-            exit();
+            throw $e;  
         }
         return $arraysDatos;
     }
@@ -40,14 +40,12 @@ class Servicios
             try {
                 mysqli_query($conexion, $sql);
                 return mysqli_insert_id($conexion);
-            } catch (Exception $e) {
-                return "Excepción catpurada: " . $e->getMessage();
-                if(!$transacion){                   
-                    exit();
-                 }else{
-                     Servicios::revertirTransacion();
-                     exit();   
-                }                 
+            } catch (Exception $e) {                
+                if($transacion){                   
+                    Servicios::revertirTransacion();
+                 }
+                echo "Excepción catpurada: " . $e->getMessage();
+                throw $e;                 
             }
              
     }
@@ -59,8 +57,11 @@ class Servicios
             try {
                 mysqli_query($conexion, $sql);
             } catch (Exception $e) {
-                return "Excepción catpurada: " . $e->getMessage();
-                exit();
+                if($transacion){                   
+                    Servicios::revertirTransacion();
+                 }
+                echo "Excepción catpurada: " . $e->getMessage();
+                throw $e;  
             }
         }
     }
@@ -115,8 +116,8 @@ class Servicios
                     mysqli_query($conexion, $sqlQuery);
                 } catch (Exception $e) {
                     mysqli_query($conexion, "ROLLBACK");                    
-                    return "Excepción catpurada: " . $e->getMessage();                    
-                    exit();
+                    echo "Excepción catpurada: " . $e->getMessage();
+                    throw $e;  
                 }                
             }
             return  mysqli_query($conexion, "COMMIT");   
