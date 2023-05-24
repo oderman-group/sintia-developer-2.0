@@ -400,7 +400,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 													<?php
 
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado['mat_id']);
+													$arrayEnviar = [
+														"tipo"            => 2, 
+														"descripcionTipo" => "Para ocultar la X y limpiar valor.", 
+														"idInput"         => $resultado['mat_id']
+													];
 
 													$arrayDatos = json_encode($arrayEnviar);
 
