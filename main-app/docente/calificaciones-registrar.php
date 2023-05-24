@@ -11,10 +11,6 @@
 <?php include("../compartido/head.php");?>
 
 <?php
-require_once("../class/Estudiantes.php");
-?>
-
-<?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
 WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
