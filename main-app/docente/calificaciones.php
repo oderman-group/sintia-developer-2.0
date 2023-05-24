@@ -140,16 +140,20 @@ $porcentajeRestante = 100 - $valores[0];
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bg = '';
-														$consultaNumEstudiante=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_calificaciones 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
-														WHERE cal_id_actividad='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas
-														INNER JOIN usuarios ON uss_id=mat_id_usuario
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)
-														");
+														if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+															$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM academico_calificaciones
+															INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+															INNER JOIN academico_matriculas ON mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante AND mat_id=matcur_id_matricula
+															WHERE cal_id_actividad='".$resultado[0]."'
+															");
+														} else {
+															$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM academico_calificaciones
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
+															WHERE cal_id_actividad='".$resultado[0]."'
+															");
+														}
 														$numerosEstudiantes = mysqli_fetch_array($consultaNumEstudiante, MYSQLI_BOTH);
-														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+														if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';
 														 
 														 $porcentajeActual +=$resultado['act_valor'];
 														 
@@ -174,7 +178,7 @@ $porcentajeRestante = 100 - $valores[0];
 															<td><?=$evidencia['evid_nombre']." (".$evidencia['evid_valor']."%)";?></td>
 														<?php }?>
 														
-														<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=$resultado['act_id'];?>&grado=<?=$datosCargaActual[2];?>&grupo=<?=$datosCargaActual[3];?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></a></td>
+														<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=$resultado['act_id'];?>&grado=<?=$datosCargaActual[2];?>&grupo=<?=$datosCargaActual[3];?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantesParaDocentes;?></a></td>
 														<td>
 															
 															<?php
