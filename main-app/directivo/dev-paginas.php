@@ -120,7 +120,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="#<?= $resultado['pagp_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-paginas-editar.php?idP=<?= $resultado['pagp_id']; ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
