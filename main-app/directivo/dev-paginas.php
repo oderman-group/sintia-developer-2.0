@@ -33,7 +33,7 @@ $Plataforma = new Plataforma;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Modulos</div>
+                            <div class="page-title">Paginas</div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ $Plataforma = new Plataforma;
 
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
-                                        <header>Modulos</header>
+                                        <header>Paginas</header>
                                         <div class="tools">
                                             <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                                             <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
