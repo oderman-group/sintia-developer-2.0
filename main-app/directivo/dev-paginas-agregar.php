@@ -165,7 +165,7 @@ include("../compartido/head.php");
 											</div>
 										</div>
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<input type="submit" id="btnGuardar" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                     </form>
                                 </div>
                             </div>
