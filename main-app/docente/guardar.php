@@ -3443,17 +3443,11 @@ if($_GET["get"]==20){
 
 if($_GET["get"]==21){
 
-	$tabla = 'academico_calificaciones';
+	mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id='".$_GET["id"]."'");
 
-	$clave = 'cal_id'; 
+	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
 
-	$id = $_GET["id"];
-
-	$urlRetorno = $_SERVER['HTTP_REFERER'];
-
-	$operacionBD->eliminarPorId($tabla, $clave, $id, $urlRetorno);
-
-	
+	exit();
 
 }
 
