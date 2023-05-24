@@ -70,6 +70,16 @@ $Plataforma = new Plataforma;
                                     </div>
                                     <div class="card-body">
 
+                                        <div class="row" style="margin-bottom: 10px;">
+                                            <div class="col-sm-12">
+                                                <div class="btn-group">
+                                                    <a href="dev-paginas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                        Agregar nuevo <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
