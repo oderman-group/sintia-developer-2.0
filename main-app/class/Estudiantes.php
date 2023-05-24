@@ -338,10 +338,10 @@ class Estudiantes {
     {
         try{
         UsuarioServicios::iniciarTransacion();
-        $idAcudiente= UsuarioServicios::guardarAcudiente($post);
-        $idEstudiante= UsuarioServicios::guardarEstudiante($post);
-        $resultado3= MatriculaServicios::guardar($post,$idAcudiente,$idEstudiante);
-        $result= UsuarioServicios::guardarUsuarioEstudiante($idAcudiente,$idEstudiante);
+        $idAcudiente= UsuarioServicios::guardarAcudiente($post,true);
+        $idEstudiante= UsuarioServicios::guardarEstudiante($post,true);
+        $idMatricula= MatriculaServicios::guardar($post,$idAcudiente,$idEstudiante,true);
+        $result= UsuarioServicios::guardarUsuarioEstudiante($idAcudiente,$idEstudiante,true);
         UsuarioServicios::finalizarTransacion();
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
