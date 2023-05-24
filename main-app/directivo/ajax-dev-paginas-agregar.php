@@ -18,7 +18,7 @@ if ($numDotos > 0) {
         document.getElementById('rutaPagina').style.backgroundColor = "#f8d7da";
         document.getElementById('navegable').disabled = 'disabled';
         document.getElementById('crud').disabled = 'disabled';
-        document.getElementById('palabrasClaves').disabled = 'disabled';
+        document.getElementById('btnGuardar').style.display = 'none';
     </script>   
     
     <div class="alert alert-danger">
@@ -31,7 +31,7 @@ if ($numDotos > 0) {
         
         <p style="margin-top:10px;">
             <div class="btn-group">
-                <a href="dev-paginas-editar.php?id=<?=$datosPaginas['pagp_id'];?>" id="addRow" class="btn deepPink-bgcolor">
+                <a href="dev-paginas-editar.php?idP=<?=$datosPaginas['pagp_id'];?>" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>
             </div>
@@ -50,7 +50,7 @@ if ($numDotos > 0) {
         document.getElementById('rutaPagina').style.backgroundColor = "";
         document.getElementById('navegable').disabled = '';
         document.getElementById('crud').disabled = '';
-        document.getElementById('palabrasClaves').disabled = '';
+        document.getElementById('btnGuardar').style.display = 'block';
     </script> 
 <?php    
 }
