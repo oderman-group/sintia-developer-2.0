@@ -9,13 +9,11 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0002';
 include("../compartido/historial-acciones-guardar.php");
 
-require '../../librerias/phpmailer/Exception.php';
 require '../../librerias/phpmailer/PHPMailer.php';
 require '../../librerias/phpmailer/SMTP.php';
 
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 include("../compartido/sintia-funciones.php");
 $archivoSubido = new Archivos;
