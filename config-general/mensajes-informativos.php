@@ -105,6 +105,15 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'La clave nueva no coincide. Por favor verifique.';
             break;
 
+            case 'ER_DT_14':
+                $tipo = 'danger';
+                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . $_GET["nombrePagina"] . '</b>.<br>
+                ¿Desea mostrar toda la información de la pagina?<br>
+                <a href="dev-paginas-editar.php?idP=' . $_GET["id"] . '" id="addRow" class="btn deepPink-bgcolor">
+                    Sí, deseo mostrar la información
+                </a>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -168,27 +177,6 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = '
                 Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.$_GET['numRegistros'].'</b><br>
                 Ahora la plataforma está más limpia y puedes trabajar con los estudiantes que necesitas para este año.</b>
-                ';
-            break;
-
-            case 'SC_DT_10':
-                $tipo = 'success';
-                $mensaje = '
-                El proceso de creación de BD nueva se concluyó exitosamente
-                ';
-            break;
-
-            case 'SC_DT_11':
-                $tipo = 'success';
-                $mensaje = '
-                La contraseña se cambió correctamente.
-                ';
-            break;
-
-            case 'SC_DT_12':
-                $tipo = 'success';
-                $mensaje = '
-                Los folios fueron generados correctamente.
                 ';
             break;
 

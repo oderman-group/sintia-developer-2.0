@@ -33,7 +33,7 @@ $Plataforma = new Plataforma;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Modulos</div>
+                            <div class="page-title">Paginas</div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ $Plataforma = new Plataforma;
 
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
-                                        <header>Modulos</header>
+                                        <header>Paginas</header>
                                         <div class="tools">
                                             <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                                             <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -69,6 +69,16 @@ $Plataforma = new Plataforma;
                                         </div>
                                     </div>
                                     <div class="card-body">
+
+                                        <div class="row" style="margin-bottom: 10px;">
+                                            <div class="col-sm-12">
+                                                <div class="btn-group">
+                                                    <a href="dev-paginas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                        Agregar nuevo <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
@@ -110,7 +120,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="#<?= $resultado['pagp_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-paginas-editar.php?idP=<?= $resultado['pagp_id']; ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

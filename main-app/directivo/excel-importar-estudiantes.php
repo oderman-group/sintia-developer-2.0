@@ -60,7 +60,7 @@ if($extension == 'xlsx'){
 				if(!empty($hojaActual->getCell('R'.$f)->getValue()) && !empty($hojaActual->getCell('S'.$f)->getValue())) {
 					$datosAcudiente = [
 						'uss_usuario' => $hojaActual->getCell('R'.$f)->getValue(),
-						'uss_clave'   => '12345678',
+						'uss_clave'   => $clavePorDefectoUsuarios,
 						'uss_tipo'    => 3,
 						'uss_nombre'  => $hojaActual->getCell('S'.$f)->getValue(),
 					];
