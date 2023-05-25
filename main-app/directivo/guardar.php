@@ -1242,8 +1242,8 @@ if ($_GET["get"] == 30) {
 }
 //ACTUALIZAR CLAVE
 if ($_GET["get"] == 31) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_clave='12345678'");
+	try {
+		mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1('sintia1234')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

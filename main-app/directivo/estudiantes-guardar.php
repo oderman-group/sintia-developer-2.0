@@ -98,7 +98,7 @@ if ($acudienteNum > 0) {
 			uss_tema_logo
 			)VALUES(
 			'".$_POST["documentoA"]."',
-			'12345678',
+			'".$clavePorDefectoUsuarios."',
 			3,
 			'".$_POST["nombresA"]."',
 			0,
@@ -155,7 +155,7 @@ try{
 		uss_tema_logo
 		)VALUES(
 		'".	$_POST["nDoc"]."',
-		'12345678',
+		'".$clavePorDefectoUsuarios."',
 		4,
 		'".$_POST["nombres"]."',
 		0,

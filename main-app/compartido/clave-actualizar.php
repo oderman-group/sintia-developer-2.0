@@ -11,7 +11,7 @@ include("../compartido/historial-acciones-guardar.php");
 
 $destinos = validarUsuarioActual($datosUsuarioActual);
 
-if ($datosUsuarioActual['uss_clave'] != $_POST['claveActual']) {
+if ($datosUsuarioActual['uss_clave'] != SHA1($_POST['claveActual'])) {
 	echo '<script type="text/javascript">window.location.href="' .$destinos. 'cambiar-clave.php?error=ER_DT_12";</script>';
 	exit();
 }
@@ -27,7 +27,7 @@ if(!validarClave($_POST["claveNueva"])){
 }
 
 try{
-	mysqli_query($conexion, "UPDATE usuarios SET uss_clave='" . $_POST["claveNueva"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1('" . $_POST["claveNueva"] . "') WHERE uss_id='" . $_SESSION["id"] . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
