@@ -3,6 +3,8 @@ $tiempo_inicial = microtime(true);
 require_once("../modelo/conexion.php");
 require_once("../class/Plataforma.php");
 require_once("../class/Utilidades.php");
+require_once("../class/Modulos.php");
+
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;
 $config = $_SESSION["configuracion"];
