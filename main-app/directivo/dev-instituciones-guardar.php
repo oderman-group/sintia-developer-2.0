@@ -38,8 +38,10 @@ try {
 	include("../compartido/error-catch-to-report.php");
 }
 
-	
-	$numModulos = (count($_POST["modulos"]));
+$numModulos = 0;
+if (!empty($_POST["modulos"])) {
+	$numModulos = count($_POST["modulos"]);
+}	
 	try{
 		mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".instituciones_modulos WHERE ipmod_institucion='".$_POST['id']."'");
 	} catch (Exception $e) {
@@ -56,7 +58,7 @@ try {
 			}
 			$contModulos++;
 		}
-	}
+	}	
 	
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="dev-instituciones.php";</script>';
