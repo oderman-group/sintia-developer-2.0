@@ -11,10 +11,6 @@
 <?php include("../compartido/head.php");?>
 
 <?php
-require_once("../class/Estudiantes.php");
-?>
-
-<?php
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
 WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
@@ -375,7 +371,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 <tbody>
 
 													<?php
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+														$consulta = Estudiantes::listarEstudiantesParaDocentesMT($datosCargaActual);
+													} else {
+														$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													}
+													
 													$contReg = 1;
 													$colorNota = "black";
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -383,7 +384,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														 if($calificacion['act_registrada']==1){
 
 															 //Consulta de calificaciones si ya la tienen puestas.
-															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
+															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$_GET["idR"]."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
 															 if($notas[3]<$config[5] and $notas[3]!="") $colorNota = $config[6]; elseif($notas[3]>=$config[5]) $colorNota = $config[7];
