@@ -51,6 +51,17 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
+											
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-sm-12">
+                                <div class="btn-group">
+                                    <a href="dev-contrato-usuarios.php" id="addRow" class="btn deepPink-bgcolor">
+                                        Ver usuarios que aceptaron
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <?php
                             include("../../config-general/mensajes-informativos.php");
                         ?>
