@@ -212,7 +212,7 @@
 										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Contratos</span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Contratos</span></a></li><li class="nav-item"><a href="dev-terminos.php" class="nav-link"> <span class="title">T&C</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
 									</ul>
 								</li>
