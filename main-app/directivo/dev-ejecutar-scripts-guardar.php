@@ -78,12 +78,10 @@ while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH
 		try {
 			$CURRENTDB = $datosInstitucion['ins_bd']."_".$yearStart;
 
-			try{
+
 				$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $CURRENTDB);
 				$resultado = mysqli_query($conexion, "SHOW DATABASES LIKE '{$CURRENTDB}';");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
+
 			
 			if(mysqli_num_rows($resultado) > 0){
 
