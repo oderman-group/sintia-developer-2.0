@@ -1,27 +1,40 @@
 <?php
+require_once("../class/servicios/MediaTecnicaServicios.php");
+
 class Estudiantes {
 
     public static function listarEstudiantes(
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
-        string $filtroLimite    = 'LIMIT 0, 2000'
+        string $filtroLimite    = 'LIMIT 0, 2000',
+        $cursoActual=null
     )
     {
         global $conexion, $baseDatosServicios;
+        $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         $resultado = [];
-
+        
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-            LEFT JOIN usuarios ON uss_id=mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat_grado
-            LEFT JOIN academico_grupos ON gru_id=mat_grupo
-            LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
-            WHERE mat_eliminado IN (0, '".$eliminados."')
-            ".$filtroAdicional."
-            ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres
-            ".$filtroLimite."
-            ");
+            if($tipoGrado==GRADO_GRUPAL){
+                $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+                LEFT JOIN usuarios ON uss_id=mat_id_usuario
+                LEFT JOIN academico_grados ON gra_id=mat_grado
+                LEFT JOIN academico_grupos ON gru_id=mat_grupo
+                LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+                LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat_lugar_nacimiento
+                WHERE mat_eliminado IN (0, '".$eliminados."')
+                ".$filtroAdicional."
+                ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres
+                ".$filtroLimite."
+                ");
+            }else{
+                $parametros = [
+                    'matcur_id_curso'=>$cursoActual["gra_id"],
+                    'limite'=>$filtroLimite,
+                    'arreglo'=>false
+                ];
+                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
+                }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
