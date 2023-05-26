@@ -4,12 +4,16 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php"); 
 
 
 $filtro = '';
+$cursoActual='';
+
 if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
 	$filtro .= " AND mat_grado='".$_GET["curso"]."'";
 	$fcurso = $_GET["curso"];
+	$cursoActual=GradoServicios::consultarCurso($fcurso);
 }
 if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 	$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";
@@ -154,7 +158,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
