@@ -29,7 +29,7 @@ if (isset($_GET['busqueda'])) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $instID) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -57,6 +57,11 @@ if (isset($_GET['busqueda'])) {
                             if (!empty($_GET['year'])){
                         ?>
                             <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
+                        <?php
+                            }
+                            if (!empty($_GET['mes'])){
+                        ?>
+                            <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
                         <?php
                             }
                         ?>
@@ -87,10 +92,29 @@ if (isset($_GET['busqueda'])) {
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 
+                    ?>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                    Filtrar por mes
+                    <span class="fa fa-angle-down"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <?php
+                        foreach ($mesesAgno as $key => $value) {
+                                $estiloResaltado="";
+                                if($key==$mes){ $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';}
+                    ?>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?=$_GET['year']; ?>&mes=<?=$key?>" <?= $estiloResaltado; ?>><?=$value?></a>
+                    <?php
+                        }
                     ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -114,6 +138,11 @@ if (isset($_GET['busqueda'])) {
                 if (!empty($_GET['year'])){
             ?>
                 <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
+            <?php
+                }
+                if (!empty($_GET['mes'])){
+            ?>
+                <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
             <?php
                 }
             ?>
