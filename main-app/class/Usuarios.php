@@ -75,14 +75,14 @@ class Usuarios {
         $BD = $data['institucion_bd']."_".$data['institucion_agno'];
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".restaurar_clave(resc_id_usuario, resc_fec_solicitud, resc_id_institucion, resc_clave_generada) VALUES('".$data['usuario_id']."', now(), '".$data['institucion_id']."', '".$data['nueva_clave']."')");
+            mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".restaurar_clave(resc_id_usuario, resc_fec_solicitud, resc_id_institucion, resc_clave_generada) VALUES('".$data['usuario_id']."', now(), '".$data['institucion_id']."', '".sha1($data['nueva_clave'])."')");
             $idatosUsuarioltimoRegistro = mysqli_insert_id($conexion);
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
 
         try {  
-            mysqli_query($conexion, "UPDATE ".$BD.".usuarios SET uss_clave='".$data['nueva_clave']."' 
+            mysqli_query($conexion, "UPDATE ".$BD.".usuarios SET uss_clave=SHA1('".$data['nueva_clave']."') 
             WHERE uss_id='".$data['usuario_id']."'");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");

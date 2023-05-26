@@ -45,6 +45,7 @@ $contadorPeriodos=0;
 <head>
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
 	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
+	<link href="../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <style>
 #saltoPagina
 {
@@ -64,23 +65,32 @@ INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 //$numeroPeriodos=$config["conf_periodos_maximos"];
 $numeroPeriodos=$config["conf_periodo"];
- ?>
 
-<?php
 $nombreInforme = "REGISTRO DE VALORACIÓN";
-include("../compartido/head-informes.php") ?>
+if($config['conf_id_institucion']!=1){
+	include("../compartido/head-informes.php");
+}else{
+?>
+<div class="container" style="margin-top:10px !important;">
+	<div class="row">
+		<img class="img-thumbnail" src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="100%"><br><br>
+	</div>
+</div>
+<?php } ?>
+<div>&nbsp;</div>
 
 
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:10px;">
     <tr>
     	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=$nombre?></b></td>   
+        <td colspan="2">Nombre: <b><?=$nombre?></b></td>   
     </tr>
     
     <tr>
     	<td>Grado: <b><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></b></td>
-        <td>Periodo: <b>Final</b></td>    
+        <td>Periodo: <b>Final</b></td>
+        <td>Folio: <b><?=$datosUsr["mat_folio"];?></b></td>
     </tr>
 </table>
 <br>

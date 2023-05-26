@@ -105,7 +105,7 @@ $institucionNombre = $institucion['ins_siglas'];
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li><a href="perfil.php"><i class="icon-user"></i> Perfil </a></li>
-                                <li><a href="#cambiar-clave.php"><i class="icon-user"></i> Cambiar contraseña </a></li>
+                                <li><a href="cambiar-clave.php"><i class="icon-lock"></i> Cambiar contraseña </a></li>
 								
                                 <li class="divider"> </li>
 								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i> Ayuda/Soporte </a></li>
