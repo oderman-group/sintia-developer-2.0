@@ -90,7 +90,7 @@ $Plataforma = new Plataforma;
 													include("includes/consulta-paginacion-dev-historial-acciones.php");
 
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones
-                                                    LEFT JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion
+                                                    INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion AND ins_enviroment='".ENVIROMENT."'
                                                     LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
                                                     WHERE  hil_institucion='".$instID."' AND YEAR(hil_fecha) =".$year." ".$filtro."
                                                     ORDER BY hil_id DESC

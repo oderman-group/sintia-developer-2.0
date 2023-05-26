@@ -59,7 +59,7 @@ try {
 	}else{//SI ES 1 LA INSTITUCION ES NUEVA Y SE EJECUTA EL SIGUIENTE SCRIPT
 
 		//CREAMOS LA INSTITUCIÓN
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".instituciones (ins_nombre,ins_fecha_inicio,ins_telefono_principal,ins_contacto_principal,ins_cargo_contacto,ins_celular_contacto,ins_email_contacto,ins_email_institucion,ins_ciudad,ins_url_carpeta,ins_nit,ins_medio_info,ins_estado,ins_url_acceso,ins_bd,ins_deuda,ins_valor_deuda,ins_concepto_deuda,ins_bloqueada,ins_years,ins_notificaciones_acudientes,ins_siglas,ins_fecha_renovacion,ins_id_plan) VALUES ('".$nombreInsti."','".$fechaCompleta."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'".$bdInstitucion."',NULL,NULL,NULL,0,'".$year.",".$year."',0,'".$siglasInst."','".$fechaCompleta."',1)");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".instituciones (ins_nombre,ins_fecha_inicio,ins_telefono_principal,ins_contacto_principal,ins_cargo_contacto,ins_celular_contacto,ins_email_contacto,ins_email_institucion,ins_ciudad,ins_enviroment,ins_nit,ins_medio_info,ins_estado,ins_url_acceso,ins_bd,ins_deuda,ins_valor_deuda,ins_concepto_deuda,ins_bloqueada,ins_years,ins_notificaciones_acudientes,ins_siglas,ins_fecha_renovacion,ins_id_plan) VALUES ('".$nombreInsti."','".$fechaCompleta."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'".$bdInstitucion."',NULL,NULL,NULL,0,'".$year.",".$year."',0,'".$siglasInst."','".$fechaCompleta."',1)");
 		$idInsti = mysqli_insert_id($conexion);
 
 		//ASIGNAMOS MODULOS A LA INSTITUCIÓN
