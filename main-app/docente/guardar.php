@@ -2339,13 +2339,13 @@ if($_GET["get"]==20){
 //ELIMINAR NOTA ACADEMICA DE UN ESTUDIANTE
 
 if($_GET["get"]==21){
-	$tabla = 'academico_calificaciones';
-	$clave = 'cal_id'; 
-	$id = $_GET["id"];
-	$urlRetorno = $_SERVER['HTTP_REFERER'];
 
-	include("../compartido/guardar-historial-acciones.php");
-	$operacionBD->eliminarPorId($tabla, $clave, $id, $urlRetorno);
+	mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id='".$_GET["id"]."'");
+
+	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
+
+	exit();
+
 }
 
 //ELIMINAR NOTA DISCIPLINARIA DE UN ESTUDIANTE
