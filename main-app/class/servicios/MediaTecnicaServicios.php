@@ -1,6 +1,6 @@
 <?php
 require_once("Servicios.php");
-class MediaTecnicaServicios 
+class MediaTecnicaServicios extends Servicios
 {
     public static function listar($parametrosArray=null)
     {
@@ -32,6 +32,26 @@ class MediaTecnicaServicios
       $sqlFinal ="";
       $sql=$sqlInicial.$sqlFinal;
       return Servicios::SelectSql($sql);         
+    }
+    
+    public static function listarEstudiantes($parametrosArray=null)
+    {
+      global $baseDatosServicios;
+      
+      $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+      LEFT JOIN academico_matriculas ON matcur_id_matricula=mat_id
+			LEFT JOIN academico_grados ON gra_id=matcur_id_curso
+			LEFT JOIN usuarios ON uss_id=mat_id_usuario			
+      ";
+      if($parametrosArray && count($parametrosArray)>0){
+        $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
+        $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
+      };
+      $sqlFinal ="ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
+      $limite=$parametrosArray["limite"];
+      $esArreglo=$parametrosArray["arreglo"];
+      $sql=$sqlInicial.$sqlFinal;
+      return Servicios::SelectSql($sql,$limite,$esArreglo);         
     }
     
 
