@@ -89,7 +89,7 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("consulta-paginacion-cargas.php");											       
+													include("includes/consulta-paginacion-cargas.php");											       
 													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
 													  LEFT JOIN academico_grados ON gra_id=car_curso
 													  LEFT JOIN academico_grupos ON gru_id=car_grupo

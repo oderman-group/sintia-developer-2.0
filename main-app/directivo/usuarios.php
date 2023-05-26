@@ -111,7 +111,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                         <th>#</th>
 														<th>Bloq.</th>
 														<th>ID</th>
-														<th>Usuario (REP)<br>Clave</th>
+														<th>Usuario (REP)</th>
 														<th>Nombre</th>
 														<th>Tipo</th>
 														<th>Sesión</th>
@@ -120,7 +120,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                 </thead>
 												
 												<?php
-													include("consulta-paginacion-usuarios.php");	
+													include("includes/consulta-paginacion-usuarios.php");	
 													$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
 													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
 													WHERE uss_id=uss_id $filtro
@@ -161,7 +161,6 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<td <?=$avisoRepetido?>>
 															<?=$resultado['uss_usuario'];?>
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
-															<br><pre><?=$resultado['uss_clave'];?></pre>
 														</td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td><?=$resultado['pes_nombre'];?></td>
