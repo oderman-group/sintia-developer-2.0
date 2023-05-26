@@ -32,6 +32,10 @@ require_once("../class/Estudiantes.php");
                     
                     <div class="row">
                         <div class="col-md-12">
+                            <?php
+                                $filtro="";
+                                include("../directivo/includes/barra-superior-estudiantes-todos.php");
+                            ?>
                             <div class="row">
 								
 								<div class="col-md-4 col-lg-3">
@@ -69,7 +73,9 @@ require_once("../class/Estudiantes.php");
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes('');
+													include("../directivo/includes/consulta-paginacion-estudiantes-todos.php");
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtro,$filtroLimite);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'");
@@ -121,6 +127,7 @@ require_once("../class/Estudiantes.php");
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("../directivo/enlaces-paginacion.php");?>
                                 </div>
 								
 								

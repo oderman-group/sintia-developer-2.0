@@ -117,7 +117,7 @@ require_once("../class/Estudiantes.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Credenciales</th>
+                                                        <th>Usuario</th>
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
@@ -141,8 +141,7 @@ require_once("../class/Estudiantes.php");
                                                         <td><?=$contReg;?></td>
                                                         <td>
                                                         	<?php 
-                                                        	echo $resultado['uss_usuario']."<br>";
-                                                        	echo '<span style="font-size:10px; color:tomato;">'.$resultado['uss_clave'].'</span>';
+                                                        	echo $resultado['uss_usuario'];
                                                         	?>
                                                         	
                                                         </td>
@@ -178,7 +177,7 @@ require_once("../class/Estudiantes.php");
 																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
 																		  
 																		  <?php if($config['conf_id_institucion'] == 9){?>
-																		  <li><a href="compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 																		  <?php }?>
 																		  
 																		  <?php if($config['conf_id_institucion'] == 1){
@@ -186,13 +185,13 @@ require_once("../class/Estudiantes.php");
 																			if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																			?>
 																		  
-																		  	<li><a href="compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		  	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 
 																		  <?php 
 																			}
 
 																		  if($config['conf_informe_parcial']==1){?>
-																		  	<li><a href="compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
+																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
 																		  <?php }
 
 																		  if($config['conf_ficha_estudiantil']==1){?>

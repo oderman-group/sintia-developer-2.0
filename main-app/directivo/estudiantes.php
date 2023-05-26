@@ -152,7 +152,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														}
 													</script>
 													<?php
-													include("consulta-paginacion-estudiantes.php");
+													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
 													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
 													$contReg = 1;

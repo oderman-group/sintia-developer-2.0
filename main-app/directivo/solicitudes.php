@@ -28,15 +28,11 @@
                     
                     <div class="row">
                         <div class="col-md-12">
+                            <?php
+                                $filtro="";
+                                include("includes/barra-superior-solicitudes.php");
+                            ?>
                             <div class="row">
-								<?php
-									$SQL = "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
-									LEFT JOIN usuarios ON uss_id=soli_remitente
-									LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
-                                    WHERE soli_institucion='".$config['conf_id_institucion']."' AND soli_year='".$_SESSION["bd"]."'";
-								?>
-
-								
 								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -62,7 +58,13 @@
 												</thead>
                                                 <tbody>
 												<?php
-												$consulta = mysqli_query($conexion, $SQL);
+                                                include("includes/consulta-paginacion-solicitudes.php");
+												$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
+                                                LEFT JOIN usuarios ON uss_id=soli_remitente
+                                                LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+                                                WHERE soli_institucion='".$config['conf_id_institucion']."' 
+                                                AND soli_year='".$_SESSION["bd"]."' $filtro
+                                                LIMIT $inicio,$registros");
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 												?>
 												<tr>
@@ -78,6 +80,7 @@
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>

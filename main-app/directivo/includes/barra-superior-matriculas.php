@@ -51,7 +51,8 @@
         <a class="dropdown-item" href="estudiantes-grupoa-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Asignar a todos al grupo A</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="estudiantes-documento-usuario-actualizar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Colocar documento como usuario de acceso</a>
-        <a class="dropdown-item" href="estudiantes-crear-usuarios.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Verificar y generar credenciales a estudiantes</a></a>
+        <a class="dropdown-item" href="estudiantes-crear-usuarios.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Verificar y generar credenciales a estudiantes</a>
+        <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="estudiantes-inactivos-remover.php" onClick="if(!confirm('Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?')){return false;}">Remover estudiantes Inactivos este año</a></a>
         </div>
@@ -71,7 +72,7 @@
             $estiloResaltado = '';
             if($grado['gra_id'] == $_GET["curso"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?curso=<?=$grado['gra_id'];?>&estadoM=<?=$_GET["estadoM"];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=$_GET["estadoM"];?>&curso=<?=$grado['gra_id'];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -83,10 +84,11 @@
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$_GET["curso"];?>" <?=$estiloResaltado;?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Asistentes</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Cancelados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
@@ -94,6 +96,18 @@
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
+        <?php
+          if(!empty($_GET["curso"])){
+        ?>
+          <input type="hidden" name="curso" value="<?= $_GET['curso']; ?>"/>
+        <?php
+          }
+          if(!empty($_GET["estadoM"])){
+        ?>
+          <input type="hidden" name="estadoM" value="<?= $_GET['estadoM']; ?>"/>
+        <?php
+          }
+        ?>
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET['busqueda'];?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
