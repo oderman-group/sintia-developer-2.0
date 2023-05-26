@@ -14,24 +14,28 @@ class Servicios
         return mysqli_fetch_array($resulsConsulta, MYSQLI_BOTH);
     }
 
-    public static function selectSql($sql,$limite ='LIMIT 20') // funcion para obtener datos en un array de una consulta
+    public static function selectSql($sql,$limite ='LIMIT 20',$esArreglo=true) // funcion para obtener datos en un array de una consulta
     {
         global $conexion;
         try {
             $resulsConsulta = mysqli_query($conexion, $sql.' '.$limite);
             if($resulsConsulta->num_rows>0){
                 $index=0;
-                while($fila=$resulsConsulta->fetch_assoc()){
-                      $arraysDatos[$index]=$fila;
-                      $index++;
-                }                
+                if($esArreglo){
+                    while($fila=$resulsConsulta->fetch_assoc()){
+                        $arraysDatos[$index]=$fila;
+                        $index++;
+                    } 
+                    return $arraysDatos;
+                }else{
+                    return $resulsConsulta;
+                }               
              }
             
         } catch (Exception $e) {
             echo "Excepción catpurada: " . $e->getMessage();
             exit();
         }
-        return $arraysDatos;
     }
 
     public static function insertSql($sql) { // funcion para insertar en una tabla 
@@ -77,6 +81,6 @@ class Servicios
             }
             
         }
-        return $sqlInicial;
+        return $sqlInicial." ";
         }
 }
