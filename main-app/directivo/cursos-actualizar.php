@@ -1,7 +1,10 @@
 <?php
-	include("session.php");
-	include("../modelo/conexion.php");
-	
+include("session.php");
+
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0173';
+include("../compartido/historial-acciones-guardar.php");
+
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
 		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
@@ -9,7 +12,8 @@
 	}
 
 	if(empty($_POST["estado"])){$_POST["estado"]=1;}
-	
+
+try{
 	mysqli_query($conexion, "UPDATE academico_grados SET 
 	gra_codigo='" . $_POST["codigoC"] . "', 
 	gra_nombre='" . $_POST["nombreC"] . "', 
@@ -23,7 +27,10 @@
 	gra_nivel='" . $_POST["nivel"] . "', 
 	gra_estado='" . $_POST["estado"] . "' 
 	WHERE gra_id='" . $_POST["id_curso"] . "'");
-
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+	include("../compartido/guardar-historial-acciones.php");
 
 	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
 	exit();
