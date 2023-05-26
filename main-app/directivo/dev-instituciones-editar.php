@@ -45,6 +45,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
+                        <li><a class="parent-item" href="#" name="dev-instituciones.php" onClick="deseaRegresar(this)">Insituciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Editar Instituciones</li>
                         </ol>
                     </div>

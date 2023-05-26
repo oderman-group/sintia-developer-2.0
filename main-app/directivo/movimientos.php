@@ -28,20 +28,22 @@
 
                     <div class="row">
                         <div class="col-md-12">
-
-						<?php include("includes/barra-superior-movimientos-financieros.php");?>
 								
 									<?php
 										$filtro = '';
+										include("includes/barra-superior-movimientos-financieros.php");
 										if(is_numeric($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
 										if(is_numeric($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
+										if(is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
 										if($_GET["fecha"]!=""){$filtro .= " AND fcu_fecha='".$_GET["fecha"]."'";}
+
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=2 AND fcu_anulado='0'),
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0'),
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0')");
 										$estadisticasCuentas = mysqli_fetch_array($consultaEstadisticas, MYSQLI_BOTH);
+
 										if($estadisticasCuentas[2]>0){
 											$porcentajeIngreso = round(($estadisticasCuentas[0]/$estadisticasCuentas[2])*100,2);
 										}	
@@ -50,6 +52,7 @@
 											$porcentajeEgreso = round(($estadisticasCuentas[1]/$estadisticasCuentas[3])*100,2);
 										}
 										if(empty($estadisticasCuentas[0])){ $estadisticasCuentas[0]=0; }
+
 										?>
 
 									<?php include("../compartido/publicidad-lateral.php");?>
@@ -91,16 +94,13 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													if(is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
+													include("includes/consulta-paginacion-movimientos.php");
 													
-													$filtroLimite = '';
-													if(is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
-													 INNER JOIN usuarios ON uss_id=fcu_usuario
-													 WHERE fcu_id=fcu_id $filtro
-													 ORDER BY fcu_id
-													 $filtroLimite");
+													$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
+													INNER JOIN usuarios ON uss_id=fcu_usuario
+													WHERE fcu_id=fcu_id $filtro
+													ORDER BY fcu_id
+													LIMIT $inicio,$registros");
 													 $contReg = 1;
 													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -146,6 +146,7 @@
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
 
                             </div>
