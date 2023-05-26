@@ -95,6 +95,7 @@ $Plataforma = new Plataforma;
                                                                 break;
                                                         }
                                                         include("dev/console.php");
+                                                        if(!empty($file)){
                                                         $contReg=1;
                                                         foreach ($lines as $line) {
                                                     ?>
@@ -105,7 +106,9 @@ $Plataforma = new Plataforma;
                                                     <?php
                                                         $contReg++;
                                                         }
-                                                        fclose($file);
+                                                        
+                                                            fclose($file);
+                                                        }
                                                     ?>
                                                 </tbody>
                                             </table>

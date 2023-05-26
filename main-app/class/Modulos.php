@@ -41,4 +41,11 @@ class Modulos {
         return true;
     }
 
+    public static function validarAccesoDirectoPaginas(){
+        if($_SERVER['HTTP_REFERER']==""){
+            echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
+            exit();
+        }
+    }
+
 }

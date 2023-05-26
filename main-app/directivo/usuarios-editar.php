@@ -113,11 +113,36 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                                                 </select>
                                             </div>
                                         </div>
+										
+										<script>
+										function habilitarClave() {
+											var cambiarClave = document.getElementById("cambiarClave");
+											var clave = document.getElementById("clave");
+											
+											if (cambiarClave.checked) {
+											clave.disabled = false;
+											clave.required = 'required';
+											} else {
+											clave.disabled = true;
+											clave.required = '';
+											clave.value = '';
+											}
+										}
+										</script>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Contraseña</label>
 											<div class="col-sm-4">
-												<input type="text" name="clave" class="form-control" value="<?=$datosEditar['uss_clave'];?>">
+												<input type="password" name="clave" id="clave" class="form-control" disabled>
+											</div>
+											<div class="col-sm-2">
+											<div class="input-group spinner col-sm-10">
+												<label class="switchToggle">
+													<input type="checkbox" name="cambiarClave" id="cambiarClave" value="1" onchange="habilitarClave()">
+													<span class="slider red round"></span>
+												</label>
+												<label class="col-sm-2 control-label">Cambiar Contraseña</label>
+												</div>
 											</div>
 										</div>
 										<hr>
