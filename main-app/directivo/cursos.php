@@ -78,8 +78,11 @@
 														<th><?=$frases[5][$datosUsuarioActual[8]];?></th>
 														<th>Formato boletín</th>
 														<th>Matrícula</th>
-														<th>Pensión</th>
+														<th>Pensión</th>														
 														<th>#P</th>
+														<?php if(array_key_exists(10,$arregloModulos) ){?>
+															<th>Tipo</th>
+														<?php }?>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
@@ -95,9 +98,11 @@
 														<td><?=$resultado['gra_nombre'];?></td>
 														<td><?=$resultado[3];?></td>
 														<td>$<?=number_format($resultado[4]);?></td>
-														<td>$<?=number_format($resultado[5]);?></td>
+														<td>$<?=number_format($resultado[5]);?></td>														
 														<td><?=$resultado[11];?></td>
-														
+														<?php if(array_key_exists(10,$arregloModulos) ){?>
+															<td><?=strtoupper($resultado['gra_tipo']);?></td>
+														<?php }?>
 														<td>
 															<div class="btn-group">
 																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
