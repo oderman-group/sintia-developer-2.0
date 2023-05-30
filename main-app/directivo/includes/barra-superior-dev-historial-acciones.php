@@ -24,7 +24,8 @@ if (isset($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
+                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE 
+                    ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $instID) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';

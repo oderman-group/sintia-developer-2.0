@@ -4,7 +4,7 @@ try{
     $pesoInstituciones=mysqli_query($conexion, "SELECT plns_espacio_gb FROM $baseDatosServicios.instituciones 
     INNER JOIN $baseDatosServicios.planes_sintia  
     ON plns_id=ins_id_plan
-    WHERE ins_id='".$config['conf_id_institucion']."'");
+    WHERE ins_id='".$config['conf_id_institucion']."' AND ins_enviroment='".ENVIROMENT."'");
 }catch(Exception $e){
     echo 'Caught exception: ',  $e->getMessage(), "\n";
     exit();

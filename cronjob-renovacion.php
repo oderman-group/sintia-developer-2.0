@@ -14,7 +14,8 @@ $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);
 
 //CONSULTA INSTITUCIONES ACTIVAS
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
-$institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM instituciones WHERE ins_estado=1");
+$institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM instituciones 
+WHERE ins_estado=1 AND ins_enviroment='".ENVIROMENT."'");
 
 //CICLO PARA EJECUTAR NOTIFICACION
 while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH)){
