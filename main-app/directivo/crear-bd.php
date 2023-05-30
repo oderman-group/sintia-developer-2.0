@@ -14,7 +14,8 @@ if($nueva==0){//PARA ANTIGUAS
     //DATOS BASICOS DE LA INSTITUCIÓN
     $idInsti = $_POST['idInsti'];//LE MODIFICAMOS EL VALOR SOLO CUANDO LA INSTITUCION ES ANTIGUA
     
-    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id = ".$idInsti."");
+    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+    WHERE ins_id = ".$idInsti." AND ins_enviroment='".ENVIROMENT."'");
     $datosInsti = mysqli_fetch_array($consulta, MYSQLI_BOTH);
     
     $siglasBD = $datosInsti['ins_bd'];//AQUI COLOCAMOS LAS SIGLAS QUE VAN AL INTERMEDIO DEL NOMBRE DE LA BD EJE: monbiliar_{[$siglasBD]}_{[$year]}

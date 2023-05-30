@@ -37,7 +37,7 @@ try {
     //consulta a instituciones no bloqueadas
     $conexionAdmin = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
     $consultaInstituciones = mysqli_query($conexionAdmin, "SELECT * FROM instituciones
-    WHERE ins_bloqueada='0'
+    WHERE ins_bloqueada='0' AND ins_enviroment='".ENVIROMENT."'
     ");
 
     if(empty($_POST["continue"]) || $_POST["continue"]!=1 || empty($_SERVER['HTTP_REFERER'])){
