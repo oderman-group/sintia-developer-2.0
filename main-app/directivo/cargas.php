@@ -135,6 +135,7 @@ $Plataforma = new Plataforma;
 																	  	<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	  <?php }?>
 																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla</a></li>
+																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla con notas</a></li>
 																  </ul>
 															  </div>
 														</td>
