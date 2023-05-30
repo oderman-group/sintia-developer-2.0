@@ -9,7 +9,8 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
+$institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
 ?>
 
 	<!--bootstrap -->

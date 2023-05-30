@@ -1,21 +1,10 @@
 <?php
-if (!empty($_GET['busqueda'])) {
+if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
-        rperr_id LIKE '%" . $busqueda . "%' 
-        OR rperr_numero LIKE '%" . $busqueda . "%' 
-        OR rperr_error LIKE '%" . $busqueda . "%' 
-        OR rperr_pagina_referencia LIKE '%" . $busqueda . "%' 
+        cxu_id LIKE '%" . $busqueda . "%' 
         OR ins_nombre LIKE '%" . $busqueda . "%' 
-        OR ins_siglas LIKE '%" . $busqueda . "%' 
-        OR uss_nombre LIKE '%".$busqueda."%' 
-        OR uss_nombre2 LIKE '%".$busqueda."%' 
-        OR uss_apellido1 LIKE '%".$busqueda."%' 
-        OR uss_apellido2 LIKE '%".$busqueda."%' 
-        OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
-        OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
-        OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
-        OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+        OR ins_siglas LIKE '%" . $busqueda . "%'
         )";
 }
 ?>
@@ -34,8 +23,7 @@ if (!empty($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-                    WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1");
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $_GET["insti"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
@@ -94,11 +82,11 @@ if (!empty($_GET['busqueda'])) {
                         $yearEndC=$yearEnd;
                         while($yearStartC <= $yearEndC){
                             $estiloResaltado = '';
-                            if ($yearStartC == $_GET["year"]){ 
+                            if ($yearStartC == $year){ 
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 

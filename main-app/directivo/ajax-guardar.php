@@ -19,7 +19,8 @@ if($_POST["operacion"]==1){
 
 if($_POST["operacion"]==3){
 	try{
-		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".instituciones SET ins_bloqueada='".$_POST["valor"]."' WHERE ins_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".instituciones SET ins_bloqueada='".$_POST["valor"]."' 
+		WHERE ins_id='".$_POST["idR"]."' AND ins_enviroment='".ENVIROMENT."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
