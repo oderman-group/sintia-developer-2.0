@@ -165,6 +165,8 @@ $Plataforma = new Plataforma;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="dev-instituciones-editar.php?id=<?= $resultado['ins_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= $resultado['ins_id']; ?>">Configuración</a></li>
+                                                                        <li><a href="dev-instituciones-Informacion.php?id=<?= $resultado['ins_id']; ?>">Información</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
