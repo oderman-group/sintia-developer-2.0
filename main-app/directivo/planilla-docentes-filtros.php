@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0141';?>
+<?php $idPaginaInterna = 'DT0194';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 
