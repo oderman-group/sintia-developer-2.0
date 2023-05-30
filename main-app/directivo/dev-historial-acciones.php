@@ -138,7 +138,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="#<?= $resultado['hil_id']; ?>">Ver Reporte</a></li>
+                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= $resultado['hil_id']; ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
