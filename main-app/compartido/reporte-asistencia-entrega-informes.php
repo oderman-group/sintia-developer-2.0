@@ -139,17 +139,24 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                     INNER JOIN academico_cargas on car_materia = mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
                     INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
                     ORDER BY mat_id;");
-                    while($notaMaterias = mysqli_fetch_array($consultaNotaMaterias, MYSQLI_BOTH)){
-                        $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
+                    $numNotas = mysqli_num_rows($consultaNotaMaterias);
+                    if($numNotas>0){
+                        while($notaMaterias = mysqli_fetch_array($consultaNotaMaterias, MYSQLI_BOTH)){
+                            $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
 
-                        $estiloNota="";
-                        if($notaMateria<$config['conf_nota_minima_aprobar']){
-                            $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
+                            $estiloNota="";
+                            if($notaMateria<$config['conf_nota_minima_aprobar']){
+                                $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
+                            }
+                            echo '<td align="center" '.$estiloNota.'>'.$notaMateria.'</td>';
                         }
+                    }else{
+                        for($i=1;$i<=$numMaterias;$i++){
+                            echo '<td align="center">&nbsp;</td>';
+                        } 
+                    }
 
                 ?>
-                <td align="center" <?=$estiloNota?>><?=$notaMateria?></td>
-                <?php } ?>
                 <td style="height:20px;">&nbsp;</td>
                 <td style="height:20px;">&nbsp;</td>
             </tbody>
