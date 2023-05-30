@@ -20,6 +20,7 @@ require_once("../class/UsuariosPadre.php");
       text-orientation: mixed;
       /* para que los caracteres se roten correctamente */
       transform: rotate(180deg);
+      padding-top: 5px;
     }
   </style>
 </head>
@@ -49,6 +50,24 @@ require_once("../class/UsuariosPadre.php");
   WHERE car_id=car_id $filtro");
 
   while ($resultadoCargas = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH)) {
+    $materia=strtoupper($resultadoCargas['mat_nombre']);
+    $materiaSiglas=strtoupper($resultadoCargas['mat_siglas']);
+    $periodoActual=($resultadoCargas['car_periodo']-1);
+
+    switch($periodoActual){
+        case 1:
+            $acomulado=0.25;
+            break;
+        case 2:
+            $acomulado=0.50;
+            break;
+        case 3:
+            $acomulado=0.75;
+            break;
+        case 4:
+            $acomulado=0.10;
+            break;
+    }
 ?>
     <div align="center" style="margin-bottom:20px;">
       <b>
@@ -66,7 +85,7 @@ require_once("../class/UsuariosPadre.php");
       </tr>
 
       <tr>
-        <td><strong>ASIGNATURA:</strong><br> <?= strtoupper($resultadoCargas['mat_nombre']); ?></td>
+        <td><strong>ASIGNATURA:</strong><br> <?= $materia ?></td>
         <td><strong>PERIODO:</strong><br> <?php echo $resultadoCargas['car_periodo'] . " (" . date("Y") . ")"; ?></td>
         <td><strong>Fecha Impresión:</strong><br> <?= date("d/m/Y H:i:s"); ?></td>
       </tr>
@@ -74,43 +93,39 @@ require_once("../class/UsuariosPadre.php");
     <p>&nbsp;</p>
 
     <table bgcolor="#FFFFFF" width="100%" cellspacing="0" cellpadding="0" rules="all" border="1">
-      <tr style="font-weight:bold; background:#4c9858; border-color:#666; height:20px; color:#000; font-size:12px;">
-        <td align="center" width="20%" colspan="3">Tipo de Evaluaci&oacute;n y %</td>
-        <td width="10%" colspan="5" align="center">&nbsp;</td>
-        <td width="10%" colspan="5" align="center">&nbsp;</td>
-        <td width="10%" colspan="5" align="center">&nbsp;</td>
+      <tr style="font-weight:bold; background:<?=$Plataforma->colorUno;?>; border-color:#4c9858; height:20px; color:#FFF; font-size:12px;">
+        <td align="center" width="15%" colspan="3">Información del Estudiante</td>
+        <td width="10%" colspan="5" align="center">Resumen de Periodos</td>
+        <td width="10%" colspan="15" align="center">TEMAS</td>
         <td align="center" width="3%">Auto</td>
         <td align="center" width="3%">Coo</td>
         <td colspan="7" width="2%"></td>
       </tr>
 
       <tr style="height:150px; font-weight:bold; font-size:12px;">
-        <td align="center" width="20%" colspan="3">TEMAS</td>
+        <td align="center" style="font-weight:bold; background:<?=$Plataforma->colorUno;?>; color:#FFF; font-size:12px;" rowspan="2">No</b></td>
+        <td align="center" style="font-weight:bold; background:<?=$Plataforma->colorUno;?>; color:#FFF; font-size:12px;" rowspan="2">C&oacute;digo</td>
+        <td align="center" style="font-weight:bold; background:<?=$Plataforma->colorUno;?>; color:#FFF; font-size:12px;" rowspan="2">Estudiante</td>
+      <?php
+        for($i=1;$i<=4;$i++){
+      ?>
+        <td rowspan="2" class="vertical" style="background:<?=$Plataforma->colorTres;?>; height:20px;" width="2%"><?= $i.". ".$materiaSiglas; ?></td>
+      <?php
+        }
+      ?>
+        <td rowspan="2" class="vertical" style="background:<?=$Plataforma->colorTres;?>; height:20px;" width="2%">FINAL <?= $materiaSiglas; ?></td>
+      <?php
+        for($i=1;$i<=17;$i++){
+      ?>
         <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
-        <td align="center" width="2%">&nbsp;</td>
+      <?php
+        }
+      ?>
         <td colspan="7" align="center">______________________<br> Firma Docente</td>
       </tr>
 
-      <tr style="font-weight:bold; font-size:12px; height:35px; background:#4c9858; border-color:#4c9858; color:#000;">
-        <td align="center">No</b></td>
-        <td align="center">C&oacute;digo</td>
-        <td align="center">Estudiante</td>
-        <td align="center" colspan="17" width="2%">&nbsp;</td>
+      <tr style="font-weight:bold; font-size:12px; height:35px; background:<?=$Plataforma->colorUno;?>; border-color:#4c9858; color:#FFF;">
+        <td align="center" colspan="17" width="2%">NOTAS</td>
         <td align="center" colspan="7">Inasistencia</td>
         <?php
           $filtroDocentesParaListarEstudiantes = " AND mat_grado='" . $resultadoCargas['car_curso'] . "' AND mat_grupo='" . $resultadoCargas['car_grupo'] . "'";
@@ -119,40 +134,52 @@ require_once("../class/UsuariosPadre.php");
           $n = 1;
 
           while ($e = mysqli_fetch_array($estudiantes, MYSQLI_BOTH)) {
-            $fondo = '#FFF';
-            if ($n % 2 == 0) {
-              $fondo = '#e0e0153b';
-            }
         ?>
 
-      <tr style="font-size:10px; height:25px; background-color: <?= $fondo; ?>">
+      <tr style="font-size:10px; height:25px;">
         <td align="center" width="2%"><?= $n; ?></td>
         <td align="center" width="5%"><?= $e[0]; ?></td>
-        <td width="20%"><?= Estudiantes::NombreCompletoDelEstudiante($e); ?></td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
-        <td width="3%">&nbsp;</td>
+        <td width="20%"><?= Estudiantes::NombreCompletoDelEstudiante($e)?></td>
+      <?php
+        $acomuladoNota=0;
+        for($i=1;$i<=4;$i++){
+          $consultaNotas=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga='".$resultadoCargas['car_id']."' AND bol_estudiante='".$e['mat_id']."' AND bol_periodo='".$i."'");
+          $nota=mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
+
+          $notaEstudiante="";
+          if(!empty($nota['bol_nota'])){
+            $notaEstudiante=round($nota['bol_nota'], $config['conf_decimales_notas']);
+            $acomuladoNota+=$notaEstudiante;
+          }
+          
+          $estiloNota='style="background:'.$Plataforma->colorTres.';"';
+          if($notaEstudiante!="" AND $notaEstudiante<$config['conf_nota_minima_aprobar']){
+              $estiloNota='style="font-weight:bold; color:#FFF; background:'.$Plataforma->colorDos.';"';
+          }
+      ?>
+        <td align="center" <?=$estiloNota?> width="3%"><?=$notaEstudiante?></td>
+      <?php
+          // $acomuladoNota+=$notaEstudiante;
+        }
+        //ACOMULADO PARA LAS MATERIAS
+        $totalAcomuladoNota=$acomuladoNota*$acomulado;
+        $totalAcomuladoNota= round($totalAcomuladoNota, 1);
+      ?>
+        <td align="center" style="background:<?=$Plataforma->colorTres;?>;" width="3%"><?=$totalAcomuladoNota?></td>
+      <?php
+        for($i=1;$i<=17;$i++){
+      ?>
+        <td align="center" width="3%">&nbsp;</td>
+      <?php
+        }
+      ?>
+      <?php
+        for($i=1;$i<=7;$i++){
+      ?>
         <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
-        <td width="1%">&nbsp;</td>
+      <?php
+        }
+      ?>
       </tr>
 
     <?php
