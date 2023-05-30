@@ -60,6 +60,7 @@
 											<p><a href="informe-reporte-sabana.php">2. Informe de sábanas</a></p>
 											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
 											<p><a href="asistencia-planilla.php">4. Planilla de asistencia</a></p>
+											<p><a href="planilla-docentes-filtros.php">4. Planilla docentes con notas</a></p>
 										</div>
                                 	</div>
 								</div>
