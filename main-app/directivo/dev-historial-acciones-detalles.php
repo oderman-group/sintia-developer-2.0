@@ -157,7 +157,7 @@ if($datosHistorial['hil_usuario_autologin']!=0){
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <a href="#" name="dev-historial-acciones.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
                                 </form>
                             </div>
                         </div>
