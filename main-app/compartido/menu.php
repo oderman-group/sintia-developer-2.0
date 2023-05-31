@@ -188,7 +188,6 @@
 	                            <ul class="sub-menu">
 									<li><a href="configuracion-sistema.php">del Sistema</a></li>
 									<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
-									<li><a href="configuracion-opciones-generales.php">Opciones generales</a></li>
 	                            </ul>
 	                        </li>
 
@@ -214,7 +213,7 @@
 										<li class="nav-item"><a href="dev-instituciones.php" class="nav-link"> <span class="title">Instituciones</span></a></li>
 										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title">Módulos</span></a></li>
 										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
+										<li class="nav-item"><a href="configuracion-opciones-generales.php" class="nav-link"> <span class="title">Opciones generales</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
 										<li class="nav-item"><a href="dev-contratos.php" class="nav-link"> <span class="title">Contratos</span></a></li>
 										<li class="nav-item"><a href="dev-terminos.php" class="nav-link"> <span class="title">T&C</span></a></li>
