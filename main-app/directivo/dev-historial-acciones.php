@@ -43,6 +43,10 @@ $Plataforma = new Plataforma;
                                 if (!empty($_GET["insti"])) {
                                     $instID=$_GET["insti"];
                                 }
+                                $mes=date("m");
+                                if (!empty($_GET["mes"])) {
+                                    $mes=$_GET["mes"];
+                                } 
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
                                     $year=$_GET["year"];
@@ -82,7 +86,7 @@ $Plataforma = new Plataforma;
                                                         <th>Tiempo de carga</th>
                                                         <th>Institución</th>
                                                         <th>Autologin</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -92,16 +96,13 @@ $Plataforma = new Plataforma;
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones
                                                     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion AND ins_enviroment='".ENVIROMENT."'
                                                     LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-                                                    WHERE  hil_institucion='".$instID."' AND YEAR(hil_fecha) =".$year." ".$filtro."
+                                                    WHERE  hil_institucion=".$instID." AND YEAR(hil_fecha) =".$year." AND MONTH(hil_fecha) =".$mes." ".$filtro."
                                                     ORDER BY hil_id DESC
                                                     LIMIT $inicio,$registros;");
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$_SESSION["inst"]."_".$year;
-                                                        if (!empty($_GET["insti"])) {
-                                                            $BD=$resultado["ins_bd"]."_".$year;
-                                                        }
+                                                        $BD=$resultado["ins_bd"]."_".$year;
 
                                                         $responsable="";
                                                         if($resultado['hil_usuario']!=0){
@@ -137,7 +138,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="#<?= $resultado['hil_id']; ?>">Ver Reporte</a></li>
+                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= $resultado['hil_id']; ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
