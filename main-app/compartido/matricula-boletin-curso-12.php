@@ -36,7 +36,7 @@
             break;
         case 4:
             $periodoActuales = "Final";
-            $acomulado=0.10;
+            $acomulado=1;
             break;
     }
 
@@ -66,6 +66,7 @@
     $contadorEstudiantes=0;
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
         $promedioGeneral = 0;
+        $promedioGeneralPeriodos = 0;
         $gradoActual = $matriculadosDatos['mat_grado'];
         $grupoActual = $matriculadosDatos['mat_grupo'];
         switch($matriculadosDatos["gru_id"]){
@@ -201,13 +202,16 @@
                             $condicion2 = "4";
                             break;
                     }
-                    $sumaPromedioGeneral=0;
                     $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM $BD.academico_materias
                     INNER join $BD.academico_areas ON ar_id = mat_area
                     INNER JOIN $BD.academico_cargas on car_materia = mat_id and car_curso = $gradoActual AND car_grupo = $grupoActual
                     GROUP by mat_area
                     ORDER BY ar_posicion");
                     $numAreas=mysqli_num_rows($consultaAreas);
+                    $sumaPromedioGeneral=0;
+                    $sumaPromedioGeneralPeriodo1=0;
+                    $sumaPromedioGeneralPeriodo2=0;
+                    $sumaPromedioGeneralPeriodo3=0;
                     while($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)){
 
                         $consultaMaterias= mysqli_query($conexion,"SELECT car_id, car_ih, car_materia, car_docente, car_director_grupo,
@@ -218,9 +222,10 @@
                         FROM $BD.academico_cargas
                         INNER JOIN $BD.academico_materias ON mat_id = car_materia
                         INNER JOIN $BD.academico_areas ON ar_id = mat_area
-                        INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo in ($condicion) AND bol_estudiante = ".$matriculadosDatos['mat_id']."
+                        INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo =".$periodoActual." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
                         WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND mat_area = ".$datosAreas['ar_id']."");
                         $notaArea=0;
+                        $notaAreasPeriodos=0;
                         while($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)){
                             //DIRECTOR DE GRUPO
                             if($datosMaterias["car_director_grupo"]==1){
@@ -252,10 +257,16 @@
                                     <td><?=$datosMaterias['mat_nombre']?></td>
                                     <td align="center"><?=$datosMaterias['car_ih']?></td>
                                     <?php
+                                        $notaMateriasPeriodosTotal=0;
                                         for($i=1;$i<=$periodoActual;$i++){
                                             if($i!=$periodoActual){
+                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga=".$datosMaterias['car_id']." AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."");
+                                                $datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
+                                                $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
+                                                $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
+                                                $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
                                     ?>
-                                    <td align="center" style="background: #9ed8ed"><?=$notaMateria?></td>
+                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodos?></td>
                                     <?php
                                                 }else{
                                     ?>
@@ -266,7 +277,7 @@
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria=$notaMateria*$acomulado;
+                                        $notaAcomuladoMateria=($notaMateria+$notaMateriasPeriodosTotal)*$acomulado;
                                         $notaAcomuladoMateria= round($notaAcomuladoMateria,1);
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
@@ -274,6 +285,9 @@
                                         $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $BD);
                                         if($notaAcomuladoMateria<10){
                                             $estiloNotaAcomuladoMaterias['notip_nombre']="Bajo";
+                                        }
+                                        if($notaAcomuladoMateria>50){
+                                            $estiloNotaAcomuladoMaterias['notip_nombre']="Superior";
                                         }
                                     ?>
                                     <td align="center"><?=$ausencia?></td>
@@ -289,32 +303,44 @@
                             //NOTA PARA LAS AREAS
                             $notaArea+=round($datosMaterias['notaArea'], 1);
                             $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
-                            if($notaArea<10){
-                                $estiloNotaAreas['notip_nombre']="Bajo";
-                            }
 
                         } //FIN WHILE DE LAS MATERIAS
-                        
-                        //ACOMULADO PARA LAS AREAS
-                        $notaAcomuladoArea=$notaArea*$acomulado;
-                        $notaAcomuladoArea= round($notaAcomuladoArea,1);
-                        if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
-                            $notaAcomuladoArea = $notaAcomuladoArea.".0";
-                        }
-                        $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
-                        if($notaAcomuladoArea<10){
-                            $estiloNotaAcomuladoAreas['notip_nombre']="Bajo";
-                        }
                     ?>
                     <!--********SE IMPRIME LO REFERENTE A LAS AREAS*******-->
                         <tr>
                             <td <?=$background?>><?=$datosAreas['ar_nombre']?></td>
                             <td align="center"><?=$ih?></td>
                             <?php
+                                $notaAreasPeriodosTotal=0;
+                                $promGeneralPer1=0;
+                                $promGeneralPer2=0;
+                                $promGeneralPer3=0;
                                 for($i=1;$i<=$periodoActual;$i++){
                                     if($i!=$periodoActual){
+                                        $consultaAreasPeriodos=mysqli_query($conexion,"SELECT mat_valor,
+                                        bol_estudiante, bol_periodo, bol_nota,
+                                        SUM(bol_nota * (mat_valor/100)) AS notaArea
+                                        FROM academico_cargas
+                                        INNER JOIN academico_materias ON mat_id = car_materia
+                                        INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
+                                        WHERE mat_area = ".$datosAreas['ar_id']."
+                                        GROUP BY mat_area");
+                                        $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
+                                        $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
+                                        $notaAreasPeriodosTotal+=$notaAreasPeriodos;
+                                        switch($i){
+                                            case 1:
+                                                $promGeneralPer1+=$notaAreasPeriodos;
+                                                break;
+                                            case 2:
+                                                $promGeneralPer2+=$notaAreasPeriodos;
+                                                break;
+                                            case 3:
+                                                $promGeneralPer3+=$notaAreasPeriodos;
+                                                break;
+                                        }
                             ?>
-                            <td align="center" style="background: #9ed8ed"><?=$notaArea?></td>
+                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodos?></td>
                             <?php
                                     }else{
                             ?>
@@ -322,6 +348,20 @@
                             <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
                             <?php
                                     }
+                                }
+                        
+                                //ACOMULADO PARA LAS AREAS
+                                $notaAcomuladoArea=($notaArea+$notaAreasPeriodosTotal)*$acomulado;
+                                $notaAcomuladoArea= round($notaAcomuladoArea,1);
+                                if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
+                                    $notaAcomuladoArea = $notaAcomuladoArea.".0";
+                                }
+                                $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
+                                if($notaAcomuladoArea<10){
+                                    $estiloNotaAcomuladoAreas['notip_nombre']="Bajo";
+                                }
+                                if($notaAcomuladoArea>50){
+                                    $estiloNotaAcomuladoAreas['notip_nombre']="Superior";
                                 }
                             ?>
                             <td align="center"><?=$ausencia?></td>
@@ -332,6 +372,11 @@
 
                             //SUMA NOTAS DE LAS AREAS
                             $sumaPromedioGeneral+=$notaArea;
+
+                            //SUMA NOTAS DE LAS AREAS PERIODOS ANTERIORES
+                            $sumaPromedioGeneralPeriodo1+=$promGeneralPer1;
+                            $sumaPromedioGeneralPeriodo2+=$promGeneralPer2;
+                            $sumaPromedioGeneralPeriodo3+=$promGeneralPer3;
                             
                         } //FIN WHILE DE LAS AREAS
 
@@ -342,6 +387,7 @@
                         if($promedioGeneral<10){
                             $estiloNotaPromedioGeneral['notip_nombre']="Bajo";
                         }
+                        
                     ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
@@ -350,8 +396,23 @@
                     <?php
                     for ($j = 1; $j <= $periodoActual; $j++) {
                         if($j!=$periodoActual){
+                            switch($j){
+                                case 1:
+                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo1;
+                                    break;
+                                case 2:
+                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo2;
+                                    break;
+                                case 3:
+                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo3;
+                                    break;
+                            }
+
+                            //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
+                            $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
+                            $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
                     ?>
-                    <td align="center"><?=$promedioGeneral;?></td>
+                    <td align="center"><?=$promedioGeneralPeriodos;?></td>
                     <?php
                         }else{
                     ?>
