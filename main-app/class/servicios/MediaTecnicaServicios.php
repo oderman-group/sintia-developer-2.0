@@ -41,7 +41,8 @@ class MediaTecnicaServicios extends Servicios
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
       LEFT JOIN academico_matriculas ON matcur_id_matricula=mat_id
 			LEFT JOIN academico_grados ON gra_id=matcur_id_curso
-			LEFT JOIN usuarios ON uss_id=mat_id_usuario			
+			LEFT JOIN usuarios ON uss_id=mat_id_usuario
+      LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero			
       ";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
