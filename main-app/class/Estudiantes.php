@@ -149,12 +149,13 @@ class Estudiantes {
         return $resultado;
     }
 
-    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '')
+    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '',$cursoActual=null)
     {
         global $conexion, $baseDatosServicios;
         $resultado = [];
-
+        $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         try {
+             if($tipoGrado==GRADO_GRUPAL){
             $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
             LEFT JOIN usuarios ON uss_id=mat_id_usuario
             LEFT JOIN academico_grados ON gra_id=mat_grado
@@ -165,6 +166,15 @@ class Estudiantes {
             ".$filtroEstudiantes."
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
             ");
+            } else{
+                $parametros = [
+                      'matcur_id_curso'=>$cursoActual["gra_id"],
+                      'and'=>'AND (mat_estado_matricula=1 OR mat_estado_matricula=2)',
+                      'arreglo'=>false
+                  ];
+                  $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
+                  
+              }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
