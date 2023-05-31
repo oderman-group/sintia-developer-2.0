@@ -47,10 +47,11 @@ class MediaTecnicaServicios extends Servicios
         $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
+      $andPersonalizado=$parametrosArray['and'];
       $sqlFinal ="ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
       $limite=$parametrosArray["limite"];
       $esArreglo=$parametrosArray["arreglo"];
-      $sql=$sqlInicial.$sqlFinal;
+      $sql=$sqlInicial." ".$andPersonalizado." ".$sqlFinal;
       return Servicios::SelectSql($sql,$limite,$esArreglo);         
     }
     
