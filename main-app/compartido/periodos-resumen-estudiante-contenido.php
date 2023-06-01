@@ -4,6 +4,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 	exit();
 }
 ?>
+<?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -93,8 +94,14 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
                                                 </thead>
                                                 <tbody>
 													<?php
-													$contReg = 1; 
-													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													$contReg = 1;
+													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+														$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+														$filtroOr='';
+														foreach ($listaCursosMediaTecnica as $dato) {
+                                                            $filtroOr=$filtroOr.' OR car_curso='.$dato["matcur_id_curso"];
+														} 
+													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."' ".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
