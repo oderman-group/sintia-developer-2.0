@@ -21,7 +21,7 @@ class Servicios
             $resulsConsulta = mysqli_query($conexion, $sql.' '.$limite);
             if($resulsConsulta->num_rows>0){
                 $index=0;
-                if($esArreglo){
+                if(is_null($esArreglo) || $esArreglo){
                     while($fila=$resulsConsulta->fetch_assoc()){
                         $arraysDatos[$index]=$fila;
                         $index++;
@@ -58,6 +58,21 @@ class Servicios
             echo "Excepción catpurada: " . $e->getMessage();
             exit();
         }
+    }
+
+    public static function buildSelectSql($parametrosArray=null)// funcion para construir y enviar un Sql teniendo en cuenta los parametros
+    {
+      $sqlInicial=$parametrosArray["sqlInicial"];
+      $parametrosValidos=$parametrosArray["parametrosValidos"];
+      if($parametrosArray && count($parametrosArray)>0){
+        $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
+        $andPersonalizado=$parametrosArray['and'];
+      };
+      $sqlFinal =$parametrosArray["sqlFinal"];;     
+      $sql=$sqlInicial." ".$andPersonalizado." ".$sqlFinal;
+      $limite=$parametrosArray["limite"];
+      $esArreglo=$parametrosArray["arreglo"];
+      return Servicios::selectSql($sql,$limite,$esArreglo);
     }
 
     public static function concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray)// funcion para concatenar los parametros WHERE o AND en una Consulta
