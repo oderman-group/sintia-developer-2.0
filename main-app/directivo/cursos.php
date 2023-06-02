@@ -34,19 +34,9 @@
 								<div class="col-md-12">
 								
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
-
-									<div class="btn-group">
-																  <button type="button" class="btn btn-primary">MÁS ACCIONES</button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cursos-intensidad.php">I.H por curso</a></li>
-																	  <!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
-																	  <li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
-																	  <li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
-																  </ul>
-															  </div>
+									
+									<?php include("includes/barra-superior-cursos.php"); ?>
+								
 
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -88,7 +78,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php													
-                           							 $consulta = Grados::listarGrados(1);
+                           							 $consulta = Grados::listarGrados(1,$_GET['tipo']);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
