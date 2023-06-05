@@ -118,7 +118,7 @@ $Plataforma = new Plataforma;
 
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones
                                                     LEFT JOIN ".$baseDatosServicios.".planes_sintia ON plns_id=ins_id_plan
-                                                    WHERE ins_id=ins_id $filtro
+                                                    WHERE ins_id=ins_id AND ins_enviroment='".ENVIROMENT."' $filtro
                                                     ORDER BY ins_id
                                                     LIMIT $inicio,$registros;");
                                                     $contReg = 1;
@@ -165,6 +165,8 @@ $Plataforma = new Plataforma;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="dev-instituciones-editar.php?id=<?= $resultado['ins_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= $resultado['ins_id']; ?>">Configuración</a></li>
+                                                                        <li><a href="dev-instituciones-Informacion.php?id=<?= $resultado['ins_id']; ?>">Información</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

@@ -1,15 +1,13 @@
 <?php
 include("session.php");
 
-$idPaginaInterna = 'DV0004';
+$idPaginaInterna = 'DV0026';
 
 include("../compartido/historial-acciones-guardar.php");
 
 Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
-
-$Plataforma = new Plataforma;
 ?>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -29,7 +27,7 @@ $Plataforma = new Plataforma;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Historial de acciones</div>
+                            <div class="page-title">T&C</div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -38,34 +36,14 @@ $Plataforma = new Plataforma;
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
-                            <?php
-                                $instID=$config['conf_id_institucion'];
-                                if (!empty($_GET["insti"])) {
-                                    $instID=$_GET["insti"];
-                                }
-                                $mes=date("m");
-                                if (!empty($_GET["mes"])) {
-                                    $mes=$_GET["mes"];
-                                } 
-                                $year=$agnoBD;
-                                if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
-                                } 
-                                $filtro = '';
-                                if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
-                                    $filtro .= " AND (hil_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR hil_fecha LIKE '%" . $_GET["hasta"] . "%')";
-                                }                        
-                            ?>
-
                             <div class="col-md-12">
                                 <?php
                                 include("../../config-general/mensajes-informativos.php");
-                                include("includes/barra-superior-dev-historial-acciones.php");
                                 ?>
 
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
-                                        <header>Historial de acciones</header>
+                                        <header>T&C</header>
                                         <div class="tools">
                                             <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                                             <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -78,59 +56,23 @@ $Plataforma = new Plataforma;
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
                                                         <th>Cod</th>
-                                                        <th>Fecha</th>
-                                                        <th>Pagina</th>
-                                                        <th>Responsable</th>
-                                                        <th>Tiempo de carga</th>
-                                                        <th>Institución</th>
-                                                        <th>Autologin</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <th>Titulo</th>
+                                                        <th>Ultima Modificación</th>
+                                                        <th>Visible</th>
+                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
-													include("includes/consulta-paginacion-dev-historial-acciones.php");
-
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones
-                                                    INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                    LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-                                                    WHERE  hil_institucion=".$instID." AND YEAR(hil_fecha) =".$year." AND MONTH(hil_fecha) =".$mes." ".$filtro."
-                                                    ORDER BY hil_id DESC
-                                                    LIMIT $inicio,$registros;");
-                                                    $contReg = 1;
-                                                    while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
-
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
-                                                        $responsable="";
-                                                        if($resultado['hil_usuario']!=0){
-
-                                                            $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario']."'");
-                                                            $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
-                                                            $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable);
-
-                                                        }
-                                                        
-                                                        $ussAutologin="NO";
-                                                        if($resultado['hil_usuario_autologin']!=0){
-
-                                                            $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
-                                                            $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
-                                                            $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
-
-                                                        }
+                                                    $terminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                                                    while ($datosTerminos = mysqli_fetch_array($terminos, MYSQLI_BOTH)) {
                                                     ?>
                                                         <tr>
-                                                            <td><?= $contReg; ?></td>
-                                                            <td><?= $resultado['hil_id']; ?></td>
-                                                            <td><?= $resultado['hil_fecha']; ?></td>
-                                                            <td><?= $resultado['pagp_pagina']; ?></td>
-                                                            <td><?= $responsable; ?></td>
-                                                            <td><?= $resultado['hil_tiempo_carga']; ?></td>
-                                                            <td><?= $resultado['ins_siglas']; ?></td>
-                                                            <td><?= $ussAutologin; ?></td>
+                                                            <td><?= $datosTerminos['ttp_id']; ?></td>
+                                                            <td><?= $datosTerminos['ttp_nombre']; ?></td>
+                                                            <td><?= $datosTerminos['ttp_fecha_modificacion']; ?></td>
+                                                            <td><?= $datosTerminos['ttp_visible']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
@@ -138,19 +80,18 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= $resultado['hil_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-terminos-editar.php?id=<?= $datosTerminos['ttp_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-terminos-usuarios.php?id=<?= $datosTerminos['ttp_id']; ?>">Usuarios que aceptaron</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                    <?php $contReg++;
-                                                    } ?>
+                                                    <?php } ?>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                                <?php include("enlaces-paginacion.php");?>
                             </div>
                         </div>
                     </div>

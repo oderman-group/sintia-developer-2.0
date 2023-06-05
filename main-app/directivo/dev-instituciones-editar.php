@@ -9,7 +9,8 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".instituciones WHERE ins_id='" . $_GET["id"] . "'");
+$consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".instituciones 
+WHERE ins_id='" . $_GET["id"] . "' AND ins_enviroment='".ENVIROMENT."'");
 $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 

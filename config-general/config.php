@@ -23,3 +23,4 @@ $opcionEstado = array("INACTIVO", "ACTIVO");
 $estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado");
 $clavePorDefectoUsuarios = SHA1('12345678');
 $estadosEtiquetasMatriculas = array("","text-success","text-warning","text-danger","text-warning");
+$opcionesGenerales = array("","T. Documento","Religion","Estratos","Generos","Nuevo/Antiguo","Dias","Nivel Educativo","Estado Civil","Estado Laboral","T. de Empresa","Si/No","T. de Vivienda","T. de Trasporte","T. de Sangre","Boletines");

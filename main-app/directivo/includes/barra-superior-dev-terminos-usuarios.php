@@ -1,9 +1,8 @@
 <?php
-if (isset($_GET['busqueda'])) {
+if (!empty($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
-        hil_id LIKE '%" . $busqueda . "%' 
-        OR hil_url LIKE '%" . $busqueda . "%' 
+        ttpxu_id LIKE '%" . $busqueda . "%' 
         OR ins_nombre LIKE '%" . $busqueda . "%' 
         OR ins_siglas LIKE '%" . $busqueda . "%'
         )";
@@ -19,20 +18,37 @@ if (isset($_GET['busqueda'])) {
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                    Cambiar T&C
+                    <span class="fa fa-angle-down"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <?php
+                    $terminosFiltro = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                    while ($datosTerminosFiltro = mysqli_fetch_array($terminosFiltro, MYSQLI_BOTH)) {
+                        $estiloResaltado = '';
+                        if ($datosTerminosFiltro['ttp_id'] == $_GET["id"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                    ?>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $datosTerminosFiltro['ttp_id']; ?>&year=<?= $_GET['year']; ?>" <?= $estiloResaltado; ?>><?= $datosTerminosFiltro['ttp_nombre']; ?></a>
+                    <?php } ?>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $_GET['id']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
                     Filtrar por institución
                     <span class="fa fa-angle-down"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE 
-                    ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosInsti['ins_id'] == $instID) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosInsti['ins_id'] == $_GET["insti"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&id=<?= $_GET['id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $_GET['id']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
 
@@ -45,6 +61,11 @@ if (isset($_GET['busqueda'])) {
                     
                     <form class="dropdown-item" method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
                         <?php
+                            if (!empty($_GET['id'])){
+                        ?>
+                            <input type="hidden" name="id" value="<?= $_GET['id']; ?>"/>
+                        <?php
+                            }
                             if (!empty($_GET['insti'])){
                         ?>
                             <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
@@ -60,11 +81,6 @@ if (isset($_GET['busqueda'])) {
                             <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
                         <?php
                             }
-                            if (!empty($_GET['mes'])){
-                        ?>
-                            <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
-                        <?php
-                            }
                         ?>
                         <label>Fecha Desde:</label>
                         <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?php if (!empty($_GET['desde'])) echo $_GET['desde']; ?>"/>
@@ -74,7 +90,7 @@ if (isset($_GET['busqueda'])) {
                         
                         <input type="submit" class="btn deepPink-bgcolor" name="fFecha" value="Filtrar" style="margin: 5px;">
                     </form>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $_GET['id']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
 
@@ -93,31 +109,12 @@ if (isset($_GET['busqueda'])) {
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&id=<?= $_GET['id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 
                     ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
-                </div>
-            </li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-                    Filtrar por mes
-                    <span class="fa fa-angle-down"></span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <?php
-                        foreach ($mesesAgno as $key => $value) {
-                                $estiloResaltado="";
-                                if($key==$mes){ $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';}
-                    ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?=$_GET['year']; ?>&mes=<?=$key?>" <?= $estiloResaltado; ?>><?=$value?></a>
-                    <?php
-                        }
-                    ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $_GET['id']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
 
@@ -125,6 +122,11 @@ if (isset($_GET['busqueda'])) {
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
             <?php
+                if (!empty($_GET['id'])){
+            ?>
+                <input type="hidden" name="id" value="<?= $_GET['id']; ?>"/>
+            <?php
+                }
                 if (!empty($_GET['insti'])){
             ?>
                 <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
@@ -139,11 +141,6 @@ if (isset($_GET['busqueda'])) {
                 if (!empty($_GET['year'])){
             ?>
                 <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['mes'])){
-            ?>
-                <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
             <?php
                 }
             ?>

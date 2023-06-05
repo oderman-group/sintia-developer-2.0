@@ -76,12 +76,17 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="grupo" required>
                                                     <option value="">Seleccione una opcion</option>
-                                                    <option value="1" <?php if($resultado["ogen_grupo"]==1){echo "selected";}?>>T. Documento</option>
-                                                    <option value="2" <?php if($resultado["ogen_grupo"]==2){echo "selected";}?>>Religion</option>
-                                                    <option value="3" <?php if($resultado["ogen_grupo"]==3){echo "selected";}?>>Estratos</option>
-                                                    <option value="4" <?php if($resultado["ogen_grupo"]==4){echo "selected";}?>>Generos</option>
-                                                    <option value="5" <?php if($resultado["ogen_grupo"]==5){echo "selected";}?>>Nuevo/Antiguo</option>
-                                                    <option value="6" <?php if($resultado["ogen_grupo"]==6){echo "selected";}?>>Dias</option>
+                                                    <?php
+                                                        foreach ($opcionesGenerales as $key => $value) {
+                                                            if($key!=0){
+                                                                $selected="";
+                                                                if($resultado["ogen_grupo"]==$key){ $selected="selected";}
+                                                    ?>
+                                                        <option value="<?=$key?>" <?=$selected?>><?=$value?></option>
+                                                    <?php
+                                                            }
+                                                        }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
