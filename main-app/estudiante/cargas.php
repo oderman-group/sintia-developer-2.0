@@ -157,6 +157,10 @@ if($config['conf_activar_encuesta']==1){
 							$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
 							if ($listacargaMediaTecnica != null) { 
 								foreach ($listacargaMediaTecnica as $cargaMediaTecnica) {
+									$fondoCargaActual = '#FFF';
+									if($cargaMediaTecnica["car_id"]==$_COOKIE["cargaE"]){
+										$fondoCargaActual = 'cornsilk';
+									}
 								?>
 								<div class="col-lg-3 col-md-6 col-6 col-sm-6">
 									<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
