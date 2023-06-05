@@ -79,7 +79,8 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
 $numeroPeriodos=$config["conf_periodo"];
 
 $nombreInforme = "REGISTRO DE VALORACIÓN";
-if($config['conf_id_institucion']!=22){
+
+if($config['conf_id_institucion']!=1){
 	include("../compartido/head-informes.php");
 }else{
 ?>
