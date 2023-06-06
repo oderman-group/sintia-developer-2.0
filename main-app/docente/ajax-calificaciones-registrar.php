@@ -58,11 +58,7 @@ if($_POST["operacion"]==2){
 
 //Para la misma nota para todos los estudiantes
 if($_POST["operacion"]==3){
-	if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
-		$consultaE = Estudiantes::listarEstudiantesParaDocentesMT($datosCargaActual);
-	} else {
-		$consultaE = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
-	}
+	$consultaE = Estudiantes::escogerConsultasParaDocentes($datosCargaActual);
 	
 	
 	$accionBD = 0;
