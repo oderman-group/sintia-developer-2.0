@@ -156,7 +156,7 @@ if(!empty($datosReportes['rperr_usuario'])){
                                         </div>
                                     </div>
 
-                                    <a href="#" name="dev-historial-acciones.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
+                                    <a href="#" name="dev-errores-sistema.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
                                 </form>
                             </div>
                         </div>
