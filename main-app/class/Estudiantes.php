@@ -427,4 +427,17 @@ class Estudiantes {
         return $cantidad;
     }
 
+    public static function escogerConsultasParaDocentes(array $datosCargaActual = [])
+    {
+        $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+
+        if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+            $consulta = Estudiantes::listarEstudiantesParaDocentesMT($datosCargaActual);
+        } else {
+            $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+        }
+
+        return $consulta;
+    }
+
 }
