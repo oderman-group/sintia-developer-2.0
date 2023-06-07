@@ -4,7 +4,7 @@ require_once("../class/Estudiantes.php");
 include("../docente/verificar-carga.php");
 
 //Consultamos los estudiantes del grado y grupo
-$consulta = Estudiantes::escogerConsultasParaDocentes($datosCargaActual);
+$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 $lineaError = __LINE__;
 include("../compartido/reporte-errores.php");
 
