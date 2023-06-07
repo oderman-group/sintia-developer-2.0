@@ -427,7 +427,7 @@ class Estudiantes {
         return $cantidad;
     }
 
-    public static function escogerConsultasParaDocentes(array $datosCargaActual = [])
+    public static function escogerConsultaParaListarEstudiantesParaDocentes(array $datosCargaActual = [])
     {
         $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
 
