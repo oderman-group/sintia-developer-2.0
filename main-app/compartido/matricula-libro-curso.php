@@ -58,10 +58,15 @@ $contadorPeriodos=0;
 	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
 	<link rel="shortcut icon" href="<?=$Plataforma->logo;?>">
 	<link href="../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<style>
+<style type="text/css">
 #saltoPagina
 {
 	PAGE-BREAK-AFTER: always;
+}
+@media print {
+	@page {
+		size: landscape;
+	}
 }
 </style>
 </head>
@@ -303,16 +308,29 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 
 
 </div>
-
-
-<p>&nbsp;</p>
+<?php 
+if($periodoActual==4){
+	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"]){
+		$msj = "EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE";
+	}elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0){
+		$msj = "EL (LA) ESTUDIANTE ".$nombre." DEBE NIVELAR LAS MATERIAS PERDIDAS";
+	}else{
+		$msj = "EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE";
+	}
+}
+?>
+<p align="left">
+	<div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:10px;"><?=$msj;?></div>
+</p>
 
 
 <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
 	<tr>
 		<td align="center">
 			<?php
-				$rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+				$consultaRector= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$informacion_inst["info_rector"]."'");
+				$rector = mysqli_fetch_array($consultaRector, MYSQLI_BOTH);
+				// $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
 				if(!empty($rector["uss_firma"])){
 					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="200"><br>';
@@ -322,14 +340,16 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 						<p>&nbsp;</p>';
 				}
 			?>
-			<p style="height:0px;"></p>_________________________________<br>
+			_________________________________<br>
 			<p>&nbsp;</p>
 			<?=$nombreRector?><br>
 			Rector(a)
 		</td>
 		<td align="center">
 			<?php
-				$secretario = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
+				$consultaSecretario= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$informacion_inst["info_secretaria_academica"]."'");
+				$secretario = mysqli_fetch_array($consultaSecretario, MYSQLI_BOTH);
+				// $secretario = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
 				$nombreScretario = UsuariosPadre::nombreCompletoDelUsuario($secretario);
 				if(!empty($secretario["uss_firma"])){
 					echo '<img src="../files/fotos/'.$secretario["uss_firma"].'" width="100"><br>';
@@ -339,7 +359,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 						<p>&nbsp;</p>';
 				}
 			?>
-			<p style="height:0px;"></p>_________________________________<br>
+			_________________________________<br>
 			<p>&nbsp;</p>
 			<?=$nombreScretario?><br>
 			Secretario(a) Académico
@@ -347,25 +367,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
     </tr>
 </table> 
 
-</div>  
-<?php 
-if($periodoActual==4){
-	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"]){
-		$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-	}elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0){
-		$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
-	}else{
-		$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-	}
-}
-?>
-
-
-<p align="center">
-
-<div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:10px;" align="center"><?=$msj;?></div>
-
-</p>	
+</div>	
 
 <?php include("../compartido/footer-informes.php") ?>;				                   
 
