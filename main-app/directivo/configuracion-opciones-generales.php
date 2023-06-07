@@ -67,31 +67,11 @@
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales");
 								                    $num_registros = mysqli_num_rows($consulta);
                                                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                                                    switch($resultado["ogen_grupo"]){
-                                                              case 1;
-                                                                  $tipo = 'T. Documento';
-                                                              break;
-                                                              case 2;
-                                                                  $tipo = 'Religion';
-                                                              break;
-                                                              case 3;
-                                                                  $tipo = 'Estratos';
-                                                              break;
-                                                              case 4;
-                                                                  $tipo = 'Generos';
-                                                              break;
-                                                              case 5;
-                                                                  $tipo = 'Nuevo/Antiguo';
-                                                              break;
-                                                              case 6;
-                                                                  $tipo = 'Dias';
-                                                              break;
-                                                          }   
 													?>
 													<tr>
                                                         <td><?=$resultado[0];?></td>
                                                         <td><?=$resultado["ogen_nombre"];?></td>
-                                                        <td><?=$tipo?></td>
+                                                        <td><?=$opcionesGenerales[$resultado['ogen_grupo']]?></td>
 														<td>
 															<div class="btn-group">
 																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>

@@ -357,13 +357,13 @@ if($notificacionID[1]>=$notificacionID[2])
 	$enviosNotf = 0;
 	
 	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id, uss_clave, uss_notificacion FROM usuarios 
-	WHERE (uss_clave='1234' OR uss_clave=uss_usuario OR LENGTH(uss_clave)<=4) AND (uss_tipo=2 or uss_tipo=5)");
+	WHERE (uss_clave='".$clavePorDefectoUsuarios."' OR uss_clave=uss_usuario OR LENGTH(uss_clave)<=4) AND (uss_tipo=2 or uss_tipo=5)");
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		
 		if($cumple['uss_notificacion']==1){
 			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
-			VALUES('TU INFORMACIÓN ES IMPORTANTE. Cambia tu clave ahora!', 'Tu clave no debería ser igual a tu usuario o documento. Tampoco que sea la que te asignaron por defecto o que sea <b>1234</b>.<br>
+			VALUES('TU INFORMACIÓN ES IMPORTANTE. Cambia tu clave ahora!', 'Tu clave no debería ser igual a tu usuario o documento. Tampoco que sea la que te asignaron por defecto o que sea <b>".$clavePorDefectoUsuarios."</b>.<br>
 			Te recomendamos una clave que sea mayor a 5 caracteres y que tenga combinación de letras y números.', 2, '".$cumple['uss_id']."', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 
 			$idNotify = mysqli_insert_id($conexion);

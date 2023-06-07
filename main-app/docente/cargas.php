@@ -56,6 +56,9 @@ require_once("../class/UsuariosPadre.php");
 							 <p>
 								 	<a href="../compartido/planilla-docentes.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
 							 </p>
+							 <p>
+								 	<a href="../compartido/planilla-docentes-notas.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+							 </p>
 							 <?php }?>
 							 <div class="row">
 								 
