@@ -58,7 +58,7 @@ if($_POST["operacion"]==2){
 
 //Para la misma nota para todos los estudiantes
 if($_POST["operacion"]==3){
-	$consultaE = Estudiantes::escogerConsultasParaDocentes($datosCargaActual);
+	$consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 	
 	
 	$accionBD = 0;
