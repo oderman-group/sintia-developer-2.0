@@ -1,10 +1,7 @@
 <?php
 include("session.php");
-$idPaginaInterna = 'DT0195';
-$accion = $_POST["accion"];
-if (is_null($accion)) {
-	$accion = GUARDAR;
-}
+$idPaginaInterna = 'DT0199';
+
 include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
@@ -20,7 +17,6 @@ if (trim($_POST["codigoG"]) == "") {
 }
 
 try {
-	if ($accion === GUARDAR) {
 		mysqli_query(
 			$conexion,
 			"INSERT INTO academico_grupos (
@@ -33,16 +29,7 @@ try {
 			)"
 		);
 		$idRegistro = mysqli_insert_id($conexion);
-	} else {
-		mysqli_query(
-			$conexion,
-			"UPDATE academico_grupos SET
-				gru_codigo =".$_POST['codigoG'].", 
-				gru_nombre  ='".$_POST['nombreG']."'
-				WHERE gru_id=".$_POST["id"].""
-		);
-		$idRegistro =$_POST["id"];
-	}
+
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
