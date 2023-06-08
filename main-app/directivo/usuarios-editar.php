@@ -85,10 +85,16 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 											</div>
 										</div>
 
+										<?php
+										$readonlyUsuario = 'readonly';
+										if($config['conf_cambiar_nombre_usuario'] == 'SI') {
+											$readonlyUsuario = '';
+										}
+										?>
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>
 											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" readonly>
+												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?>>
 											</div>
 										</div>
 
