@@ -1,14 +1,5 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0195';?>
-<?php 
- $contenido = $_GET['contenido'];
- $id = $_GET['id'];
- if(!is_null($contenido)){
-	 $contenidoPagina=  $contenido;
- }else{
-	$contenidoPagina = 'grupos-listar';
- }
-;?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 	<!-- data tables -->
@@ -40,7 +31,7 @@
                             <div class="row">								
 								<div class="col-md-12">								
 									<?php include("../../config-general/mensajes-informativos.php");									
-									 	  include ("includes/".$contenidoPagina.".php"); ?>						
+									 	  include ("includes/grupos-listar.php"); ?>						
                             </div>
                         </div>
                     </div>
