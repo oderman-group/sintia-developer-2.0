@@ -176,7 +176,7 @@ $filasAfectadasDoc = $documentos->rowCount();
 //Acudiente
 $acudienteQuery = "UPDATE usuarios SET
 uss_usuario = :usuarioAcudiente, 
-uss_clave = 1234, 
+uss_clave = SHA1('12345678'), 
 uss_nombre = :nombreAcudiente, 
 uss_telefono = :telefonoAcudiente, 
 uss_celular = :celularAcudiente, 
@@ -203,7 +203,7 @@ $filasAfectadasAcu = $acudiente->rowCount();
 //Padre
 $padreQuery = "UPDATE usuarios SET
 uss_usuario = :usuariopadre, 
-uss_clave = 1234, 
+uss_clave = SHA1('12345678'), 
 uss_nombre = :nombrepadre, 
 uss_telefono = :telefonopadre, 
 uss_celular = :celularpadre, 
@@ -233,7 +233,7 @@ $filasAfectadasPad = $padre->rowCount();
 //Madre
 $madreQuery = "UPDATE usuarios SET
 uss_usuario = :usuariomadre, 
-uss_clave = 1234, 
+uss_clave = SHA1('12345678'), 
 uss_nombre = :nombremadre, 
 uss_telefono = :telefonomadre, 
 uss_celular = :celularmadre, 

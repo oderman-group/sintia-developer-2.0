@@ -57,7 +57,7 @@ class Estudiantes {
         return $resultado;
     }
 
-    public static function listarEstudiantesParaDocentes(string $filtroDocentes = '')
+    public static function listarEstudiantesParaDocentes(string $filtroDocentes = '',string $filtroLimite = '')
     {
         global $conexion, $baseDatosServicios;
         $resultado = [];
@@ -72,7 +72,7 @@ class Estudiantes {
             AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
             ".$filtroDocentes."
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
-            ");
+            $filtroLimite");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();

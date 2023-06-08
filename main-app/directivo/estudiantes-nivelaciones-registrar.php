@@ -87,7 +87,7 @@ include("../compartido/head.php");
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<a href="../compartido/informe-nivelaciones.php?curso=<?=$_REQUEST["curso"];?>&grupo=<?=$_REQUEST["grupo"];?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
-															Sacara Informe <i class="fa fa-plus"></i>
+															Sacara Informe
 														</a>
 													</div>
 												</div>

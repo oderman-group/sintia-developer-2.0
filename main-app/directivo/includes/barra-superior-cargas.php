@@ -53,7 +53,7 @@ if (isset($_GET['busqueda'])) {
                         $estiloResaltado = '';
                         if ($grado['gra_id'] == $_GET["curso"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= $grado['gra_id']; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= $grado['gra_id']; ?>&busqueda=<?=$_GET["busqueda"];?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -61,6 +61,13 @@ if (isset($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="cargas.php" method="get">
+            <?php
+                if(!empty($_GET["curso"])){
+            ?>
+                <input type="hidden" name="curso" value="<?= $_GET['curso']; ?>"/>
+            <?php
+                }
+            ?>
             <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>

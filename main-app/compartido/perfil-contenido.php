@@ -71,13 +71,6 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[152][$datosUsuarioActual[8]];?></label>
-                                            <div class="col-sm-4">
-                                                <input type="password" value="<?=$usuarioPerfil["uss_clave"];?>" name="clave" class="form-control" required>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_nombre"];?>" name="nombre" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">

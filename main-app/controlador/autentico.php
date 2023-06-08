@@ -4,7 +4,8 @@ $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
-$institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST["bd"]."'");
+$institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+WHERE ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $yearArray = explode(",", $institucion['ins_years']);
@@ -38,7 +39,7 @@ if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"])
 }
 
 $rst_usr = mysqli_query($conexion, "SELECT * FROM usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave='".$_POST["Clave"]."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
+WHERE uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
 
 $num = mysqli_num_rows($rst_usr);
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
@@ -86,7 +87,8 @@ if($num>0)
 	$informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
 	$_SESSION["informacionInstConsulta"] = $informacion_inst;
 
-	$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$config['conf_id_institucion']."'");
+	$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+	WHERE ins_id='".$config['conf_id_institucion']."' AND ins_enviroment='".ENVIROMENT."'");
 	$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
 	$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 

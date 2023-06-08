@@ -1,7 +1,12 @@
 <?php 
 include("session.php");
 
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0187';
+include("../compartido/historial-acciones-guardar.php");
+
 if (trim($_POST["periodo"]) == "" or trim($_POST["perdida"]) == "" or trim($_POST["ganada"]) == "" or trim($_POST["estiloNotas"]) == "") {
+	include("../compartido/guardar-historial-acciones.php");
 	echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 	exit();
 }
@@ -40,9 +45,10 @@ try {
 	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
 	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
 	$_SESSION["configuracion"] = $config;
-
-	echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
-	exit();
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
-}	
+}
+
+include("../compartido/guardar-historial-acciones.php");
+echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';
+exit();

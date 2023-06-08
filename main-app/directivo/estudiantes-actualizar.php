@@ -1,7 +1,10 @@
 <?php 
 include("session.php");
-include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
+
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0174';
+include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
@@ -96,16 +99,14 @@ try{
 	WHERE mat_id=".$_POST["id"].";");
 
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }	
 
 try {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' 
 	WHERE uss_id='".$_POST["idU"]."'");
 } catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-	exit();
+	include("../compartido/error-catch-to-report.php");
 }	
 
 //ACTUALIZAR EL ACUDIENTE 1	
@@ -116,31 +117,27 @@ if($_POST["documentoA"]!=""){
 		WHERE uss_usuario='".$_POST["documentoA"]."'");
 		$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}		
 
 	try {
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$acudiente['uss_id']."' 
 		WHERE mat_id='".$_POST["id"]."'");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}	
 
 	try {
 		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes 
 		WHERE upe_id_estudiante='".$_POST["id"]."'");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}	
 
 	try {
 		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$acudiente['uss_id']."', '".$_POST["id"]."')");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}	
 
 	try {
@@ -160,8 +157,7 @@ if($_POST["documentoA"]!=""){
 		uss_documento		 = '".$_POST["documentoA"]."' 
 		WHERE uss_id='".$acudiente['uss_id']."'");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}	
 		
 }
@@ -186,8 +182,7 @@ if($_POST["idAcudiente2"]!=""){
 		uss_documento= '".$_POST["documentoA2"]."' 
 		WHERE uss_id='".$_POST["documentoA2"]."'");
 	} catch (Exception $e) {
-		echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-		exit();
+		include("../compartido/error-catch-to-report.php");
 	}	
 		
 }else {
@@ -198,20 +193,20 @@ if($_POST["idAcudiente2"]!=""){
 			
 			$idAcudiente2 = mysqli_insert_id($conexion);
 		} catch (Exception $e) {
-			echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-			exit();
+			include("../compartido/error-catch-to-report.php");
 		}	
 		
 		try {
 			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."'
 			WHERE mat_id=".$_POST["id"]);
 		} catch (Exception $e) {
-			echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-			exit();
+			include("../compartido/error-catch-to-report.php");
 		}	
 			
 	}
 }
+include("../compartido/guardar-historial-acciones.php");
+
 $estadoSintia=true;
 $mensajeSintia='La información del estudiante se actualizó correctamente en SINTIA.';
 

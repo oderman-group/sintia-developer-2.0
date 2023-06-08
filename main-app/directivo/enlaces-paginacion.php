@@ -13,7 +13,7 @@ if($paginaActual==$totalPaginas){
 if ( isset($_GET) ) {
     foreach ($_GET as $key => $value) {
         if ($key != 'nume') {
-            $parametros = "&{$key}={$value}";
+            $parametros .= "&{$key}={$value}";
         }    
     }
 }

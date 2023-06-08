@@ -76,6 +76,12 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                             </div>
                                         </div>
 
+                                        <?php
+                                            $filtro="";
+                                            if(is_numeric($_GET["curso"])){
+                                                $filtro .= " AND asp_grado='".$_GET["curso"]."'";
+                                            }
+                                        ?>
                                         <div class="table-scrollable">
                                     		<table id="example1" class="display" style="width:100%;">
 												<thead>
@@ -93,6 +99,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
 												</thead>
                                                 <tbody>
                                                 <?php
+												include("includes/consulta-paginacion-inscripciones.php");	
                                                 $estadosSolicitud = array(
                                                 1 => 'VERIFICACIÓN DE PAGO',
                                                 2 => 'PAGO RECHAZADO',
@@ -118,7 +125,9 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                                 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                                                 INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
                                                 LEFT JOIN academico_grados ON gra_id=asp_grado
-                                                WHERE mat_estado_matricula=5 ORDER BY mat_primer_apellido");
+                                                WHERE mat_estado_matricula=5 $filtro
+                                                ORDER BY mat_primer_apellido
+                                                LIMIT $inicio,$registros");
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
@@ -161,6 +170,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                             </div>
                                         </div>
                                     </div>
+                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>
