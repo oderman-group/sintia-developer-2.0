@@ -164,7 +164,7 @@ if ($newId > 0) {
         exit();
     }
 
-    // echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'";</script>';
     exit();
 } else {
     redireccionMal('index.php', 3);
