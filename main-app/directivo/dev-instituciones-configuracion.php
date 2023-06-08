@@ -322,6 +322,20 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Permitir cambiar el usuario de acceso</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                                                <option value="SI" <?php if ($datosInstitucion['conf_cambiar_nombre_usuario'] == 'SI') {
+                                                                        echo "selected";
+                                                                    } ?>>SI</option>
+                                                <option value="NO" <?php if ($datosInstitucion['conf_cambiar_nombre_usuario'] == 'NO') {
+                                                                        echo "selected";
+                                                                    } ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>
