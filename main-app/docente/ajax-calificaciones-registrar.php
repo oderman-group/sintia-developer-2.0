@@ -1,10 +1,9 @@
 <?php 
 include("session.php");
 require_once("../class/Estudiantes.php");
-?>
 
-<?php include("verificar-carga.php");?>
-<?php
+include("verificar-carga.php");
+
 $consultaNum = mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
 WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
 $num = mysqli_num_rows($consultaNum);
@@ -59,8 +58,7 @@ if($_POST["operacion"]==2){
 
 //Para la misma nota para todos los estudiantes
 if($_POST["operacion"]==3){
-	$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-	$consultaE =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+	$consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 	
 	
 	$accionBD = 0;
