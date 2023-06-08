@@ -72,41 +72,7 @@
 	                            </a>
 	                        </li>
 
-							<?php 
-							function validarPaginaActual(array $paginas = []):bool {
-								global $idPaginaInterna;
-								 foreach ($paginas as $idPagina) {
-									if ($idPaginaInterna === $idPagina){
-										return true;
-									}
-								 }
-							return false;
-							};
-							function agregarClass(string $tipoMenu,array $paginas = []) {
-								switch($tipoMenu){
-									case MENU:
-										if(validarPaginaActual($paginas)){
-											echo 'class="active nav-item"';
-										}
-									break;
-									case MENU_PADRE:
-										if(validarPaginaActual($paginas)){
-											echo 'class="nav-item open"';
-										}else{
-											echo 'class="nav-item"';
-										}
-									break;
-									case SUB_MENU:
-										if(validarPaginaActual($paginas)){
-											echo 'style="display: block;"';
-										}
-									break;
-									
-								}
-								
-							};
-							
-							?>
+							<?php include_once("menu-metodos.php")?>
 							<li <?php agregarClass(MENU,["DT0004"]) ?>>
 							<a href="index.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">dashboard</i>
@@ -130,11 +96,11 @@
 							
 							//MÓDULO ACADÉMICO
 							if(array_key_exists(1, $arregloModulos)){?>
-							<li <?php agregarClass(MENU_PADRE,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"]) ?>>
+							<li <?php agregarClass(MENU_PADRE,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"]) ?> >
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
 									<?php if(array_key_exists(8, $arregloModulos)){?>
 	                                	<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
@@ -142,7 +108,7 @@
 
 	                                <li <?php agregarClass(MENU,["DT0001"]) ?>><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
 									<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0195"]) ?>><a href="grupos.php" class="nav-link "> <span class="title"><?=$frases[254][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0195","DT0196","DT0197"]) ?>><a href="grupos.php" class="nav-link "> <span class="title"><?=$frases[254][$datosUsuarioActual[8]];?></span></a></li>
 									<li <?php agregarClass(MENU,["DT0017"]) ?>><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
 									<li <?php agregarClass(MENU,["DT0020"]) ?>><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
 									<li <?php agregarClass(MENU,["DT0032"]) ?>><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
