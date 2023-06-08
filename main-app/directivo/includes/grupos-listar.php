@@ -27,7 +27,7 @@
                         <th>#</th>
                         <th>Codigo</th>
                         <th><?= $frases[254][$datosUsuarioActual[8]]; ?></th>
-                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                        <th style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
                     </tr>
                 </thead>
                 <tbody>
