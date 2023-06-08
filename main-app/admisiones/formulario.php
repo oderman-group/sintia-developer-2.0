@@ -101,6 +101,7 @@ $datosMadre = $madre->fetch();
             <input type="hidden" name="idAcudiente" value="<?= $datos['mat_acudiente']; ?>">
             <input type="hidden" name="idPadre" value="<?= $datos['mat_padre']; ?>">
             <input type="hidden" name="idMadre" value="<?= $datos['mat_madre']; ?>">
+            <input type="hidden" name="idInst" value="<?=$_GET['idInst']?>">
 
             <input type="hidden" name="fotoA" value="<?= $datos['mat_foto']; ?>">
 

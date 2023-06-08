@@ -1,7 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0102';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0102';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+
+$db = $_SESSION["inst"]."_".$_SESSION["bd"];
+$urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_institucion"];
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -62,6 +67,13 @@
                                             <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
                                             <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
                                                 <b>En cada aspirante: Ve a la opción Acciones->Borrar documentación.</b></p>
+                                        </div>
+											
+                                        <div class="alert alert-block alert-success">
+                                            <h4 class="alert-heading">Enlace para inscripción:</h4>
+                                            <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
+                                            <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
+                                            </div>
                                         </div>
 
                                         <?php
@@ -134,8 +146,8 @@
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Editar</a></li>
+                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&inst=<?=base64_encode($db)?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&inst=<?=base64_encode($db)?>" target="_blank">Editar</a></li>
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
                                                                     
