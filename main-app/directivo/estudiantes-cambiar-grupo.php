@@ -42,10 +42,11 @@ require_once("../class/Estudiantes.php");
                             </ol>
                         </div>
                     </div>
+                    <?php include("../../config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 					
                         <div class="col-sm-12">
-                          
+                        
                                 <?php
                                     $e = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                                 ?>
@@ -61,33 +62,28 @@ require_once("../class/Estudiantes.php");
 											
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estudiante</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-1">
                                                 <input type="text" name="codigoE" class="form-control" autocomplete="off" value="<?=$e['mat_id'];?>" readonly>
                                             </div>
                                             
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-9">
                                                 <input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=Estudiantes::NombreCompletoDelEstudiante($e);?>" readonly>
                                             </div>
                                         </div>
 
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Curso</label>  
-                                          	<?php 
-											$consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_estado=1");
+                                            <label class="col-sm-2 control-label">Curso</label> 
+                                            
+                                            <?php 
+                                            $gradoActual=Grados::obtenerGrado($e["mat_grado"]);											
 											?>
-                                            <div class="col-sm-10">
-                                                <select class="form-control  select2" name="cursoNuevo" required>
-                                                <option value="0"></option>
-                                                 <?php 
-												 while($c = mysqli_fetch_array($consulta_cargas, MYSQLI_BOTH)){
-												 	if($c["gra_id"]==$e[6])
-														echo '<option value="'.$c["gra_id"].'" selected style="color:blue; font-weight:bold;">Actual: '.$c["gra_nombre"].'</option>';	
-													else
-													    echo '<option value="'.$c["gra_id"].'">'.$c["gra_nombre"].'</option>';
-												 }
-												 ?>
-                                                </select>
+                                            <div class="col-sm-1">
+                                            <input type="text" name="cursoNuevo" class="form-control" autocomplete="off" value="<?= $gradoActual["gra_id"]?>" readonly> 
                                             </div>
+                                            <div class="col-sm-9">
+                                            <input type="text"  class="form-control" autocomplete="off" value="<?= $gradoActual["gra_nombre"]?>" readonly> 
+                                            </div>
+                                           
                                         </div>
 										
 										<div class="form-group row">
@@ -95,7 +91,7 @@ require_once("../class/Estudiantes.php");
                                           	<?php 
 											$consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_grupos");
 											?>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-9">
                                                 <select class="form-control  select2" name="grupoNuevo" required>
                                                 <option value="0"></option>
                                                  <?php 
@@ -111,6 +107,7 @@ require_once("../class/Estudiantes.php");
                                         </div>
 
                                         <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
+                                        <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>
