@@ -45,23 +45,34 @@ class Estudiantes {
 
     public static function listarEstudiantesEnGrados(
         string $filtroAdicional = '', 
-        string $filtroLimite    = 'LIMIT 0, 2000'
+        string $filtroLimite    = 'LIMIT 0, 2000',
+        $cursoActual=null
     )
     {
         global $conexion, $baseDatosServicios;
+        $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-            LEFT JOIN usuarios ON uss_id=mat_id_usuario
-            INNER JOIN academico_grados ON gra_id=mat_grado
-            INNER JOIN academico_grupos ON gru_id=mat_grupo
-            LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            WHERE mat_eliminado = 0
-            ".$filtroAdicional."
-            ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
-            ".$filtroLimite."
-            ");
+            if($tipoGrado==GRADO_GRUPAL){
+                $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+                LEFT JOIN usuarios ON uss_id=mat_id_usuario
+                INNER JOIN academico_grados ON gra_id=mat_grado
+                INNER JOIN academico_grupos ON gru_id=mat_grupo
+                LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
+                WHERE mat_eliminado = 0
+                ".$filtroAdicional."
+                ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
+                ".$filtroLimite."
+                ");
+            }else{
+                $parametros = [
+                    'matcur_id_curso'=>$cursoActual["gra_id"],
+                    'limite'=>$filtroLimite,
+                    'arreglo'=>false
+                ];
+                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
+            }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
