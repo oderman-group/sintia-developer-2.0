@@ -1,12 +1,13 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0011';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
+
+$idPaginaInterna = 'DC0011';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
+
 $consultaValores=mysqli_query($conexion, "SELECT
 (SELECT sum(act_valor) FROM academico_actividades 
 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
@@ -174,12 +175,12 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;
 														$periodo = $periodoConsultaActual;
-														$estudiante = $resultado[0];
+														$estudiante = $resultado['mat_id'];
 														include("../definitivas.php");
 														
 														$colorEstudiante = '#000;';
@@ -187,7 +188,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 													?>
 													
 													<?php
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado[0]);
+													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado['mat_id']);
 													$arrayDatos = json_encode($arrayEnviar);
 													$objetoEnviar = htmlentities($arrayDatos);
 													?>
@@ -203,7 +204,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														 $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
 														 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
 															//LAS CALIFICACIONES
-															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$rA[0]);
+															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad=".$rA[0]);
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 														?>
 															<td>
@@ -213,7 +214,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 															<?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=21&id=<?=$notasResultado['cal_id'];?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
 																<?php if($notasResultado[3]<$config[5]){?>
-																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
+																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado['mat_id'];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
 																<?php }?>
 																
 															<?php }?>
