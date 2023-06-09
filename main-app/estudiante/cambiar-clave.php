@@ -1,4 +1,10 @@
 <?php include("session.php");?>
+<?php
+if($config['conf_cambiar_clave_estudiantes'] == 'NO') { 
+    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=305";</script>';
+	exit();
+}
+?>
 <?php $idPaginaInterna = 'ES0054';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>

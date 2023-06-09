@@ -106,7 +106,9 @@ $institucionNombre = $institucion['ins_siglas'];
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li><a href="perfil.php"><i class="icon-user"></i> Perfil </a></li>
-                                <li><a href="cambiar-clave.php"><i class="icon-lock"></i> Cambiar contraseña </a></li>
+                                <?php if($datosUsuarioActual['uss_tipo'] == 4 && $config['conf_cambiar_clave_estudiantes'] == 'NO') { }else{?>
+                                    <li><a href="cambiar-clave.php"><i class="icon-lock"></i> Cambiar contraseña </a></li>
+                                <?php }?>
 								
                                 <li class="divider"> </li>
 								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i> Ayuda/Soporte </a></li>
