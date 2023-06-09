@@ -1,15 +1,16 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0077';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php 
-//Hay acciones que solo son permitidos en periodos diferentes al actual.
-include("verificar-periodos-iguales.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
+
+$idPaginaInterna = 'DC0077';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+
+//Hay acciones que solo son permitidos en periodos diferentes al actual.
+include("verificar-periodos-iguales.php");
+include("../compartido/head.php");
+
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
 INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
 WHERE ind_id='".$_GET["idR"]."'");
@@ -214,13 +215,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$_GET["idR"]."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
+														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado['mat_id']." AND rind_indicador='".$_GET["idR"]."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														
 
