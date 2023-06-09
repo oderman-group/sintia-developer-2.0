@@ -1,15 +1,12 @@
-<?php include("session.php"); ?>
-
-<?php $idPaginaInterna = 'DC0079'; ?>
-
-<?php include("../compartido/historial-acciones-guardar.php"); ?>
-
-<?php include("verificar-carga.php"); ?>
-
-<?php include("../compartido/head.php"); ?>
-
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0079';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
 ?>
 
 </head>
@@ -151,7 +148,7 @@ require_once("../class/Estudiantes.php");
 
 													$contReg = 1;
 
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
@@ -161,7 +158,7 @@ require_once("../class/Estudiantes.php");
 
 														$periodo = $periodoConsultaActual;
 
-														$estudiante = $resultado[0];
+														$estudiante = $resultado['mat_id'];
 
 														include("../definitivas.php");
 
@@ -202,7 +199,7 @@ require_once("../class/Estudiantes.php");
 																//LAS CALIFICACIONES
 																$consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM academico_calificaciones
 																INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $rA['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
-																WHERE cal_id_estudiante=" . $resultado[0]);
+																WHERE cal_id_estudiante=" . $resultado['mat_id']);
 																$sumaNotas = mysqli_fetch_array($consultaSumaNotas, MYSQLI_BOTH);
 
 																$notasResultado = round($sumaNotas[0] / ($rA['ipc_valor'] / 100), $config['conf_decimales_notas']);
