@@ -1,13 +1,14 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0005';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php //include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
+
+$idPaginaInterna = 'DC0005';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+//include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
@@ -180,11 +181,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado[0]." AND dn_periodo='".$periodoConsultaActual."'");
+														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
 
