@@ -1,11 +1,24 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0016';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0016';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
+WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
+
+//Cantidad de preguntas de la evaluación
+$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
+WHERE evp_id_evaluacion='".$_GET["idE"]."'
+ORDER BY preg_id DESC");
+$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
@@ -13,23 +26,6 @@ require_once("../class/Estudiantes.php");
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
-	
-	<?php
-	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
-	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
-
-	
-	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
-	ORDER BY preg_id DESC
-	");
-	
-	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
-
-	?>
 
 	<input type="hidden" id="idE" name="idE" value="<?=$_GET["idE"];?>">
     <div class="page-wrapper">
@@ -203,7 +199,7 @@ require_once("../class/Estudiantes.php");
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -235,10 +231,10 @@ require_once("../class/Estudiantes.php");
 														 //Exportar las notas
 														 if($_POST["exportar"]==1 and $nota!=""){
 															 
-															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
+															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado['mat_id']."'");
 															
 															 
-															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado[0]."','".$nota."','".$_POST["actividad"]."', now(), 0)");
+															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado['mat_id']."','".$nota."','".$_POST["actividad"]."', now(), 0)");
 															
 															
 															 //Solo actuliza una vez que la actividad fue registrada.
