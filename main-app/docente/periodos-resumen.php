@@ -1,10 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0039';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0039';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
 ?>
 <script type="text/javascript">
   function def(enviada){
@@ -142,7 +144,7 @@ function niv(enviada){
 																WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'
 																");
 																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+																echo '<th style="text-align:center;">'.$p.'P<br>(25%)</th>';
 																$p++;
 															}
 														?> 
@@ -153,7 +155,7 @@ function niv(enviada){
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$colorEstudiante = '#000;';
 														if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
@@ -174,7 +176,7 @@ function niv(enviada){
 															WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'
 															");
 															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-															 $decimal = $periodosCursos['gvp_valor']/100;
+															 $decimal = 25/100;
 															 
 															//LAS CALIFICACIONES
 															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
@@ -210,7 +212,7 @@ function niv(enviada){
 																$consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 																WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
 																 $periodosCursos2 = mysqli_fetch_array($consultaPeriodosCursos2, MYSQLI_BOTH);
-																 $decimal2 = $periodosCursos2['gvp_valor']/100;
+																 $decimal2 = 25/100;
 																 
 																 $notaMinima = $config[5] - $definitiva;
 																 @$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);
