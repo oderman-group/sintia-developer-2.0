@@ -189,8 +189,7 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
     <td align="center" colspan="7">Inasistencia</td>
 
     <?php
-    $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
-    $estudiantes = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+		$estudiantes = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($rCargas);
 
     $n = 1;
 
