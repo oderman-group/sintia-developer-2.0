@@ -1,8 +1,13 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0046';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0046';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
+?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 <!--tagsinput-->
@@ -170,14 +175,18 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bg = '';
-														$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_ausencias 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-														WHERE aus_id_clase='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas 
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+														if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+															INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_id_matricula=aus_id_estudiante
+															INNER JOIN academico_matriculas ON mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=matcur_id_matricula
+															WHERE aus_id_clase='".$resultado[0]."'");
+														}else{
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+															WHERE aus_id_clase='".$resultado[0]."'");
+														}
 														$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+														if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';
 														 
 														$cheked = '';
 														if($resultado['cls_disponible']==1){$cheked = 'checked';}
@@ -204,7 +213,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														</td>
 														<td><a href="clases-ver.php?idR=<?=$resultado['cls_id'];?>"><?=$resultado['cls_tema'];?></a></td>
 														<td><?=$resultado['cls_fecha'];?></td>
-														<td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></td>
+														<td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantesParaDocentes;?></td>
 														<td>
 															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 															
