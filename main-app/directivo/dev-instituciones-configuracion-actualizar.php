@@ -40,7 +40,8 @@ try {
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
 	conf_num_registros='" . $_POST["numRegistros"] . "',
 	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
-	conf_cambiar_nombre_usuario='" . $_POST["cambiarNombreUsuario"] . "'
+	conf_cambiar_nombre_usuario='" . $_POST["cambiarNombreUsuario"] . "',
+	conf_cambiar_clave_estudiantes='" . $_POST["cambiarClaveEstudiantes"] . "'
 
 	WHERE conf_id_institucion='".$_POST["id"]."' AND conf_agno='".$_POST["year"]."'");
 } catch (Exception $e) {

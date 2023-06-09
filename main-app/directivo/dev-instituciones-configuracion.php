@@ -336,6 +336,20 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Permitir a estudiantes cambiar su clave</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control  select2" name="cambiarClaveEstudiantes">
+                                                <option value="SI" <?php if ($datosInstitucion['conf_cambiar_clave_estudiantes'] == 'SI') {
+                                                                        echo "selected";
+                                                                    } ?>>SI</option>
+                                                <option value="NO" <?php if ($datosInstitucion['conf_cambiar_clave_estudiantes'] == 'NO') {
+                                                                        echo "selected";
+                                                                    } ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>
