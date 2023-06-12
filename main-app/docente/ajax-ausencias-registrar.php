@@ -1,7 +1,6 @@
-<?php include("session.php");?>
-<?php include("../../config-general/config.php");?>
 <?php
-include("../modelo/conexion.php");
+include("session.php");
+
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."'");
 
 $num = mysqli_num_rows($consulta);
