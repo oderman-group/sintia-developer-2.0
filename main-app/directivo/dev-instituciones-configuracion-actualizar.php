@@ -39,7 +39,8 @@ try {
 	conf_informe_parcial='" . $_POST["informeParcial"] . "',
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
 	conf_num_registros='" . $_POST["numRegistros"] . "',
-	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "'
+	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
+	conf_cambiar_nombre_usuario='" . $_POST["cambiarNombreUsuario"] . "'
 
 	WHERE conf_id_institucion='".$_POST["id"]."' AND conf_agno='".$_POST["year"]."'");
 } catch (Exception $e) {
