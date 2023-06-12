@@ -298,6 +298,14 @@ switch($_GET["idmsg"]){
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
 	break;
+
+	case 305:
+		$color = 'red';
+		$titulo = 'SIN PERMISO DE CAMBIAR CLAVE';
+		$texto = 'No tienes permiso para cambiar tu clave en este momento.';
+		$url1 = 'index.php';
+		$boton1 = 'IR AL INICIO';
+	break;
 		
 		
 		
