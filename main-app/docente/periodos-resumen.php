@@ -144,7 +144,12 @@ function niv(enviada){
 																WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'
 																");
 																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-																echo '<th style="text-align:center;">'.$p.'P<br>(25%)</th>';
+																$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+																$porcentaje=25;
+																if($numPeriodosCursos>0){
+																	$porcentaje=$periodosCursos['gvp_valor'];
+																}
+																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
 																$p++;
 															}
 														?> 
@@ -176,7 +181,12 @@ function niv(enviada){
 															WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'
 															");
 															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-															 $decimal = 25/100;
+															$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+															$porcentaje=25;
+															if($numPeriodosCursos>0){
+																$porcentaje=$periodosCursos['gvp_valor'];
+															}
+															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
 															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
@@ -212,7 +222,12 @@ function niv(enviada){
 																$consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 																WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
 																 $periodosCursos2 = mysqli_fetch_array($consultaPeriodosCursos2, MYSQLI_BOTH);
-																 $decimal2 = 25/100;
+																 $numPeriodosCursos2=mysqli_num_rows($consultaPeriodosCursos2);
+																 $porcentaje2=25;
+																 if($numPeriodosCursos2>0){
+																	 $porcentaje2=$periodosCursos2['gvp_valor'];
+																 }
+																  $decimal = $porcentaje2/100;
 																 
 																 $notaMinima = $config[5] - $definitiva;
 																 @$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);
