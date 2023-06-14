@@ -8,13 +8,11 @@ require_once("../class/Estudiantes.php");
     <link rel="shortcut icon" href="../files/images/ico.png">
 </head>
 <body style="font-family:Arial;">
-<div align="center" style="margin-bottom:20px;">
-   <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
-    <?=$informacion_inst["info_nombre"]?><br>
-    INFORME DE NOTAS - PERIODO: <?=$_GET["per"];?></br>
-</div>   
-  <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
-  <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
+<?php
+$nombreInforme = "INFORME DE NOTAS - PERIODO:";
+include("../compartido/head-informes.php") ?>
+  <table width="100%" border="1" style=" border:solid;border-color:<?=$Plataforma->colorUno;?>;" rules="all" align="center">    
+			<tr style="font-weight:bold; height:30px; background:<?=$Plataforma->colorUno;?>; color:#FFF;">
         <th>Cod</th>
         <th>Des</th>
         <th>Fecha</th>
@@ -25,6 +23,10 @@ require_once("../class/Estudiantes.php");
   </tr>
   <?php
   //ESTUDIANTES ACTUALES
+  $_GET["carga"]=is_null($_POST["carga"])? $_GET["carga"]: $_POST["carga"];
+  $_GET["grado"]=is_null($_POST["grado"])? $_GET["grado"]: $_POST["grado"];
+  $_GET["grupo"]=is_null($_POST["grupo"])? $_GET["grupo"]: $_POST["grupo"];
+  $_GET["per"]=is_null($_POST["periodo"])? $_GET["per"]: $_POST["periodo"];
   $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
   $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
@@ -38,7 +40,7 @@ require_once("../class/Estudiantes.php");
 	$numCalificados = mysqli_num_rows($consultaNumCalificados);
 	if($numEstudiantes!=$numCalificados) $bg = '#FCC'; else $bg = '#FFF';
   ?>
-  <tr style="font-size:13px;">
+  <tr style="text-transform: uppercase; border-color: <?=$Plataforma->colorDos;?>">
       <td align="center"><?=$resultado[0];?></td>
       <td><?=$resultado[1];?></td>
       <td align="center"><?=$resultado[2];?></td>
@@ -52,11 +54,7 @@ require_once("../class/Estudiantes.php");
   }//Fin mientras que
   ?>
   </table>
-  </center>
-	<div align="center" style="font-size:10px; margin-top:10px;">
-                                        <img src="../files/images/sintia.png" height="50" width="100"><br>
-                                        SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
-                                    </div>
+  <?php include("../compartido/footer-informes.php") ?>;
 </body>
 </html>
 
