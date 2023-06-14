@@ -3,7 +3,8 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
-    
+
+$arregloModulos = $_SESSION["modulos"];
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -460,20 +461,155 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                             </tr>
 
-                        <?php } ?>
-
-                    <?php
-
+                        <?php 
+                        }
                         $contador++;
                     } //while fin materias
-
-                    ?>
-
-            <?php }
+                }
             } //while fin areas
 
-            ?>
+            $consultaMediaTecnica=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+            INNER JOIN $BD.academico_cargas ON car_curso=matcur_id_curso AND car_grupo=1
+            INNER JOIN $BD.academico_materias ON mat_id=car_materia
+            INNER JOIN $BD.academico_areas ON ar_id= mat_area
+            WHERE matcur_id_matricula='".$matriculadosDatos['mat_id']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'
+            GROUP BY ar_id ORDER BY ar_posicion ASC;");
+            $numMediaTecnica=mysqli_num_rows($consultaMediaTecnica);
+            if ((array_key_exists(10, $arregloModulos)) && $numMediaTecnica>0){
+                $contador = 1;
+                while ($fila = mysqli_fetch_array($consultaMediaTecnica, MYSQLI_BOTH)) {
+                    if ($periodoActual == 1) {
+                        $condicion = "1";
+                        $condicion2 = "1";
+                    }
+                    if ($periodoActual == 2) {
+                        $condicion = "1,2";
+                        $condicion2 = "2";
+                    }
+                    if ($periodoActual == 3) {
+                        $condicion = "1,2,3";
+                        $condicion2 = "3";
+                    }
+                    if ($periodoActual == 4) {
+                        $condicion = "1,2,3,4";
+                        $condicion2 = "4";
+                    }
+                    //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
+                    $consultaNotaDefArea = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM $BD.academico_materias am
+                    INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+                    INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
+                    INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+                    WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+                    GROUP BY ar_id;");
+    
+                    //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
+                    $consultaMat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM $BD.academico_materias am
+                    INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+                    INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
+                    INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+                    WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+                    GROUP BY mat_id ORDER BY mat_id;");
+    
+                    //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
+                    $consultaMatPeriodo = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM $BD.academico_materias am
+                    INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+                    INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
+                    INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+                    WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+                    ORDER BY mat_id,bol_periodo;");
 
+                    //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA
+                    $consultaMatIndicadores = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
+                    ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM $BD.academico_materias am
+                    INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+                    INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
+                    INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+                    INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+                    INNER JOIN $BD.academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
+                    INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
+                    WHERE car_curso=" . $fila["car_curso"] . "  and car_grupo=" . $fila["car_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos['mat_id'] . "' and act_periodo=" . $condicion2 . "
+                    group by act_id_tipo, act_id_carga order by mat_id,ipc_periodo,ind_id;");
+                    $numIndicadores = mysqli_num_rows($consultaMatIndicadores);
+                    $resultadoNotArea = mysqli_fetch_array($consultaNotaDefArea, MYSQLI_BOTH);
+    
+                    $numFilasNotArea = mysqli_num_rows($consultaNotaDefArea);
+                    if ($numFilasNotArea > 0) {
+                ?>
+                        <tr style="background-color: #e0e0153b" style="font-size:12px;">
+                            <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultadoNotArea["ar_nombre"]." (Media Tecnica)"; ?></td>
+                            <td align="center" style="font-weight:bold; font-size:12px;"></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <?php
+                        while ($fila2 = mysqli_fetch_array($consultaMat, MYSQLI_BOTH)) {
+                            $contador_periodos = 0;
+                            mysqli_data_seek($consultaMatPeriodo, 0);
+                        ?>
+                            <tr bgcolor="#EAEAEA" style="font-size:12px;">
+                                <td align="center"><?= $contador; ?></td>
+                                <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;"><?php echo $fila2["mat_nombre"]; ?></td>
+                                <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"]; ?></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <?php
+                            if ($numIndicadores > 0) {
+                                mysqli_data_seek($consultaMatIndicadores, 0);
+                                $contadorIndicadores = 0;
+                                while ($fila4 = mysqli_fetch_array($consultaMatIndicadores, MYSQLI_BOTH)) {
+                                    if ($fila4["mat_id"] == $fila2["mat_id"]) {
+                                        $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion 
+                                        WHERE rind_estudiante='".$matriculadosDatos['mat_id']."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
+                                        $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
+
+                                        $contadorIndicadores++;
+                                        $leyendaRI = '';
+                                        if($recuperacionIndicador['rind_nota']>$fila4["nota"]){
+                                            $notaIndicador = round($recuperacionIndicador['rind_nota'], 1);
+                                            $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
+                                        }else{
+                                            $notaIndicador = round($fila4["nota"], 1);
+                                        }
+
+                                        if ($notaIndicador == 1)    $notaIndicador = "1.0";
+                                        if ($notaIndicador == 2)    $notaIndicador = "2.0";
+                                        if ($notaIndicador == 3)    $notaIndicador = "3.0";
+                                        if ($notaIndicador == 4)    $notaIndicador = "4.0";
+                                        if ($notaIndicador == 5)    $notaIndicador = "5.0";
+                            ?>
+                                        <tr bgcolor="#FFF" style="font-size:12px;">
+                                            <td align="center">&nbsp;</td>
+                                            <td style="font-size:12px; height:15px;"><?php echo $contadorIndicadores . "." . $fila4["ind_nombre"]; ?></td>
+                                            <td>&nbsp;</td>
+                                            <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicador." ".$leyendaRI; ?></td>
+                                        </tr>
+                            <?php
+                                    } //fin if
+                                }
+                            }
+                            ?>
+                            <!-- observaciones de la asignatura-->
+                            <?php
+                                $consultaObsevacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
+                                WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos['mat_id'] . "'");
+                                $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
+                                if ($observacion['bol_observaciones_boletin'] != "") {
+                            ?>
+                                <tr>
+                                    <td colspan="4">
+                                        <h5 align="center">Observaciones</h5>
+                                        <p style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+                                            <?= $observacion['bol_observaciones_boletin']; ?>
+                                        </p>
+                                    </td>
+                                </tr>
+                            <?php
+                            }    
+                            $contador++;
+                        } //while fin materias
+                        }
+                    } //while fin areas
+                }
+            ?>
         </table>
 
 
