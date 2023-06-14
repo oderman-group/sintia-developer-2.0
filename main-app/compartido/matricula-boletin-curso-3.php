@@ -4,8 +4,6 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
-$arregloModulos = $_SESSION["modulos"];
-
 $year=$agnoBD;
 if(isset($_GET["year"])){
 $year=$_GET["year"];
@@ -475,7 +473,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             WHERE matcur_id_matricula='".$matriculadosDatos['mat_id']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'
             GROUP BY ar_id ORDER BY ar_posicion ASC;");
             $numMediaTecnica=mysqli_num_rows($consultaMediaTecnica);
-            if ((array_key_exists(10, $arregloModulos)) && $numMediaTecnica>0){
+            if ((array_key_exists(10, $_SESSION["modulos"])) && $numMediaTecnica>0){
                 $contador = 1;
                 while ($fila = mysqli_fetch_array($consultaMediaTecnica, MYSQLI_BOTH)) {
                     if ($periodoActual == 1) {
