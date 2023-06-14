@@ -61,6 +61,7 @@
 											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
 											<p><a href="asistencia-planilla.php">4. Planilla de asistencia</a></p>
 											<p><a href="planilla-docentes-filtros.php">5. Planilla docentes con notas</a></p>
+											<p><a href="notas-registradas-informes-filtros.php" >4. Notas declaradas y registradas</a></p>
 										</div>
                                 	</div>
 								</div>
