@@ -69,11 +69,10 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                 <input type="text" name="nombreC" class="form-control" value="<?=$resultadoCurso["gra_nombre"]; ?>">
                                             </div>
                                         </div>
-
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Formato Boletin</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="formatoB" required>
+                                                <select id="tipoBoletin" class="form-control  select2" name="formatoB" required>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                         $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
@@ -82,7 +81,20 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                         <option value="<?=$datosBoletin['ogen_id'];?>" <?php if($resultadoCurso["gra_formato_boletin"]==$datosBoletin['ogen_id']){ echo 'selected';} ?>><?=$datosBoletin['ogen_nombre'];?></option>
                                                     <?php }?>
                                                 </select>
-                                            </div>
+                                            </div>                                           
+                                            <button type="button" titlee="Ver formato del boletin" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
+                                            <script>
+                                                    $(document).ready(function(){
+                                                    $('[data-toggle="popover"]').popover({
+                                                        html: true, // Habilitar contenido HTML
+                                                        content: function () {
+                                                            valor = document.getElementById("tipoBoletin");
+                                                        return '<div class="popover-content">Formato tipo '+valor.value+
+                                                        '<img src="../files/images/boletines/tipo'+valor.value+'.png" class="w-100" />'+
+                                                        '</div>';}
+                                                        });   
+                                                    });
+                                            </script>
                                         </div>
                                         
                                         <div class="form-group row">
