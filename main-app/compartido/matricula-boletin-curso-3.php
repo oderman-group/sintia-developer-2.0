@@ -534,7 +534,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     if ($numFilasNotArea > 0) {
                 ?>
                         <tr style="background-color: #e0e0153b" style="font-size:12px;">
-                            <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultadoNotArea["ar_nombre"]." (Media Tecnica)"; ?></td>
+                            <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultadoNotArea["ar_nombre"]; ?></td>
                             <td align="center" style="font-weight:bold; font-size:12px;"></td>
                             <td>&nbsp;</td>
                         </tr>
