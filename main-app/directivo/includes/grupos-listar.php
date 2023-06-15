@@ -12,8 +12,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div class="btn-group">
-
-                    <a href="grupos.php?contenido=grupos-agregar" id="addRow" class="btn deepPink-bgcolor">
+                    <a href="grupos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
                         Agregar nuevo <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -25,6 +24,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Codigo</th>
                         <th><?= $frases[254][$datosUsuarioActual[8]]; ?></th>
                         <th style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
@@ -38,6 +38,7 @@
                     ?>
                         <tr>
                             <td><?= $contReg; ?></td>
+                            <td><?= $resultado["gru_id"]; ?></td>
                             <td><?= $resultado["gru_codigo"]; ?></td>
                             <td><?= $resultado['gru_nombre']; ?></td>
                             <td>
@@ -47,7 +48,7 @@
                                         <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="grupos.php?contenido=grupos-agregar&id=<?=$resultado["gru_id"];?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
+                                        <li><a href="grupos-editar.php?id=<?=$resultado["gru_id"];?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
                                      </ul>
                                 </div>
                             </td>

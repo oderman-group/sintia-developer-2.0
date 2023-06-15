@@ -10,8 +10,6 @@ define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 define('MENU', 'menu');
 define('MENU_PADRE', 'menu-padre');
 define('SUB_MENU', 'sub-menu');
-define('GUARDAR', 'guardar');
-define('ACTUALIZAR', 'actualizar');
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
