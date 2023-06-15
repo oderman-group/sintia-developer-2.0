@@ -36,7 +36,7 @@
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
                             <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                            <li class="active">Asistencia de Acudientes</li>
+                            <li class="active">Notas declaradas y registradas</li>
                         </ol>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                                                 var grado = $('#grado').val();
                                                 var grupo =$('#grupo').val();
                                                 var periodo = $('#periodo').val();
-                                                if (grado === "" || grupo === "" || periodo === "") {
+                                                if (grado === "" || grupo === "") {
                                                     $('#carga-container').hide();
                                                     return;
                                                 }
