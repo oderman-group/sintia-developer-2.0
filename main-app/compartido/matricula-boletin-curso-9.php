@@ -71,7 +71,7 @@ $contador_periodos=0;
 <body style="font-family:Arial;">
 
 <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150"><br>
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"><br>
     <!-- <?=$informacion_inst["info_nombre"]?><br>
     BOLETÍN DE CALIFICACIONES<br> -->
 </div> 
