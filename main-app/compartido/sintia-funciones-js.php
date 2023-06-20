@@ -782,6 +782,13 @@ $(document).ready(function(){
     	localStorage.setItem("modalPoliticas", 1);
 
     });
+	
+
+	$('#boton-cerrar-contrato').click(function(){                    
+
+    	localStorage.setItem("modalContratos", 1);
+
+    });
 
 });	
 
@@ -902,11 +909,12 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 //Mostrar modal de ACEPTACION DE CONTRATO a DIRECTIVOS
 if($datosUsuarioActual['uss_tipo']==5){
 ?>	
-
-	function mostrarModalContrato(){$("#modalContrato").modal("show");}
-
-	setTimeout('mostrarModalContrato()', 2000);
-
+	if(localStorage.getItem("modalContratos")!=1){
+		function mostrarModalContrato(){
+			$("#modalContrato").modal("show");
+		}
+		setTimeout('mostrarModalContrato()', 2000);
+	}
 <?php }?>
 
 

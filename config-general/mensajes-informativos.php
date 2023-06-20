@@ -95,6 +95,25 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
             break;
 
+            case 'ER_DT_12':
+                $tipo = 'danger';
+                $mensaje = 'La clave actual no es correcta. Por favor verifique.';
+            break;
+
+            case 'ER_DT_13':
+                $tipo = 'danger';
+                $mensaje = 'La clave nueva no coincide. Por favor verifique.';
+            break;
+
+            case 'ER_DT_14':
+                $tipo = 'danger';
+                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . $_GET["nombrePagina"] . '</b>.<br>
+                ¿Desea mostrar toda la información de la pagina?<br>
+                <a href="dev-paginas-editar.php?idP=' . $_GET["id"] . '" id="addRow" class="btn deepPink-bgcolor">
+                    Sí, deseo mostrar la información
+                </a>';
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -164,7 +183,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_10':
                 $tipo = 'success';
                 $mensaje = '
-                El proceso de creación de BD nueva se concluyó exitosamente
+                El proceso de creación de BD nueva se concluyó exitosamente.
                 ';
             break;
 
@@ -181,7 +200,6 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 Los folios fueron generados correctamente.
                 ';
             break;
-
 
             default:
                 $tipo = 'secondary';

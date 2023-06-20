@@ -4,7 +4,8 @@ if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 }
-$institucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$_SESSION["inst"]."'");
+$institucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+WHERE ins_bd='".$_SESSION["inst"]."' AND ins_enviroment='".ENVIROMENT."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $institucionNombre = $institucion['ins_siglas'];
@@ -105,7 +106,9 @@ $institucionNombre = $institucion['ins_siglas'];
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li><a href="perfil.php"><i class="icon-user"></i> Perfil </a></li>
-                                <li><a href="#cambiar-clave.php"><i class="icon-user"></i> Cambiar contraseña </a></li>
+                                <?php if($datosUsuarioActual['uss_tipo'] == 4 && $config['conf_cambiar_clave_estudiantes'] == 'NO') { }else{?>
+                                    <li><a href="cambiar-clave.php"><i class="icon-lock"></i> Cambiar contraseña </a></li>
+                                <?php }?>
 								
                                 <li class="divider"> </li>
 								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i> Ayuda/Soporte </a></li>

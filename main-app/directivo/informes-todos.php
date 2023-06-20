@@ -28,34 +28,48 @@
                     
                     <div class="row">
                         <div class="col-md-12">
+							<h4>INFORMES ACADEMICOS</h4>
                             <div class="row">
 								
 								<div class="col-md-6">
 									<div class="panel">
-										<header class="panel-heading panel-heading-blue">INFORMES ACADÉMICOS</header>
+										<header class="panel-heading panel-heading-blue">MATRICULAS</header>
 										<div class="panel-body">
 											<p><a href="informes-boletines.php">1. Boletines</a></p>
 											<p><a href="estudiantes-certificados.php">2. Certificados</a></p>
 											<p><a href="consolidado-perdidos.php">3. Consolidado de asignaturas perdidas</a></p>
-											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">4. Docentes y cargas académicas</a></p>
-											<p><a href="informe-libro-cursos.php">5. Libro final por curso</a></p>
-											<p><a href="informe-estudiantes.php">6. Listado de Estudiantes</a></p>
-											<p><a href="informe-parcial-grupo.php">7. Informe parcial por grupo</a></p>
-											<p><a href="../compartido/reporte-pasos.php" target="_blank">8. Informe pasos matrícula</a></p>
-											<p><a href="estudiantes-planilla.php">9. Planilla de Estudiantes</a></p>
-											<p><a href="asistencia-planilla.php">10. Planilla de Asistencia</a></p>
-											<p><a href="reportes-academicos-consultas.php">11. Reporte general</a></p>
-											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">12. Reporte informe parcial</a></p>
-											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">13. Reporte vista observador</a></p>
-											<p><a href="informe-reporte-sabana.php">14. Informe de Sabanas</a></p>
-											<p><a href="consolidado-final-filtro.php">15. Informe de Consolidado Final</a></p>
-											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">16. Informe de Cargas Duplicadas</a></p>
-											<p><a href="asistencia-entrega-informes-filtros.php">17. Reporte de asistencia a entrega de informes</a></p>
+											<p><a href="informe-libro-cursos.php">4. Libro final por curso</a></p>
+											<p><a href="informe-estudiantes.php">5. Listado de estudiantes</a></p>
+											<p><a href="informe-parcial-grupo.php">6. Informe parcial por grupo</a></p>
+											<p><a href="../compartido/reporte-pasos.php" target="_blank">7. Informe pasos matrícula</a></p>
+											<p><a href="consolidado-final-filtro.php">8. Informe de consolidado final</a></p>
+											<p><a href="estudiantes-planilla.php">9. Planilla de estudiantes</a></p>
+											<p><a href="reportes-academicos-consultas.php">10. Reporte general de estudiantes</a></p>
+											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
+											<p><a href="asistencia-entrega-informes-filtros.php">12. Reporte de asistencia a entrega de informes</a></p>
+                                            <p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
 										</div>
                                 	</div>
 								</div>
 
-                                <div class="col-md-6">
+								<div class="col-md-6">
+									<div class="panel">
+										<header class="panel-heading panel-heading-blue">CARGAS ACADÉMICAS</header>
+										<div class="panel-body">
+											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">1. Docentes y cargas académicas</a></p>
+											<p><a href="informe-reporte-sabana.php">2. Informe de sábanas</a></p>
+											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
+											<p><a href="asistencia-planilla.php">4. Planilla de asistencia</a></p>
+											<p><a href="planilla-docentes-filtros.php">5. Planilla docentes con notas</a></p>
+											<p><a href="notas-registradas-informes-filtros.php" >6. Notas declaradas y registradas</a></p>
+										</div>
+                                	</div>
+								</div>
+							</div>
+
+							<h4>OTROS INFORMES</h4>
+							<div class="row">
+                                <div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-green">INFORMES FINANCIEROS</header>
 										<div class="panel-body">
@@ -64,24 +78,34 @@
                                 	</div>
 								</div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-red">INFORMES DISCPLINARIOS</header>
 										<div class="panel-body">
-											<p><a href="reportes-sacar-filtro.php">Sacar reportes</a></p>
+											<p><a href="reportes-sacar-filtro.php">1. Sacar reportes</a></p>
+											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">2. Reporte vista observador</a></p>
 										</div>
                                 	</div>
 								</div>
 								
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-yellow">EXPORTAR A EXCEL</header>
 										<div class="panel-body">
-                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">Exportar Inscripciones</a></p>
-                                            <p><a href="../compartido/excel-estudiantes.php" target="_blank">Exportar Matrículas</a></p>
+                                            <p><a href="../compartido/excel-inscripciones.php" target="_blank">1. Exportar inscripciones</a></p>
+                                            <p><a href="../compartido/excel-estudiantes.php" target="_blank">2. Exportar matrículas</a></p>
 										</div>
                                 	</div>
-									
+								</div>
+								
+								<div class="col-md-4">
+									<div class="panel">
+										<header class="panel-heading panel-heading-green">INFORMES ADMINISTRATIVOS</header>
+										<div class="panel-body">
+                                            <p><a href="../compartido/informe-usuarios-repetidos.php" target="_blank">1. Informe usuarios repetidos</a></p>
+                                            <p><a href="../compartido/informe-estudiantes-sin-usuarios.php" target="_blank">2. Informe estudiantes sin usuario</a></p>
+										</div>
+                                	</div>
 								</div>
                             </div>
                         </div>

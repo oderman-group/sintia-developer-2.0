@@ -44,7 +44,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title">Agregar <?=$frases[63][$datosUsuarioActual[8]];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
@@ -55,11 +55,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
@@ -88,10 +84,8 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Creado por el docente</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-2">
                                                 <select class="form-control  select2" name="creado" required>
-                                                    <option value="0">Seleccione una opción</option>
-													<option value="1">SI</option>
 													<option value="0" selected>NO</option>
                                                 </select>
                                             </div>

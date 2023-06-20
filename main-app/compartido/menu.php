@@ -43,15 +43,19 @@
 							<?php
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
 							?>
-							<div class="nav-item">
-								<div align="center" style="color:#FC0; font-weight:bold;">
-									AÑO CONSULTADO<br />
-									<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
+								<div class="nav-item">
+									<div align="center" style="color:#FC0; font-weight:bold;">
+										AÑO CONSULTADO<br />
+										<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
+									</div>
 								</div>
-							</div>
+							<?php }?>
 							
+							<?php
+								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3 || $datosUsuarioActual[3]==4){
+							?>
 							<li class="nav-item">
-	                            <a href="como-empezar.php" class="nav-link nav-toggle">
+							<a href="como-empezar.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">toc</i>
 	                                <span class="title">GUIA PARA EMPEZAR</span>
                                 	<span class="selected"></span>
@@ -60,17 +64,17 @@
 
 							<?php }?>
 							
-							<li class="nav-item start active">
-	                            <a href="javascript:void(0);" onclick="javascript:introJs().start();" class="nav-link nav-toggle">
+							<li class="nav-item start">
+							<a href="javascript:void(0);" onclick="javascript:introJs().start();" class="nav-link nav-toggle">
 	                                <i class="fa fa-life-ring"></i>
 	                                <span class="title">Tour SINTIA</span>
                                 	<span class="selected"></span>
 	                            </a>
 	                        </li>
 
-							
-							<li class="nav-item">
-	                            <a href="index.php" class="nav-link nav-toggle">
+							<?php include_once("menu-metodos.php")?>
+							<li <?php agregarClass(MENU,["DT0004"]) ?>>
+							<a href="index.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">dashboard</i>
 	                                <span class="title"><?=$frases[100][$datosUsuarioActual['uss_idioma']];?></span>
                                 	<span class="selected"></span>
@@ -92,24 +96,25 @@
 							
 							//MÓDULO ACADÉMICO
 							if(array_key_exists(1, $arregloModulos)){?>
-							<li class="nav-item">
+							<li <?php agregarClass(MENU_PADRE,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu">
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
 									<?php if(array_key_exists(8, $arregloModulos)){?>
-	                                	<li class="nav-item"><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
+	                                	<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
 									<?php }?>
 
-	                                <li class="nav-item"><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
+	                                <li <?php agregarClass(MENU,["DT0001"]) ?>><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0195","DT0196","DT0197"]) ?>><a href="grupos.php" class="nav-link "> <span class="title"><?=$frases[254][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0017"]) ?>><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0020"]) ?>><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0032"]) ?>><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
 
 									<?php if(array_key_exists(9, $arregloModulos)){?>
-										<li class="nav-item"><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
+										<li <?php agregarClass(MENU,["DT0121"]) ?>><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
 									<?php }?>
 									
 	                            </ul>
@@ -184,7 +189,6 @@
 	                            <ul class="sub-menu">
 									<li><a href="configuracion-sistema.php">del Sistema</a></li>
 									<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
-									<li><a href="configuracion-opciones-generales.php">Opciones generales</a></li>
 	                            </ul>
 	                        </li>
 
@@ -202,17 +206,19 @@
 										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu">
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Log de errores</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Instituciones</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Módulos</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Páginas</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Opciones generales</span></a></li>
+										<li class="nav-item"><a href="dev-ejecutar-scripts.php" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
+										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
+										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title">Log de errores</span></a></li>
+										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
+										<li class="nav-item"><a href="dev-historial-acciones.php" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
+										<li class="nav-item"><a href="dev-instituciones.php" class="nav-link"> <span class="title">Instituciones</span></a></li>
+										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title">Módulos</span></a></li>
+										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
+										<li class="nav-item"><a href="configuracion-opciones-generales.php" class="nav-link"> <span class="title">Opciones generales</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Contratos</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
+										<li class="nav-item"><a href="dev-contratos.php" class="nav-link"> <span class="title">Contratos</span></a></li>
+										<li class="nav-item"><a href="dev-terminos.php" class="nav-link"> <span class="title">T&C</span></a></li>
+										<li class="nav-item"><a href="dev-datos-contacto.php" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
 									</ul>
 								</li>
 							<?php }?>

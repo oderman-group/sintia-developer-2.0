@@ -1,7 +1,7 @@
 <?php
 if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SERVER['HTTP_REFERER']==""){
-	echo '<script type="text/javascript">window.close()</script>';
-	exit();
+    echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=220";</script>';
+	exit();	
 }
 
 include("../directivo/session.php");
