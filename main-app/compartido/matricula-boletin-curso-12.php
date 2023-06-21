@@ -277,7 +277,7 @@
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria=($notaMateria+$notaMateriasPeriodosTotal)*$acomulado;
+                                        $notaAcomuladoMateria=($notaMateria+$notaMateriasPeriodosTotal)/$config["conf_periodos_maximos"];
                                         $notaAcomuladoMateria= round($notaAcomuladoMateria,1);
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
@@ -351,7 +351,7 @@
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
-                                $notaAcomuladoArea=($notaArea+$notaAreasPeriodosTotal)*$acomulado;
+                                $notaAcomuladoArea=($notaArea+$notaAreasPeriodosTotal)/$config["conf_periodos_maximos"];
                                 $notaAcomuladoArea= round($notaAcomuladoArea,1);
                                 if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
