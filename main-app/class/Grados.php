@@ -35,4 +35,8 @@ class Grados {
         return $resultado;
     }
 
+    public static function obtenerGrado($grado = 0){        
+            return mysqli_fetch_array(Grados::obtenerDatosGrados($grado));
+    }
+
 }

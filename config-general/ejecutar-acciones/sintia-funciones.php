@@ -18,7 +18,7 @@ $tablaOrigen = 'general_resultados';
 
 //consulta a instituciones activas
 $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM instituciones
-WHERE ins_estado=1
+WHERE ins_estado=1 AND ins_enviroment='".ENVIROMENT."'
 ");
 $totalCompleto = 0;
 while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH)){

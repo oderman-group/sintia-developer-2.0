@@ -507,6 +507,8 @@ $frases[250][$l] = 'Grupo';
 $frases[251][$l] = 'Temática';
 
 $frases[252][$l] = 'Notas por indicador';
+$frases[253][$l] = 'Cambiar clave';
+$frases[254][$l] = 'Grupos';
 
 
 
@@ -1019,5 +1021,7 @@ $frases[250][$l] = 'Group';
 $frases[251][$l] = 'Thematic';
 
 $frases[252][$l] = 'Ratings by indicator';
+
+$frases[254][$l] = 'Groups';
 
 ?>

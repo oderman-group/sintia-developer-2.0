@@ -1,6 +1,10 @@
 <?php 
 include("session.php");
 
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0193';
+include("../compartido/historial-acciones-guardar.php");
+
 $year=$agnoBD;
 if(!empty($_REQUEST["year"])){
 $year=$_REQUEST["year"];
@@ -18,15 +22,20 @@ try {
 	INNER JOIN ".$BD.".academico_grados ON gra_id=mat_grado
 	WHERE mat_eliminado=0 $filtro
 	ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 	while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-		mysqli_query($conexion,"UPDATE ".$BD.".academico_matriculas SET mat_folio='".$folio."' 
-		WHERE mat_id='".$datos['mat_id']."'");
+		try{
+			mysqli_query($conexion,"UPDATE ".$BD.".academico_matriculas SET mat_folio='".$folio."' 
+			WHERE mat_id='".$datos['mat_id']."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 		$folio ++ ;
 	}
 
+	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_12";</script>';
 	exit();
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}	

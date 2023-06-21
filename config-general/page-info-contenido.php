@@ -104,61 +104,61 @@ switch($_GET["idmsg"]){
 		$boton1 = 'IR A EVALUACIONES';
 	break;
 										
-									case 201:
-										$color = 'yellow';
-										$titulo = 'EVALUACIÓN INICIADA PREVIAMENTE';
-										$texto = 'Al parecer la evaluación a la que intentaste acceder ya la habías iniciado en otra ocasión. Tal vez cerraste, cambiaste o recargaste la pestaña sin haber enviado la evaluación. Debes pedirle al docente encargado que verifique este asunto y te la habilite nuevamente de ser necesario.';
-										$url1 = 'evaluaciones.php';
-										$boton1 = 'IR A EVALUACIONES';
-									break;
-									
-									case 202:
-										$color = 'yellow';
-										$titulo = 'CLAVE INCORRECTA';
-										$texto = 'La clave que ingresaste para la evaluación no es correcta. Verifica con el docente encargado que ésta sea correcta y vuelve a intentar.';
-										$url1 = 'evaluaciones-clave.php?idE='.$_GET["idE"];
-										$boton1 = 'VOLVER A INTENTAR';
-									break;
-										
-									case 203:
-										$color = 'yellow';
-										$titulo = 'FALTA REALIZAR LA EVALUACIÓN';
-										$texto = 'Para ver los detalles de la evaluación debes realizarla primero.';
-										$url1 = 'evaluaciones.php';
-										$boton1 = 'IR A EVALUACIONES';
-									break;
-										
-									case 204:
-										$color = 'yellow';
-										$titulo = 'HO HA LLEGADO LA FECHA';
-										$texto = 'La evaluación a la que intentaste acceder no está disponible hasta la siguiente fecha: <b>'.$_GET["fechaD"].'</b>. Faltan <b>'.$_GET["diasF"].'</b> días y <b>'.number_format($_GET["segundosF"],0,",",".").'</b> segundos.';
-										$url1 = 'evaluaciones.php';
-										$boton1 = 'IR A EVALUACIONES';
-									break;
-										
-									case 205:
-										$color = 'yellow';
-										$titulo = 'LA FECHA YA PASÓ';
-										$texto = 'La evaluación a la que intentaste acceder estuvo disponible hasta la siguiente fecha: <b>'.$_GET["fechaH"].'</b>. Hasta hace <b>'.($_GET["diasP"]*-1).'</b> días.';
-										$url1 = 'evaluaciones.php';
-										$boton1 = 'IR A EVALUACIONES';
-									break;
-										
-									case 206:
-										$color = 'yellow';
-										$titulo = 'NO HA LLEGADO LA FECHA';
-										$texto = 'La actividad a la que intentaste acceder no está disponible hasta la siguiente fecha: <b>'.$_GET["fechaD"].'</b>. Faltan <b>'.$_GET["diasF"].'</b> minutos.';
-										$url1 = 'actividades.php';
-										$boton1 = 'IR A ACTIVIDADES';
-									break;
-										
-									case 207:
-										$color = 'yellow';
-										$titulo = 'LA FECHA YA PASÓ';
-										$texto = 'La actividad que intentaste enviar estuvo disponible hasta la siguiente fecha: <b>'.$_GET["fechaH"].'</b>. Hasta hace <b>'.($_GET["diasP"]*-1).'</b> minutos.';
-										$url1 = 'actividades.php';
-										$boton1 = 'IR A ACTIVIDADES';
-									break;
+	case 201:
+		$color = 'yellow';
+		$titulo = 'EVALUACIÓN INICIADA PREVIAMENTE';
+		$texto = 'Al parecer la evaluación a la que intentaste acceder ya la habías iniciado en otra ocasión. Tal vez cerraste, cambiaste o recargaste la pestaña sin haber enviado la evaluación. Debes pedirle al docente encargado que verifique este asunto y te la habilite nuevamente de ser necesario.';
+		$url1 = 'evaluaciones.php';
+		$boton1 = 'IR A EVALUACIONES';
+	break;
+	
+	case 202:
+		$color = 'yellow';
+		$titulo = 'CLAVE INCORRECTA';
+		$texto = 'La clave que ingresaste para la evaluación no es correcta. Verifica con el docente encargado que ésta sea correcta y vuelve a intentar.';
+		$url1 = 'evaluaciones-clave.php?idE='.$_GET["idE"];
+		$boton1 = 'VOLVER A INTENTAR';
+	break;
+		
+	case 203:
+		$color = 'yellow';
+		$titulo = 'FALTA REALIZAR LA EVALUACIÓN';
+		$texto = 'Para ver los detalles de la evaluación debes realizarla primero.';
+		$url1 = 'evaluaciones.php';
+		$boton1 = 'IR A EVALUACIONES';
+	break;
+		
+	case 204:
+		$color = 'yellow';
+		$titulo = 'HO HA LLEGADO LA FECHA';
+		$texto = 'La evaluación a la que intentaste acceder no está disponible hasta la siguiente fecha: <b>'.$_GET["fechaD"].'</b>. Faltan <b>'.$_GET["diasF"].'</b> días y <b>'.number_format($_GET["segundosF"],0,",",".").'</b> segundos.';
+		$url1 = 'evaluaciones.php';
+		$boton1 = 'IR A EVALUACIONES';
+	break;
+		
+	case 205:
+		$color = 'yellow';
+		$titulo = 'LA FECHA YA PASÓ';
+		$texto = 'La evaluación a la que intentaste acceder estuvo disponible hasta la siguiente fecha: <b>'.$_GET["fechaH"].'</b>. Hasta hace <b>'.($_GET["diasP"]*-1).'</b> días.';
+		$url1 = 'evaluaciones.php';
+		$boton1 = 'IR A EVALUACIONES';
+	break;
+		
+	case 206:
+		$color = 'yellow';
+		$titulo = 'NO HA LLEGADO LA FECHA';
+		$texto = 'La actividad a la que intentaste acceder no está disponible hasta la siguiente fecha: <b>'.$_GET["fechaD"].'</b>. Faltan <b>'.$_GET["diasF"].'</b> minutos.';
+		$url1 = 'actividades.php';
+		$boton1 = 'IR A ACTIVIDADES';
+	break;
+		
+	case 207:
+		$color = 'yellow';
+		$titulo = 'LA FECHA YA PASÓ';
+		$texto = 'La actividad que intentaste enviar estuvo disponible hasta la siguiente fecha: <b>'.$_GET["fechaH"].'</b>. Hasta hace <b>'.($_GET["diasP"]*-1).'</b> minutos.';
+		$url1 = 'actividades.php';
+		$boton1 = 'IR A ACTIVIDADES';
+	break;
 										
 	case 208:
 		$color = 'red';
@@ -254,7 +254,15 @@ switch($_GET["idmsg"]){
 		$texto = 'Algunas acciones solo son permitidas en periodos anteriores al actual.';
 		$url1 = 'cargas.php';
 		$boton1 = 'IR A CARGAS ACADÉMICAS';
-	break;	
+	break;
+	
+	case 220:
+		$color = 'red';
+		$titulo = 'ACCIÓN NO PERMITIDA';
+		$texto = 'No hay número de matrícula para este estudiante';
+		$url1 = 'estudiantes.php';
+		$boton1 = 'IR A ESTUDIANTES';
+	break;
 		
 	
 	
@@ -295,6 +303,14 @@ switch($_GET["idmsg"]){
 		$color = 'red';
 		$titulo = 'ACCESO INCORRECTO';
 		$texto = 'Lo sentimos para el año '.$_SESSION["cambioYear"].' usted no era administrativo';
+		$url1 = 'index.php';
+		$boton1 = 'IR AL INICIO';
+	break;
+
+	case 305:
+		$color = 'red';
+		$titulo = 'SIN PERMISO DE CAMBIAR CLAVE';
+		$texto = 'No tienes permiso para cambiar tu clave en este momento.';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
 	break;

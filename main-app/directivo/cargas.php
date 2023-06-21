@@ -89,7 +89,7 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("consulta-paginacion-cargas.php");											       
+													include("includes/consulta-paginacion-cargas.php");											       
 													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
 													  LEFT JOIN academico_grados ON gra_id=car_curso
 													  LEFT JOIN academico_grupos ON gru_id=car_grupo
@@ -135,6 +135,7 @@ $Plataforma = new Plataforma;
 																	  	<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	  <?php }?>
 																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla</a></li>
+																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla con notas</a></li>
 																  </ul>
 															  </div>
 														</td>

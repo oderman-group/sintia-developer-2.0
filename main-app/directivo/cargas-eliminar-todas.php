@@ -1,6 +1,11 @@
-<?php /*include("session.php"); ?>
-<?php include("../modelo/conexion.php"); ?>
 <?php
+include("session.php");
+
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0153';
+include("../compartido/historial-acciones-guardar.php");
+
+try{
 	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones");
 	mysqli_query($conexion, "DELETE FROM academico_actividad_foro");
 	mysqli_query($conexion, "DELETE FROM academico_actividad_foro");
@@ -21,9 +26,12 @@
 	mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas");
 	mysqli_query($conexion, "DELETE FROM academico_ausencias");
 	mysqli_query($conexion, "DELETE FROM disiplina_nota");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 	$lineaError = __LINE__;
-
 	include("../compartido/reporte-errores.php");
+	include("../compartido/guardar-historial-acciones.php");
+
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
-	*/
