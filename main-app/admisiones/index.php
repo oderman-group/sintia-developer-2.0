@@ -1,5 +1,5 @@
 <?php
-$idInstitucion = 22;
+$idInstitucion = 1;
 if(!empty($_GET['idInst'])){
     $idInstitucion = $_GET['idInst'];
 }
