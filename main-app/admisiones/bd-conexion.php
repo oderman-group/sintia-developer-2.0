@@ -7,10 +7,9 @@ $user   		   = $usuarioConexion;
 $pass   		   = $claveConexion;
 $dbName 		   = $baseDatosAdmisiones;
 
-if(!empty($_REQUEST['idInst']) || !empty($_REQUEST['institucion'])){
+if(!empty($_REQUEST['idInst']) || !empty($_REQUEST['institucion']) || $idInstitucion==1){
 	try{
 		$pdoAdmin = new PDO('mysql:host='.$server.';dbname='.$baseDatosServicios, $user, $pass);
-		//$pdoI->exec("SET CHARACTER SET utf-8");
 	}catch (PDOException $e) {
 		echo "Error!: " . $e->getMessage() . "<br/>";
 		die();
@@ -18,8 +17,10 @@ if(!empty($_REQUEST['idInst']) || !empty($_REQUEST['institucion'])){
 	
 	if(!empty($_REQUEST['institucion'])){
 		$idInsti=$_REQUEST['institucion'];
-	}else{
+	}elseif(!empty($_REQUEST['idInst'])){
 		$idInsti=$_REQUEST['idInst'];
+	}else{
+		$idInsti=$idInstitucion;
 	}
 
 	//configuración
@@ -45,7 +46,6 @@ if(!empty($_REQUEST['inst'])){
 
 try{
 	$pdo = new PDO('mysql:host='.$server.';dbname='.$dbName, $user, $pass);
-    //$pdo->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
@@ -55,7 +55,6 @@ $dbNameInstitucion = $BD_ADMISIONES_MOCK;
 
 try{
 	$pdoI = new PDO('mysql:host='.$server.';dbname='.$dbNameInstitucion, $user, $pass);
-    //$pdoI->exec("SET CHARACTER SET utf-8");
 }catch (PDOException $e) {
 	echo "Error!: " . $e->getMessage() . "<br/>";
 	die();
