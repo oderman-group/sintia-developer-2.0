@@ -10,7 +10,6 @@ WHERE gra_estado = 1";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();
-$datosGrado = $grados->fetch();
 ?>
 <!DOCTYPE html>
 
