@@ -547,16 +547,16 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-3">
-													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
 													<input class="form-control" size="16" type="text">
 													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 													</div>
 												</div>
-												<input type="hidden" id="dtp_input1" name="fechaNA">
+												<input type="hidden" id="dtp_input2" name="fechaNA">
 
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
-													<select class="form-control  select2" name="generoA">
+													<select class="form-control select2" name="generoA">
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");

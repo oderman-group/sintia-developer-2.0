@@ -102,6 +102,7 @@ require_once("../class/Grupos.php");
 	<!-- Para la vista guiada -->
     <link href="../../librerias/vista-tour/introjs.css" rel="stylesheet">
 	<script type="text/javascript" src="../../librerias/vista-tour/intro.js"></script>
+	<script src="https://kit.fontawesome.com/e84fa1cf78.js" crossorigin="anonymous"></script>
 	
 	
 	

@@ -1766,16 +1766,16 @@
     },
     headTemplate: '<thead>' +
                 '<tr>' +
-                '<th class="prev"><i class="{iconType} {leftArrow}"/></th>' +
+                '<th class="prev"><i class="fa-solid fa-angle-left"></i></th>' +
                 '<th colspan="5" class="switch"></th>' +
-                '<th class="next"><i class="{iconType} {rightArrow}"/></th>' +
+                '<th class="next"><i class="fa-solid fa-angle-right"></i></th>' +
                 '</tr>' +
       '</thead>',
     headTemplateV3: '<thead>' +
                 '<tr>' +
-                '<th class="prev"><span class="{iconType} {leftArrow}"></span> </th>' +
+                '<th class="prev"><i class="fa-solid fa-angle-left"></i></th>' +
                 '<th colspan="5" class="switch"></th>' +
-                '<th class="next"><span class="{iconType} {rightArrow}"></span> </th>' +
+                '<th class="next"><i class="fa-solid fa-angle-right"></i></span> </th>' +
                 '</tr>' +
       '</thead>',
     contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
