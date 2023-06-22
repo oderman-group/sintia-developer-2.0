@@ -18,6 +18,7 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
     <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 	<link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
 	<!-- favicon -->
     <link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
