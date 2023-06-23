@@ -12,6 +12,8 @@ try{
 }
 $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
+
+$variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins_bd='.$_POST['ins_bd'].'&yearA='.$_POST['yearA'].'&siglasBD='.$_POST['siglasBD'].'&nombreInsti='.$_POST['nombreInsti'].'&siglasInst='.$_POST['siglasInst'].'&yearN='.$_POST['yearN'];
 ?>
 </head>
 
@@ -80,7 +82,7 @@ $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
                                                 <input type="hidden" name="confirmacion" value="1">
 
                                                 <input type="submit" class="btn  deepPink-bgcolor" value="Confirmar">
-                                                <a href="dev-crear-nueva-bd.php" class="btn btn-round btn-primary">Regresar</a>
+                                                <a href="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-round btn-primary">Regresar</a>
                                             </form>
 										</div>
                                     </div>
@@ -117,7 +119,7 @@ $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
                                                 <input type="hidden" name="continue" value="1">
 
                                                 <?=$boton?>
-                                                <a href="dev-crear-nueva-bd.php" class="btn btn-round btn-primary">Regresar</a>
+                                                <a href="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-round btn-primary">Regresar</a>
                                             </form>
                                         </div>
                                     </div>

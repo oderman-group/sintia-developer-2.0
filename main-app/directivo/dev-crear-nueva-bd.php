@@ -8,6 +8,50 @@ include("../compartido/historial-acciones-guardar.php");
 Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
+$datosNuevaBD = [
+	'tipoInsti'     => '',
+	'idInsti'      => '',
+	'ins_bd'       => '',
+	'yearA'    => '',
+	'siglasBD'      => '',
+	'nombreInsti' => '',
+	'siglasInst'      => '',
+	'yearN'       => ''
+];
+$displayNueva= 'none';
+$displayAntigua= 'none';
+if(isset($_GET['tipoInsti'])){
+
+    $displayNueva= 'block';
+    $displayAntigua= 'none';
+    if($_GET['tipoInsti']==0){
+        $displayNueva= 'none';
+        $displayAntigua= 'block';
+    }
+
+	$datosNuevaBD['tipoInsti'] = $_GET['tipoInsti'];
+}
+if(isset($_GET['idInsti'])){
+	$datosNuevaBD['idInsti'] = $_GET['idInsti'];
+}
+if(isset($_GET['ins_bd'])){
+	$datosNuevaBD['ins_bd'] = $_GET['ins_bd'];
+}
+if(isset($_GET['yearA'])){
+	$datosNuevaBD['yearA'] = $_GET['yearA'];
+}
+if(isset($_GET['siglasBD'])){
+	$datosNuevaBD['siglasBD'] = $_GET['siglasBD'];
+}
+if(isset($_GET['nombreInsti'])){
+	$datosNuevaBD['nombreInsti'] = $_GET['nombreInsti'];
+}
+if(isset($_GET['siglasInst'])){
+	$datosNuevaBD['siglasInst'] = $_GET['siglasInst'];
+}
+if(isset($_GET['yearN'])){
+	$datosNuevaBD['yearN'] = $_GET['yearN'];
+}
 
 try{
     $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
@@ -82,25 +126,25 @@ try{
 											<div class="col-sm-3">
                                                 <select class="form-control  select2" name="tipoInsti" onchange="institucion(this)">
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value="1">Nueva</option>
-                                                    <option value="0">Antigua</option>
+                                                    <option value="1"<?php if($datosNuevaBD['tipoInsti']==1){echo "selected";}?>>Nueva</option>
+                                                    <option value="0"<?php if($datosNuevaBD['tipoInsti']==0){echo "selected";}?>>Antigua</option>
                                                 </select>
 											</div>
 										</div>
                                         
-                                        <div id="nueva" style="display: none;">
+                                        <div id="nueva" style="display: <?=$displayNueva?>;">
 
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Nombre de la institución</label>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="nombreInsti" class="form-control" autocomplete="off" value="">
+                                                    <input type="text" name="nombreInsti" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombreInsti'];?>">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Siglas de la institución</label>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="siglasInst" class="form-control" autocomplete="off" value="">
+                                                    <input type="text" name="siglasInst" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasInst'];?>">
                                                     <span style="color:#6017dc;">Nombre corto de la institución.</span>
                                                 </div>
                                             </div>
@@ -108,7 +152,7 @@ try{
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b></label>
                                                 <div class="col-sm-6">
-                                                    <input type="text" name="siglasBD" class="form-control col-sm-6" autocomplete="off" value="">
+                                                    <input type="text" name="siglasBD" class="form-control col-sm-6" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">
                                                     <span style="color:#6017dc;">Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_<b>SiglasBD</b>_year</span>
                                                 </div>
                                             </div>
@@ -116,13 +160,13 @@ try{
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Año a crear</label>
                                                 <div class="col-sm-3">
-                                                    <input type="number" name="yearN" class="form-control" autocomplete="off" value="">
+                                                    <input type="number" name="yearN" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearN'];?>">
                                                 </div>
                                             </div>
 
 										</div>
 
-                                        <div id="antigua" style="display: none;">
+                                        <div id="antigua" style="display: <?=$displayAntigua?>;">
 
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Institución</label>
@@ -132,7 +176,7 @@ try{
                                                         <?php
                                                             while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
                                                         ?>
-                                                            <option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
+                                                            <option value="<?=$instituciones['ins_id'];?>" <?php if($datosNuevaBD['idInsti']==$instituciones['ins_id']){echo "selected";}?>><?=$instituciones['ins_siglas'];?></option>
                                                         <?php }?>
                                                     </select>
                                                 </div>
@@ -141,7 +185,7 @@ try{
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Año a crear</label>
                                                 <div class="col-sm-3">
-                                                    <input type="number" name="yearA" class="form-control" autocomplete="off" value="">
+                                                    <input type="number" name="yearA" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearA'];?>">
                                                 </div>
                                             </div>
 
