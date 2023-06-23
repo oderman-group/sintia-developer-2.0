@@ -183,7 +183,13 @@ if($config['conf_activar_encuesta']==1){
 									</div>
 								</div>
 								<?php }} else {
-								echo '<div class="col-lg-3 col-md-6 col-12 col-sm-6"> El curso ' . $cursoMediaTecnica["gra_nombre"] . ' no tiene carga academica.</div>';
+								echo '
+									<div class="col-12">
+										<div class="alert alert-danger">
+											<i class="icon-exclamation-sign"></i><strong>INFORMACIÓN:</strong> El curso de <b>' . $cursoMediaTecnica["gra_nombre"] . '</b> no tiene cargas academicas asignadas aún.
+										</div>
+									</div>
+									';
 							} ?>
 							</div>
 							<?php } ?>
