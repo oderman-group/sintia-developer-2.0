@@ -2,12 +2,21 @@
 include("bd-conexion.php");
 include("php-funciones.php");
 
+require ROOT_PATH.'/librerias/phpmailer/Exception.php';
+require ROOT_PATH.'/librerias/phpmailer/PHPMailer.php';
+require ROOT_PATH.'/librerias/phpmailer/SMTP.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'phpmailer/Exception.php';
-require 'phpmailer/PHPMailer.php';
-require 'phpmailer/SMTP.php';
+//DATOS SECRETARIA(O)
+$ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
+$uss = $pdoI->prepare($ussQuery);
+$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_INT);
+$uss->execute();
+$num = $uss->rowCount();
+$datosUss = $uss->fetch();
+$nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
 $estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion";
 $est = $pdo->prepare($estQuery);
@@ -59,7 +68,7 @@ if ($newId > 0) {
     $estuId = $pdoI->lastInsertId();
 
     //Acudiente
-    $acudienteQuery = "INSERT INTO usuarios(uss_usuario, uss_tipo, uss_nombre, uss_email, uss_celular)VALUES(:usuario, 3, :nombre, :email, :celular)";
+    $acudienteQuery = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_email, uss_celular)VALUES(:usuario, SHA1('12345678'), 3, :nombre, :email, :celular)";
     $acudiente = $pdoI->prepare($acudienteQuery);
     $acudiente->bindParam(':usuario', $_POST['documentoAcudiente'], PDO::PARAM_STR);
     $acudiente->bindParam(':nombre', $_POST['nombreAcudiente'], PDO::PARAM_STR);
@@ -81,7 +90,7 @@ if ($newId > 0) {
     $madreId = $pdoI->lastInsertId();
 
     //Matriculas
-    $matriculasQuery = "INSERT INTO academico_matriculas(mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado)VALUES(:tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado)";
+    $matriculasQuery = "INSERT INTO academico_matriculas(mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo)VALUES(:tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1)";
     $matriculas = $pdoI->prepare($matriculasQuery);
     $matriculas->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
     $matriculas->bindParam(':documento', $_POST['documento'], PDO::PARAM_STR);
@@ -104,90 +113,57 @@ if ($newId > 0) {
 
 
     //Mensaje para correo
-    $fin =  '<html><body style="background-color:#CCC;">';
-    $fin .= '
-                    <center>
-            
-                        <div style="font-family:arial; background:#FFF; width:800px; color:#000; text-align:justify; padding:15px; border-radius:5px; margin-top:20px;">
-                        
-                            <div style="width:800px; text-align:center; padding:15px;">
 
-                                <img src="http://plataformasintia.com/admisiones/files/logoicolven.jpeg" width="150">
+	$data = [
+		'solicitud_id'     => $newId,
+		'solicitud_nombre' => $_POST['nombreEstudiante'],
+		'solicitud_documento' => $_POST['documento'],
+		'usuario_email'    => $_POST['email'],
+		'usuario_nombre'   => strtoupper($_POST['nombreAcudiente'])
+	];
+	$asunto = 'Solicitud de admisión #' . $newId;
+	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-index-inscripcion.php';
+	
 
-                            </div>
-
-							<p style="color:#000;">
-                                Cordial saludo ' . strtoupper($_POST['nombreAcudiente']) . ', su solicitud de admisión para el aspirante <b>'.$_POST['nombreEstudiante'].'</b>, en el <b>INSTITUTO COLOMBO VENEZOLANO</b> fue realizada correctamente.<br>
-                                A continuación le informaremos algunos datos importantes que debe tener presente al momento de continuar al siguiente paso, o cuando desee consultar el estado de su solicitud.
-							</p>
-
-                            <p style="color:#000;">
-                                <span style="color:navy; font-weight:bold;">
-                                    Guarde estos datos en un lugar seguro porque los necesitará durante todo el proceso de admisión:
-                                </span><br>   
-
-                                Número de solicitud: <b>' . $newId . '</b><br>
-                                Número de documento del aspirante: <b>' . $_POST['documento'] . '</b><br>
-                            </p>
-
-                            <p>
-                                Puede consultar el estado de su solicitud en el siguiente enlace:<br>
-                                <a href="https://plataformasintia.com/admisiones/consultar-estado.php">CONSULTAR ESTADO DE SOLICITUD</a>
-                            </p>
-
-							<p>
-                                Cualquier duda o inquietud no dude en contactarnos.<br>
-                                <b>WhatsApp:</b> +57 317 572 1061<br>
-                                <b>Correo:</b> sec.academica@icolven.edu.co
-							</p>
-
-							<p align="center" style="color:#000;">
-								Gracias por preferirnos, que tenga un feliz día.
-							</p>
-
-						</div>
-					</center>
-					<p>&nbsp;</p>
-				';
-    $fin .= '';
-    $fin .=  '<html><body>';
-
-    // Instantiation and passing `true` enables exceptions
     $mail = new PHPMailer(true);
-    echo '<div style="display:none;">';
+
     try {
+
+        ob_start();
+        include($bodyTemplateRoute);
+        $body = ob_get_clean();
+
         //Server settings
-        $mail->SMTPDebug = 2;                                       // Enable verbose debug output
+        $mail->SMTPDebug = 2;                                     // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'jemima.dongee.com';  // Specify main and backup SMTP servers
+        $mail->Host       = EMAIL_SERVER;  	                        // Specify main and backup SMTP servers
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = 'info@plataformasintia.com';                     // SMTP username
-        $mail->Password   = 'B=XKY?y{VWiH';                              // SMTP password
+        $mail->Username   = EMAIL_USER;              
+        $mail->Password   = EMAIL_PASSWORD;                     
         $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 465;                                    // TCP port to connect to
+        $mail->Port       = 465;
 
-        //Recipients
-        $mail->setFrom('info@plataformasintia.com', 'Plataforma SINTIA');
+        //Remitente
+        $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
 
-        $mail->addAddress($_POST['email'], $_POST['nombreAcudiente']);     // Add a recipient
-        $mail->addAddress('sec.academica@icolven.edu.co', 'Sec. Académica');     // Add a recipient
+        //Destinatarios
+        $mail->addAddress('soporte@plataformasintia.com', 'Soporte Plataforma SINTIA');//PLATAFORMA
+        $mail->addAddress($data['usuario_email'], $data['usuario_nombre']);//ASPIRANTE
+        $mail->addAddress($datosUss['uss_email'], $nombreUss);//SECRETARIA(O)
 
         // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = "Solicitud de admisión ICOLVEN #" . $newId;
-        $mail->Body = $fin;
+        $mail->isHTML(true);                                   // Set email format to HTML
+        $mail->Subject = $asunto;
+        $mail->Body = $body;
         $mail->CharSet = 'UTF-8';
 
         $mail->send();
-        echo 'Enviado OK.';
+
     } catch (Exception $e) {
         echo "Error: {$mail->ErrorInfo}";
         exit();
     }
-    echo '</div>';
 
-    //pagarOnline($newId, $_POST['email'], $valor, $_POST['documentoAcudiente'], $_POST['nombreAcudiente'], $_POST['celular']);
-    //header("Location:consultar-estado.php?solicitud=".$newId."&documento=".$_POST['documento']);
     echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'";</script>';
     exit();
 } else {

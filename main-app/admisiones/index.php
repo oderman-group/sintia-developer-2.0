@@ -1,11 +1,15 @@
 <?php
+$idInstitucion = 1;
+if(!empty($_GET['idInst'])){
+    $idInstitucion = $_GET['idInst'];
+}
 include("bd-conexion.php");
+
 $gradosConsulta = "SELECT * FROM academico_grados
 WHERE gra_estado = 1";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();
-$datosGrado = $grados->fetch();
 ?>
 <!DOCTYPE html>
 
@@ -74,7 +78,7 @@ $datosGrado = $grados->fetch();
 
                 <div class="jumbotron">
 
-                    <h1 class="display-5">Hola, bienvenido a DEV!</h1>
+                    <h1 class="display-5">Hola, bienvenido!</h1>
 
                     <p class="lead">
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion,0,".","."); ?>.
@@ -109,10 +113,6 @@ $datosGrado = $grados->fetch();
 
                 <h3 style="text-align: center;">REGISTRO INICIAL</h3>
                 <form action="index-guardar.php" method="post">
-
-                    <?php
-                    $idInstitucion = 22;
-                    ?>
 
                     <input type="hidden" name="iditoken" value="<?= md5($idInstitucion); ?>">
 

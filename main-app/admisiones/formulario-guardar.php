@@ -262,5 +262,5 @@ $filasAfectadasMad = $madre->rowCount();
 
 
 
-header('Location:formulario.php?msg=3&token=' . md5($_POST['solicitud']) . '&id=' . $_POST['solicitud'] . '&fa=' . $filasAfectadas . '&faa=' . $filasAfectadasAcu);
+header('Location:formulario.php?msg=3&token=' . md5($_POST['solicitud']) . '&idInst=' . $_POST['idInst'] . '&id=' . $_POST['solicitud'] . '&fa=' . $filasAfectadas . '&faa=' . $filasAfectadasAcu);
 exit();
