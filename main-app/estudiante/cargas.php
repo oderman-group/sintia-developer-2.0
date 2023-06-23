@@ -136,10 +136,10 @@ if($config['conf_activar_encuesta']==1){
 			        </div>
 			        <!-- End course list -->
 			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
-						<hr  noshade="noshade" size="3" width="100%" />	
 						<?php
 						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';}
 						foreach ($listaCursosMediaTecnica as $dato) {
 							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>			
 
