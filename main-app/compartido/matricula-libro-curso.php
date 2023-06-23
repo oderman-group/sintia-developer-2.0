@@ -100,7 +100,8 @@ if($config['conf_id_institucion']!=1){
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:10px;">
     <tr>
     	<td>C&oacute;digo: <b><?=$datosUsr["mat_matricula"];?></b></td>
-        <td colspan="2">Nombre: <b><?=$nombre?></b></td>   
+        <td>Nombre: <b><?=$nombre?></b></td>   
+        <td>Matricula: <b><?=$datosUsr["mat_numero_matricula"];?></b></td>   
     </tr>
     
     <tr>
