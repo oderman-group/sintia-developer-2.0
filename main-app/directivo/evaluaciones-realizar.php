@@ -120,8 +120,12 @@
 </div>
 	
 	<?php
-	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	try{
+		$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
+		WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 	if($evaluacion[0]==""){
@@ -129,8 +133,11 @@
 		exit();
 	}
 	
-	$consultaFecha=mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	try{
+		$consultaFecha=mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$fechas = mysqli_fetch_array($consultaFecha, MYSQLI_BOTH);
 	if($fechas[2]>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=204&fechaD='.$evaluacion['eva_desde'].'&diasF='.$fechas[0].'&segundosF='.$fechas[2].'";</script>';
@@ -142,10 +149,13 @@
 	}
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
-	");
+	try{
+		$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+		INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
+		WHERE evp_id_evaluacion='".$_GET["idE"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
@@ -156,8 +166,12 @@
 	}
 
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-	$consultaNume=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-	WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'");
+	try{
+		$consultaNume=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
+		WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$nume = mysqli_num_rows($consultaNume);
 	
 	if($nume>0){
@@ -166,23 +180,38 @@
 	}
 	
 	//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-	$consultaEstadoSesionEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-	WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL");
+	try{
+		$consultaEstadoSesionEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
+		WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$estadoSesionEvaluacion = mysqli_num_rows($consultaEstadoSesionEvaluacion);
 	if($estadoSesionEvaluacion>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 		exit();
 	}
 	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
-	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
-	
-	mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$_GET["idE"]."', now())");
+	try{
+		mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	try{
+		mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$_GET["idE"]."', now())");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	
 
 	//CUANTOS ESTÁN REALIZANDO LA EVALUACIÓN EN ESTE MOMENTO Y CUANTOS TERMINARON
-	$consultaNumerosEvaluados=mysqli_query($conexion, "SELECT
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_fin IS NULL),
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)");
+	try{
+		$consultaNumerosEvaluados=mysqli_query($conexion, "SELECT
+		(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_fin IS NULL),
+		(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$Numerosevaluados = mysqli_fetch_array($consultaNumerosEvaluados, MYSQLI_BOTH);
 	
 	?>
@@ -291,9 +320,13 @@
 											<?php
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
-												");
+												try{
+													$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
+													WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+													");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {

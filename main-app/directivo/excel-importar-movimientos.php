@@ -39,8 +39,12 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 
 		//Si es por documento
 		if($_POST["datoID"]==1){
-			$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM usuarios
-			WHERE uss_usuario='".$data->sheets[0]['cells'][$i][1]."'");
+			try{
+				$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM usuarios
+				WHERE uss_usuario='".$data->sheets[0]['cells'][$i][1]."'");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
 			$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);	
 			
 			$idUsuario = $datosUsuario['uss_id'];
@@ -48,8 +52,12 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 		}
 		//Si es por código de tesorería
 		elseif($_POST["datoID"]==2){
-			$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-			WHERE mat_codigo_tesoreria='".$data->sheets[0]['cells'][$i][1]."' AND mat_eliminado=0");
+			try{
+				$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
+				WHERE mat_codigo_tesoreria='".$data->sheets[0]['cells'][$i][1]."' AND mat_eliminado=0");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
 			$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);	
 			
 			$idUsuario = $datosUsuario['mat_id_usuario'];	
@@ -57,7 +65,11 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 		
 		
 		if($idUsuario!=""){
-			mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
+			try{
+				mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
 
 			//No hacer nada
 			if($_POST["accion"]==1){
@@ -73,10 +85,18 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 			elseif($_POST["accion"]==2){
 				if($data->sheets[0]['cells'][$i][4] == 1){
 					$tipo = 3;
-					mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
+					try{
+						mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 				}else{
 					$tipo = 4;
-					mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
+					try{
+						mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 				}
 			}
 
@@ -96,10 +116,11 @@ for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 }
 
 $datosInsert = substr($datosInsert,0,-1);
-		
-mysqli_query($conexion, "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES ".$datosInsert."");
-$lineaError = __LINE__;
-include("../compartido/reporte-errores.php");
+try{
+	mysqli_query($conexion, "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES ".$datosInsert."");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 echo '<script type="text/javascript">window.location.href="movimientos.php";</script>';
 exit();
