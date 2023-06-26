@@ -6,7 +6,11 @@ if(isset($_POST['buscar']))
 	$valores = array();
 	$valores['existe'] = "0"; 
 
-	$resultados = mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_usuario = '$doc' or uss_documento = '$doc'");
+	try{
+		$resultados = mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_usuario = '$doc' or uss_documento = '$doc'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	while($consulta = mysqli_fetch_array($resultados))
 	{
 		$valores['existe'] = "1"; 

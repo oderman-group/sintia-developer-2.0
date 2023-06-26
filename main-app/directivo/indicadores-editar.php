@@ -5,18 +5,26 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-WHERE ipc_id='".$_GET["idR"]."'");
+try{
+	$consultaIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+	INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+	WHERE ipc_id='".$_GET["idR"]."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
 
-$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+try{
+	$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
+	(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
+	(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
+	(SELECT count(*) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -71,10 +79,14 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 								<header class="panel-heading panel-heading-purple"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?> </header>
 								<div class="panel-body">
 										<?php
-										$indicadoresEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-										INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-										WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_id!='".$_GET["idR"]."'
-										");
+										try{
+											$indicadoresEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+											INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+											WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_id!='".$_GET["idR"]."'
+											");
+										} catch (Exception $e) {
+											include("../compartido/error-catch-to-report.php");
+										}
 										while($indComun = mysqli_fetch_array($indicadoresEnComun, MYSQLI_BOTH)){
 										?>
 										<p><a href="indicadores-editar.php?idR=<?=$indComun['ipc_id'];?>"><?=$indComun['ind_nombre'];?></a></p>

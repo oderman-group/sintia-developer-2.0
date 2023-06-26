@@ -3,7 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".$_GET["idR"]."'");
+try{
+    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".$_GET["idR"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
 ?>
 

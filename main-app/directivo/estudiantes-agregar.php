@@ -111,8 +111,12 @@
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-4">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-													WHERE ogen_grupo=1");
+													try{
+														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+														WHERE ogen_grupo=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control  select2" name="tipoD">
 														<option value="">Seleccione una opción</option>
@@ -142,9 +146,13 @@
 													<select class="form-control  select2" name="lugarD">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-														");
+														try{
+															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+															");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarEx']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -215,9 +223,13 @@
 													<select class="form-control  select2" name="lNacM">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-														");
+														try{
+															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+															");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarNac']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -237,7 +249,11 @@
 													<select class="form-control  select2" name="genero">
 														<option value="">Seleccione una opción</option>
 														<?php
-										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														try{
+															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 															if($o[0]==$datosMatricula['genero'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
@@ -279,7 +295,11 @@
 													<select class="form-control  select2" name="religion">
 														<option value="">Seleccione una opción</option>
 														<?php
-										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
+														try{
+															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 															if($o[0]==$datosMatricula['religion'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
@@ -318,10 +338,14 @@
 													<select class="form-control  select2" name="ciudadR">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
-														ORDER BY ciu_nombre
-														");
+														try{
+															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
+															ORDER BY ciu_nombre
+															");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 															$selected='';
 															$opg['ciu_codigo'] = trim($opg['ciu_codigo']);
@@ -342,7 +366,11 @@
 													<select class="form-control  select2" name="estrato">
 														<option value="">Seleccione una opción</option>
 														<?php
+														try{
 															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 															if($o[0]==$datosMatricula['estrato'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
@@ -376,9 +404,13 @@
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1
-													");
+													try{
+														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
+														WHERE gra_estado=1
+														");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="grado" required>
 														<option value="">Seleccione una opción</option>
@@ -397,8 +429,11 @@
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos
-													");
+													try{
+														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="grupo">
 														<option value="">Seleccione una opción</option>
@@ -417,9 +452,13 @@
 												<label class="col-sm-2 control-label">Tipo estudiante</label>
 												<div class="col-sm-4">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-													WHERE ogen_grupo=5
-													");
+													try{
+														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+														WHERE ogen_grupo=5
+														");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="tipoEst">
 														<option value="">Seleccione una opción</option>
@@ -463,9 +502,13 @@
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-3">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-													WHERE ogen_grupo=1
-													");
+													try{
+														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+														WHERE ogen_grupo=1
+														");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="tipoDAcudiente">
 														<option value="">Seleccione una opción</option>
@@ -500,9 +543,13 @@
 													<select class="form-control" id="lugardE" name="lugarDa">
 														<option value="">Seleccione una opción</option>
 														<?php
-														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-														");
+														try{
+															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+															");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['expedicionA']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -559,7 +606,11 @@
 													<select class="form-control select2" name="generoA">
 														<option value="">Seleccione una opción</option>
 														<?php
-										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														try{
+															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 															if($o[0]==$datosMatricula['generoA'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';

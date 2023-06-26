@@ -72,12 +72,20 @@
 													<?php
 													 $filtro = '';
 													 if(isset($_GET["area"]) and is_numeric($_GET["area"])){$filtro .= " AND mat_area='".$_GET["area"]."'";}
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
-													 INNER JOIN academico_areas ON ar_id=mat_area
-													 WHERE mat_id=mat_id $filtro");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
+														INNER JOIN academico_areas ON ar_id=mat_area
+														WHERE mat_id=mat_id $filtro");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM academico_cargas WHERE car_materia='".$resultado['mat_id']."'");
+														try{
+															$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM academico_cargas WHERE car_materia='".$resultado['mat_id']."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														 $numeros = mysqli_fetch_array($consultaNumeros, MYSQLI_BOTH);
 													 ?>
 													<tr>

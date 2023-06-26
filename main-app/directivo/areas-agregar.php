@@ -64,7 +64,11 @@
                                             <label class="col-sm-2 control-label">Orden o posición en los informes</label>
                                             <div class="col-sm-10">
 												<?php
+                                                try{
                                                     $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="posicionA" required>
                                                     <option value="">Seleccione una opción</option>

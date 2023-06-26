@@ -9,7 +9,11 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+try{
+    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
 ?>
 <!-- data tables -->
@@ -86,11 +90,15 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                                     <?php
 													include("includes/consulta-paginacion-dev-terminos-usuarios.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios
-                                                    INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=ttpxu_id_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                    WHERE ttpxu_id_termino_tratamiento_politicas='".$id."' AND YEAR(ttpxu_fecha_aceptacion) =".$year." ".$filtro."
-                                                    ORDER BY ttpxu_id DESC
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios
+                                                        INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=ttpxu_id_institucion AND ins_enviroment='".ENVIROMENT."'
+                                                        WHERE ttpxu_id_termino_tratamiento_politicas='".$id."' AND YEAR(ttpxu_fecha_aceptacion) =".$year." ".$filtro."
+                                                        ORDER BY ttpxu_id DESC
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
@@ -99,7 +107,11 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                                         $responsable="";
                                                         if($resultado['ttpxu_id_usuario']!=0){
 
-                                                            $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."'");
+                                                            try{
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."'");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
                                                             $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
                                                             $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable);
 

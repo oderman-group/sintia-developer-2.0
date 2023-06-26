@@ -65,7 +65,11 @@ require_once("../class/Estudiantes.php");
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                    $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_GET['id']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+                                                    try{
+                                                        $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_GET['id']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $num = mysqli_num_rows($consultaUsuarioAcudiente);
                                                     $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);
                                                     $selected = '';

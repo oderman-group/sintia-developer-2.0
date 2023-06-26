@@ -116,11 +116,15 @@ $Plataforma = new Plataforma;
                                                     <?php
 													include("includes/consulta-paginacion-dev-instituciones.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones
-                                                    LEFT JOIN ".$baseDatosServicios.".planes_sintia ON plns_id=ins_id_plan
-                                                    WHERE ins_id=ins_id AND ins_enviroment='".ENVIROMENT."' $filtro
-                                                    ORDER BY ins_id
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones
+                                                        LEFT JOIN ".$baseDatosServicios.".planes_sintia ON plns_id=ins_id_plan
+                                                        WHERE ins_id=ins_id AND ins_enviroment='".ENVIROMENT."' $filtro
+                                                        ORDER BY ins_id
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                         

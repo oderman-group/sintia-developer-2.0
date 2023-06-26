@@ -82,7 +82,11 @@
 													<tr>
 														<th width="50%">Materia</th>
 														<?php
-														$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+														try{
+															$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($c = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 														?>
 														<th style="font-size:8px; text-align:center;"><?=$c[2];?></th>
@@ -93,15 +97,27 @@
 												</thead>
 												<tbody>
 													<?php
-													$materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+													try{
+														$materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($m = mysqli_fetch_array($materias, MYSQLI_BOTH)){
 													?>
 													<tr id="data1">
 														<td><?=$m[2];?></td>
 														<?php
-														$curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+														try{
+															$curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-															$consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_intensidad_curso WHERE ipc_curso=".$c[0]." AND ipc_materia=".$m[0]."");
+															try{
+																$consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_intensidad_curso WHERE ipc_curso=".$c[0]." AND ipc_materia=".$m[0]."");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH); 
 														?>
 															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?=$ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>"></td>

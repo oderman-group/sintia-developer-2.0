@@ -64,7 +64,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 								                    $num_registros = mysqli_num_rows($consulta);
                                                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>

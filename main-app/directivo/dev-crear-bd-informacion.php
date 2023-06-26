@@ -5,7 +5,11 @@ include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
 //CONSULTA EXISTENCIA DE LA INSTITUCIÓN
-$consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
+try{
+    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
 ?>

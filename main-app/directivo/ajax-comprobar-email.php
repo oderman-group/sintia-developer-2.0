@@ -3,7 +3,11 @@ include('session.php');
 if($_REQUEST['email']!=""){
 $email = $_REQUEST['email'];
 $jsonData = array();
-$selectQuery   = ("SELECT * FROM usuarios WHERE uss_email='".$email."' ");
+try{
+    $selectQuery   = ("SELECT * FROM usuarios WHERE uss_email='".$email."' ");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $query         = mysqli_query($conexion, $selectQuery);
 $totalCliente  = mysqli_num_rows($query);
 

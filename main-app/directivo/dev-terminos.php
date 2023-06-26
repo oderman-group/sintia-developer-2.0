@@ -65,7 +65,11 @@ include("../compartido/head.php");
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $terminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                                                    try{
+                                                        $terminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while ($datosTerminos = mysqli_fetch_array($terminos, MYSQLI_BOTH)) {
                                                     ?>
                                                         <tr>

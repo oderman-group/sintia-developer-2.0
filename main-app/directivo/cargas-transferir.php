@@ -58,7 +58,11 @@
                                                 <select class="form-control  select2" name="de" required>
                                                     <option value="">Seleccione una opci�n</option>
                                                     <?php
-                                                    $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
+                                                    try{
+                                                        $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
                                                         echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";
@@ -74,7 +78,11 @@
                                                 <select class="form-control  select2" name="para" required>
                                                     <option value="">Seleccione una opci�n</option>
                                                     <?php
-                                                    $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
+                                                    try{
+                                                        $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
                                                         echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";

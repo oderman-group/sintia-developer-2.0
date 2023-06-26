@@ -94,7 +94,11 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 												</thead>
 												<tbody>
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 ORDER BY fcu_id DESC");
+												try{
+													$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 ORDER BY fcu_id DESC");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>		
 															<!-- BEGIN PRODUCT INFO -->
@@ -108,10 +112,18 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 															<!-- END PRODUCT INFO -->
 													<?php 
 													}
+													try{
 														$consultaC=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 AND fcu_tipo=3");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 														$c = mysqli_fetch_array($consultaC, MYSQLI_BOTH);
 														if(empty($c[0])){ $c[0]=0; }
+													try{
 														$consultaA=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_GET["id"]."' AND fcu_anulado=0 AND fcu_tipo=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 														$a = mysqli_fetch_array($consultaA, MYSQLI_BOTH);
 														if(empty($a[0])){ $a[0]=0; }
 														$t = $a[0] - $c[0];

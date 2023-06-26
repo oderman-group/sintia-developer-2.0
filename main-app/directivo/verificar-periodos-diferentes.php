@@ -8,7 +8,11 @@ if($periodoConsultaActual!=$datosCargaActual['car_periodo'] and $datosCargaActua
 $URL = 'calificaciones-registrar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['act_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -19,7 +23,11 @@ if($existeURL != false){
 $URL = 'calificaciones-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['act_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -31,7 +39,11 @@ if($existeURL != false){
 $URL = 'indicadores-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_id='".$_GET["idR"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_id='".$_GET["idR"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['ipc_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -43,7 +55,11 @@ if($existeURL != false){
 $URL = 'evaluaciones-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idR"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idR"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -54,7 +70,11 @@ if($existeURL != false){
 $URL = 'evaluaciones-preguntas.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -65,7 +85,11 @@ if($existeURL != false){
 $URL = 'preguntas-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -76,13 +100,11 @@ if($existeURL != false){
 $URL = 'evaluaciones-resultados.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
-	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
-	/* Ya está siendo evaluado en la misma pagina para NO mostrar algunas opciones de edición.
-	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
-		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
-		exit();	
+	try{
+		$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
 	}
-	*/
+	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 }
 ?>

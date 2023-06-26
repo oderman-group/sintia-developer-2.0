@@ -96,14 +96,22 @@ $Plataforma = new Plataforma;
                                                     <?php
 													include("includes/consulta-paginacion-dev-modulos.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos
-                                                    WHERE mod_id=mod_id $filtro
-                                                    ORDER BY mod_id
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos
+                                                        WHERE mod_id=mod_id $filtro
+                                                        ORDER BY mod_id
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                         
-                                                        $consultaModPadre = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id='".$resultado['mod_padre']."'");
+                                                        try{
+                                                            $consultaModPadre = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id='".$resultado['mod_padre']."'");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         $modPadre=mysqli_fetch_array($consultaModPadre, MYSQLI_BOTH);
 
                                                         $estado="Activo";

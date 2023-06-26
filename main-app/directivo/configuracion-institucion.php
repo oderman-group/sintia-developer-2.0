@@ -60,7 +60,11 @@
                                  	<form name="example_advanced_form" id="example-advanced-form" action="configuracion-institucion-guardar.php" method="post" enctype="multipart/form-data">
                                         
                                        <?php 
-                                       $consultaDatosInf=mysqli_query($conexion, "SELECT info_id, info_rector, info_secretaria_academica, info_logo, info_nit, info_nombre, info_direccion, info_telefono, info_clase, info_caracter, info_calendario, info_jornada, info_horario, info_niveles, info_modalidad, info_propietario, info_coordinador_academico, info_tesorero FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "';");
+                                        try{
+                                            $consultaDatosInf=mysqli_query($conexion, "SELECT info_id, info_rector, info_secretaria_academica, info_logo, info_nit, info_nombre, info_direccion, info_telefono, info_clase, info_caracter, info_calendario, info_jornada, info_horario, info_niveles, info_modalidad, info_propietario, info_coordinador_academico, info_tesorero FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "';");
+                                        } catch (Exception $e) {
+                                            include("../compartido/error-catch-to-report.php");
+                                        }
 									   $datosinf= mysqli_fetch_array($consultaDatosInf, MYSQLI_BOTH);
 									   ?>
 									  
@@ -179,7 +183,11 @@
                                             <label class="col-sm-2 control-label">Rector(a)</label>
                                             <div class="col-sm-4">
 												<?php
-												$consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                try{
+                                                    $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select class="form-control" name="rectorI">
                                                     <option value="">Seleccione una opción</option>
@@ -206,7 +214,11 @@
                                                 <select class="form-control" name="secretarioI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    try{
+                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_secretaria_academica"]==$r["uss_id"]){
                                                     ?>
@@ -229,7 +241,11 @@
                                                 <select class="form-control" name="coordinadorI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    try{
+                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_coordinador_academico"]==$r["uss_id"]){
                                                     ?>
@@ -252,7 +268,11 @@
                                                 <select class="form-control" name="tesoreroI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    try{
+                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_tesorero"]==$r["uss_id"]){
                                                     ?>

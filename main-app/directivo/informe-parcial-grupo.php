@@ -55,7 +55,11 @@
                                                 <select class="form-control  select2" name="curso">
                                                 <option value=""></option>
                                                 <?php 
-                                                $c=mysqli_query($conexion, "SELECT * FROM academico_grados") ;
+                                                try{
+                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_grados");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                 ?>
                                                     <option value="<?php echo $r[0]; ?>"><?php echo $r[2];?></option>
@@ -72,7 +76,11 @@
                                                 <select class="form-control  select2" name="grupo">
                                                 <option value=""></option>
                                                 <?php 
-                                                $c=mysqli_query($conexion, "SELECT * FROM academico_grupos") ;
+                                                try{
+                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                 ?>
                                                     <option value="<?php echo $r[0]; ?>"><?php echo $r[2];?></option>

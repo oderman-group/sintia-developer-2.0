@@ -5,7 +5,11 @@
 
 <?php
 if($_SESSION["empresa"] == ""){
-    $consultaEmpresa=mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
+    try{
+        $consultaEmpresa=mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
+    } catch (Exception $e) {
+        include("../compartido/error-catch-to-report.php");
+    }
 	$empresa = mysqli_fetch_array($consultaEmpresa, MYSQLI_BOTH);
 	
 	if($empresa[0]!=""){

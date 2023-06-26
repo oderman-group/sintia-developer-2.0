@@ -4,7 +4,11 @@ $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
+try{
+    $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 ?>
 
@@ -75,7 +79,11 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                 <select id="tipoBoletin" class="form-control  select2" name="formatoB" required>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                        $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
+                                                        try{
+                                                            $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         while($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?=$datosBoletin['ogen_id'];?>" <?php if($resultadoCurso["gra_formato_boletin"]==$datosBoletin['ogen_id']){ echo 'selected';} ?>><?=$datosBoletin['ogen_nombre'];?></option>

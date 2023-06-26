@@ -81,7 +81,11 @@ include("../compartido/head.php");
 											<div class="table-scrollable">
 												
 												<?php
-												$TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
+												try{
+													$TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
 
 												<table class="display" style="width:100%;">
@@ -146,7 +150,11 @@ include("../compartido/head.php");
 														
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 															$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
-															$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_REQUEST["carga"]."' AND dn_periodo='".$_REQUEST["periodo"]."'");
+															try{
+																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_REQUEST["carga"]."' AND dn_periodo='".$_REQUEST["periodo"]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$rndisiplina=mysqli_fetch_array($consultaRnDisiplina, MYSQLI_BOTH);
 															//LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
 														?>

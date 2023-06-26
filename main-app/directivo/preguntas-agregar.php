@@ -108,8 +108,12 @@
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas 
-												WHERE preg_id_carga='".$cargaConsultaActual."'");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas 
+													WHERE preg_id_carga='".$cargaConsultaActual."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

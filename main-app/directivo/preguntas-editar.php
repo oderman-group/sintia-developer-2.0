@@ -5,7 +5,11 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaPregunta=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$_GET["idR"]."'");
+try{
+    $consultaPregunta=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$_GET["idR"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 ?>
 

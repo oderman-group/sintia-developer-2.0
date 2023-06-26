@@ -9,7 +9,11 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$contrato= mysqli_query($conexion, "SELECT cont_nombre FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
+try{
+    $contrato= mysqli_query($conexion, "SELECT cont_nombre FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
 ?>
 <!-- data tables -->
@@ -85,12 +89,16 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                                                     <?php
 													include("includes/consulta-paginacion-dev-contratos-usuarios.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos_usuarios
-                                                    LEFT JOIN ".$baseDatosServicios.".contratos ON cont_id=cxu_id_contrato
-                                                    LEFT JOIN ".$baseDatosServicios.".instituciones ON ins_id=cxu_id_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                    WHERE  YEAR(cxu_fecha_aceptacion) =".$year." ".$filtro."
-                                                    ORDER BY cxu_id DESC
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos_usuarios
+                                                        LEFT JOIN ".$baseDatosServicios.".contratos ON cont_id=cxu_id_contrato
+                                                        LEFT JOIN ".$baseDatosServicios.".instituciones ON ins_id=cxu_id_institucion AND ins_enviroment='".ENVIROMENT."'
+                                                        WHERE  YEAR(cxu_fecha_aceptacion) =".$year." ".$filtro."
+                                                        ORDER BY cxu_id DESC
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
@@ -99,7 +107,11 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                                                         $responsable="";
                                                         if($resultado['cxu_id_usuario']!=0){
 
-                                                            $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."'");
+                                                            try{
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."'");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
                                                             $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
                                                             $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable);
 

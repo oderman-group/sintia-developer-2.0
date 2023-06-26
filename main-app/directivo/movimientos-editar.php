@@ -3,7 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".$_GET['idU']."'");
+try{
+    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".$_GET['idU']."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 
@@ -137,8 +141,12 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Usuario</label>
                                             <div class="col-sm-10">
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-												INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="usuario" required>
                                                     <option value="">Seleccione una opción</option>
