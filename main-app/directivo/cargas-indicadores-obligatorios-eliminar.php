@@ -10,9 +10,8 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-	$lineaError = __LINE__;
-	include("../compartido/reporte-errores.php");
-	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
-	exit();
+include("../compartido/guardar-historial-acciones.php");
+
+echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+exit();
