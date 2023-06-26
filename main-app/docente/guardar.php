@@ -113,7 +113,7 @@ if($_POST["id"]==7){
 			if($datosInsert!=""){
 				$datosInsert = substr($datosInsert,0,-1);
 				try{
-					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES ".$datosInsert."");
+					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -134,7 +134,7 @@ if($_POST["id"]==7){
 			if($datosInsert!=""){
 				$datosInsert = substr($datosInsert,0,-1);
 				try{
-					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES ".$datosInsert."");
+					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -146,7 +146,7 @@ if($_POST["id"]==7){
 			if($datosInsert!=""){
 				$datosInsert = substr($datosInsert,0,-1);
 				try{
-					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES ".$datosInsert."");
+					mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -1409,8 +1409,7 @@ if($_POST["id"]==40){
 		if($datosInsert!=""){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado)VALUES
-				'".$datosInsert."'");
+				mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado) VALUES $datosInsert");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1482,8 +1481,7 @@ if($_POST["id"]==40){
 			if($datosInsert!=""){
 				$datosInsert = substr($datosInsert,0,-1);
 				try{
-					mysqli_query($conexion, "INSERT INTO academico_actividades(act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir)VALUES
-					'".$datosInsert."'");
+					mysqli_query($conexion, "INSERT INTO academico_actividades(act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir) VALUES $datosInsert");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -1493,8 +1491,7 @@ if($_POST["id"]==40){
 		if($datosInsertInd!=""){
 			$datosInsertInd = substr($datosInsertInd,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado)VALUES
-				'".$datosInsertInd."'");
+				mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado) VALUES $datosInsertInd");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1527,8 +1524,7 @@ if($_POST["id"]==40){
 		if($datosInsert!=""){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible)VALUES
-				'".$datosInsert."'");
+				mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible) VALUES $datosInsert");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1564,8 +1560,7 @@ if($_POST["id"]==40){
 		if($datosInsert!=""){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividad_tareas(tar_titulo, tar_descripcion, tar_id_carga, tar_fecha_disponible, tar_fecha_entrega, tar_archivo, tar_impedir_retrasos, tar_periodo, tar_estado, tar_archivo2, ar_archivo3)VALUES
-				'".$datosInsert."'");
+				mysqli_query($conexion, "INSERT INTO academico_actividad_tareas(tar_titulo, tar_descripcion, tar_id_carga, tar_fecha_disponible, tar_fecha_entrega, tar_archivo, tar_impedir_retrasos, tar_periodo, tar_estado, tar_archivo2, ar_archivo3)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1597,8 +1592,7 @@ if($_POST["id"]==40){
 		if($datosInsert!=""){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividad_foro(foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado)VALUES
-				'".$datosInsert."'");
+				mysqli_query($conexion, "INSERT INTO academico_actividad_foro(foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1623,8 +1617,7 @@ if($_POST["id"]==40){
 		if($datosInsert!=""){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_cronograma(cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color)VALUES
-				'".$datosInsert."'");
+				mysqli_query($conexion, "INSERT INTO academico_cronograma(cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
