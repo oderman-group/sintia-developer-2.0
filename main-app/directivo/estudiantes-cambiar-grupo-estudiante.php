@@ -1,6 +1,5 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
 
 try{

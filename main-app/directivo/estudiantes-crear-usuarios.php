@@ -1,6 +1,5 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 
 try{
 	$estud = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_eliminado=0");

@@ -1,6 +1,5 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 
 	//SE CREA MATRICULA EN AÑO SIGUIENTE
 	try{
