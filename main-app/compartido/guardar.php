@@ -441,7 +441,6 @@ if ($_POST["id"] == 7) {
 		if ($_POST["para"][$i] == 1) {
 			//INICIO ENVÍO DE MENSAJE
 			$tituloMsj = $_POST["asunto"];
-			$bgTitulo = "#4086f4";
 			$contenidoMsj = '
 				<p style="color:navy;">
 				Hola ' . strtoupper($destinatario['uss_nombre']) . ', has recibido un mensaje a través de la plataforma SINTIA.<br>
@@ -451,31 +450,15 @@ if ($_POST["id"] == 7) {
 				<p>' . $_POST["contenido"] . '</p>
 			';
 
-			include("../../config-general/plantilla-email-1.php");
-			// Instantiation and passing `true` enables exceptions
-			$mail = new PHPMailer(true);
-			echo '<div style="display:none;">';
-			try {
-				include("../../config-general/mail.php");
-
-				$mail->addBCC('tecmejia2010@gmail.com');     // Add a recipient con copia oculta
-
-				// Attachments
-				//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-				// Content
-				$mail->isHTML(true);                                  // Set email format to HTML
-				$mail->Subject = $_POST["asunto"];
-				$mail->Body = $fin;
-				$mail->CharSet = 'UTF-8';
-
-				@$mail->send();
-				echo 'Mensaje enviado correctamente.';
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			echo '</div>';
-			//FIN ENVÍO DE MENSAJE
+			  $data = [
+				'contenido_msj'   => $contenidoMsj,
+				'usuario_email'    => 'tecmejia2010@gmail.com',
+				'usuario_nombre'   => 'Jhon Oderman'
+			  ];
+			$asunto = $tituloMsj;
+			$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
+		
+			EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 		}
 	}
 
@@ -540,31 +523,16 @@ if ($_POST["id"] == 10) {
 			</p>
 		';
 
-		include("../../config-general/plantilla-email-1.php");
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-		echo '<div style="display:none;">';
-		try {
-			include("../../config-general/mail.php");
+		$data = [
+			'contenido_msj'   => $contenidoMsj,
+			'usuario_email'    => 'tecmejia2010@gmail.com',
+			'usuario_nombre'   => 'Jhon Oderman'
+		  ];
+		  $asunto = $tituloMsj;
+		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
+	
+		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 
-			$mail->addAddress('tecmejia2010@gmail.com');     // Add a recipient con copia oculta
-
-			// Attachments
-			//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-			// Content
-			$mail->isHTML(true);                                  // Set email format to HTML
-			$mail->Subject = 'Sugerencia SINTIA';
-			$mail->Body = $fin;
-			$mail->CharSet = 'UTF-8';
-
-			$mail->send();
-			echo 'Mensaje enviado correctamente.';
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		echo '</div>';
-		//FIN ENVÍO DE MENSAJE
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
@@ -668,7 +636,6 @@ if ($_POST["id"] == 14) {
 	if ($_SESSION["id"] != $datos["uss_id"]) {
 		//INICIO ENVÍO DE MENSAJE
 		$tituloMsj = 'NUEVO COMENTARIO/PREGUNTA';
-		$bgTitulo = "#4086f4";
 		$contenidoMsj = '
 			<p>
 				Hola <b>' . strtoupper($datos["uss_nombre"]) . '</b>, uno de los estudiantes ha realizado un nuevo comentario/pregunta sobre la clase <b>' . $datos["cls_tema"] . '</b>.<br>
@@ -682,32 +649,15 @@ if ($_POST["id"] == 14) {
 			</p>
 		';
 
-		include("../../config-general/plantilla-email-1.php");
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-
-		echo '<div style="display:none;">';
-		try {
-			include("../../config-general/mail.php");
-
-			$mail->addAddress($datos["uss_email"], $datos["uss_nombre"]);     // Add a recipient con copia oculta
-
-			// Attachments
-			//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-			// Content
-			$mail->isHTML(true);                                  // Set email format to HTML
-			$mail->Subject = 'Nuevo comentario sobre la clase';
-			$mail->Body = $fin;
-			$mail->CharSet = 'UTF-8';
-
-			$mail->send();
-			echo 'Mensaje enviado correctamente.';
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		echo '</div>';
-		//FIN ENVÍO DE MENSAJE
+		$data = [
+			'contenido_msj'   => $contenidoMsj,
+			'usuario_email'    => $datos["uss_email"],
+			'usuario_nombre'   => strtoupper($datos["uss_nombre"])
+		  ];
+		$asunto = $tituloMsj;
+		$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
+	
+		EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
