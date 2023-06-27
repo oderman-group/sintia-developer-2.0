@@ -57,7 +57,7 @@
 							<li class="nav-item">
 							<a href="como-empezar.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">toc</i>
-	                                <span class="title">GUIA PARA EMPEZAR</span>
+	                                <span class="title"><?=$frases[255][$datosUsuarioActual['uss_idioma']];?></span>
                                 	<span class="selected"></span>
 	                            </a>
 	                        </li>

@@ -4,7 +4,7 @@
 
 $l = 1;
 
-$frases[1][1] = 'Amigos';
+$frases[1][$l] = 'Amigos';
 
 $frases[2][$l] = 'Enviar mensaje';
 
@@ -507,9 +507,136 @@ $frases[250][$l] = 'Grupo';
 $frases[251][$l] = 'Temática';
 
 $frases[252][$l] = 'Notas por indicador';
+
 $frases[253][$l] = 'Cambiar clave';
+
 $frases[254][$l] = 'Grupos';
 
+$frases[255][$l] = 'Guia para empezar';
+
+$frases[256][$l] = 'Perfil';
+
+$frases[257][$l] = 'Soporte';
+
+$frases[258][$l] = 'Mis páginas recientes';
+
+$frases[259][$l] = 'Mis páginas más visitadas';
+
+$frases[260][$l] = 'Buscar Información';
+
+$frases[261][$l] = 'Inglés';
+
+$frases[262][$l] = 'Español';
+
+$frases[263][$l] = 'Crea una publicación más completa';
+
+$frases[264][$l] = 'Aspectos';
+
+$frases[265][$l] = 'Informe parcial';
+
+$frases[266][$l] = 'Ficha estudiantil';
+
+$frases[267][$l] = 'Descargar Boletín';
+
+$frases[268][$l] = 'Bloqueado';
+
+$frases[269][$l] = 'Solicitar desbloqueo';
+
+$frases[270][$l] = '¿Desea reservar el cupo?';
+
+$frases[271][$l] = 'Enviar solicitud';
+
+$frases[272][$l] = 'Enviar respuesta';
+
+$frases[273][$l] = 'Si cree que el estudiante está bloqueado por error, entonces envíe la solicitud de desbloqueo a los directivos de la Institución.';
+
+$frases[274][$l] = 'Si desea puede escribir aquí un comentario';
+
+$frases[275][$l] = 'SI';
+
+$frases[276][$l] = 'NO';
+
+$frases[277][$l] = 'Reserva de cupos';
+
+$frases[278][$l] = '¿Desea reservar cupo del estudiante para el siguiente año escolar?';
+
+$frases[279][$l] = 'Nos gustaría saber el motivo por el cual no desea reservar el cupo para este estudiante.';
+
+$frases[280][$l] = 'Escriba el motivo';
+
+$frases[281][$l] = 'Aspectos académicos';
+
+$frases[282][$l] = 'Aspectos convivenciales';
+
+$frases[283][$l] = 'Información de consulta';
+
+$frases[284][$l] = 'Es el periodo actual que se está trabajando en la asignatura.';
+
+$frases[285][$l] = 'Más opciones';
+
+$frases[286][$l] = 'Firmar';
+
+$frases[287][$l] = 'Firma digital';
+
+$frases[288][$l] = 'Al hacer click en el botón <b>Enviar firma y comentario</b>, estás firmando y aceptando el reporte realizado a su acudido. Los comentarios colocados, llegarán a la persona encargada para ser tenidos en cuenta.';
+
+$frases[289][$l] = 'Enviar firma y comentario';
+
+$frases[290][$l] = 'Si desea puede escribir aquí un comentario';
+
+$frases[291][$l] = 'Editar información';
+
+$frases[292][$l] = 'Aspectos Estudiantiles';
+
+$frases[293][$l] = 'Edad';
+
+$frases[294][$l] = 'Tipo de';
+
+$frases[295][$l] = 'Número de hermanos';
+
+$frases[296][$l] = 'Lugar que ocupa entre ellos';
+
+$frases[297][$l] = 'Direccion';
+
+$frases[298][$l] = 'Barrio';
+
+$frases[299][$l] = 'Parentezco';
+
+$frases[300][$l] = 'Nombre papá';
+
+$frases[301][$l] = 'Nombre mamá';
+
+$frases[302][$l] = 'Descripción de la situación';
+
+$frases[303][$l] = 'Aspectos positivos';
+
+$frases[304][$l] = 'Aspectos a mejorar';
+
+$frases[305][$l] = 'Tratamiento';
+
+$frases[306][$l] = 'Observador del alumno';
+
+$frases[307][$l] = 'Nombre del Usuario';
+
+$frases[308][$l] = 'Promovido';
+
+$frases[309][$l] = 'Tienes las cuentas al día. Excelente!';
+
+$frases[310][$l] = 'Tienes saldo a favor.';
+
+$frases[311][$l] = 'Tienes un saldo pendiente por pagar. Trata de ponerte al día lo antes posible.';
+
+$frases[312][$l] = 'Resumen';
+
+$frases[313][$l] = 'Cobros';
+
+$frases[314][$l] = 'Pagos';
+
+$frases[315][$l] = 'Saldo';
+
+$frases[316][$l] = 'Recuerde que su código para hacer el pago es el siguiente';
+
+$frases[317][$l] = 'Link de pago';
 
 
 
@@ -716,7 +843,7 @@ $frases[98][$l] = 'Social Wall';
 
 $frases[99][$l] = 'Thematic';
 
-$frases[100][$l] = 'Desk';
+$frases[100][$l] = 'Desktop';
 
 $frases[101][$l] = 'Current period';
 
@@ -1022,6 +1149,134 @@ $frases[251][$l] = 'Thematic';
 
 $frases[252][$l] = 'Ratings by indicator';
 
+$frases[253][$l] = 'Change password';
+
 $frases[254][$l] = 'Groups';
+
+$frases[255][$l] = 'Getting Started Guide';
+
+$frases[256][$l] = 'Profile';
+
+$frases[257][$l] = 'Support';
+
+$frases[258][$l] = 'My recent pages';
+
+$frases[259][$l] = 'My most visited pages';
+
+$frases[260][$l] = 'search information';
+
+$frases[261][$l] = 'English';
+
+$frases[262][$l] = 'Spanish';
+
+$frases[263][$l] = 'Create a more complete publication';
+
+$frases[264][$l] = 'Aspects';
+
+$frases[265][$l] = 'Partial report';
+
+$frases[266][$l] = 'Student file';
+
+$frases[267][$l] = 'Download Newsletter';
+
+$frases[268][$l] = 'Blocked';
+
+$frases[269][$l] = 'Request Unlock';
+
+$frases[270][$l] = 'Do you want to reserve your quota?';
+
+$frases[271][$l] = 'Send request';
+
+$frases[272][$l] = 'Send reply';
+
+$frases[273][$l] = 'If you believe that the student is blocked by mistake, then send the unblocking request to the Institutions management.';
+
+$frases[274][$l] = 'If you wish, you can write a comment here';
+
+$frases[275][$l] = 'YES';
+
+$frases[276][$l] = 'NOT';
+
+$frases[277][$l] = 'Quota reservation';
+
+$frases[278][$l] = 'Would you like to reserve a students place for the following school year?';
+
+$frases[279][$l] = 'We would like to know why you do not wish to reserve a place for this student.';
+
+$frases[280][$l] = 'Write the reason';
+
+$frases[281][$l] = 'Academic aspects';
+
+$frases[282][$l] = 'Coexistence aspects';
+
+$frases[283][$l] = 'Consultation information';
+
+$frases[284][$l] = 'This is the current period being worked on in the subject.';
+
+$frases[285][$l] = 'More options';
+
+$frases[286][$l] = 'Sign';
+
+$frases[287][$l] = 'Digital signature';
+
+$frases[288][$l] = 'By clicking on the <b>Send signature and comment</b> button, you are signing and accepting the report made to your client. The comments posted will be forwarded to the person in charge to be taken into account.';
+
+$frases[289][$l] = 'Send signature and comment';
+
+$frases[290][$l] = 'If you wish, you can write a comment here';
+
+$frases[291][$l] = 'Edit information';
+
+$frases[292][$l] = 'Student Aspects';
+
+$frases[293][$l] = 'Age';
+
+$frases[294][$l] = 'type of';
+
+$frases[295][$l] = 'Number of siblings';
+
+$frases[296][$l] = 'Place it occupies among them';
+
+$frases[297][$l] = 'address';
+
+$frases[298][$l] = 'neighborhood';
+
+$frases[299][$l] = 'relationship';
+
+$frases[300][$l] = 'Fathers name';
+
+$frases[301][$l] = 'Mothers name';
+
+$frases[302][$l] = 'Description of the situation';
+
+$frases[303][$l] = 'Positive aspects';
+
+$frases[304][$l] = 'Aspects to improve';
+
+$frases[305][$l] = 'Treatment';
+
+$frases[306][$l] = 'Student observer';
+
+$frases[307][$l] = 'Users name';
+
+$frases[308][$l] = 'Promoted';
+
+$frases[309][$l] = 'Your accounts are up to date. Excellent!';
+
+$frases[310][$l] = 'You have a credit balance.';
+
+$frases[311][$l] = 'You have a balance due. Try to catch up as soon as possible.';
+
+$frases[312][$l] = 'Summary';
+
+$frases[313][$l] = 'Collections';
+
+$frases[314][$l] = 'Payments';
+
+$frases[315][$l] = 'Balance';
+
+$frases[316][$l] = 'Remember that your payment code is as follows';
+
+$frases[317][$l] = 'Payment link';
 
 ?>
