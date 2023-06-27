@@ -15,6 +15,7 @@ if(empty($_POST["hasta"])) {$_POST["hasta"] = 5;}
 if(empty($_POST["notaMinima"])) {$_POST["notaMinima"] = 3;}
 if(empty($_POST["periodoTrabajar"])) {$_POST["periodoTrabajar"] = 4;}
 if(empty($_POST["porcenAsigan"])) {$_POST["porcenAsigan"] = 'NO';}
+if(empty($_POST["certificado"])) {$_POST["certificado"] = 1;}
 
 try {
 	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET 
@@ -39,7 +40,8 @@ try {
 	conf_informe_parcial='" . $_POST["informeParcial"] . "',
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
 	conf_num_registros='" . $_POST["numRegistros"] . "',
-	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "'
+	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
+	conf_certificado='" . $_POST["certificado"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
 	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
