@@ -35,7 +35,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Aspectos</div>
+                            <div class="page-title"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -65,14 +65,14 @@
                                     <input type="hidden" name="periodo" value="<?=$periodoConsultaActual;?>">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Aspectos académicos</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
                                             <?= $aspectos["dn_aspecto_academico"]; ?>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Aspectos convivenciales</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
                                             <?= $aspectos["dn_aspecto_convivencial"]; ?>
                                         </div>

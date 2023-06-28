@@ -27,7 +27,7 @@
 										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
 
 											<div class="form-group row">
-												<label class="col-sm-3 control-label">Tipo</label>
+												<label class="col-sm-3 control-label"><?=$frases[53][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-9">
 													<select class="form-control  select2" name="tipo" required onChange="tipoFolder(this)">
 														<option value="">Seleccione una opción</option>
@@ -42,7 +42,7 @@
 											
 											<div id="nombreCarpeta" style="display: none;">
 											<div class="form-group row">
-												<label class="col-sm-3 control-label">Nombre de la carpeta</label>
+												<label class="col-sm-3 control-label"><?=$frases[318][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-9">
 													<input type="text" name="nombre" class="form-control" value="<?=$datosConsulta['fold_nombre'];?>" autocomplete="off">
 												</div>
@@ -51,7 +51,7 @@
 										
 											<div id="archivo">
 											<div class="form-group row">
-												<label class="col-sm-3 control-label">Archivo</label>
+												<label class="col-sm-3 control-label"><?=$frases[128][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-6">
 													<input type="file" name="archivo" class="form-control">
 												</div>
@@ -67,7 +67,7 @@
 										
 											<div id="nombreCarpeta">
 											<div class="form-group row">
-												<label class="col-sm-3 control-label">Nombre de la carpeta</label>
+												<label class="col-sm-3 control-label"><?=$frases[318][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-9">
 													<input type="text" name="nombre" class="form-control" autocomplete="off" value="<?=$datosConsulta['fold_nombre'];?>" required>
 												</div>
@@ -131,7 +131,7 @@
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<input type="submit" class="btn btn-primary" value="<?=$frases[41][$datosUsuarioActual[8]];?>">&nbsp;
 										
 										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
                                     </form>

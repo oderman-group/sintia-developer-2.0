@@ -638,6 +638,25 @@ $frases[316][$l] = 'Recuerde que su código para hacer el pago es el siguiente';
 
 $frases[317][$l] = 'Link de pago';
 
+$frases[318][$l] = 'Nombre de la carpeta';
+
+$frases[319][$l] = 'Primer apellido';
+
+$frases[320][$l] = 'Segundo apellido';
+
+$frases[321][$l] = 'Cod. Tesorería';
+
+$frases[322][$l] = 'La dirección se debe colocar con abreviaciones como (CL, DG, AV, CR) y no puede contener ningún tipo de carácter como (-,#,.).';
+
+$frases[323][$l] = 'Estrato';
+
+$frases[324][$l] = 'Sistema';
+
+$frases[325][$l] = 'Si necesita hacer un cambio de acudiente debe comunicarse vía WhatsApp, al número 318 347 9394.';
+
+$frases[326][$l] = 'Documento';
+
+$frases[327][$l] = 'Ocupación';
 
 
 
@@ -1278,5 +1297,25 @@ $frases[315][$l] = 'Balance';
 $frases[316][$l] = 'Remember that your payment code is as follows';
 
 $frases[317][$l] = 'Payment link';
+
+$frases[318][$l] = 'Folder name';
+
+$frases[319][$l] = 'First surname';
+
+$frases[320][$l] = 'second last name';
+
+$frases[321][$l] = 'Cod. treasury';
+
+$frases[322][$l] = 'The address must be entered with abbreviations such as (CL, DG, AV, CR) and cannot contain any type of character such as (-,#,.).';
+
+$frases[323][$l] = 'Stratum';
+
+$frases[324][$l] = 'ID System';
+
+$frases[325][$l] = 'If you need to make a change of guardian, please contact us via WhatsApp at 318 347 9394.';
+
+$frases[326][$l] = 'Document';
+
+$frases[327][$l] = 'Occupation';
 
 ?>
