@@ -10,6 +10,31 @@ class UsuariosPadre {
         return strtoupper($usuario['uss_nombre']." ".$usuario['uss_nombre2']." ".$usuario['uss_apellido1']." ".$usuario['uss_apellido2']);
     }
 
+    public static function listarUsuariosAnio($usuario)
+    {
+        global $conexion;
+        global $yearStart;
+        global $yearEnd;
+        global $baseDatosServicios;
+        global $filtro;
+        $index=0;        
+        while($yearStart <= $yearEnd){
+            $instYear =$_SESSION["inst"] ."_". $yearStart;            
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios 
+            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+            WHERE uss_usuario LIKE '".$usuario."%'");
+            if($consultaUsuarioAuto->num_rows>0){               
+                while($fila=$consultaUsuarioAuto->fetch_assoc()){
+                    $fila["anio"]=$yearStart;
+                    $arraysDatos[$index]=$fila;
+                    $index++;
+                }
+            }
+            $yearStart++; 
+        }
+        return $arraysDatos;
+    }
+
     public static function sesionUsuario($idUsuario)
     {
         global $conexion;
@@ -26,7 +51,8 @@ class UsuariosPadre {
         return $datosUsuarioAuto;
     }
 
-   public static function actualizarUsuariosAnios(){
+   public static function actualizarUsuariosAnios()
+   {
         $campoGet=null;
         $campoTabla=null;
         global $yearStart;
@@ -75,9 +101,7 @@ class UsuariosPadre {
                     }
                     $yearStart++;
                 }		
-        }	
+        }        	
     }
 
-    
-
-}
+}   
