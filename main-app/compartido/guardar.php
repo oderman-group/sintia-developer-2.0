@@ -508,31 +508,6 @@ if ($_POST["id"] == 10) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
-		//INICIO ENVÍO DE MENSAJE
-		$tituloMsj = 'Sugerencia SINTIA';
-		$bgTitulo = "#4086f4";
-		$contenidoMsj = '
-			<p>
-			<b>ID Institución:</b> ' . $config['conf_id_institucion'] . '<br>
-			<b>Nombre Institución:</b> ' . $_SESSION["inst"] . '<br>
-			<b>ID Usuario:</b> ' . $_SESSION["id"] . '<br>
-			<b>Nombre Usuario:</b> ' . $_POST["usuario"] . '<br>
-			<b>Tipo Usuario:</b> ' . $_POST["tipoUsuario"] . '<br>
-			<b>Sugerencia:</b><br>
-			' . $_POST["contenido"] . '
-			</p>
-		';
-
-		$data = [
-			'contenido_msj'   => $contenidoMsj,
-			'usuario_email'    => 'tecmejia2010@gmail.com',
-			'usuario_nombre'   => 'Jhon Oderman'
-		  ];
-		  $asunto = $tituloMsj;
-		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
-	
-		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
-
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
@@ -631,33 +606,6 @@ if ($_POST["id"] == 14) {
 		WHERE cls_id='" . $_POST["idClase"] . "' AND cls_estado=1"), MYSQLI_BOTH);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
-	}
-
-	if ($_SESSION["id"] != $datos["uss_id"]) {
-		//INICIO ENVÍO DE MENSAJE
-		$tituloMsj = 'NUEVO COMENTARIO/PREGUNTA';
-		$contenidoMsj = '
-			<p>
-				Hola <b>' . strtoupper($datos["uss_nombre"]) . '</b>, uno de los estudiantes ha realizado un nuevo comentario/pregunta sobre la clase <b>' . $datos["cls_tema"] . '</b>.<br>
-
-				<b>COMENTARIO:</b><br>
-				' . $_POST["contenido"] . '
-			</p>
-
-			<p>
-				Ingresa a la plataforma SINTIA para responder a este comentario de ser necesario.
-			</p>
-		';
-
-		$data = [
-			'contenido_msj'   => $contenidoMsj,
-			'usuario_email'    => $datos["uss_email"],
-			'usuario_nombre'   => strtoupper($datos["uss_nombre"])
-		  ];
-		$asunto = $tituloMsj;
-		$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
-	
-		EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
