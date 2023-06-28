@@ -1,12 +1,6 @@
 <?php
 include("conexion.php");
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'librerias/phpmailer/Exception.php';
-require 'librerias/phpmailer/PHPMailer.php';
-require 'librerias/phpmailer/SMTP.php';
+require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
@@ -212,35 +206,17 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	
 	
 	if($paraEnviar==1){
-		//INICIO ENVÍO DE MENSAJE
-		include("config-general/plantilla-email-1.php");
-
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-		echo "Enviando información. Por favor espere unos pocos segundos...<br>";
 		
-		echo '<div style="display:none;">';
-			try {
-				include("config-general/mail.php");
+		$data = [
+			'contenido_msj'   => $contenidoMsj,
+			'usuario_email'    => $cDemo[3],
+			'usuario_nombre'   => UsuariosPadre::nombreCompletoDelUsuario($cDemo)
+		  ];
+		  $asunto = $tituloMsj;
+		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
 
-				$mail->addAddress($cDemo[3], $cDemo[2]);     // Add a recipient
-				//$mail->addBCC('jhooderman@gmail.com');     // Add a recipient
-				//$mail->addBCC('info@plataformasintia.com');     // Add a recipient
+		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 
-				// Attachments
-				//$mail->addAttachment('files-general/plan-sintia-info.pdf', 'Información SINTIA');    // Optional name
-
-				// Content
-				$mail->isHTML(true);                                  // Set email format to HTML
-				$mail->Subject = $tituloMsj;
-				$mail->Body = $fin;
-				$mail->CharSet = 'UTF-8';
-
-				$mail->send();
-				echo 'Mensaje enviado.';
-			} catch (Exception $e) {echo "Error: {$mail->ErrorInfo}"; exit();}
-		echo '</div>';
-		//FIN ENVÍO DE MENSAJE
 	}
 }
 
@@ -436,40 +412,20 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 	$contenidoMsj .= '
 		<b>TOTAL NOVEDADES:</b> '.$novedades.'
 	';
-	
-	
-	//INICIO ENVÍO DE MENSAJE
-	include("config-general/plantilla-email-1.php");
-	//echo $fin;
-	
+
 	if($acudiente['uss_email']!=""){
 		$mensajesEnviados++;
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-		echo '<div style="display:none;">';
-			try {
-				include("config-general/mail.php");
-				$mail->addAddress(strtolower($acudiente['uss_email']), $acudiente['uss_nombre']);    
-				//$mail->addAddress('tecmejia2010@gmail.com', 'Plataforma SINTIA');
 
-				// Attachments
-				//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-				// Content
-				$mail->isHTML(true);                                  // Set email format to HTML
-				$mail->Subject = $tituloMsj;
-				$mail->Body = $fin;
-				$mail->CharSet = 'UTF-8';
-
-				$mail->send();
-				echo 'Mensaje enviado correctamente.';
-			} catch (Exception $e) {
-				mysqli_query($conexion,"INSERT INTO correos_enviados(cenv_fecha, cenv_cantidad, cenv_novedades)VALUES(now(), '".$mensajesEnviados."', '".$mensajesTotales."')");
-				
-				
-				echo "Error: {$mail->ErrorInfo}"; exit();
-			}
-		echo '</div>';
+		$data = [
+			'contenido_msj'   => $contenidoMsj,
+			'usuario_email'    => $cDemo[3],
+			'usuario_nombre'   => UsuariosPadre::nombreCompletoDelUsuario($cDemo)
+		  ];
+		  $asunto = $tituloMsj;
+		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
+	
+		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+		
 	}else{
 		mysqli_query($conexion,"UPDATE correos SET corr_observacion='El acudiente no tiene email registrado.' WHERE corr_id='".$cDat["corr_id"]."'");
 		
@@ -478,4 +434,3 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 	
 	
 }
-?>

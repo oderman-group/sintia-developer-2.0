@@ -2,6 +2,7 @@
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 //require_once("conexion-datos.php");
 require_once("main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 //DATOS DE FECHA ACTUAL
 date_default_timezone_set("America/New_York");
@@ -50,41 +51,23 @@ while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH))
 
     //CONSULTAMOS DIRECTIVOS ACTIVOS DE LA INSTITUCION
     $conexionUsuarios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $datosInstituciones['ins_bd']."_".date("Y"));
-    $directivosConsulta = mysqli_query($conexionUsuarios, "SELECT * FROM usuarios WHERE uss_tipo=5 AND uss_estado=1");
-
+    $directivosConsulta = mysqli_query($conexionUsuarios, "SELECT * FROM usuarios WHERE uss_tipo=5 AND uss_estado=1 AND uss_permiso1=".CODE_PRIMARY_MANAGER);
+    
     //CICLO PARA ENVIAR CORREO A DIRECTIVOS
     while($datosDirectivos=mysqli_fetch_array($directivosConsulta, MYSQLI_BOTH)){
 
-      //INICIO ENVÍO DE MENSAJE
-      $tituloMsj = "¡Faltan ".$falta." para vencer su licencia!";
-      $bgTitulo = "#4086f4";
-      $contenidoMsj = '
-      Hola! <b>'.UsuariosPadre::nombreCompletoDelUsuario($datosDirectivos).'</b><br>
-      <b>'.strtoupper($datosInstituciones['ins_nombre']).'</b>, su licencia con la plataforma SINTIA esta por vencer<br>
-      faltan <b>'.$falta.'</b> para su vencimiento<br>
-      puede hacer la renovacion atraves de la plataforma.';
+      $data = [
+        'falta'   => $falta,
+        'institucion_nombre' => strtoupper($datosInstituciones['ins_nombre']),
+        'usuario_email'    => $datosDirectivos['uss_email'],
+        'usuario_nombre'   => UsuariosPadre::nombreCompletoDelUsuario($datosDirectivos)
+      ];
+      $asunto = 'NOTIFICACIÓN DE VENCIMIENTO DE LICENCIA';
+      $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-1.php';
+      
+      EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 
-      include("config-general/plantilla-email-1.php");
-      // Instantiation and passing `true` enables exceptions
-      $mail = new PHPMailer(true);
-      echo '<div style="display:block;">';
-        try {
-          include("config-general/mail.php");
-
-          $mail->addAddress(strtolower($datosDirectivos['uss_email']), $datosDirectivos['uss_nombre']);    
-          $mail->addAddress('tecmejia2010@gmail.com', 'Plataforma SINTIA');
-
-          // Content
-          $mail->isHTML(true);                                  // Set email format to HTML
-          $mail->Subject = 'NOTIFICACIÓN DE VENCIMIENTO DE LICENCIA';
-          $mail->Body = $fin;
-          $mail->CharSet = 'UTF-8';
-
-          $mail->send();
-          echo 'Mensaje enviado correctamente.';
-        } catch (Exception $e) {echo "Error: {$mail->ErrorInfo}"; exit();}
-      echo '</div>';
-      //FIN ENVÍO DE MENSAJE
     }
+
   }
 }
