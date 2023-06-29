@@ -1218,7 +1218,7 @@ $frases[276][$l] = 'NOT';
 
 $frases[277][$l] = 'Quota reservation';
 
-$frases[278][$l] = 'Would you like to reserve a students place for the following school year?';
+$frases[278][$l] = 'Would you like to reserve a students place for the next school year?';
 
 $frases[279][$l] = 'We would like to know why you do not wish to reserve a place for this student.';
 
