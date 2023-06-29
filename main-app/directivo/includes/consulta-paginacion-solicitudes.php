@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="solicitudes.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
     LEFT JOIN usuarios ON uss_id=soli_remitente
     LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso

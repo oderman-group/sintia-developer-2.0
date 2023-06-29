@@ -81,6 +81,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		WHERE car_curso=" . $_REQUEST["curso"] . " 
 		AND car_grupo='" . $_REQUEST["grupo"] . "'");
 
+				$defini = 0;
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 					if($config['conf_id_institucion']!=23){
@@ -90,7 +91,9 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						AND bol_periodo=" . $_REQUEST["per"]);
 
 						$nota = mysqli_fetch_array($notas, MYSQLI_BOTH);
-						$defini = $nota[4];
+						if(!empty($nota[4])){
+							$defini = $nota[4];
+						}
 					}else{
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
 						$consultaNotaMateriaIndicadoresxPeriodo = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
@@ -140,7 +143,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				if ($def == 3)	$def = "3.0";
 				if ($def == 4)	$def = "4.0";
 				if ($def == 5)	$def = "5.0";
-				if ($def < $cde[5]) $color = 'red';
+				if ($def < $config[5]) $color = 'red';
 				else $color = '#417BC4';
 				$notas1[$cont] = $def;
 				$grupo1[$cont] = $nombre;

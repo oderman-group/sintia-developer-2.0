@@ -5,9 +5,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 
 <?php
 $filtro = '';
-if(is_numeric($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}
-if(is_numeric($_GET["grado"])){$filtro .=" AND car_curso='".$_GET["grado"]."'";}
-if(is_numeric($_GET["asignatura"])){$filtro .=" AND car_materia='".$_GET["asignatura"]."'";}
+if(!empty($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}
+if(!empty($_GET["grado"])){$filtro .=" AND car_curso='".$_GET["grado"]."'";}
+if(!empty($_GET["asignatura"])){$filtro .=" AND car_materia='".$_GET["asignatura"]."'";}
 
 $consulta = mysqli_query($conexion, "SELECT car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, car_director_grupo, car_ih FROM academico_cargas
 INNER JOIN usuarios ON uss_id=car_docente

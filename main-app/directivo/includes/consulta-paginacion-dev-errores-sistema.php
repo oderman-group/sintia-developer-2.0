@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-errores-sistema.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".reporte_errores
     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
     LEFT JOIN usuarios ON uss_id=rperr_usuario

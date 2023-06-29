@@ -10,6 +10,7 @@ if($paginaActual==$totalPaginas){
     $fin=$numRegistros;
 }
 
+$parametros = "";
 if ( isset($_GET) ) {
     foreach ($_GET as $key => $value) {
         if ($key != 'nume') {

@@ -2,7 +2,14 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-require_once("../class/Estudiantes.php");?>
+require_once("../class/Estudiantes.php");
+$filtro = '';
+$busqueda='';
+if(!empty($_GET["busqueda"])){
+  $busqueda=$_GET["busqueda"];
+  $filtro = " AND mat_nombres LIKE '%" . $busqueda . "%' OR mat_primer_apellido LIKE '%" . $busqueda . "%' OR mat_documento LIKE '%" . $busqueda . "%'";
+}
+?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
 <head>
@@ -20,7 +27,7 @@ require_once("../class/Estudiantes.php");?>
       <div class="col-sm">
         <form action="reporte-ver-observador.php" method="GET" class="form-inline">
           <div class="form-group mx-sm-4 mb-2">
-            <input type="text" class="form-control" name="busqueda" value="<?= $_GET["busqueda"]; ?>" placeholder="Búsqueda de estudiante...">
+            <input type="text" class="form-control" name="busqueda" value="<?= $busqueda; ?>" placeholder="Búsqueda de estudiante...">
           </div>
           <button type="submit" class="btn btn-primary mb-2">Buscar</button>
         </form>
@@ -45,20 +52,15 @@ require_once("../class/Estudiantes.php");?>
       <?php
       $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
       $cont = 1;
-      $filtro = '';
-      if ($_GET["busqueda"] != "") {
-        $filtro = " AND mat_nombres LIKE '%" . $_GET["busqueda"] . "%' OR mat_primer_apellido LIKE '%" . $_GET["busqueda"] . "%' OR mat_documento LIKE '%" . $_GET["busqueda"] . "%'";
-      }
-
       $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
-      if ($_GET["orden"] != "") {
+      if (!empty($_GET["orden"])) {
         $ordenado = $_GET["orden"] . " DESC";
       }
 
       $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
       while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
         $colorProceso = 'tomato';
-        if ($resultado["dn_aprobado"] == 1) {
+        if (!empty($resultado["dn_aprobado"]) && $resultado["dn_aprobado"] == 1) {
           $colorProceso = '';
         }
       ?>

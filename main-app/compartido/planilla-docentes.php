@@ -33,15 +33,15 @@ require_once("../class/Estudiantes.php");
 
 $filtro = '';
 
-if(is_numeric($_GET["carga"])) {$filtro .= " AND car_id='".$_GET["carga"]."'";}	
+if(!empty($_GET["carga"])) {$filtro .= " AND car_id='".$_GET["carga"]."'";}	
 
-if(is_numeric($_GET["docente"])) {$filtro .= " AND car_docente='".$_GET["docente"]."'";}
+if(!empty($_GET["docente"])) {$filtro .= " AND car_docente='".$_GET["docente"]."'";}
 
-if(is_numeric($_GET["grado"])) {$filtro .= " AND car_curso='".$_GET["grado"]."'";}
+if(!empty($_GET["grado"])) {$filtro .= " AND car_curso='".$_GET["grado"]."'";}
 
-if(is_numeric($_GET["grupo"])) {$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
+if(!empty($_GET["grupo"])) {$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
 
-if(is_numeric($_GET["periodo"])) {$filtro .= " AND car_periodo='".$_GET["periodo"]."'";}	
+if(!empty($_GET["periodo"])) {$filtro .= " AND car_periodo='".$_GET["periodo"]."'";}	
 
 	
 
@@ -273,8 +273,6 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
 <p align="center">
 
 <div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center">
-
-  <?=$msj;?>
 
 </div>
 

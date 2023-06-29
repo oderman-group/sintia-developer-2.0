@@ -79,6 +79,7 @@
 													<?php
 													$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_obligatorio=1");
 													$contReg = 1;
+                                                    $sumaP = 0;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                         $sumaP = $sumaP + $resultado[3];
 													?>

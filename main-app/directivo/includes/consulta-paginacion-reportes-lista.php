@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="reportes-lista.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
     INNER JOIN disciplina_faltas ON dfal_id=dr_falta
     INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria

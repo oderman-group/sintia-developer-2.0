@@ -150,9 +150,11 @@ include("../compartido/head.php");
 														while($p<=$config[19]){
 															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-															if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
-															$defPorMateria += $boletin[4];
-															$p++;
+															if(!empty($boletin[4])){
+																if($boletin[4]<$config[5])$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
+																$defPorMateria += $boletin[4];
+																$p++;
+															}
 														}
 														$defPorMateria = round($defPorMateria/$config[19],2);
 														//CONSULTAR NIVELACIONES

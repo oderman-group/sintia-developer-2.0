@@ -20,13 +20,13 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-if (is_numeric($_GET["id"])) {
+if (!empty($_GET["id"])) {
     $filtro .= " AND mat_id='" . $_GET["id"] . "'";
 }
-if (is_numeric($_REQUEST["curso"])) {
+if (!empty($_REQUEST["curso"])) {
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
-if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){

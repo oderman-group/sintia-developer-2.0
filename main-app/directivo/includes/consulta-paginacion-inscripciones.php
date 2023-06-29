@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="inscripciones.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
     INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
     LEFT JOIN academico_grados ON gra_id=asp_grado

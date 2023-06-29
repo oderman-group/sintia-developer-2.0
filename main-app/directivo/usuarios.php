@@ -70,7 +70,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								
 							<?php
 							$filtro = '';
-							if(is_numeric($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'";}
+							$tipo = '';
+							if(!empty($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'"; $tipo = $_GET["tipo"];}
 							?>
 								
 								<div class="col-md-12">

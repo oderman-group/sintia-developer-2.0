@@ -3,7 +3,6 @@ session_start();
 $idPaginaInterna = 'DT0146';
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");?>
-<?php include("../compartido/head.php");?>
 <?php
 $consulta = mysqli_query($conexion, "SELECT GROUP_CONCAT( car_id SEPARATOR ', ')as car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, COUNT(*) as duplicados
 FROM academico_cargas
@@ -19,7 +18,7 @@ ORDER BY car_id ASC");
 <!doctype html>
 <html>
 
-<head></head>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Informes SINTIA</title>
 <link rel="shortcut icon" href="../files/images/ico.png">

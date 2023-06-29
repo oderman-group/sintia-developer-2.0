@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="usuarios.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
     INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
     WHERE uss_id=uss_id $filtro

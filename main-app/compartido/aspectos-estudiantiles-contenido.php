@@ -270,8 +270,8 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                             </tr>
 
                                             <tr style="height: 60px;">
-                                                <td><?=$aspectos['dn_aspecto_academico'];?></td>
-                                                <td><?=$aspectos['dn_aspecto_convivencial'];?></td>
+                                                <td><?php if(!empty($aspectos['dn_aspecto_academico'])){ echo $aspectos['dn_aspecto_academico'];}?></td>
+                                                <td><?php if(!empty($aspectos['dn_aspecto_convivencial'])){ echo $aspectos['dn_aspecto_convivencial'];}?></td>
                                                 <td>
                                                     <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
                                                         <a href="../compartido/guardar.php?get=27&idR=<?=$aspectos['dn_id'];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}" class="btn btn-danger">X</a>

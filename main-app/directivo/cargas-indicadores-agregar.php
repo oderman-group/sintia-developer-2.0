@@ -4,6 +4,11 @@
 <?php include("../compartido/head.php");?>
 <?php include("verificar-carga.php");?>
 <?php
+$consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+$indicador = mysqli_fetch_array($consultaIndicadores, MYSQLI_BOTH);
+
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
 WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
 (SELECT sum(ipc_valor) FROM academico_indicadores_carga 

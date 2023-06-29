@@ -109,7 +109,7 @@
                                                             if($ipcC>0 or $calC>0) $indCreados=1;
                                                         }
                                                         
-                                                        if($carga['car_id']=="") {$estadoD = 'disabled'; $fondo = '#FFF';} 
+                                                        if(!empty($carga['car_id'])) {$estadoD = 'disabled'; $fondo = '#FFF';} 
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>

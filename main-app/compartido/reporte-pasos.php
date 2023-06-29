@@ -14,8 +14,15 @@ include("../../config-general/consulta-usuario-actual.php");?>
 <body style="font-family:Arial;">
 <div class="container-fluid">
 <?php
-$nombreInforme =  "INFORME DE MATRÍCULAS"."<br>"."PASO A PASO";
-include("../compartido/head_informes.php") ?>
+$filtro = '';
+$busqueda='';
+if(!empty($_GET["busqueda"])){
+  $busqueda=$_GET["busqueda"];
+  $filtro .= " AND mat_nombres LIKE '%" . $busqueda . "%' OR mat_primer_apellido LIKE '%" . $busqueda . "%' OR mat_documento LIKE '%" . $busqueda . "%'";
+}
+$nombreInforme =  "INFORME DE MATRÍCULAS<br>PASO A PASO";
+include("../compartido/head_informes.php");
+?>
   <div align="center" style="margin-bottom:20px;">
       <p class="mb-2 mt-2">
       <a href="reporte-pasos.php">VER TODO</a>&nbsp;|&nbsp;
@@ -27,7 +34,7 @@ include("../compartido/head_informes.php") ?>
         <div class="col-sm">
           <form action="reporte-pasos.php" method="GET" class="form-inline">
             <div class="form-group mx-sm-4 mb-2">
-              <input type="text" class="form-control" name="busqueda" value="<?= $_GET["busqueda"]; ?>" placeholder="Búsqueda de estudiante...">
+              <input type="text" class="form-control" name="busqueda" value="<?= $busqueda; ?>" placeholder="Búsqueda de estudiante...">
             </div>
             <button type="submit" class="btn btn-primary mb-2">Buscar</button>
           </form>
@@ -59,15 +66,10 @@ include("../compartido/head_informes.php") ?>
     $iniciaProceso = array("NO", "SI");
     $estadoProceso = array("Pendiente", "Listo");
     $modalidadEstudio = array("", "Virtual", "Presencial- alternancia");
-    $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
+    $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado", "No matriculado");
     $cont = 1;
-    $filtro = '';
-    if ($_GET["busqueda"] != "") {
-      $filtro = " AND mat_nombres LIKE '%" . $_GET["busqueda"] . "%' OR mat_primer_apellido LIKE '%" . $_GET["busqueda"] . "%' OR mat_documento LIKE '%" . $_GET["busqueda"] . "%'";
-    }
-
     $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
-    if ($_GET["orden"] != "") {
+    if (!empty($_GET["orden"])) {
       $ordenado = $_GET["orden"]." DESC";
     }
 
@@ -84,6 +86,45 @@ include("../compartido/head_informes.php") ?>
       $colorFirma = '';
       if ($resultado["mat_hoja_firma"] == 1) {
         $colorFirma = 'aquamarine';
+      }
+
+      $modalidad = 0;
+      if (!empty($resultado["mat_modalidad_estudio"])) {
+        $modalidad = $resultado["mat_modalidad_estudio"];
+      }
+      if (empty($resultado["mat_iniciar_proceso"])) {
+        $resultado["mat_iniciar_proceso"]=0;
+      }
+      if (empty($resultado["mat_actualizar_datos"])) {
+        $resultado["mat_actualizar_datos"]=0;
+      }
+      if (empty($resultado["mat_pago_matricula"])) {
+        $resultado["mat_pago_matricula"]=0;
+      }
+      if (empty($resultado["mat_contrato"])) {
+        $resultado["mat_contrato"]=0;
+      }
+      if (empty($resultado["mat_pagare"])) {
+        $resultado["mat_pagare"]=0;
+      }
+      if (empty($resultado["mat_compromiso_academico"])) {
+        $resultado["mat_compromiso_academico"]=0;
+      }
+      if (empty($resultado["mat_compromiso_convivencia"])) {
+        $resultado["mat_compromiso_convivencia"]=0;
+      }
+      if (empty($resultado["mat_manual"])) {
+        $resultado["mat_manual"]=0;
+      }
+      if (empty($resultado["mat_mayores14"])) {
+        $resultado["mat_mayores14"]=0;
+      }
+      if (empty($resultado["mat_hoja_firma"])) {
+        $resultado["mat_hoja_firma"]=0;
+      }
+      $estadoM = 0;
+      if (!empty($resultado["mat_estado_matricula"])) {
+        $estadoM = $resultado["mat_estado_matricula"];
       }
     ?>
       <tr style="font-size:13px;">
@@ -111,8 +152,8 @@ include("../compartido/head_informes.php") ?>
             <br> <a href="https://plataformasintia.com/main-app/v2.0/files/comprobantes/<?= $resultado["mat_firma_adjunta"]; ?>" target="_blank" style="color:blue;">Firma</a>
           <?php } ?>
         </td>
-        <td align="center"><?= $modalidadEstudio[$resultado["mat_modalidad_estudio"]]; ?></td>
-        <td align="center"><?= $estadoMatricula[$resultado["mat_estado_matricula"]]; ?></td>
+        <td align="center"><?= $modalidadEstudio[$modalidad]; ?></td>
+        <td align="center"><?= $estadoMatricula[$estadoM]; ?></td>
       </tr>
     <?php
       $cont++;

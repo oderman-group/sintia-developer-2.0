@@ -38,15 +38,6 @@ $contadorPeriodos=0;
 
 <body style="font-family:Arial;">
 
-
-<?php
-if($periodoActual==1) $periodoActuales = "Primero";
-if($periodoActual==2) $periodoActuales = "Segundo";
-if($periodoActual==3) $periodoActuales = "Tercero";
-if($periodoActual==4) $periodoActuales = "Final";
-//if($periodoActual==5) $periodoActuales = "Final";
-?>
-
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
 $consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
@@ -93,6 +84,7 @@ WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo
 </tr>
 <?php 
 $numeroFilas=mysqli_num_rows($consultaMatAreaEst);
+$contfilas=0;
 while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
 $contfilas++;
 //CONSULTA QUE ME EL NOMBRE Y EL PROMEDIO DEL AREA
@@ -145,10 +137,12 @@ if($numeroFilas==$contfilas && $numMaterias==1){
        <td align='center' style='font-size:12px;border-bottom-style:solid;border-bottom-width:2;'><?php echo $totalPromedio;?></td>
         <td  align="center" style="border-bottom-style:solid;border-bottom-width:2;font-size:12px;"><?php //DESEMPEÑO
 		while($r_desempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
-			if($totalPromedio>=$rDesempeno["notip_desde"] && $totalPromedio<=$rDesempeno["notip_hasta"]){
-				echo $rDesempeno["notip_nombre"];
-				
-				}
+        if(!empty($rDesempeno["notip_desde"]) && !empty($rDesempeno["notip_hasta"])){
+          if($totalPromedio>=$rDesempeno["notip_desde"] && $totalPromedio<=$rDesempeno["notip_hasta"]){
+            echo $rDesempeno["notip_nombre"];
+          
+          }
+        }
 			}
 			mysqli_data_seek($consultaDesempeno,0);
 		 ?></td>
@@ -288,5 +282,5 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 </html>
 
 <script>
-//print();
+print();
 </script>

@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-contrato-usuarios.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".contratos_usuarios
     LEFT JOIN ".$baseDatosServicios.".contratos ON cont_id=cxu_id_contrato
     LEFT JOIN ".$baseDatosServicios.".instituciones ON ins_id=cxu_id_institucion AND ins_enviroment='".ENVIROMENT."'

@@ -37,10 +37,10 @@ $Plataforma = new Plataforma;
 								
 								<?php 
 								$filtro = '';
-								if(is_numeric($_GET["curso"])){$filtro .= " AND car_curso='".$_GET["curso"]."'";}
-								if(is_numeric($_GET["grupo"])){$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
-								if(is_numeric($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
-								if(is_numeric($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
+								if(!empty($_GET["curso"])){$filtro .= " AND car_curso='".$_GET["curso"]."'";}
+								if(!empty($_GET["grupo"])){$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
+								if(!empty($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
+								if(!empty($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
 
 								//include("includes/cargas-filtros.php");
 								?>
