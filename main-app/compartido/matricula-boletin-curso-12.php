@@ -1,6 +1,8 @@
 
 <?php
-    include("../directivo/session.php");
+    session_start();
+    include("../../config-general/config.php");
+    include("../../config-general/consulta-usuario-actual.php");
     require_once("../class/Estudiantes.php");
     require_once("../class/Boletin.php");
     require_once("../class/Usuarios.php");

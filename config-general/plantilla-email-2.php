@@ -3,11 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 $Plataforma = new Plataforma;
 
-$contenidoMsj = '
-      Hola! <b>'.$data['usuario_nombre'].'</b><br>
-      <b>'.$data['institucion_nombre'].'</b>, su licencia con la plataforma SINTIA esta por vencer<br>
-      faltan <b>'.$data['falta'].'</b> para su vencimiento<br>
-      puede hacer la renovacion atraves de la plataforma.';
+$contenidoMsj = $data['contenido_msj'];
 ?>
 
 <html>
@@ -20,7 +16,7 @@ $contenidoMsj = '
 			</div>
 
 			<div style="font-family:arial; background:<?=$Plataforma->colorUno;?>; width:600px; color:#FFF; text-align:center; padding:15px;">
-				<h3>¡Faltan <?=$data['falta'];?> para vencer su licencia!</h3>
+				<h3><?=$asunto;?></h3>
 			</div>
 
 			<div style="font-family:arial; background:#FAFAFA; width:600px; color:#000; text-align:justify; padding:15px;"><?=$contenidoMsj;?></div>

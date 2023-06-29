@@ -40,8 +40,9 @@ try {
 	conf_informe_parcial='" . $_POST["informeParcial"] . "',
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
 	conf_num_registros='" . $_POST["numRegistros"] . "',
-	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
-	conf_certificado='" . $_POST["certificado"] . "'
+	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "'
+	conf_certificado='" . $_POST["certificado"] . "',
+	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 
 	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");

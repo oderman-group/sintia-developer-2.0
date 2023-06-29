@@ -297,6 +297,17 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 											</div>
 										</div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Permitir a acudientes descargar el boletín?</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="descargarBoletin">
+                                                    <option value="1" <?php if($cfg['conf_permiso_descargar_boletin']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_permiso_descargar_boletin']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                                <span style="color:#6017dc;">Esta acción permite a los acudientes descargar el boletín de sus acudidos.</span>
+                                            </div>
+                                        </div>
+
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                     </form>
