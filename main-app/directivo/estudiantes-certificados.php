@@ -49,7 +49,7 @@ require_once("../class/Estudiantes.php");
 
                                 <?php
                                 $ext='';
-                                if($config['conf_id_institucion'] == 20){
+                                if($config['conf_certificado'] == 2){
                                     $ext='-2';
                                 }
                                 ?>

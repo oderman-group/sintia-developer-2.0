@@ -53,8 +53,12 @@
                                         <label class="col-sm-2 control-label">Curso</label>
                                         <div class="col-sm-8">
                                             <?php
-                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-                                            ORDER BY gra_vocal");
+                                            try{
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
+                                                ORDER BY gra_vocal");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
                                             ?>
                                             <select class="form-control  select2" name="grado" required>
                                                 <option value="">Seleccione una opción</option>
@@ -73,7 +77,11 @@
                                         <label class="col-sm-2 control-label">Grupo</label>
                                         <div class="col-sm-4">
                                             <?php
-                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                            try{
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
                                             ?>
                                             <select class="form-control  select2" name="grupo">
                                                 <option value="">Seleccione una opción</option>

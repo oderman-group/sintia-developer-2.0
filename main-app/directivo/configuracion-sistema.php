@@ -3,8 +3,12 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion 
-WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+try{
+    $consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion 
+    WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 ?>
 
@@ -104,7 +108,11 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="estiloNotas" required>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                        $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                        try{
+                                                            $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         while($opcionesGeneralesDatos = mysqli_fetch_array($opcionesGeneralesConsulta, MYSQLI_BOTH)){
                                                             if($cfg[22]==$opcionesGeneralesDatos[0])
                                                                 echo '<option value="'.$opcionesGeneralesDatos[0].'" selected>'.$opcionesGeneralesDatos[1].'</option>';
@@ -123,6 +131,37 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>">
 											</div>
 										</div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Estilo de certificado</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()">
+                                                    <option value="1" <?php if($cfg['conf_certificado']==1){ echo "selected";} ?>>Certificado 1</option>
+                                                    <option value="2" <?php if($cfg['conf_certificado']==2){ echo "selected";} ?>>Certificado 2</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" titlee="Ver formato certificado" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
+                                            <script>
+                                                    $(document).ready(function(){
+                                                    $('[data-toggle="popover"]').popover({
+                                                        html: true, // Habilitar contenido HTML
+                                                        content: function () {
+                                                            valor = document.getElementById("tipoCertificado");
+                                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Estilo Certificado '+valor.value+'</label>'+
+                                                        '<img id="img-boletin" src="../files/images/certificados/tipo'+valor.value+'.png" class="w-100" />'+                                                       
+                                                        '</div>';}
+                                                        });                                                    
+                                                    });
+                                                    function cambiarTipo(){  
+                                                        var imagen_boletin = document.getElementById('img-boletin'); 
+                                                        if(imagen_boletin){                                                     
+                                                        var valor = document.getElementById("tipoCertificado");  
+                                                        var lbl_tipo = document.getElementById('lbl_tipo');
+                                                        imagen_boletin.src ="../files/images/certificados/tipo"+valor.value+".png";
+                                                        lbl_tipo.textContent='Estilo Certificado '+valor.value;
+                                                        }
+                                                    }
+                                            </script>
+                                        </div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
@@ -265,6 +304,17 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                                 </select>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Permitir a acudientes descargar el boletín?</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="descargarBoletin">
+                                                    <option value="1" <?php if($cfg['conf_permiso_descargar_boletin']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_permiso_descargar_boletin']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                                <span style="color:#6017dc;">Esta acción permite a los acudientes descargar el boletín de sus acudidos.</span>
+                                            </div>
+                                        </div>
 
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;

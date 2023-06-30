@@ -25,14 +25,16 @@ if(file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$d
 
 try{
     mysqli_query($conexion, "DELETE FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
-
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+try{
     mysqli_query($conexion, "DELETE FROM academico_matriculas WHERE mat_id='".$_GET["matricula"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-	$lineaError = __LINE__;
-	include("../compartido/reporte-errores.php");
-	include("../compartido/guardar-historial-acciones.php");
+
+include("../compartido/guardar-historial-acciones.php");
 
 echo '<script type="text/javascript">window.location.href="inscripciones.php?msg=2";</script>';
 exit();

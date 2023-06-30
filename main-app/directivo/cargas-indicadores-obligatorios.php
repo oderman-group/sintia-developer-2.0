@@ -37,9 +37,17 @@
 								
 								  
                                 <?php
-                                $consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor) FROM academico_indicadores WHERE ind_obligatorio=1");
+                                try{
+                                    $consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor) FROM academico_indicadores WHERE ind_obligatorio=1");
+                                } catch (Exception $e) {
+                                    include("../compartido/error-catch-to-report.php");
+                                }
                                 $ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
-                                $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_creado=0");
+                                try{
+                                    $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_creado=0");
+                                } catch (Exception $e) {
+                                    include("../compartido/error-catch-to-report.php");
+                                }
                                 $indGenerados = mysqli_num_rows($consultaIndGenerados);
                                 ?>
 								<div class="col-md-12">
@@ -77,7 +85,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_obligatorio=1");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_obligatorio=1");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													$contReg = 1;
                                                     $sumaP = 0;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){

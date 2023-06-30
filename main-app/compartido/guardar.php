@@ -940,68 +940,14 @@ if ($_POST["id"] == 29) {
 
 
 ##############################################
-//CAMBIAR IDIOMA
-if ($_GET["get"] == 1) {
+//CAMBIAR IDIOMA y TEMA
+if ($_GET["get"] >= 1 && $_GET["get"]<=5) {	
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_idioma='" . $_GET["idioma"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+		UsuariosPadre::actualizarUsuariosAnios();	
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA ENCABEZADO
-if ($_GET["get"] == 2) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA MENÚ
-if ($_GET["get"] == 3) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_sidebar='" . $_GET["temaSidebar"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA LOGO
-if ($_GET["get"] == 4) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TODO EL TEMA
-if ($_GET["get"] == 5) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "', uss_tema_sidebar='" . $_GET["temaSidebar"] . "', uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();

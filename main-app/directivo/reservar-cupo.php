@@ -65,12 +65,16 @@
 													<?php
 													include("includes/consulta-paginacion-reservar-cupo.php");
 													$respuestas = array("","SI","NO");
-													$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas
-													INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
-													INNER JOIN academico_grados ON gra_id=mat_grado
-													INNER JOIN academico_grupos ON gru_id=mat_grupo
-													WHERE genc_id=genc_id $filtro
-													LIMIT $inicio,$registros");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas
+														INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
+														INNER JOIN academico_grados ON gra_id=mat_grado
+														INNER JOIN academico_grupos ON gru_id=mat_grupo
+														WHERE genc_id=genc_id $filtro
+														LIMIT $inicio,$registros");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 													?>
 													<tr>

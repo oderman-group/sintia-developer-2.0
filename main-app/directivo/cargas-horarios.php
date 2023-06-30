@@ -70,7 +70,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".$_GET["id"]." AND hor_estado=1;");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".$_GET["id"]." AND hor_estado=1;");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														switch($resultado[2]){
 															case 1: $dia = 'Domingo'; break;

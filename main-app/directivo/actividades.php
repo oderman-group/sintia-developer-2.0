@@ -91,13 +91,25 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 ");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
+														WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 ");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaFd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[5]."','".date("Y-m-d")."')");
+														try{
+															$consultaFd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[5]."','".date("Y-m-d")."')");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$fd = mysqli_fetch_array($consultaFd, MYSQLI_BOTH);
-														$consultaSd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[4]."','".date("Y-m-d")."')");
+														try{
+															$consultaSd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[4]."','".date("Y-m-d")."')");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$sd = mysqli_fetch_array($consultaSd, MYSQLI_BOTH);
 													 ?>
 													<tr>

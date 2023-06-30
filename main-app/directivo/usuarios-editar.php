@@ -3,7 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
+try{
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
@@ -102,7 +106,11 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                                             <label class="col-sm-2 control-label">Tipo de usuario</label>
                                             <div class="col-sm-3">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="tipoUsuario" required>
                                                     <option value="">Seleccione una opción</option>
@@ -196,8 +204,12 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 											<label class="col-sm-2 control-label">Tipo de documento</label>
 											<div class="col-sm-4">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-												WHERE ogen_grupo=1");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=1");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
 												<select class="form-control  select2" name="tipoD">
 													<option value="">Seleccione una opción</option>
@@ -266,7 +278,11 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
                                             <label class="col-sm-2 control-label">Género</label>
                                             <div class="col-sm-3">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="genero" required>
                                                     <option value="">Seleccione una opción</option>

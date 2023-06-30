@@ -45,7 +45,11 @@
                                         <div class="panel-body">
 											<?php
 											for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-												$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+												try{
+													$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 
 												if($i==$datosCargaActual['car_periodo']) $msjPeriodoActual = '- ACTUAL'; else $msjPeriodoActual = '';
@@ -64,12 +68,16 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-											INNER JOIN academico_materias ON mat_id=car_materia
-											INNER JOIN academico_grados ON gra_id=car_curso
-											INNER JOIN academico_grupos ON gru_id=car_grupo
-											WHERE car_docente='".$datosCargaActual['car_docente']."'
-											ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre");
+											try{
+												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+												INNER JOIN academico_materias ON mat_id=car_materia
+												INNER JOIN academico_grados ON gra_id=car_curso
+												INNER JOIN academico_grupos ON gru_id=car_grupo
+												WHERE car_docente='".$datosCargaActual['car_docente']."'
+												ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											$nCargas = mysqli_num_rows($cCargas);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
@@ -125,15 +133,23 @@
 													<?php
 													 $filtro = '';
 													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$_GET["periodo"]."'";}
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-													 INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-													 WHERE ipc_carga='".$_GET["carga"]."' $filtro
-													 ORDER BY ipc_periodo");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+														INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+														WHERE ipc_carga='".$_GET["carga"]."' $filtro
+														ORDER BY ipc_periodo");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 $contReg = 1;
 													 $sino = array("NO","SI");
 													 $sumaPorcentaje = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
+														try{
+															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														 $numActividades = mysqli_num_rows($consultaNumActividades);
 														 
 														 $sumaPorcentaje += $resultado['ipc_valor'];

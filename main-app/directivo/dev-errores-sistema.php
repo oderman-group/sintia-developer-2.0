@@ -90,12 +90,16 @@ $Plataforma = new Plataforma;
                                                     <?php
 													include("includes/consulta-paginacion-dev-errores-sistema.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
-                                                    INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                    LEFT JOIN usuarios ON uss_id=rperr_usuario
-                                                    WHERE rperr_id=rperr_id $filtro
-                                                    ORDER BY rperr_id DESC
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
+                                                        INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
+                                                        LEFT JOIN usuarios ON uss_id=rperr_usuario
+                                                        WHERE rperr_id=rperr_id $filtro
+                                                        ORDER BY rperr_id DESC
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
@@ -104,7 +108,11 @@ $Plataforma = new Plataforma;
                                                         $ussAutologin="NO";
                                                         if($resultado['hil_usuario_autologin']!=0){
 
-                                                            $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
+                                                            try{
+                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
                                                             $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
                                                             $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
 

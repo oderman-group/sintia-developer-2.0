@@ -137,8 +137,12 @@
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-												WHERE eva_id_carga='".$cargaConsultaActual."'");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
+													WHERE eva_id_carga='".$cargaConsultaActual."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>
@@ -156,17 +160,10 @@
 
 										<a href="#" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>
-
-
                                 </div>
                             </div>
-									
-									
-							
                         </div>
-						
                     </div>
-
                 </div>
                 <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>

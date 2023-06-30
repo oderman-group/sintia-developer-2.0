@@ -1,4 +1,7 @@
-<?php include("../directivo/session.php");
+<?php
+session_start();
+include("../../config-general/config.php");
+include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
 $year=$agnoBD;

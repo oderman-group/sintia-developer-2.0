@@ -112,7 +112,11 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="tipoUsuario" id="tipoUsuario">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    $consultaUsuarios = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+                                                    try{
+                                                        $consultaUsuarios = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($tipoUsuarios=mysqli_fetch_array($consultaUsuarios, MYSQLI_BOTH)){
                                                         $selected="";
                                                         if($datosPaginas['pagp_tipo_usuario']==$tipoUsuarios["pes_id"]){
@@ -131,7 +135,11 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="modulo" id="modulo">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    try{
+                                                        $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($modulos=mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                         $selected="";
                                                         if($datosPaginas['pagp_modulo']==$modulos["mod_id"]){

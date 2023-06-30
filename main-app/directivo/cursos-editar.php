@@ -4,7 +4,11 @@ $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
+try{
+    $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 ?>
 
@@ -72,10 +76,14 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Formato Boletin</label>
                                             <div class="col-sm-2">
-                                                <select id="tipoBoletin" class="form-control  select2" name="formatoB" required>
+                                                <select id="tipoBoletin" class="form-control  select2"  name="formatoB" onchange="cambiarTipo()" required>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                        $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
+                                                        try{
+                                                            $consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=15");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         while($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?=$datosBoletin['ogen_id'];?>" <?php if($resultadoCurso["gra_formato_boletin"]==$datosBoletin['ogen_id']){ echo 'selected';} ?>><?=$datosBoletin['ogen_nombre'];?></option>
@@ -89,11 +97,20 @@ $resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
                                                         html: true, // Habilitar contenido HTML
                                                         content: function () {
                                                             valor = document.getElementById("tipoBoletin");
-                                                        return '<div class="popover-content">Formato tipo '+valor.value+
-                                                        '<img src="../files/images/boletines/tipo'+valor.value+'.png" class="w-100" />'+
+                                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Formato tipo '+valor.value+'</label>'+
+                                                        '<img id="img-boletin" src="../files/images/boletines/tipo'+valor.value+'.png" class="w-100" />'+                                                       
                                                         '</div>';}
-                                                        });   
+                                                        });                                                    
                                                     });
+                                                    function cambiarTipo(){  
+                                                        var imagen_boletin = document.getElementById('img-boletin'); 
+                                                        if(imagen_boletin){                                                     
+                                                        var valor = document.getElementById("tipoBoletin");  
+                                                        var lbl_tipo = document.getElementById('lbl_tipo');
+                                                        imagen_boletin.src ="../files/images/boletines/tipo"+valor.value+".png";
+                                                        lbl_tipo.textContent='Formato tipo '+valor.value;
+                                                        }
+                                                    }
                                             </script>
                                         </div>
                                         

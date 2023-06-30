@@ -1,0 +1,14 @@
+@import './login.css';
+@import './btn.css';
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+
+
+.is-invalid {
+    display: none;
+}

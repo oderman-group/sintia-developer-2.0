@@ -4,17 +4,25 @@
 <?php include("../compartido/head.php");?>
 <?php include("verificar-carga.php");?>
 <?php
-$consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+try{
+    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+    INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $indicador = mysqli_fetch_array($consultaIndicadores, MYSQLI_BOTH);
 
-$consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+try{
+    $consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
+    (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
+    (SELECT count(*) FROM academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);

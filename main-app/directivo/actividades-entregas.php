@@ -15,8 +15,11 @@ include("../compartido/head.php");
 <?php include("../compartido/body.php");?>
 	
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1");
+try{
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 
 ?>
@@ -78,9 +81,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
-											ORDER BY eva_id DESC");
+											try{
+												$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
+												WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
+												ORDER BY eva_id DESC");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="evaluaciones-resultados.php?idE=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>
@@ -133,9 +140,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
-														$consultaDatos=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60) FROM academico_actividad_tareas_entregas 
-														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$_GET["idR"]."'");
+														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
+														try{	
+															$consultaDatos=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60) FROM academico_actividad_tareas_entregas 
+															WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$_GET["idR"]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														 $datos1 = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													 ?>
 													<tr>

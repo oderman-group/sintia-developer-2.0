@@ -3,7 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".$_GET["idR"]."'");
+try{
+    $consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".$_GET["idR"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 
@@ -78,7 +82,11 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                             <label class="col-sm-2 control-label">Categoría</label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select class="form-control  select2" name="categoria" required>
                                                     <option value="">Seleccione una opción</option>

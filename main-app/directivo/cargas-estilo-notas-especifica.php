@@ -69,7 +69,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria='".$_GET["id"]."'");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria='".$_GET["id"]."'");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>

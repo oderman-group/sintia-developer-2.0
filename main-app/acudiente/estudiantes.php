@@ -176,29 +176,21 @@ require_once("../class/Estudiantes.php");
 																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>">R. Disciplina</a></li>
 																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
 																		  
-																		  <?php if($config['conf_id_institucion'] == 9){?>
-																		  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
-																		  <?php }?>
-																		  
-																		  <?php if($config['conf_id_institucion'] == 1){
-																			  
-																			if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
-																			?>
-																		  
-																		  	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		<?php 
+																			if($config['conf_permiso_descargar_boletin'] == 1){
+																				if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
+																		?>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
 
-																		  <?php 
+																		<?php
+																				}
 																			}
-
-																		  if($config['conf_informe_parcial']==1){?>
-																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
-																		  <?php }
+																		if($config['conf_informe_parcial']==1){?>
+																		<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
+																		<?php }
 
 																		  if($config['conf_ficha_estudiantil']==1){?>
 																		  	<li><a href="ficha-estudiantil.php?idR=<?=$resultado["mat_id_usuario"];?>">Ficha estudiantil</a></li>
-																		  <?php }?>
-
-																		  
 																		  <?php }?>
 
 																		  <?php if(!isset($_SESSION['admin'])){?>

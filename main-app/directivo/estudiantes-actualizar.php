@@ -44,8 +44,16 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
 	$destino = "../files/fotos";
 	move_uploaded_file($_FILES['fotoMat']['tmp_name'], $destino . "/" . $archivo);
-	mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "'");
-	mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "'");
+	try{
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	try{
+		mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 }
 
 try{
@@ -103,8 +111,7 @@ try{
 }	
 
 try {
-	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' 
-	WHERE uss_id='".$_POST["idU"]."'");
+	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }	

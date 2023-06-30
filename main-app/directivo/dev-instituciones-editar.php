@@ -9,8 +9,12 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".instituciones 
-WHERE ins_id='" . $_GET["id"] . "' AND ins_enviroment='".ENVIROMENT."'");
+try{
+    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".instituciones 
+    WHERE ins_id='" . $_GET["id"] . "' AND ins_enviroment='".ENVIROMENT."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 
@@ -111,10 +115,14 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             <select class="form-control  select2" name="ciudad">
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                $opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-                                                INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
-                                                ORDER BY ciu_nombre
-                                                ");
+                                                try{
+                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+                                                    INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
+                                                    ORDER BY ciu_nombre
+                                                    ");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
                                                 ?>
                                                 <option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosInstitucion['ins_ciudad']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -194,7 +202,11 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             <select class="form-control  select2" name="plan">
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                $consultaPlan = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".planes_sintia");
+                                                try{
+                                                    $consultaPlan = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".planes_sintia");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($plan = mysqli_fetch_array($consultaPlan, MYSQLI_BOTH)){
                                                 ?>
                                                 <option value="<?=$plan['plns_id'];?>" <?php if($plan['plns_id']==$datosInstitucion['ins_id_plan']){echo "selected";}?>><?=$plan['plns_nombre']." (".$plan['plns_espacio_gb']."GB)"?></option>
@@ -209,7 +221,11 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             <select class="form-control  select2-multiple" name="modulos[]" multiple>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                    $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos");
+                                                    try{
+                                                        $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                 ?>
                                                 <option value="<?=$modulos['mod_id'];?>" <?php if(Modulos::verificarModulosDeInstitucion($_GET["id"],$modulos['mod_id'])){echo "selected";}?>><?=$modulos['mod_nombre']?></option>

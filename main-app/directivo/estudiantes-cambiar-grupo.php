@@ -89,7 +89,11 @@ require_once("../class/Estudiantes.php");
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Grupo</label>
                                           	<?php 
-											$consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                            try{
+                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
 											?>
                                             <div class="col-sm-9">
                                                 <select class="form-control  select2" name="grupoNuevo" required>

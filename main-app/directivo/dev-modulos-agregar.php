@@ -73,7 +73,11 @@ include("../compartido/head.php");
                                                 <select class="form-control  select2" name="moduloPadre">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    try{
+                                                        $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($modulos=mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                         echo'<option value="'.$modulos["mod_id"].'">'.$modulos["mod_nombre"].'</option>';
                                                         }

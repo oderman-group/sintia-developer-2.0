@@ -51,8 +51,12 @@
                                             <label class="col-sm-2 control-label"><?=$frases[26][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-												WHERE gra_estado=1");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
+                                                    WHERE gra_estado=1");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="grado" required>
                                                     <option value="">Seleccione una opción</option>
@@ -69,7 +73,11 @@
                                             <label class="col-sm-2 control-label"><?=$frases[250][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select class="form-control  select2" name="grupo" required>
                                                     <option value="">Seleccione una opción</option>
@@ -106,9 +114,13 @@
                                             <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
                                                 <?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-												INNER JOIN usuarios ON uss_id=mat_id_usuario
-												WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+                                                    INNER JOIN usuarios ON uss_id=mat_id_usuario
+                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="est">
                                                     <option value="">Seleccione una opción</option>
@@ -127,8 +139,12 @@
                                                 <select name="falta" class="form-control select2">
 													<option value="">Seleccione una opción</option>
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
+                                                    INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												?>	
                                                   <option value="<?=$datos['dfal_id'];?>"><?=$datos['dfal_codigo'].". ".$datos['dfal_nombre'];?></option>	
@@ -142,9 +158,13 @@
 												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-10">
 													<?php
-													$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													WHERE (uss_tipo=2 OR uss_tipo=5)
-													ORDER BY uss_tipo, uss_nombre");
+                                                    try{
+                                                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                        WHERE (uss_tipo=2 OR uss_tipo=5)
+                                                        ORDER BY uss_tipo, uss_nombre");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													?>
 													<select class="form-control  select2" name="usuario">
 														<option value="">Seleccione una opción</option>

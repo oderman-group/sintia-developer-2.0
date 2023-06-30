@@ -6,7 +6,11 @@ $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 100');
 // $jsonData['acudidos'] = array();
 $i=0;
 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-    $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_REQUEST['idA']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+    try{
+        $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_REQUEST['idA']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+    } catch (Exception $e) {
+        include("../compartido/error-catch-to-report.php");
+    }
     $num = mysqli_num_rows($consultaUsuarioAcudiente);
     $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);
     $selected = " ";

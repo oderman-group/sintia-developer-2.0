@@ -5,7 +5,11 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DV0019';
 include("../compartido/historial-acciones-guardar.php");
 
-$consultaPagina=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$_POST["dato"]."' OR pagp_ruta='".$_POST["dato"]."'");
+try{
+    $consultaPagina=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$_POST["dato"]."' OR pagp_ruta='".$_POST["dato"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $numDotos=mysqli_num_rows($consultaPagina);
 if ($numDotos > 0) {
     $datosPaginas=mysqli_fetch_array($consultaPagina, MYSQLI_BOTH);

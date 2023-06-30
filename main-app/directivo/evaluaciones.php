@@ -61,14 +61,22 @@
 											
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1
-												  ORDER BY eva_id DESC");
+												try{
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
+													WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1
+													ORDER BY eva_id DESC");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													
 													//Cantidad de preguntas de la evaluación
-													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."'");
+													try{
+														$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+														WHERE evp_id_evaluacion='".$resultado['eva_id']."'");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													$cantPreguntas = mysqli_num_rows($consultaCantPreguntas);
 												 ?>
 												  <div class="panel panel-default">

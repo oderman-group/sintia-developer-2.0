@@ -69,9 +69,13 @@
                                                     $filtro = '';
                                                     if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".$_GET["cat"]."'";}
 
-													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas
-                                                     INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-                                                     WHERE dfal_id=dfal_id $filtro");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas
+                                                        INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+                                                        WHERE dfal_id=dfal_id $filtro");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
