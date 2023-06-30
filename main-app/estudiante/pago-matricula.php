@@ -33,7 +33,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Pago de matrícula</div>
+                            <div class="page-title"><?=$frases[332][$datosUsuarioActual[8]];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -45,19 +45,19 @@
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header>Pago de matrícula</header>
+                                <header><?=$frases[332][$datosUsuarioActual[8]];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
 
 
-                                <p>El valor a pagar es <b>$<?= number_format($saldoEC, 0, ",", "."); ?></b></p>
-                                <p>Para realizar el proceso de pago tiene dos opciones, escoja alguna de las dos:</p>
+                                <p><?=$frases[340][$datosUsuarioActual[8]];?> <b>$<?= number_format($saldoEC, 0, ",", "."); ?></b></p>
+                                <p><?=$frases[341][$datosUsuarioActual[8]];?>:</p>
                                 <ol>
-                                    <li>Ingrese al link y con el c&oacute;digo de estudiante pague por pse: <a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" style="text-decoration: underline; font-weight: bold;" target="_Blank">IR A PAGO POR PSE</a></li>
-                                    <li>O pagar en la cuenta corriente de Bancolombia # 00411865393</li>
+                                    <li><?=$frases[342][$datosUsuarioActual[8]];?>: <a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" style="text-decoration: underline; font-weight: bold;" target="_Blank"><?=$frases[349][$datosUsuarioActual[8]];?></a></li>
+                                    <li><?=$frases[343][$datosUsuarioActual[8]];?> # 00411865393</li>
                                 </ol>
                                 <p>&nbsp;</p>
-                                <p style="font-weight: bold;">Adjuntar soporte</p>
+                                <p style="font-weight: bold;"><?=$frases[344][$datosUsuarioActual[8]];?></p>
 
 
 
@@ -66,7 +66,7 @@
                                     <input type="hidden" name="id" value="22">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Comprobante de pago</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-4">
                                             <input type="file" name="archivo" class="form-control">
                                         </div>
@@ -78,7 +78,7 @@
 
 
                                     <?php if ($datosEstudianteActual["mat_actualizar_datos"] == 1 and $datosEstudianteActual["mat_pago_matricula"] == '0') { ?>
-                                        <input type="submit" class="btn btn-primary" value="Enviar comprobante">&nbsp;
+                                        <input type="submit" class="btn btn-primary" value="<?=$frases[350][$datosUsuarioActual[8]];?>">&nbsp;
                                     <?php } ?>
 
                                 </form>
@@ -87,11 +87,11 @@
 
 
                                 <p><br /><br />&nbsp;</p>
-                                <p>Nota: Una vez realice el pago, debe adjuntar el soporte para verificaci&oacute;n con tesorer&iacute;a.</p>
-                                <p>SI tiene alg&uacute;n problema con el pago por favor comunicarse a tesorer&iacute;a al n&uacute;mero 313 7965407</p>
+                                <p><?=$frases[346][$datosUsuarioActual[8]];?></p>
+                                <p><?=$frases[347][$datosUsuarioActual[8]];?></p>
                                 <hr>
 
-                                <h3 align="center">TABLA DE COSTOS</h3>
+                                <h3 align="center"><?=$frases[348][$datosUsuarioActual[8]];?></h3>
                                 <p align="center">
                                     <img src="../files/imagencostosicolven2022.jpeg">
                                 </p>

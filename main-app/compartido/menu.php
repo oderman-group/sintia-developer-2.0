@@ -472,7 +472,7 @@
 
 							<li class="nav-item">
 	                            <a href="aspectos.php" class="nav-link nav-toggle"> <i class="material-icons">backspace</i>
-	                                <span class="title">Aspectos</span> 
+	                                <span class="title"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 
