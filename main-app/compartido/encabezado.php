@@ -32,7 +32,7 @@ $institucionNombre = $institucion['ins_siglas'];
 				
                  <form class="search-form-opened" action="paginas-buscador.php" method="GET" name="busqueda">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar información..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
+                        <input type="text" class="form-control" placeholder="<?=$frases[260][$datosUsuarioActual['uss_idioma']];?>..." value="<?php if(isset($_GET["query"])){ echo $_GET["query"];}?>" name="query">
                         <span class="input-group-btn">
                         <span class="input-group-btn">
                           <a href="javascript:;" onclick="document.forms.busqueda.submit()" class="btn submit">
@@ -77,10 +77,10 @@ $institucionNombre = $institucion['ins_siglas'];
 							
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=2" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> English</a>
+                                    <a href="../compartido/guardar.php?get=1&idioma=2" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=1" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> Español</a>
+                                    <a href="../compartido/guardar.php?get=1&idioma=1" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                             </ul>
                         </li>
@@ -105,14 +105,14 @@ $institucionNombre = $institucion['ins_siglas'];
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
-                                <li><a href="perfil.php"><i class="icon-user"></i> Perfil </a></li>
+                                <li><a href="perfil.php"><i class="icon-user"></i><?=$frases[256][$datosUsuarioActual['uss_idioma']];?></a></li>
                                 <?php if($datosUsuarioActual['uss_tipo'] == 4 && $config['conf_cambiar_clave_estudiantes'] == 'NO') { }else{?>
-                                    <li><a href="cambiar-clave.php"><i class="icon-lock"></i> Cambiar contraseña </a></li>
+                                    <li><a href="cambiar-clave.php"><i class="icon-lock"></i><?=$frases[253][$datosUsuarioActual['uss_idioma']];?></a></li>
                                 <?php }?>
 								
                                 <li class="divider"> </li>
-								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i> Ayuda/Soporte </a></li>
-                                <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i> Salir </a></li>
+								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i><?=$frases[16][$datosUsuarioActual['uss_idioma']];?>/<?=$frases[257][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i><?=$frases[15][$datosUsuarioActual['uss_idioma']];?></a></li>
                             </ul>
                         </li>
 						

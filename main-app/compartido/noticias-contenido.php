@@ -132,7 +132,7 @@
                         </form>
                     </div>
                     <div class="card-footer" align="center">
-                        <a href="noticias-agregar.php" class="btn btn-danger">CREA UNA PUBLICACIÓN MÁS COMPLETA</a>
+                        <a href="noticias-agregar.php" class="btn btn-danger"><?=$frases[263][$datosUsuarioActual[8]];?></a>
                     </div>
                 </div>
 

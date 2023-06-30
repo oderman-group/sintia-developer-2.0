@@ -14,7 +14,7 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						               
 
 										<div class="form-group row">
-						                    <label class="col-sm-2 control-label">Cod. Tesorería</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[321][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_codigo_tesoreria"]; ?>" name="codTes" class="form-control" disabled>
 						                    </div>
@@ -28,21 +28,21 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Primer apellido</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[319][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_primer_apellido"]; ?>" name="nombre" class="form-control" readonly>
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Segundo apellido</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[320][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_segundo_apellido"]; ?>" name="nombre" class="form-control" readonly>
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Nombres</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[187][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_nombres"]; ?>" name="nombre" class="form-control" readonly>
 						                    </div>
@@ -79,24 +79,24 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 
 						                <hr>
 
-                                        <p style="color: navy;">La dirección se debe colocar con abreviaciones como (CL, DG, AV, CR) y no puede contener ningún tipo de carácter como (-,#,.).</p>
+                                        <p style="color: navy;"><?= $frases[322][$datosUsuarioActual[8]]; ?></p>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Dirección</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[297][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_direccion"]; ?>" name="dir" class="form-control">
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Barrio</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[298][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_barrio"]; ?>" name="barrio" class="form-control">
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Estrato</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[323][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <select class="form-control  select2" name="estrato" required>
 						                            <option value="">Seleccione una opción</option>
@@ -113,21 +113,21 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Teléfono</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[182][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_telefono"]; ?>" name="telefono" class="form-control">
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Celular</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[188][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_celular"]; ?>" name="celular" class="form-control">
 						                    </div>
 						                </div>
 
 						                <div class="form-group row">
-						                    <label class="col-sm-2 control-label">ID. Sistema</label>
+						                    <label class="col-sm-2 control-label">ID. <?= $frases[324][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-3">
 						                        <input type="text" value="<?= $datosEstudianteActual["mat_id"]; ?>" name="cod" class="form-control" disabled>
 						                    </div>
@@ -149,7 +149,7 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						            -->
 
                                         <h3>Datos Acudiente</h3>
-                                        <p style="color: navy;">Si necesita hacer un cambio de acudiente debe comunicarse vía WhatsApp, al número 318 347 9394.</p>
+                                        <p style="color: navy;"><?= $frases[325][$datosUsuarioActual[8]]; ?></p>
 
                                         <input type="hidden" name="idAcudiente" value="<?= $acudiente["uss_id"]; ?>">
 
@@ -161,35 +161,35 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						                </div>
 
                                         <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Documento</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[326][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <input type="text" value="<?= $acudiente["uss_usuario"]; ?>" name="documentoA" class="form-control" readonly>
 						                    </div>
 						                </div>
 
                                         <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Nombre</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[187][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $acudiente["uss_nombre"]; ?>" name="nombreA" class="form-control" readonly>
 						                    </div>
 						                </div>
 
                                         <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Email</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[181][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $acudiente["uss_email"]; ?>" name="emailA" class="form-control">
 						                    </div>
 						                </div>
 
                                         <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Celular</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[188][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">
 						                        <input type="text" value="<?= $acudiente["uss_celular"]; ?>" name="celularA" class="form-control">
 						                    </div>
 						                </div>
 
                                         <div class="form-group row">
-						                    <label class="col-sm-2 control-label">Ocupación</label>
+						                    <label class="col-sm-2 control-label"><?= $frases[327][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-10">
 						                        <input type="text" value="<?= $acudiente["uss_ocupacion"]; ?>" name="ocupacion" class="form-control">
 						                    </div>
@@ -200,7 +200,7 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 
 
 						                <?php if ($datosEstudianteActual["mat_iniciar_proceso"] == 1 AND $datosEstudianteActual["mat_actualizar_datos"] == '0') { ?>
-						                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+						                    <input type="submit" class="btn btn-primary" value="<?= $frases[41][$datosUsuarioActual[8]]; ?>">&nbsp;
 						                <?php } ?>
 
 						            </form>

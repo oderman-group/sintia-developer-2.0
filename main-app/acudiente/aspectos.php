@@ -35,7 +35,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Aspectos</div>
+                            <div class="page-title"><?=$frases[264][$datosUsuarioActual[8]];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header>Aspectos</header>
+                                <header><?=$frases[264][$datosUsuarioActual[8]];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
                                 <form action="guardar.php" method="post" enctype="multipart/form-data">
@@ -65,14 +65,14 @@
                                     <input type="hidden" name="periodo" value="<?=$_GET['periodo'];?>">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Aspectos académicos</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-10">
                                             <?= $aspectos["dn_aspecto_academico"]; ?>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Aspectos convivenciales</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-10">
                                             <?= $aspectos["dn_aspecto_convivencial"]; ?>
                                         </div>

@@ -82,7 +82,7 @@
 
 									<div class="panel">
 
-											<header class="panel-heading panel-heading-yellow">INFORMACIÓN DE CONSULTA</header>
+											<header class="panel-heading panel-heading-yellow"><?=strtoupper($frases[283][$datosUsuarioActual['uss_idioma']]);?></header>
 
 
 
@@ -92,7 +92,7 @@
 
 													<li class="list-group-item">
 
-														<b>ESTUDIANTE</b> 
+														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
 
 														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
 
@@ -100,7 +100,7 @@
 
 													<li class="list-group-item">
 
-														<b>ASIGNATURA</b> 
+														<b><?=strtoupper($frases[116][$datosUsuarioActual['uss_idioma']]);?></b> 
 
 														<div class="profile-desc-item pull-right"><?=strtoupper($datosCargaActual['mat_nombre']);?></div>
 
@@ -110,7 +110,7 @@
 
 													<li class="list-group-item">
 
-														<b>PERIODO</b> 
+														<b><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?></b> 
 
 														<div class="profile-desc-item pull-right"><?=strtoupper($_GET["periodo"]);?></div>
 

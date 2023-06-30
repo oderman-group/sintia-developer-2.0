@@ -135,7 +135,7 @@
 
 							<div class="panel">
 								
-							    <header class="panel-heading panel-heading-purple" align="center">Mis páginas recientes (5)</header>
+							    <header class="panel-heading panel-heading-purple" align="center"><?=$frases[258][$datosUsuarioActual['uss_idioma']];?> (5)</header>
 								<div class="col-sm-12">
 									<ul class="feed-blog">
 									<?php	
@@ -169,7 +169,7 @@
 
 							<div class="panel">
 								
-							    <header class="panel-heading panel-heading-blue" align="center">Mis páginas más visitadas (5)</header>
+							    <header class="panel-heading panel-heading-blue" align="center"><?=$frases[259][$datosUsuarioActual['uss_idioma']];?> (5)</header>
 								<div class="col-sm-12">
 								<?php	
                                     $paginasMasVisitadasConsulta = mysqli_query($conexion, "SELECT count(*) as visitas, pagp_pagina, pagp_ruta FROM ".$baseDatosServicios.".seguridad_historial_acciones
