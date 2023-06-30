@@ -36,17 +36,17 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <?php
-
-if (is_numeric($_GET["id"])) {
+$filtro = "";
+if (!empty($_GET["id"])) {
 
     $filtro .= " AND mat_id='" . $_GET["id"] . "'";
 }
 
-if (is_numeric($_REQUEST["curso"])) {
+if (!empty($_REQUEST["curso"])) {
 
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
-if(is_numeric($_REQUEST["grupo"])){
+if(!empty($_REQUEST["grupo"])){
     $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
 }
 
@@ -385,7 +385,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                     $contador_indicadores++;
                                     $leyendaRI = '';
-                                    if($recuperacionIndicador['rind_nota']>$fila4["nota"]){
+                                    if(!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota']>$fila4["nota"]){
                                         $nota_indicador = round($recuperacionIndicador['rind_nota'], 1);
                                         $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                     }else{
@@ -440,7 +440,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
                         $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
 
-                        if ($observacion['bol_observaciones_boletin'] != "") {
+                        if (!empty($observacion['bol_observaciones_boletin'])) {
 
                         ?>
 
@@ -539,7 +539,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 <tr>
 
-                    <td style="font-weight:bold;" align="left"><?php if ($num_observaciones > 0) { ?>
+                    <td style="font-weight:bold;" align="left"><?php if(!empty($num_observaciones) && $num_observaciones > 0){ ?>
 
                             COMPORTAMIENTO:
 

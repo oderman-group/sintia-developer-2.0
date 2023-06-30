@@ -23,15 +23,11 @@ include("../compartido/head-informes.php") ?>
   </tr>
   <?php
   //ESTUDIANTES ACTUALES
-  $_GET["carga"]=is_null($_POST["carga"])? $_GET["carga"]: $_POST["carga"];
-  $_GET["grado"]=is_null($_POST["grado"])? $_GET["grado"]: $_POST["grado"];
-  $_GET["grupo"]=is_null($_POST["grupo"])? $_GET["grupo"]: $_POST["grupo"];
-  $_GET["per"]=is_null($_POST["periodo"])? $_GET["per"]: $_POST["periodo"];
-  $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+  $filtroAdicional= "AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
   $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
   $cont=1;
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_estado=1 AND act_periodo='".$_GET["per"]."'");
+  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_REQUEST["carga"]."' AND act_estado=1 AND act_periodo='".$_REQUEST["per"]."'");
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $consultaInd=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$resultado[4]."'");
 	$ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);

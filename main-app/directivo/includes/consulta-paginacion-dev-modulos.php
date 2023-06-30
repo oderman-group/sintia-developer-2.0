@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-modulos.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".modulos
         WHERE mod_id=mod_id $filtro

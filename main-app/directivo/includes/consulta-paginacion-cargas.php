@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="cargas.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM academico_cargas
         INNER JOIN academico_grados ON gra_id=car_curso

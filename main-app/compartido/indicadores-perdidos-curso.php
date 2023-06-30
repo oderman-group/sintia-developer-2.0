@@ -2,7 +2,7 @@
 include("../directivo/session.php");
 
 
-if ($_GET["periodo"] == "") {
+if (!empty($_GET["periodo"])) {
 
     $periodoActual = 1;
 } else {
@@ -30,12 +30,13 @@ if ($periodoActual == 4) $periodoActuales = "Cuarto";
 
 <?php
 
-if (is_numeric($_GET["id"])) {
+$filtro = "";
+if (!empty($_GET["id"])) {
 
     $filtro .= " AND mat_id='" . $_GET["id"] . "'";
 }
 
-if (is_numeric($_REQUEST["curso"])) {
+if (!empty($_REQUEST["curso"])) {
 
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
@@ -359,7 +360,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                                     $contador_indicadores++;
                                     $leyendaRI = '';
-                                    if($recuperacionIndicador['rind_nota']>$fila4["nota"]){
+                                    if(!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota']>$fila4["nota"]){
                                         $nota_indicador = round($recuperacionIndicador['rind_nota'], 1);
                                         $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                     }else{

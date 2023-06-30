@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-terminos-usuarios.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".terminos_tratamiento_politicas_usuarios
         INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=ttpxu_id_institucion AND ins_enviroment='".ENVIROMENT."'

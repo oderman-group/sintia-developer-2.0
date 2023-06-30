@@ -1,4 +1,5 @@
 <?php
+  $busqueda = '';
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -52,23 +53,17 @@ if (isset($_GET['busqueda'])) {
             $tiposUsuarios = TipoUsuario::listarTiposUsuarios();
             while($tipoUsuario = mysqli_fetch_array($tiposUsuarios, MYSQLI_BOTH)){
                 $estiloResaltado = '';
-                if($tipoUsuario['pes_id'] == $_GET["tipo"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
+                if($tipoUsuario['pes_id'] == $tipo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
             ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>&busqueda=<?=$_GET['busqueda'];?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>&busqueda=<?=$busqueda?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
         <?php }?>
         </div>
       </li>
   </ul> 
 
     <form class="form-inline my-2 my-lg-0" action="usuarios.php" method="get">
-        <?php
-          if(!empty($_GET["tipo"])){
-        ?>
-          <input type="hidden" name="tipo" value="<?= $_GET['tipo']; ?>"/>
-        <?php
-          }
-        ?>
-        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET['busqueda'];?>">
+        <input type="hidden" name="tipo" value="<?= $tipo; ?>"/>
+        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
 

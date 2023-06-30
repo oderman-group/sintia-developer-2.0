@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-paginas.php";
-    if($_REQUEST["nume"] == "" ){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
         LEFT JOIN ".$baseDatosServicios.".modulos ON mod_id=pagp_modulo

@@ -42,15 +42,15 @@
             break;
     }
 
-    if (is_numeric($_REQUEST["id"])) {
+    if (!empty($_REQUEST["id"])) {
         $filtro .= " AND mat_id='" . $_REQUEST["id"] . "'";
     }
 
-    if (is_numeric($_REQUEST["curso"])) {
+    if (!empty($_REQUEST["curso"])) {
         $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
     }
 
-    if(is_numeric($_REQUEST["grupo"])){
+    if(!empty($_REQUEST["grupo"])){
         $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
     }
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);

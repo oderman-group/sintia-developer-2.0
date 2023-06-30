@@ -1,4 +1,5 @@
 <?php
+$periodoConsultaActual=$config['conf_periodo'];
 if(!isset($_GET["carga"]) or !is_numeric($_GET["carga"])){
 	if($_COOKIE["carga"]!="" and $_COOKIE["periodo"]!=""){
 		$cargaConsultaActual = $_COOKIE["carga"];
@@ -8,8 +9,12 @@ if(!isset($_GET["carga"]) or !is_numeric($_GET["carga"])){
 			exit();
 	}
 }else{
-	$cargaConsultaActual = $_GET["carga"];
-	$periodoConsultaActual = $_GET["periodo"];
+	if(!empty($_GET["carga"])){
+		$cargaConsultaActual = $_GET["carga"];
+	}
+	if(!empty($_GET["periodo"])){
+		$periodoConsultaActual = $_GET["periodo"];
+	}
 }
 try{
 	$consultaCargaH=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$cargaConsultaActual."'");

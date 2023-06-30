@@ -182,9 +182,11 @@ include("../compartido/head.php");
 																include("../compartido/error-catch-to-report.php");
 															}
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-															if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
-															$defPorMateria += $boletin[4];
-															$p++;
+															if(!empty($boletin[4])){
+																if($boletin[4]<$config[5])$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
+																$defPorMateria += $boletin[4];
+																$p++;
+															}
 														}
 														$defPorMateria = round($defPorMateria/$config[19],2);
 														//CONSULTAR NIVELACIONES

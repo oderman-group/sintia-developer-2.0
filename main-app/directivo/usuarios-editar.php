@@ -122,7 +122,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['pes_nombre'];?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> ><?=$opcionesDatos['pes_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -291,7 +291,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['uss_genero']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['ogen_nombre'];?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> ><?=$opcionesDatos['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>

@@ -196,7 +196,7 @@ $(document).ready(function() {
 														$select = '';
 														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
 													?>
-                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>>
+                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?>>
                                                     <?=$opcionesDatos['pes_nombre'];?></option>
                                                 <?php }?>
                                             </select>
@@ -319,7 +319,7 @@ $(document).ready(function() {
 														$select = '';
 														if($opcionesDatos[0]==$datosUsuario['genero']) $select = 'selected';
 													?>
-                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>>
+                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?>>
                                                     <?=$opcionesDatos['ogen_nombre'];?></option>
                                                 <?php }?>
                                             </select>

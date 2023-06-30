@@ -91,6 +91,7 @@
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
 													$contReg = 1;
+                                                    $sumaP = 0;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                         $sumaP = $sumaP + $resultado[3];
 													?>

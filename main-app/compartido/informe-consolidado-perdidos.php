@@ -67,9 +67,11 @@ include("../compartido/head-informes.php") ?>
 				while($p<=$config[19]){
 					$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
 					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-					if($boletin[4]<$config[5] and $boletin[4]!=""){$color = $config[6];} elseif($boletin[4]>=$config[5]) {$color = $config[7];}
+					if(!empty($boletin[4]) && $boletin[4]<$config[5]){$color = $config[6];} elseif(!empty($boletin[4]) && $boletin[4]>=$config[5]) {$color = $config[7];}
 					//$defPorMateria += $boletin[4];
-					$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
+					if(!empty($boletin[4])){
+						$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
+					}
 					//DEFINITIVA DE CADA PERIODO
 					$p++;
 				}

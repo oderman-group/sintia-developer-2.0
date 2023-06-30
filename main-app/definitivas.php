@@ -17,6 +17,7 @@ $numConsultaD = mysqli_num_rows($consultaD);
 	$porNuevo = 0;
 
 	$notaMultiplicada = 0;
+	$nn=0;
 
 	while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
 

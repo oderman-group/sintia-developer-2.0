@@ -6,7 +6,7 @@ require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 $Plataforma = new Plataforma;
 
-if($_REQUEST["periodo"]==""){
+if(empty($_REQUEST["periodo"])){
 	$periodoActual = 4;
 }else{
 	$periodoActual = $_REQUEST["periodo"];
@@ -23,8 +23,8 @@ $year=$_POST["year"];
 $BD=$_SESSION["inst"]."_".$year;
 //CONSULTA ESTUDIANTES MATRICULADOS
 $filtro = '';
-if(is_numeric($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
-if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
@@ -212,7 +212,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 ?>
 
 			<?php 
-			if($notaDelEstudiante['bol_nota']!=""){
+			if(!empty($notaDelEstudiante['bol_nota'])){
 				$consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta");
 				$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
 				if($datosUsr["mat_grado"]>11){
@@ -291,8 +291,12 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 				}
 			}
 			mysqli_data_seek($consultaDesempeno,0);
+			$matmaxaus=0;
+			if(!empty($fila2["matmaxaus"])){
+				$matmaxaus=$fila2["matmaxaus"];
+			}
 		 ?></td>
-        <td align="center" style="font-weight:bold; "><?php if($rAusencias[0]>0){ echo $rAusencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
+        <td align="center" style="font-weight:bold; "><?php if(!empty($rAusencias[0]) && $rAusencias[0]>0){ echo $rAusencias[0]."/".$matmaxaus;} else{ echo "0.0/".$matmaxaus;}?></td>
         
         <td align="center">_______________________________________</td>
 	

@@ -154,9 +154,11 @@
 
 												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
 
-												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
+												if(!empty($notapp[0])){
+													$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
+												}
 
-												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
+												if(!empty($notapp[0]) and $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 
@@ -168,7 +170,7 @@
 
 													
 
-													<?php if($notapp[0]!="" and $config['conf_sin_nota_numerica']!=1){?>
+													<?php if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){?>
 
 														<div class="work-monitor work-progress">
 
@@ -292,7 +294,7 @@
 
 													 $filtro = '';
 
-													 if(is_numeric($_GET["indicador"])){$filtro .= " AND act_id_tipo='".$_GET["indicador"]."'";}
+													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".$_GET["indicador"]."'";}
 
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 
@@ -303,6 +305,10 @@
 													 ");
 
 													 $contReg = 1;
+
+													 $acumulaValor = 0;
+
+													 $sumaNota = 0;
 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 

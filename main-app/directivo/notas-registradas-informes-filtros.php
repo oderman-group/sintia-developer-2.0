@@ -96,7 +96,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Periodo</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" style="width: 810.666px;" onchange="traerCargas()"  name="periodo" id="periodo" required disabled>
+                                            <select class="form-control  select2" style="width: 810.666px;" onchange="traerCargas()"  name="per" id="periodo" required disabled>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 $p = 1;

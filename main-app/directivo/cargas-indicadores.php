@@ -132,7 +132,7 @@
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(is_numeric($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$_GET["periodo"]."'";}
+													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$_GET["periodo"]."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 														INNER JOIN academico_indicadores ON ind_id=ipc_indicador
@@ -143,6 +143,7 @@
 													}
 													 $contReg = 1;
 													 $sino = array("NO","SI");
+													 $sumaPorcentaje = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
 															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
@@ -183,7 +184,7 @@
 													  }
 													  ?>
                                                 </tbody>
-												<?php if(is_numeric($_GET["periodo"])){?>
+												<?php if(!empty($_GET["periodo"])){?>
 												<tfoot>
 													<tr>
 														<td colspan="3"></td>

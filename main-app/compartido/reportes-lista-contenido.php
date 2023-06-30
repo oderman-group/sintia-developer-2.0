@@ -17,7 +17,7 @@
                             <div class="row">
 								
 								<div class="col-md-12">
-									<?php if($_GET["filtros"]==1){?>
+									<?php if(!empty($_GET["filtros"]) && $_GET["filtros"]==1){?>
 									<p style="background-color: antiquewhite; color: darkblue; padding: 5px;">
 									Estás viendo este listado con filtros; para verlo completo quita los filtros.
 									<a href="reportes-lista.php">Quitar filtros</a>
@@ -36,7 +36,7 @@
 								<?php }?>
 
 
-									<?php if($datosCargaActual['car_director_grupo']==1){?>
+									<?php if(!empty($datosCargaActual['car_director_grupo']) && $datosCargaActual['car_director_grupo']==1){?>
 									<form class="form-horizontal" action="../compartido/reporte-disciplina-sacar.php" method="post" enctype="multipart/form-data" target="_blank">
 										<input type="hidden" name="id" value="12">
 										<input type="hidden" name="grado" value="<?=$datosCargaActual['car_curso'];?>">
@@ -77,8 +77,8 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													if($_GET["est"]){$filtro .= " AND dr_estudiante='".$_GET["est"]."'";}
-													if($_GET["falta"]){$filtro .= " AND dr_falta='".$_GET["falta"]."'";}
+													if(!empty($_GET["est"]) && $_GET["est"]){$filtro .= " AND dr_estudiante='".$_GET["est"]."'";}
+													if(!empty($_GET["falta"]) && $_GET["falta"]){$filtro .= " AND dr_falta='".$_GET["falta"]."'";}
 												
 													if($datosUsuarioActual[3]!=5 and !isset($_GET["fest"])){
 													$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";
