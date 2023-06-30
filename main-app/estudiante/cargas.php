@@ -136,10 +136,10 @@ if($config['conf_activar_encuesta']==1){
 			        </div>
 			        <!-- End course list -->
 			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
-						<hr  noshade="noshade" size="3" width="100%" />	
 						<?php
 						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';}
 						foreach ($listaCursosMediaTecnica as $dato) {
 							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>			
 
@@ -183,7 +183,13 @@ if($config['conf_activar_encuesta']==1){
 									</div>
 								</div>
 								<?php }} else {
-								echo '<div class="col-lg-3 col-md-6 col-12 col-sm-6"> El curso ' . $cursoMediaTecnica["gra_nombre"] . ' no tiene carga academica.</div>';
+								echo '
+									<div class="col-12">
+										<div class="alert alert-danger">
+											<i class="icon-exclamation-sign"></i><strong>INFORMACIÓN:</strong> El curso de <b>' . $cursoMediaTecnica["gra_nombre"] . '</b> no tiene cargas academicas asignadas aún.
+										</div>
+									</div>
+									';
 							} ?>
 							</div>
 							<?php } ?>
