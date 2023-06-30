@@ -79,17 +79,25 @@ function mostrarNuevaRespuesta(datos){
 <?php include("../compartido/body.php");?>
 	
 	<?php
-	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	try{
+		$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
+		WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
-	ORDER BY preg_id DESC
-	");
+	try{
+		$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+		INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
+		WHERE evp_id_evaluacion='".$_GET["idE"]."'
+		ORDER BY preg_id DESC
+		");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 
@@ -135,10 +143,14 @@ function mostrarNuevaRespuesta(datos){
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
-											ORDER BY eva_id DESC
-											");
+											try{
+												$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
+												WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
+												ORDER BY eva_id DESC
+												");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="evaluaciones-preguntas.php?idE=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>
@@ -173,9 +185,13 @@ function mostrarNuevaRespuesta(datos){
 											$totalPuntos = 0;
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
-												");
+												try{
+													$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
+													WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+													");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												

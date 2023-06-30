@@ -3,7 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php 
-$consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".$_GET["id"].";");
+try{
+    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".$_GET["id"].";");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
 ?>
 

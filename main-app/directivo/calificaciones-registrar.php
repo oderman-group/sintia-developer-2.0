@@ -7,7 +7,11 @@ include("verificar-periodos-diferentes.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+try{
+	$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -89,10 +93,14 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 												  </tr>
 												</thead>
 												<tbody>
-												 <?php
-												 $TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
-												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
-												 ?>
+												<?php
+												try{
+												 	$TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
+												while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
+												?>
 												  <tr id="data1" class="odd grade">
 
 													<td><?=$tabla["notip_desde"];?></td>
@@ -111,10 +119,14 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 										<div class="panel-body">
 											<p>Puedes cambiar a otra actividad rápidamente para calificar a tus estudiantes o hacer modificaciones de notas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$_GET["idR"]."'
-											ORDER BY act_id DESC
-											");
+											try{
+												$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+												WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$_GET["idR"]."'
+												ORDER BY act_id DESC
+												");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['act_id'];?>"><?=$regComun['act_descripcion']." (".$regComun['act_valor']."%)";?></a></p>
@@ -174,7 +186,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 														 if($calificacion['act_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
+															try{
+															 	$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 															 if($notas[3]<$config[5] and $notas[3]!="") $colorNota = $config[6]; elseif($notas[3]>=$config[5]) $colorNota = $config[7];
 														 }

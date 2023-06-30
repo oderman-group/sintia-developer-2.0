@@ -6,10 +6,14 @@
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
 
-$consultaE=mysqli_query($conexion, "SELECT academico_matriculas.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM academico_matriculas
-LEFT JOIN (SELECT * FROM academico_matriculas_retiradas ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=academico_matriculas.mat_id
-LEFT JOIN usuarios ON uss_id=matret_responsable
-WHERE mat_id='".$_GET["id"]."'");
+try{
+    $consultaE=mysqli_query($conexion, "SELECT academico_matriculas.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM academico_matriculas
+    LEFT JOIN (SELECT * FROM academico_matriculas_retiradas ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=academico_matriculas.mat_id
+    LEFT JOIN usuarios ON uss_id=matret_responsable
+    WHERE mat_id='".$_GET["id"]."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $e = mysqli_fetch_array($consultaE, MYSQLI_BOTH);
 
 $nombreBoton='Restaurar Matrícula';

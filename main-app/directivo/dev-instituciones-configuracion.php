@@ -12,9 +12,13 @@ $year = date("Y");
 if (!empty($_GET['year'])) {
     $year = $_GET['year'];
 }
-$consultaConfiguracion = mysqli_query($conexion, "SELECT configuracion.*, ins_siglas, ins_years FROM " . $baseDatosServicios . ".configuracion 
-INNER JOIN " . $baseDatosServicios . ".instituciones ON ins_id=conf_id_institucion
-WHERE conf_id_institucion='" . $_GET["id"] . "' AND conf_agno='" . $year . "'");
+try{
+    $consultaConfiguracion = mysqli_query($conexion, "SELECT configuracion.*, ins_siglas, ins_years FROM " . $baseDatosServicios . ".configuracion 
+    INNER JOIN " . $baseDatosServicios . ".instituciones ON ins_id=conf_id_institucion
+    WHERE conf_id_institucion='" . $_GET["id"] . "' AND conf_agno='" . $year . "'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
 ?>
 
@@ -120,7 +124,11 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                             <select class="form-control  select2" name="estiloNotas" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                try{
+                                                    $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while ($opcionesGeneralesDatos = mysqli_fetch_array($opcionesGeneralesConsulta, MYSQLI_BOTH)) {
                                                     if ($datosInstitucion[22] == $opcionesGeneralesDatos[0])
                                                         echo '<option value="' . $opcionesGeneralesDatos[0] . '" selected>' . $opcionesGeneralesDatos[1] . '</option>';

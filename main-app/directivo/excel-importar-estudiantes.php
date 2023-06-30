@@ -71,7 +71,11 @@ if($extension == 'xlsx'){
 						$idAcudiente = $datosAcudienteExistente['uss_id'];
 						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 					} else {
-						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
+						try{
+							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
+						} catch (Exception $e) {
+							include("../compartido/error-catch-to-report.php");
+						}
 						$idAcudiente = mysqli_insert_id($conexion);
 						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 					}
@@ -120,9 +124,12 @@ if($extension == 'xlsx'){
 
 				$grado = "";
 				if(!empty($arrayIndividual['mat_grado'])) {
-					
-					$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
-					WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+					try{
+						$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
+						WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 
 					$num = mysqli_num_rows($consulta);
 
@@ -214,15 +221,27 @@ if($extension == 'xlsx'){
 							}
 
 							//Actualizamos el acudiente y los datos del formulario
-							mysqli_query($conexion, "UPDATE academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
-							WHERE mat_id='".$datosEstudianteExistente['mat_id']."'");
+							try{
+								mysqli_query($conexion, "UPDATE academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
+								WHERE mat_id='".$datosEstudianteExistente['mat_id']."'");
+							} catch (Exception $e) {
+								include("../compartido/error-catch-to-report.php");
+							}
 
 							//Verificamos que el array no venga vacio y adicionalmente que tenga el campo acudiente seleccionado para actualizarce
 							if (!empty($_POST['actualizarCampo']) && in_array(4, $_POST['actualizarCampo'])) {
 								//Borramos si hay alguna asociación igual y creamos la nueva
-								mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."'");
+								try{
+									mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."'");
+								} catch (Exception $e) {
+									include("../compartido/error-catch-to-report.php");
+								}
 
-								mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."')");
+								try{
+									mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."')");
+								} catch (Exception $e) {
+									include("../compartido/error-catch-to-report.php");
+								}
 							}
 
 							$estudiantesActualizados["FILA_".$f] = $datosEstudianteExistente['mat_documento'];
@@ -259,7 +278,11 @@ if($extension == 'xlsx'){
 
 						$arrayTodos[$f] = $arrayIndividual;
 
-						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
+						try{
+							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
+						} catch (Exception $e) {
+							include("../compartido/error-catch-to-report.php");
+						}
 
 						$idUsuarioEstudiante = mysqli_insert_id($conexion);
 

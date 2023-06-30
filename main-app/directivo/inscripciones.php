@@ -122,12 +122,16 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                                 8 => 'yellow',
                                                 9 => '#00FAB5'
                                                 );
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-                                                INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
-                                                LEFT JOIN academico_grados ON gra_id=asp_grado
-                                                WHERE mat_estado_matricula=5 $filtro
-                                                ORDER BY mat_primer_apellido
-                                                LIMIT $inicio,$registros");
+                                                try{
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+                                                    INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
+                                                    LEFT JOIN academico_grados ON gra_id=asp_grado
+                                                    WHERE mat_estado_matricula=5 $filtro
+                                                    ORDER BY mat_primer_apellido
+                                                    LIMIT $inicio,$registros");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">

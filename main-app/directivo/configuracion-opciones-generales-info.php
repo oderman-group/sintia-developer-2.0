@@ -53,13 +53,21 @@
                                         <?php
                                         if($_GET["a"]==1){
                                             echo '<input type="hidden" name="id" value="46">';
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales;");
+                                            try{
+                                                $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales;");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
                                             $n = mysqli_num_rows($consulta);
                                         }	
                                         elseif($_GET["a"]==2){
                                             echo '<input type="hidden" name="id" value="47">';
                                             echo '<input type="hidden" name="idogen" value="'.$_GET["idogen"].'">';
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
+                                            try{
+                                                $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
                                             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         }	
                                         ?>

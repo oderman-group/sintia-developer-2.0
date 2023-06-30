@@ -65,12 +65,20 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-													<?php													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+													<?php	
+                                                    try{												
+													    $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                                                        $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM disciplina_faltas
-                                                        WHERE dfal_id_categoria='".$resultado['dcat_id']."'");
+                                                        try{
+                                                            $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM disciplina_faltas
+                                                            WHERE dfal_id_categoria='".$resultado['dcat_id']."'");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
 														 $numFaltas = mysqli_fetch_array($consultaNumFaltas, MYSQLI_BOTH);
 													 ?>
 													<tr>

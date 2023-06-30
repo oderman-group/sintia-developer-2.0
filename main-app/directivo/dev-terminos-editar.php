@@ -9,7 +9,11 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+try{
+    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
 ?>
 

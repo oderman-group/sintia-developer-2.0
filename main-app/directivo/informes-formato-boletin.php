@@ -19,7 +19,11 @@
 
     $consulta="";
     if(isset($_POST["curso"]) AND $_POST["curso"]!=""){
-    $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados WHERE gra_id='".$curso."' ");
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados WHERE gra_id='".$curso."' ");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
     }
 
     if(isset($_POST["estudiante"]) AND $_POST["estudiante"]!=""){

@@ -10,7 +10,11 @@
                                 	</div>
 									
 									<?php
+									try{
 										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM academico_cargas)");
+									} catch (Exception $e) {
+										include("../compartido/error-catch-to-report.php");
+									}
 										$estadisticasCargas = mysqli_fetch_array($consultaEstadisticaCarga, MYSQLI_BOTH);
 										?>
 									
@@ -20,12 +24,20 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-											WHERE gra_estado=1
-											ORDER BY gra_vocal
-											");
+											try{
+												$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
+												WHERE gra_estado=1
+												ORDER BY gra_vocal
+												");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-												$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
+												try{
+													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){
@@ -57,8 +69,11 @@
 										<header class="panel-heading panel-heading-purple">Grupos </header>
 										<div class="panel-body">
 											<?php
-											$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos
-											");
+											try{
+												$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
 												if($grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>
@@ -74,12 +89,20 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[28][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$docentes = mysqli_query($conexion, "SELECT * FROM usuarios
-											WHERE uss_tipo=2 AND uss_bloqueado=0
-											ORDER BY uss_nombre
-											");
+											try{
+												$docentes = mysqli_query($conexion, "SELECT * FROM usuarios
+												WHERE uss_tipo=2 AND uss_bloqueado=0
+												ORDER BY uss_nombre
+												");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
-												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
+												try{
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){
@@ -112,11 +135,19 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$docentes = mysqli_query($conexion, "SELECT * FROM academico_materias
-											ORDER BY mat_nombre
-											");
+											try{
+												$docentes = mysqli_query($conexion, "SELECT * FROM academico_materias
+												ORDER BY mat_nombre
+												");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
-												$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
+												try{
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){

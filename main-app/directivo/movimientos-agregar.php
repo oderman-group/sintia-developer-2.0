@@ -109,8 +109,12 @@
                                             <label class="col-sm-2 control-label">Usuario</label>
                                             <div class="col-sm-10">
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-												INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+                                                try{
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="usuario" required>
                                                     <option value="">Seleccione una opción</option>

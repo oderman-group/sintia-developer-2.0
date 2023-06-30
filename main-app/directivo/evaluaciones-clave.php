@@ -26,7 +26,11 @@
 </head>
 <body>
     <?php
-    $consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+    try{
+        $consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+    } catch (Exception $e) {
+        include("../compartido/error-catch-to-report.php");
+    }
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 	//Si la evaluación no tiene clave, lo mandamos de una vez a realizarla.
 	if($evaluacion['eva_clave']==""){

@@ -180,8 +180,12 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Tipo de usuario <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                             <?php
+                                            try{
 												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
-												?>
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
+                                            ?>
                                             <select class="form-control  select2" name="tipoUsuario" required>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
@@ -224,8 +228,12 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Tipo de documento</label>
                                         <div class="col-sm-4">
                                             <?php
-                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-                                            WHERE ogen_grupo=1");
+                                            try{
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+                                                WHERE ogen_grupo=1");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
                                             ?>
                                             <select class="form-control  select2" name="tipoD">
                                                 <option value="">Seleccione una opción</option>
@@ -297,8 +305,12 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Género <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                         <?php
-										$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales 
-                                        WHERE ogen_grupo=4");
+                                        try{
+                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales 
+                                            WHERE ogen_grupo=4");
+                                        } catch (Exception $e) {
+                                            include("../compartido/error-catch-to-report.php");
+                                        }
 										?>
                                         <select class="form-control  select2" name="genero" required>
                                                 <option value="">Seleccione una opción</option>

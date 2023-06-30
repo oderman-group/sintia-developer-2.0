@@ -55,11 +55,15 @@ $Plataforma = new Plataforma;
 											$filtroOrden ='DESC';
 											if(isset($_GET["orden"])&&$_GET["orden"]!=""){$filtroOrden = $_GET["orden"];}
 											
-											$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin
-											INNER JOIN academico_matriculas ON mat_id=bol_estudiante $filtro AND mat_eliminado=0
-											WHERE bol_id=bol_id $filtroBoletin
-											GROUP BY bol_estudiante ORDER BY promedio $filtroOrden
-											$filtroLimite");
+											try{
+												$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin
+												INNER JOIN academico_matriculas ON mat_id=bol_estudiante $filtro AND mat_eliminado=0
+												WHERE bol_id=bol_id $filtroBoletin
+												GROUP BY bol_estudiante ORDER BY promedio $filtroOrden
+												$filtroLimite");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											$contP = 1;
 											while($dest = mysqli_fetch_array($destacados, MYSQLI_BOTH)){
 												$porcentaje = ($dest['promedio']/$config['conf_nota_hasta'])*100;
@@ -83,8 +87,6 @@ $Plataforma = new Plataforma;
 										</div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>

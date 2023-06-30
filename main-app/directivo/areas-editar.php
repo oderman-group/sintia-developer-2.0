@@ -50,7 +50,11 @@
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
                                     <?php 
-                                    $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas WHERE ar_id=".$_GET["id"].";");
+                                    try{
+                                        $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas WHERE ar_id=".$_GET["id"].";");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
                                     $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                     ?>
 									<form name="formularioGuardar" action="areas-actualizar.php" method="post" enctype="multipart/form-data">
@@ -67,7 +71,11 @@
                                             <label class="col-sm-2 control-label">Posición</label>
                                             <div class="col-sm-10">
 												<?php
-                                                $cPosicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas WHERE ar_id NOT IN (".$rCargas["ar_id"].");");
+                                                try{
+                                                    $cPosicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas WHERE ar_id NOT IN (".$rCargas["ar_id"].");");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select class="form-control  select2" name="posicionA" required>
                                                     <option value="">Seleccione una opci n</option>

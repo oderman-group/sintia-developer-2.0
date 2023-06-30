@@ -56,7 +56,11 @@
                                                 <select class="form-control  select2" name="cursosR">
                                                 <option value=""></option>
                                                 <?php
-                                                $c_cursos=mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM academico_grados ORDER BY gra_codigo;");
+                                                try{
+                                                    $c_cursos=mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM academico_grados ORDER BY gra_codigo;");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($r_cursos=mysqli_fetch_array($c_cursos, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_cursos["gra_id"].'">'.$r_cursos["gra_nombre"].'</option>';
                                                 }
@@ -71,7 +75,11 @@
                                                 <select class="form-control  select2" name="gruposR">
                                                 <option value=""></option>
                                                 <?php 
-                                                $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM academico_grupos ORDER BY gru_nombre;");
+                                                try{
+                                                    $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM academico_grupos ORDER BY gru_nombre;");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($r_grupos=mysqli_fetch_array($c_grupos, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_grupos["gru_id"].'">'.$r_grupos["gru_nombre"].'</option>';
                                                 }
@@ -99,8 +107,11 @@
                                                 <select class="form-control  select2" name="tipoR">
                                                 <option value=""></option>
                                                 <?php 
-                                                //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
+                                                try{
                                                     $c_testudiante=mysqli_query($conexion, "SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
                                                 while($r_testudiante=mysqli_fetch_array($c_testudiante, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -159,7 +170,11 @@
                                                 <select class="form-control  select2" name="generoR">
                                                 <option value=""></option>
                                                 <?php 
+                                                try{
                                                     $c_testudiante=mysqli_query($conexion, "SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
                                                 while($r_testudiante=mysqli_fetch_array($c_testudiante, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -174,7 +189,11 @@
                                                 <select class="form-control  select2" name="religionR">
                                                 <option value=""></option>
                                                 <?php 
+                                                try{
                                                     $c_testudiante=mysqli_query($conexion, "SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
                                                 while($r_testudiante=mysqli_fetch_array($c_testudiante, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -189,8 +208,11 @@
                                                 <select class="form-control  select2" name="estratoE">
                                                 <option value=""></option>
                                                 <?php 
-                                                //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
+                                                try{
                                                     $c_testudiante=mysqli_query($conexion, "SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
                                                 while($r_testudiante=mysqli_fetch_array($c_testudiante, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }
@@ -205,8 +227,11 @@
                                                 <select class="form-control  select2" name="tdocumentoR">
                                                 <option value=""></option>
                                                 <?php 
-                                                //SELECT ogen_id, ogen_nombre, ogen_grupo FROM opciones_generales WHERE ogen_grupo=5;
+                                                try{
                                                     $c_testudiante=mysqli_query($conexion, "SELECT ogen_id, ogen_nombre, ogen_grupo FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=1;");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
                                                 while($r_testudiante=mysqli_fetch_array($c_testudiante, MYSQLI_BOTH)){
                                                     echo '<option value="'.$r_testudiante["ogen_id"].'">'.$r_testudiante["ogen_nombre"].'</option>';
                                                 }

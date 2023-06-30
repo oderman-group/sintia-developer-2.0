@@ -73,7 +73,11 @@
                                             <label class="col-sm-2 control-label">Categoría</label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select class="form-control  select2" name="categoria" required>
                                                     <option value="">Seleccione una opción</option>

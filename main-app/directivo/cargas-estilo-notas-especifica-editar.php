@@ -50,7 +50,11 @@
                                 	<div class="panel-body">
 
                                     <?php 
-                                    $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
+                                    try{
+                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
                                     $rCategoriaN=mysqli_fetch_array($consultaCategoriaNota, MYSQLI_BOTH);
                                     ?>
 

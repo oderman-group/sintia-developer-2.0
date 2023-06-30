@@ -23,7 +23,11 @@ if (!empty($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $terminosFiltro = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                    try{
+                        $terminosFiltro = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica");
+                    } catch (Exception $e) {
+                        include("../compartido/error-catch-to-report.php");
+                    }
                     while ($datosTerminosFiltro = mysqli_fetch_array($terminosFiltro, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
                         if ($datosTerminosFiltro['ttp_id'] == $_GET["id"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
@@ -41,7 +45,11 @@ if (!empty($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    try{
+                        $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    } catch (Exception $e) {
+                        include("../compartido/error-catch-to-report.php");
+                    }
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $_GET["insti"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';

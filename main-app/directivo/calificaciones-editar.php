@@ -5,14 +5,22 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+try{
+	$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
-$consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)");
+try{
+	$consultaValores=mysqli_query($conexion, "SELECT
+	(SELECT sum(act_valor) FROM academico_actividades 
+	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
+	(SELECT count(*) FROM academico_actividades 
+	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
 ?>
@@ -65,9 +73,13 @@ $porcentajeRestante = 100 - $valores[0];
 								<header class="panel-heading panel-heading-purple"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?> </header>
 								<div class="panel-body">
 										<?php
-										$enComun = mysqli_query($conexion, "SELECT * FROM academico_actividades
-										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$_GET["idR"]."' AND act_estado=1
-										");
+										try{
+											$enComun = mysqli_query($conexion, "SELECT * FROM academico_actividades
+											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$_GET["idR"]."' AND act_estado=1
+											");
+										} catch (Exception $e) {
+											include("../compartido/error-catch-to-report.php");
+										}
 										while($regComun = mysqli_fetch_array($enComun, MYSQLI_BOTH)){
 										?>
 										<p><a href="calificaciones-editar.php?idR=<?=$regComun['act_id'];?>"><?=$regComun['act_descripcion'];?></a></p>
@@ -109,10 +121,14 @@ $porcentajeRestante = 100 - $valores[0];
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
-												");
+												try{
+													$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+													INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+													WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+													");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
                                                     <option value="">Seleccione una opción</option>

@@ -9,7 +9,11 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id=".$_GET["id"].";");
+try{
+    $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id=".$_GET["id"].";");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 
@@ -77,7 +81,11 @@ $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="moduloPadre">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    try{
+                                                        $consultaModulos=mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos WHERE mod_estado=1");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($modulos=mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                         $selected="";
                                                         if($modulos["mod_id"]==$datosModulo["mod_padre"]){

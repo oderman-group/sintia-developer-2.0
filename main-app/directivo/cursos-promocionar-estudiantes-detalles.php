@@ -112,7 +112,11 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                             <div class="form-group row">
                                                                 <div class="col-sm-4">
                                                                     <?php
-                                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                                    try{
+                                                                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                                    } catch (Exception $e) {
+                                                                        include("../compartido/error-catch-to-report.php");
+                                                                    }
                                                                     ?>
                                                                     <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>">
                                                                         <option value="">Seleccione una opción</option>

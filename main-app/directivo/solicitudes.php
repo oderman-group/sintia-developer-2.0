@@ -59,12 +59,16 @@
                                                 <tbody>
 												<?php
                                                 include("includes/consulta-paginacion-solicitudes.php");
-												$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
-                                                LEFT JOIN usuarios ON uss_id=soli_remitente
-                                                LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
-                                                WHERE soli_institucion='".$config['conf_id_institucion']."' 
-                                                AND soli_year='".$_SESSION["bd"]."' $filtro
-                                                LIMIT $inicio,$registros");
+                                                try{
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
+                                                    LEFT JOIN usuarios ON uss_id=soli_remitente
+                                                    LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+                                                    WHERE soli_institucion='".$config['conf_id_institucion']."' 
+                                                    AND soli_year='".$_SESSION["bd"]."' $filtro
+                                                    LIMIT $inicio,$registros");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){				
 												?>
 												<tr>

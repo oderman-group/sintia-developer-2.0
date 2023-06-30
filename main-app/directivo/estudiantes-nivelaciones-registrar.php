@@ -38,9 +38,17 @@ include("../compartido/head.php");
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		<?php
-		$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_REQUEST["curso"]."'");
+		try{
+			$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_REQUEST["curso"]."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-		$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."'");
+		try{
+			$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 		$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 		?>
         <?php include("../compartido/panel-color.php");?>
@@ -100,11 +108,19 @@ include("../compartido/head.php");
 													<th rowspan="2" style="font-size:9px;">Mat</th>
 													<th rowspan="2" style="font-size:9px;">Estudiante</th>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1");
+													try{
+														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														try{
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 													?>
 														<th style="font-size:9px; text-align:center; border:groove;" colspan="3" width="5%"><?=$materia[2];?></th>
@@ -116,7 +132,11 @@ include("../compartido/head.php");
 													
 												<tr>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+													try{
+														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 													?>	
 													<th style="text-align:center;">DEF</th>
@@ -140,15 +160,27 @@ include("../compartido/head.php");
 													<td style="font-size:9px;"><?=$resultado[1];?></td>
 													<td style="font-size:9px;"><?=$nombre?></td>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+													try{
+														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														try{
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 														$p = 1;
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
 														while($p<=$config[19]){
-															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+															try{
+																$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 															if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
 															$defPorMateria += $boletin[4];
@@ -156,7 +188,11 @@ include("../compartido/head.php");
 														}
 														$defPorMateria = round($defPorMateria/$config[19],2);
 														//CONSULTAR NIVELACIONES
-														$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+														try{
+															$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 														if($cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														//DEFINITIVA DE CADA MATERIA

@@ -2,13 +2,17 @@
 $registros_por_pagina = 10;
 $limite_inferior = 0;
 
-$sql = "SELECT COUNT(*) AS total FROM academico_cargas
-INNER JOIN academico_grados ON gra_id=car_curso
-INNER JOIN academico_grupos ON gru_id=car_grupo
-INNER JOIN academico_materias ON mat_id=car_materia
-INNER JOIN usuarios ON uss_id=car_docente
-WHERE car_id=car_id";
-$resultado = $conexion->query($sql);
+try{
+    $sql = "SELECT COUNT(*) AS total FROM academico_cargas
+    INNER JOIN academico_grados ON gra_id=car_curso
+    INNER JOIN academico_grupos ON gru_id=car_grupo
+    INNER JOIN academico_materias ON mat_id=car_materia
+    INNER JOIN usuarios ON uss_id=car_docente
+    WHERE car_id=car_id";
+    $resultado = $conexion->query($sql);
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $fila = $resultado->fetch_assoc();
 $total_registros = $fila['total'];
 
@@ -33,13 +37,17 @@ if ($pagina_actual == 1) {
   $limite_inferior = 0;}
 
 // Consultar los datos de la tabla
-$sql = "SELECT * FROM academico_cargas
-INNER JOIN academico_grados ON gra_id=car_curso
-INNER JOIN academico_grupos ON gru_id=car_grupo
-INNER JOIN academico_materias ON mat_id=car_materia
-INNER JOIN usuarios ON uss_id=car_docente
-WHERE car_id=car_id LIMIT $limite_inferior, $registros_por_pagina";
-$resultado = $conexion->query($sql);
+try{
+    $sql = "SELECT * FROM academico_cargas
+    INNER JOIN academico_grados ON gra_id=car_curso
+    INNER JOIN academico_grupos ON gru_id=car_grupo
+    INNER JOIN academico_materias ON mat_id=car_materia
+    INNER JOIN usuarios ON uss_id=car_docente
+    WHERE car_id=car_id LIMIT $limite_inferior, $registros_por_pagina";
+    $resultado = $conexion->query($sql);
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 
 // Mostrar los enlaces de paginación
 $primer_registro = $limite_inferior + 1;

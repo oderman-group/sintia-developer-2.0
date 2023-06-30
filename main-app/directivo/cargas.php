@@ -89,20 +89,28 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("includes/consulta-paginacion-cargas.php");											       
-													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
-													  LEFT JOIN academico_grados ON gra_id=car_curso
-													  LEFT JOIN academico_grupos ON gru_id=car_grupo
-													  LEFT JOIN academico_materias ON mat_id=car_materia
-													  LEFT JOIN usuarios ON uss_id=car_docente
-													  WHERE car_id=car_id $filtro
-												        ORDER BY car_id
-													    LIMIT $inicio,$registros;");
+													include("includes/consulta-paginacion-cargas.php");	
+													try{										       
+														$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
+														LEFT JOIN academico_grados ON gra_id=car_curso
+														LEFT JOIN academico_grupos ON gru_id=car_grupo
+														LEFT JOIN academico_materias ON mat_id=car_materia
+														LEFT JOIN usuarios ON uss_id=car_docente
+														WHERE car_id=car_id $filtro
+														ORDER BY car_id
+														LIMIT $inicio,$registros;");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
     												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 																										
 														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
-														$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
+														try{
+															$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$cargaAcademica = mysqli_fetch_array($consultaCargaAcademica, MYSQLI_BOTH);
 														$cargaSP = $resultado[0];
 														$periodoSP = $resultado['car_periodo'];

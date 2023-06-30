@@ -9,7 +9,11 @@ Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
 
-$contrato= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
+try{
+    $contrato= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
 ?>
 

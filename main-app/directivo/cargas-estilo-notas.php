@@ -66,7 +66,11 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT catn_id, catn_nombre FROM academico_categorias_notas;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT catn_id, catn_nombre FROM academico_categorias_notas;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>

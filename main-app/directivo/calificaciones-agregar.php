@@ -117,10 +117,14 @@ if(
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
-												");
+												try{
+													$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
+													INNER JOIN academico_indicadores ON ind_id=ipc_indicador
+													WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+													");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
                                                     <option value="">Seleccione una opción</option>
@@ -163,9 +167,13 @@ if(
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-												WHERE act_estado=1 AND ((act_compartir=1 AND act_id_carga!='".$cargaConsultaActual."') OR (act_id_carga='".$cargaConsultaActual."' AND act_periodo!='".$periodoConsultaActual."')) 
-												");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+													WHERE act_estado=1 AND ((act_compartir=1 AND act_id_carga!='".$cargaConsultaActual."') OR (act_id_carga='".$cargaConsultaActual."' AND act_periodo!='".$periodoConsultaActual."')) 
+													");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

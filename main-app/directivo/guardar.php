@@ -1256,6 +1256,10 @@ if ($_GET["get"] == 31) {
 if ($_GET["get"] == 34) {
 	try{
 		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id=" . $_GET["id"] . ";");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	try{
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente=null WHERE mat_id='" . $_GET["est"] . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
@@ -1269,6 +1273,10 @@ if ($_GET["get"] == 34) {
 if ($_GET["get"] == 35) {
 	try{
 		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario=" . $_GET["usr"] . ";");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	try{
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente=null WHERE mat_acudiente='" . $_GET["usr"] . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
@@ -1478,6 +1486,10 @@ if ($_GET["get"] == 57) {
 if ($_GET["get"] == 59) {
 	try{
 		mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_tipo=3");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	try{
 		mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");

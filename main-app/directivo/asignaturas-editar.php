@@ -52,7 +52,11 @@
                                 	<div class="panel-body">
 
                                     <?php
-                                    $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$_GET["id"].";");
+                                    try{
+                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$_GET["id"].";");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
                                     $rMateria=mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
                                     ?>
                                    
@@ -86,7 +90,11 @@
                                                 <select class="form-control  select2" name="areaM" required>
                                                     <option value="">Seleccione una opci n</option>
                                                 <?php
-                                                $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
+                                                try{
+                                                    $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($rA=mysqli_fetch_array($cAreas, MYSQLI_BOTH)){
                                                     if($rMateria["mat_area"]==$rA["ar_id"]){
                                                         echo'<option value="'.$rA["ar_id"].'" selected>'.$rA["ar_nombre"].'</option>';

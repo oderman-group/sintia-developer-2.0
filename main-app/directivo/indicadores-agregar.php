@@ -5,13 +5,17 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaSumaIndicacores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+try{
+	$consultaSumaIndicacores=mysqli_query($conexion, "SELECT
+	(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
+	(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
+	(SELECT count(*) FROM academico_indicadores_carga 
+	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicacores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -138,9 +142,13 @@ if(
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores
-												INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
-												WHERE ind_obligatorio=0");
+												try{
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores
+													INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
+													WHERE ind_obligatorio=0");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

@@ -118,19 +118,27 @@ $porcentajeRestante = 100 - $valores[0];
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-													 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
-													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
-													 ");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
+														INNER JOIN academico_indicadores ON ind_id=act_id_tipo
+														WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
+														");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bg = '';
-														$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_calificaciones 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
-														WHERE cal_id_actividad='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas 
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+														try{
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
+															(SELECT count(*) FROM academico_calificaciones 
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
+															WHERE cal_id_actividad='".$resultado[0]."'),
+															(SELECT count(*) FROM academico_matriculas 
+															WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
 														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
 														 
