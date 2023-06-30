@@ -110,25 +110,6 @@
 
         if (response.success) {
 
-          // if (response.data.x_cod_response == 1) {
-          //   //Codigo personalizado
-          //   alert("Transaccion Aprobada");
-
-          //   console.log('transacción aceptada');
-          // }
-          // //Transaccion Rechazada
-          // if (response.data.x_cod_response == 2) {
-          //   console.log('transacción rechazada');
-          // }
-          // //Transaccion Pendiente
-          // if (response.data.x_cod_response == 3) {
-          //   console.log('transacción pendiente');
-          // }
-          // // Transaccion Fallida
-          // if (response.data.x_cod_response == 4) {
-          //   console.log('transacción fallida');
-          // }
-
           $('#fecha').html(response.data.x_transaction_date);
           $('#respuesta').html(response.data.x_response);
           $('#referencia').text(response.data.x_id_invoice);
