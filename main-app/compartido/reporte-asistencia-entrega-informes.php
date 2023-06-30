@@ -115,9 +115,9 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         </tr>
 
         <?php
-        if (is_numeric($_REQUEST["curso"]) and is_numeric($_REQUEST["grupo"])) {
+        if (!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "' AND mat_grupo='" . $_REQUEST["grupo"] . "'";
-        } elseif (is_numeric($_REQUEST["curso"])) {
+        } elseif (!empty($_REQUEST["curso"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "'";
         } else {
             $adicional = "";
@@ -135,20 +135,25 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                 <td><?= $nombre ?></td>
                 <?php
                     $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM academico_materias
-                    INNER join academico_areas ON ar_id = mat_area
+                    INNER JOIN academico_areas ON ar_id = mat_area
                     INNER JOIN academico_cargas on car_materia = mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
-                    INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
+                    LEFT JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
                     ORDER BY mat_id;");
                     $numNotas = mysqli_num_rows($consultaNotaMaterias);
                     if($numNotas>0){
+                        // $notaMateria= 0;
                         while($notaMaterias = mysqli_fetch_array($consultaNotaMaterias, MYSQLI_BOTH)){
-                            $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
+                            if(!is_null($notaMaterias['bol_nota'])){
+                                $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
 
-                            $estiloNota="";
-                            if($notaMateria<$config['conf_nota_minima_aprobar']){
-                                $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
-                            }
-                            echo '<td align="center" '.$estiloNota.'>'.$notaMateria.'</td>';
+                                $estiloNota="";
+                                if($notaMateria<$config['conf_nota_minima_aprobar']){
+                                    $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
+                                }
+                                echo '<td align="center" '.$estiloNota.'>'.$notaMateria.'</td>';
+                            }else{
+                                echo '<td align="center">&nbsp;</td>';
+                            } 
                         }
                     }else{
                         for($i=1;$i<=$numMaterias;$i++){
