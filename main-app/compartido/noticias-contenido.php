@@ -51,9 +51,27 @@
                     </div>
                 </div>
 
-                <?php include("../compartido/datos-fechas.php");?>
-
-                <?php if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 && $dfDias<=1)){?>
+                <?php
+                    include("../compartido/datos-fechas.php");
+                    if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){
+                        $monto=0;
+                        $descripcion='Pago de';
+                        if($datosUnicosInstitucion['ins_deuda']==1 && !empty($datosUnicosInstitucion['ins_valor_deuda'])){
+                            $monto+=$datosUnicosInstitucion['ins_valor_deuda'];
+                            $descripcion.=' saldo pendiente';
+                        }
+                        if($dfDias<=1 && ($datosUnicosInstitucion['ins_deuda']==1 && !empty($datosUnicosInstitucion['ins_valor_deuda']))){
+                            $descripcion.=' y';
+                        }
+                        if($dfDias<=1){
+                            $consultaPlan = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".planes_sintia 
+                            WHERE plns_id='".$datosUnicosInstitucion['ins_id_plan']."'");
+                            $datosPlan = mysqli_fetch_array($consultaPlan, MYSQLI_BOTH);
+                            
+                            $monto+=$datosPlan['plns_valor'];
+                            $descripcion.=' renovación de la plataforma';
+                        }
+                ?>
                 <div class="panel">
                     <header class="panel-heading panel-heading-red">Pagos</header>
                     <div class="panel-body">
@@ -61,7 +79,18 @@
                             pago pendiente con la plataforma SINTIA.<br><br>
                             Puede hacer el pago en el siguiente botón.</p>
                         <div class="col-sm-4">
-                            <a href="#" class="btn btn-danger">PAGA AQUÍ</a>
+                            <form action="../pagos-online/index.php" method="post" target="_target">
+                                <input type="hidden" class="form-control" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
+                                <input type="hidden" class="form-control" name="emailUsuario" value="<?=$datosUsuarioActual['uss_email'];?>">
+                                <input type="hidden" class="form-control" name="documentoUsuario" value="<?=$datosUsuarioActual['uss_documento'];?>">
+                                <input type="hidden" class="form-control" name="nombreUsuario" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?>">
+                                <input type="hidden" class="form-control" name="celularUsuario" value="<?=$datosUsuarioActual['uss_celular'];?>">
+                                <input type="hidden" class="form-control" name="idInstitucion" value="<?=$config['conf_id_institucion'];?>">
+                                <input type="hidden" class="form-control" name="monto" value="<?=$monto;?>">
+                                <input type="hidden" class="form-control" name="nombre" value="<?=$descripcion;?>">
+
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-credit-card" aria-hidden="true"></i>PAGA AQUÍ</button>
+                            </form>
                         </div>
                     </div>
                 </div>
