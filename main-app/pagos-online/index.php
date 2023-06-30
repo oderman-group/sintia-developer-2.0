@@ -1,8 +1,5 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-    
-    $publicKey="e252ea750263d327bd5029d920258f21";
-    $privateKey="6cf1d267c7925918e9e866fa5b28a6fc";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +134,7 @@
                 data-epayco-autoclick="true"
                 data-epayco-button="<?=REDIRECT_ROUTE?>/sintia-logo-2023.png"
 
-                data-epayco-key="<?=$publicKey?>"
+                data-epayco-key="<?=PUBLIC_KEY_EPAYCO?>"
                 data-epayco-country="co"
                 data-epayco-currency="cop"
                 data-epayco-amount="<?=$_POST['monto']?>"
