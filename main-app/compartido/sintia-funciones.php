@@ -150,7 +150,8 @@ class Cargas {
 
 	
 
-	function verificarNumCargas($num){
+	function verificarNumCargas($num, $idioma=1){
+		include("../../config-general/idiomas.php");
 
 		if($num>0){
 
@@ -158,7 +159,7 @@ class Cargas {
 
 	<div class="alert alert-warning">
 
-		<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> Haz click sobre la imagen o sobre el nombre del curso al que deseas entrar.
+		<i class="icon-exclamation-sign"></i><strong><?=$frases[119][$idioma];?>:</strong> <?=$frases[328][$idioma];?>
 
 	</div>
 
@@ -172,7 +173,7 @@ class Cargas {
 
 			<div class="alert alert-danger">
 
-				<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> No tienes cargas asignadas aún.
+				<i class="icon-exclamation-sign"></i><strong><?=$frases[119][$idioma];?>:</strong> <?=$frases[329][$idioma];?>
 
 			</div>
 

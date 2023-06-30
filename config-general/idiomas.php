@@ -658,6 +658,76 @@ $frases[326][$l] = 'Documento';
 
 $frases[327][$l] = 'Ocupación';
 
+$frases[328][$l] = 'Haz click sobre la imagen o sobre el nombre del curso al que deseas entrar.';
+
+$frases[329][$l] = 'No tienes cargas asignadas aún.';
+
+$frases[330][$l] = 'Proceso de matrícula';
+
+$frases[331][$l] = 'Actualizar datos.';
+
+$frases[332][$l] = 'Pago matrícula.';
+
+$frases[333][$l] = 'Contrato.';
+
+$frases[334][$l] = 'Pagaré.';
+
+$frases[335][$l] = 'Compromiso académico.';
+
+$frases[336][$l] = 'Compromiso de convivencia.';
+
+$frases[337][$l] = 'Manual de convivencia.';
+
+$frases[338][$l] = 'Contrato mayores de 14 años.';
+
+$frases[339][$l] = 'Firma matrícula.';
+
+$frases[340][$l] = 'El valor a pagar es';
+
+$frases[341][$l] = 'Para realizar el proceso de pago tiene dos opciones, escoja alguna de las dos';
+
+$frases[342][$l] = 'Ingrese al link y con el código de estudiante pague por pse';
+
+$frases[343][$l] = 'O pagar en la cuenta corriente de Bancolombia';
+
+$frases[344][$l] = 'Adjuntar soporte';
+
+$frases[345][$l] = 'Comprobante de pago';
+
+$frases[346][$l] = 'Nota: Una vez realice el pago, debe adjuntar el soporte para verificación con tesorería.';
+
+$frases[347][$l] = 'SI tiene algún problema con el pago por favor comunicarse a tesorería.';
+
+$frases[348][$l] = 'TABLA DE COSTOS';
+
+$frases[349][$l] = 'IR A PAGO POR PSE';
+
+$frases[350][$l] = 'Enviar comprobante';
+
+$frases[351][$l] = 'CONTRATO DE PRESTACIÓN DE SERVICIOS EDUCATIVOS';
+
+$frases[352][$l] = 'En este espacio puede adjuntar la firma digital, si no tiene firma digital puede realizar la firma en un papel blanco sin líneas, ni cuadriculas; tomarle una foto con buena iluminación y subirla a este medio.';
+
+$frases[353][$l] = 'Adjuntar firma.';
+
+$frases[354][$l] = 'NOTA: Una vez la secretaria académica verifique y apruebe la matrícula le aparecerá el comprobante final.';
+
+$frases[355][$l] = 'DESCARGAR COMPROBANTE';
+
+$frases[356][$l] = 'Menú principal';
+
+$frases[357][$l] = 'PRIMEROS PASOS';
+
+$frases[358][$l] = 'Primeramente vamos a las asignaturas para seleccionar la que necesitamos.';
+
+$frases[359][$l] = 'Exploremos las opciones del menú G. Académica.';
+
+$frases[360][$l] = 'Veamos otras opciones adicionales.';
+
+$frases[361][$l] = 'Video de Guia';
+
+$frases[362][$l] = 'Todas las opciones más importantes están en la opción acudidos del menú. Te recomendamos ver el video de esta pagina para que tengas claridad sobre el manejo de la plataforma.';
+
 
 
 //ENGLISH
@@ -1317,5 +1387,75 @@ $frases[325][$l] = 'If you need to make a change of guardian, please contact us 
 $frases[326][$l] = 'Document';
 
 $frases[327][$l] = 'Occupation';
+
+$frases[328][$l] = 'Click on the image or on the name of the course you wish to enter.';
+
+$frases[329][$l] = 'You do not have any assigned loads yet.';
+
+$frases[330][$l] = 'Registration Process';
+
+$frases[331][$l] = 'Data update.';
+
+$frases[332][$l] = 'Payment of the registration.';
+
+$frases[333][$l] = 'Contract.';
+
+$frases[334][$l] = 'Promissory note.';
+
+$frases[335][$l] = 'Academic commitment.';
+
+$frases[336][$l] = 'Coexistence Commitment.';
+
+$frases[337][$l] = 'Coexistence Manual.';
+
+$frases[338][$l] = 'Contract over 14 years old.';
+
+$frases[339][$l] = 'Signed registration.';
+
+$frases[340][$l] = 'The amount payable is';
+
+$frases[341][$l] = 'To make the payment process you have two options, choose one of them';
+
+$frases[342][$l] = 'Enter the link and with the student code pay by pse';
+
+$frases[343][$l] = 'Or pay in the current account of Bancolombia';
+
+$frases[344][$l] = 'Attach support';
+
+$frases[345][$l] = 'Proof of payment';
+
+$frases[346][$l] = 'Note: Once you make the payment, you must attach the support for verification with treasury.';
+
+$frases[347][$l] = 'If you have any problem with the payment please contact the treasury.';
+
+$frases[348][$l] = 'TABLE OF COSTS';
+
+$frases[349][$l] = 'PAYMENT BY PSE';
+
+$frases[350][$l] = 'Send proof of payment';
+
+$frases[351][$l] = 'CONTRACT FOR THE PROVISION OF EDUCATIONAL SERVICES';
+
+$frases[352][$l] = 'In this space you can attach the digital signature, if you do not have a digital signature you can sign on a white paper without lines or squares; take a photo with good lighting and upload it to this media.';
+
+$frases[353][$l] = 'Attach signature.';
+
+$frases[354][$l] = 'NOTE: Once the academic secretary verifies and approves the registration, the final voucher will appear.';
+
+$frases[355][$l] = 'DOWNLOAD VOUCHER';
+
+$frases[356][$l] = 'Main menu';
+
+$frases[357][$l] = 'FIRST STEPS';
+
+$frases[358][$l] = 'First we go to the subjects to select the one we need.';
+
+$frases[359][$l] = 'Lets explore the options of the G. Academic menu';
+
+$frases[360][$l] = 'Lets look at some additional options.';
+
+$frases[361][$l] = 'Video Guide';
+
+$frases[362][$l] = 'All the most important options are in the menu option attended. We recommend you to watch the video on this page so that you have clarity on how to use the platform.';
 
 ?>
