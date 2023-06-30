@@ -1,0 +1,164 @@
+<?php
+    include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+    
+    $publicKey="e252ea750263d327bd5029d920258f21";
+    $privateKey="6cf1d267c7925918e9e866fa5b28a6fc";
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redireccionando</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        @-webkit-keyframes shake {
+            0% {
+                -webkit-transform: translate(2px, 1px) rotate(0deg);
+                transform: translate(2px, 1px) rotate(0deg);
+            }
+            10% {
+                -webkit-transform: translate(-1px, -2px) rotate(-2deg);
+                transform: translate(-1px, -2px) rotate(-2deg);
+            }
+            20% {
+                -webkit-transform: translate(-3px, 0) rotate(3deg);
+                transform: translate(-3px, 0) rotate(3deg);
+            }
+            30% {
+                -webkit-transform: translate(0, 2px) rotate(0deg);
+                transform: translate(0, 2px) rotate(0deg);
+            }
+            40% {
+                -webkit-transform: translate(1px, -1px) rotate(1deg);
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+            50% {
+                -webkit-transform: translate(-1px, 2px) rotate(-1deg);
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+            60% {
+                -webkit-transform: translate(-3px, 1px) rotate(0deg);
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+            70% {
+                -webkit-transform: translate(2px, 1px) rotate(-2deg);
+                transform: translate(2px, 1px) rotate(-2deg);
+            }
+            80% {
+                -webkit-transform: translate(-1px, -1px) rotate(4deg);
+                transform: translate(-1px, -1px) rotate(4deg);
+            }
+            90% {
+                -webkit-transform: translate(2px, 2px) rotate(0deg);
+                transform: translate(2px, 2px) rotate(0deg);
+            }
+            100% {
+                -webkit-transform: translate(1px, -2px) rotate(-1deg);
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                -webkit-transform: translate(2px, 1px) rotate(0deg);
+                transform: translate(2px, 1px) rotate(0deg);
+            }
+            10% {
+                -webkit-transform: translate(-1px, -2px) rotate(-2deg);
+                transform: translate(-1px, -2px) rotate(-2deg);
+            }
+            20% {
+                -webkit-transform: translate(-3px, 0) rotate(3deg);
+                transform: translate(-3px, 0) rotate(3deg);
+            }
+            30% {
+                -webkit-transform: translate(0, 2px) rotate(0deg);
+                transform: translate(0, 2px) rotate(0deg);
+            }
+            40% {
+                -webkit-transform: translate(1px, -1px) rotate(1deg);
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+            50% {
+                -webkit-transform: translate(-1px, 2px) rotate(-1deg);
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+            60% {
+                -webkit-transform: translate(-3px, 1px) rotate(0deg);
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+            70% {
+                -webkit-transform: translate(2px, 1px) rotate(-2deg);
+                transform: translate(2px, 1px) rotate(-2deg);
+            }
+            80% {
+                -webkit-transform: translate(-1px, -1px) rotate(4deg);
+                transform: translate(-1px, -1px) rotate(4deg);
+            }
+            90% {
+                -webkit-transform: translate(2px, 2px) rotate(0deg);
+                transform: translate(2px, 2px) rotate(0deg);
+            }
+            100% {
+                -webkit-transform: translate(1px, -2px) rotate(-1deg);
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
+        }
+        .preloader {
+            display: -ms-flexbox;
+            display: flex;
+            background-color: #f4f6f9;
+            height: 100vh;
+            width: 100%;
+            transition: height 200ms linear;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+        }
+        .animation__shake {
+            -webkit-animation: shake 1600ms;
+            animation: shake 1600ms;
+        }
+        form img{
+            width: 30% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <form class="animation__shake">
+            <script
+                src="https://checkout.epayco.co/checkout.js"
+                class="epayco-button"
+                data-epayco-test="true"
+                data-epayco-external="true"
+                data-epayco-autoclick="true"
+                data-epayco-button="<?=REDIRECT_ROUTE?>/sintia-logo-2023.png"
+
+                data-epayco-key="<?=$publicKey?>"
+                data-epayco-country="co"
+                data-epayco-currency="cop"
+                data-epayco-amount="<?=$_POST['monto']?>"
+                data-epayco-name="<?=$_POST['nombre']?>"
+                data-epayco-description="<?=$_POST['nombre']?>"
+
+                data-epayco-extra1="<?=$_POST['idUsuario']?>"
+                data-epayco-extra2="<?=$_POST['emailUsuario']?>"
+                data-epayco-extra3="<?=$_POST['documentoUsuario']?>"
+                data-epayco-extra4="<?=$_POST['nombreUsuario']?>"
+                data-epayco-extra5="<?=$_POST['celularUsuario']?>"
+                data-epayco-extra6="<?=$_POST['idInstitucion']?>"
+
+                data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
+                data-epayco-methodconfirmation="get"
+                data-epayco-confirmation="<?=REDIRECT_ROUTE?>/pagos-online/confirmacion.php">
+            </script>
+        </form>
+        <p>Redireccionando.</p>
+        <p><b>Por favor espere un momento...</b></p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
