@@ -35,6 +35,10 @@ switch ($periodoActual) {
         $acomulado = 0.10;
         break;
 }
+$colspan=1;
+if($config['conf_firma_estudiante_informe_asistencia']==1){
+    $colspan=2;
+}
 
 $consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM $BD.academico_materias
 INNER join $BD.academico_areas ON ar_id = mat_area
@@ -68,7 +72,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         <tr style="font-weight:bold;">
             <td align="center" colspan="3" style="font-weight:bold;"><?=strtoupper($informacion_inst["info_nombre"])?></td>
             <td align="center" colspan="<?=$numMaterias?>">PERIODO <?=strtoupper($periodoActuales)?></td>
-            <td align="center" colspan="2">REPORTE DE ASISTENCIA A ENTREGA DE INFORMES PERIODO <?=strtoupper($periodoActuales)?></td>
+            <td align="center" colspan="<?=$colspan?>">REPORTE DE ASISTENCIA A ENTREGA DE INFORMES PERIODO <?=strtoupper($periodoActuales)?></td>
         </tr>
 
         <tr style="font-weight:bold; background:#d8e285;">
@@ -89,13 +93,17 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                 $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
                 $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
             ?>
-            <td colspan="2">FECHA: <?=date("d/m/Y")?></td>
+            <td colspan="<?=$colspan?>">FECHA: <?=date("d/m/Y")?></td>
         </tr>
 
         <tr style="font-weight:bold;">
             <td colspan="2">SEDE:</td>
             <td>Principal</td>
+            <?php
+                if($config['conf_firma_estudiante_informe_asistencia']==1){
+            ?>
             <td align="center" rowspan="4">FIRMA DE<br>ESTUDIANTE</td>
+            <?php } ?>
             <td align="center" rowspan="4">FIRMA DE<br>ACUDIENTE</td>
         </tr>
 
@@ -162,7 +170,11 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                     }
 
                 ?>
+                <?php
+                    if($config['conf_firma_estudiante_informe_asistencia']==1){
+                ?>
                 <td style="height:20px;">&nbsp;</td>
+                <?php } ?>
                 <td style="height:20px;">&nbsp;</td>
             </tbody>
         <?php
