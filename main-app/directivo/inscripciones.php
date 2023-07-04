@@ -37,7 +37,10 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
 								
 								<div class="col-md-12">
 
-                                <?php include("includes/barra-superior-inscripciones.php");?>
+                                <?php
+                                    $filtro="";
+                                    include("includes/barra-superior-inscripciones.php");
+                                ?>
 
                                     <?php if (isset($_GET["msg"]) and $_GET["msg"] == 1) { ?>
                                     <div class="alert alert-block alert-success">
@@ -77,7 +80,6 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                         </div>
 
                                         <?php
-                                            $filtro="";
                                             if(is_numeric($_GET["curso"])){
                                                 $filtro .= " AND asp_grado='".$_GET["curso"]."'";
                                             }
