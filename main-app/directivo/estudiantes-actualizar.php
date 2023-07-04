@@ -29,12 +29,10 @@ if(!empty($_POST["fNac"])){
 }
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
-$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
-if(!$esMediaTecnica){
-	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
-	$_POST["tipoMatricula"]=$datosEstudianteActual["mat_tipo_matricula"];
-}
-if($_POST["tipoMatricula"]==""){$_POST["tipoMatricula"]=GRADO_GRUPAL;}
+
+
+if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
+
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
@@ -118,13 +116,28 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 
-//Insertamos las matrículas Adicionales
-if ($esMediaTecnica) { 
+if($_POST["tipoMatricula"] ==GRADO_GRUPAL){
 	try{
-		if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL)
+		$consultaMediaTecnica=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+		WHERE matcur_id_matricula='".$_POST["id"]."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+	$numMediaTecnica=mysqli_num_rows($consultaMediaTecnica);
+	if($numMediaTecnica>0){
+		try{
+			mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+			WHERE matcur_id_matricula ='".$_POST["id"]."' AND matcur_id_institucion ='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
+}
+
+//Insertamos las matrículas Adicionales
+if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL){
+	try{
 		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
-		else
-		MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
