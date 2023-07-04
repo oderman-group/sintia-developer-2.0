@@ -369,6 +369,17 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar campo para firma del estudiante en reporte de asistencia?</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control col-sm-2 select2" name="firmaEstudiante">
+                                                <option value="1" <?php if($datosInstitucion['conf_firma_estudiante_informe_asistencia']==1){ echo "selected";} ?>>SI</option>
+                                                <option value="0" <?php if($datosInstitucion['conf_firma_estudiante_informe_asistencia']==0){ echo "selected";} ?>>NO</option>
+                                            </select>
+                                            <span style="color:#6017dc;">Esta acción permite dar un espacio para que el estudiante firme en el reporte de asistencia a la entrega de informes.</span>
+                                        </div>
+                                    </div>
+
 
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>
