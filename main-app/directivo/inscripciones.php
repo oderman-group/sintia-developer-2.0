@@ -5,7 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
 $db = $_SESSION["inst"]."_".$_SESSION["bd"];
-$urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_institucion"];
+$urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -152,8 +152,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&inst=<?=base64_encode($db)?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&inst=<?=base64_encode($db)?>" target="_blank">Editar</a></li>
+                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Editar</a></li>
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
                                                                     
