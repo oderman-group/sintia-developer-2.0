@@ -1,11 +1,13 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0006';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0006';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
@@ -79,12 +81,10 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas
-											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$_GET["idR"]."' AND tar_estado=1
-											ORDER BY tar_id DESC
-											");
+											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$_GET["idR"]."' AND tar_estado=1 ORDER BY tar_id DESC");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="actividades-entregas.php?idR=<?=$evaComun['tar_id'];?>"><?=$evaComun['tar_nombre'];?></a></p>
+												<p><a href="actividades-entregas.php?idR=<?=$evaComun['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>"><?=$evaComun['tar_titulo'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
