@@ -15,16 +15,24 @@ $valorInscripcion = 55000;
 
             </button>
 
+            <?php
+                $idInst='';
+                if(!empty($_REQUEST['idInst'])){
+                    $idInst=$_REQUEST['idInst'];
+            ?>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
                 <div class="navbar-nav">
 
-                    <a class="nav-link" href="admision.php?idInst=<?=$_REQUEST['idInst']?>">Registro</a>
+                    <a class="nav-link" href="admision.php?idInst=<?=$idInst?>">Registro</a>
 
-                    <a class="nav-link" href="consultar-estado.php?idInst=<?=$_REQUEST['idInst']?>">Consultar estado de solicitud</a>
+                    <a class="nav-link" href="consultar-estado.php?idInst=<?=$idInst?>">Consultar estado de solicitud</a>
 
                 </div>
 
             </div>
+            <?php
+                }
+            ?>
 
         </nav>
