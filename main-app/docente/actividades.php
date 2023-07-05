@@ -146,7 +146,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																</label>
 															</div>
 														</td>
-														<td><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>" style="text-decoration: underline;"><?=$resultado[1];?></a></td>
+														<td><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" style="text-decoration: underline;"><?=$resultado[1];?></a></td>
 														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado[4];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado[5];?></td>
 														<td><?php if($resultado[6]!="" and file_exists('../files/tareas/'.$resultado[6])){?><a href="../files/tareas/<?=$resultado[6];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
@@ -165,7 +165,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																</button>
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 																	
-																		<li><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>">Entregas</a></li>
+																		<li><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Entregas</a></li>
 																	  	<li><a href="actividades-editar.php?idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
 																	 	 
 																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="guardar.php?get=17&idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
