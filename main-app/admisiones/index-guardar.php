@@ -35,13 +35,14 @@ if (md5($_POST['institucion']) != $_POST['iditoken']) {
     redireccionMal('index.php', 1);
 }
 
+$nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
 $sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".(date('Y')+1)."', 8, :documentoAcudiente, :grado)";
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindParam(':institucion', $_POST['institucion'], PDO::PARAM_INT);
 $stmt->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
 $stmt->bindParam(':documento', $_POST['documento'], PDO::PARAM_STR);
-$stmt->bindParam(':nombreEstudiante', $_POST['nombreEstudiante'], PDO::PARAM_STR);
+$stmt->bindParam(':nombreEstudiante', $nombreCompleto, PDO::PARAM_STR);
 $stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
 $stmt->bindParam(':nombreAcudiente', $_POST['nombreAcudiente'], PDO::PARAM_STR);
 $stmt->bindParam(':celular', $_POST['celular'], PDO::PARAM_STR);
@@ -134,7 +135,7 @@ if ($newId > 0) {
         $body = ob_get_clean();
 
         //Server settings
-        $mail->SMTPDebug = 2;                                     // Enable verbose debug output
+        $mail->SMTPDebug = 0;                                     // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
         $mail->Host       = EMAIL_SERVER;  	                        // Specify main and backup SMTP servers
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication

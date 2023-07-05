@@ -80,7 +80,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                         </div>
 
                                         <?php
-                                            if(is_numeric($_GET["curso"])){
+                                            if(!empty($_GET["curso"])){
                                                 $filtro .= " AND asp_grado='".$_GET["curso"]."'";
                                             }
                                         ?>
@@ -175,8 +175,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/index.php?idInst='.$config["conf_id_
                                             </table>
                                             </div>
                                         </div>
+                      				    <?php include("enlaces-paginacion.php");?>
                                     </div>
-                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>
