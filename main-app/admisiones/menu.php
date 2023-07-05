@@ -19,9 +19,9 @@ $valorInscripcion = 55000;
 
                 <div class="navbar-nav">
 
-                    <a class="nav-link" href="index.php">Registro</a>
+                    <a class="nav-link" href="admision.php?idInst=<?=$_REQUEST['idInst']?>">Registro</a>
 
-                    <a class="nav-link" href="consultar-estado.php">Consultar estado de solicitud</a>
+                    <a class="nav-link" href="consultar-estado.php?idInst=<?=$_REQUEST['idInst']?>">Consultar estado de solicitud</a>
 
                 </div>
 

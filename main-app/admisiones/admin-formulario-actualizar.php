@@ -75,7 +75,7 @@ if($_POST['enviarCorreo'] == 1){
 
                             <p>
                                 Puede consultar el estado de su solicitud o hacer correciones en el formulario en el siguiente enlace:<br>
-                                <a href="https://plataformasintia.com/admisiones/consultar-estado.php">CONSULTAR ESTADO DE SOLICITUD</a>
+                                <a href="https://plataformasintia.com/admisiones/consultar-estado.php?idInst='.$_REQUEST['idInst'].'">CONSULTAR ESTADO DE SOLICITUD</a>
                             </p>
 
 							<p>
@@ -100,7 +100,7 @@ if($_POST['enviarCorreo'] == 1){
     echo '<div style="display:none;">';
     try {
         //Server settings
-        $mail->SMTPDebug = 2;                                       // Enable verbose debug output
+        $mail->SMTPDebug = 0;                                       // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
         $mail->Host       = 'jemima.dongee.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
@@ -138,7 +138,7 @@ if($_POST['enviarCorreo'] == 1){
         exit();
     }
     echo '</div>';
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'";</script>';
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 }else{
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'";</script>';
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 }

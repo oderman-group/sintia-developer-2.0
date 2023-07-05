@@ -21,7 +21,7 @@ $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 $estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion";
 $est = $pdo->prepare($estQuery);
 $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
-$est->bindParam(':institucion', $_POST['institucion'], PDO::PARAM_INT);
+$est->bindParam(':institucion', $_POST['idInst'], PDO::PARAM_INT);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
@@ -31,7 +31,7 @@ if ($num > 0) {
     exit();
 }
 
-if (md5($_POST['institucion']) != $_POST['iditoken']) {
+if (md5($_POST['idInst']) != $_POST['iditoken']) {
     redireccionMal('index.php', 1);
 }
 
@@ -39,7 +39,7 @@ $nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
 $sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".(date('Y')+1)."', 8, :documentoAcudiente, :grado)";
 $stmt = $pdo->prepare($sql);
 
-$stmt->bindParam(':institucion', $_POST['institucion'], PDO::PARAM_INT);
+$stmt->bindParam(':institucion', $_POST['idInst'], PDO::PARAM_INT);
 $stmt->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
 $stmt->bindParam(':documento', $_POST['documento'], PDO::PARAM_STR);
 $stmt->bindParam(':nombreEstudiante', $nombreCompleto, PDO::PARAM_STR);
@@ -122,7 +122,7 @@ if ($newId > 0) {
 		'usuario_email'    => $_POST['email'],
 		'usuario_nombre'   => strtoupper($_POST['nombreAcudiente'])
 	];
-	$asunto = 'Solicitud de admisión #' . $newId;
+	$asunto = 'Solicitud de admisión ' . $newId;
 	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-index-inscripcion.php';
 	
 
@@ -165,7 +165,7 @@ if ($newId > 0) {
         exit();
     }
 
-    echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'&idInst='.$_REQUEST['idInst'].'";</script>';
     exit();
 } else {
     redireccionMal('index.php', 3);

@@ -25,5 +25,5 @@ $ruta = 'files/adjuntos';
 if(file_exists($ruta."/".$_GET["file"])){	unlink($ruta."/".$_GET["file"]);	}
 
 
- echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_GET["solicitud"]).'&id='.$_GET["solicitud"].'";</script>';
+ echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_GET["solicitud"]).'&id='.$_GET["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 

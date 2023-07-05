@@ -18,7 +18,7 @@ $stmt->bindParam(':comprobante', $archivo, PDO::PARAM_STR);
 
 $stmt->execute();
 
-redireccionBien('respuestas-usuario.php', 2);
+redireccionBien('respuestas-usuario.php?idInst='.$_REQUEST['idInst'].'', 2);
 
 
 
