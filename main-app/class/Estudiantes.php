@@ -46,7 +46,8 @@ class Estudiantes {
     public static function listarEstudiantesEnGrados(
         string $filtroAdicional = '', 
         string $filtroLimite    = 'LIMIT 0, 2000',
-        $cursoActual=null
+        $cursoActual=null,
+        string $BD    = ''
     )
     {
         global $conexion, $baseDatosServicios;
@@ -55,10 +56,10 @@ class Estudiantes {
 
         try {
             if($tipoGrado==GRADO_GRUPAL){
-                $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-                LEFT JOIN usuarios ON uss_id=mat_id_usuario
-                INNER JOIN academico_grados ON gra_id=mat_grado
-                INNER JOIN academico_grupos ON gru_id=mat_grupo
+                $resultado = mysqli_query($conexion, "SELECT * FROM ".$BD."academico_matriculas
+                LEFT JOIN ".$BD."usuarios ON uss_id=mat_id_usuario
+                INNER JOIN ".$BD."academico_grados ON gra_id=mat_grado
+                INNER JOIN ".$BD."academico_grupos ON gru_id=mat_grupo
                 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
                 WHERE mat_eliminado = 0
                 ".$filtroAdicional."
@@ -71,7 +72,7 @@ class Estudiantes {
                     'limite'=>$filtroLimite,
                     'arreglo'=>false
                 ];
-                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
+                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros,$BD);
             }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
