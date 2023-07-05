@@ -1,26 +1,18 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/config-admisiones.php");
-
 $server 		   = $servidorConexion;
 $user   		   = $usuarioConexion;
 $pass   		   = $claveConexion;
 $dbName 		   = $baseDatosAdmisiones;
 
-if(!empty($_REQUEST['idInst']) || !empty($_REQUEST['institucion']) || $idInstitucion==1){
+if(!empty($_REQUEST['idInst'])){
+	$idInsti=$_REQUEST['idInst'];
 	try{
 		$pdoAdmin = new PDO('mysql:host='.$server.';dbname='.$baseDatosServicios, $user, $pass);
 	}catch (PDOException $e) {
 		echo "Error!: " . $e->getMessage() . "<br/>";
 		die();
-	}
-	
-	if(!empty($_REQUEST['institucion'])){
-		$idInsti=$_REQUEST['institucion'];
-	}elseif(!empty($_REQUEST['idInst'])){
-		$idInsti=$_REQUEST['idInst'];
-	}else{
-		$idInsti=$idInstitucion;
 	}
 
 	//configuración
@@ -38,10 +30,6 @@ if(!empty($_REQUEST['idInst']) || !empty($_REQUEST['institucion']) || $idInstitu
 	$datosInfo = $info->fetch();
 
 	$BD_ADMISIONES_MOCK = $datosConfig['conf_base_datos'].'_'.$datosConfig['conf_agno'];
-}
-
-if(!empty($_REQUEST['inst'])){
-	$BD_ADMISIONES_MOCK = base64_decode($_REQUEST['inst']);
 }
 
 try{

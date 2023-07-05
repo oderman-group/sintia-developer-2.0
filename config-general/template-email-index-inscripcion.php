@@ -26,7 +26,7 @@ $Plataforma = new Plataforma;
 				<b>Número de solicitud:</b>          <pre><?=$data['solicitud_id'];?></pre>
 				<b>Número de documento del aspirante:</b> <pre><?=$data['solicitud_documento'];?></pre><br><br>
 				Puede consultar el estado de su solicitud en el siguiente enlace:<br>
-				<a href="https://plataformasintia.com/admisiones/consultar-estado.php">CONSULTAR ESTADO DE SOLICITUD</a>
+				<a href="https://plataformasintia.com/admisiones/consultar-estado.php?idInst=<?=$_REQUEST['idInst']?></a>">CONSULTAR ESTADO DE SOLICITUD</a>
 				<p style="text-align:center;">
 					Gracias por preferirnos, que tenga un feliz día.
 				</p>

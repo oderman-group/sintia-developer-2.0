@@ -42,6 +42,7 @@
                 ?>
 
                 <form action="consultar-estado.php" method="post">
+                    <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
 
                     <div class="form-group">
                         <label for="solicitud">Número de solicitud</label>
@@ -80,7 +81,7 @@
                                 <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>-->
 
                                 <?php if ($datos['asp_estado_solicitud'] == 3 or $datos['asp_estado_solicitud'] == 4) { ?>
-                                    <a class="btn btn-primary btn-lg" href="formulario.php?token=<?= md5($datos['asp_id']); ?>&id=<?= $datos['asp_id']; ?>" role="button">Ir al formulario</a>
+                                    <a class="btn btn-primary btn-lg" href="formulario.php?token=<?= md5($datos['asp_id']); ?>&id=<?= $datos['asp_id']; ?>&idInst=<?= $_REQUEST['idInst']; ?>" role="button">Ir al formulario</a>
                                 <?php } ?>
 
                                 <hr class="my-4">
@@ -117,6 +118,7 @@
 
                             <form action="enviar-comprobante.php" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="solicitud" value="<?= $solicitud; ?>">
+                                <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
 
                                 <div class="form-group">
                                     <label for="comprobante">Adjuntar comprobante de pago</label>

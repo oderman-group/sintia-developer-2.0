@@ -96,6 +96,7 @@ $datosAsp = $asp->fetch();
             <input type="hidden" name="emailAcudiente" value="<?= $datos['uss_email']; ?>">
             <input type="hidden" name="idPadre" value="<?= $datos['mat_padre']; ?>">
             <input type="hidden" name="idMadre" value="<?= $datos['mat_madre']; ?>">
+            <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
 
             <input type="hidden" name="fotoA" value="<?= $datos['mat_foto']; ?>">
 
@@ -302,7 +303,7 @@ $datosAsp = $asp->fetch();
                     <?php if ($datosAsp['asp_archivo1'] != "" and file_exists('files/adjuntos/' . $datosAsp['asp_archivo1'])) { ?>
                         <p><a href="files/adjuntos/<?= $datosAsp['asp_archivo1']; ?>" target="_blank" class="link"><?= $datosAsp['asp_archivo1']; ?></a></p>
 
-                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=1&file=<?= $datosAsp['asp_archivo1']; ?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
+                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=1&file=<?= $datosAsp['asp_archivo1']; ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
                     <?php } ?>
 
 
@@ -319,7 +320,7 @@ $datosAsp = $asp->fetch();
                     <?php if ($datosAsp['asp_archivo2'] != "" and file_exists('files/adjuntos/' . $datosAsp['asp_archivo2'])) { ?>
                         <p><a href="files/adjuntos/<?= $datosAsp['asp_archivo2']; ?>" target="_blank" class="link"><?= $datosAsp['asp_archivo2']; ?></a></p>
 
-                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=2&file=<?= $datosAsp['asp_archivo2']; ?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
+                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=2&file=<?= $datosAsp['asp_archivo2']; ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
                     <?php } ?>
 
                 </div>
