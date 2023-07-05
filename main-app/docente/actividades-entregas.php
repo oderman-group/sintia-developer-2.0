@@ -131,7 +131,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM academico_actividad_tareas_entregas 
