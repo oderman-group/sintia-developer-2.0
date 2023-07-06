@@ -122,16 +122,18 @@ if ($_POST["id"] == 3) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	$cont = count($_POST["compartirCon"]);
-	$i = 0;
-	while ($i < $cont) {
-		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
+	if($_POST["compartirCon"]){
+		$cont = count($_POST["compartirCon"]);
+		$i = 0;
+		while ($i < $cont) {
+			try{
+				mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+			$i++;
 		}
-		$i++;
-	}
+	}	
 
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
