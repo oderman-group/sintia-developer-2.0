@@ -49,9 +49,7 @@
 		}
 		function mostrarCursosAdicionales(enviada) {
 			var valor = enviada.value;
-			var individual = 'individual';
-			console.log(valor+' - '+individual)
-			if (valor == individual) {
+			if (valor == '<?=GRADO_INDIVIDUAL;?>') {
 				document.getElementById("divCursosAdicionales").style.display='block';
 			} else {
 				document.getElementById("divCursosAdicionales").style.display='none';
@@ -469,8 +467,7 @@
 													<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 													<div class="col-sm-2">
 														<select class="form-control" onchange="mostrarCursosAdicionales(this)" name="tipoMatricula">
-															<option value="">Seleccione una opción</option>
-															<option value="<?=GRADO_GRUPAL;?>">NO</option>
+															<option value="<?=GRADO_GRUPAL;?>" selected>NO</option>
 															<option value="<?=GRADO_INDIVIDUAL;?>">SI</option>
 														</select>
 													</div>
