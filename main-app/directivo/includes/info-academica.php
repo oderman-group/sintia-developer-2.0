@@ -118,9 +118,7 @@
 			$(document).ready(mostrarCursosAdicionales(document.getElementById("tipoMatricula")))
 			function mostrarCursosAdicionales(enviada) {
 				var valor = enviada.value;
-				var individual = 'individual';
-				console.log(valor+' - '+individual)
-				if (valor == individual) {
+				if (valor == '<?=GRADO_INDIVIDUAL;?>') {
 					document.getElementById("divCursosAdicionales").style.display='block';
 				} else {
 					document.getElementById("divCursosAdicionales").style.display='none';
