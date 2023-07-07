@@ -28,12 +28,14 @@ if(!empty($_POST["fNac"])){
 }
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
+
 $esMediaTecnica=!is_null($_POST["tipoMatricula"]);
 if(!$esMediaTecnica){
 	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 	$_POST["tipoMatricula"]=$datosEstudianteActual["mat_tipo_matricula"];
 }
-if($_POST["tipoMatricula"]==""){$_POST["tipoMatricula"]=GRADO_GRUPAL;}
+if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
+
 $procedencia=$_POST["lNac"];
 if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
@@ -109,7 +111,6 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 
-//Insertamos las matrículas Adicionales
 if ($esMediaTecnica) { 
 	try{
 		if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL)

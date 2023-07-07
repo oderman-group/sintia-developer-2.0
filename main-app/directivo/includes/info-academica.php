@@ -104,50 +104,49 @@
 		<div class="form-group row">
 			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
 			<div class="col-sm-2">
-				<select class="form-control  select2" id="tipoMatricula" name="tipoMatricula" onchange="javascript:mostrarCursosAdicionales()">
-					<option value=<?=GRADO_GRUPAL;?> 
+				<select class="form-control  select2" name="tipoMatricula" id="tipoMatricula" onchange="mostrarCursosAdicionales(this)">
+					<option value="<?=GRADO_GRUPAL;?>" 
 					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_GRUPAL) {echo 'selected';} ?>
 					>NO</option>
-					<option value=<?=GRADO_INDIVIDUAL;?>
+					<option value="<?=GRADO_INDIVIDUAL;?>"
 					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {echo 'selected';} ?>
 					>SI</option>
 				</select>
 			</div>
 		</div>
-		<script>
-			mostrarCursosAdicionales();
-			function mostrarCursosAdicionales() {
-				valor = document.getElementById("tipoMatricula");
-				if (valor.value == "<?php echo GRADO_INDIVIDUAL ;?>") {
-					$(document).ready(function() {
-						$('.divCursosAdicionales').show();
-					});
+		<script type="application/javascript">
+			$(document).ready(mostrarCursosAdicionales(document.getElementById("tipoMatricula")))
+			function mostrarCursosAdicionales(enviada) {
+				var valor = enviada.value;
+				if (valor == '<?=GRADO_INDIVIDUAL;?>') {
+					document.getElementById("divCursosAdicionales").style.display='block';
 				} else {
-					$(document).ready(function() {
-						$('.divCursosAdicionales').hide();
-					});
+					document.getElementById("divCursosAdicionales").style.display='none';
 				}
 			}
 		</script>
-		<div class="form-group row divCursosAdicionales" >
-			<label class="col-sm-2 control-label">Cursos adicionales <span style="color: red;">(*)</span></label>
-			<div class="col-sm-4">
-				<select class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" required multiple>
-					<option value="">Seleccione una opción</option>
-					<?php
-					foreach ($listaIndividuales as $dato) {
-						$disabled = '';
-						$selected = '';
-						if (array_key_exists($dato["gra_id"], $listaMediaActual)){
-							$selected = 'selected';
+		
+		<div id="divCursosAdicionales" style="display: none;">
+			<div class="form-group row" >
+				<label class="col-sm-2 control-label">Cursos adicionales</label>
+				<div class="col-sm-4">
+					<select id="multiple" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" multiple>
+						<option value="">Seleccione una opción</option>
+						<?php
+						foreach ($listaIndividuales as $dato) {
+							$disabled = '';
+							$selected = '';
+							if (array_key_exists($dato["gra_id"], $listaMediaActual)){
+								$selected = 'selected';
+							}
+							if ($dato['gra_estado'] == '0') {
+								$disabled = 'disabled';
+							};
+							echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . ' ' . $selected . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
 						}
-						if ($dato['gra_estado'] == '0') {
-							$disabled = 'disabled';
-						};
-						echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . ' ' . $selected . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
-					}
-					?>
-				</select>
+						?>
+					</select>
+				</div>
 			</div>
 		</div>
 	<?php } ?>
