@@ -1,20 +1,40 @@
 <?php
 include("session.php");
-$cdnota=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
+try{
+	$cdnota=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 if(mysqli_num_rows($cdnota)==0){
 	if(isset($_POST["nota"])){
-	mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["nota"]."', now(),'".$_POST["periodo"]."')");
-	}else{
-	mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["observacion"]."', now(),'".$_POST["periodo"]."')");	
+		try{
+			mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["nota"]."', now(),'".$_POST["periodo"]."')");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
 		}
+	}else{
+		try{
+			mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["observacion"]."', now(),'".$_POST["periodo"]."')");	
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
 	
 }else{
 	if(isset($_POST["nota"])){
-	mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$_POST["nota"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
-	}else{
-	mysqli_query($conexion, "UPDATE disiplina_nota SET dn_observacion='".$_POST["observacion"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");	
+		try{
+			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$_POST["nota"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
 		}
+	}else{
+		try{
+			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_observacion='".$_POST["observacion"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");	
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
 	
 	}
 

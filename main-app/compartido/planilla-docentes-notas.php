@@ -188,16 +188,6 @@ require_once("../class/UsuariosPadre.php");
     ?>
     </table>
 
-    <p align="center">
-
-    <div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center">
-
-      <?= $msj; ?>
-
-    </div>
-
-    </p>
-
 
 
     <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">

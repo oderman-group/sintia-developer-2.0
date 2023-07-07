@@ -35,12 +35,20 @@
 											<?php
 											$porcentaje = 0;
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
-												$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'");
+												try{
+													$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
+													WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 												
-												$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'");
+												try{
+													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
+													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												$notapp = mysqli_fetch_array($consultaNotaspp, MYSQLI_BOTH);
 												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
 												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
@@ -78,9 +86,13 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-											INNER JOIN academico_materias ON mat_id=car_materia
-											WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+											try{
+												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+												INNER JOIN academico_materias ON mat_id=car_materia
+												WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											$nCargas = mysqli_num_rows($cCargas);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
@@ -117,11 +129,19 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_registrada=1 AND cls_estado=1");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_registrada=1 AND cls_estado=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaAusencias=mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-														WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'");
+														try{
+															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM academico_ausencias 
+															WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$ausencia = mysqli_fetch_array($consultaAusencias, MYSQLI_BOTH);
 													 ?>
 													<tr>

@@ -1,4 +1,7 @@
-<?php include("../directivo/session.php");
+<?php
+session_start();
+include("../../config-general/config.php");
+include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
@@ -22,13 +25,13 @@ if ($periodoActual == 3) $periodoActuales = "Tercero";
 if ($periodoActual == 4) $periodoActuales = "Final";
 //CONSULTA ESTUDIANTES MATRICULADOS
 $filtro = '';
-if (is_numeric($_GET["id"])) {
+if (!empty($_GET["id"])) {
     $filtro .= " AND mat_id='" . $_GET["id"] . "'";
 }
-if (is_numeric($_REQUEST["curso"])) {
+if (!empty($_REQUEST["curso"])) {
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
-if(is_numeric($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 $numMatriculados = mysqli_num_rows($matriculadosPorCurso);

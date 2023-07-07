@@ -5,7 +5,11 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idR"]."'");
+try{
+	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idR"]."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 ?>
 
@@ -56,9 +60,13 @@ $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idR"]."' AND eva_estado=1
-											ORDER BY eva_id DESC");
+											try{
+												$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
+												WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idR"]."' AND eva_estado=1
+												ORDER BY eva_id DESC");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="evaluaciones-editar.php?idR=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>

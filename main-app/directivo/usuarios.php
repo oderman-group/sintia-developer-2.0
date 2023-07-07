@@ -70,7 +70,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 								
 							<?php
 							$filtro = '';
-							if(is_numeric($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'";}
+							$tipo = '';
+							if(!empty($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'"; $tipo = $_GET["tipo"];}
 							?>
 								
 								<div class="col-md-12">
@@ -121,11 +122,15 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 												
 												<?php
 													include("includes/consulta-paginacion-usuarios.php");	
-													$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-													WHERE uss_id=uss_id $filtro
-													ORDER BY uss_id
-													LIMIT $inicio,$registros;");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
+														INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+														WHERE uss_id=uss_id $filtro
+														ORDER BY uss_id
+														LIMIT $inicio,$registros;");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													$contReg = 1;
 													$bloqueado = array("NO","SI");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -135,14 +140,22 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$cheked = '';
 														if($resultado['uss_bloqueado']==1){$cheked = 'checked';}
 
-														$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
+														try{
+															$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$numCarga = mysqli_num_rows($consultaNumCarga);
 
-														$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
-														FROM usuarios 
-														WHERE uss_usuario='".$resultado['uss_usuario']."'
-														GROUP BY uss_usuario
-														");
+														try{
+															$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
+															FROM usuarios 
+															WHERE uss_usuario='".$resultado['uss_usuario']."'
+															GROUP BY uss_usuario
+															");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$usuarioRepetido = mysqli_fetch_array($consultaUsuariosRepetidos, MYSQLI_BOTH);
 														$avisoRepetido = null;
 														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';

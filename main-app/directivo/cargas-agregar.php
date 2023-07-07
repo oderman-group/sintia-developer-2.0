@@ -56,8 +56,12 @@
                                             <label class="col-sm-2 control-label">Docente <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-												WHERE uss_tipo=2 ORDER BY uss_nombre");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                    WHERE uss_tipo=2 ORDER BY uss_nombre");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="docente" required>
                                                     <option value="">Seleccione una opción</option>
@@ -76,7 +80,11 @@
                                             <label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select id="multiple" class="form-control  select2-multiple" name="curso[]" required multiple>
                                                     <option value="">Seleccione una opción</option>
@@ -95,7 +103,11 @@
                                             <label class="col-sm-2 control-label">Grupo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
 												?>
                                                 <select id="multiple" class="form-control select2-multiple" name="grupo[]" multiple>
                                                     <option value="">Seleccione una opción</option>
@@ -112,8 +124,12 @@
                                             <label class="col-sm-2 control-label">Asignatura (Área) <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias
-												INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
+                                                try{
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias
+                                                    INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select id="multiple"  class="form-control  select2-multiple" name="asignatura[]" required multiple>
                                                     <option value="">Seleccione una opción</option>

@@ -3,7 +3,9 @@ include("../docente/session.php");
 require_once("../class/Estudiantes.php");
 
 $filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+// $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."'";
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+// $asig = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 
 $grados = mysqli_fetch_array($asig, MYSQLI_BOTH);		
 $num_asg=mysqli_num_rows($asig);
@@ -22,7 +24,7 @@ $num_asg=mysqli_num_rows($asig);
   var codEst = enviada.id;
   var carga = enviada.name;
   var per = enviada.alt;
- if (nota><?=$config[4];?> || isNaN(nota) || nota<<?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;} 
+ if (nota> <?=$config[4];?> || isNaN(nota) || nota< <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;} 
     $('#resp').empty().hide().html("Esperando...").show(1);
     datos = "nota="+(nota)+
            "&carga="+(carga)+
@@ -42,10 +44,10 @@ $num_asg=mysqli_num_rows($asig);
 </head>
 <body style="font-family:Arial;">
 	
-  <!--
-<div style="margin: 10px;">
-		<img src="../../files-general/main-app/informes/sabanas.jpg" style="width: 100%;">
-	</div>-->
+
+<!-- <div style="margin: 10px;">
+  <img src="../../files-general/instituciones/informes/sabanas.jpg" style="width: 100%;">
+</div> -->
 	
 <div align="center" style="margin-bottom:20px;">
     <?=$informacion_inst["info_nombre"]?><br>

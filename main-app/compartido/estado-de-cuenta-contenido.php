@@ -9,14 +9,14 @@
 								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=4)
 								"), MYSQLI_BOTH);
 								$saldo = ($resumen[0] - $resumen[2]);
-								$mensajeSaldo='Tienes las cuentas al día. Excelente!';
-								if($saldo>0){$mensajeSaldo='Tienes saldo a favor.';}
-								if($saldo<0){$mensajeSaldo='Tienes un saldo pendiente por pagar. Trata de ponerte al día lo antes posible.';}
+								$mensajeSaldo=$frases[309][$datosUsuarioActual['uss_idioma']];
+								if($saldo>0){$mensajeSaldo=$frases[310][$datosUsuarioActual['uss_idioma']];}
+								if($saldo<0){$mensajeSaldo=$frases[311][$datosUsuarioActual['uss_idioma']];}
 								?>
 								<div class="col-md-3">
 									
 									<div class="panel">
-										<header class="panel-heading panel-heading-purple">Resumen </header>
+										<header class="panel-heading panel-heading-purple"><?=strtoupper($frases[312][$datosUsuarioActual['uss_idioma']]);?> </header>
                                         <div class="panel-body">
 											<?php
 											if(empty($resumen[2])){
@@ -26,20 +26,20 @@
 												$resumen[0]=0;
 											}
 											?>
-											<p><b>COBROS:</b> $<?=number_format($resumen[2],0,",",".");?></p>
-											<p><b>PAGOS:</b> $<?=number_format($resumen[0],0,",",".");?></p>
+											<p><b><?=strtoupper($frases[313][$datosUsuarioActual['uss_idioma']]);?>:</b> $<?=number_format($resumen[2],0,",",".");?></p>
+											<p><b><?=strtoupper($frases[314][$datosUsuarioActual['uss_idioma']]);?>:</b> $<?=number_format($resumen[0],0,",",".");?></p>
 											<hr>
-											<p><b>SALDO:</b> $<?=number_format($saldo,0,",",".");?></p>
+											<p><b><?=strtoupper($frases[315][$datosUsuarioActual['uss_idioma']]);?>:</b> $<?=number_format($saldo,0,",",".");?></p>
 											<p style="color: blueviolet;"><?=$mensajeSaldo;?></p>
 										</div>
 									</div>
 
 									<div align="center">
-										<p><mark>Recuerde que su código para hacer el pago es el siguiente: <b><?=$datosEstudianteActual['mat_codigo_tesoreria'];?></b></mark></p>
+										<p><mark><?=$frases[316][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosEstudianteActual['mat_codigo_tesoreria'];?></b></mark></p>
 
-										<p><a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn btn-info" target="_blank">LINK DE PAGO</a></p>
+										<p><a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn btn-info" target="_blank"><?=strtoupper($frases[317][$datosUsuarioActual['uss_idioma']]);?></a></p>
 
-										<p><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$datosEstudianteActual['mat_codigo_tesoreria'];?>/<?=date('Y');?>" class="btn btn-success" target="_blank">ESTADO DE CUENTA</a></p>
+										<p><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$datosEstudianteActual['mat_codigo_tesoreria'];?>/<?=date('Y');?>" class="btn btn-success" target="_blank"><?=strtoupper($frases[104][$datosUsuarioActual['uss_idioma']]);?></a></p>
 									</div>
 
 								</div>
@@ -62,7 +62,7 @@
                                                         <th>#</th>
 														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[162][$datosUsuarioActual[8]];?></th>
-														<th>Tipo</th>
+														<th><?=$frases[53][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[52][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>

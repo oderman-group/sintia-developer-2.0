@@ -37,10 +37,10 @@ $Plataforma = new Plataforma;
 								
 								<?php 
 								$filtro = '';
-								if(is_numeric($_GET["curso"])){$filtro .= " AND car_curso='".$_GET["curso"]."'";}
-								if(is_numeric($_GET["grupo"])){$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
-								if(is_numeric($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
-								if(is_numeric($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
+								if(!empty($_GET["curso"])){$filtro .= " AND car_curso='".$_GET["curso"]."'";}
+								if(!empty($_GET["grupo"])){$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
+								if(!empty($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
+								if(!empty($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
 
 								//include("includes/cargas-filtros.php");
 								?>
@@ -89,20 +89,28 @@ $Plataforma = new Plataforma;
 													</thead>
 													<tbody>
 													<?php
-													include("includes/consulta-paginacion-cargas.php");											       
-													$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
-													  LEFT JOIN academico_grados ON gra_id=car_curso
-													  LEFT JOIN academico_grupos ON gru_id=car_grupo
-													  LEFT JOIN academico_materias ON mat_id=car_materia
-													  LEFT JOIN usuarios ON uss_id=car_docente
-													  WHERE car_id=car_id $filtro
-												        ORDER BY car_id
-													    LIMIT $inicio,$registros;");
+													include("includes/consulta-paginacion-cargas.php");	
+													try{										       
+														$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
+														LEFT JOIN academico_grados ON gra_id=car_curso
+														LEFT JOIN academico_grupos ON gru_id=car_grupo
+														LEFT JOIN academico_materias ON mat_id=car_materia
+														LEFT JOIN usuarios ON uss_id=car_docente
+														WHERE car_id=car_id $filtro
+														ORDER BY car_id
+														LIMIT $inicio,$registros;");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
     												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 																										
 														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
-														$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
+														try{
+															$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$cargaAcademica = mysqli_fetch_array($consultaCargaAcademica, MYSQLI_BOTH);
 														$cargaSP = $resultado[0];
 														$periodoSP = $resultado['car_periodo'];

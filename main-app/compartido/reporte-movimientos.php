@@ -29,6 +29,7 @@ require_once("../class/UsuariosPadre.php");
   </tr>
   <?php
 									 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_anulado=0");
+                   $cont=0;
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                     $consultaU=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[6]."'");
 										 $u = mysqli_fetch_array($consultaU, MYSQLI_BOTH);

@@ -100,8 +100,12 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bg = '';
@@ -166,8 +170,12 @@
 												<input type="submit" class="btn btn-primary" value="Guardar cambios">
 											</form>
 											<?php
-											$consultapClase=mysqli_query($conexion, "SELECT * FROM academico_pclase 
-											WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."'");
+											try{
+												$consultapClase=mysqli_query($conexion, "SELECT * FROM academico_pclase 
+												WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."'");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											$pclase = mysqli_fetch_array($consultapClase, MYSQLI_BOTH);
 											if($pclase['pc_plan']!=""){
 											?>

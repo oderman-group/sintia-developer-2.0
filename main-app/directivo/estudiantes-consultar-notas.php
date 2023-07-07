@@ -120,7 +120,11 @@ include("../compartido/head.php");
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Carga Acad&eacute;mica</label> 
                                           	<?php 
-											$consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas, academico_materias WHERE car_curso='".$e[6]."' AND car_grupo='".$e[7]."' AND mat_id=car_materia");
+                                            try{
+                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas, academico_materias WHERE car_curso='".$e[6]."' AND car_grupo='".$e[7]."' AND mat_id=car_materia");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
 											?>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="carga" required>

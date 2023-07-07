@@ -76,12 +76,16 @@ $porcentajeRestante = 100 - $valores[0];
                                             <label class="col-sm-2 control-label">Carga</label>
                                             <div class="col-sm-10">
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
-												INNER JOIN academico_grados ON gra_id=car_curso
-												INNER JOIN academico_grupos ON gru_id=car_grupo
-												WHERE car_docente='".$_SESSION["id"]."'
-												ORDER BY car_curso, car_grupo, mat_nombre");
+												try{
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+													INNER JOIN academico_materias ON mat_id=car_materia
+													INNER JOIN academico_grados ON gra_id=car_curso
+													INNER JOIN academico_grupos ON gru_id=car_grupo
+													WHERE car_docente='".$_SESSION["id"]."'
+													ORDER BY car_curso, car_grupo, mat_nombre");
+												} catch (Exception $e) {
+													include("../compartido/error-catch-to-report.php");
+												}
 												?>
                                                 <select class="form-control  select2" name="cargaImportar" required>
                                                     <option value="">Seleccione una opción</option>

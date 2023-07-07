@@ -2,7 +2,6 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php"); ?>
-<?php include("../compartido/head.php"); ?>
 
 <?php
 $consultaDatos = mysqli_query($conexion, "SELECT * FROM academico_grados

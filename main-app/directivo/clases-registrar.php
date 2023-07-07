@@ -7,7 +7,11 @@ include("verificar-periodos-diferentes.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+try{
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -81,10 +85,12 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 										<div class="panel-body">
 											<p>Puedes cambiar a otra clases rápidamente para registrar la asistencia a tus estudiantes o hacer modificaciones de las mismas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_clases 
-											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$_GET["idR"]."'
-											ORDER BY cls_id DESC
-											");
+											try{
+												$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_clases 
+												WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$_GET["idR"]."' ORDER BY cls_id DESC ");
+											} catch (Exception $e) {
+												include("../compartido/error-catch-to-report.php");
+											}
 											while($regComun = mysqli_fetch_array($registrosEnComun)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['cls_id'];?>"><?=$regComun['cls_tema'];?></a></p>
@@ -141,7 +147,11 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 														$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$_GET["idR"]."'");
+															try{
+															 	$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$_GET["idR"]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														 }
 													 ?>

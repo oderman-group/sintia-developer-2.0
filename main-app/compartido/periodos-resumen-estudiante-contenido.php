@@ -38,12 +38,12 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 									?>
 
 									<div class="panel">
-											<header class="panel-heading panel-heading-yellow">INFORMACIÓN DE CONSULTA</header>
+											<header class="panel-heading panel-heading-yellow"><?=strtoupper($frases[283][$datosUsuarioActual['uss_idioma']]);?></header>
 
 											<div class="panel-body">
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b>ESTUDIANTE</b> 
+														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
 														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
 													</li>
 													

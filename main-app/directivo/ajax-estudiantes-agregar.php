@@ -1,7 +1,11 @@
 <?php 
 include("session.php");
-$consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
-WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
+try{
+    $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
+    WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
 $numDotos=mysqli_num_rows($consultaDoc);
 if ($numDotos > 0) {
     require_once("../class/Estudiantes.php");

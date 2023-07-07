@@ -1,7 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0102';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0102';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+
+$db = $_SESSION["inst"]."_".$_SESSION["bd"];
+$urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -32,7 +37,10 @@
 								
 								<div class="col-md-12">
 
-                                <?php include("includes/barra-superior-inscripciones.php");?>
+                                <?php
+                                    $filtro="";
+                                    include("includes/barra-superior-inscripciones.php");
+                                ?>
 
                                     <?php if (isset($_GET["msg"]) and $_GET["msg"] == 1) { ?>
                                     <div class="alert alert-block alert-success">
@@ -63,10 +71,16 @@
                                             <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
                                                 <b>En cada aspirante: Ve a la opción Acciones->Borrar documentación.</b></p>
                                         </div>
+											
+                                        <div class="alert alert-block alert-success">
+                                            <h4 class="alert-heading">Enlace para inscripción:</h4>
+                                            <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
+                                            <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
+                                            </div>
+                                        </div>
 
                                         <?php
-                                            $filtro="";
-                                            if(is_numeric($_GET["curso"])){
+                                            if(!empty($_GET["curso"])){
                                                 $filtro .= " AND asp_grado='".$_GET["curso"]."'";
                                             }
                                         ?>
@@ -110,12 +124,16 @@
                                                 8 => 'yellow',
                                                 9 => '#00FAB5'
                                                 );
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-                                                INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
-                                                LEFT JOIN academico_grados ON gra_id=asp_grado
-                                                WHERE mat_estado_matricula=5 $filtro
-                                                ORDER BY mat_primer_apellido
-                                                LIMIT $inicio,$registros");
+                                                try{
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+                                                    INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
+                                                    LEFT JOIN academico_grados ON gra_id=asp_grado
+                                                    WHERE mat_estado_matricula=5 $filtro
+                                                    ORDER BY mat_primer_apellido
+                                                    LIMIT $inicio,$registros");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
@@ -134,8 +152,8 @@
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>" target="_blank">Editar</a></li>
+                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Editar</a></li>
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
                                                                     
@@ -157,8 +175,8 @@
                                             </table>
                                             </div>
                                         </div>
+                      				    <?php include("enlaces-paginacion.php");?>
                                     </div>
-                      				<?php include("enlaces-paginacion.php");?>
                                 </div>
                             </div>
                         </div>

@@ -17,7 +17,7 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                         <div class="panel-body">
-												<p><b>P.A:</b> Es el periodo actual que se está trabajando en la asignatura.</p>
+												<p><b>P.A:</b> <?=$frases[284][$datosUsuarioActual['uss_idioma']];?></p>
 										</div>
 									</div>
 									
@@ -26,12 +26,12 @@
 									?>
 
 									<div class="panel">
-											<header class="panel-heading panel-heading-yellow">INFORMACIÓN DE CONSULTA</header>
+											<header class="panel-heading panel-heading-yellow"><?=strtoupper($frases[283][$datosUsuarioActual['uss_idioma']]);?></header>
 
 											<div class="panel-body">
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b>ESTUDIANTE</b> 
+														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
 														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
 													</li>
 													
@@ -65,7 +65,7 @@
 														<th><?=$frases[116][$datosUsuarioActual['uss_idioma']];?></th>
 														<th style="text-align:center;">P.A</th>
 														<th style="text-align:center;"><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
-														<th style="text-align:center;">Más opciones</th>
+														<th style="text-align:center;"><?=$frases[285][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -101,7 +101,7 @@
 														</td>
 														<?php }else{?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>" style="text-decoration:underline;">Ver</a>
+															<a href="calificaciones.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>" style="text-decoration:underline;"><?=$frases[39][$datosUsuarioActual['uss_idioma']];?></a>
 														</td>
 														<?php }?>
 														
@@ -112,7 +112,7 @@
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
-																		  <li><a href="cronograma-actividades.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>">Cronograma</a></li>
+																		  <li><a href="cronograma-actividades.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	  </ul>
 																  </div>
 														</td>

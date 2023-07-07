@@ -52,7 +52,7 @@
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th><?=$frases[186][$datosUsuarioActual['uss_idioma']];?></th>
-														<th>Observaciones</th>
+														<th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
 														<th title="Firma y aprobación del estudiante">F.E</th>
 														<th title="Firma y aprobación del acudiente">F.A</th>
                                                     </tr>
@@ -82,7 +82,7 @@
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
-																<a href="guardar.php?get=1&id=<?=$resultado['dr_id'];?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}">Firmar</a>
+																<a href="guardar.php?get=1&id=<?=$resultado['dr_id'];?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
 															<?php }else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_estudiante_fecha'];?>"></i>
 															<?php }?>

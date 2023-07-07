@@ -73,7 +73,11 @@
                                                     <tr>
                                                         <th width="20%">Materia</th>
                                                         <?php
-                                                        $cursos = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                        try{
+                                                            $cursos = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         while($c = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
                                                         ?>
                                                             <th style="font-size:8px; text-align:center;"><?=$c[2];?></th>
@@ -86,30 +90,58 @@
                                                 <!-- BEGIN -->
                                                 <tbody>
                                                 <?php
-                                                $materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+                                                try{
+                                                    $materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
                                                 while($m = mysqli_fetch_array($materias, MYSQLI_BOTH)){
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?=$m[2];?></td>
                                                     <?php
-                                                    $curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                    try{
+                                                        $curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-                                                        $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                        try{
+                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
-                                                        $consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".$_GET["ind"]."' AND ipc_creado=0");
+                                                        try{
+                                                            $consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".$_GET["ind"]."' AND ipc_creado=0");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         $ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH);
                                                         
-                                                        $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                        try{
+                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
                                                         $indCreados=0;
                                                         while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-                                                            $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_creado=1");
+                                                            try{
+                                                                $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_creado=1");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
                                                             $ipcC = mysqli_num_rows($consultaNumIpcC);
-                                                            $consultaCalC=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cgs[0]."' AND act_estado=1");
+                                                            try{
+                                                                $consultaCalC=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cgs[0]."' AND act_estado=1");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
                                                             $calC = mysqli_num_rows($consultaCalC);
                                                             if($ipcC>0 or $calC>0) $indCreados=1;
                                                         }
                                                         
-                                                        if($carga['car_id']=="") {$estadoD = 'disabled'; $fondo = '#FFF';} 
+                                                        if(!empty($carga['car_id'])) {$estadoD = 'disabled'; $fondo = '#FFF';} 
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>

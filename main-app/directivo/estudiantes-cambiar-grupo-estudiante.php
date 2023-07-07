@@ -1,22 +1,41 @@
 <?php
 include("session.php");
-include("../modelo/conexion.php");
 require_once("../class/Estudiantes.php");
 
+try{
 	$consultaEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='" . $_POST["estudiante"] . "'");
-	$estudiante = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+$estudiante = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
+try{
 	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $estudiante["mat_grado"] . "' AND car_grupo='" . $estudiante["mat_grupo"] . "'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 	$contador=0;
 	while ($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)) {
-		$consultaCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $_POST["cursoNuevo"] . "' AND car_grupo='" . $_POST["grupoNuevo"] . "' AND car_materia='" . $cargasDatos["car_materia"] . "'");
+		try{
+			$consultaCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $_POST["cursoNuevo"] . "' AND car_grupo='" . $_POST["grupoNuevo"] . "' AND car_materia='" . $cargasDatos["car_materia"] . "'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 		$cargasConsultaNuevo = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH);		
         if(!is_null($cargasConsultaNuevo)){
-			mysqli_query($conexion, "UPDATE academico_boletin SET bol_carga='" . $cargasConsultaNuevo["car_id"] . "' 
-		WHERE bol_carga='" . $cargasDatos["car_id"] . "' AND bol_estudiante='" . $_POST["estudiante"] . "'");
-		$contador++;
+			try{
+				mysqli_query($conexion, "UPDATE academico_boletin SET bol_carga='" . $cargasConsultaNuevo["car_id"] . "' 
+				WHERE bol_carga='" . $cargasDatos["car_id"] . "' AND bol_estudiante='" . $_POST["estudiante"] . "'");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+			$contador++;
 		}		
 	}
-	mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado='" . $_POST["cursoNuevo"] . "', mat_grupo='" . $_POST["grupoNuevo"] . "' WHERE mat_id='" . $_POST["estudiante"] . "'");
+	try{
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_grado='" . $_POST["cursoNuevo"] . "', mat_grupo='" . $_POST["grupoNuevo"] . "' WHERE mat_id='" . $_POST["estudiante"] . "'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	include("../compartido/guardar-historial-acciones.php");
 	$msj="Se actualizaron (".$contador.") cargas para el estudiante ".Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	echo '<script type="text/javascript">window.location.href="estudiantes-cambiar-grupo.php?success=SC_DT_4&summary='.$msj.'&id='.$_POST["estudiante"].'";</script>';

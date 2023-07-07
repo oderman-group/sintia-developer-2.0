@@ -33,7 +33,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Firmar matrícula</div>
+                            <div class="page-title"><?=$frases[339][$datosUsuarioActual[8]];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header>Firmar matrícula</header>
+                                <header><?=$frases[339][$datosUsuarioActual[8]];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
 
@@ -53,7 +53,7 @@
 
 
 
-                                <p>En este espacio puede adjuntar la firma digital, si no tiene firma digital puede realizar la firma en un papel blanco sin l&iacute;neas, ni cuadriculas; tomarle una foto con buena iluminaci&oacute;n y subirla a este medio.</p>
+                                <p><?=$frases[352][$datosUsuarioActual[8]];?></p>
 
 
 
@@ -61,7 +61,7 @@
                                     <input type="hidden" name="id" value="25">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Adjuntar firma</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[353][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-4">
                                             <input type="file" name="archivo" class="form-control">
                                         </div>
@@ -73,7 +73,7 @@
 
 
                                     <?php if ($datosEstudianteActual["mat_mayores14"] == 1 and $datosEstudianteActual["mat_hoja_firma"] == '0') { ?>
-                                        <input type="submit" class="btn btn-primary" value="Enviar firma y finalizar proceso">&nbsp;
+                                        <input type="submit" class="btn btn-primary" value="<?=$frases[353][$datosUsuarioActual[8]];?>">&nbsp;
                                     <?php } ?>
 
                                 </form>
@@ -81,13 +81,13 @@
 
                                 <?php if ($datosEstudianteActual["mat_hoja_firma"] == 1 and $datosEstudianteActual["mat_estado_matricula"] == 4) { ?>
                                     <p align="center" style="margin-top:50px; font-size: 20px;">
-                                        NOTA: Una vez la secretaria académica verifique y apruebe la matrícula le aparecerá el comprobante final.
+                                    <?=$frases[354][$datosUsuarioActual[8]];?>
                                     </p>
                                 <?php } ?>
 
                                 <?php if ($datosEstudianteActual["mat_hoja_firma"] == 1 and $datosEstudianteActual["mat_estado_matricula"] == 1) { ?>
                                     <p align="center" style="margin-top:50px;">
-                                        <a href="comprobante-matricula.php?" style="text-decoration: underline; font-weight: bold; color:green;" target="_Blank">DESCARGAR COMPROBANTE</a>
+                                        <a href="comprobante-matricula.php?" style="text-decoration: underline; font-weight: bold; color:green;" target="_Blank"><?=$frases[355][$datosUsuarioActual[8]];?></a>
                                     </p>
                                 <?php } ?>
 

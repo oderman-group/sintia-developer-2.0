@@ -65,7 +65,7 @@
 										
 	
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Palabras claves</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[228][$datosUsuarioActual[8]];?></label>
 											<div class="col-sm-10">
 												<input type="text" name="keyw" class="tags tags-input" data-type="tags" />
 											</div>
@@ -78,7 +78,7 @@
                                             </div>
                                         </div>
 										
-										<h4 align="center" style="font-weight: bold;">FILTROS</h4>
+										<h4 align="center" style="font-weight: bold;"><?=$frases[205][$datosUsuarioActual[8]];?></h4>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
@@ -108,9 +108,9 @@
 											
 
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<input type="submit" class="btn btn-primary" value="<?=$frases[41][$datosUsuarioActual[8]];?>">&nbsp;
 										
-										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 
                                     </form>
                                 </div>

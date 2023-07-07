@@ -159,8 +159,12 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
-														WHERE uss_id='".$resultado["mat_acudiente"]."'");
+														try{
+															$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
+															WHERE uss_id='".$resultado["mat_acudiente"]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
@@ -261,10 +265,6 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                                     </div>
                       				<?php include("enlaces-paginacion.php");?>
                                 </div>
-								
-								
-								
-							
                             </div>
                         </div>
                     </div>

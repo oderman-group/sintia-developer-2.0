@@ -107,11 +107,19 @@ require_once("../class/Estudiantes.php");
 													<th rowspan="2" style="font-size:9px;">Doc</th>
 													<th rowspan="2" style="font-size:9px;">Estudiante</th>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1");
+													try{
+														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														try{
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 													?>
 														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia[2];?></th>
@@ -123,7 +131,11 @@ require_once("../class/Estudiantes.php");
 													
 													<tr>
 														<?php
-														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+														try{
+															$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														while($carga = mysqli_fetch_array($cargas)){
 															$p = 1;
 															//PERIODOS DE CADA MATERIA
@@ -159,15 +171,27 @@ require_once("../class/Estudiantes.php");
 													<td style="font-size:9px;"><?=$resultado[12];?></td>
 													<td style="font-size:9px;"><?=$resultado[3]." ".$resultado[4]." ".$resultado[5];?></td>
 													<?php
-													$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+													try{
+														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														try{
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 														$p = 1;
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
 														while($p<=$config[19]){
-															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+															try{
+																$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 															if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
 															if(isset($boletin[4])){
@@ -196,7 +220,11 @@ require_once("../class/Estudiantes.php");
 															//DEFINITIVA DE CADA MATERIA
 															if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
 															//CONSULTAR NIVELACIONES
-															$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+															try{
+																$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 															if(isset($cNiv[3]) and $cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														?>

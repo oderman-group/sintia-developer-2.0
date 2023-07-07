@@ -39,22 +39,22 @@ require_once("../class/Estudiantes.php");
 									<?php if($_GET["req"]==1){?>
 										<div class="card card-topline-red">
 											<div class="card-head">
-												<header>Solicitud de desbloqueo</header>
+												<header><?=$frases[269][$datosUsuarioActual[8]];?></header>
 											</div>
 											<div class="card-body">
-												<p>Si cree que el estudiante <b><?=strtoupper($_GET["nameE"]);?></b> está bloqueado por error, entonces envíe la solicitud de desbloqueo a los directivos de la Institución.</p>
+												<p><?=$frases[273][$datosUsuarioActual[8]];?></p>
 												<form class="form-horizontal" action="guardar.php" method="post">
 													<input type="hidden" name="id" value="1">
 													<input type="hidden" name="idRecurso" value="<?=$_GET["idE"];?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
-															<textarea name="contenido" class="form-control" rows="3" placeholder="Si desea puede escribir aquí un comentario" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+															<textarea name="contenido" class="form-control" rows="3" placeholder="<?=$frases[274][$datosUsuarioActual[8]];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 														</div>
 													</div>
 
 													<div class="form-group">
 														<div class="offset-md-3 col-md-9">
-															<button type="submit" class="btn btn-info">Enviar solicitud</button>
+															<button type="submit" class="btn btn-info"><?=$frases[271][$datosUsuarioActual[8]];?></button>
 															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 														</div>
 													</div>
@@ -66,34 +66,34 @@ require_once("../class/Estudiantes.php");
 									<?php if($_GET["req"]==2){?>
 										<div class="card card-topline-green">
 											<div class="card-head">
-												<header>Reserva de cupos</header>
+												<header><?=$frases[277][$datosUsuarioActual[8]];?></header>
 											</div>
 											<div class="card-body">
-												<p>¿Desea reservar el cupo para el estudiante <b><?=strtoupper($_GET["nameE"]);?></b> para el siguiente año escolar?.</p>
+												<p><?=$frases[278][$datosUsuarioActual[8]];?></p>
 												<form name="formularioCupo" class="form-horizontal" action="guardar.php" method="post">
 													<input type="hidden" name="id" value="2">
 													<input type="hidden" name="idEstudiante" value="<?=$_GET["idE"];?>">
 													
 													<div class="col-sm-12">
-														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /> SI
+														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /><?=$frases[275][$datosUsuarioActual[8]];?>
 													</div>
 													
 													<div class="col-sm-12">
-														<input type="radio" name="respuesta" value="2" onClick="cupoNo(2)" /> NO
+														<input type="radio" name="respuesta" value="2" onClick="cupoNo(2)" /><?=$frases[276][$datosUsuarioActual[8]];?>
 													</div>
 													
 													<div id="motivoNo" style="display: none;">
-													<p>Nos gustaría saber el motivo por el cual no desea reservar el cupo para este estudiante.</p>
+													<p><?=$frases[279][$datosUsuarioActual[8]];?></p>
 													<div class="form-group row">
 														<div class="col-sm-12">
-															<textarea name="motivo" class="form-control" rows="3" placeholder="Escriba el motivo..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+															<textarea name="motivo" class="form-control" rows="3" placeholder="<?=$frases[280][$datosUsuarioActual[8]];?>..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
 														</div>
 													</div>
 													</div>	
 
 													<div class="form-group">
 														<div class="offset-md-3 col-md-9">
-															<button type="submit" class="btn btn-info">Enviar respuesta</button>
+															<button type="submit" class="btn btn-info"><?=$frases[272][$datosUsuarioActual[8]];?></button>
 															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 														</div>
 													</div>
@@ -117,7 +117,7 @@ require_once("../class/Estudiantes.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Usuario</th>
+                                                        <th><?=$frases[186][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
@@ -173,32 +173,25 @@ require_once("../class/Estudiantes.php");
 																				<li><a href="notas-actuales.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
 																			<?php }?>
 
-																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>">R. Disciplina</a></li>
-																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>">Aspectos</a></li>
+																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=$resultado['mat_id_usuario'];?>"><?=$frases[105][$datosUsuarioActual[8]];?></a></li>
+																		  <li><a href="aspectos.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$config[2];?>"><?=$frases[264][$datosUsuarioActual[8]];?></a></li>
 																		  
-																		  <?php if($config['conf_id_institucion'] == 9){?>
-																		  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
-																		  <?php }?>
-																		  
-																		  <?php if($config['conf_id_institucion'] == 1){
-																			  
-																			if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
-																			?>
-																		  
-																		  	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" >Descargar Boletín</a></li>
+																		<?php 
+																			if($config['conf_permiso_descargar_boletin'] == 1){
+																				if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
+																		?>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" ><?=$frases[266][$datosUsuarioActual[8]];?></a></li>
 
-																		  <?php 
+																		<?php
+																				}
 																			}
 
 																		  if($config['conf_informe_parcial']==1){?>
-																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" >Informe parcial</a></li>
+																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>&acu=1" target="_blank" ><?=$frases[265][$datosUsuarioActual[8]];?></a></li>
 																		  <?php }
 
 																		  if($config['conf_ficha_estudiantil']==1){?>
-																		  	<li><a href="ficha-estudiantil.php?idR=<?=$resultado["mat_id_usuario"];?>">Ficha estudiantil</a></li>
-																		  <?php }?>
-
-																		  
+																		  	<li><a href="ficha-estudiantil.php?idR=<?=$resultado["mat_id_usuario"];?>"><?=$frases[266][$datosUsuarioActual[8]];?></a></li>
 																		  <?php }?>
 
 																		  <?php if(!isset($_SESSION['admin'])){?>
@@ -210,15 +203,15 @@ require_once("../class/Estudiantes.php");
 															<?php
 																	}else{
 																		echo "
-																		<span style='color:red;'>Bloqueado</span><br>
-																		<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>Solicitar desbloqueo</a>
+																		<span style='color:red;'>".$frases[268][$datosUsuarioActual[8]]."</span><br>
+																		<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[269][$datosUsuarioActual[8]]."</a>
 																		";
 																	}	
 																}
 																else{}
 															}else{
 																echo "
-																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>¿Desea reservar el cupo?</a>
+																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
 																";	
 															}
 															?>

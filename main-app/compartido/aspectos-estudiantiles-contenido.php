@@ -21,7 +21,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class="pull-left">
-                                <div class="page-title">Aspectos estudiantiles</div>
+                                <div class="page-title"><?=$frases[292][$datosUsuarioActual[8]];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -31,13 +31,13 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                         <div class="col-sm-12">
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
-                                <a href="reportes-lista.php?est=<?=$_GET['idR'];?>&fest=1" class="btn btn-danger" target="_blank">Faltas</a>
+                                <a href="reportes-lista.php?est=<?=$_GET['idR'];?>&fest=1" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
                             <?php }?>
                             
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-                                <a href="estudiantes-editar.php?idR=<?=$_GET['idR'];?>" class="btn btn-info" target="_blank">Editar información</a>
+                                <a href="estudiantes-editar.php?idR=<?=$_GET['idR'];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
 
                             <?php }?>
 
@@ -52,20 +52,20 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                     <table border="1" rules="group" width="100%">
                                         <tr>
-                                            <td style="background-color: lightgray;">Estudiante:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[61][$datosUsuarioActual[8]];?>:</td>
                                             <td colspan="3"><?=$datosEditar['mat_primer_apellido']." ".$datosEditar['mat_segundo_apellido']." ".$datosEditar['mat_nombres'];?></td>
-                                            <td style="background-color: lightgray;">Curso:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[164][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['gra_nombre'];?></td>
                                             <td style="background-color: lightgray;">D.I:</td>
                                             <td><?=$datosEditar['mat_documento'];?></td>
                                         </tr>
 
                                         <tr>
-                                            <td style="background-color: lightgray;">Fecha de nacimiento:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[189][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['mat_fecha_nacimiento'];?></td>
-                                            <td style="background-color: lightgray;">Edad:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[293][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$edad;?></td>
-                                            <td style="background-color: lightgray;">Tipo de RH:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[294][$datosUsuarioActual[8]];?> RH:</td>
                                             <td>&nbsp;</td>
                                             <td style="background-color: lightgray;">EPS:</td>
                                             <td>&nbsp;</td>
@@ -74,47 +74,47 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         <tr>
                                             <td style="background-color: lightgray;">Email acudiente:</td>
                                             <td colspan="3"><?=$datosEditar['uss_email'];?></td>
-                                            <td style="background-color: lightgray;">Número de hermanos:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[295][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
-                                            <td style="background-color: lightgray;">Lugar que ocupa entre ellos:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[296][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
                                         </tr>
 
                                         <tr>
-                                            <td style="background-color: lightgray;">Dirección:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[297][$datosUsuarioActual[8]];?>:</td>
                                             <td colspan="3"><?=$datosEditar['mat_direccion'];?></td>
-                                            <td style="background-color: lightgray;">Barrio:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[298][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['mat_barrio'];?></td>
-                                            <td style="background-color: lightgray;">Teléfono fijo:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[182][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['mat_telefono'];?></td>
                                         </tr>
 
                                         <tr>
-                                            <td style="background-color: lightgray;">Nombre Mamá:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[301][$datosUsuarioActual[8]];?>:</td>
                                             <td colspan="3"></td>
-                                            <td style="background-color: lightgray;">Teléfono:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[182][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
-                                            <td style="background-color: lightgray;">Dirección:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[297][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
                                         </tr>
 
                                         <tr>
-                                            <td style="background-color: lightgray;">Nombre Papá:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[300][$datosUsuarioActual[8]];?>:</td>
                                             <td colspan="3"></td>
-                                            <td style="background-color: lightgray;">Teléfono:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[182][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
-                                            <td style="background-color: lightgray;">Dirección:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[297][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
                                         </tr>
 
                                         <tr>
                                             <td style="background-color: lightgray;">Acudiente:</td>
                                             <td><?=$datosEditar['uss_nombre'];?></td>
-                                            <td style="background-color: lightgray;">Teléfono:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[182][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['uss_telefono'];?></td>
-                                            <td style="background-color: lightgray;">Dirección:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[297][$datosUsuarioActual[8]];?>:</td>
                                             <td><?=$datosEditar['uss_direccion'];?></td>
-                                            <td style="background-color: lightgray;">Parentezco:</td>
+                                            <td style="background-color: lightgray;"><?=$frases[299][$datosUsuarioActual[8]];?>:</td>
                                             <td>&nbsp;</td>
                                         </tr>
 
@@ -127,7 +127,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                            <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header>Aspectos estudiantiles</header>
+                                    <header><?=$frases[292][$datosUsuarioActual[8]];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
@@ -135,14 +135,14 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         <input type="hidden" name="estudiante" value="<?=$datosEditar['mat_id'];?>">
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Fecha</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">  
                                                 <input type="date" name="fecha" class="form-control">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Periodo(Coloque el número)</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[27][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-2">  
                                                 <input type="number" name="periodo" class="form-control">
                                             </div>
@@ -150,28 +150,28 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                         
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Descripción de la situación</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[302][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Aspectos positivos</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[303][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="positivos" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Aspectos a mejorar</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[304][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="mejorar" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Tratamiento</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[305][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="tratamiento" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
@@ -180,7 +180,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         
                                         <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                         
-                                        <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 
                                     </form>
                                 </div>
@@ -190,7 +190,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header>Aspectos estudiantiles (Docentes)</header>
+                                    <header><?=$frases[292][$datosUsuarioActual[8]];?> (<?=$frases[28][$datosUsuarioActual[8]];?>)</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
@@ -201,7 +201,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Periodo(Coloque el número)</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[27][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-2">  
                                                 <input type="number" name="periodo" class="form-control">
                                             </div>
@@ -209,14 +209,14 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Aspectos académicos</label>
+                                            <label class="col-sm-2 control-label"><?=strtoupper($frases[281][$datosUsuarioActual[8]]);?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="academicos" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Aspectos convivenciales</label>
+                                            <label class="col-sm-2 control-label"><?=strtoupper($frases[282][$datosUsuarioActual[8]]);?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="convivenciales" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
                                             </div>
@@ -225,7 +225,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         
                                         <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                         
-                                        <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 
                                     </form>
                                 </div>
@@ -260,18 +260,18 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                     <table width="100%">
                                             <tr style="font-weight: bold;">
-                                                <td colspan="2" align="center">PERIODO <?=$p;?></td>
+                                                <td colspan="2" align="center"><?=strtoupper($frases[27][$datosUsuarioActual[8]]);?> <?=$p;?></td>
                                             </tr>
 
                                             <tr style="font-weight: bold;">
-                                                <td align="center" width="40%">ASPECTOS ACADÉMICOS</td>
-                                                <td align="center" width="40%">ASPECTOS DISCIPLINARIOS</td>
+                                                <td align="center" width="40%"><?=strtoupper($frases[281][$datosUsuarioActual[8]]);?></td>
+                                                <td align="center" width="40%"><?=strtoupper($frases[282][$datosUsuarioActual[8]]);?></td>
                                                 <td align="right" width="20%">&nbsp;</td>
                                             </tr>
 
                                             <tr style="height: 60px;">
-                                                <td><?=$aspectos['dn_aspecto_academico'];?></td>
-                                                <td><?=$aspectos['dn_aspecto_convivencial'];?></td>
+                                                <td><?php if(!empty($aspectos['dn_aspecto_academico'])){ echo $aspectos['dn_aspecto_academico'];}?></td>
+                                                <td><?php if(!empty($aspectos['dn_aspecto_convivencial'])){ echo $aspectos['dn_aspecto_convivencial'];}?></td>
                                                 <td>
                                                     <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
                                                         <a href="../compartido/guardar.php?get=27&idR=<?=$aspectos['dn_id'];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}" class="btn btn-danger">X</a>
@@ -284,7 +284,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                                 <tfoot>
                                                     <tr style="font-weight: bold;">
-                                                        <td align="right">PROMOVIDO: </td>
+                                                        <td align="right"><?=strtoupper($frases[308][$datosUsuarioActual[8]]);?>: </td>
                                                         <td><?=$estadoAgno[$datosEditar['mat_estado_agno']];?></td>
                                                     </tr>  
                                                 </tfoot>
@@ -302,7 +302,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                             <div class="card card-box">
                                     <div class="card-head">
-                                        <header>OBSERVADOR DEL ALUMNO</header>
+                                        <header><?=strtoupper($frases[306][$datosUsuarioActual[8]]);?></header>
                                     </div>
 
                                     <div class="card-body">
@@ -310,12 +310,12 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                             <table width="100%">
 
                                 <tr style="font-weight: bold;">
-                                    <td>FECHA</td>
-                                    <td>NOMBRE DEL USUARIO</td>
-                                    <td>DESCRIPCIÓN DE LA SITUACIÓN</td>
-                                    <td>ASPECTOS POSITIVOS</td>
-                                    <td>ASPECTOS A MEJORAR</td>
-                                    <td>TRATAMIENTO</td>
+                                    <td><?=strtoupper($frases[51][$datosUsuarioActual[8]]);?></td>
+                                    <td><?=strtoupper($frases[307][$datosUsuarioActual[8]]);?></td>
+                                    <td><?=strtoupper($frases[302][$datosUsuarioActual[8]]);?></td>
+                                    <td><?=strtoupper($frases[303][$datosUsuarioActual[8]]);?></td>
+                                    <td><?=strtoupper($frases[304][$datosUsuarioActual[8]]);?></td>
+                                    <td><?=strtoupper($frases[305][$datosUsuarioActual[8]]);?></td>
                                     <th title="Firma y aprobación del acudiente">F.A</th>
                                     <td>&nbsp;</td>
                                 </tr>

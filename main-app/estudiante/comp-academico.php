@@ -33,7 +33,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Compromiso académico</div>
+                                <div class="page-title"><?=$frases[335][$datosUsuarioActual[8]];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
 						<div class="col-sm-9">
 						    <div class="card card-box">
 						        <div class="card-head">
-						            <header>Compromiso académico</header>
+						            <header><?=$frases[335][$datosUsuarioActual[8]];?></header>
 						        </div>
 						        <div class="card-body " id="bar-parent6">
 

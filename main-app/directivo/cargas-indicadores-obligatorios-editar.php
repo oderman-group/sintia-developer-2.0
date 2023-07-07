@@ -49,7 +49,11 @@
 									<header class="panel-heading panel-heading-purple">Editar Indicadores</header>
                                 	<div class="panel-body">
                                     <?php 
-                                    $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_GET["id"]."'");
+                                    try{
+                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_GET["id"]."'");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
                                     $rCargas=mysqli_fetch_array($consultarCargas, MYSQLI_BOTH);
                                     ?>
 

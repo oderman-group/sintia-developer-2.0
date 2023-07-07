@@ -4,7 +4,11 @@
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													try{
+														$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="grado">
 														<option value="">Seleccione una opción</option>
@@ -22,7 +26,11 @@
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+													try{
+														$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="grupo">
 													<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
@@ -39,7 +47,11 @@
 												<label class="col-sm-2 control-label">Tipo estudiante</label>
 												<div class="col-sm-4">
 													<?php
-													$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5");
+													try{
+														$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													?>
 													<select class="form-control" name="tipoEst">
 														<option value="">Seleccione una opción</option>

@@ -1,5 +1,6 @@
 <?php
-  if (isset($_GET['busqueda'])) {
+  $busqueda='';
+  if (!empty($_GET['busqueda'])) {
       $busqueda = $_GET['busqueda'];
       $filtro .= " AND (
       mat_id LIKE '%".$busqueda."%' 
@@ -15,6 +16,14 @@
       OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
       )";
       
+  }
+  $curso = '';
+  if (!empty($_GET['curso'])) {
+      $curso = $_GET['curso'];
+  }
+  $estadoM = '';
+  if (!empty($_GET['estadoM'])) {
+      $estadoM = $_GET['estadoM'];
   }
 ?>
 
@@ -70,9 +79,9 @@
         $grados = Grados::listarGrados(1);
         while($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)){
             $estiloResaltado = '';
-            if($grado['gra_id'] == $_GET["curso"]) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
+            if($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=$_GET["estadoM"];?>&curso=<?=$grado['gra_id'];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=$estadoM;?>&curso=<?=$grado['gra_id'];?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -84,10 +93,10 @@
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$_GET["curso"];?>&busqueda=<?=$_GET["busqueda"];?>" <?=$estiloResaltado;?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Asistentes</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Cancelados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>No Matriculados</a>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
@@ -96,19 +105,9 @@
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
-        <?php
-          if(!empty($_GET["curso"])){
-        ?>
-          <input type="hidden" name="curso" value="<?= $_GET['curso']; ?>"/>
-        <?php
-          }
-          if(!empty($_GET["estadoM"])){
-        ?>
-          <input type="hidden" name="estadoM" value="<?= $_GET['estadoM']; ?>"/>
-        <?php
-          }
-        ?>
-        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET['busqueda'];?>">
+        <input type="hidden" name="curso" value="<?=$curso;?>"/>
+        <input type="hidden" name="estadoM" value="<?=$estadoM;?>"/>
+        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
 

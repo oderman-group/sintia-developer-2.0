@@ -1,4 +1,5 @@
 <?php
+$periodoConsultaActual=$config['conf_periodo'];
 if(!isset($_GET["carga"]) or !is_numeric($_GET["carga"])){
 	if($_COOKIE["carga"]!="" and $_COOKIE["periodo"]!=""){
 		$cargaConsultaActual = $_COOKIE["carga"];
@@ -8,25 +9,45 @@ if(!isset($_GET["carga"]) or !is_numeric($_GET["carga"])){
 			exit();
 	}
 }else{
-	$cargaConsultaActual = $_GET["carga"];
-	$periodoConsultaActual = $_GET["periodo"];
+	if(!empty($_GET["carga"])){
+		$cargaConsultaActual = $_GET["carga"];
+	}
+	if(!empty($_GET["periodo"])){
+		$periodoConsultaActual = $_GET["periodo"];
+	}
 }
-$consultaCargaH=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$cargaConsultaActual."'");
+try{
+	$consultaCargaH=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$cargaConsultaActual."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 $cargaHconsulta = mysqli_fetch_array($consultaCargaH, MYSQLI_BOTH);
 
 if($cargaHconsulta['car_primer_acceso_docente']==""){
-	mysqli_query($conexion, "UPDATE academico_cargas SET car_primer_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+	try{
+		mysqli_query($conexion, "UPDATE academico_cargas SET car_primer_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	
 }else{
-	mysqli_query($conexion, "UPDATE academico_cargas SET car_ultimo_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+	try{
+		mysqli_query($conexion, "UPDATE academico_cargas SET car_ultimo_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 	
 }
 //A los directivos no se les consulta el docente ni tampoco el estado de la carga (Activa o Inactiva)
-$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-INNER JOIN academico_materias ON mat_id=car_materia
-INNER JOIN academico_grados ON gra_id=car_curso
-INNER JOIN academico_grupos ON gru_id=car_grupo
-WHERE car_id='".$cargaConsultaActual."'");
+try{
+	$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+	INNER JOIN academico_materias ON mat_id=car_materia
+	INNER JOIN academico_grados ON gra_id=car_curso
+	INNER JOIN academico_grupos ON gru_id=car_grupo
+	WHERE car_id='".$cargaConsultaActual."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 $numCargaActual = mysqli_num_rows($consultaCargaActual);
 $datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);

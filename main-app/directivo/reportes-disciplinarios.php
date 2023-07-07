@@ -52,8 +52,12 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-													 WHERE dr_estudiante='".$datosEstudianteActual['mat_id']."'");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+                                                        WHERE dr_estudiante='".$datosEstudianteActual['mat_id']."'");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>

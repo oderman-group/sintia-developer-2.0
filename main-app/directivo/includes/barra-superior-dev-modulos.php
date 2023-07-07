@@ -22,7 +22,11 @@ if (isset($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $consultaFiltro = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos");
+                    try{
+                        $consultaFiltro = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos");
+                    } catch (Exception $e) {
+                        include("../compartido/error-catch-to-report.php");
+                    }
                     while ($datosFiltro = mysqli_fetch_array($consultaFiltro, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
                         if ($datosFiltro['mod_id'] == $_GET["modPadre"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';

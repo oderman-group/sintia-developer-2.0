@@ -122,16 +122,18 @@ if ($_POST["id"] == 3) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	$cont = count($_POST["compartirCon"]);
-	$i = 0;
-	while ($i < $cont) {
-		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
+	if($_POST["compartirCon"]){
+		$cont = count($_POST["compartirCon"]);
+		$i = 0;
+		while ($i < $cont) {
+			try{
+				mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_folders_usuarios_compartir(fxuc_folder, fxuc_usuario, fxuc_institucion, fxuc_year)VALUES('" . $idRegistro . "','" . $_POST["compartirCon"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+			$i++;
 		}
-		$i++;
-	}
+	}	
 
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
@@ -441,7 +443,6 @@ if ($_POST["id"] == 7) {
 		if ($_POST["para"][$i] == 1) {
 			//INICIO ENVÍO DE MENSAJE
 			$tituloMsj = $_POST["asunto"];
-			$bgTitulo = "#4086f4";
 			$contenidoMsj = '
 				<p style="color:navy;">
 				Hola ' . strtoupper($destinatario['uss_nombre']) . ', has recibido un mensaje a través de la plataforma SINTIA.<br>
@@ -451,31 +452,15 @@ if ($_POST["id"] == 7) {
 				<p>' . $_POST["contenido"] . '</p>
 			';
 
-			include("../../config-general/plantilla-email-1.php");
-			// Instantiation and passing `true` enables exceptions
-			$mail = new PHPMailer(true);
-			echo '<div style="display:none;">';
-			try {
-				include("../../config-general/mail.php");
-
-				$mail->addBCC('tecmejia2010@gmail.com');     // Add a recipient con copia oculta
-
-				// Attachments
-				//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-				// Content
-				$mail->isHTML(true);                                  // Set email format to HTML
-				$mail->Subject = $_POST["asunto"];
-				$mail->Body = $fin;
-				$mail->CharSet = 'UTF-8';
-
-				@$mail->send();
-				echo 'Mensaje enviado correctamente.';
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			echo '</div>';
-			//FIN ENVÍO DE MENSAJE
+			  $data = [
+				'contenido_msj'   => $contenidoMsj,
+				'usuario_email'    => 'tecmejia2010@gmail.com',
+				'usuario_nombre'   => 'Jhon Oderman'
+			  ];
+			$asunto = $tituloMsj;
+			$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
+		
+			EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
 		}
 	}
 
@@ -525,46 +510,6 @@ if ($_POST["id"] == 10) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
-		//INICIO ENVÍO DE MENSAJE
-		$tituloMsj = 'Sugerencia SINTIA';
-		$bgTitulo = "#4086f4";
-		$contenidoMsj = '
-			<p>
-			<b>ID Institución:</b> ' . $config['conf_id_institucion'] . '<br>
-			<b>Nombre Institución:</b> ' . $_SESSION["inst"] . '<br>
-			<b>ID Usuario:</b> ' . $_SESSION["id"] . '<br>
-			<b>Nombre Usuario:</b> ' . $_POST["usuario"] . '<br>
-			<b>Tipo Usuario:</b> ' . $_POST["tipoUsuario"] . '<br>
-			<b>Sugerencia:</b><br>
-			' . $_POST["contenido"] . '
-			</p>
-		';
-
-		include("../../config-general/plantilla-email-1.php");
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-		echo '<div style="display:none;">';
-		try {
-			include("../../config-general/mail.php");
-
-			$mail->addAddress('tecmejia2010@gmail.com');     // Add a recipient con copia oculta
-
-			// Attachments
-			//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-			// Content
-			$mail->isHTML(true);                                  // Set email format to HTML
-			$mail->Subject = 'Sugerencia SINTIA';
-			$mail->Body = $fin;
-			$mail->CharSet = 'UTF-8';
-
-			$mail->send();
-			echo 'Mensaje enviado correctamente.';
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		echo '</div>';
-		//FIN ENVÍO DE MENSAJE
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
@@ -663,51 +608,6 @@ if ($_POST["id"] == 14) {
 		WHERE cls_id='" . $_POST["idClase"] . "' AND cls_estado=1"), MYSQLI_BOTH);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
-	}
-
-	if ($_SESSION["id"] != $datos["uss_id"]) {
-		//INICIO ENVÍO DE MENSAJE
-		$tituloMsj = 'NUEVO COMENTARIO/PREGUNTA';
-		$bgTitulo = "#4086f4";
-		$contenidoMsj = '
-			<p>
-				Hola <b>' . strtoupper($datos["uss_nombre"]) . '</b>, uno de los estudiantes ha realizado un nuevo comentario/pregunta sobre la clase <b>' . $datos["cls_tema"] . '</b>.<br>
-
-				<b>COMENTARIO:</b><br>
-				' . $_POST["contenido"] . '
-			</p>
-
-			<p>
-				Ingresa a la plataforma SINTIA para responder a este comentario de ser necesario.
-			</p>
-		';
-
-		include("../../config-general/plantilla-email-1.php");
-		// Instantiation and passing `true` enables exceptions
-		$mail = new PHPMailer(true);
-
-		echo '<div style="display:none;">';
-		try {
-			include("../../config-general/mail.php");
-
-			$mail->addAddress($datos["uss_email"], $datos["uss_nombre"]);     // Add a recipient con copia oculta
-
-			// Attachments
-			//$mail->addAttachment('files/archivos/'.$ficha, 'FICHA');    // Optional name
-
-			// Content
-			$mail->isHTML(true);                                  // Set email format to HTML
-			$mail->Subject = 'Nuevo comentario sobre la clase';
-			$mail->Body = $fin;
-			$mail->CharSet = 'UTF-8';
-
-			$mail->send();
-			echo 'Mensaje enviado correctamente.';
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		echo '</div>';
-		//FIN ENVÍO DE MENSAJE
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
@@ -1042,68 +942,14 @@ if ($_POST["id"] == 29) {
 
 
 ##############################################
-//CAMBIAR IDIOMA
-if ($_GET["get"] == 1) {
+//CAMBIAR IDIOMA y TEMA
+if ($_GET["get"] >= 1 && $_GET["get"]<=5) {	
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_idioma='" . $_GET["idioma"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+		UsuariosPadre::actualizarUsuariosAnios();	
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA ENCABEZADO
-if ($_GET["get"] == 2) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA MENÚ
-if ($_GET["get"] == 3) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_sidebar='" . $_GET["temaSidebar"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TEMA LOGO
-if ($_GET["get"] == 4) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-	exit();
-}
-//CAMBIAR TODO EL TEMA
-if ($_GET["get"] == 5) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "', uss_tema_sidebar='" . $_GET["temaSidebar"] . "', uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
-
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 	exit();

@@ -1,4 +1,5 @@
 <?php
+$busqueda='';
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -6,6 +7,18 @@ if (isset($_GET['busqueda'])) {
         OR ins_nombre LIKE '%" . $busqueda . "%' 
         OR ins_siglas LIKE '%" . $busqueda . "%'
         )";
+}
+$desde = '';
+if (!empty($_GET['desde'])) {
+    $desde = $_GET['desde'];
+}
+$hasta = '';
+if (!empty($_GET['hasta'])) {
+    $hasta = $_GET['hasta'];
+}
+$insti = '';
+if (!empty($_GET['insti'])) {
+    $insti = $_GET['insti'];
 }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
@@ -23,12 +36,16 @@ if (isset($_GET['busqueda'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <?php
-                    $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    try{
+                        $instituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+                    } catch (Exception $e) {
+                        include("../compartido/error-catch-to-report.php");
+                    }
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosInsti['ins_id'] == $_GET["insti"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosInsti['ins_id'] == $insti) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= $year; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -42,28 +59,14 @@ if (isset($_GET['busqueda'])) {
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
                     <form class="dropdown-item" method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
-                        <?php
-                            if (!empty($_GET['insti'])){
-                        ?>
-                            <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
-                        <?php
-                            }
-                            if (!empty($_GET['busqueda'])){
-                        ?>
-                            <input type="hidden" name="busqueda" value="<?= $_GET['busqueda']; ?>"/>
-                        <?php
-                            }
-                            if (!empty($_GET['year'])){
-                        ?>
-                            <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
-                        <?php
-                            }
-                        ?>
+                        <input type="hidden" name="insti" value="<?= $insti; ?>"/>
+                        <input type="hidden" name="busqueda" value="<?=$busqueda?>"/>
+                        <input type="hidden" name="year" value="<?= $year; ?>"/>
                         <label>Fecha Desde:</label>
-                        <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?php if (!empty($_GET['desde'])) echo $_GET['desde']; ?>"/>
+                        <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?= $desde; ?>"/>
 
                         <label>Hasta</label>
-                        <input type="date" class="form-control" placeholder="hasta"  name="hasta" value="<?php if (!empty($_GET['hasta'])) echo $_GET['hasta']; ?>"/>
+                        <input type="date" class="form-control" placeholder="hasta"  name="hasta" value="<?= $hasta; ?>"/>
                         
                         <input type="submit" class="btn deepPink-bgcolor" name="fFecha" value="Filtrar" style="margin: 5px;">
                     </form>
@@ -86,7 +89,7 @@ if (isset($_GET['busqueda'])) {
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $insti; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 
@@ -98,25 +101,11 @@ if (isset($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <?php
-                if (!empty($_GET['insti'])){
-            ?>
-                <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['desde']) || !empty($_GET['hasta'])){
-            ?>
-                <input type="hidden" name="desde" value="<?= $_GET['desde']; ?>"/>
-                <input type="hidden" name="hasta" value="<?= $_GET['hasta']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['year'])){
-            ?>
-                <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
-            <?php
-                }
-            ?>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+            <input type="hidden" name="insti" value="<?= $insti; ?>"/>
+            <input type="hidden" name="desde" value="<?= $desde; ?>"/>
+            <input type="hidden" name="hasta" value="<?= $hasta; ?>"/>
+            <input type="hidden" name="year" value="<?= $year; ?>"/>
+            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>
 

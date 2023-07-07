@@ -1,5 +1,7 @@
 <?php
-include("../directivo/session.php");
+session_start();
+include("../../config-general/config.php");
+include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Boletin.php");
 $Plataforma = new Plataforma;
@@ -38,13 +40,13 @@ $colspan=5+$celdas;
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-if (is_numeric($_GET["id"])) {
+if (!empty($_GET["id"])) {
     $filtro .= " AND mat_id='" . $_GET["id"] . "'";
 }
-if (is_numeric($_REQUEST["curso"])) {
+if (!empty($_REQUEST["curso"])) {
     $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
-if (is_numeric($_REQUEST["grupo"])) {
+if (!empty($_REQUEST["grupo"])) {
     $filtro .= " AND mat_grupo='" . $_REQUEST["grupo"] . "'";
 }
 $contadorEstudiantes=0;

@@ -126,7 +126,11 @@ function niv(enviada){
 														<?php
 															$p = 1;
 															while($p<=$datosCargaActual['gra_periodos']){
-																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'");
+																try{
+																	$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'");
+																} catch (Exception $e) {
+																	include("../compartido/error-catch-to-report.php");
+																}
 																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
 																$p++;
@@ -154,33 +158,47 @@ function niv(enviada){
 														 $decimal = 0;
 														 $n = 0;
 														 for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-															$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+															try{
+																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 															 $decimal = $periodosCursos['gvp_valor']/100;
 															 
 															//LAS CALIFICACIONES
-															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+															try{
+																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;
 																$definitiva += $notasResultado[4]*$decimal;
 															}
-															if($notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7];
-															if($notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif($notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
+															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															$notaPeriodo="";
+															if(!empty($notasResultado[4]))$notaPeriodo=$notasResultado[4];
 
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notasResultado[4]."</a><br>".$tipo;?><br>
-																<?php if($notasResultado[4]!=""){?>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo."</a><br>".$tipo;?><br>
+																<?php if(!empty($notasResultado[4])){?>
 																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
 																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
 														<?php		
 														 }
+														try{
 															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
+														} catch (Exception $e) {
+															include("../compartido/error-catch-to-report.php");
+														}
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -198,7 +216,11 @@ function niv(enviada){
 														 //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
 														 if($config[2]==$datosCargaActual['gra_periodos']){
 															 $notaMinima = ($config[5]-$definitiva);
-															 $consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
+															try{
+															 	$consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
 															 $periodosCursos2 = mysqli_fetch_array($consultaPeriodosCursos2, MYSQLI_BOTH);
 															 $decimal2 = $periodosCursos2['gvp_valor']/100;
 															 $notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);

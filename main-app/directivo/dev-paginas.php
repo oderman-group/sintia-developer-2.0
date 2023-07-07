@@ -97,12 +97,16 @@ $Plataforma = new Plataforma;
                                                     <?php
 													include("includes/consulta-paginacion-dev-paginas.php");
 
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
-                                                    LEFT JOIN ".$baseDatosServicios.".modulos ON mod_id=pagp_modulo
-                                                    LEFT JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=pagp_tipo_usuario
-                                                    WHERE pagp_id=pagp_id $filtro
-                                                    ORDER BY pagp_id
-                                                    LIMIT $inicio,$registros;");
+                                                    try{
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
+                                                        LEFT JOIN ".$baseDatosServicios.".modulos ON mod_id=pagp_modulo
+                                                        LEFT JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=pagp_tipo_usuario
+                                                        WHERE pagp_id=pagp_id $filtro
+                                                        ORDER BY pagp_id
+                                                        LIMIT $inicio,$registros;");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                     ?>

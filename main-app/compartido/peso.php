@@ -11,24 +11,20 @@ try{
 }
 $peso=mysqli_fetch_array($pesoInstituciones, MYSQLI_BOTH);
 
-$direccionArchivo = ('../files/archivos');
 
- "Total : " . Fsize($direccionArchivo);
- function Fsize($direccionArchivo)
-{
-    clearstatcache();
-    $contadorByte = 0;
-    if (is_dir($direccionArchivo)) {
-        if ($gd = opendir($direccionArchivo)) {
+ function calcularFile($dir)
+{   clearstatcache();
+    $cont = 0;
+    if (is_dir($dir)) {
+        if ($gd = opendir($dir)) {
             while (($archivo = readdir($gd)) !== false) {
                 if ($archivo != "." && $archivo != "..") {
                     if (is_dir($archivo)) {
-                        $contadorByte += Fsize($direccionArchivo . "/" . $archivo);
+                        $cont += calcularFile($dir . "/" . $archivo);
                     } else {
-                        $nombreArchivo= "archivo : " . $direccionArchivo . "/" . $archivo . "&nbsp;&nbsp;" . filesize($direccionArchivo . "/" . $archivo) . "<br />";
-                        if (strpos($nombreArchivo, $_SESSION["inst"])){
-                            $contadorByte += sprintf("%u", filesize($direccionArchivo . "/" . $archivo));
-                              $nombreArchivo;
+                        // se valida que dentro de la direcion se encuentren archivos con el nombre de la institucion
+                        if (strpos("/".$archivo,$_SESSION["inst"])){ 
+                        $cont += sprintf("%u", filesize($dir . "/" . $archivo));
                         }
                     }
                 }
@@ -36,8 +32,23 @@ $direccionArchivo = ('../files/archivos');
             closedir($gd);
         }
     }
+    
+    return $cont;
+}
+ function crearContenido()
+{
+    $contadorByte = 0;
+    $contadorByte = calcularFile('../files/archivos');
+    $contadorByte +=calcularFile('../files/clases');
+    $contadorByte +=calcularFile('../files/evaluaciones');
+    $contadorByte +=calcularFile('../files/firmas');
+    $contadorByte +=calcularFile('../files/fotos');
+    $contadorByte +=calcularFile('../files/pclase');
+    $contadorByte +=calcularFile('../files/publicaciones');
+    $contadorByte +=calcularFile('../files/tareas');
+    $contadorByte +=calcularFile('../files/tareas-entregadas');
+    
     $gb= $contadorByte/1073741824;
-    "Carpeta: ".$direccionArchivo."<br>";
     global $peso;
     if(!empty($peso[0])){
         $porcentaje = ($gb/$peso[0])*100;
@@ -65,6 +76,6 @@ $direccionArchivo = ('../files/archivos');
 ?>
 <div class="card" style="margin-left:5px; margin-right:5px; padding:5px;">
 <td> Uso Del Disco </td>
-   <?=Fsize($direccionArchivo)?>
+   <?=crearContenido()?>
 </div>
 

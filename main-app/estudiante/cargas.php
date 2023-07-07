@@ -68,7 +68,7 @@ if($config['conf_activar_encuesta']==1){
 						WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
 						$nCargas = mysqli_num_rows($cCargas);
 						$mensajeCargas = new Cargas;
-						$mensajeCargas->verificarNumCargas($nCargas);
+						$mensajeCargas->verificarNumCargas($nCargas,$datosUsuarioActual['uss_idioma']);
 						?>
 
 					

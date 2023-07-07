@@ -41,7 +41,9 @@ try {
 	conf_num_registros='" . $_POST["numRegistros"] . "',
 	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
 	conf_cambiar_nombre_usuario='" . $_POST["cambiarNombreUsuario"] . "',
-	conf_cambiar_clave_estudiantes='" . $_POST["cambiarClaveEstudiantes"] . "'
+	conf_cambiar_clave_estudiantes='" . $_POST["cambiarClaveEstudiantes"] . "',
+	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "',
+	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "'
 
 	WHERE conf_id_institucion='".$_POST["id"]."' AND conf_agno='".$_POST["year"]."'");
 } catch (Exception $e) {

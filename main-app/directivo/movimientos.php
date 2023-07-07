@@ -32,10 +32,10 @@
 									<?php
 										$filtro = '';
 										include("includes/barra-superior-movimientos-financieros.php");
-										if(is_numeric($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
-										if(is_numeric($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
-										if(is_numeric($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
-										if($_GET["fecha"]!=""){$filtro .= " AND fcu_fecha='".$_GET["fecha"]."'";}
+										if(!empty($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
+										if(!empty($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
+										if(!empty($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
+										if(!empty($_GET["fecha"])){$filtro .= " AND fcu_fecha='".$_GET["fecha"]."'";}
 
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
@@ -96,11 +96,15 @@
 													<?php
 													include("includes/consulta-paginacion-movimientos.php");
 													
-													$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
-													INNER JOIN usuarios ON uss_id=fcu_usuario
-													WHERE fcu_id=fcu_id $filtro
-													ORDER BY fcu_id
-													LIMIT $inicio,$registros");
+													try{
+														$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
+														INNER JOIN usuarios ON uss_id=fcu_usuario
+														WHERE fcu_id=fcu_id $filtro
+														ORDER BY fcu_id
+														LIMIT $inicio,$registros");
+													} catch (Exception $e) {
+														include("../compartido/error-catch-to-report.php");
+													}
 													 $contReg = 1;
 													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -111,12 +115,12 @@
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$_GET["usuario"];?>&fecha=<?=$resultado['fcu_fecha'];?>&tipo=<?=$_GET["tipo"];?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario?>&fecha=<?=$resultado['fcu_fecha'];?>&tipo=<?=$tipo;?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
 														<td>$<?=number_format($resultado['fcu_valor'],0,",",".");?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$_GET["usuario"];?>&tipo=<?=$resultado['fcu_tipo'];?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario;?>&tipo=<?=$resultado['fcu_tipo'];?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=strtoupper($resultado['uss_nombre']);?></a>
