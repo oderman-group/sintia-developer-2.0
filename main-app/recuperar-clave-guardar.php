@@ -11,10 +11,14 @@ WHERE ins_id='".$_POST["bd"]."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 
+$yearArray = explode(",", $institucion['ins_years']);
+$yearStart = $yearArray[0];
+$yearEnd = $yearArray[1];
+
 $_SESSION["inst"] = $institucion['ins_bd'];
 
-if(isset($_POST["agnoIngreso"]) and is_numeric($_POST["agnoIngreso"])){
-	$_SESSION["bd"] = $_POST["agnoIngreso"];
+if(isset($yearEnd) and is_numeric($yearEnd)){
+	$_SESSION["bd"] = $yearEnd;
 }else{
 	$_SESSION["bd"] = date("Y");
 }
