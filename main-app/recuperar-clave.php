@@ -39,14 +39,11 @@ require_once("index-logica.php");
 
           <?php include("../config-general/mensajes-informativos.php"); ?>
 
-          <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0">Recuperar contraseña</p>
-          </div>
+          <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
 
 		   <!-- Colegios input -->
-		   <div class="form-outline mb-4 bd">
-		    <label for="bd">Institución</label>
-		    <select class="form-select select2" name="bd" required id="bd" onchange="traerYears(this)">
+		   <div class="form-floating mt-3">
+		    <select class="form-select select2" aria-label="Default select example" name="bd" required id="bd">
 							<option value="">Seleccione su Institución</option>
 							<?php
 							while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
@@ -55,7 +52,9 @@ require_once("index-logica.php");
 								<option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
 							<?php }?>
 						</select>
-        </div>
+            <label for="institution">Institucion</label>
+                                <div class="invalid-feedback">Por favor seleccione una institución.</div>
+                            </div>
 
           <div class="form-floating mt-3">
               <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
@@ -80,7 +79,7 @@ require_once("index-logica.php");
             </div>
         </div>
         <div class="logo-container vertical-center">
-            <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_4rq0nvpt.json" background="transparent"
+            <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_hzgq1iov.json" background="transparent"
                 speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
         </div>
     </div>
