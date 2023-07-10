@@ -527,7 +527,7 @@ window.onload = notificaciones();
 	
 
 
-/*
+
 function mensajes(){
 
 	var usuario = <?=$_SESSION["id"];?>;
@@ -549,7 +549,6 @@ function mensajes(){
 		   data: datos,
 
 		   success: function(data){
-
 			   $('#mensajes').empty().hide().html(data).show(1);
 
 		   }
@@ -563,7 +562,7 @@ function mensajes(){
 setInterval('mensajes()',300000);
 
 window.onload = mensajes();			
-*/
+
 	
 
 
