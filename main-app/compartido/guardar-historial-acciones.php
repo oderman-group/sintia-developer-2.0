@@ -17,6 +17,11 @@ if(isset($_SESSION['acudiente'])){
     $idLogin=$_SESSION['acudiente'];
 }
 
+$REFERER = 'NO APLICA';
+if(!empty($_SERVER['HTTP_REFERER'])){
+    $REFERER = $_SERVER['HTTP_REFERER'];
+}
+
 try {
     
     $post = ""; 
@@ -49,7 +54,7 @@ try {
         '".$ip."', 
         '".$_SERVER['HTTP_USER_AGENT']."', 
         '".$config['conf_id_institucion']."', 
-        '".$_SERVER["HTTP_REFERER"]."', 
+        '".$REFERER."', 
         '".$tiempoMostrar."', 
         '".$idLogin."'
     )");

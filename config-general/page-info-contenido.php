@@ -1,5 +1,5 @@
 <?php
-if($_SERVER['HTTP_REFERER']=="" and $_GET["idmsg"]!=303){
+if(empty($_SERVER['HTTP_REFERER']) || (!empty($_GET["idmsg"]) && $_GET["idmsg"]!=303)){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
 	exit();
 }
@@ -297,6 +297,7 @@ switch($_GET["idmsg"]){
 		$texto = 'Estás intentando a acceder de manera incorrecta.';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
+		$lottie = 'https://assets2.lottiefiles.com/packages/lf20_0emKnVT48m.json';
 	break;	
 		
 	case 304:
@@ -328,6 +329,7 @@ switch($_GET["idmsg"]){
 		$texto = 'Desconocemos el motivo que lo ha traido a esta pagina informativa. Intente ir al escritorio o inicio de esta plataforma y continúe con su navegación.';
 		$url1 = 'index.php';
 		$boton1 = 'IR Al ESCRITORIO';
+		$lottie = 'https://assets7.lottiefiles.com/packages/lf20_CeuefT.json';
 	break;
 						
 }
