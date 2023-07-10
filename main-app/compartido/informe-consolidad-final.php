@@ -8,9 +8,11 @@ require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
-if(isset($_REQUEST["agno"])){
+$bdConsulta = "";
+if(!empty($_REQUEST["agno"])){
 	$year = $_REQUEST["agno"];
 	$BD   = $_SESSION["inst"]."_".$_REQUEST["agno"];
+	$bdConsulta = $BD.".";
 }
 ?>
 <?php
@@ -50,7 +52,7 @@ include("../compartido/head-informes.php") ?>
 											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_materias WHERE mat_id='".$carga[4]."'");
 											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 										?>
-                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(isset($materia[2])){echo $materia['mat_nombre'];}?></th>
+                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(!empty($materia[2])){echo $materia['mat_nombre'];}?></th>
                                         <?php
 										}
 										?>
@@ -73,13 +75,17 @@ include("../compartido/head-informes.php") ?>
                                             ?>
                                         </tr>
 									<?php
-									 if(isset($_REQUEST["curso"]) and isset($_REQUEST["grupo"])) $adicional = " AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."'"; else $adicional = "";
-									 $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $BD);
+									 $filtroAdicional = "";
+									 if(!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])){
+									 	$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									 }
+									 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+									 $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									 $defPorEstudiante = 0;
 									 ?>
 									<tr style="border-color:<?=$Plataforma->colorDos;?>;">
-										<td style="font-size:9px;"><?=$resultado[1];?></td>
+										<td style="font-size:9px;"><?=$resultado['mat_matricula'];?></td>
                                         <td style="font-size:9px;"><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
@@ -91,16 +97,16 @@ include("../compartido/head-informes.php") ?>
 											$defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-												if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
+												if(!empty($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(!empty($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
 												//$defPorMateria += $boletin[4];
-												if(isset($boletin[4])){
+												if(!empty($boletin[4])){
 												$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
 												}
 												//DEFINITIVA DE CADA PERIODO
 											?>	
-												<td style="text-align:center; color:<?=$color;?>"><?php if(isset($boletin[4])){echo $boletin[4];}?></td>
+												<td style="text-align:center; color:<?=$color;?>"><?php if(!empty($boletin[4])){echo $boletin[4];}?></td>
                                             <?php
 												$p++;
                                             }
