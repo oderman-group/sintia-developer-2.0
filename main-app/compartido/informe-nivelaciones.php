@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
@@ -47,14 +48,21 @@ include("../compartido/head-informes.php") ?>
                                                <th style="text-align:center;">Fecha</th>
                                            	<?php
                                             }
-									$filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+									// $filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									// $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+									
+									$filtroAdicional = "";
+									if(!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])){
+										$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									}
+									$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 									 $defPorEstudiante = 0;
 									 ?>
                                       <tr style="border-color:<?=$Plataforma->colorDos;?>;">
-                                        <td style="font-size:9px;"><?=$resultado[1];?></td>
+                                        <td style="font-size:9px;"><?=$resultado['mat_matricula'];?></td>
                                         <td style="font-size:9px;"><?=$nombreCompleto?></td>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_GET["curso"]."' AND car_grupo='".$_GET["grupo"]."' AND car_activa=1"); 
@@ -65,7 +73,7 @@ include("../compartido/head-informes.php") ?>
                                             $defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 												if($boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
 												$defPorMateria += $boletin[4];
@@ -73,7 +81,7 @@ include("../compartido/head-informes.php") ?>
                                             }
 											$defPorMateria = round($defPorMateria/$config[19],2);
 											//CONSULTAR NIVELACIONES
-											$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+											$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga[0]."'");
 											$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 											if($cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 											//DEFINITIVA DE CADA MATERIA
