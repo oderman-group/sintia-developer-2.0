@@ -1,17 +1,13 @@
 <?php
-include("../../config-general/config.php");
-//include("../modelo/conexion.php");
-
+session_start();
+include("../modelo/conexion.php");
+$datosUnicosInstitucion=$_SESSION["datosUnicosInstitucion"];
 $mensajesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails 
 INNER JOIN usuarios ON uss_id=ema_de
-WHERE ema_para='".$_POST["usuario"]."' AND ema_visto=0 ORDER BY ema_id DESC");
+WHERE ema_para='".$_SESSION["id"]."' AND ema_visto=0 ORDER BY ema_id DESC");
 $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 ?>
 
-							<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <i class="fa fa-envelope-o"></i>
-                                <?php if($mensajesNumero>0){?><span class="badge headerBadgeColor2"> <?=$mensajesNumero;?> </span><?php }?>
-                            </a>
                             <ul class="dropdown-menu">
                                 <li class="external">
                                     <h3><span class="bold">Mensajes</span></h3>
@@ -41,7 +37,10 @@ $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 
 							<?php if($mensajesNumero>0){?>
 							<script type="text/javascript">
-								function avisoMsjs(){
+								var numero=<?=$mensajesNumero;?>;
+								$('#mensajes_numero').empty().hide().html('<span class="badge headerBadgeColor2">'+<?=$mensajesNumero;?>+'</span>').show(1);
+
+								function avisoMsjs(){									
 								  $.toast({
 										heading: 'Notificación',  
 										text: 'Tienes <?=$mensajesNumero;?> mensajes nuevos. Revisalos en el icono del sobre, que está en la parte superior.',
@@ -57,8 +56,7 @@ $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 								
 								if(localStorage.getItem('msjs') === null){
 									setTimeout('avisoMsjs()',1000);
-								}
-								
+								}			
 								
 								
 								//Notificaciones de escritorio
