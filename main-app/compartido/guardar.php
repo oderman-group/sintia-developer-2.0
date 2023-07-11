@@ -629,6 +629,14 @@ if ($_POST["id"] == 15) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
+
+	try{
+		$consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'");
+		$datosUsuario = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH);
+		$_SESSION["datosUsuario"] = $datosUsuario;
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
 ?>
 	<script>
 		localStorage.setItem("vGuiada", 1);
