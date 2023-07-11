@@ -380,7 +380,7 @@ function deseaEliminar(dato){
 
 	{	
 
-		if(id!=""){
+		if(!empty(is)){
 
 			axios.get(url)
 
@@ -527,7 +527,7 @@ window.onload = notificaciones();
 	
 
 
-/*
+
 function mensajes(){
 
 	var usuario = <?=$_SESSION["id"];?>;
@@ -549,7 +549,6 @@ function mensajes(){
 		   data: datos,
 
 		   success: function(data){
-
 			   $('#mensajes').empty().hide().html(data).show(1);
 
 		   }
@@ -563,7 +562,7 @@ function mensajes(){
 setInterval('mensajes()',300000);
 
 window.onload = mensajes();			
-*/
+
 	
 
 
@@ -652,11 +651,11 @@ window.onload = finalizado();
 
 //Mostrar anuncio publicitario
 
-if($publicidadPopUp['pubxub_id']!="" and $numMostrarPopUp<$publicidadPopUp['pubxub_muestras_popup']){
+if(!empty($publicidadPopUp['pubxub_id']) and $numMostrarPopUp<$publicidadPopUp['pubxub_muestras_popup']){
 
 	$tiempoMS = 3000;
 
-	if($publicidadPopUp['pubxub_inicio_popup']!="" and $publicidadPopUp['pubxub_inicio_popup']>=1000) $tiempoMS = $publicidadPopUp['pubxub_inicio_popup'];
+	if( !empty($publicidadPopUp['pubxub_inicio_popup'])  and $publicidadPopUp['pubxub_inicio_popup']>=1000) $tiempoMS = $publicidadPopUp['pubxub_inicio_popup'];
 
 	
 
@@ -798,7 +797,7 @@ $(document).ready(function(){
 
 //Mostrar modal de cumpleaños
 
-if($cumpleUsuario['agno']!=""){
+if(!empty($cumpleUsuario['agno'])){
 
 ?> 
 
