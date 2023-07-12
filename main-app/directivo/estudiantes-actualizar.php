@@ -1,6 +1,7 @@
 <?php 
 include("session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Usuarios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0174';
@@ -120,16 +121,55 @@ try {
 if($_POST["documentoA"]!=""){
 
 	try {
-		$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios 
-		WHERE uss_usuario='".$_POST["documentoA"]."'");
-		$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+		$consultaIdAcudiente=mysqli_query($conexion, "SELECT mat_acudiente FROM academico_matriculas WHERE mat_id='".$_POST["id"]."'");
+		$datosIdAcudiente = mysqli_fetch_array($consultaIdAcudiente, MYSQLI_BOTH);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+
+	$usuarioAcudiente=$_POST["documentoA"];
+	if(!empty($datosIdAcudiente['mat_acudiente']) && $datosIdAcudiente['mat_acudiente']!=0){
+		$usuarioAcudiente=$datosIdAcudiente['mat_acudiente'];
+	}
+
+	try {
+		$acudiente = Usuarios::obtenerDatosUsuario($usuarioAcudiente);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}		
 
+	if(!empty($acudiente)){
+		try {
+			mysqli_query($conexion, "UPDATE usuarios SET 
+			uss_usuario   		 = '".$_POST["documentoA"]."', 
+			uss_nombre    		 = '".$_POST["nombreA"]."', 
+			uss_email     		 = '".$_POST["email"]."', 
+			uss_ocupacion 		 = '".$_POST["ocupacionA"]."', 
+			uss_genero    		 = '".$_POST["generoA"]."', 
+			uss_celular   		 = '".$_POST["celular"]."', 
+			uss_lugar_expedicion = '".$_POST["lugardA"]."', 
+			uss_tipo_documento   = '".$_POST["tipoDAcudiente"]."', 
+			uss_direccion        = '".$_POST["direccion"]."', 
+			uss_apellido1 		 = '".$_POST["apellido1A"]."', 
+			uss_apellido2		 = '".$_POST["apellido2A"]."', 
+			uss_nombre2			 = '".$_POST["nombre2A"]."', 
+			uss_documento		 = '".$_POST["documentoA"]."' 
+			WHERE uss_id='".$acudiente['uss_id']."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+		$idAcudiente = $acudiente['uss_id'];
+	}else{
+		try {
+			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_idioma, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, uss_tema_sidebar, uss_tema_header, uss_tema_logo)VALUES('".$_POST["documentoA"]."', '".$clavePorDefectoUsuarios."', 3, '".$_POST["nombreA"]."', 0, '".$_POST["ocupacionA"]."', '".$_POST["email"]."', '".$_POST["fechaNA"]."', 0, '".$_POST["generoA"]."', '".$_POST["celular"]."', 'default.png', 1, '".$_POST["tipoDAcudiente"]."', '".$_POST["lugardA"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A"]."', '".$_POST["apellido2A"]."', '".$_POST["nombre2A"]."', '".	$_POST["documentoA"]."', 'cyan-sidebar-color', 'header-indigo', 'logo-indigo')");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+		$idAcudiente = mysqli_insert_id($conexion);
+	}
+
 	try {
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$acudiente['uss_id']."' 
-		WHERE mat_id='".$_POST["id"]."'");
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$idAcudiente."' WHERE mat_id='".$_POST["id"]."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}	
@@ -142,31 +182,10 @@ if($_POST["documentoA"]!=""){
 	}	
 
 	try {
-		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$acudiente['uss_id']."', '".$_POST["id"]."')");
+		mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$_POST["id"]."')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}	
-
-	try {
-		mysqli_query($conexion, "UPDATE usuarios SET 
-		uss_usuario   		 = '".$_POST["documentoA"]."', 
-		uss_nombre    		 = '".$_POST["nombreA"]."', 
-		uss_email     		 = '".$_POST["email"]."', 
-		uss_ocupacion 		 = '".$_POST["ocupacionA"]."', 
-		uss_genero    		 = '".$_POST["generoA"]."', 
-		uss_celular   		 = '".$_POST["celular"]."', 
-		uss_lugar_expedicion = '".$_POST["lugardA"]."', 
-		uss_tipo_documento   = '".$_POST["tipoDAcudiente"]."', 
-		uss_direccion        = '".$_POST["direccion"]."', 
-		uss_apellido1 		 = '".$_POST["apellido1A"]."', 
-		uss_apellido2		 = '".$_POST["apellido2A"]."', 
-		uss_nombre2			 = '".$_POST["nombre2A"]."', 
-		uss_documento		 = '".$_POST["documentoA"]."' 
-		WHERE uss_id='".$acudiente['uss_id']."'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}	
-		
 }
 
 
