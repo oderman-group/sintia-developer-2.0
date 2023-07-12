@@ -2,7 +2,7 @@
 include("../directivo/session.php");
 
 
-if (!empty($_GET["periodo"])) {
+if (empty($_GET["periodo"])) {
 
     $periodoActual = 1;
 } else {
