@@ -74,7 +74,8 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 
 if ($_POST["tipoUsuario"] == 4) {
 	try{
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_email='" . strtolower($_POST["email"]) . "'");
+		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_email='" . strtolower($_POST["email"]) . "'
+		WHERE mat_id_usuario='" . $_POST["idR"] . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
