@@ -1,19 +1,18 @@
 <?php
 include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
+$bdDemo="mobiliar_dev_".date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
 $correosDemo = mysqli_query($conexion,"SELECT DATEDIFF(now(), demo_fecha_ingreso), demo_usuario, uss_nombre, uss_email, uss_ultimo_ingreso FROM demo
-INNER JOIN mobiliar_sintiademo.usuarios ON uss_id=demo_usuario
-WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
+INNER JOIN $bdDemo.usuarios ON uss_id=demo_usuario WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
 
 
 
 
 $paraEnviar = 0;
 while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
-	echo $cDemo[0]."<br>";
 	//Correo 2/ 1er día/ ¿Necesitas Ayuda?
 	if($cDemo[0]==1){
 		$tituloMsj = "¿Requiere una cita virtual para aclarar dudas?";
@@ -26,7 +25,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 				Sólo tiene que responder a este correo o escribir directamente a mi Whatsapp para programar la cita.<br><br>
 				
 				<div style="text-align: center; background-color: #31A952; width: 250px; height:30px; padding: 12px; font-size: 16px;">
-				<a href="https://api.whatsapp.com/send?phone=573007304428&text=Hola, quisiera una demostración virtual de la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 300 730 4428</a></div><br><br>
+				<a href="https://api.whatsapp.com/send?phone=573113932970&text=Hola, quisiera una demostración virtual de la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 311 393 2970</a></div><br><br>
 				
 				Gracias por su atención a este mensaje.
 			</p>	
@@ -35,14 +34,14 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 				
 				Jhon Mejía M.<br>
 				<b>Email:</b> info@plataformasintia.com<br>
-				<b>WhatsApp:</b> (+57) 300 730 4428<br>
+				<b>WhatsApp:</b> (+57) 311 393 2970<br>
 			</p>
 		';
 		$paraEnviar = 1;
 	}
 	
 	//Si ya ha ingresado a la plataforma
-	if($cDemo[4]!=""){
+	if(!empty($cDemo[4])){
 		//Correo 3/ 5 días/ ¿Cómo te ha ido?
 		if($cDemo[0]==5){
 			$tituloMsj = "¿Cómo le ha ido con la plataforma SINTIA?";
@@ -61,7 +60,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -80,7 +79,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 					Quedo atento a su respuesta.<br><br>
 
 					<div style="text-align: center; background-color: #31A952; width: 250px; height:30px; padding: 12px; font-size: 16px;">
-					<a href="https://api.whatsapp.com/send?phone=573007304428&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 300 730 4428</a></div><br><br>
+					<a href="https://api.whatsapp.com/send?phone=573113932970&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 311 393 2970</a></div><br><br>
 
 					Gracias por su atención a este mensaje.
 				</p>	
@@ -89,7 +88,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -107,7 +106,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 					Si le interesa puede contactarme, ya sabe que estoy a su servicio.<br>
 
 					<div style="text-align: center; background-color: #31A952; width: 250px; height:30px; padding: 12px; font-size: 16px;">
-					<a href="https://api.whatsapp.com/send?phone=573007304428&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 300 730 4428</a></div><br><br>
+					<a href="https://api.whatsapp.com/send?phone=573113932970&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 311 393 2970</a></div><br><br>
 
 					Gracias por su atención a este mensaje.
 				</p>	
@@ -116,7 +115,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -142,7 +141,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -161,7 +160,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 					Quedo atento a su respuesta.<br><br>
 
 					<div style="text-align: center; background-color: #31A952; width: 250px; height:30px; padding: 12px; font-size: 16px;">
-					<a href="https://api.whatsapp.com/send?phone=573007304428&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 300 730 4428</a></div><br><br>
+					<a href="https://api.whatsapp.com/send?phone=573113932970&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="background-color: #31A952; color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 311 393 2970</a></div><br><br>
 
 					Gracias por su atención a este mensaje.
 				</p>	
@@ -170,7 +169,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -188,7 +187,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 					Si le interesa puede contactarme, ya sabe que estoy a su servicio.<br>
 
 					<div style="text-align: center; background-color: #31A952; width: 250px; height:30px; padding: 12px; font-size: 16px;">
-					<a href="https://api.whatsapp.com/send?phone=573007304428&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 300 730 4428</a></div><br><br>
+					<a href="https://api.whatsapp.com/send?phone=573113932970&text=Hola, quisiera hablar respecto a los planes que manejan con la Plataforma SINTIA." target="_blank" style="color: white;"><img src="https://plataformasintia.com/files-general/iconos/whatsapp.png" width="20"> WhatsApp: 311 393 2970</a></div><br><br>
 
 					Gracias por su atención a este mensaje.
 				</p>	
@@ -197,7 +196,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 					Jhon Mejía M.<br>
 					<b>Email:</b> info@plataformasintia.com<br>
-					<b>WhatsApp:</b> (+57) 300 730 4428<br>
+					<b>WhatsApp:</b> (+57) 311 393 2970<br>
 				</p>
 			';
 			$paraEnviar = 1;
@@ -223,7 +222,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 //=====CORREOS PROGRAMADOS DE LAS NOTIFICACIONES A ACUDIENTES=====//
 $correosProg = mysqli_query($conexion,"SELECT * FROM correos
-INNER JOIN instituciones ON ins_id=corr_institucion
+INNER JOIN instituciones ON ins_id=corr_institucion AND ins_enviroment='".ENVIROMENT."'
 WHERE corr_estado=0 AND corr_usuario IS NOT NULL
 GROUP BY corr_institucion, corr_usuario
 ORDER BY corr_institucion, corr_usuario");

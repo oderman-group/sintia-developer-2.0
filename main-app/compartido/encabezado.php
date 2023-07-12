@@ -91,10 +91,15 @@ $institucionNombre = $institucion['ins_siglas'];
                             <!--<span id="notificaciones"></span>-->
                         </li>
                         <!-- end notification dropdown -->
-						
+				
                         <!-- start message dropdown -->
  						<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar" data-step="5" data-intro="<b>Mensajes:</b> Aquí verás los mensajes directos que te envíen otros usuarios de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
-                            <!--<span id="mensajes"></span>-->
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="fa fa-envelope-o"></i>
+                                <span id="mensajes_numero"></span>
+                            </a>
+                             <span id="mensajes"></span>
+                           
                         </li>
                         <!-- end message dropdown -->
  						<!-- start manage user dropdown -->
