@@ -21,7 +21,7 @@ if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']==
 									<div class="row">
 			                            <div class="col-md-3">
 				                                <div class="inbox-sidebar">
-				                                    <a href="#" data-title="Compose" class="btn red compose-btn btn-block">
+				                                    <a href="mensajes-redactar.php" data-title="Compose" class="btn red compose-btn btn-block">
 				                                        <i class="fa fa-edit"></i> Redactar </a>
 				                                    <ul class="inbox-nav inbox-divider">
 				                                        <li class="active"><a href="mensajes.php"><i class="fa fa-inbox"></i> Recibidos</a></li>
