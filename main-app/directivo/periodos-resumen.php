@@ -11,8 +11,16 @@ require_once("../class/Estudiantes.php");
   var nota = enviada.value;
   var codEst = enviada.id;
   var per = enviada.name;
+  var notaAnterior = enviada.alt;
   var carga = <?=$cargaConsultaActual;?>;
+  
+  var casilla = document.getElementById(codEst);
+  
  if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+	
+	casilla.disabled="disabled";
+	casilla.style.fontWeight="bold";
+	
 	  $('#respRP').empty().hide().html("esperando...").show(1);
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
@@ -188,7 +196,7 @@ function niv(enviada){
 															<td style="text-align:center;">
 																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo."</a><br>".$tipo;?><br>
 																<?php if(!empty($notasResultado[4])){?>
-																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
+																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
 																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
