@@ -1,9 +1,9 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php"); ?>
+include("../../config-general/consulta-usuario-actual.php"); 
+require_once("../class/Estudiantes.php");
 
-<?php
 $consultaDatos = mysqli_query($conexion, "SELECT * FROM academico_grados
 LEFT JOIN academico_grupos ON gru_id='" . $_POST["grupo"] . "'
 WHERE gra_id='" . $_POST["grado"] . "'");
@@ -42,42 +42,53 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
     <?php
     $cont = 1;
     $filtro = '';
-    if ($_POST["est"] != "") {
+    if (!empty($_POST["est"])) {
       $filtro .= " AND dr_estudiante='" . $_POST["est"] . "'";
     }
-    if ($_POST["falta"] != "") {
+    if (!empty($_POST["falta"])) {
       $filtro .= " AND dr_falta='" . $_POST["falta"] . "'";
     }
-    if ($_POST["usuario"] != "") {
+    if (!empty($_POST["usuario"])) {
       $filtro .= " AND dr_usuario='" . $_POST["usuario"] . "'";
     }
 
     $filtroMat = '';
-    if ($_POST["grado"] != "") {
-      $filtro .= " AND mat_grado='" . $_POST["grado"] . "'";
+    if (!empty($_POST["grado"])) {
+      $filtroMat .= " AND mat_grado='" . $_POST["grado"] . "'";
     }
-    if ($_POST["grupo"] != "") {
-      $filtro .= " AND mat_grupo='" . $_POST["grupo"] . "'";
+    if (!empty($_POST["grupo"])) {
+      $filtroMat .= " AND mat_grupo='" . $_POST["grupo"] . "'";
     }
 
-    //if($datosUsuarioActual[3]!=5){$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";}
-
-    $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-  INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-  INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-  INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante $filtroMat
-  LEFT JOIN academico_grados ON gra_id=mat_grado
-  LEFT JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN usuarios ON uss_id=dr_usuario
-  WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
-  ");
+    if($datos['gra_tipo']==GRADO_GRUPAL){
+      $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+      INNER JOIN disciplina_faltas ON dfal_id=dr_falta
+      INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+      INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante $filtroMat
+      LEFT JOIN academico_grados ON gra_id=mat_grado
+      LEFT JOIN academico_grupos ON gru_id=mat_grupo
+      INNER JOIN usuarios ON uss_id=dr_usuario
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
+      ");
+    }else{
+      $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+      INNER JOIN disciplina_faltas ON dfal_id=dr_falta
+      INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+      INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
+      INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula=mat_id AND matcur_id_curso='" . $_POST["grado"] . "'
+      LEFT JOIN academico_grados ON gra_id=matcur_id_curso
+      LEFT JOIN academico_grupos ON gru_id=1
+      INNER JOIN usuarios ON uss_id=dr_usuario
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
+      ");
+    }
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
     ?>
 
-      <tr style="border-color:<?= $Plataforma->colorDos; ?>;">s
+      <tr style="border-color:<?= $Plataforma->colorDos; ?>;">
         <td><?= $cont; ?></td>
         <td><?= $resultado['dr_fecha']; ?></td>
-        <td><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres']); ?></td>
+        <td><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></td>
         <td><?= $resultado['gra_nombre'] . " " . $resultado['gru_nombre']; ?></td>
         <td><?= $resultado['dcat_nombre']; ?></td>
         <td><?= $resultado['dfal_codigo']; ?></td>
