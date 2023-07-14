@@ -1,5 +1,5 @@
 <?php
-if(empty($_SERVER['HTTP_REFERER']) || (!empty($_GET["idmsg"]) && $_GET["idmsg"]!=303)){
+if((empty($_SERVER['HTTP_REFERER']) && !empty($_GET["idmsg"]) && $_GET["idmsg"]!=303) || empty($_GET["idmsg"])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
 	exit();
 }
