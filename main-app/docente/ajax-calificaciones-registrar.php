@@ -334,6 +334,7 @@ setTimeout ("notifica()", 100);
 $consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
 WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
 $numD = mysqli_num_rows($consultaNumD);
+$datosEstudiante =Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 
 
 //Para guardar ASPECTOS ESTUDIANTILES
@@ -348,7 +349,7 @@ if($_POST["operacion"]==10){
 		mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_academico='".$_POST["nota"]."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."'  AND dn_periodo='".$_POST["periodo"]."';");
 		
 	}
-	$mensajeNot = 'El aspecto academico se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["codEst"]).'</b>';
+	$mensajeNot = 'El aspecto academico se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>';
 }
 
 if($_POST["operacion"]==11){
@@ -362,11 +363,9 @@ if($_POST["operacion"]==11){
 		mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_convivencial='".$_POST["nota"]."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."';");
 		
 	}
-	$mensajeNot = 'El aspecto convivencial se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
+	$mensajeNot = 'El aspecto convivencial se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>';
 }
-
-
-else{?>
+?>
 <script type="text/javascript">
 function notifica(){
 	$.toast({
@@ -386,8 +385,6 @@ setTimeout ("notifica()", 100);
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> <?=$mensajeNot;?>
 </div>
-
-<?php }?>
 
 
 <?php 
