@@ -202,8 +202,8 @@ include("../compartido/head.php");
 																	<a href="guardar.php?get=57&idNiv=<?=$cNiv[0];?>&curso=<?=$_REQUEST["curso"];?>&grupo=<?=$_REQUEST["grupo"];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}"><img src="../files/iconos/1363803022_001_052.png"></a>
 																<?php }?>
 															</td>
-															<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if(!empty($cNiv[5])) echo $cNiv[5];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="2" onChange="niv(this)"></td>
-															<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if(!empty($cNiv[6])) echo $cNiv[6];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="3" onChange="niv(this)"></td>
+															<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if(!empty($cNiv[5])) echo $cNiv[5];?>" id="<?=$resultado['mat_id'];?>" name="<?=$carga[0];?>" alt="2" onChange="niv(this)"></td>
+															<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if(!empty($cNiv[6])) echo $cNiv[6];?>" id="<?=$resultado['mat_id'];?>" name="<?=$carga[0];?>" alt="3" onChange="niv(this)"></td>
 													<?php
 														//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 														$defPorEstudiante += $defPorMateria;   
