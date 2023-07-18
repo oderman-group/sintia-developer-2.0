@@ -256,11 +256,11 @@
 	                            </a>
 	                            <ul class="sub-menu">
 									
-									<?php if($datosCargaActual['car_indicador_automatico']==0 or $datosCargaActual['car_indicador_automatico']==null){?>
+									<?php if(isset($datosCargaActual) && ($datosCargaActual['car_indicador_automatico']==0 or $datosCargaActual['car_indicador_automatico']==null)){?>
 	                                <li class="nav-item"><a href="indicadores.php" class="nav-link "> <span class="title"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if($datosCargaActual['car_observaciones_boletin']==1){?>
+									<?php if(isset($datosCargaActual) && $datosCargaActual['car_observaciones_boletin']==1){?>
 									<li class="nav-item"><a href="observaciones.php" class="nav-link "> <span class="title">Observaciones</span></a> </li>
 									<?php }?>
 									
@@ -279,7 +279,7 @@
 									
 									<li class="nav-item"><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
-									<?php if($datosCargaActual['car_tematica']==1){?>
+									<?php if(isset($datosCargaActual) && $datosCargaActual['car_tematica']==1){?>
 									<li class="nav-item"><a href="tematica.php" class="nav-link "> <span class="title">Temática</span></a> </li>
 									<?php }?>
 									
@@ -304,7 +304,7 @@
 	                            </ul>
 	                        </li>
 							
-							<?php if($datosCargaActual['car_director_grupo']==1){?>
+							<?php if(isset($datosCargaActual) && $datosCargaActual['car_director_grupo']==1){?>
 							<li class="nav-item">
 	                            <a href="comportamiento.php" class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
 	                                <span class="title"><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></span> 
@@ -318,7 +318,7 @@
 							<?php }?>
 							
 							
-							<?php if($datosCargaActual['car_id']!=""){?>
+							<?php if(isset($datosCargaActual) && $datosCargaActual['car_id']!=""){?>
 							<li class="nav-item">
 	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Mis <?=$frases[55][$datosUsuarioActual['uss_idioma']];?></span> 

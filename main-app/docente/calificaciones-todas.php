@@ -208,9 +208,9 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														?>
 															<td>
 																
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" value="<?=$notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
 																
-															<?php if($notasResultado[3]!=""){?>
+															<?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=21&id=<?=$notasResultado['cal_id'];?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
 																<?php if($notasResultado[3]<$config[5]){?>
 																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>

@@ -185,19 +185,19 @@ function niv(enviada){
 																$definitiva += $notasResultado[4]*$decimal;
 																$sumaPorcentaje += $decimal;
 															}
-															if($notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7];
+															if(isset($notasResultado) && $notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado[4]>=$config[5]) $color = $config[7];
 															 
-															if($notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
-															elseif($notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
-															 elseif($notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
-															elseif($notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+															if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
+															 elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
 															 else $tipo='';
 
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notasResultado[4]."</a><br>".$tipo;?><br>
-																<?php if($notasResultado[4]!="" and $notasResultado[4]<$config[5]){?>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?php if(isset($notasResultado)) echo $notasResultado[4]."</a><br>".$tipo;?><br>
+																<?php if(isset($notasResultado) && $notasResultado[4]!="" and $notasResultado[4]<$config[5]){?>
 																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
 																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
 																<?php }?>
