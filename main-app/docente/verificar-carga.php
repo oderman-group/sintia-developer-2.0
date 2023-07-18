@@ -1,6 +1,6 @@
 <?php
 //SELECCIONAR UNA CARGA - DEBE ESTAR ARRIBA POR LAS COOKIES QUE CREA.
-if($_GET["get"]==100){
+if(isset($_GET["get"]) && $_GET["get"]==100){
 	if(is_numeric($_GET["carga"]) and is_numeric($_GET["periodo"])){
 		setcookie("carga",$_GET["carga"]);
 		setcookie("periodo",$_GET["periodo"]);
