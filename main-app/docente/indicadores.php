@@ -121,6 +121,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 													 INNER JOIN academico_indicadores ON ind_id=ipc_indicador
 													 WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
 													 $contReg = 1; 
+													 $porcentajeActual = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $porcentajeActual +=$resultado['ipc_valor'];
 													 ?>

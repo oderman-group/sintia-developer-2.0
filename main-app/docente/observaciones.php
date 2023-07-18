@@ -137,7 +137,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														$periodo = $periodoConsultaActual;
 														$estudiante = $resultado[0];
                                                         include("../definitivas.php");*/
-                                                        $definitiva = $notas['bol_nota'];
+                                                        $definitiva = isset($notas['bol_nota']) ? $notas['bol_nota'] : null;
 														if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';} 
 														
 													 ?>
@@ -150,11 +150,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														
-														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?=$notas['bol_observaciones'];?></span></td>
+														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?php if(isset($notas)) echo $notas['bol_observaciones'];?></span></td>
 														
 														<td width="25%">
 															
-															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="8" onChange="notas(this)"><?=$notas['bol_observaciones_boletin'];?></textarea>
+															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="8" onChange="notas(this)"><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
 														</td>
                                                     </tr>
 													<?php 

@@ -3,6 +3,10 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+
+if(!empty($_GET["carga"])) {
+  $carga = base64_decode($_GET["carga"]);
+}
 ?>
 
 <head>
@@ -33,7 +37,7 @@ require_once("../class/Estudiantes.php");
 
 $filtro = '';
 
-if(!empty($_GET["carga"])) {$filtro .= " AND car_id='".$_GET["carga"]."'";}	
+if(!empty($carga)) {$filtro .= " AND car_id='".$carga."'";}	
 
 if(!empty($_GET["docente"])) {$filtro .= " AND car_docente='".$_GET["docente"]."'";}
 

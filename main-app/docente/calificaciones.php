@@ -138,6 +138,7 @@ $porcentajeRestante = 100 - $valores[0];
 													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
 													 ");
 													 $contReg = 1;
+													 $porcentajeActual = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bg = '';
 														$consultaNumEstudiante=mysqli_query($conexion, "SELECT

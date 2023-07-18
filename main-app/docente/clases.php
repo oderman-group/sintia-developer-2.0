@@ -82,7 +82,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											$consultaPclase=mysqli_query($conexion, "SELECT * FROM academico_pclase 
 											WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."'");
 											$pclase = mysqli_fetch_array($consultaPclase, MYSQLI_BOTH);
-											if($pclase['pc_plan']!=""){
+											if(isset($pclase) && $pclase['pc_plan']!=""){
 											?>
 											<hr>
 											<a href="../files/pclase/<?=$pclase['pc_plan'];?>" target="_blank"><i class="fa fa-download"></i> <?=$pclase['pc_plan'];?></a>
