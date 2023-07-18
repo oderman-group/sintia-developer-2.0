@@ -106,7 +106,7 @@ require_once("../class/UsuariosPadre.php");
 	                        	<h4 <?=$induccionEntrar;?>><a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h4>
 		                            
 									<p>
-										<a href="../compartido/planilla-docentes.php?carga=<?=$rCargas['car_id'];?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;
+										<a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($rCargas['car_id']);?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;
 										<span><i class="fa  fa-group"></i> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
 									</p>
 									
