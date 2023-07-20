@@ -46,7 +46,9 @@ class MediaTecnicaServicios extends Servicios
       LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero			
       ";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
+        $grupo="";
+        if(!empty($parametrosArray['matcur_id_grupo'])){$grupo='matcur_id_grupo';}
+        $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years',$grupo);
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $andPersonalizado=$parametrosArray['and'];
