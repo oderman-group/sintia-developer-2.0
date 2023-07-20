@@ -10,7 +10,7 @@ class Estudiantes {
         $cursoActual=null
     )
     {
-        global $conexion, $baseDatosServicios;
+        global $conexion, $baseDatosServicios, $config;
         $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         $resultado = [];
         
@@ -30,6 +30,7 @@ class Estudiantes {
             }else{
                 $parametros = [
                     'matcur_id_curso'=>$cursoActual["gra_id"],
+                    'matcur_id_institucion'=>$config['conf_id_institucion'],
                     'limite'=>$filtroLimite,
                     'arreglo'=>false
                 ];
