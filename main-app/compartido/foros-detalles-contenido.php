@@ -29,7 +29,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 													$urlRecurso = 'foros-detalles.php?idR='.$_GET["idR"];
 													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 													$cursoActual=GradoServicios::consultarCurso($datosCargaActual[2]);
-													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
+													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$datosCargaActual[3]);
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
@@ -43,7 +43,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 													?>
 													<li class="list-group-item">
-														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
+														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['uss_id'];?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
 													<?php }?>

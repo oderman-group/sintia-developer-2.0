@@ -143,8 +143,8 @@ $porcentajeRestante = 100 - $valores[0];
 														$bg = '';
 														if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
 															$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM academico_calificaciones
-															INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
-															INNER JOIN academico_matriculas ON mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante AND mat_id=matcur_id_matricula
+															INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+															INNER JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_id=cal_id_estudiante AND mat_id=matcur_id_matricula
 															WHERE cal_id_actividad='".$resultado[0]."'
 															");
 														} else {

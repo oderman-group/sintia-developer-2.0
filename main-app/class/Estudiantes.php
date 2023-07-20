@@ -10,7 +10,7 @@ class Estudiantes {
         $cursoActual=null
     )
     {
-        global $conexion, $baseDatosServicios;
+        global $conexion, $baseDatosServicios, $config;
         $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         $resultado = [];
         
@@ -30,6 +30,7 @@ class Estudiantes {
             }else{
                 $parametros = [
                     'matcur_id_curso'=>$cursoActual["gra_id"],
+                    'matcur_id_institucion'=>$config['conf_id_institucion'],
                     'limite'=>$filtroLimite,
                     'arreglo'=>false
                 ];
@@ -47,10 +48,11 @@ class Estudiantes {
         string $filtroAdicional = '', 
         string $filtroLimite    = 'LIMIT 0, 2000',
         $cursoActual=null,
-        string $BD    = ''
+        string $BD    = '',
+        $grupoActual=1
     )
     {
-        global $conexion, $baseDatosServicios;
+        global $conexion, $baseDatosServicios, $config;
         $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         $resultado = [];
 
@@ -69,6 +71,8 @@ class Estudiantes {
             }else{
                 $parametros = [
                     'matcur_id_curso'=>$cursoActual["gra_id"],
+                    'matcur_id_grupo'=>$grupoActual,
+                    'matcur_id_institucion'=>$config['conf_id_institucion'],
                     'limite'=>$filtroLimite,
                     'arreglo'=>false
                 ];
@@ -161,9 +165,9 @@ class Estudiantes {
         return $resultado;
     }
 
-    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '',$cursoActual=null)
+    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '',$cursoActual=null,$grupoActual=1)
     {
-        global $conexion, $baseDatosServicios;
+        global $conexion, $baseDatosServicios, $config;
         $resultado = [];
         $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
         try {
@@ -181,6 +185,8 @@ class Estudiantes {
             } else{
                 $parametros = [
                       'matcur_id_curso'=>$cursoActual["gra_id"],
+                      'matcur_id_grupo'=>$grupoActual,
+                      'matcur_id_institucion'=>$config['conf_id_institucion'],
                       'and'=>'AND (mat_estado_matricula=1 OR mat_estado_matricula=2)',
                       'arreglo'=>false
                   ];
@@ -375,12 +381,12 @@ class Estudiantes {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos
-            LEFT JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grupo='".$datosCargaActual['car_grupo']."' AND mat_id=matcur_id_matricula
+            LEFT JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_id=matcur_id_matricula
             LEFT JOIN academico_grados ON gra_id=matcur_id_curso
-            LEFT JOIN academico_grupos ON gru_id=mat_grupo
+            LEFT JOIN academico_grupos ON gru_id=matcur_id_grupo
             LEFT JOIN usuarios ON uss_id=mat_id_usuario
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres;
             ");
         } catch (Exception $e) {
@@ -424,10 +430,10 @@ class Estudiantes {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos
             LEFT JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grupo='".$datosCargaActual['car_grupo']."' AND mat_id=matcur_id_matricula
             LEFT JOIN academico_grados ON gra_id=matcur_id_curso
-            LEFT JOIN academico_grupos ON gru_id=mat_grupo
+            LEFT JOIN academico_grupos ON gru_id=matcur_id_grupo
             LEFT JOIN usuarios ON uss_id=mat_id_usuario
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres;
             ");
             $cantidad = mysqli_num_rows($consulta);
