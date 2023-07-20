@@ -158,7 +158,7 @@ require_once("../class/Estudiantes.php");
 												<?php
 												$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 												$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
-												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
+												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$_REQUEST["grupo"]);
 												//PRIMER PUESTO
 												$primerPuestoNota = 0;
 												$primerPuestoNombre = '';

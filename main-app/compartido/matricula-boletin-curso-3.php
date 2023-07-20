@@ -467,7 +467,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             } //while fin areas
 
             $consultaMediaTecnica=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
-            INNER JOIN $BD.academico_cargas ON car_curso=matcur_id_curso AND car_grupo=1
+            INNER JOIN $BD.academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
             INNER JOIN $BD.academico_materias ON mat_id=car_materia
             INNER JOIN $BD.academico_areas ON ar_id= mat_area
             WHERE matcur_id_matricula='".$matriculadosDatos['mat_id']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'
