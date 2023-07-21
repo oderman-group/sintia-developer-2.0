@@ -2,12 +2,6 @@
 include("bd-conexion.php");
 include("php-funciones.php");
 
-require ROOT_PATH.'/librerias/phpmailer/Exception.php';
-require ROOT_PATH.'/librerias/phpmailer/PHPMailer.php';
-require ROOT_PATH.'/librerias/phpmailer/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 //DATOS SECRETARIA(O)
 $ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
@@ -120,50 +114,15 @@ if ($newId > 0) {
 		'solicitud_nombre' => $_POST['nombreEstudiante'],
 		'solicitud_documento' => $_POST['documento'],
 		'usuario_email'    => $_POST['email'],
-		'usuario_nombre'   => strtoupper($_POST['nombreAcudiente'])
+		'usuario_nombre'   => strtoupper($_POST['nombreAcudiente']),
+        'usuario2_email'    => $datosUss['uss_email'],
+        'usuario2_nombre'    =>$nombreUss
+        
 	];
 	$asunto = 'Solicitud de admisión ' . $newId;
 	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-index-inscripcion.php';
-	
 
-    $mail = new PHPMailer(true);
-
-    try {
-
-        ob_start();
-        include($bodyTemplateRoute);
-        $body = ob_get_clean();
-
-        //Server settings
-        $mail->SMTPDebug = 0;                                     // Enable verbose debug output
-        $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = EMAIL_SERVER;  	                        // Specify main and backup SMTP servers
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = EMAIL_USER;              
-        $mail->Password   = EMAIL_PASSWORD;                     
-        $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 465;
-
-        //Remitente
-        $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
-
-        //Destinatarios
-        $mail->addAddress('soporte@plataformasintia.com', 'Soporte Plataforma SINTIA');//PLATAFORMA
-        $mail->addAddress($data['usuario_email'], $data['usuario_nombre']);//ASPIRANTE
-        $mail->addAddress($datosUss['uss_email'], $nombreUss);//SECRETARIA(O)
-
-        // Content
-        $mail->isHTML(true);                                   // Set email format to HTML
-        $mail->Subject = $asunto;
-        $mail->Body = $body;
-        $mail->CharSet = 'UTF-8';
-
-        $mail->send();
-
-    } catch (Exception $e) {
-        echo "Error: {$mail->ErrorInfo}";
-        exit();
-    }
+	EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
     echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'&idInst='.$_REQUEST['idInst'].'";</script>';
     exit();

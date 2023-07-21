@@ -89,6 +89,7 @@ $datosAsp = $asp->fetch();
         <?php include("menu.php"); ?>
 
         <?php include("alertas.php"); ?>
+        <?php include("../../config-general/mensajes-informativos.php"); ?>
 
         <form action="admin-formulario-actualizar.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="idMatricula" value="<?= $datos['mat_id']; ?>">
