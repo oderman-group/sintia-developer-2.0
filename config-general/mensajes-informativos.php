@@ -113,6 +113,10 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                     Sí, deseo mostrar la información
                 </a>';
             break;
+            case 'ER_DT_15':
+                $tipo = 'danger';
+                $mensaje = $_GET["msj"];
+            break;
 
 
             default:
