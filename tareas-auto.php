@@ -214,7 +214,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		  $asunto = $tituloMsj;
 		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
 
-		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
 	}
 }
@@ -423,7 +423,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		  $asunto = $tituloMsj;
 		  $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
 	
-		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 		
 	}else{
 		mysqli_query($conexion,"UPDATE correos SET corr_observacion='El acudiente no tiene email registrado.' WHERE corr_id='".$cDat["corr_id"]."'");
