@@ -12,6 +12,9 @@ define('GRADO_GRUPAL', 'grupal');
 define('MENU', 'menu');
 define('MENU_PADRE', 'menu-padre');
 define('SUB_MENU', 'sub-menu');
+
+define('ESTADO_EMAIL_ENVIADO', 'enviado');
+define('ESTADO_EMAIL_ERROR', 'error');
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
