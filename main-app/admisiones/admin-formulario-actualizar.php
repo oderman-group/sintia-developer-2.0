@@ -8,13 +8,7 @@ if ($_SESSION["id"] == "") {
 <?php
 include("bd-conexion.php");
 include("php-funciones.php");
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'phpmailer/Exception.php';
-require 'phpmailer/PHPMailer.php';
-require 'phpmailer/SMTP.php';
+require_once("../class/EnviarEmail.php");
 
 if ($_FILES['archivo1']['name'] != "") {
 	$destino = "files/adjuntos";
@@ -94,49 +88,21 @@ if($_POST['enviarCorreo'] == 1){
 				';
     $fin .= '';
     $fin .=  '<html><body>';
-
-    // Instantiation and passing `true` enables exceptions
-    $mail = new PHPMailer(true);
-    echo '<div style="display:none;">';
-    try {
-        //Server settings
-        $mail->SMTPDebug = 0;                                       // Enable verbose debug output
-        $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'jemima.dongee.com';  // Specify main and backup SMTP servers
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = 'info@plataformasintia.com';                     // SMTP username
-        $mail->Password   = 'B=XKY?y{VWiH';                              // SMTP password
-        $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 465;                                    // TCP port to connect to
-
-        //Recipients
-        $mail->setFrom('info@plataformasintia.com', 'Plataforma SINTIA');
-
-        $mail->addAddress($_POST['emailAcudiente'], '');     // Add a recipient
-        $mail->addAddress('sec.academica@icolven.edu.co', 'Sec. Académica');     // Add a recipient
-        #$mail->addAddress('tecmejia2010@gmail.com', 'Jhon');     // Add a recipient
-
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = "Observación a solicutud #" . $_POST['solicitud'];
-        $mail->Body = $fin;
-        $mail->CharSet = 'UTF-8';
-
-        if($archivo1 != "" and file_exists('files/adjuntos/'.$archivo1)){
-            $mail->AddAttachment('files/adjuntos/'.$archivo1);
-        }
-
-        if($archivo2 != "" and file_exists('files/adjuntos/'.$archivo2)){
-            $mail->AddAttachment('files/adjuntos/'.$archivo2);
-        }
-        
-        
-
-        $mail->send();
-    } catch (Exception $e) {
-        echo "Error: {$mail->ErrorInfo}";
-        exit();
+    if($archivo1 != "" and file_exists('files/adjuntos/'.$archivo1)){
+        $archivos[1] = 'files/adjuntos/'.$archivo1;
     }
+
+    if($archivo2 != "" and file_exists('files/adjuntos/'.$archivo2)){
+        $archivos[2] = 'files/adjuntos/'.$archivo2;
+    }
+    $data = [
+        'institucion_id'   => $datosInfo['info_institucion'],
+        'usuario_email'    => $_POST['emailAcudiente'],
+        'usuario_nombre'   => 'Sec. Académica',
+    ];
+    $asunto = 'Tus credenciales han llegado';
+    EnviarEmail::enviar($data, $asunto,null,$fin,$archivos);
+
     echo '</div>';
     echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 }else{
