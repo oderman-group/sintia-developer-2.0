@@ -93,4 +93,37 @@ class MediaTecnicaServicios extends Servicios
              );
         }        
     }
+
+    public static function eliminarExistenciaEnCursoMT($idCursos,$config)
+    {
+        global $baseDatosServicios,$conexion;
+
+        try {
+          $consulta= mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$idCursos."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        } 
+    }
+
+    public static function guardarPorCurso($idMatricula,$idCurso,$config,$idGrupo)
+    {
+        global $baseDatosServicios,$conexion;
+          mysqli_query($conexion," INSERT INTO ".$baseDatosServicios.".mediatecnica_matriculas_cursos(
+                 matcur_id_curso, 
+                 matcur_id_matricula,
+                 matcur_id_institucion,
+                 matcur_years,
+                 matcur_id_grupo
+                 )
+                 VALUES
+                 (
+                  '".$idCurso."',
+                  '".$idMatricula."',
+                  '".$config['conf_id_institucion']."',
+                  '".$config['conf_agno']."',
+                  '".$idGrupo."'
+                 )"
+             );      
+    }
 }
