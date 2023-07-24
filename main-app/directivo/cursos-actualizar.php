@@ -1,10 +1,11 @@
 <?php
 include("session.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/MediaTecnicaServicios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0173';
 include("../compartido/historial-acciones-guardar.php");
-require_once("../class/servicios/GradoServicios.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
@@ -39,7 +40,37 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
-	exit();
+if ($_POST["tipoG"]==GRADO_INDIVIDUAL) { 
+	if(!empty($_POST["estudiantesMT"])){
+		$numEstudiantesMT = (count($_POST["estudiantesMT"]));
+		if($numEstudiantesMT>0) {
+			try{
+				MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"],$config);
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+			$contEstudiantes = 0;
+			while ($contEstudiantes < $numEstudiantesMT) {
+				$idEstudiante=$_POST["estudiantesMT"][$contEstudiantes];
+				try{
+					MediaTecnicaServicios::guardarPorCurso($idEstudiante,$_POST["id_curso"],$config,$_POST["grupo".$idEstudiante]);
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$contEstudiantes++;
+			}
+		}
+	}else{
+		try{
+			MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"],$config);
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
+}
+
+include("../compartido/guardar-historial-acciones.php");
+
+echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
+exit();
