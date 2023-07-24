@@ -77,11 +77,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-													<?php													
-                           							 $consulta = Grados::listarGrados(1,$_GET['tipo']);
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-													 ?>
+													<?php	
+													$tipo=NULL;
+													if(!empty($_GET['tipo'])){ $tipo=$_GET['tipo'];}
+													$consulta = Grados::listarGrados(1,$tipo);
+													$contReg = 1;
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
