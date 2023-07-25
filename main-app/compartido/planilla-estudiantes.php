@@ -12,14 +12,14 @@ require_once("../class/Estudiantes.php");
   $year=$agnoBD;
   $BD=$_SESSION["inst"]."_".$agnoBD;
   $bdConsulta='';
-  if(isset($_POST["agno"])){
-    $year=$_POST["agno"];
-    $BD=$_SESSION["inst"]."_".$_POST["agno"];
+  if(isset($_REQUEST["agno"])){
+    $year=$_REQUEST["agno"];
+    $BD=$_SESSION["inst"]."_".$_REQUEST["agno"];
     $bdConsulta=$BD.'.';
 	}
-	if(!empty($_REQUEST["grado"]) and !empty($_REQUEST["grupo"])){
+	if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
-	}elseif(!empty($_REQUEST["grado"])){
+	}elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])){
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."'");
 	}else{
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos");
@@ -28,9 +28,9 @@ require_once("../class/Estudiantes.php");
 ?>
 <?php
 $subNombre="";
- if(!empty($_REQUEST["grado"]) and !empty($_REQUEST["grupo"])){
+ if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
 $subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
-}elseif(!empty($_REQUEST["grado"])) {
+}elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) {
   $subNombre=$grados["gra_nombre"]."<br>".$year;
 }
 $nombreInforme =  "PLANILLA DE ESTUDIANTES ".$subNombre;
@@ -55,10 +55,10 @@ include("../compartido/head-informes.php") ?>
 
   <?php
   $grupo='';
-  if(!empty($_REQUEST["grado"]) and !empty($_REQUEST["grupo"])){
+  if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
     $grupo=$_REQUEST["grupo"];
 		$adicional = "AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."'";
-  }elseif(!empty($_REQUEST["grado"])) {
+  }elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) {
 		$adicional = "AND mat_grado='".$_REQUEST["grado"]."'";
 	}else{
 		$adicional = "";
