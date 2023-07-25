@@ -3,7 +3,7 @@ session_start();
 include("../modelo/conexion.php");
 $preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases_preguntas 
 INNER JOIN usuarios ON uss_id=cpp_usuario
-WHERE cpp_id_clase='" . $_POST["claseId"] . "'  ORDER BY cpp_fecha ASC");
+WHERE cpp_id_clase='" . $_POST["claseId"] . "'  ORDER BY cpp_fecha DESC");
 $usuarioActual= $_POST["usuarioActual"];
 ?>
 <?php while ($preguntasDatos = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) { ?>

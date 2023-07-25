@@ -175,7 +175,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										</div>
 										
 										<div class="card-body">
-										<form class="form-horizontal" action="../compartido/guardar.php" method="post">
+										<form class="form-horizontal" action="#" method="post">
 											<input type="hidden" name="id" value="14">
 											<input type="hidden" name="idClase" value="<?=$_GET["idR"];?>">
 											<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
@@ -192,7 +192,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											
 											<div class="form-group">
 												<div class="offset-md-3 col-md-9">
-													<button type="submit" class="btn btn-info">Enviar</button>
+													<button  id="btnEnviar" class="btn btn-info"  onclick="this.disabled=true;guardar()">Enviar</button>
+													
 													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 												</div>
 											</div>
@@ -210,7 +211,42 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 																window.onload = consultarPreguntas();	
 																
+																function guardar(){																
+																	id="14";
+																	idClase=<?=$_GET["idR"];?>;
+																	sesionUsuario=<?=$_SESSION["id"];?>;
+																	contenido=document.getElementById("contenido").value;
+																	btn=document.getElementById("btnEnviar");
+																	if(validar()){
+																		datos = "id="+id
+																				+"&idClase="+idClase
+																				+"&sesionUsuario="+sesionUsuario
+																				+"&contenido="+contenido;
+																			
+																		
+																			$.ajax({
+																			type: "POST",
+																			url: "../compartido/guardar.php",
+																			data: datos,
+																			success: function(data){
+																				document.getElementById("contenido").value="";
+																				btn.disabled=false;																				
+																				consultarPreguntas();
+																			}
+																			});
+																	}else{
+																		btn.disabled=false;
+																	}
 
+																};
+																function validar(){
+																	contenido=document.getElementById("contenido").value;
+																	if( contenido == null || contenido.length == 0 || /^\s+$/.test(contenido) ) {
+																		return false;
+																	}else{
+																		return true;
+																	}
+																}
 																function consultarPreguntas(){
 
 																	var claseId = <?= $_GET["idR"]; ?>;
