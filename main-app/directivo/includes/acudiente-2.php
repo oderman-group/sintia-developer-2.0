@@ -10,6 +10,7 @@ try{
 	$acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
 ?>  
 <h2><b>ACUDIENTE 2</b></h2>
+<input type="hidden" name="idAcudiente2" value="<?php if(!empty($datosEstudianteActual["mat_acudiente2"])){ echo $datosEstudianteActual["mat_acudiente2"];}?>">
 
 <div class="form-group row">
 	<label class="col-sm-2 control-label">Tipo de documento</label>
@@ -33,7 +34,7 @@ try{
 	
 	<label class="col-sm-2 control-label">Documento</label>
 	<div class="col-sm-3">
-		<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2[0])){ echo $acudiente2[0];}?>">
+		<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2['uss_usuario'])){ echo $acudiente2['uss_usuario'];}?>">
 	</div>
 </div>
 	
