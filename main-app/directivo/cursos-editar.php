@@ -241,9 +241,14 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                                     <label class="col-sm-2 control-label">Estudiantes:</label>
                                                     <div class="col-sm-8">
                                                         <?php
-                                                        $consulta = Estudiantes::listarEstudiantes(0, "", "",$resultadoCurso);
+                                                        $parametros = [
+                                                            'matcur_id_curso'=>$_GET['id'],
+                                                            'matcur_id_institucion'=>$config['conf_id_institucion'],
+                                                            'arreglo'=>false
+                                                        ];
+                                                        $consulta = MediaTecnicaServicios::listarEstudiantes($parametros);
                                                         ?>
-                                                        <select id="select_estudiante" class="form-control select2-multiple"  name="estudiantesMT[]" multiple onchange="mostrarSelects(this)">
+                                                        <select id="select_estudiante" class="form-control select2-multiple" style="width: 100% !important" name="estudiantesMT[]" multiple onchange="mostrarSelects(this)">
                                                             <option value="">Seleccione una opción</option>
                                                             <?php
                                                             foreach($consulta as $idEstudiante){
