@@ -380,7 +380,7 @@ function deseaEliminar(dato){
 
 	{	
 
-		if(!empty(is)){
+		if(typeof id !== "undefined"){
 
 			axios.get(url)
 
