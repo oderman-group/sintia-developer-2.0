@@ -17,9 +17,6 @@ include("../compartido/head-informes.php") ?>
 
 
 <?php
-// $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1)";
-// $matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-
 $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
 $matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$_REQUEST["grupo"]);
