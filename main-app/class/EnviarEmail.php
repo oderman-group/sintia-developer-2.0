@@ -51,10 +51,10 @@ class EnviarEmail {
             $correrocopia='soporte@plataformasintia.com';
             $destinatario=$data['usuario_email'];
             $destinatario2=$data['usuario2_email'];
-            $validarRemitente = self::validar_email(EMAIL_SENDER);
-            $validarDestinatario = self::validar_email($destinatario);
-            $validarDestinatario2 = is_null($destinatario2)?true:self::validar_email($destinatario2);
-            $validarcopia = self::validar_email($correrocopia);
+            $validarRemitente = self::validarEmail(EMAIL_SENDER);
+            $validarDestinatario = self::validarEmail($destinatario);
+            $validarDestinatario2 = is_null($destinatario2)?true:self::validarEmail($destinatario2);
+            $validarcopia = self::validarEmail($correrocopia);
 
             if($validarRemitente && $validarDestinatario &&  $validarDestinatario2 && $validarcopia){
                     //Destinatarios
@@ -81,19 +81,19 @@ class EnviarEmail {
             }else{                 
                     if(!$validarRemitente){
                         self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
-                        self::mensaje_error(EMAIL_SENDER);        
+                        self::mensajeError(EMAIL_SENDER);        
                     } 
                     if(!$validarDestinatario){
                         self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
-                        self::mensaje_error($destinatario);        
+                        self::mensajeError($destinatario);        
                     }
                     if(!$validarDestinatario2){
                         self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
-                        self::mensaje_error($destinatario2);        
+                        self::mensajeError($destinatario2);        
                     }    
                     if(!$validarcopia){
                         self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
-                        self::mensaje_error($correrocopia);        
+                        self::mensajeError($correrocopia);        
                     } 
             }
 
@@ -103,7 +103,7 @@ class EnviarEmail {
         }
 
     }
-    public static function validar_email($email) 
+    public static function validarEmail($email) 
     {
         $matches = null;
         // Expresion regular
@@ -111,7 +111,7 @@ class EnviarEmail {
        return (1 === preg_match($regex, $email, $matches));      
     }
 
-    private static function mensaje_error($email) 
+    private static function mensajeError($email) 
     {
         $msj=' el Correo '.$email.' no cumple con la estructura de un correo valido';
         $url=$_SERVER["HTTP_REFERER"];
