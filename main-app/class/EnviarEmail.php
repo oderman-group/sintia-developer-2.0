@@ -50,7 +50,7 @@ class EnviarEmail {
             $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
             $correrocopia='soporte@plataformasintia.com';
             $destinatario=$data['usuario_email'];
-            $destinatario2=$data['usuario2_email'];
+            $destinatario2=empty($data['usuario2_email'])?null:$data['usuario2_email'];
             $validarRemitente = self::validarEmail(EMAIL_SENDER);
             $validarDestinatario = self::validarEmail($destinatario);
             $validarDestinatario2 = is_null($destinatario2)?true:self::validarEmail($destinatario2);
@@ -98,8 +98,8 @@ class EnviarEmail {
             }
 
         } catch (Exception $e) {
-            self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,$e->getMessage()); 
-             include("../compartido/error-catch-to-report.php");
+            self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,$e->getMessage());
+            include("../compartido/error-catch-to-report.php");
         }
 
     }
