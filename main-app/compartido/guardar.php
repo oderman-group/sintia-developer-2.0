@@ -459,8 +459,8 @@ if ($_POST["id"] == 7) {
 			  ];
 			$asunto = $tituloMsj;
 			$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
-		
-			EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+			
+			EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 		}
 	}
 
