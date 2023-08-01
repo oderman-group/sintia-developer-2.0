@@ -43,22 +43,38 @@ try{
 
 if ($_POST["tipoG"]==GRADO_INDIVIDUAL) { 
 	if(!empty($_POST["estudiantesMT"])){
-		$numEstudiantesMT = (count($_POST["estudiantesMT"]));
-		if($numEstudiantesMT>0) {
-			try{
-				MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"],$config);
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			$contEstudiantes = 0;
-			while ($contEstudiantes < $numEstudiantesMT) {
-				$idEstudiante=$_POST["estudiantesMT"][$contEstudiantes];
+		$parametros = [
+			'matcur_id_curso'=>$_POST["id_curso"],
+			'matcur_id_institucion'=>$config['conf_id_institucion'],
+			'arreglo'=>true
+		];
+		$consulta = MediaTecnicaServicios::listarEstudiantes($parametros);
+		$idEstudianteMT = array();
+		foreach ($consulta as $subarreglo) {
+			$idEstudianteMT[] = $subarreglo['matcur_id_matricula'];
+		}
+		//Agregamos los estudiantes que no esten en registrados en la BD
+		$resultadoAgregar= array_diff($_POST["estudiantesMT"],$idEstudianteMT);
+		if($resultadoAgregar){
+			print_r($resultadoAgregar);
+			foreach ($resultadoAgregar as $idMatriculaGuardar) {
 				try{
-					MediaTecnicaServicios::guardarPorCurso($idEstudiante,$_POST["id_curso"],$config,$_POST["grupo".$idEstudiante]);
+					MediaTecnicaServicios::guardarPorCurso($idMatriculaGuardar,$_POST["id_curso"],$config,$_POST["grupo".$idMatriculaGuardar]);
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
-				$contEstudiantes++;
+			}
+		}
+
+		//Eliminamos los estudiantes que ya no vayan a paertenecer a este curso
+		$resultadoEliminar= array_diff($idEstudianteMT,$_POST["estudiantesMT"]);
+		if($resultadoEliminar){
+			foreach ($resultadoEliminar as $idMatriculaEliminar) {
+				try{
+					mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$_POST["id_curso"]."' AND matcur_id_matricula='".$idMatriculaEliminar."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
 			}
 		}
 	}else{
