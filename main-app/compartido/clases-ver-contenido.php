@@ -175,7 +175,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										</div>
 										
 										<div class="card-body">
-										<form id="comentario" name="comentario" class="form-horizontal" action="../compartido/guardar.php" method="post">
+										<form class="form-horizontal" action="#" method="post">
 											<input type="hidden" name="id" value="14">
 											<input type="hidden" name="idClase" value="<?=$_GET["idR"];?>">
 											<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
@@ -192,7 +192,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											
 											<div class="form-group">
 												<div class="offset-md-3 col-md-9">
-													<button type="submit" class="btn btn-info">Enviar</button>
+													<button  id="btnEnviar" class="btn btn-info"  onclick="this.disabled=true;guardar()">Enviar</button>
+													
 													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 												</div>
 											</div>
@@ -204,133 +205,73 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											<p style="color: tomato;">Los comentarios y/o preguntas más recientes aparecen automáticamente en la parte de abajo.</p>	
 
 											<div id="preguntas"></div>
-									
-											<script>
-											var comentario = document.getElementById("comentario");
-											var preguntas = document.getElementById("preguntas");
-												
-											var contenido = document.getElementById("contenido");
-												
-											document.addEventListener("DOMContentLoaded", listarPreguntas, false);
-												
+											
+															<script>
+																setInterval('consultarPreguntas()',10000);
 
-											comentario.addEventListener("submit", listarPreguntas);
-											var cont = 0;
-											var numItems = 0;	
-												
-											function listarPreguntas(e)
-											{
-												
-												
-												document.getElementById("envia").value="NO";
-												
-												if(e && e.type == 'submit'){
-												  	e.preventDefault();
-													document.getElementById("envia").value="SI";
-												 }
-												
-												var datos = new FormData(comentario);
-												//console.log(datos.get('envia'));
-												
-												
-												fetch('https://plataformasintia.com/main-app/v2.0/compartido/clases-ver-contenido-api.php', {
-													method: 'POST',
-													body: datos
-												})
-												.then(resp => resp.json())
-												.then(data => {
-													//console.log(data);
-													preguntas.innerHTML = '';
-													for(valores of data.info){
-														preguntas.innerHTML += `
-															<div id="${valores.cpp_id}" class="row">
-																<div class="col-sm-12">
-																	<div class="panel">
-																		<div class="card-head">
-
-																				
-																				${ valores.cpp_usuario == data.adicional.usuario ? `
-																				<div class = "pull-right">
-																					<a href="../compartido/guardar.php?get=24&idCom=${valores.cpp_id}" onClick="if(!confirm('Deseas eliminar este mensaje?')){return false;}">
-																						<i class="fa fa-trash"></i>
-																					</a>
-																				</div>
-																				` : ``}
-																		</div>
-
-																		<div class="user-panel">
-																				<div class="pull-left image">
-																					<img src="../files/fotos/${valores.uss_foto}" class="img-circle user-img-circle" alt="User Image" height="50" width="50" />
-																				</div>
-
-																				<div class="pull-left info">
-																					<p><a href="clases-ver.php?idR=${valores.cpp_id_clase}&usuario=${valores.uss_id}">${valores.uss_nombre}</a><br><span style="font-size: 11px; color: #000;">${valores.cpp_fecha}</span></p>
-																				</div>
-																		</div>
+																window.onload = consultarPreguntas();	
+																
+																function guardar(){																
+																	id="14";
+																	idClase=<?=$_GET["idR"];?>;
+																	sesionUsuario=<?=$_SESSION["id"];?>;
+																	contenido=document.getElementById("contenido").value;
+																	btn=document.getElementById("btnEnviar");
+																	if(validar()){
+																		datos = "id="+id
+																				+"&idClase="+idClase
+																				+"&sesionUsuario="+sesionUsuario
+																				+"&contenido="+contenido;
+																			
 																		
+																			$.ajax({
+																			type: "POST",
+																			url: "../compartido/guardar.php",
+																			data: datos,
+																			success: function(data){
+																				document.getElementById("contenido").value="";
+																				btn.disabled=false;																				
+																				consultarPreguntas();
+																			}
+																			});
+																	}else{
+																		btn.disabled=false;
+																	}
 
-																		<div class="panel-body">
-																			<p>${valores.cpp_contenido}</p>	
-																		</div>
+																};
+																function validar(){
+																	contenido=document.getElementById("contenido").value;
+																	if( contenido == null || contenido.length == 0 || /^\s+$/.test(contenido) ) {
+																		return false;
+																	}else{
+																		return true;
+																	}
+																}
+																function consultarPreguntas(){
 
-																		<div class="card-body">
+																	var claseId = <?= $_GET["idR"]; ?>;
+																	var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
+																	
 
-																		</div>
+																	datos = "claseId="+claseId+"&usuarioActual="+usuarioActual;
+																		$.ajax({
+																		type: "POST",
+																		url: "../compartido/ajax-comentarios-preguntas.php",
+																		data: datos,
+																		success: function(data){
+																			$('#preguntas').empty().hide().html(data).show(1);
 
-																	</div>
+																		}
+																		});
 
 
 
-																</div>
-															</div>
-														`;
+																}	
+
+																
+																															
+															</script>
 														
-													}
-													
-													//console.log(data.adicional);
-													
-													if(e && e.type == 'submit'){
-														contenido.value="";
-													 }
-													
-													
-													
-													if(data.adicional.numItems > numItems && cont > 0){
-														var numItActual = parseInt(data.adicional.numItems) - parseInt(numItems);
-														notificare(numItActual);
-													 }
-													
-													//console.log(numItems);
-													
-													numItems = data.adicional.numItems;
-													cont ++;
-
-												});
-												
-												
-											};
-												
-												
-											setInterval(listarPreguntas, 3000);
-												
-												function notificare(numI){
-															$.toast({
-																heading: 'Información',  
-																text: 'Hay '+ numI +' comentarios nuevos.',
-																position: 'botom-left',
-																loaderBg:'#ff6849',
-																icon: 'info',
-																hideAfter: 5000, 
-																stack: 6,
-																allowToastClose : false,
-																stack : 5
-															});
-														}
-														
-
-
-										</script>
-									
 									
 											
                                 </div>
