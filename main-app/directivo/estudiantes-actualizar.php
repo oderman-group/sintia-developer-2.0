@@ -123,7 +123,7 @@ try{
 if ($esMediaTecnica) { 
 	try{
 		if($_POST["tipoMatricula"] ==GRADO_INDIVIDUAL)
-		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config);
+		MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config,$_POST["grupoMT"]);
 		else
 		MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
 	} catch (Exception $e) {
