@@ -380,6 +380,16 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Editar información en años anteriores?</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control col-sm-2 select2" name="editarInfoYears">
+                                                <option value="1" <?php if($datosInstitucion['conf_permiso_edicion_years_anteriores']==1){ echo "selected";} ?>>SI</option>
+                                                <option value="0" <?php if($datosInstitucion['conf_permiso_edicion_years_anteriores']==0){ echo "selected";} ?>>NO</option>
+                                            </select>
+                                            <span style="color:#6017dc;">Esta acción permite a los directivos editar registros en años anteriores al actual.</span>
+                                        </div>
+                                    </div>
 
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>
