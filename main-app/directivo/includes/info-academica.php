@@ -96,6 +96,7 @@
 			if(!is_null($listaMediaTenicaActual) && count($listaMediaTenicaActual)>0){
 				foreach($listaMediaTenicaActual as $llave=> $valor){
 					$listaMediaActual[$valor["matcur_id_curso"]]='id_curso';
+					$listaMediaActual[$valor["matcur_id_grupo"]]='id_grupo';
 					
 				}
 				
@@ -130,7 +131,7 @@
 			<div class="form-group row" >
 				<label class="col-sm-2 control-label">Cursos adicionales</label>
 				<div class="col-sm-4">
-					<select id="multiple" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" multiple>
+					<select id="cursosAdicionales" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" onchange="mostrarGrupoCursosAdicionales(this)" multiple>
 						<option value="">Seleccione una opción</option>
 						<?php
 						foreach ($listaIndividuales as $dato) {
@@ -146,6 +147,37 @@
 						}
 						?>
 					</select>
+				</div>
+			</div>
+			
+			<script type="application/javascript">
+				$(document).ready(mostrarGrupoCursosAdicionales(document.getElementById("cursosAdicionales")))
+				function mostrarGrupoCursosAdicionales(enviada) {
+					var valor = enviada.value;
+					if (valor != '') {
+						document.getElementById("divGradoMT").style.display='block';
+					} else {
+						document.getElementById("divGradoMT").style.display='none';
+					}
+				}
+			</script>
+			<div id="divGradoMT" style="display: none;">
+				<div class="form-group row" >
+					<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
+					<div class="col-sm-4">
+						<?php
+						$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+						?>
+						<select class="form-control" name="grupoMT">
+						<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+							if (array_key_exists($rv[0], $listaMediaActual)){
+								echo '<option value="'.$rv[0].'" selected>'.$rv[1].'</option>';
+							}else{
+								echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';
+							}	
+						}?>
+						</select>
+					</div>
 				</div>
 			</div>
 		</div>
