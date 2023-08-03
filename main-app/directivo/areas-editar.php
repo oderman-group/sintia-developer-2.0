@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0018';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -63,7 +68,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre del Areas</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>">
+                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
@@ -77,7 +82,7 @@
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select class="form-control  select2" name="posicionA" required>
+                                                <select class="form-control  select2" name="posicionA" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci n</option>
 													<?php
                                                     $cont=0;
@@ -110,7 +115,9 @@
                                         </div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>
