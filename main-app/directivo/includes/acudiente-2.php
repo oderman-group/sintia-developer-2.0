@@ -22,7 +22,7 @@ try{
 			include("../compartido/error-catch-to-report.php");
 		}
 		?>
-		<select class="form-control" name="tipoDAcudiente2">
+		<select class="form-control" name="tipoDAcudiente2" <?=$disabledPermiso;?>>
 			<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 				if($o[0]==$acudiente2["uss_tipo_documento"])
 				echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
@@ -34,14 +34,14 @@ try{
 	
 	<label class="col-sm-2 control-label">Documento</label>
 	<div class="col-sm-3">
-		<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2['uss_usuario'])){ echo $acudiente2['uss_usuario'];}?>">
+		<input type="text" name="documentoA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2['uss_usuario'])){ echo $acudiente2['uss_usuario'];}?>" <?=$disabledPermiso;?>>
 	</div>
 </div>
 	
 <div class="form-group row">
 	<label class="col-sm-2 control-label">Lugar de expedición</label>
 	<div class="col-sm-3">
-		<select class="form-control" name="lugardA2">
+		<select class="form-control" name="lugardA2" <?=$disabledPermiso;?>>
 			<option value="">Seleccione una opción</option>
 			<?php
 			try{
@@ -61,31 +61,31 @@ try{
 
 	<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 	<div class="col-sm-3">
-		<input type="text" name="ocupacionA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_ocupacion"])){ echo $acudiente2["uss_ocupacion"];}?>">
+		<input type="text" name="ocupacionA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_ocupacion"])){ echo $acudiente2["uss_ocupacion"];}?>" <?=$disabledPermiso;?>>
 	</div>
 </div>
 
 <div class="form-group row">												
 	<label class="col-sm-2 control-label">Primer Apellido</label>
 	<div class="col-sm-3">
-		<input type="text" name="apellido1A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido1"])){ echo $acudiente2["uss_apellido1"];}?>">
+		<input type="text" name="apellido1A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido1"])){ echo $acudiente2["uss_apellido1"];}?>" <?=$disabledPermiso;?>>
 	</div>
 												
 	<label class="col-sm-2 control-label">Segundo Apellido</label>
 	<div class="col-sm-3">
-		<input type="text" name="apellido2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido2"])){ echo $acudiente2["uss_apellido2"];}?>">
+		<input type="text" name="apellido2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_apellido2"])){ echo $acudiente2["uss_apellido2"];}?>" <?=$disabledPermiso;?>>
 	</div>
 </div>
 
 <div class="form-group row">												
 	<label class="col-sm-2 control-label">Nombre</label>
 	<div class="col-sm-3">
-		<input type="text" name="nombreA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre"])){ echo $acudiente2["uss_nombre"];}?>">
+		<input type="text" name="nombreA2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre"])){ echo $acudiente2["uss_nombre"];}?>" <?=$disabledPermiso;?>>
 	</div>
 													
 	<label class="col-sm-2 control-label">Otro Nombre</label>
 	<div class="col-sm-3">
-		<input type="text" name="nombre2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre2"])){ echo $acudiente2["uss_nombre2"];}?>">
+		<input type="text" name="nombre2A2" class="form-control" autocomplete="off" value="<?php if(isset($acudiente2["uss_nombre2"])){ echo $acudiente2["uss_nombre2"];}?>" <?=$disabledPermiso;?>>
 	</div>
 </div>	
 	
@@ -99,7 +99,7 @@ try{
 			include("../compartido/error-catch-to-report.php");
 		}
 		?>
-		<select class="form-control" name="generoA2">
+		<select class="form-control" name="generoA2" <?=$disabledPermiso;?>>
 			<option value="">Seleccione una opción</option>
 			<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
 				if($o[0]==$acudiente2[16])

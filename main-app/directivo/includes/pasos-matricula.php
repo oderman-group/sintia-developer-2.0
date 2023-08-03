@@ -11,7 +11,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">Puede iniciar el proceso?</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="iniciarProceso">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="iniciarProceso">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_iniciar_proceso'] == 1){echo "selected";}?>>SI</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_iniciar_proceso'] == '0'){echo "selected";}?>>NO</option>
@@ -22,7 +22,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">1. Actualizar datos</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="actualizarDatos">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="actualizarDatos">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_actualizar_datos'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_actualizar_datos'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -34,7 +34,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">2. Pago de matrícula</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="pagoMatricula">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="pagoMatricula">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_pago_matricula'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_pago_matricula'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -50,7 +50,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">3. Contrato</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="contrato">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="contrato">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_contrato'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_contrato'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -62,7 +62,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">4. Pagaré</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="pagare">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="pagare">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_pagare'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_pagare'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -75,7 +75,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">5. Compromiso académico</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="compromisoA">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="compromisoA">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_compromiso_academico'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_compromiso_academico'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -88,7 +88,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">6. Compromiso de convivencia</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="compromisoC">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="compromisoC">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_compromiso_convivencia'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_compromiso_convivencia'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -96,7 +96,7 @@
 													</div>
 													
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="compromisoOpcion">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="compromisoOpcion">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_compromiso_convivencia_opcion'] == 1){echo "selected";}?>>Nuevos</option>
 															<option value="2"<?php if ($datosEstudianteActual['mat_compromiso_convivencia_opcion'] == 2){echo "selected";}?>>Antiguos</option>
@@ -110,7 +110,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">7. Manual de convivencia</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="manual">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="manual">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_manual'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_manual'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -123,7 +123,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">8. Contrato mayores de 14 años</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="contrato14">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="contrato14">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_mayores14'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_mayores14'] == '0'){echo "selected";}?>>Pendiente</option>
@@ -136,7 +136,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">9. Firma hoja matrícula</label>
 													<div class="col-sm-2">
-														<select class="form-control  select2" name="contrato14">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="contrato14">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_hoja_firma'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_hoja_firma'] == '0'){echo "selected";}?>>Pendiente</option>
