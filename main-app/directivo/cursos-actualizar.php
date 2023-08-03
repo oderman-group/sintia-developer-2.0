@@ -56,7 +56,6 @@ if ($_POST["tipoG"]==GRADO_INDIVIDUAL) {
 		//Agregamos los estudiantes que no esten en registrados en la BD
 		$resultadoAgregar= array_diff($_POST["estudiantesMT"],$idEstudianteMT);
 		if($resultadoAgregar){
-			print_r($resultadoAgregar);
 			foreach ($resultadoAgregar as $idMatriculaGuardar) {
 				try{
 					MediaTecnicaServicios::guardarPorCurso($idMatriculaGuardar,$_POST["id_curso"],$config,$_POST["grupo".$idMatriculaGuardar]);
