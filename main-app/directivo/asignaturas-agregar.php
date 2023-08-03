@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0022';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -56,7 +61,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre de la Asignatura <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" name="nombreM" class="form-control" onchange="generarSiglas(this)">
+                                                <input type="text" name="nombreM" class="form-control" onchange="generarSiglas(this)" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 
@@ -71,7 +76,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre corto, Abreviatura o Siglas de la asignatura</label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="siglasM" id="siglasM" class="form-control">
+                                                <input type="text" name="siglasM" id="siglasM" class="form-control" <?=$disabledPermiso;?>>
                                                 <span style="color: #6017dc;">Este valor se usa para mostrar de forma abreviada el nombre de la asignatura en algunos informes.</span>
                                             </div>
                                         </div>
@@ -79,7 +84,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Área académica a la cual pertenece esta asignatura <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-control  select2" name="areaM" required>
+                                                <select class="form-control  select2" name="areaM" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
@@ -99,13 +104,15 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Porcentaje</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="porcenAsigna" id="porcenAsigna" class="form-control">
+                                                    <input type="text" name="porcenAsigna" id="porcenAsigna" class="form-control" <?=$disabledPermiso;?>>
                                                 </div>
                                             </div>
                                         <?php } ?>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>
