@@ -1,10 +1,11 @@
 <?php
 include("session.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/MediaTecnicaServicios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0173';
 include("../compartido/historial-acciones-guardar.php");
-require_once("../class/servicios/GradoServicios.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
@@ -39,7 +40,53 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
-	exit();
+if ($_POST["tipoG"]==GRADO_INDIVIDUAL) { 
+	if(!empty($_POST["estudiantesMT"])){
+		$parametros = [
+			'matcur_id_curso'=>$_POST["id_curso"],
+			'matcur_id_institucion'=>$config['conf_id_institucion'],
+			'arreglo'=>true
+		];
+		$consulta = MediaTecnicaServicios::listarEstudiantes($parametros);
+		$idEstudianteMT = array();
+		foreach ($consulta as $subarreglo) {
+			$idEstudianteMT[] = $subarreglo['matcur_id_matricula'];
+		}
+		//Agregamos los estudiantes que no esten en registrados en la BD
+		$resultadoAgregar= array_diff($_POST["estudiantesMT"],$idEstudianteMT);
+		if($resultadoAgregar){
+			print_r($resultadoAgregar);
+			foreach ($resultadoAgregar as $idMatriculaGuardar) {
+				try{
+					MediaTecnicaServicios::guardarPorCurso($idMatriculaGuardar,$_POST["id_curso"],$config,$_POST["grupo".$idMatriculaGuardar]);
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+			}
+		}
+
+		//Eliminamos los estudiantes que ya no vayan a paertenecer a este curso
+		$resultadoEliminar= array_diff($idEstudianteMT,$_POST["estudiantesMT"]);
+		if($resultadoEliminar){
+			foreach ($resultadoEliminar as $idMatriculaEliminar) {
+				try{
+					mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$_POST["id_curso"]."' AND matcur_id_matricula='".$idMatriculaEliminar."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+			}
+		}
+	}else{
+		try{
+			MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"],$config);
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
+}
+
+include("../compartido/guardar-historial-acciones.php");
+
+echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
+exit();
