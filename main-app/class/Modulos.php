@@ -48,4 +48,13 @@ class Modulos {
         }
     }
 
+    public static function validarPermisoEdicion(){
+        global $config;
+
+        if($config['conf_permiso_edicion_years_anteriores']==0){
+            return false;
+        }
+        return true;
+    }
+
 }
