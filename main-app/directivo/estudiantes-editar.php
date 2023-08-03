@@ -7,6 +7,10 @@ require_once("../class/Estudiantes.php");
 ?>
 <?php
 $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
     <!-- Material Design Lite CSS -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
@@ -82,9 +86,11 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 					<div class="row mb-3">
                     	<div class="col-sm-12">
 							<div class="btn-group">
-								<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-									Agregar nuevo <i class="fa fa-plus"></i>
-								</a>
+								<?php if(Modulos::validarPermisoEdicion()){?>
+									<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+										Agregar nuevo <i class="fa fa-plus"></i>
+									</a>
+								<?php }?>
 							</div>
 						</div>
 					</div>
