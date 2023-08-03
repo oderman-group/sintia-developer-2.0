@@ -2,8 +2,12 @@
 <?php $idPaginaInterna = 'DT0084';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php include("includes/variables-estudiantes-agregar.php");?>
 <?php require_once("../class/servicios/GradoServicios.php"); ?>
+<?php include("includes/variables-estudiantes-agregar.php");
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
     <!-- Material Design Lite CSS -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
 	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
@@ -124,7 +128,7 @@
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
 													WHERE ogen_grupo=1");
 													?>
-													<select class="form-control  select2" name="tipoD">
+													<select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 															if($o[0]==$datosMatricula['tipoD'])
@@ -141,7 +145,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Número de documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="nDoc" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)" value="<?=$datosMatricula['documento'];?>">
+													<input type="text" id="nDoc" name="nDoc" required class="form-control" autocomplete="off"  tabindex="<?=$contReg;?>" onChange="nuevoEstudiante(this)" value="<?=$datosMatricula['documento'];?>" <?=$disabledPermiso;?>>
 												</div>
 
 											</div>	
@@ -149,7 +153,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de expedición</label>
 												<div class="col-sm-4">
-													<select class="form-control  select2" name="lugarD">
+													<select class="form-control  select2" name="lugarD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
@@ -167,12 +171,12 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
-													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosMatricula['folio'];?>">
+													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosMatricula['folio'];?>" <?=$disabledPermiso;?>>
 												</div>
 												
 												<label class="col-sm-2 control-label">Codigo Tesoreria</label>
 												<div class="col-sm-2">
-													<input type="text" name="codTesoreria" class="form-control" autocomplete="off" value="<?=$datosMatricula['tesoreria'];?>">
+													<input type="text" name="codTesoreria" class="form-control" autocomplete="off" value="<?=$datosMatricula['tesoreria'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											<?php }?>
@@ -180,31 +184,31 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>">
+													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>" <?=$disabledPermiso;?>>
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>">
+													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>">
+													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>" <?=$disabledPermiso;?>>
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-4">
-													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>">
+													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Email</label>
 												<div class="col-sm-6">
-													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off">
+													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
@@ -212,7 +216,7 @@
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-4">
 													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-													<input class="form-control" size="16" type="text" value="<?=$datosMatricula['nacimiento'];?>">
+													<input class="form-control" size="16" type="text" value="<?=$datosMatricula['nacimiento'];?>" <?=$disabledPermiso;?>>
 													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 													</div>
 												</div>
@@ -222,7 +226,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de Nacimiento</label>
 												<div class="col-sm-4">
-													<select class="form-control  select2" name="lNacM">
+													<select class="form-control  select2" name="lNacM" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
@@ -237,14 +241,14 @@
 												
 												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
 												<div class="col-sm-4" id="ciudadPro2" >
-													<input type="text" name="ciudadPro" class="form-control" autocomplete="off">
+													<input type="text" name="ciudadPro" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Género</label>
 												<div class="col-sm-4">
-													<select class="form-control  select2" name="genero">
+													<select class="form-control  select2" name="genero" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
@@ -262,21 +266,21 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo Sanguineo</label>
 												<div class="col-sm-2">
-													<input type="text" name="tipoSangre" class="form-control" autocomplete="off" value="<?=$datosMatricula['tipoSangre'];?>">
+													<input type="text" name="tipoSangre" class="form-control" autocomplete="off" value="<?=$datosMatricula['tipoSangre'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">EPS</label>
 												<div class="col-sm-2">
-													<input type="text" name="eps" class="form-control" autocomplete="off" value="<?=$datosMatricula['eps'];?>">
+													<input type="text" name="eps" class="form-control" autocomplete="off" value="<?=$datosMatricula['eps'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estudiante de Inclusión</label>
 												<div class="col-sm-2">
-													<select class="form-control  select2" name="inclusion">
+													<select class="form-control  select2" name="inclusion" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<option value="1"<?php if ($datosMatricula['inclusion']==1){echo "selected";}?>>Si</option>
 														<option value="0"<?php if ($datosMatricula['inclusion']==0){echo "selected";}?>>No</option>
@@ -286,7 +290,7 @@
 												
 												<label class="col-sm-2 control-label">Religi&oacute;n</label>
 												<div class="col-sm-2">
-													<select class="form-control  select2" name="religion">
+													<select class="form-control  select2" name="religion" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
@@ -304,7 +308,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Extranjero?</label>
 												<div class="col-sm-2">
-													<select class="form-control  select2" name="extran">
+													<select class="form-control  select2" name="extran" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<option value="1"<?php if ($datosMatricula['extran']==1){echo "selected";}?>>Si</option>
 														<option value="0"<?php if ($datosMatricula['extran']==0){echo "selected";}?>>No</option>
@@ -315,17 +319,17 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
 												<div class="col-sm-4">
-													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosMatricula['direcion'];?>">
+													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosMatricula['direcion'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-4">
-													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosMatricula['barrio'];?>">
+													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosMatricula['barrio'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Ciudad de residencia</label>
 												<div class="col-sm-4">
-													<select class="form-control  select2" name="ciudadR">
+													<select class="form-control  select2" name="ciudadR" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
@@ -349,7 +353,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estrato</label>
 												<div class="col-sm-2">
-													<select class="form-control  select2" name="estrato">
+													<select class="form-control  select2" name="estrato" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
@@ -367,13 +371,13 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
 												<div class="col-sm-2">
-													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosMatricula['telefono'];?>">
+													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosMatricula['telefono'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosMatricula['celular'];?>">
+													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosMatricula['celular'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off" value="<?=$datosMatricula['celular2'];?>">
+													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off" value="<?=$datosMatricula['celular2'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>								   
 									       
@@ -389,7 +393,7 @@
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
 													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
-													<select class="form-control" name="grado" required>
+													<select class="form-control" name="grado" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -409,7 +413,7 @@
 													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos
 													");
 													?>
-													<select class="form-control" name="grupo">
+													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -430,7 +434,7 @@
 													WHERE ogen_grupo=5
 													");
 													?>
-													<select class="form-control" name="tipoEst">
+													<select class="form-control" name="tipoEst" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -446,7 +450,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estado Matricula</label>
 												<div class="col-sm-4">
-													<select class="form-control" name="matestM">
+													<select class="form-control" name="matestM" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<option value="1"  <?php if(1==$datosMatricula["matestM"]) echo 'selected'?>>Matriculado</option>
 														<option value="2"  <?php if(2==$datosMatricula["matestM"]) echo 'selected'?>>Asistente </option>
@@ -459,7 +463,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>
 												<div class="col-sm-2">
-													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>">
+													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											<?php if (array_key_exists(10, $arregloModulos)) { ?>
@@ -538,7 +542,7 @@
 													WHERE ogen_grupo=1
 													");
 													?>
-													<select class="form-control" name="tipoDAcudiente">
+													<select class="form-control" name="tipoDAcudiente" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -561,14 +565,14 @@
                         </div>
                       </div>
 
-													<input type="text" name="documentoA" id="doc" onblur="buscar_datos();" class="form-control"  required value="<?=$datosMatricula['documentoA'];?>">
+													<input type="text" name="documentoA" id="doc" onblur="buscar_datos();" class="form-control"  required value="<?=$datosMatricula['documentoA'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de expedición</label>
 												<div class="col-sm-4">
-													<select class="form-control" id="lugardE" name="lugarDa">
+													<select class="form-control" id="lugardE" name="lugarDa" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
@@ -584,7 +588,7 @@
 												<?php if($config['conf_id_institucion']==1){ ?>
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
-													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>">
+													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<?php }?>
 
@@ -593,24 +597,24 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Primer Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido1A" id="apellido1A" class="form-control"  value="<?=$datosMatricula['apellido1A'];?>">
+													<input type="text" name="apellido1A" id="apellido1A" class="form-control"  value="<?=$datosMatricula['apellido1A'];?>" <?=$disabledPermiso;?>>
 												</div>
 																							
 												<label class="col-sm-2 control-label">Segundo Apellido</label>
 												<div class="col-sm-3">
-													<input type="text" name="apellido2A" id="apellido2A" class="form-control"  value="<?=$datosMatricula['apellido2A'];?>">
+													<input type="text" name="apellido2A" id="apellido2A" class="form-control"  value="<?=$datosMatricula['apellido2A'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="nombresA" id="nombresA" class="form-control"  required value="<?=$datosMatricula['nombreA'];?>">
+													<input type="text" name="nombresA" id="nombresA" class="form-control"  required value="<?=$datosMatricula['nombreA'];?>" <?=$disabledPermiso;?>>
 												</div>
 																								
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-3">
-													<input type="text" name="nombre2A" id="nombre2A" class="form-control"  value="<?=$datosMatricula['documentoA'];?>">
+													<input type="text" name="nombre2A" id="nombre2A" class="form-control"  value="<?=$datosMatricula['documentoA'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>	
 												
@@ -618,8 +622,8 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-3">
-													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-													<input class="form-control" size="16" type="text">
+													<div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+													<input class="form-control" size="16" type="text" <?=$disabledPermiso;?>>
 													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 													</div>
 												</div>
@@ -627,7 +631,7 @@
 
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
-													<select class="form-control  select2" name="generoA">
+													<select class="form-control select2" name="generoA" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
