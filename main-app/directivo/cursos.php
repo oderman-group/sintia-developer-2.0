@@ -35,18 +35,20 @@
 								
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
 
-									<div class="btn-group">
-																  <button type="button" class="btn btn-primary">MÁS ACCIONES</button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cursos-intensidad.php">I.H por curso</a></li>
-																	  <!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
-																	  <li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
-																	  <li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
-																  </ul>
-															  </div>
+									<?php if(Modulos::validarPermisoEdicion()){?>
+										<div class="btn-group">
+											<button type="button" class="btn btn-primary">MÁS ACCIONES</button>
+											<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+												<i class="fa fa-angle-down"></i>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li><a href="cursos-intensidad.php">I.H por curso</a></li>
+												<!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
+												<li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
+												<li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
+											</ul>
+										</div>
+									<?php }?>
 
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -62,9 +64,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cursos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="cursos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
@@ -105,13 +109,15 @@
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cursos-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	  <li><a href="cursos-eliminar.php?id=<?=$resultado[0];?>">Eliminar</a></li>
-																	  <li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
-																	  <li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
-																	  <li><a href="../compartido/matricula-libro-curso.php?curso=<?=$resultado[0];?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
-																	  <li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=$resultado[0];?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
-																	  <li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=$resultado[0];?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
+																	<?php if(Modulos::validarPermisoEdicion()){?>
+																		<li><a href="cursos-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="cursos-eliminar.php?id=<?=$resultado[0];?>">Eliminar</a></li>
+																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=$resultado[0];?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
+																	<?php }?>
+																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
+																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=$resultado[0];?>&periodo=<?=$config[2];?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
+																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=$resultado[0];?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
+																	<li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=$resultado[0];?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
 																  </ul>
 															  </div>
 														</td>
