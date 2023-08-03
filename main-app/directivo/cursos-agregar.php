@@ -1,12 +1,7 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0065';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
-$disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion()){
-	$disabledPermiso = "disabled";
-}?>
-
+<?php include("../compartido/head.php");?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -98,25 +93,10 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
                                                 <input type="text" name="valorP" class="form-control" value="0" <?=$disabledPermiso;?>>
                                             </div>
-                                        </div>
-                                      
-                                        <?php if(array_key_exists(10,$arregloModulos)){?>
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Tipo de grado</label>
-                                            <div class="col-sm-2">
-                                            <select class="form-control  select2" name="tipoG" >
-                                                    <option value="">Seleccione una opción</option>
-                                                    <option value=<?=GRADO_GRUPAL;?> >Grupal</option>
-                                                    <option value=<?=GRADO_INDIVIDUAL;?> >Individual</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <?php }?>
-                                       
+                                        </div>	
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                        <?php }?>
+
+										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										
 										<a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
