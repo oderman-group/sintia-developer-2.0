@@ -60,7 +60,7 @@ class MediaTecnicaServicios extends Servicios
     }
     
 
-    public static function editar($idMatricula,$cursosId,$config)
+    public static function editar($idMatricula,$cursosId,$config,$idGrupo=NULL)
     {
         global $baseDatosServicios;
         Servicios::UpdateSql(
@@ -69,10 +69,10 @@ class MediaTecnicaServicios extends Servicios
             AND matcur_id_institucion =".(int)$config['conf_id_institucion']."
             AND matcur_years          =".(int)$config['conf_agno']."
             ");
-        MediaTecnicaServicios::guardar($idMatricula,$cursosId,$config);
+        MediaTecnicaServicios::guardar($idMatricula,$cursosId,$config,$idGrupo);
     }
 
-    public static function guardar($idMatricula,$arregloCursos,$config)
+    public static function guardar($idMatricula,$arregloCursos,$config,$idGrupo=NULL)
     {
         global $baseDatosServicios;
         foreach ($arregloCursos as $clave => $curso) {
@@ -81,14 +81,16 @@ class MediaTecnicaServicios extends Servicios
                  matcur_id_curso, 
                  matcur_id_matricula,
                  matcur_id_institucion,
-                 matcur_years
+                 matcur_years,
+                 matcur_id_grupo
                  )
                  VALUES
                  (
                   '".$curso."',
                   '".$idMatricula."',
                   '".$config['conf_id_institucion']."',
-                  '".$config['conf_agno']."'
+                  '".$config['conf_agno']."',
+                  '".$idGrupo."'
                  )"
              );
         }        

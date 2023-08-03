@@ -481,7 +481,7 @@
 															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
 															$listaIndividuales = GradoServicios::listarCursos($parametros);
 															?>
-															<select id="multiple" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" multiple>
+															<select id="cursosAdicionales" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" onchange="mostrarGrupoCursosAdicionales(this)" multiple>
 																<option value="">Seleccione una opción</option>
 																<?php
 																foreach ($listaIndividuales as $clave => $dato) {
@@ -493,6 +493,33 @@
 																}
 																?>
 															</select>
+														</div>
+													</div>
+			
+													<script type="application/javascript">
+														$(document).ready(mostrarGrupoCursosAdicionales(document.getElementById("cursosAdicionales")))
+														function mostrarGrupoCursosAdicionales(enviada) {
+															var valor = enviada.value;
+															if (valor != '') {
+																document.getElementById("divGradoMT").style.display='block';
+															} else {
+																document.getElementById("divGradoMT").style.display='none';
+															}
+														}
+													</script>
+													<div id="divGradoMT" style="display: none;">
+														<div class="form-group row" >
+															<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
+															<div class="col-sm-4">
+																<?php
+																$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+																?>
+																<select class="form-control" name="grupoMT">
+																<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+																	echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';
+																}?>
+																</select>
+															</div>
 														</div>
 													</div>
 												</div>

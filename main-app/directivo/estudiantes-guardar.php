@@ -224,7 +224,7 @@ $idEstudiante = mysqli_insert_id($conexion);
 //Insertamos las matrículas Adicionales
 if ($_POST["tipoMatricula"]==GRADO_INDIVIDUAL && !empty($_POST["cursosAdicionales"])) { 
 	try{
-		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config);
+		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config,$_POST["grupoMT"]);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
