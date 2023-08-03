@@ -9,6 +9,11 @@ $consultaCursoActual = Grados::obtenerDatosGrados($_GET["curso"]);
 $cursoActual = mysqli_fetch_array($consultaCursoActual, MYSQLI_BOTH);
 $consultaCursoSiguiente = Grados::obtenerDatosGrados($cursoActual['gra_grado_siguiente']);
 $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -87,7 +92,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                 <thead>
                                                     <tr>
                                                         <th style="text-align: center; padding: 10px;">
-                                                        <input type="checkbox" checked="checked" id="all">
+                                                        <input type="checkbox" checked="checked" id="all" <?=$disabledPermiso;?>>
                                                         </th>
                                                         <th>DOCUMENTO</th>
                                                         <th>NOMBRES Y APELLIDOS</th>
@@ -104,7 +109,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                     ?>
                                                     <tr>
                                                         <td style="text-align: center; padding: 10px;">
-                                                            <input type="checkbox" checked="checked" id="check" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>">
+                                                            <input type="checkbox" checked="checked" id="check" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>" <?=$disabledPermiso;?>>
                                                         </td>
                                                         <td><?=$datosEstudiante['mat_documento'];?></td>
                                                         <td><?=$nombre;?></td>
@@ -118,7 +123,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                                         include("../compartido/error-catch-to-report.php");
                                                                     }
                                                                     ?>
-                                                                    <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>">
+                                                                    <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>" <?=$disabledPermiso;?>>
                                                                         <option value="">Seleccione una opción</option>
                                                                         <?php
                                                                         while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -141,7 +146,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                             </table>
                                         </div>
                                         <?php
-                                            if($numeroEstudiantes>0){
+                                            if($numeroEstudiantes>0 && Modulos::validarPermisoEdicion()){
                                         ?>
                                         <input type="submit" class="btn btn-primary" value="Realizar promoción">
                                         <?php

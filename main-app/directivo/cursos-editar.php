@@ -8,8 +8,16 @@ require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/CargaServicios.php");
 require_once("../class/servicios/MatriculaServicios.php");
 
-$resultadoCurso=GradoServicios::consultarCurso($_GET["id"]);
-$resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
+try{
+    $resultadoCurso=GradoServicios::consultarCurso($_GET["id"]);
+    $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -40,12 +48,12 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Agregar Cursos</div>
+                                <div class="page-title">Editar Cursos</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Agregar Cursos</li>
+                                <li class="active">Editar Cursos</li>
                             </ol>
                         </div>
                     </div>
@@ -63,20 +71,20 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Codigo</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="codigoC" class="form-control"  value="<?=$resultadoCurso["gra_codigo"]; ?>">
+                                                <input type="text" name="codigoC" class="form-control"  value="<?=$resultadoCurso["gra_codigo"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre Curso</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreC" class="form-control" value="<?=$resultadoCurso["gra_nombre"]; ?>">
+                                                <input type="text" name="nombreC" class="form-control" value="<?=$resultadoCurso["gra_nombre"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Formato Boletin</label>
                                             <div class="col-sm-2">
-                                                <select id="tipoBoletin" class="form-control  select2"  name="formatoB" onchange="cambiarTipo()" required>
+                                                <select id="tipoBoletin" class="form-control  select2"  name="formatoB" onchange="cambiarTipo()" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                         try{
@@ -117,28 +125,28 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nota Minima</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="notaMin" class="form-control"  value="<?=$resultadoCurso["gra_nota_minima"]; ?>">
+                                                <input type="text" name="notaMin" class="form-control"  value="<?=$resultadoCurso["gra_nota_minima"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Periodos</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="periodosC" class="form-control"  value="<?=$resultadoCurso["gra_periodos"]; ?>">
+                                                <input type="text" name="periodosC" class="form-control"  value="<?=$resultadoCurso["gra_periodos"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Matricula</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="valorM" class="form-control" value="<?=$resultadoCurso["gra_valor_matricula"]; ?>">
+                                                <input type="text" name="valorM" class="form-control" value="<?=$resultadoCurso["gra_valor_matricula"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Pension</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="valorP" class="form-control" value="<?=$resultadoCurso["gra_valor_pension"]; ?>">
+                                                <input type="text" name="valorP" class="form-control" value="<?=$resultadoCurso["gra_valor_pension"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
                                         
@@ -148,7 +156,7 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                                 <?php
                                                 $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
-                                                <select class="form-control  select2" name="graSiguiente" >
+                                                <select class="form-control  select2" name="graSiguiente"  <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -167,7 +175,7 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                                 <?php
                                                 $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
-                                                <select class="form-control  select2" name="graAnterior" >
+                                                <select class="form-control  select2" name="graAnterior"  <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -182,8 +190,8 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nivel Educativo</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control  select2" name="nivel" >
+                                            <div class="col-sm-10">
+                                                <select class="form-control  select2" name="nivel"  <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($resultadoCurso['gra_nivel']==1){ echo 'selected'; } ?>>Educación Precolar</option>
                                                     <option value="2" <?php if($resultadoCurso['gra_nivel']==2){ echo 'selected'; } ?>>Educación Basica Primaria</option>
@@ -196,7 +204,7 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="estado" >
+                                                <select class="form-control  select2" name="estado"  <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($resultadoCurso['gra_estado']==1){ echo 'selected'; } ?>>Activo</option>
                                                     <option value="0" <?php if($resultadoCurso['gra_estado']==0){ echo 'selected'; } ?>>Inactivo</option>
@@ -380,7 +388,9 @@ $resultadoCargaCurso=CargaServicios::cantidadCursos($_GET["id"]);
                                         </script>
 
 
-                                        <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                         
                                         <a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
