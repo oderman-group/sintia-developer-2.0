@@ -374,16 +374,13 @@ if($periodoActual==4){
 
 </div>	
 
-<?php include("../compartido/footer-informes.php") ?>;				                   
+<div id="saltoPagina"></div>
 
- <div id="saltoPagina"></div>
-                                    
 <?php
- }// FIN DE TODOS LOS MATRICULADOS
+	}// FIN DE TODOS LOS MATRICULADOS
 ?>
 <script type="application/javascript">
 print();
-</script>                                    
-                          
+</script>
 </body>
 </html>
