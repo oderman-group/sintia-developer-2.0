@@ -104,4 +104,15 @@ class UsuariosPadre {
         }        	
     }
 
+    public static function listarUsuariosCompartir($nombre='')
+    {
+        global $conexion,$baseDatosServicios;
+
+        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM usuarios 
+        INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
+         
+        return $consulta;         
+    }
+
 }   
