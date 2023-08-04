@@ -9,6 +9,11 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -80,7 +85,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="docente" required>
+                                                <select class="form-control  select2" name="docente" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -105,7 +110,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="curso" required>
+                                                <select class="form-control  select2" name="curso" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -130,7 +135,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="grupo" required>
+                                                <select class="form-control  select2" name="grupo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -153,7 +158,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="asignatura" required>
+                                                <select class="form-control  select2" name="asignatura" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -169,7 +174,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Periodo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="periodo" required>
+                                                <select class="form-control  select2" name="periodo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
@@ -188,7 +193,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Director de grupo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="dg" required>
+                                                <select class="form-control  select2" name="dg" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_director_grupo"]==1){echo 'selected';} ?>>SI</option>
 													<option value="0" <?php if($datosEditar["car_director_grupo"]=='0'){echo 'selected';} ?>>NO</option>
@@ -199,7 +204,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Intensidad H. <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
-												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>">
+												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
@@ -207,21 +212,21 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Max. Indicadores</label>
 											<div class="col-sm-2">
-												<input type="text" name="maxIndicadores" class="form-control" value="<?=$datosEditar['car_maximos_indicadores'];?>">
+												<input type="text" name="maxIndicadores" class="form-control" value="<?=$datosEditar['car_maximos_indicadores'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Max. Actividades</label>
 											<div class="col-sm-2">
-												<input type="text" name="maxActividades" class="form-control" value="<?=$datosEditar['car_maximas_calificaciones'];?>">
+												<input type="text" name="maxActividades" class="form-control" value="<?=$datosEditar['car_maximas_calificaciones'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required>
+                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_activa"]==1){echo 'selected';} ?>>Activa</option>
 													<option value="0" <?php if($datosEditar["car_activa"]=='0'){echo 'selected';} ?>>Inactiva</option>
@@ -232,7 +237,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">% Actividades</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="valorActividades">
+                                                <select class="form-control  select2" name="valorActividades" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_configuracion"]==1){echo 'selected';} ?>>Manual</option>
 													<option value="0" <?php if($datosEditar["car_configuracion"]=='0'){echo 'selected';} ?>>Automático</option>
@@ -243,7 +248,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">% Indicadores</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="valorIndicadores">
+                                                <select class="form-control  select2" name="valorIndicadores" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_valor_indicador"]==1){echo 'selected';} ?>>Manual</option>
 													<option value="0" <?php if($datosEditar["car_valor_indicador"]=='0'){echo 'selected';} ?>>Automático</option>
@@ -254,7 +259,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para generar informe</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="permiso1">
+                                                <select class="form-control  select2" name="permiso1" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_permiso1"]==1){echo 'selected';} ?>>SI</option>
 													<option value="0" <?php if($datosEditar["car_permiso1"]=='0' or $datosEditar["car_permiso1"]==''){echo 'selected';} ?>>NO</option>
@@ -265,7 +270,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para editar en periodos anteriores</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="permiso2">
+                                                <select class="form-control  select2" name="permiso2" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_permiso2"]==1){echo 'selected';} ?>>SI</option>
 													<option value="0" <?php if($datosEditar["car_permiso2"]=='0'){echo 'selected';} ?>>NO</option>
@@ -276,7 +281,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Indicador automático </label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="indicadorAutomatico">
+                                                <select class="form-control  select2" name="indicadorAutomatico" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_indicador_automatico"]==1){echo 'selected';} ?>>SI</option>
 													<option value="0" <?php if($datosEditar["car_indicador_automatico"]==0){echo 'selected';} ?>>NO</option>
@@ -291,7 +296,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Observaciones en el boletin de los estudiantes ? </label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="observacionesBoletin">
+                                                <select class="form-control  select2" name="observacionesBoletin" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_observaciones_boletin"]==1){echo 'selected';} ?>>SI</option>
 													<option value="0" <?php if($datosEditar["car_observaciones_boletin"]==0){echo 'selected';} ?>>NO</option>
@@ -334,7 +339,9 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php }?>
 										
 										<a href="#" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

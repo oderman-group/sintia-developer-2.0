@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0043';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -56,7 +61,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Dia</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="diaH[]" multiple required>
+                                                <select class="form-control  select2" name="diaH[]" multiple required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci�n</option>
                                                     <option value="1">Domingos</option>
                                                     <option value="2">Lunes</option>
@@ -72,19 +77,21 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Inicio</label>
 											<div class="col-sm-2">
-                                                <input name="inicioH" data-format="hh:mm:ss" type="time" class="form-control" value="">
+                                                <input name="inicioH" data-format="hh:mm:ss" type="time" class="form-control" value="" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fin</label>
 											<div class="col-sm-2">
-                                                <input name="finH" data-format="hh:mm:ss" type="time" class="form-control" value="">
+                                                <input name="finH" data-format="hh:mm:ss" type="time" class="form-control" value="" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="cargas-horarios.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
