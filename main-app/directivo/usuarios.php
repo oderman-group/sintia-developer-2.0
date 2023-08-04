@@ -93,9 +93,11 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="usuarios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="usuarios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 
 													
@@ -163,12 +165,14 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													<tr id="Reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td>
-															<div class="input-group spinner col-sm-10">
-																<label class="switchToggle">
-																	<input type="checkbox" id="<?=$resultado['uss_id'];?>" name="bloqueado" value="1" onChange="guardarAjax(this)" <?=$cheked;?>>
-																	<span class="slider red round"></span>
-																</label>
-															</div>
+															<?php if(Modulos::validarPermisoEdicion()){?>
+																<div class="input-group spinner col-sm-10">
+																	<label class="switchToggle">
+																		<input type="checkbox" id="<?=$resultado['uss_id'];?>" name="bloqueado" value="1" onChange="guardarAjax(this)" <?=$cheked;?> <?=$disabledPermiso;?>>
+																		<span class="slider red round"></span>
+																	</label>
+																</div>
+															<?php }?>
 														</td>
 														<td><?=$resultado['uss_id'];?></td>
 														<td <?=$avisoRepetido?>>
@@ -189,25 +193,27 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																  <?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
-																  	<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
-																  <?php }?>	
+																	<?php if(Modulos::validarPermisoEdicion()){?>
+																		<?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
+																			<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
+																		<?php }?>	
 
-																	  <?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
-																	  	<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
-																	  <?php }?>
-																	  
-																	<?php if($resultado['uss_tipo']==3){?>
-																		<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																		<?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
+																		<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
+																		<?php }?>
+																		
+																		<?php if($resultado['uss_tipo']==3){?>
+																			<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																		<?php }?>
+
+																		<?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
+																			<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['not_id'];?>">Eliminar</a></li>
+																		<?php }?>
 																	<?php }?>
 																	  
-																	  <?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
-																	  	<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas de las cargas</a></li>
-																	  <?php }?>
-
-																	  <?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
-																	  	<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['not_id'];?>">Eliminar</a></li>
-																	  <?php }?>
+																	<?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
+																		<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas de las cargas</a></li>
+																	<?php }?>
 
 																  </ul>
 															  </div>

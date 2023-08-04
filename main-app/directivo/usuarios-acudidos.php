@@ -4,6 +4,11 @@ $idPaginaInterna = 'DT0137';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -61,7 +66,7 @@ require_once("../class/Estudiantes.php");
                                             <?php
                                             $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 10');
                                             ?>
-                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple>
+                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -81,7 +86,9 @@ require_once("../class/Estudiantes.php");
                                         </div>
                                     </div>
                                     
-                                    <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                        <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                    <?php }?>
                                     
                                     <a href="#" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
