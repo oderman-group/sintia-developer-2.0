@@ -10,6 +10,11 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -62,14 +67,14 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 									<div class="form-group row">
 											<label class="col-sm-2 control-label">Año Actual</label>
 											<div class="col-sm-8">
-												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg[1];?>" readonly>
+												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg[1];?>" readonly <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Periodos a trabajar <span style="color: red;">(*)</span></label>
 											<div class="col-sm-8">
-												<input type="text" name="periodoTrabajar" class="form-control col-sm-2" value="<?=$cfg[19];?>" required pattern="[0-9]+">
+												<input type="text" name="periodoTrabajar" class="form-control col-sm-2" value="<?=$cfg[19];?>" required pattern="[0-9]+" <?=$disabledPermiso;?>>
                                                 <span style="color:#6017dc;">Las instituciones normalmente manejan 4 periodos. Los colegios semestralizados o de bachillerato acelerado manejan 2 periodos.</span>
 											</div>
 										</div>
@@ -79,7 +84,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Periodo Actual <span style="color: red;">(*)</span></label>
 											<div class="col-sm-3">
-                                                <select class="form-control  select2" name="periodo" required>
+                                                <select class="form-control  select2" name="periodo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
@@ -105,7 +110,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estilo de calificación <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estiloNotas" required>
+                                                <select class="form-control  select2" name="estiloNotas" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
                                                         try{
@@ -127,14 +132,14 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta) <span style="color: red;">(*)</span></label>
 											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="desde" class="col-sm-1" value="<?=$cfg[3];?>">
-												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>">
+												<input type="text"style="margin-top: 20px;" name="desde" class="col-sm-1" value="<?=$cfg[3];?>" <?=$disabledPermiso;?>>
+												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estilo de certificado</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()">
+                                                <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_certificado']==1){ echo "selected";} ?>>Certificado 1</option>
                                                     <option value="2" <?php if($cfg['conf_certificado']==2){ echo "selected";} ?>>Certificado 2</option>
                                                 </select>
@@ -166,7 +171,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
-												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>">
+												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -181,15 +186,15 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Color de las notas (Perdidas -  Ganadas) <span style="color: red;">(*)</span></label>
 											<div class="col-sm-10">
-												<input type="color"style="margin-top: 20px;" name="perdida" class="col-sm-1" value="<?=$cfg[6];?>">
-												<input type="color"style="margin-top: 20px;" name="ganada" class="col-sm-1" value="<?=$cfg[7];?>">
+												<input type="color"style="margin-top: 20px;" name="perdida" class="col-sm-1" value="<?=$cfg[6];?>" <?=$disabledPermiso;?>>
+												<input type="color"style="margin-top: 20px;" name="ganada" class="col-sm-1" value="<?=$cfg[7];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
                                         
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Asignar porcentaje a las asignaturas?</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="porcenAsigna">
+                                                <select class="form-control  select2" name="porcenAsigna" <?=$disabledPermiso;?>>
                                                     <option value="SI" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='SI'){ echo "selected";} ?>>SI</option>
                                                     <option value="NO" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='NO'){ echo "selected";} ?>>No</option>
                                                 </select>
@@ -201,7 +206,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">En qué orden desea ver el nombre de los estudiantes?</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="ordenEstudiantes">
+                                                <select class="form-control  select2" name="ordenEstudiantes" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_orden_nombre_estudiantes']==1){ echo "selected";} ?>>Nombres y Apellidos (Andres David Arias Pertuz)</option>
                                                     <option value="2" <?php if($cfg['conf_orden_nombre_estudiantes']==2){ echo "selected";} ?>>Apellidos y nombres (Arias Pertuz Andres David)</option>
                                                 </select>
@@ -211,7 +216,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Mostrar calificaciones a los acudientes?</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="caliAcudientes">
+                                                <select class="form-control  select2" name="caliAcudientes" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_calificaciones_acudientes']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_calificaciones_acudientes']==0){ echo "selected";} ?>>No</option>
                                                 </select>
@@ -221,7 +226,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Mostrar calificaciones a los estudiantes?</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="caliEstudiantes">
+                                                <select class="form-control  select2" name="caliEstudiantes" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_mostrar_calificaciones_estudiantes']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_mostrar_calificaciones_estudiantes']==0){ echo "selected";} ?>>No</option>
                                                 </select>
@@ -231,7 +236,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso de actualizar las definitivas en consolidado final?</label>
                                             <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="permisoConsolidado">
+                                                <select class="form-control col-sm-2 select2" name="permisoConsolidado" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_editar_definitivas_consolidado']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_editar_definitivas_consolidado']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
@@ -242,7 +247,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Observaciones multiples en comportamiento?</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="observacionesMultiples">
+                                                <select class="form-control  select2" name="observacionesMultiples" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_observaciones_multiples_comportamiento']==1){ echo "selected";} ?>>SI</option>
 
                                                     <option value="0" <?php if($cfg['conf_observaciones_multiples_comportamiento'] == 0 || $cfg['conf_observaciones_multiples_comportamiento'] == null){ echo "selected";} ?>>No</option>
@@ -253,7 +258,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Numero de registros en listados?</label>
                                             <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="numRegistros">
+                                                <select class="form-control col-sm-2 select2" name="numRegistros" <?=$disabledPermiso;?>>
                                                     <option value="20" <?php if($cfg['conf_num_registros']==20){ echo "selected";} ?>>20</option>
                                                     <option value="30" <?php if($cfg['conf_num_registros']==30){ echo "selected";} ?>>30</option>
                                                     <option value="50" <?php if($cfg['conf_num_registros']==50){ echo "selected";} ?>>50</option>
@@ -266,21 +271,21 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fecha que aparecerá en el proximo Informe Parcial</label>
 											<div class="col-sm-2">
-												<input type="text" name="fechapa" class="form-control" value="<?=$cfg[28];?>">
+												<input type="text" name="fechapa" class="form-control" value="<?=$cfg[28];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Texto de arriba del informe parcial</label>
 											<div class="col-sm-10">
-                                                <textarea cols="80" id="editor1" name="descrip" rows="10"><?=$cfg[29];?></textarea>
+                                                <textarea cols="80" id="editor1" name="descrip" rows="10" <?=$disabledPermiso;?>><?=$cfg[29];?></textarea>
 											</div>
 										</div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Permitir descargar informe parcial a acudientes</label>
                                             <div class="col-sm-2">
-                                                <select class="form-control  select2" name="informeParcial">
+                                                <select class="form-control  select2" name="informeParcial" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_informe_parcial']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_informe_parcial']==0){ echo "selected";} ?>>No</option>
                                                 </select>
@@ -290,15 +295,15 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho -  Alto)</label>
 											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$cfg[30];?>">
-												<input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$cfg[31];?>">
+												<input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$cfg[30];?>" <?=$disabledPermiso;?>>
+												<input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$cfg[31];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Mostrar Nombre del colegio en el encabezado de los informes</label>
 											<div class="col-sm-4">
-                                                <select class="form-control  select2" name="mostrarNombre">
+                                                <select class="form-control  select2" name="mostrarNombre" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg[32]==1){ echo "selected";} ?>>SI</option>
                                                     <option value="2" <?php if($cfg[32]==2){ echo "selected";} ?>>NO</option>
                                                 </select>
@@ -308,7 +313,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Permitir a acudientes descargar el boletín?</label>
                                             <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="descargarBoletin">
+                                                <select class="form-control col-sm-2 select2" name="descargarBoletin" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_permiso_descargar_boletin']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_permiso_descargar_boletin']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
@@ -319,7 +324,7 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Mostrar campo para firma del estudiante en reporte de asistencia?</label>
                                             <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="firmaEstudiante">
+                                                <select class="form-control col-sm-2 select2" name="firmaEstudiante" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_firma_estudiante_informe_asistencia']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_firma_estudiante_informe_asistencia']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
@@ -327,7 +332,9 @@ $cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
                                             </div>
                                         </div>
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>
