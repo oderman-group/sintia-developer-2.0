@@ -36,7 +36,7 @@
 								<?php }?>
 
 
-									<?php if(!empty($datosCargaActual['car_director_grupo']) && $datosCargaActual['car_director_grupo']==1){?>
+									<?php if((!empty($datosCargaActual['car_director_grupo']) && $datosCargaActual['car_director_grupo']==1) && Modulos::validarPermisoEdicion()){?>
 									<form class="form-horizontal" action="../compartido/reporte-disciplina-sacar.php" method="post" enctype="multipart/form-data" target="_blank">
 										<input type="hidden" name="id" value="12">
 										<input type="hidden" name="grado" value="<?=$datosCargaActual['car_curso'];?>">
@@ -44,7 +44,9 @@
 										<input type="hidden" name="desde" value="<?=date("Y");?>-01-01">
 										<input type="hidden" name="hasta" value="<?=date("Y-m-d");?>">
 
-										<input type="submit" class="btn btn-primary" value="Ver reporte a mis estudiantes">&nbsp;
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<input type="submit" class="btn btn-primary" value="Ver reporte a mis estudiantes">&nbsp;
+										<?php }?>
 									</form>
 									<?php }?>
 
@@ -72,7 +74,9 @@
 														<th title="Firma y aprobación del estudiante">F.E</th>
 														<th title="Firma y aprobación del acudiente">F.A</th>
 														<th>Comentario</th>
-														<th>&nbsp;</th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th>&nbsp;</th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -124,33 +128,35 @@
 																<i class="fa fa-eye" title="<?=$resultado['dr_comentario'];?>"></i>
 															<?php }?>
 														</td>
-														<td>
-															<?php
-																$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-																$arrayDatos = json_encode($arrayEnviar);
-														 		$objetoEnviar = htmlentities($arrayDatos);
-																?>
-															
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary">Acciones</button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="../compartido/guardar.php?get=20&idR=<?=$resultado['dr_id'];?>">Firmar por el estudiante</a></li>
-																	  <li><a href="../compartido/guardar.php?get=21&idR=<?=$resultado['dr_id'];?>">Firmar por el acudiente</a></li>
-																	  <li><a href="../compartido/guardar.php?get=22&idR=<?=$resultado['dr_id'];?>">Quitar firma estudiante</a></li>
-																	  <li><a href="../compartido/guardar.php?get=23&idR=<?=$resultado['dr_id'];?>">Quitar firma acudiente</a></li>
-																	  
-																	  <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<?php
+																	$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+																	$arrayDatos = json_encode($arrayEnviar);
+																	$objetoEnviar = htmlentities($arrayDatos);
+																	?>
+																
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary">Acciones</button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="../compartido/guardar.php?get=20&idR=<?=$resultado['dr_id'];?>">Firmar por el estudiante</a></li>
+																		<li><a href="../compartido/guardar.php?get=21&idR=<?=$resultado['dr_id'];?>">Firmar por el acudiente</a></li>
+																		<li><a href="../compartido/guardar.php?get=22&idR=<?=$resultado['dr_id'];?>">Quitar firma estudiante</a></li>
+																		<li><a href="../compartido/guardar.php?get=23&idR=<?=$resultado['dr_id'];?>">Quitar firma acudiente</a></li>
+																		
+																		<?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-																	  	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=19&idR=<?=$resultado['dr_id'];?>" onClick="deseaEliminar(this)">Eliminar</a></li>
-																	  	
-																	  <?php }?>
+																			<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=19&idR=<?=$resultado['dr_id'];?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																			
+																		<?php }?>
 
-																  </ul>
-															  </div>
-														</td>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;
