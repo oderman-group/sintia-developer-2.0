@@ -182,15 +182,17 @@ if ($_POST["id"] == 4) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	$cont = count($_POST["cursos"]);
-	$i = 0;
-	while ($i < $cont) {
-		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
+	if(!empty($_POST["cursos"])){
+		$cont = count($_POST["cursos"]);
+		$i = 0;
+		while ($i < $cont) {
+			try{
+				mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_cursos(notpc_noticia, notpc_curso, notpc_institucion, notpc_year)VALUES('" . $_POST["idR"] . "','" . $_POST["cursos"][$i] . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+			$i++;
 		}
-		$i++;
 	}
 
 	$destinos = validarUsuarioActual($datosUsuarioActual);
