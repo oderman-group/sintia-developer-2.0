@@ -13,6 +13,11 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
 	exit();
 }
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -76,7 +81,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">
-                                                <input type="file" name="fotoUss" class="form-control">
+                                                <input type="file" name="fotoUss" class="form-control" <?=$disabledPermiso;?>>
                                                 <span style="color: #6017dc;">La foto debe estar en formato JPG o PNG.</span>
                                             </div>
                                         </div>
@@ -85,7 +90,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
 											<div class="col-sm-2">
-												<input type="text" name="idRegistro" class="form-control" value="<?=$datosEditar['uss_id'];?>" readonly>
+												<input type="text" name="idRegistro" class="form-control" value="<?=$datosEditar['uss_id'];?>" readonly <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -98,7 +103,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Usuario</label>
 											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?>>
+												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?> <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -112,7 +117,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="tipoUsuario" required>
+                                                <select class="form-control  select2" name="tipoUsuario" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -147,17 +152,19 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Contraseña</label>
 											<div class="col-sm-4">
-												<input type="password" name="clave" id="clave" class="form-control" disabled>
+												<input type="password" name="clave" id="clave" class="form-control" disabled <?=$disabledPermiso;?>>
 											</div>
-											<div class="col-sm-2">
-											<div class="input-group spinner col-sm-10">
-												<label class="switchToggle">
-													<input type="checkbox" name="cambiarClave" id="cambiarClave" value="1" onchange="habilitarClave()">
-													<span class="slider red round"></span>
-												</label>
-												<label class="col-sm-2 control-label">Cambiar Contraseña</label>
+											<?php if(Modulos::validarPermisoEdicion()){?>
+												<div class="col-sm-2">
+													<div class="input-group spinner col-sm-10">
+														<label class="switchToggle">
+															<input type="checkbox" name="cambiarClave" id="cambiarClave" value="1" onchange="habilitarClave()">
+															<span class="slider red round"></span>
+														</label>
+														<label class="col-sm-2 control-label">Cambiar Contraseña</label>
+													</div>
 												</div>
-											</div>
+											<?php }?>
 										</div>
 										<hr>
 										
@@ -173,7 +180,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-4">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
+												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$" <?=$disabledPermiso;?>>
 											<span style="color: tomato;"><?=$leyenda;?></span>
 											</div>
 											
@@ -182,21 +189,21 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Otro Nombre</label>
 											<div class="col-sm-4">
-												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>" <?=$readOnly;?>>
+												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>" <?=$readOnly;?> <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Primer Apellido</label>
 											<div class="col-sm-4">
-												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
+												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Segundo Apellido</label>
 											<div class="col-sm-4">
-												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>" <?=$readOnly;?>>
+												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>" <?=$readOnly;?> <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -211,7 +218,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-												<select class="form-control  select2" name="tipoD">
+												<select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
 													<option value="">Seleccione una opción</option>
 													<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														if($o[0]==$datosEditar['uss_tipo_documento'])
@@ -226,49 +233,49 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Documento</label>
 											<div class="col-sm-4">
-												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?>>
+												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?> <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Email</label>
 											<div class="col-sm-4">
-												<input type="email" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>">
+												<input type="email" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Celular</label>
 											<div class="col-sm-4">
-												<input type="text" name="celular" class="form-control" value="<?=$datosEditar['uss_celular'];?>">
+												<input type="text" name="celular" class="form-control" value="<?=$datosEditar['uss_celular'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Teléfono</label>
 											<div class="col-sm-4">
-												<input type="text" name="telefono" class="form-control" value="<?=$datosEditar['uss_telefono'];?>">
+												<input type="text" name="telefono" class="form-control" value="<?=$datosEditar['uss_telefono'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Dirección</label>
 											<div class="col-sm-4">
-												<input type="text" name="direccion" class="form-control" value="<?=$datosEditar['uss_direccion'];?>">
+												<input type="text" name="direccion" class="form-control" value="<?=$datosEditar['uss_direccion'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Ocupacion</label>
 											<div class="col-sm-4">
-												<input type="text" name="ocupacion" class="form-control" value="<?=$datosEditar['uss_ocupacion'];?>">
+												<input type="text" name="ocupacion" class="form-control" value="<?=$datosEditar['uss_ocupacion'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Lugar de expedición del documento</label>
 											<div class="col-sm-4">
-												<input type="text" name="lExpedicion" class="form-control" value="<?=$datosEditar['uss_lugar_expedicion'];?>">
+												<input type="text" name="lExpedicion" class="form-control" value="<?=$datosEditar['uss_lugar_expedicion'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
@@ -284,7 +291,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="genero" required>
+                                                <select class="form-control  select2" name="genero" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -303,7 +310,7 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Intentos de acceso fallidos</label>
 											<div class="col-sm-1">
-												<input type="number" name="intentosFallidos" class="form-control" value="<?=$datosEditar['uss_intentos_fallidos'];?>">
+												<input type="number" name="intentosFallidos" class="form-control" value="<?=$datosEditar['uss_intentos_fallidos'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -336,7 +343,9 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 										</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php }?>
 										
 										<a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

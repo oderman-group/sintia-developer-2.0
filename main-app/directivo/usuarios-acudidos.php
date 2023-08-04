@@ -6,6 +6,11 @@ include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/servicios/UsuarioServicios.php");
 require_once("../class/servicios/MatriculaServicios.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -79,7 +84,7 @@ require_once("../class/servicios/MatriculaServicios.php");
                                             $parametros = array("upe_id_usuario"=>$acudienteActual["uss_id"]);
                                             $listaAcudidos = UsuarioServicios::listarUsuariosEstudiante($parametros);
                                             ?>
-                                            <select id="select_estudiante" class="form-control  select2-multiple"  name="acudidos[]" required multiple>
+                                            <select id="select_estudiante" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 foreach($listaAcudidos as $idEstudiante){
@@ -93,9 +98,12 @@ require_once("../class/servicios/MatriculaServicios.php");
                                             </select>
                                         </div>
                                     </div>
+                                    
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
                                         <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
-
-                                        <a href="#" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <?php }?>
+                                    
+                                    <a href="#" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>
