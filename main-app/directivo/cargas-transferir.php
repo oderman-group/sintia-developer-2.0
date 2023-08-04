@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0033';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -55,7 +60,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Del Docente</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="de" required>
+                                                <select class="form-control  select2" name="de" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci�n</option>
                                                     <?php
                                                     try{
@@ -75,7 +80,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Al Docente</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="para" required>
+                                                <select class="form-control  select2" name="para" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci�n</option>
                                                     <?php
                                                     try{
@@ -92,7 +97,9 @@
                                             </div>
                                         </div>
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

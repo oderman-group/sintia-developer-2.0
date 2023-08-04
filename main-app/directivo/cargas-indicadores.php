@@ -126,7 +126,9 @@
 														<th>Periodo</th>
 														<th>Creado</th>
 														<th>#ACTV</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -163,21 +165,23 @@
 														<td align="center"><?=$sino[$resultado['ipc_creado']];?></td>
 														<td align="center"><?=$numActividades;?></td>
 														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual[8]];?></a></li>
-																	  
-																	  <li><a href="cargas-indicadores-editar.php?idR=<?=$resultado['ipc_id'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	  
-																	  <li><a href="#" name="guardar.php?get=68&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
-																  </ul>
-															  </div>
-														</td>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual[8]];?></a></li>
+																		
+																		<li><a href="cargas-indicadores-editar.php?idR=<?=$resultado['ipc_id'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		
+																		<li><a href="#" name="guardar.php?get=68&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

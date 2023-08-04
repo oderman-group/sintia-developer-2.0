@@ -4,6 +4,11 @@ $idPaginaInterna = 'DT0051';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -162,15 +167,15 @@ include("../compartido/head.php");
 															<td style="text-align:center;"><?=$resultado[0];?></td>
 															<td><?=$nombre?></td>
 															<td style="text-align: center;">
-																<input size="5" maxlength="3" name="" id="" value="<?=$rndisiplina["dn_nota"]?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;">
+																<input size="5" maxlength="3" name="" id="" value="<?=$rndisiplina["dn_nota"]?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 
-																<?php if($rndisiplina[4]!=""){?>
+																<?php if($rndisiplina[4]!="" && Modulos::validarPermisoEdicion()){?>
 																	<a href="cargas-comportamiento-eliminar.php?get=22&id=<?=$rndisiplina[0];?>&periodo=<?=$_REQUEST["periodo"];?>&carga=<?=$_REQUEST["carga"];?>&grado=<?=$_REQUEST["grado"];?>&grupo=<?=$_REQUEST["grupo"];?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">X</a>
 																<?php }?>
 
 															</td>
 															<td style="text-align:center;">
-																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50"><?=$rndisiplina["dn_observacion"]?></textarea>
+																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50" <?=$disabledPermiso;?>><?=$rndisiplina["dn_observacion"]?></textarea>
 															</td>
 														</tr>
 														<?php 

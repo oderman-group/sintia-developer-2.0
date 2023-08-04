@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0036';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
     
@@ -145,7 +150,7 @@
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>
-                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=$_GET["ind"];?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m[2];?>" <?php if($ipc[0]!=""){echo "checked";}?> <?=$estadoD;?>></td>
+                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=$_GET["ind"];?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m[2];?>" <?php if($ipc[0]!=""){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
                                                     <?php
                                                     }
                                                     ?>

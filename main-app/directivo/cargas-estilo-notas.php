@@ -47,9 +47,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cargas-estilo-notas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <a href="cargas-estilo-notas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -61,7 +63,9 @@
                                                         <th>#</th>
 														<th>C&oacute;digo</th>
 														<th>Nombre</th>
-														<th>Acciones</th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th>Acciones</th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -77,19 +81,21 @@
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado["catn_id"];?></td>
-														<td><?=$resultado["catn_nombre"];?></td>														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-estilo-notas-especifica.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        								<?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-eliminar.php?idR=<?=$resultado["catn_id"];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
-																  </ul>
-															  </div>
-														</td>
+														<td><?=$resultado["catn_nombre"];?></td>	
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>													
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a href="cargas-estilo-notas-especifica.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                            <?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-eliminar.php?idR=<?=$resultado["catn_id"];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;
