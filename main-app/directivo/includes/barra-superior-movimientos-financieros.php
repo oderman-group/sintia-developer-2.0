@@ -41,15 +41,17 @@
 	</button>
 	<div class="navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-					Menú movimiento financiero
-					<span class="fa fa-angle-down"></span>
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="movimientos-importar.php">Importar saldos</a>
-				</div>
-			</li>
+			<?php if(Modulos::validarPermisoEdicion()){?>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+						Menú movimiento financiero
+						<span class="fa fa-angle-down"></span>
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="movimientos-importar.php">Importar saldos</a>
+					</div>
+				</li>
+			<?php }?>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
 					Resúmen

@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0106';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -56,14 +61,14 @@
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Fecha</label>
 													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date("Y-m-d");?>">
+														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date("Y-m-d");?>" <?=$disabledPermiso;?>>
 													</div>
 											</div>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Detalle</label>
 												<div class="col-sm-10">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" required>
+													<input type="text" name="detalle" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
@@ -72,7 +77,7 @@
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="text" name="valor" class="form-control" autocomplete="off" required>
+														<input type="text" name="valor" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
 													</div>
 											</div>
 										
@@ -80,7 +85,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="tipo" required>
+                                                <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Ingreso</option>
 													<option value="2">Egreso</option>
@@ -93,7 +98,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="forma" required>
+                                                <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Efectivo</option>
 													<option value="2">Cheque</option>
@@ -116,7 +121,7 @@
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="usuario" required>
+                                                <select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
@@ -131,7 +136,7 @@
 												<label class="col-sm-2 control-label">Notificar al usuario</label>
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked>
+														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
 														<span class="slider red round"></span>
 													</label>
 												</div>
@@ -140,13 +145,15 @@
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
 												<div class="col-sm-10">
-                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>></textarea>
 												</div>
 											</div>
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
