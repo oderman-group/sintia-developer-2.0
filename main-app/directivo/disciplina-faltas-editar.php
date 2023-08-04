@@ -9,6 +9,11 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -66,14 +71,14 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Código</label>
 											<div class="col-sm-2">
-												<input type="text" name="codigo" class="form-control" value="<?=$datosEditar['dfal_codigo'];?>">
+												<input type="text" name="codigo" class="form-control" value="<?=$datosEditar['dfal_codigo'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-10">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['dfal_nombre'];?>">
+												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['dfal_nombre'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -88,7 +93,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select class="form-control  select2" name="categoria" required>
+                                                <select class="form-control  select2" name="categoria" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -105,7 +110,9 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

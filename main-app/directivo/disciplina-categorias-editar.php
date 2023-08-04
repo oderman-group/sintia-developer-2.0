@@ -9,6 +9,11 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -65,14 +70,16 @@ $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>
 											<div class="col-sm-8">
-												<input type="text" name="categoria" class="form-control" value="<?=$datosEditar['dcat_nombre'];?>">
+												<input type="text" name="categoria" class="form-control" value="<?=$datosEditar['dcat_nombre'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

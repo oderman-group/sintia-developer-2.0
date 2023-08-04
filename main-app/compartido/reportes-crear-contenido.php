@@ -1,4 +1,9 @@
-<?php require_once("../class/Estudiantes.php");?>
+<?php require_once("../class/Estudiantes.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 					<div class="row">
                         <div class="col-sm-12">
@@ -13,7 +18,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-4">  
-                                                <input type="date" class="form-control" name="fecha" required value="<?=date("Y-m-d");?>">
+                                                <input type="date" class="form-control" name="fecha" required value="<?=date("Y-m-d");?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
@@ -23,7 +28,7 @@
                                                 <?php
 												$datosConsulta = Estudiantes::listarEstudiantesParaDocentes('');
 												?>
-                                                <select class="form-control  select2" name="estudiante" required>
+                                                <select class="form-control  select2" name="estudiante" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
@@ -37,7 +42,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple>
+                                                <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple <?=$disabledPermiso;?>>
 												<?php
 												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
 												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
@@ -60,7 +65,7 @@
 													ORDER BY uss_tipo, uss_nombre
 													");
 													?>
-													<select class="form-control  select2" name="usuario" required>
+													<select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
@@ -77,11 +82,13 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">  
-                                                <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+                                                <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<?php }?>
 										
 										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
