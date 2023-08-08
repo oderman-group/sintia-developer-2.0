@@ -6,7 +6,6 @@ if(isset($_GET['term']))
 { 
 	try {
 		$lista=UsuariosPadre::listarUsuariosCompartir($_GET['term']);
-		// $valores = json_encode($lista);
 		while($dato=mysqli_fetch_array($lista, MYSQLI_BOTH)){
 			$nombre=UsuariosPadre::nombreCompletoDelUsuario($dato)." - ".$dato["pes_nombre"];
 			$response[] = ["value"=>$dato["uss_id"],"label"=>$nombre];
