@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0071';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 
 	<!--bootstrap -->
@@ -58,14 +63,16 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>
 											<div class="col-sm-8">
-												<input type="text" name="categoria" class="form-control">
+												<input type="text" name="categoria" class="form-control" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

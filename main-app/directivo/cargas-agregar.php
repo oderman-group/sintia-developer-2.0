@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0052';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -63,7 +68,7 @@
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="docente" required>
+                                                <select class="form-control  select2" name="docente" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -86,7 +91,7 @@
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select id="multiple" class="form-control  select2-multiple" name="curso[]" required multiple>
+                                                <select id="multiple" class="form-control  select2-multiple" name="curso[]" required multiple <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -109,7 +114,7 @@
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select id="multiple" class="form-control select2-multiple" name="grupo[]" multiple>
+                                                <select id="multiple" class="form-control select2-multiple" name="grupo[]" multiple <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -131,7 +136,7 @@
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select id="multiple"  class="form-control  select2-multiple" name="asignatura[]" required multiple>
+                                                <select id="multiple"  class="form-control  select2-multiple" name="asignatura[]" required multiple <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -145,7 +150,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Periodo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="periodo" required>
+                                                <select class="form-control  select2" name="periodo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
@@ -161,7 +166,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Director de grupo <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="dg" required>
+                                                <select class="form-control  select2" name="dg" required <?=$disabledPermiso;?>>
                                                     <option value="0">Seleccione una opción</option>
 													<option value="1">SI</option>
 													<option value="0" selected>NO</option>
@@ -172,7 +177,7 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Intensidad H. <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
-												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>">
+												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -182,21 +187,21 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Max. Indicadores</label>
 											<div class="col-sm-2">
-												<input type="text" name="maxIndicadores" class="form-control" value="10">
+												<input type="text" name="maxIndicadores" class="form-control" value="10" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Max. Actividades</label>
 											<div class="col-sm-2">
-												<input type="text" name="maxActividades" class="form-control" value="100">
+												<input type="text" name="maxActividades" class="form-control" value="100" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required>
+                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" selected>Activa</option>
 													<option value="0">Inactiva</option>
@@ -207,7 +212,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">% Actividades</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="valorActividades">
+                                                <select class="form-control  select2" name="valorActividades" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Manual</option>
 													<option value="0" selected>Automático</option>
@@ -218,7 +223,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">% Indicadores</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="valorIndicadores">
+                                                <select class="form-control  select2" name="valorIndicadores" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Manual</option>
 													<option value="0" selected>Automático</option>
@@ -229,7 +234,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para generar informe</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="permiso1">
+                                                <select class="form-control  select2" name="permiso1" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" selected>SI</option>
 													<option value="0">NO</option>
@@ -240,7 +245,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para editar en periodos anteriores</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="permiso2">
+                                                <select class="form-control  select2" name="permiso2" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">SI</option>
 													<option value="0" selected>NO</option>
@@ -251,7 +256,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Indicador automático </label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="indicadorAutomatico">
+                                                <select class="form-control  select2" name="indicadorAutomatico" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">SI</option>
 													<option value="0" selected>NO</option>
@@ -266,7 +271,9 @@
                                         </div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

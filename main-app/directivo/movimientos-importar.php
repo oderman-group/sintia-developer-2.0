@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0105';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -67,14 +72,14 @@
 										<div class="form-group row">
 												<label class="col-sm-3 control-label">Detalle</label>
 												<div class="col-sm-9">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" required>
+													<input type="text" name="detalle" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
 												</div>
 											</div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Qué acción desea ejecutar?</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="accion">
+                                                <select class="form-control select2" name="accion" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">No hacer nada</option>
 													<option value="2">Bloquear usuarios con deuda</option>
@@ -85,7 +90,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Qué dato está en la primera columna de excel?</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="datoID">
+                                                <select class="form-control select2" name="datoID" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">Documento</option>
 													<option value="2">Código de tesorería</option>
@@ -104,11 +109,13 @@
 										<div class="form-group row">
 												<label class="col-sm-3 control-label">Subir la plantilla diligenciada</label>
 												<div class="col-sm-9">
-													<input type="file" name="planilla" required>
+													<input type="file" name="planilla" required <?=$disabledPermiso;?>>
 												</div>
 											</div>
 
-										<input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
+                                        <?php }?>
 										
 										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

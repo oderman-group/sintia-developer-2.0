@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0142';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -47,7 +52,7 @@
                             <div class="panel">
                                 <header class="panel-heading panel-heading-purple">Filtros </header>
                                 <div class="panel-body">
-                                <form name="formularioGuardar" action="cargas-comportamiento.php" method="post">
+                                <form name="formularioGuardar" action="cargas-comportamiento.php" method="post" target="_target">
                                     
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Curso</label>
@@ -59,7 +64,7 @@
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" style="width: 810.666px;" name="grado" id="grado" required onchange="habilitarGrupoPeriodo()">
+                                            <select class="form-control  select2" style="width: 810.666px;" name="grado" id="grado" required onchange="habilitarGrupoPeriodo()" <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -82,7 +87,7 @@
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" style="width: 810.666px;" id="grupo" name="grupo" onchange="traerCargas(this)" disabled>
+                                            <select class="form-control  select2" style="width: 810.666px;" id="grupo" name="grupo" onchange="traerCargas(this)" disabled <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -97,7 +102,7 @@
                                     <div class="form-group row" id="carga-container">
                                         <label class="col-sm-2 control-label">Carga</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control  select2" style="width: 810.666px;" name="carga" id="carga" required>
+                                            <select class="form-control  select2" style="width: 810.666px;" name="carga" id="carga" required <?=$disabledPermiso;?>>
                                             </select>
                                             <script type="application/javascript">
                                                  $(document).ready(traerCargas(document.getElementById('grupo')));
@@ -150,7 +155,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Periodo</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" style="width: 810.666px;" name="periodo" id="periodo" required disabled>
+                                            <select class="form-control  select2" style="width: 810.666px;" name="periodo" id="periodo" required disabled <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 $p = 1;
@@ -163,7 +168,9 @@
                                         </div>
                                     </div>
                                     
-                                    <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                        <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+                                    <?php }?>
                                     
                                     <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>

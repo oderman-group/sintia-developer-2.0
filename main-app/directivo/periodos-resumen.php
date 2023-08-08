@@ -5,6 +5,11 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 <script type="text/javascript">
   function def(enviada){
@@ -195,8 +200,8 @@ function niv(enviada){
 														?>
 															<td style="text-align:center;">
 																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo."</a><br>".$tipo;?><br>
-																<?php if(!empty($notasResultado[4])){?>
-																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
+																<?php if(!empty($notasResultado[4]) && Modulos::validarPermisoEdicion()){?>
+																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
 																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
@@ -251,7 +256,9 @@ function niv(enviada){
 															<?php
 															if($n==$datosCargaActual['gra_periodos']) $e = ''; else $e = 'disabled';
 															?>
-															<input size="5" name="<?=$i?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
+															<?php if(Modulos::validarPermisoEdicion()){?>
+																<input size="5" name="<?=$i?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
+															<?php }?>
 														</td>
                                                     </tr>
 													<?php

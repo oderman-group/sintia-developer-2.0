@@ -29,22 +29,24 @@ if (!empty($_GET['curso'])) {
     <div class="navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
-                    Más opciones
-                    <span class="fa fa-angle-down"></span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
-                    <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="cargas-transferir.php">Transferir cargas</a>
-                    <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
+            <?php if(Modulos::validarPermisoEdicion()){?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
+                        Más opciones
+                        <span class="fa fa-angle-down"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
+                        <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="cargas-transferir.php">Transferir cargas</a>
+                        <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
 
-                </div>
-            </li>
+                    </div>
+                </li>
 
-            <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+            <?php }?>
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">

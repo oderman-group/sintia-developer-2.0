@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0047';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -56,26 +61,28 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreCN" class="form-control" value="">
+                                                <input type="text" name="nombreCN" class="form-control" value="" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nota Desde</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="ndesdeCN" class="form-control" value="">
+                                                <input type="text" name="ndesdeCN" class="form-control" value="" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nota Hasta</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="nhastaCN" class="form-control" value="">
+                                                <input type="text" name="nhastaCN" class="form-control" value="" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>

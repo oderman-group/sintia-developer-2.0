@@ -71,9 +71,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="movimientos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="movimientos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
@@ -89,7 +91,9 @@
 														<th>Valor</th>
 														<th>Tipo</th>
 														<th>Usuario</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -126,20 +130,22 @@
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=strtoupper($resultado['uss_nombre']);?></a>
 														</td>
 
-														<td>
-															<div class="btn-group">
-																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	<i class="fa fa-angle-down"></i>
-																</button>
-																<ul class="dropdown-menu" role="menu">
-																	<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	<?php if($resultado['fcu_anulado']!=1){?>
-																		<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
-																	<?php } ?>
-																</ul>
-															  </div>
-														</td>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php if($resultado['fcu_anulado']!=1){?>
+																			<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
+																		<?php } ?>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

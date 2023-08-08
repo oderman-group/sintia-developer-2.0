@@ -48,9 +48,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -64,7 +66,9 @@
                                                         <th>Nombre</th>
                                                         <th>Nota desde</th>
                                                         <th>Nota hasta</th>
-														<th>Acciones</th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th>Acciones</th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -82,19 +86,21 @@
                                                         <td><?=$resultado["notip_id"];?></td>
                                                         <td><?=$resultado["notip_nombre"];?></td>
                                                         <td><?=$resultado["notip_desde"];?></td>
-                                                        <td><?=$resultado["notip_hasta"];?></td>														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=$resultado["notip_id"];?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        								<?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-especifica-eliminar.php?idN=<?=$resultado["notip_id"];?>&idNC=<?=$_GET["id"]?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
-																  </ul>
-															  </div>
-														</td>
+                                                        <td><?=$resultado["notip_hasta"];?></td>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>														
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=$resultado["notip_id"];?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                            <?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-especifica-eliminar.php?idN=<?=$resultado["notip_id"];?>&idNC=<?=$_GET["id"]?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

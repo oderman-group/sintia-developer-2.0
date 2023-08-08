@@ -4,6 +4,10 @@ $idPaginaInterna = 'DT0076';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -200,14 +204,14 @@ include("../compartido/head.php");
 														//DEFINITIVA DE CADA MATERIA
 														if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
 														?>
-															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?=$defPorMateria;?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="1" onChange="niv(this)"><br>
+															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?=$defPorMateria;?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="1" onChange="niv(this)" <?=$disabledPermiso;?>><br>
 																<?php if(!empty($cNiv[0])){?>
 																	<span style="font-size:10px; color:rgb(255,0,0);"><?=$msj;?></span><br>
 																	<a href="guardar.php?get=57&idNiv=<?=$cNiv[0];?>&curso=<?=$_REQUEST["curso"];?>&grupo=<?=$_REQUEST["grupo"];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}"><img src="../files/iconos/1363803022_001_052.png"></a>
 																<?php }?>
 															</td>
-															<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if(!empty($cNiv[5])) echo $cNiv[5];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="2" onChange="niv(this)"></td>
-															<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if(!empty($cNiv[6])) echo $cNiv[6];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="3" onChange="niv(this)"></td>
+															<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if(!empty($cNiv[5])) echo $cNiv[5];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="2" onChange="niv(this)" <?=$disabledPermiso;?>></td>
+															<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if(!empty($cNiv[6])) echo $cNiv[6];?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="3" onChange="niv(this)" <?=$disabledPermiso;?>></td>
 													<?php
 														//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 														$defPorEstudiante += $defPorMateria;   

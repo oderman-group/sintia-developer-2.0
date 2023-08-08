@@ -46,9 +46,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="areas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <a href="areas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -62,7 +64,9 @@
 														<th>Posición</th>
 														<th><?=$frases[93][$datosUsuarioActual[8]];?></th>
 														<th>Materias</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -88,18 +92,20 @@
 														<td><?=$resultado['ar_nombre'];?></td>
 														<td><a href="asignaturas.php?area=<?=$resultado['ar_id'];?>" style="text-decoration: underline;"><?=$numMaterias[0];?></a></td>
 														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="areas-editar.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        								<?php if($numMaterias[0]==0){?><li><a href="areas-eliminar.php?id=<?php echo $resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
-																  </ul>
-															  </div>
-														</td>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a href="areas-editar.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                            <?php if($numMaterias[0]==0){?><li><a href="areas-eliminar.php?id=<?php echo $resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

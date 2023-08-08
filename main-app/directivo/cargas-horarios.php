@@ -50,9 +50,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
@@ -65,7 +67,9 @@
 														<th>Día</th>
 														<th>Desde</th>
 														<th>Hasta</th>
-														<th>Acciones</th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th>Acciones</th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -99,18 +103,20 @@
 														<td><?=$dia;?></td>
 														<td><?=$resultado[3];?></td>
 														<td><?=$resultado[4];?></td>
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-horarios-editar.php?id=<?=$resultado[0];?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
-																	  <li><a href="cargas-horarios-eliminar.php?idH=<?=$resultado[0];?>&idC=<?=$resultado[1];?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
-																  </ul>
-															</div>
-														</td>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="cargas-horarios-editar.php?id=<?=$resultado[0];?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<li><a href="cargas-horarios-eliminar.php?idH=<?=$resultado[0];?>&idC=<?=$resultado[1];?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
                                       				<?php }?>
                                                 </tbody>
