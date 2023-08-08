@@ -24,6 +24,11 @@ define('SUB_MENU', 'sub-menu');
 
 define('ESTADO_EMAIL_ENVIADO', 'enviado');
 define('ESTADO_EMAIL_ERROR', 'error');
+
+
+define('SOLICITUD_CANCELACION_PENDIENTE', 'pendiente');
+define('SOLICITUD_CANCELACION_APROBADO', 'aprobado');
+define('SOLICITUD_CANCELACION_CANCELADO', 'cancelado');
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
