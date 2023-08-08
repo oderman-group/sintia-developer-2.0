@@ -107,20 +107,48 @@
 											<div class="form-group row">
 												<label class="col-sm-3 control-label"><?=$frases[227][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-9">
-													<select id="multiple" class="form-control select2-multiple" multiple name="compartirCon[]">
-													<?php
-													$infoConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-													");
-													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_usuario='".$infoDatos['uss_id']."'"));
-														
-													?>	
-													  <option value="<?=$infoDatos['uss_id'];?>" <?php if($existe>0){echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($infoDatos)." - ".$infoDatos['pes_nombre'];?></option>
-													<?php }?>	
+													<select id="select_usuario" class="form-control select2-multiple" multiple name="compartirCon[]">
+														<?php
+														$infoConsulta = mysqli_query($conexion, "SELECT fxuc_usuario FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_institucion='".$config['conf_id_institucion']."' AND fxuc_year='".$config['conf_agno']."'");
+														while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
+
+															$consultaExiste=mysqli_query($conexion, "SELECT * FROM usuarios
+															INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+															WHERE uss_id='".$infoDatos['fxuc_usuario']."'");
+															$existe = mysqli_fetch_array($consultaExiste, MYSQLI_BOTH);
+
+															if(!is_null($existe)){
+																$nombre = UsuariosPadre::nombreCompletoDelUsuario($existe);
+														?>	
+														<option value="<?=$existe['uss_id'];?>" selected><?=$nombre." - ".$existe['pes_nombre'];?></option>
+														<?php }}?>	
 													</select>
 												</div>
 											</div>
+											<script>          
+												$(document).ready(function() {
+													$('#select_usuario').select2({
+													placeholder: 'Seleccione el usuario...',
+													theme: "bootstrap",
+													multiple: true,
+														ajax: {
+															type: 'GET',
+															url: '../compartido/ajax-listar-usuarios.php',
+															processResults: function(data) {
+																data = JSON.parse(data);
+																return {
+																	results: $.map(data, function(item) {                                  
+																		return {
+																			id: item.value,
+																			text: item.label
+																		}
+																	})
+																};
+															}
+														}
+													});
+												});
+											</script>
 										
 											<div class="form-group row">
 												<label class="col-sm-3 control-label"><?=$frases[228][$datosUsuarioActual[8]];?></label>
