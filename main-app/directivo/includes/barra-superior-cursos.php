@@ -6,22 +6,23 @@
 
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
- 
 
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
-            Más opciones
-		  <span class="fa fa-angle-down"></span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="cursos-intensidad.php">I.H por curso</a>
-        <a class="dropdown-item" href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a>
-        
-        <a class="dropdown-item" href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a>
-        <div class="dropdown-divider"></div>
-        </div>
-      </li>
-      <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+      <?php if(Modulos::validarPermisoEdicion()){?>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+              Más opciones
+            <span class="fa fa-angle-down"></span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="cursos-intensidad.php">I.H por curso</a>
+          <a class="dropdown-item" href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a>
+          
+          <a class="dropdown-item" href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a>
+          <div class="dropdown-divider"></div>
+          </div>
+        </li>
+        <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+      <?php }?>
 
       <?php if(array_key_exists(10,$arregloModulos) ){?>
         <li class="nav-item dropdown">
