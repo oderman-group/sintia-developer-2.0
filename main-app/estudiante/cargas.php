@@ -137,7 +137,11 @@ if($config['conf_activar_encuesta']==1){
 			        <!-- End course list -->
 			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
 						<?php
-						$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+						$parametros = [
+							'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+							'matcur_id_institucion' => $config['conf_id_institucion'],
+							'matcur_years' => $config['conf_agno']
+						];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';}
 						foreach ($listaCursosMediaTecnica as $dato) {
@@ -152,7 +156,10 @@ if($config['conf_activar_encuesta']==1){
 							<?php
 							$parametros = [
 								'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
-								'matcur_id_curso'     => $dato["matcur_id_curso"]
+								'matcur_id_curso'     => $dato["matcur_id_curso"],
+								'matcur_id_grupo'     => $dato["matcur_id_grupo"],
+								'matcur_id_institucion' => $config['conf_id_institucion'],
+								'matcur_years' => $config['conf_agno']
 							];
 							$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
 							if ($listacargaMediaTecnica != null) { 
