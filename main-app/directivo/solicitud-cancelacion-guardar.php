@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-$idPaginaInterna = 'DT0204';
+$idPaginaInterna = 'DT0203';
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 include("../compartido/historial-acciones-guardar.php");

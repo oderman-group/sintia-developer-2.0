@@ -18,7 +18,7 @@ $Plataforma = new Plataforma;
 			</div>
 
 			<div style="font-family:arial; background:#FAFAFA; width:600px; color:#000; text-align:justify; padding:15px;">
-				Cordial saludo <?=$data['usuario_nombre']?>, su solicitud de cancelaciondel servicio fue realizada correctamente.<br>
+				Cordial saludo <?=$data['usuario_nombre']?>, su solicitud de cancelacion del servicio fue realizada correctamente.<br>
 				Nos contactaremos pronto para dar validacion a esta solicitud <br>
 				
 				<b>Número de solicitud:</b>          <pre><?=$data['solicitud_id'];?></pre>
