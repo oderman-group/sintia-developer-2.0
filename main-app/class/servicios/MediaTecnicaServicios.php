@@ -128,4 +128,27 @@ class MediaTecnicaServicios extends Servicios
                  )"
              );      
     }
+
+    public static function existeEstudianteMT($config,$year,$estudiante = 0)
+    {
+
+        global $conexion, $baseDatosServicios;
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+            INNER JOIN academico_matriculas ON mat_id=matcur_id_matricula
+            WHERE matcur_id_matricula='".$estudiante."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'");
+            $num = mysqli_num_rows($consulta);
+            if($num == 0){
+                echo "Estás intentando obtener datos de un estudiante que no existe: ".$estudiante."<br>";
+            }
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+
+    }
 }
