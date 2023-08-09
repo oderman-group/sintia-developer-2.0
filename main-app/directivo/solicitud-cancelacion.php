@@ -32,7 +32,6 @@
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <div class="page-title"><?= $frases[367][$datosUsuarioActual[8]]; ?></div>
-                            <?php include("../config-general/mensajes-informativos.php"); ?>
                         </div>
                     </div>
                 </div>

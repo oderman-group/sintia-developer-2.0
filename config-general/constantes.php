@@ -15,9 +15,9 @@ define('ESTADO_EMAIL_ENVIADO', 'enviado');
 define('ESTADO_EMAIL_ERROR', 'error');
 
 
-define('SOLICITUD_CANCELACION_PENDIENTE', 'pendiente');
-define('SOLICITUD_CANCELACION_APROBADO', 'aprobado');
-define('SOLICITUD_CANCELACION_CANCELADO', 'cancelado');
+define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');
+define('SOLICITUD_CANCELACION_APROBADO', 'Aprobado');
+define('SOLICITUD_CANCELACION_CANCELADO', 'Cancelado');
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
