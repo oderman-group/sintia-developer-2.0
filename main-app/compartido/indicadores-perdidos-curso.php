@@ -1,5 +1,8 @@
 <?php 
 include("../directivo/session.php");
+require_once("../class/Grados.php");
+require_once("../class/Grupos.php");
+require_once("../class/Estudiantes.php");
 
 
 if (empty($_GET["periodo"])) {
@@ -29,30 +32,16 @@ if ($periodoActual == 4) $periodoActuales = "Cuarto";
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <?php
-
-$filtro = "";
+$filtroAdicional = " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 if (!empty($_GET["id"])) {
-
-    $filtro .= " AND mat_id='" . $_GET["id"] . "'";
+    $filtroAdicional .= " AND mat_id='" . $_GET["id"] . "'";
 }
-
 if (!empty($_REQUEST["curso"])) {
-
-    $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
+    $filtroAdicional .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
 }
 
-
-
-$matriculadosPorCurso = mysqli_query($conexion,"SELECT * FROM academico_matriculas 
-
-WHERE mat_eliminado=0 AND mat_estado_matricula=1 $filtro 
-
-GROUP BY mat_id
-
-ORDER BY mat_grupo, mat_primer_apellido");
-
-
-
+$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+$matriculadosPorCurso =Estudiantes::listarEstudiantes(0,$filtroAdicional,"",$cursoActual);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
 
     //contador materias
@@ -64,54 +53,21 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $materiasPerdidas = 0;
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
+    $datos_usr = Estudiantes::obtenerDatosEstudiante($matriculadosDatos['mat_id']);
 
-    $usr = mysqli_query($conexion,"SELECT * FROM academico_matriculas am
-
-INNER JOIN academico_grupos ON mat_grupo=gru_id
-
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDatos[0]);
-
-    $num_usr = mysqli_num_rows($usr);
-
-    $datos_usr = mysqli_fetch_array($usr, MYSQLI_BOTH);
-
-    if ($num_usr == 0) {
-
-?>
-
-        <!-- <script type="text/javascript">
-            window.close();
-        </script> -->
-
-    <?php
-
-        exit();
+    $idCurso=$datos_usr["mat_grado"];
+    $idGrupo=$datos_usr["mat_grupo"];
+    if($cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+        $idCurso=$matriculadosDatos["matcur_id_curso"];
+        $idGrupo=$matriculadosDatos["matcur_id_grupo"];
     }
-
-
-
+    $consultaGrupo = Grupos::obtenerDatosGrupos($idGrupo);
+    $grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
     $contador_periodos = 0;
-
     ?>
 
     <!doctype html>
-
-    <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-
-    <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-
-    <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-
-    <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-
-    <!--[if gt IE 8]><!-->
-
     <html class="no-js" lang="en">
-
-    <!--<![endif]-->
-
-
-
     <head>
 
         <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
@@ -144,7 +100,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 		INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 
-		WHERE  car_curso=" . $datos_usr["mat_grado"] . " AND car_grupo=" . $datos_usr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+		WHERE  car_curso=" . $idCurso . " AND car_grupo=" . $idGrupo . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
         //$numero_periodos=$config["conf_periodos_maximos"];
 
@@ -166,9 +122,9 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 <td>Documento:<br> <?= number_format($datos_usr["mat_documento"], 0, ",", "."); ?></td>
 
-                <td>Nombre:<br> <?= strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]); ?></td>
+                <td>Nombre:<br> <?= Estudiantes::NombreCompletoDelEstudiante($datos_usr); ?></td>
 
-                <td>Grado:<br> <?= $datos_usr["gra_nombre"] . " " . $datos_usr["gru_nombre"]; ?></td>
+                <td>Grado:<br> <?= $cursoActual["gra_nombre"] . " " . $grupo["gru_nombre"]; ?></td>
 
                 <td>Periodo:<br> <b><?= $periodoActuales . " (" . date("Y") . ")"; ?></b></td>
 
@@ -245,7 +201,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
 				GROUP BY ar_id;");
 
@@ -259,7 +215,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
 				GROUP BY mat_id
 
@@ -275,7 +231,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 				INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
 
 				ORDER BY mat_id,bol_periodo
 
@@ -301,7 +257,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 				INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 
-				WHERE car_curso=" . $datos_usr["mat_grado"] . "  and car_grupo=" . $datos_usr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . "
+				WHERE car_curso=" . $idCurso . "  and car_grupo=" . $idGrupo . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos['mat_id'] . "' and act_periodo=" . $condicion2 . "
 
 				group by act_id_tipo, act_id_carga
 
@@ -354,7 +310,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
-                                    $recuperacionIndicador = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'"), MYSQLI_BOTH);
+                                    $recuperacionIndicador = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante='".$matriculadosDatos['mat_id']."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'"), MYSQLI_BOTH);
 
                                     
 
