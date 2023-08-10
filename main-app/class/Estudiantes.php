@@ -458,4 +458,43 @@ class Estudiantes {
         return $consulta;
     }
 
+    //METODO PARA BUSCAR TODA LA INFORMACIÓN DE LOS ESTUDIANTES
+    public static function reporteEstadoEstudiantes($where="")
+    {
+
+        global $conexion, $baseDatosServicios;
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT mat_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_inclusion, mat_extranjero, mat_documento, uss_usuario, uss_email, uss_celular, uss_telefono, gru_nombre, gra_nombre, og.ogen_nombre as Tipo_est, mat_id,
+            IF(mat_acudiente is null,'No',uss_nombre) as nom_acudiente,
+            IF(mat_foto is null,'No','Si') as foto, 
+            og2.ogen_nombre as genero, og3.ogen_nombre as religion, og4.ogen_nombre as estrato, og5.ogen_nombre as tipoDoc,
+            CASE mat_estado_matricula 
+                WHEN 1 THEN 'Matriculado' 
+                WHEN 2 THEN 'Asistente' 
+                WHEN 3 THEN 'Cancelado' 
+                WHEN 4 
+                THEN 'No matriculado' 
+            END AS estado
+            FROM academico_matriculas am 
+            INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
+            INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
+            INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
+            INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
+            INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion
+            INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
+            INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
+            INNER JOIN usuarios u ON u.uss_id=am.mat_acudiente or am.mat_acudiente is null
+            $where
+            GROUP BY mat_id
+            ORDER BY mat_primer_apellido,mat_estado_matricula;");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+
+    }
+
 }
