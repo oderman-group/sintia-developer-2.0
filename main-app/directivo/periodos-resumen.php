@@ -162,7 +162,6 @@ function niv(enviada){
 													<?php
 													$contReg = 1;
 													$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
-													// $consulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
 													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>
