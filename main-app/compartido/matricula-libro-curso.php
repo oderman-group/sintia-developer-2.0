@@ -209,7 +209,11 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 	while($fila3=mysqli_fetch_array($consultaAMatPer, MYSQLI_BOTH)){
 		if($fila2["mat_id"]==$fila3["mat_id"]){
 			$contadorPeriodos++;
-			$notaPeriodo=round($fila3["bol_nota"],1);
+			$notaBoletin=0;
+			if(!empty($fila3["bol_nota"])){
+				$notaBoletin=$fila3["bol_nota"];
+			}
+			$notaPeriodo=round($notaBoletin,1);
 			if($notaPeriodo==1)$notaPeriodo="1.0";	if($notaPeriodo==2)$notaPeriodo="2.0";	if($notaPeriodo==3)$notaPeriodo="3.0";	if($notaPeriodo==4)$notaPeriodo="4.0";	if($notaPeriodo==5)$notaPeriodo="5.0";
 			$notas[$contadorPeriodos] =$notaPeriodo;
 		}
