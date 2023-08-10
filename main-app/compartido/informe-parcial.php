@@ -4,6 +4,11 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
+$year=date("Y");
+$cPeriodo=$config[2];
+if(isset($_GET["periodo"])){
+  $cPeriodo=$_GET["periodo"];
+}
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -21,7 +26,7 @@ require_once("../class/Estudiantes.php");
 								  ?>
     
     <?=$informacion_inst["info_nombre"]?><br>
-    INFORME PARCIAL - PERIODO: <?php echo $config[2];?><br>
+    INFORME PARCIAL - PERIODO: <?php echo $cPeriodo;?><br>
     <?php echo $config["conf_fecha_parcial"];?><br>
     <?php 
       $tamano='height="100" width="150"';
@@ -57,17 +62,9 @@ require_once("../class/Estudiantes.php");
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
 										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
-									    //PLAN DE CLASE
-                        $cPeriodo=$config[2];
-                      if(isset($_GET["periodo"])){
-                        $cPeriodo=$_GET["periodo"];
-                      }
-										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$cPeriodo."'");
-									    $Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
-									    $Npc = mysqli_num_rows($Cpc);
 										//DEFINITIVAS
 										$carga = $rCargas[0];
-										$periodo = $config[2];
+										$periodo = $cPeriodo;
 										$estudiante = $_GET["estudiante"];
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
@@ -86,6 +83,31 @@ require_once("../class/Estudiantes.php");
 								   		if($nn>0){
 											$promedioG = round(($promedioG / $materiasDividir),1);
 										}	
+                    //MEDIA TECNICA
+                    if (array_key_exists(10, $_SESSION["modulos"])){
+                      $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$_GET["estudiante"]);
+                      while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+                          $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActualMT['matcur_id_curso']."' AND car_grupo='".$datosEstudianteActualMT['matcur_id_grupo']."'");
+                          $nCargas = mysqli_num_rows($cCargas);
+                          while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
+                            $cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+                            $rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
+                            //DEFINITIVAS
+                            $carga = $rCargas[0];
+                            $periodo = $cPeriodo;
+                            $estudiante = $_GET["estudiante"];
+                            include("../definitivas.php");
+                    ?>
+                                      <tr id="data1" class="odd gradeX">
+                                          <td style="text-align:center;"><?=$rCargas[0];?></td>
+                                          <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
+                                          <td><?=$rDatos['mat_nombre'];?></td>
+                                          <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
+                                          <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
+                                        </tr>
+                                     <?php
+                     }}}}
 								   ?>   
                                     </tbody>
                                     <!-- END -->
