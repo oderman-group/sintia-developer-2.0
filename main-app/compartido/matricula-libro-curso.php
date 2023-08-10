@@ -32,8 +32,6 @@ if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"].
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
 
-// $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
-
 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
 $matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,$bdConsulta,$grupo);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
@@ -92,7 +90,6 @@ $consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.acade
 INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
 INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$idGrado." AND car_grupo=".$idGrupo." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
-//$numeroPeriodos=$config["conf_periodos_maximos"];
 $numeroPeriodos=$config["conf_periodo"];
 
 $nombreInforme = "REGISTRO DE VALORACIÓN";
