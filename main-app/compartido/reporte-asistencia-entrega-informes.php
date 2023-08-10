@@ -3,6 +3,7 @@ include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/servicios/GradoServicios.php");
 $Plataforma = new Plataforma;
 
 $year = $agnoBD;
@@ -10,6 +11,7 @@ if (isset($_REQUEST["year"])) {
     $year = $_REQUEST["year"];
 }
 $BD = $_SESSION["inst"] . "_" . $year;
+$bdConsulta = $BD.".";
 
 if (empty($_REQUEST["periodo"])) {
     $periodoActual = 1;
@@ -123,8 +125,10 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         </tr>
 
         <?php
+        $grupo="";
         if (!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "' AND mat_grupo='" . $_REQUEST["grupo"] . "'";
+            $grupo=$_REQUEST["grupo"];
         } elseif (!empty($_REQUEST["curso"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "'";
         } else {
@@ -132,7 +136,8 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         }
         $cont = 1;
         $filtroAdicional = $adicional . " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-        $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $filtroAdicional, $BD);
+        $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+        $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta,$grupo);
         $numE = mysqli_num_rows($consulta);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
