@@ -148,12 +148,12 @@ include("../compartido/reporte-errores.php");
 function minutosTranscurridos($fecha_i,$fecha_f)
 {
 $intervalo = $fecha_i->diff($fecha_f);
-$formato = 'H:i';
+$formato = "h:i:s";
 $horaMinutosInicio = $fecha_i->format($formato);
 $horaMinutosFin = $fecha_i->format($formato);
 $minutos = $intervalo->i;
 $segundos = $intervalo->s;
-return "Inicio :$horaMinutosInicio Final:$horaMinutosFin Duración: $minutos Min y $segundos Seg.";
+return " Finalizo en: $minutos Min y $segundos Seg.";
 }
 
 exit()
