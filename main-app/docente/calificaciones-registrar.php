@@ -384,7 +384,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														 if($calificacion['act_registrada']==1){
 
 															 //Consulta de calificaciones si ya la tienen puestas.
-															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$_GET["idR"]."'");
+															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$_GET["idR"]."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
 															 if($notas[3]<$config[5] and $notas[3]!="") $colorNota = $config[6]; elseif($notas[3]>=$config[5]) $colorNota = $config[7];

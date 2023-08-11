@@ -166,7 +166,7 @@ th {
 														 $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
 														 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
 															//LAS CALIFICACIONES
-															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad=".$rA[0]);
+															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad=".$rA[0]);
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 														?>
 															<td style="text-align:center;">

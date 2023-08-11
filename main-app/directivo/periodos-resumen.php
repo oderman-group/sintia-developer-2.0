@@ -191,7 +191,7 @@ function niv(enviada){
 															 
 															//LAS CALIFICACIONES
 															try{
-																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -218,7 +218,7 @@ function niv(enviada){
 														<?php		
 														 }
 														try{
-															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
+															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg=".$cargaConsultaActual);
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
