@@ -97,6 +97,7 @@
                                                 <option value="2">Asistente</option>
                                                 <option value="3">Cancelado</option>
                                                 <option value="4">No matriculado</option>
+                                                <option value="5">En inscripción</option>
                                                 </select>
                                             </div>
                                         </div>

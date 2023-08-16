@@ -79,6 +79,10 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 		case 4:
 		$estadoM='No Matriculado';
 		break;
+		
+		case 5:
+		$estadoM='En inscripción';
+		break;
 	}	
 ?>    
     	<tr>	
