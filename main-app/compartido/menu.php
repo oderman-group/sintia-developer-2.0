@@ -203,7 +203,7 @@
 							<?php
 								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION){
 							?>
-								<li class="nav-item">
+								<li  <?php agregarClass(MENU,["DV0038","DV0039"]) ?> >
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-database"></i>
 										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
 									</a>
@@ -214,6 +214,7 @@
 										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
 										<li class="nav-item"><a href="dev-historial-acciones.php" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
 										<li class="nav-item"><a href="dev-instituciones.php" class="nav-link"> <span class="title">Instituciones</span></a></li>
+										<li  <?php agregarClass(MENU,["DV0038","DV0039"]) ?>><a href="dev-solicitudes-cancelacion.php" class="nav-link"> <span class="title">Solicitudes de cancelacion</span></a></li>
 										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title">Módulos</span></a></li>
 										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
 										<li class="nav-item"><a href="configuracion-opciones-generales.php" class="nav-link"> <span class="title">Opciones generales</span></a></li>

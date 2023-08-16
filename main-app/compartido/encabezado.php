@@ -117,6 +117,9 @@ $institucionNombre = $institucion['ins_siglas'];
 								
                                 <li class="divider"> </li>
 								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i><?=$frases[16][$datosUsuarioActual['uss_idioma']];?>/<?=$frases[257][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                <?php if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION){?>
+                                <li><a href="../directivo/solicitud-cancelacion.php"><i class="fa fa-cut"></i><?=$frases[367][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                <?php }?>
                                 <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i><?=$frases[15][$datosUsuarioActual['uss_idioma']];?></a></li>
                             </ul>
                         </li>
