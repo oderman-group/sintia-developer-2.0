@@ -4,6 +4,11 @@
 <?php include("../compartido/head.php");?>
 <?php
 $Plataforma = new Plataforma;
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
