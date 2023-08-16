@@ -20,7 +20,7 @@ $yearEnd = $yearArray[1];
 $opcionSINO = array ("NO","SI");
 $mesesAgno = array("01"=>"Enero","02"=>"Febrero","03"=>"Marzo","04"=>"Abril","05"=>"Mayo","06"=>"Junio","07"=>"Julio","08"=>"Agosto","09"=>"Septiembre","10"=>"Octubre","11"=>"Noviembre","12"=>"Diciembre");
 $opcionEstado = array("INACTIVO", "ACTIVO");
-$estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado");
+$estadosMatriculasEstudiantes = array("","Matriculado","Asistente","Cancelado","No Matriculado","En inscripción");
 $clavePorDefectoUsuarios = SHA1('12345678');
 $estadosEtiquetasMatriculas = array("","text-success","text-warning","text-danger","text-warning");
 $opcionesGenerales = array("","T. Documento","Religion","Estratos","Generos","Nuevo/Antiguo","Dias","Nivel Educativo","Estado Civil","Estado Laboral","T. de Empresa","Si/No","T. de Vivienda","T. de Trasporte","T. de Sangre","Boletines");
