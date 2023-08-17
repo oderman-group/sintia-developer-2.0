@@ -101,7 +101,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 						
                         <div class="col-sm-9">
 								
-								<?php if($_GET["idMsg"]==1){?>
+								<?php if(!empty($_GET["idMsg"]) && $_GET["idMsg"]==1){?>
 									<p class="text-success">La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b></p>
 											
 								<?php }?>

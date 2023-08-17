@@ -10,7 +10,8 @@ class Archivos {
 
 		$maxPeso = $config['conf_max_peso_archivos'];
 
-		$extension = end(explode(".", $archivoName));
+		$explode=explode(".", $archivoName);
+		$extension = end($explode);
 
 		if($extension == 'exe' or $extension == 'php' or $extension == 'js' or $extension == 'html' or $extension == 'htm'){
 

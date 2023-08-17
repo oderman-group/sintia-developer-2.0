@@ -71,7 +71,7 @@
                                    
 									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
 										<input type="hidden" value="23" name="id">
-										<input type="hidden" value="<?=$_GET["idE"];?>" name="idE">
+										<input type="hidden" value="<?php if(!empty($_GET["idE"])){ echo $_GET["idE"];}?>" name="idE">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>

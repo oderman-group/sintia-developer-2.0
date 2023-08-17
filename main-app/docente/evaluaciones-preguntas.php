@@ -243,7 +243,7 @@ function mostrarNuevaRespuesta(datos){
 												$contRespuestas = 1;
 												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green';} else {$colorRespuesta = 'red';}
-													if($respuestas['resp_correcta']==1 and $compararRespuestas[0]!=""){
+													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas[0])){
 														$puntosSumados += $preguntas['preg_valor'];
 													}
 											?>

@@ -33,7 +33,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$datos['uss_id'];?>"><?="[".$datos['uss_id']."] ".Estudiantes::NombreCompletoDelEstudiante($datos);?></option>
+                                                    	<option value="<?=$datos['mat_id'];?>"><?="[".$datos['mat_id']."] ".Estudiantes::NombreCompletoDelEstudiante($datos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
