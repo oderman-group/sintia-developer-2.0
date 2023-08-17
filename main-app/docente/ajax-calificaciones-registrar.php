@@ -122,10 +122,12 @@ if($_POST["operacion"]==4){
 
 }
 
-//PARA NOTAS DE COMPORTAMIENTO
-$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
-WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
-$numD = mysqli_num_rows($consultaNumD);
+if(!empty($_POST["codEst"]) && !empty($_POST["periodo"])){
+	//PARA NOTAS DE COMPORTAMIENTO
+	$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
+	WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
+	$numD = mysqli_num_rows($consultaNumD);
+}
 
 
 //Para guardar notas de disciplina
@@ -330,11 +332,13 @@ setTimeout ("notifica()", 100);
 </div>
 <?php }
 
-//PARA ASPECTOS ESTUDIANTILES
-$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
-WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
-$numD = mysqli_num_rows($consultaNumD);
-$datosEstudiante =Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
+if(!empty($_POST["codEst"]) && !empty($_POST["periodo"])){
+	//PARA ASPECTOS ESTUDIANTILES
+	$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
+	WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
+	$numD = mysqli_num_rows($consultaNumD);
+	$datosEstudiante =Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
+}
 
 
 //Para guardar ASPECTOS ESTUDIANTILES

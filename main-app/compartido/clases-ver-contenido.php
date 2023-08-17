@@ -41,7 +41,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
 														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 														
-														if($ingresoClase[0]==""){continue;}
+														if(empty($ingresoClase[0])){continue;}
 													?>
 													<li class="list-group-item">
 														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 

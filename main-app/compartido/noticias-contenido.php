@@ -309,7 +309,7 @@
                                     <?php
 								  $i=1;
 								 while($i<=4){
-									if($i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
+									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
                                     <li class="mdl-menu__item"><a
                                             href="../compartido/guardar.php?get=8&r=<?=$i;?>&idR=<?=$resultado['not_id'];?>&postname=<?=$resultado['not_titulo'];?>&usrname=<?=$datosUsuarioActual['uss_nombre'];?>&postowner=<?=$resultado['not_usuario'];?>"><i

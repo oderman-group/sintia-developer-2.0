@@ -386,7 +386,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
-															 if($notas[3]<$config[5] and $notas[3]!="") $colorNota = $config[6]; elseif($notas[3]>=$config[5]) $colorNota = $config[7];
+															 if(!empty($notas[3]) && $notas[3]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[3]) && $notas[3]>=$config[5]) $colorNota = $config[7];
 
 														 }
 
@@ -428,9 +428,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['cal_nota'];?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
 
-															<?php if($notas['cal_nota']!=""){?>
+															<?php if(!empty($notas['cal_nota'])){?>
 
 															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="guardar.php?get=21&id=<?=$notas['cal_id'];?>" onClick="deseaEliminar(this)">X</a>
 
@@ -440,7 +440,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 														<td>
 
-															<?php if($notas['cal_nota']!=""){?>
+															<?php if(!empty($notas['cal_nota'])){?>
 
 															<input type="text" style="text-align: center;" size="5" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="4" onChange="notas(this)">
 
@@ -448,7 +448,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 														</td>
 
-														<td><input type="text" value="<?=$notas['cal_observaciones'];?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="2" onChange="notas(this)" tabindex="10<?=$contReg;?>"></td>
+														<td><input type="text" value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="2" onChange="notas(this)" tabindex="10<?=$contReg;?>"></td>
 
                                                     </tr>
 
