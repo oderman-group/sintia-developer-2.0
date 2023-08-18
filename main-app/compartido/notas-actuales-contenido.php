@@ -71,10 +71,6 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																"), MYSQLI_BOTH);
-													
 													$contReg = 1; 
 													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);

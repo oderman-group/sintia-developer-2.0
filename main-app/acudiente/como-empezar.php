@@ -20,7 +20,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$paginaActualUsuario['pagp_pagina'];?></div>
+                                <div class="page-title">Como Empezar</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
