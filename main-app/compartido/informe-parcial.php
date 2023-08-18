@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/UsuariosPadre.php");

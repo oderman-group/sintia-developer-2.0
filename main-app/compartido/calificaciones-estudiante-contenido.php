@@ -319,13 +319,20 @@
 
 														$acumulaValor = ($acumulaValor + $porNuevo);
 
-														$notaMultiplicada = ($nota[3] * $porNuevo);
+														$notaMultiplicada=0;
+														$nota3="";
+														$nota4="";
+														if(!empty($nota[3])){
+															$nota3=$nota[3];
+															$nota4=$nota[4];
+															$notaMultiplicada = ($nota[3] * $porNuevo);
+														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
 
 														//COLOR DE CADA NOTA
 
-														if($nota[3]<$config[5]) $colorNota = $config[6];
+														if(!empty($nota[3]) && $nota[3]<$config[5]) $colorNota = $config[6];
 
 														else $colorNota = $config[7];
 
@@ -353,9 +360,9 @@
 
 														<td><?=$resultado[3];?>%</td>
 
-														<td style="color:<?=$colorNota;?>"><?=$nota[3];?></td>
+														<td style="color:<?=$colorNota;?>"><?=$nota3;?></td>
 
-														<td><?=$nota[4];?></td>
+														<td><?=$nota4;?></td>
 
                                                     </tr>
 
