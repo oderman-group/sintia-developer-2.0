@@ -109,7 +109,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 								
 								<div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$evaluacion['eva_nombre'];?></header>
+                                            <header><?=$datosConsulta['tar_titulo'];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -136,7 +136,9 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM academico_actividad_tareas_entregas 
 														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$_GET["idR"]."'");
-														 $datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
+														$numEntregas=mysqli_num_rows($consultaDatos1);
+														if ($numEntregas>0){
+															$datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
@@ -144,15 +146,15 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 														<td><?=$datos1['ent_fecha'];?></td>
 														<td><?php if($datos1[1]>0){echo $datos1[1]." Min. y ";} if($datos1[2]>0){echo $datos1[2]." Seg.";}?></td>
 														<td>
-														<?php if($datos1['ent_archivo']!="" and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo'])){?>
+														<?php if(!empty($datos1['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo'])){?>
 															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo'];?>" target="_blank">Archivo 1</a><br>
 														<?php }?>
 															
-														<?php if($datos1['ent_archivo2']!="" and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo2'])){?>
+														<?php if(!empty($datos1['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo2'])){?>
 															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo2'];?>" target="_blank">Archivo 2</a><br>
 														<?php }?>
 															
-														<?php if($datos1['ent_archivo3']!="" and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo3'])){?>
+														<?php if(!empty($datos1['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo3'])){?>
 															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo3'];?>" target="_blank">Archivo 3</a><br>
 														<?php }?>	
 														
@@ -161,7 +163,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                     </tr>
 													<?php 
 														 $contReg++;
-													  }
+													  }}
 													  ?>
                                                 </tbody>
                                             </table>

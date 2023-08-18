@@ -39,13 +39,16 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
 														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlRecurso."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
-														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+														$numIngreso=mysqli_num_rows($consultaIngresoClase);
+														if($numIngreso>0){
+															$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+
 													?>
 													<li class="list-group-item">
 														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
-													<?php }?>
+													<?php }}?>
 												</ul>
 												
 												<p align="center"><a href="foros-detalles.php?idR=<?=$_GET["idR"];?>">VER TODOS</a></p>
@@ -96,8 +99,8 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 
 											<?php 
 											$filtro = '';
-											if($_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
+											if(!empty($_GET["busqueda"])){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
+											if(!empty($_GET["usuario"]) && is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
@@ -139,7 +142,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																		<img src="../files/fotos/<?=$resultado['uss_foto'];?>" class="img-circle user-img-circle" alt="User Image" height="50" width="50" />
 																	</div>
 																	<div class="pull-left info">
-																		<p><a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>"><?=$resultado['uss_nombre'];?></a><br><span style="font-size: 11px;"><?=$resultado['not_fecha'];?></span></p>
+																		<p><a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>"><?=$resultado['uss_nombre'];?></a><br><span style="font-size: 11px;"><?=$resultado['com_fecha'];?></span></p>
 																	</div>
 															</div>
 

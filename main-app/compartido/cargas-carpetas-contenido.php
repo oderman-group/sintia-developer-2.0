@@ -8,7 +8,7 @@
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 
 								<?php
-								if(is_numeric($_GET["carpeta"])){	
+								if(!empty($_GET["carpeta"]) && is_numeric($_GET["carpeta"])){	
 									$idFolderActual = $_GET["carpeta"];
 									$var = 1;
 									$i=0;
@@ -57,14 +57,14 @@
 	
 											<div class="form-group row">
 												<div class="col-sm-8">
-													<input type="text" name="busqueda" class="form-control" value="<?=$_GET["busqueda"];?>" placeholder="Búsqueda...">
+													<input type="text" name="busqueda" class="form-control" value="<?php if(!empty($_GET["busqueda"])){ echo $_GET["busqueda"];}?>" placeholder="Búsqueda...">
 												</div>
 												<div class="col-sm-4">
 													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual[8]];?>">
 												</div>
 											</div>
 											</form>
-											<?php if(isset($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
+											<?php if(!empty($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
 										</div>
 									</div>
 							
@@ -79,12 +79,11 @@
 						
                         <div class="col-sm-9">
 							
-							
-							<?php if(is_numeric($_GET["carpeta"])){?>
+							<?php $carpeta=""; if(!empty($_GET["carpeta"]) && is_numeric($_GET["carpeta"])){ $carpeta=$_GET["carpeta"]; ?>
 								<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 							<?php }?>
 							
-							<a href="cargas-carpetas-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&carpeta=<?=$_GET['carpeta'];?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual[8]];?></a>
+							<a href="cargas-carpetas-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&carpeta=<?=$carpeta;?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual[8]];?></a>
 							<p>&nbsp;</p>
                        	 	<!-- start widget -->
 							<div class="state-overview">
@@ -93,8 +92,8 @@
 									<div class="row">
 										<?php
 										$filtro = '';
-										if(is_numeric($_GET["carpeta"])){$filtro .= " AND fold_padre='".$_GET["carpeta"]."'";}
-										if($_GET["busqueda"]!=""){$filtro .= " AND (fold_nombre LIKE '%".$_GET["busqueda"]."%' OR fold_keywords LIKE '%".$_GET["busqueda"]."%')";}
+										if(!empty($_GET["carpeta"]) && is_numeric($_GET["carpeta"])){$filtro .= " AND fold_padre='".$_GET["carpeta"]."'";}
+										if(!empty($_GET["busqueda"])){$filtro .= " AND (fold_nombre LIKE '%".$_GET["busqueda"]."%' OR fold_keywords LIKE '%".$_GET["busqueda"]."%')";}
 										$carpetas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders 
 										WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_year='" . $_SESSION["bd"] . "' AND fold_categoria=2 AND fold_estado=1 $filtro
 										ORDER BY fold_tipo, fold_nombre
@@ -103,7 +102,7 @@
 											$compartidoNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'"));
 											
 											$numRecursos = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_padre='".$carpeta['fold_id']."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'"));
-											if(!is_numeric($_GET["carpeta"]) and $carpeta['fold_padre']!="" and $carpeta['fold_padre']!="0" and $_GET["busqueda"]=="") continue;
+											if(!empty($_GET["carpeta"]) && !is_numeric($_GET["carpeta"]) and !empty($carpeta['fold_padre']) and $carpeta['fold_padre']!="0" and empty($_GET["busqueda"])) continue;
 										?>
 										
 										<?php if($carpeta['fold_tipo']==1){?>
