@@ -90,6 +90,7 @@
 													<?php
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
 													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1");
+                                                    $contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr>
