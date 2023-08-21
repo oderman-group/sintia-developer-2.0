@@ -7,7 +7,17 @@ class UsuariosPadre {
         if (!is_array($usuario)) {
             return '--';
         }
-        return strtoupper($usuario['uss_nombre']." ".$usuario['uss_nombre2']." ".$usuario['uss_apellido1']." ".$usuario['uss_apellido2']);
+        $nombre=$usuario['uss_nombre'];
+        if(!empty($usuario['uss_nombre2'])){
+            $nombre.=" ".$usuario['uss_nombre2'];
+        }
+        if(!empty($usuario['uss_apellido1'])){
+            $nombre.=" ".$usuario['uss_apellido1'];
+        }
+        if(!empty($usuario['uss_apellido2'])){
+            $nombre.=" ".$usuario['uss_apellido2'];
+        }
+        return strtoupper($nombre);
     }
 
     public static function listarUsuariosAnio($usuario)
