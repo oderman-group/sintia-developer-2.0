@@ -36,7 +36,7 @@ require_once("../class/Estudiantes.php");
 									
 								<div class="col-md-12">
 									
-									<?php if($_GET["req"]==1){?>
+									<?php if(!empty($_GET["req"]) && $_GET["req"]==1){?>
 										<div class="card card-topline-red">
 											<div class="card-head">
 												<header><?=$frases[269][$datosUsuarioActual[8]];?></header>
@@ -63,7 +63,7 @@ require_once("../class/Estudiantes.php");
 										</div>
 									<?php }?>
 									
-									<?php if($_GET["req"]==2){?>
+									<?php if(!empty($_GET["req"]) && $_GET["req"]==2){?>
 										<div class="card card-topline-green">
 											<div class="card-head">
 												<header><?=$frases[277][$datosUsuarioActual[8]];?></header>
