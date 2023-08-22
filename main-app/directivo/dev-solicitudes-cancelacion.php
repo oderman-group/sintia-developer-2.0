@@ -4,7 +4,7 @@ include("session.php");
 $idPaginaInterna = 'DV0038';
 require_once("../class/Solicitudes.php");
 include("../compartido/historial-acciones-guardar.php");
-
+Modulos::verificarPermisoDev();
 $listaSolicitudes=Solicitudes::listar();
 include("../compartido/head.php");
 
