@@ -11,7 +11,7 @@ $parametros = array(
 );
 
 $parametrosBuscar = array(
-    "tipo" =>JOBS_TIPOO_GENERAR_INFORMES,
+    "tipo" =>JOBS_TIPO_GENERAR_INFORMES,
     "responsable" => $_SESSION['id'],
     "parametros" => json_encode($parametros),
 	"agno"=>$config['conf_agno']
@@ -38,7 +38,7 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
 			job_prioridad)
 		VALUES(
 			'".JOBS_ESTADO_PENDIENTE."',
-			'".JOBS_TIPOO_GENERAR_INFORMES."',
+			'".JOBS_TIPO_GENERAR_INFORMES."',
 			NOW(), 
 			'".$_SESSION['id']."', 
 			'".$config['conf_id_institucion']."', 
@@ -49,7 +49,7 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
 			'".JOBS_PRIORIDAD_MEDIA."'
 		)");
 		$idRegistro = mysqli_insert_id($conexion);
-		$mensaje="Sé realizó exitosamente el proceso de genracion de informe con el codigo ".$idRegistro;
+		$mensaje="Se realizó exitosamente el proceso de generación de informe con el código ".$idRegistro;
 	}else{
 		$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 		$intentos = intval($jobsEncontrado["job_intentos"])+1;
@@ -60,7 +60,7 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
 		
 		SysJobs::actualizar($datos);
 		$idRegistro = $jobsEncontrado["job_id"];
-			$mensaje="Sé Actualizo exitosamente el proceso de genracion de informe con el codigo ".$idRegistro." intentos(".$intentos.")";
+			$mensaje="Se actualizó exitosamente el proceso de generación de informe con el código ".$idRegistro." intentos(".$intentos.")";
 	}
 	
 	include("../compartido/guardar-historial-acciones.php");	

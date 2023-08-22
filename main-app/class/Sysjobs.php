@@ -38,7 +38,7 @@ class SysJobs {
         $resultado = [];
 
         try {
-            if(!empty($parametrosBusqueda["tipo"]) && $parametrosBusqueda["tipo"]===JOBS_TIPOO_GENERAR_INFORMES){
+            if(!empty($parametrosBusqueda["tipo"]) && $parametrosBusqueda["tipo"]===JOBS_TIPO_GENERAR_INFORMES){
                 $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sys_jobs
                 LEFT JOIN usuarios  ON uss_id = job_responsable
                 LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
