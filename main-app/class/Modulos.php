@@ -22,7 +22,17 @@ class Modulos {
 
         global $datosUsuarioActual;
 
-        if($datosUsuarioActual['uss_permiso1'] != CODE_DEV_MODULE_PERMISSION){
+        if($datosUsuarioActual['uss_tipo']== 1 && $datosUsuarioActual['uss_permiso1'] != CODE_DEV_MODULE_PERMISSION){
+            echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+            exit();	
+        }
+    }
+    /* Esta función Válida los permisos del un directivo especial */
+    public static function verificarPermisoDirectivoEspecial(){
+
+        global $datosUsuarioActual;
+
+        if($datosUsuarioActual['uss_tipo']== 5 && $datosUsuarioActual['uss_permiso1'] != CODE_PRIMARY_MANAGER){
             echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
             exit();	
         }
