@@ -94,7 +94,7 @@ require_once("../class/Sysjobs.php");
 												);
 												
 												$parametrosBuscar = array(
-													"tipo" =>JOBS_TIPOO_GENERAR_INFORMES,
+													"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
 													"responsable" => $_SESSION['id'],
 													"parametros" => json_encode($parametros),
 													"agno"=>$config['conf_agno']
