@@ -31,21 +31,23 @@ class SysJobs {
         return $resultado;
     }
 
-    public static function consultar(array $parametrosBusqeda = []
+    public static function consultar(array $parametrosBusqueda = []
     )
     {
         global $conexion, $baseDatosServicios;
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sys_jobs
-            LEFT JOIN usuarios  ON uss_id = job_responsable
-            LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
-            WHERE job_tipo = '".$parametrosBusqeda["tipo"]."'
-            AND job_responsable ='".$parametrosBusqeda["responsable"]."'
-            AND job_year='".$parametrosBusqeda["agno"]."'
-            AND job_parametros='".$parametrosBusqeda["parametros"]."'           
-            ORDER BY job_fecha_creacion");
+            if(!empty($parametrosBusqueda["tipo"]) && $parametrosBusqueda["tipo"]===JOBS_TIPO_GENERAR_INFORMES){
+                $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sys_jobs
+                LEFT JOIN usuarios  ON uss_id = job_responsable
+                LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
+                WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
+                AND job_responsable ='".$parametrosBusqueda["responsable"]."'
+                AND job_year='".$parametrosBusqueda["agno"]."'
+                AND job_parametros='".$parametrosBusqueda["parametros"]."'           
+                ORDER BY job_fecha_creacion");
+            }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
