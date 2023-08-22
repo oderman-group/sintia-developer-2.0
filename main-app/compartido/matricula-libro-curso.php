@@ -219,35 +219,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
  <tr style="font-size:10px;">
             <td style="font-size:10px;"><?php echo $fila2["mat_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:10px;"><?php echo $fila2["car_ih"];?></td>
-<?php for($l=1;$l<=$numeroPeriodos;$l++){ 
-	$consultaNotaEstudiante=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$l."'");
-	$notaDelEstudiante = mysqli_fetch_array($consultaNotaEstudiante, MYSQLI_BOTH);
-?>
-
-			<?php 
-			if(!empty($notaDelEstudiante['bol_nota'])){
-				$consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta");
-				$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
-				if($datosUsr["mat_grado"]>11){
-					$notaF = ceil($notaDelEstudiante['bol_nota']);
-					switch($notaF){
-						case 1: echo "D"; break;
-						case 2: echo "I"; break;
-						case 3: echo "A"; break;
-						case 4: echo "S"; break;
-						case 5: echo "E"; break;
-					}
-				}else{
-					 $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP[1];
-					//echo $notas[$l]."<br>".$desempenoNotaP[1];
-				}
-				$promedios[$l]=$promedios[$l]+$notaDelEstudiante['bol_nota'];
-				$contpromedios[$l]=$contpromedios[$l]+1;
-			}else{}
-			?>
-
-        <?php }?>
-      <?php 
+<?php
 	  $totalPromedio2=round( $fila2["suma"],1);
 	   
 	   if($totalPromedio2==1)	$totalPromedio2="1.0";	if($totalPromedio2==2)	$totalPromedio2="2.0";		if($totalPromedio2==3)	$totalPromedio2="3.0";	if($totalPromedio2==4)	$totalPromedio2="4.0";	if($totalPromedio2==5)	$totalPromedio2="5.0";
@@ -412,34 +384,6 @@ if($fila2["mat_id"]==$fila3["mat_id"]){
 <tr style="font-size:10px;">
 	<td style="font-size:10px;"><?php echo $fila2["mat_nombre"];?></td> 
 	<td align="center" style="font-weight:bold; font-size:10px;"><?php echo $fila2["car_ih"];?></td>
-<?php for($l=1;$l<=$numeroPeriodos;$l++){ 
-$consultaNotaEstudiante=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$l."'");
-$notaDelEstudiante = mysqli_fetch_array($consultaNotaEstudiante, MYSQLI_BOTH);
-?>
-
-	<?php 
-	if(!empty($notaDelEstudiante['bol_nota'])){
-		$consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta");
-		$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
-		if($datosUsr["mat_grado"]>11){
-			$notaF = ceil($notaDelEstudiante['bol_nota']);
-			switch($notaF){
-				case 1: echo "D"; break;
-				case 2: echo "I"; break;
-				case 3: echo "A"; break;
-				case 4: echo "S"; break;
-				case 5: echo "E"; break;
-			}
-		}else{
-			 $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP[1];
-			//echo $notas[$l]."<br>".$desempenoNotaP[1];
-		}
-		$promedios[$l]=$promedios[$l]+$notaDelEstudiante['bol_nota'];
-		$contpromedios[$l]=$contpromedios[$l]+1;
-	}else{}
-	?>
-
-<?php }?>
 <?php 
 $totalPromedio2=round( $fila2["suma"],1);
 
