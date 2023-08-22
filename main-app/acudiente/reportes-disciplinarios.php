@@ -32,7 +32,7 @@
 									
 								<div class="col-md-12">
 									
-									<?php if($_GET["req"]==1){?>
+									<?php if(!empty($_GET["req"]) && $_GET["req"]==1){?>
 										<div class="card card-topline-red">
 											<div class="card-head">
 												<header><?=$frases[287][$datosUsuarioActual[8]];?></header>
@@ -87,7 +87,7 @@
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if($_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
+													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
 													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
 													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta

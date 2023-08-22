@@ -53,29 +53,29 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 	@$progreso = ($definitiva * 100);
 
-	@$progreso = ($progreso / $config[4]);
+	@$progreso = ($progreso / $config['conf_nota_hasta']);
 
 	//COLOR DE LA BARRA Y DE LAS DEFINITIVAS
 
-	if($definitiva<$config[5]){
+	if($definitiva< $config['conf_nota_minima_aprobar']){
 
-		$colorDefinitiva = $config[6];
+		$colorDefinitiva =  $config['conf_color_perdida'];
 
 		$colorProgreso = "danger";
 
 	}	
 
-	if($definitiva==$config[5]){	
+	if($definitiva== $config['conf_nota_minima_aprobar']){	
 
-		$colorDefinitiva = $config[7];
+		$colorDefinitiva =  $config['conf_color_ganada'];
 
 		$colorProgreso = "warning";
 
 	}	
 
-	if($definitiva>$config[5]){	
+	if($definitiva> $config['conf_nota_minima_aprobar']){	
 
-		$colorDefinitiva = $config[7];
+		$colorDefinitiva =  $config['conf_color_ganada'];
 
 		$colorProgreso = "striped";
 
@@ -83,7 +83,7 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 	//NUMEROS ENTEROS DE DEFINITIVAS AGREGARLES EL .0 AL FINAL 4 = 4.0
 
-	for($i=$config[3]; $i<=$config[4]; $i++){
+	for($i= $config['conf_nota_desde']; $i<= $config['conf_nota_hasta']; $i++){
 
 		if($definitiva==$i)
 

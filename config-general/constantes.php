@@ -9,12 +9,26 @@ define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 define('GRADO_INDIVIDUAL', 'individual');
 define('GRADO_GRUPAL', 'grupal');
 
+define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
+define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
+
+define('JOBS_TIPOO_GENERAR_INFORMES', 'Generar Informes');
+
+define('JOBS_PRIORIDAD_ALTA', 'Alta');
+define('JOBS_PRIORIDAD_MEDIA', 'Media');
+define('JOBS_PRIORIDAD_BAJA', 'Baja');
+
 define('MENU', 'menu');
 define('MENU_PADRE', 'menu-padre');
 define('SUB_MENU', 'sub-menu');
 
 define('ESTADO_EMAIL_ENVIADO', 'enviado');
 define('ESTADO_EMAIL_ERROR', 'error');
+
+
+define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');
+define('SOLICITUD_CANCELACION_APROBADO', 'Aprobado');
+define('SOLICITUD_CANCELACION_CANCELADO', 'Cancelado');
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
@@ -40,7 +54,7 @@ switch (ENVIROMENT) {
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-        // error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        //error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
 	case 'developer.plataformasintia.com':

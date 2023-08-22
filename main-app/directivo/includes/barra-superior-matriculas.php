@@ -99,6 +99,7 @@
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Asistentes</a>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Cancelados</a>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=5&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>En Inscripción</a>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>

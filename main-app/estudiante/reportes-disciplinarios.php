@@ -60,7 +60,7 @@
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if($_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
+													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
 													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
 													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta

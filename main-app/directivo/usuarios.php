@@ -4,6 +4,11 @@
 <?php include("../compartido/head.php");?>
 <?php
 $Plataforma = new Plataforma;
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
@@ -207,7 +212,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 
 																		<?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
-																			<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['not_id'];?>">Eliminar</a></li>
+																			<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
 																		<?php }?>
 																	<?php }?>
 																	  

@@ -88,22 +88,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
     <!doctype html>
 
-    <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-
-    <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-
-    <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-
-    <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-
-    <!--[if gt IE 8]><!-->
-
     <html class="no-js" lang="en">
-
-    <!--<![endif]-->
-
-
-
     <head>
 
         <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
@@ -135,8 +120,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 		INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 
 		WHERE  car_curso=" . $datosUsr["mat_grado"] . " AND car_grupo=" . $datosUsr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
-
-        //$numero_periodos=$config["conf_periodos_maximos"];
 
         $numero_periodos = $config["conf_periodo"];
 
@@ -561,7 +544,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                         $contadorIndicadores++;
                                         $leyendaRI = '';
-                                        if($recuperacionIndicador['rind_nota']>$fila4["nota"]){
+                                        if(!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota']>$fila4["nota"]){
                                             $notaIndicador = round($recuperacionIndicador['rind_nota'], 1);
                                             $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                         }else{
@@ -590,7 +573,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 $consultaObsevacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
                                 WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos['mat_id'] . "'");
                                 $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
-                                if ($observacion['bol_observaciones_boletin'] != "") {
+                                if (!empty($observacion['bol_observaciones_boletin'])) {
                             ?>
                                 <tr>
                                     <td colspan="4">
@@ -634,8 +617,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                     <td width="8%">Periodo</td>
 
-                    <!--<td width="8%">Nota</td>-->
-
                     <td>Observaciones</td>
 
                 </tr>
@@ -644,16 +625,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
 
-                    // $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $rndisiplina["dn_nota"] . ">=notip_desde AND " . $rndisiplina["dn_nota"] . "<=notip_hasta");
-                    // $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
-
                 ?>
 
                     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
 
                         <td><?= $rndisiplina["dn_periodo"] ?></td>
-
-                        <!--<td><?= $desempenoND[1] ?></td>-->
 
                         <td align="left"><?= $rndisiplina["dn_observacion"] ?></td>
 
@@ -664,8 +640,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             </table>
 
         <?php } ?>
-
-        <!--<hr align="center" width="100%">-->
 
         <div align="center">
 
@@ -693,41 +667,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             </table>
 
-            <?php
-
-            //print_r($vectorT);
-
-            ?>
-
         </div>
-
-        <!--
-
-<div>
-
-<table width="100%" cellspacing="0" cellpadding="0"  border="0" style="text-align:center; font-size:12px;">
-
-  <tr>
-
-    <td style="font-weight:bold;" align="left">
-
-    OBSERVACIONES:_____________________________________________________________________________________________________________<br><br>
-
-    ____________________________________________________________________________________________________________________________<br><br>
-
-    ____________________________________________________________________________________________________________________________<br>
-
-    </td>
-
-  </tr>
-
-</table>
-
-
-
-</div>
-
--->
 
 
 
@@ -735,86 +675,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <div align="center"><img src="../files/firmas/firmalucy.jpeg" height="120"></div>
 
-        
-<!--
-<table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
-
-	<tr>
-
-		<td align="center"><br>_________________________________<br><?= strtoupper(""); ?><br>Rector(a)</td>
-
-		<td align="center"><p style="height:0px;"></p>_________________________________<br><?= strtoupper(""); ?><br>Director(a) de grupo</td>
-
-    </tr>
-
-</table> -->
-
-
-
-
-
-        <!--
-
-<br>
-
-<div align="center">
-
-<table width="100%" cellspacing="0" cellpadding="0"  border="1" style="text-align:center; font-size:8px; background:#FFFFCC;">
-
-  <tr style="text-transform:uppercase;">
-
-    <td style="font-weight:bold;" align="right">ESCALA NACIONAL</td><td>Desempe&ntilde;o Superior</td><td>Desempe&ntilde;o Alto</td><td>Desempe&ntilde;o B&aacute;sico</td><td>Desempe&ntilde;o Bajo</td>
-
-  </tr>
-
-  
-
-  <tr>
-
-  	<td style="font-weight:bold;" align="right">RANGO INSTITUCIONAL</td>
-
-  	<td>NO HAY</td><td>NO HAY</td><td>NO HAY</td><td>NO HAY</td>  
-
-  </tr>
-
-
-
-</table>
-
--->
-
 
 
         </div>
-
-        <?php
-
-        /*if ($periodoActual == 4) {
-
-            if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
-
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-
-            elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
-
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
-
-            else
-
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datosUsr[3] . " " . $datosUsr[4] . " " . $datosUsr["mat_nombres"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-        }*/
-
-        ?>
-
-        <p align="center">
-
-            <div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center">
-
-                <?= $msj; ?>
-
-            </div>
-
-        </p>
 
 
 

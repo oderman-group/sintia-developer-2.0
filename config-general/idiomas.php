@@ -728,6 +728,11 @@ $frases[361][$l] = 'Video de Guia';
 
 $frases[362][$l] = 'Todas las opciones más importantes están en la opción acudidos del menú. Te recomendamos ver el video de esta pagina para que tengas claridad sobre el manejo de la plataforma.';
 
+$frases[367][$l] = 'Cancelar servicio';
+
+$frases[368][$l] = 'Motivo de Cancelacion';
+
+
 
 
 //ENGLISH
@@ -1458,4 +1463,7 @@ $frases[361][$l] = 'Video Guide';
 
 $frases[362][$l] = 'All the most important options are in the menu option attended. We recommend you to watch the video on this page so that you have clarity on how to use the platform.';
 
+$frases[367][$l] = 'Cancel service';
+
+$frases[368][$l] = 'Reason for cancellation';
 ?>

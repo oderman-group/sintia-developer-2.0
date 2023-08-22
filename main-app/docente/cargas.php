@@ -4,6 +4,7 @@
 <?php 
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/Sysjobs.php");
 ?>
 </head>
  <!-- END HEAD -->
@@ -28,6 +29,7 @@ require_once("../class/UsuariosPadre.php");
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?> (<a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>)</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
+								<?php include("../../config-general/mensajes-informativos.php"); ?>
                             </div>
                         </div>
                     </div>
@@ -84,7 +86,29 @@ require_once("../class/UsuariosPadre.php");
 											  }elseif($rCargas["car_permiso1"]==0){
 												$mensajeI = 'Sin permiso para generar';
 											  }else{
-												  $mensajeI = '<a href="../compartido/generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="btn red">Generar Informe</a>';
+												$parametros = array(
+													"carga" =>$rCargas["car_id"],
+													"periodo" =>$rCargas["car_periodo"],
+													"grado" => $rCargas["car_curso"],
+													"grupo"=>$rCargas["car_grupo"]
+												);
+												
+												$parametrosBuscar = array(
+													"tipo" =>JOBS_TIPOO_GENERAR_INFORMES,
+													"responsable" => $_SESSION['id'],
+													"parametros" => json_encode($parametros),
+													"agno"=>$config['conf_agno']
+												);
+												$buscarJobs=SysJobs::consultar($parametrosBuscar);
+												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+												if(Empty($jobsEncontrado["job_estado"])){
+													$estadoCrobJob ="";
+													$estadoColor ="btn red";
+												}else{
+													$estadoCrobJob ="(".$jobsEncontrado["job_estado"].")";
+													$estadoColor ="btn btn-success";
+												}
+												$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
 											  }	
 										}
 										

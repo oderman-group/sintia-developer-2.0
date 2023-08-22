@@ -100,9 +100,12 @@
 												"), MYSQLI_BOTH);
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
-											$porcentaje = ($notapp[0] / $config['conf_nota_hasta']) * 100;
-											if ($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger';
+												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
+                                            $porcentaje=0;
+                                            if(!empty($notapp[0])){
+                                                $porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
+                                            }
+											if (!empty($notapp[0]) && $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger';
 											else $colorGrafico = 'info';
 											if ($i == $_GET['periodo']) $estiloResaltadoP = 'style="color: orange;"';
 											else $estiloResaltadoP = '';
@@ -110,7 +113,7 @@
 											<p>
 												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= $_GET['usrEstud']; ?>&periodo=<?= $i; ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
 
-												<?php if ($notapp[0] != "" and $config['conf_sin_nota_numerica'] != 1) { ?>
+												<?php if (!empty($notapp[0]) && $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">
 														<div class="states">
 															<div class="info">
