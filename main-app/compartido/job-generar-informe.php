@@ -60,7 +60,7 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
 		
 		SysJobs::actualizar($datos);
 		$idRegistro = $jobsEncontrado["job_id"];
-			$mensaje="Sé Actualizo exitosamente el proceso de genracion de informe con el codigo ".$idRegistro." intenttos(".$intentos.")";
+			$mensaje="Sé Actualizo exitosamente el proceso de genracion de informe con el codigo ".$idRegistro." intentos(".$intentos.")";
 	}
 	
 	include("../compartido/guardar-historial-acciones.php");	

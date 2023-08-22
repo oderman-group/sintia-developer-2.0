@@ -4,8 +4,6 @@ require_once("../class/Sysjobs.php");
 require_once("../class/Estudiantes.php");
 $listadoCrobjobs=SysJobs::listar();
 
-
-
 while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 // fecha1 es la primera fecha
 $fechaInicio = new DateTime();
@@ -20,7 +18,6 @@ $intentos = intval($resultadoJobs["job_intentos"])+1;
 $grado =$parametros["grado"];
 $grupo =$parametros["grupo"];
 $carga = $parametros["carga"];
-$periodo = $parametros["periodo"];
 $periodo = $parametros["periodo"];
 
 mysqli_select_db($conexion,$institucionBdAnio);
@@ -121,7 +118,7 @@ include("../compartido/reporte-errores.php");
 			mysqli_query($conexion, "DELETE FROM academico_boletin 
 			WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");			
 			//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-			mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores)VALUES('".$carga."', '".$resultado[0]."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."')");	
+			mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores)VALUES('".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."')");	
 				
 		}		
 
