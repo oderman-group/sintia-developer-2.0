@@ -1,5 +1,7 @@
 <?php
-require_once("../../conexion.php");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
+
 require_once("../class/Sysjobs.php");
 require_once("../class/Estudiantes.php");
 $listadoCrobjobs=SysJobs::listar();
@@ -57,7 +59,7 @@ include("../compartido/reporte-errores.php");
 		}
 		$caso = 1; //Inserta la definitiva que viene normal 
 		//Si ya existe un registro previo de definitiva TIPO 1
-		if($boletinDatos['bol_id']!="" and $boletinDatos['bol_tipo']==1){
+		if(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==1){
 			
 			if($boletinDatos['bol_nota']!=$definitiva){
 				$caso = 2;//Se cambia la definitiva que tenía por la que viene. Sea menor o mayor.
@@ -68,7 +70,7 @@ include("../compartido/reporte-errores.php");
 			
 		}
 		//Si ya existe un registro previo de recuperación de periodo TIPO 2
-		elseif($boletinDatos['bol_id']!="" and $boletinDatos['bol_tipo']==2){
+		elseif(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==2){
 			
 			//Si la definitiva que viene está perdida 
 			if($definitiva<$config[5]){
@@ -80,10 +82,10 @@ include("../compartido/reporte-errores.php");
 			
 		}
 		//Si ya existe un registro previo de recuperación por Indicadores TIPO 3
-		elseif($boletinDatos['bol_id']!="" and ($boletinDatos['bol_tipo']==3 or $boletinDatos['bol_tipo']==4)){
+		elseif(!empty($boletinDatos['bol_id']) and ($boletinDatos['bol_tipo']==3 or $boletinDatos['bol_tipo']==4)){
 			$caso = 5;//Se actualiza la definitiva que viene y se cambia la recuperación del Indicador a nota anterior. 
-	}
-	//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
+		}
+		//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
 		$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM academico_calificaciones
 		INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_registrada=1 AND act_periodo='".$periodo."' AND act_id_carga='".$carga."'
 		INNER JOIN academico_indicadores_carga ON ipc_indicador=act_id_tipo AND ipc_carga='".$carga."' AND ipc_periodo='".$periodo."'
