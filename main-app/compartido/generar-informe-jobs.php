@@ -1,9 +1,11 @@
 <?php
+// exit;
+$_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
-require_once("../class/Sysjobs.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
 	"estado" =>JOBS_ESTADO_PENDIENTE
@@ -40,7 +42,7 @@ $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 
 		$estudiante = $estudianteResultado["mat_id"];
-		include("../definitivas.php");
+		include(ROOT_PATH."/main-app/definitivas.php");
 
 		//Consultamos si tiene registros en el boletín
 		$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM academico_boletin 
