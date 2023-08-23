@@ -1,7 +1,10 @@
 <?php
-require_once("../../conexion.php");
-require_once("../class/Sysjobs.php");
-require_once("../class/Estudiantes.php");
+$_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
+
+require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 use PhpOffice\PhpSpreadsheet\IOFactory;
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
