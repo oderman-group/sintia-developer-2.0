@@ -10,8 +10,8 @@ define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
 
-define('JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL', 'Importar Estudiantes Excel');
-define('JOBS_TIPO_GENERAR_INFORMES', 'Generar Informes');
+define('JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL', 'importar_estudiantes');
+define('JOBS_TIPO_GENERAR_INFORMES', 'generar_informes');
 
 define('JOBS_PRIORIDAD_ALTA', 'Alta');
 define('JOBS_PRIORIDAD_MEDIA', 'Media');
