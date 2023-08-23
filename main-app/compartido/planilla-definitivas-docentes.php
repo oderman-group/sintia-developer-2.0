@@ -93,7 +93,7 @@ $num_asg=mysqli_num_rows($asig);
   ?>
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
-      <td align="center"> <?php echo $fila[1];?></td>
+      <td align="center"> <?php echo $fila[0];?></td>
       <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
@@ -104,13 +104,13 @@ $num_asg=mysqli_num_rows($asig);
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
 			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$_GET["per"]);
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
-			$defini = $nota[4];
+      $defini = 0;
+      if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
-			$suma=($suma+$defini);
 		?>
         	<td align="center" style="color:<?=$color;?>;">
            
-           <input style="text-align:center; width:40px; color:<?=$color;?>" value="<?=$nota[4];?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$_GET["per"];?>">
+           <input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$_GET["per"];?>">
 
           </td>      
   		<?php
@@ -119,7 +119,7 @@ $num_asg=mysqli_num_rows($asig);
 			$def=round(($suma/$numero),2);
 		}
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
-		if($def<$cde[5]) $color='red'; else $color='blue'; 
+		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
 		?>
