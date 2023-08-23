@@ -22,7 +22,6 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
     //HISTORIAL DE ACCIONES
 	$cantidad = mysqli_num_rows($buscarJobs);	
 	$direccionOrigen = explode("?", $_SERVER["HTTP_REFERER"]);
-	echo '<script type="text/javascript">window.location.href=;.$direccionOrigen[0]."?success=SC_DT_1&id=' . $idRegistro . '";</script>';
 
 	if($cantidad<1){
 		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".sys_jobs(
@@ -60,11 +59,10 @@ $buscarJobs=SysJobs::consultar($parametrosBuscar);
 		
 		SysJobs::actualizar($datos);
 		$idRegistro = $jobsEncontrado["job_id"];
-			$mensaje="Se actualizó exitosamente el proceso de generación de informe con el código ".$idRegistro." intentos(".$intentos.")";
+		$mensaje="Se actualizó exitosamente el proceso de generación de informe con el código ".$idRegistro." intentos(".$intentos.")";
 	}
 	
-	include("../compartido/guardar-historial-acciones.php");	
-	$url=$direccionOrigen[0].'?success=SC_DT_4&summary=' . $mensaje;
+	include("../compartido/guardar-historial-acciones.php");
     echo '<script type="text/javascript">window.location.href="../docente/cargas.php?success=SC_DT_4&summary=' . $mensaje.'";</script>';
 	exit();
 
