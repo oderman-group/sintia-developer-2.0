@@ -2,7 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 require_once("../class/Sysjobs.php");
-
+Modulos::validarAccesoDirectoPaginas();
 $parametros = array(
     "carga" =>$_GET['carga'],
     "periodo" => $_GET['periodo'],

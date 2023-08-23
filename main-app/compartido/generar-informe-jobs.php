@@ -36,8 +36,7 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-$lineaError = __LINE__;
-include("../compartido/reporte-errores.php");
+
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 
 		$estudiante = $estudianteResultado["mat_id"];
