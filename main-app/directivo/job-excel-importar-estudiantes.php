@@ -20,23 +20,45 @@ if($extension == 'xlsx'){
 		
 		if ($_FILES['planilla']['error'] === UPLOAD_ERR_OK){
 				$parametros = array(
-					"temName" =>$temName,
-					"archivo" => $archivo,
-					"explode" => $explode,
-					"extension"=>$extension,
-					"fullArchivo"=>$fullArchivo,
 					"nombreArchivo"=>$nombreArchivo,
 					"filaFinal"=>$_POST["filaFinal"],
 					"actualizarCampo"=>$_POST["actualizarCampo"]
 				);
 				try{
-					$mensaje=SysJobs::registrar(JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,$parametros,false);	
+					$camposActualizar="";
+					$Separador="";
+					foreach ($_POST["actualizarCampo"] as $filtro) {
+						
+						if ($filtro == '1') {
+							$camposActualizar =$camposActualizar.$Separador."Grado";
+						}
+						if ($filtro == '2') {
+							$camposActualizar = $camposActualizar.$Separador."Grupo";
+						}
+						if ($filtro == '3') {
+							$camposActualizar = $camposActualizar.$Separador."Tipo de Documento";
+						}
+						if ($filtro == '4') {
+							$camposActualizar = $Separador.$camposActualiza."Acudiente";
+						}
+						if ($filtro == '5') {
+							$camposActualizar = $camposActualizar.$Separador."Segundo nombre del estudiante";
+						}
+						if ($filtro == '6') {
+							$camposActualizar = $camposActualizar.$Separador."Fecha de nacimiento";
+						}
+						if ($Separador == "") {
+							$Separador=" , ";
+						}
+					}
+					if(count($_POST["actualizarCampo"])>0){
+						$camposActualizar="Campos a actualizar (".$camposActualizar.")";
+					}
+					$mensaje='Se generó Jobs para importar excel del archivo ['.$archivo.'] hasta la fila '.$_POST["filaFinal"].' '.$camposActualizar;
+					$mensaje=SysJobs::registrar(JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,$parametros,$mensaje);	
 					include("../compartido/guardar-historial-acciones.php");	
-					$direccionOrigen = explode("?", $_SERVER["HTTP_REFERER"]);
-					$url=$direccionOrigen[0].'?success=SC_DT_4&summary=' . $mensaje;
 					echo '<script type="text/javascript">window.location.href="../directivo/estudiantes-importar-excel.php?success=SC_DT_4&summary=' . $mensaje.'";</script>';
 					exit();
-
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}

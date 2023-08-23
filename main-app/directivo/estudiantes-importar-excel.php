@@ -113,25 +113,54 @@
                                     <div class="panel">
                                         <header class="panel-heading panel-heading-purple">Solicitudes de Importacion </header>
                                         <?php
-                                        $parametros = array(
-													"carga" =>$rCargas["car_id"],
-													"periodo" =>$rCargas["car_periodo"],
-													"grado" => $rCargas["car_curso"],
-													"grupo"=>$rCargas["car_grupo"]
-												);
 												
-												$parametrosBuscar = array(
-													"tipo" =>JOBS_TIPOO_GENERAR_INFORMES,
-													"parametros" => json_encode($parametros),
-													"agno"=>$config['conf_agno']
-												);
-										
-                                                $buscarJobs=SysJobs::consultar($parametrosBuscar);
+                                                $parametrosBuscar = array(
+                                                    "tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
+                                                    "responsable" => $_SESSION['id'],
+                                                    "agno"=>$config['conf_agno'],
+                                                    "estado" =>JOBS_ESTADO_PENDIENTE
+                                                );										
+                                                $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
                                         ?>
-                                                <div class="panel-body">
+                                               
+                                        <div class="card-body">
 
-                                        </div>
-                                     </div>
+                                                        <div >
+                                                            <table id="example1"  style="width:100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Cod</th>
+                                                                        <th>Fecha</th>
+                                                                        <th>mensaje</th>
+                                                                        <th>Estado</th>
+                                                                    </tr>
+                                                                </thead>
+                                                        <tbody>
+                                                           <?php $contReg = 1;
+                                                                    while ($resultado = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {?>
+                                                                        <tr>
+                                                                            <td><?= $contReg; ?></td>
+                                                                            <td><?= $resultado['job_id']; ?></td>
+                                                                            <td><?= $resultado['job_fecha_creacion']; ?></td>
+                                                                            <td><?= $resultado['job_mensaje']; ?></td> 
+                                                                            <td>
+                                                                                <div class="btn-group">
+                                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                                         <?= $resultado['job_estado']; ?>
+                                                                                    </button>
+                                                                                   
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php $contReg++;
+                                                                    } ?>
+                                                         </tbody>
+                                                     </table>
+                                                </div>
+                                            </div>
+                                         </div>
+                                     
                             </div>
                         </div>
                     </div>

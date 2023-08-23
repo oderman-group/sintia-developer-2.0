@@ -1,47 +1,43 @@
 <?php
 class SysJobs {
-    public static function registrar($tipo,array $parametros = [],$buscarParametros=true)
+    public static function registrar($tipo,array $parametros = [],$msj ='')
     {
         global $config;
-        if($buscarParametros){
-            $parametrosBuscar = array(
-                "tipo" =>$tipo,
-                "responsable" => $_SESSION['id'],
-                "parametros" => json_encode($parametros),
-                "agno"=>$config['conf_agno'],
-                "estado" =>JOBS_ESTADO_PENDIENTE
-            );
-        }else{
-            $parametrosBuscar = array(
-                "tipo" =>$tipo,
-                "responsable" => $_SESSION['id'],
-                "agno"=>$config['conf_agno'],
-                "estado" =>JOBS_ESTADO_PENDIENTE
-            );
-        }
+        $parametrosBuscar = array(
+            "tipo" =>$tipo,
+            "responsable" => $_SESSION['id'],
+            "parametros" => json_encode($parametros),
+            "agno"=>$config['conf_agno']
+        );
        
         $buscarJobs=self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
-        $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
         if($cantidad<1){
-            $idRegistro =self::crear($tipo,$parametros);
-            $mensaje="Se realizó exitosamente el proceso de importación de estudiantes con el código ".$idRegistro;
+            $idRegistro =self::crear($tipo,$parametros,$msj);
+            $mensaje="Se realizó exitosamente el proceso de ".$tipo." con el código ".$idRegistro;
         }else{
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
-            $intentos = intval($jobsEncontrado["job_intentos"])+1;
-            $datos = array(
-                "intentos" =>$intentos,
-                "id" => $jobsEncontrado['job_id']
-            );
+            $idRegistro = $jobsEncontrado["job_id"];           
+            if($jobsEncontrado["job_intentos"]==JOBS_ESTADO_PENDIENTE){
+                $intentos = intval($jobsEncontrado["job_intentos"])+1;            
+                $datos = array(
+                    "intentos" =>$intentos,
+                    "id" => $jobsEncontrado['job_id']
+                );
+                self::actualizar($datos);
+                $mensaje="Se actualizó exitosamente el proceso de ".$tipo." con el código ".$idRegistro." intentos(".$intentos.")";
+            }else{
+                $mensaje="Proceso ".$tipo." con el código ".$idRegistro." ya está marcado como finalizado";
+            }
             
-            self::actualizar($datos);
-            $idRegistro = $jobsEncontrado["job_id"];
-                $mensaje="Se actualizó exitosamente el proceso de importación de estudiantes con el código ".$idRegistro." intentos(".$intentos.")";
+            
+            
+           
         }
         return $mensaje;
     }
 
-    public static function crear($tipo,array $parametros = [])
+    public static function crear($tipo,array $parametros = [],$mensaje ='')
     {
         global $conexion, $baseDatosServicios,$config;
         $idRegistro = -1;        
@@ -63,7 +59,7 @@ class SysJobs {
                 NOW(), 
                 '".$_SESSION['id']."', 
                 '".$config['conf_id_institucion']."', 
-                'Generando el primer Jobs', 
+                '".$mensaje."', 
                 '".json_encode($parametros)."', 
                 '".$config['conf_agno']."', 
                 '1', 
@@ -111,20 +107,21 @@ class SysJobs {
 
     public static function consultar(array $parametrosBusqueda = [])
     {
-        global $conexion, $baseDatosServicios,$config;
+        global $conexion, $baseDatosServicios;
         $resultado = [];
         $andEstado=empty($parametrosBusqueda["estado"])?" ":"AND job_estado='".$parametrosBusqueda["estado"]."'";
         $andParametros=empty($parametrosBusqueda["parametros"])?" ":"AND job_parametros='".$parametrosBusqueda["parametros"]."'";
+       
+        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
+        LEFT JOIN usuarios  ON uss_id = job_responsable
+        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
+        WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
+        AND job_responsable ='".$parametrosBusqueda["responsable"]."'
+        AND job_year='".$parametrosBusqueda["agno"]."'
+        ".$andParametros
+         .$andEstado."       
+        ORDER BY job_fecha_creacion";
         try {
-            $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
-            LEFT JOIN usuarios  ON uss_id = job_responsable
-            LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
-            WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
-            AND job_responsable ='".$parametrosBusqueda["responsable"]."'
-            AND job_year='".$parametrosBusqueda["agno"]."'
-            ".$andParametros
-             .$andEstado."       
-            ORDER BY job_fecha_creacion";
             $resultado = mysqli_query($conexion,$sqlExecute);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -134,16 +131,24 @@ class SysJobs {
         return $resultado;
     }
 
-    public static function listar($estado = JOBS_ESTADO_PENDIENTE)
+    public static function listar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
         $resultado = [];
-
+        $andEstado=empty($parametrosBusqueda["estado"])?JOBS_ESTADO_PENDIENTE:$parametrosBusqueda["estado"];
+        $andTipo=empty($parametrosBusqueda["tipo"])?" ":"AND job_tipo='".$parametrosBusqueda["tipo"]."' ";
+        $andResponsable=empty($parametrosBusqueda["responsable"])?" ":"AND job_responsable='".$parametrosBusqueda["responsable"]."' ";
+        $andAgno=empty($parametrosBusqueda["agno"])?" ":"AND job_year='".$parametrosBusqueda["agno"]."' ";
+        
+        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
+        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
+        WHERE job_estado = '".$andEstado."'
+        ".$andTipo
+        . $andResponsable
+        .$andAgno."            
+        ORDER BY job_fecha_creacion";
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sys_jobs
-            LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
-            WHERE job_estado = '".$estado."'          
-            ORDER BY job_fecha_creacion");
+            $resultado = mysqli_query($conexion,$sqlExecute);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
