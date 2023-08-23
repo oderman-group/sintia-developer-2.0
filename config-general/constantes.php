@@ -10,7 +10,8 @@ define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
 
-define('JOBS_TIPO_GENERAR_INFORMES', 'Generar Informes');
+define('JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL', 'importar_estudiantes');
+define('JOBS_TIPO_GENERAR_INFORMES', 'generar_informes');
 
 define('JOBS_PRIORIDAD_ALTA', 'Alta');
 define('JOBS_PRIORIDAD_MEDIA', 'Media');
@@ -52,7 +53,7 @@ switch (ENVIROMENT) {
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-        // error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        //error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
 	case 'developer.plataformasintia.com':

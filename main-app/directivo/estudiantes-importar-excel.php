@@ -2,6 +2,8 @@
 <?php $idPaginaInterna = 'DT0077';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php require_once("../class/Sysjobs.php");?>
+
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -40,6 +42,7 @@
                             </ol>
                         </div>
                     </div>
+                    
                     <div class="row">
 						
 						<div class="col-sm-3">
@@ -59,54 +62,107 @@
 							 </div>
 
                         </div>
-						
-                        <div class="col-sm-9">
-								<?php include("../../config-general/mensajes-informativos.php"); ?>
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
+                        <div  class="col-sm-9" >
+                            <div class="col-sm-12">
+                                    <?php include("../../config-general/mensajes-informativos.php"); ?>
+                                    <div class="panel">
+                                        <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+                                        <div class="panel-body">
 
-                                   
-									<form name="formularioGuardar" action="excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
-										
-										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Subir la planilla lista</label>
-                                            <div class="col-sm-6">
-                                                <input type="file" class="form-control" name="planilla" required>
+                                    
+                                        <form name="formularioGuardar" action="job-excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Subir la planilla lista</label>
+                                                <div class="col-sm-6">
+                                                    <input type="file" class="form-control" name="planilla" required>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
-                                            <div class="col-sm-4">
-                                                <input type="number" class="form-control" name="filaFinal" value="200" required><br>
-                                                <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="filaFinal" value="200" required><br>
+                                                    <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
+                                                </div>
                                             </div>
-                                        </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Campos a actualizar</label>
-                                            <div class="col-sm-9">
-                                                <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
-                                                    <option value="">Seleccione una opción</option>
-                                                    <option value="1">Grado</option>
-                                                    <option value="2">Grupo</option>
-                                                    <option value="3">Tipo de Documento</option>
-                                                    <option value="4">Acudiente</option>
-                                                    <option value="5">Segundo nombre del estudiante</option>
-                                                    <option value="6">Fecha de nacimiento</option>
-                                                </select>
+                                            
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Campos a actualizar</label>
+                                                <div class="col-sm-9">
+                                                    <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
+                                                        <option value="">Seleccione una opción</option>
+                                                        <option value="1">Grado</option>
+                                                        <option value="2">Grupo</option>
+                                                        <option value="3">Tipo de Documento</option>
+                                                        <option value="4">Acudiente</option>
+                                                        <option value="5">Segundo nombre del estudiante</option>
+                                                        <option value="6">Fecha de nacimiento</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-										<input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
-										
-										<a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                    </form>
+                                            <input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
+                                            
+                                            <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">                                   
+                                    <div class="panel">
+                                        <header class="panel-heading panel-heading-purple">Solicitudes de Importacion </header>
+                                        <?php
+												
+                                                $parametrosBuscar = array(
+                                                    "tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
+                                                    "responsable" => $_SESSION['id'],
+                                                    "agno"=>$config['conf_agno'],
+                                                    "estado" =>JOBS_ESTADO_PENDIENTE
+                                                );										
+                                                $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
+                                        ?>
+                                               
+                                        <div class="card-body">
+
+                                                        <div >
+                                                            <table id="example1"  style="width:100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Cod</th>
+                                                                        <th>Fecha</th>
+                                                                        <th>mensaje</th>
+                                                                        <th>Estado</th>
+                                                                    </tr>
+                                                                </thead>
+                                                        <tbody>
+                                                           <?php $contReg = 1;
+                                                                    while ($resultado = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {?>
+                                                                        <tr>
+                                                                            <td><?= $contReg; ?></td>
+                                                                            <td><?= $resultado['job_id']; ?></td>
+                                                                            <td><?= $resultado['job_fecha_creacion']; ?></td>
+                                                                            <td><?= $resultado['job_mensaje']; ?></td> 
+                                                                            <td>
+                                                                                <div class="btn-group">
+                                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                                         <?= $resultado['job_estado']; ?>
+                                                                                    </button>
+                                                                                   
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php $contReg++;
+                                                                    } ?>
+                                                         </tbody>
+                                                     </table>
+                                                </div>
+                                            </div>
+                                         </div>
+                                     
+                            </div>
                         </div>
-						
                     </div>
 
                 </div>

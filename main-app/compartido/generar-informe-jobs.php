@@ -4,7 +4,12 @@ $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once("../class/Sysjobs.php");
 require_once("../class/Estudiantes.php");
-$listadoCrobjobs=SysJobs::listar();
+$parametrosBuscar = array(
+	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
+	"estado" =>JOBS_ESTADO_PENDIENTE
+);										
+$listadoCrobjobs=SysJobs::listar($parametrosBuscar);
+
 
 while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 // fecha1 es la primera fecha
@@ -15,7 +20,6 @@ $institucionId = $resultadoJobs["job_id_institucion"];
 $institucionBd = $resultadoJobs["ins_bd"];
 $anio = $resultadoJobs["job_year"];
 $institucionBdAnio = $resultadoJobs["ins_bd"]."_".$anio;
-$intentos = intval($resultadoJobs["job_intentos"])+1;
 
 $grado =$parametros["grado"];
 $grupo =$parametros["grupo"];
@@ -32,8 +36,7 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-$lineaError = __LINE__;
-include("../compartido/reporte-errores.php");
+
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 
 		$estudiante = $estudianteResultado["mat_id"];
@@ -133,7 +136,6 @@ include("../compartido/reporte-errores.php");
 		$datos = array(
 			"id" => $resultadoJobs['job_id'],
 			"mensaje" => "Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!",
-			"intentos" =>$intentos,		
 			"estado" =>JOBS_ESTADO_FINALIZADO,
 		);
 		SysJobs::actualizar($datos);
@@ -147,9 +149,6 @@ include("../compartido/reporte-errores.php");
 function minutosTranscurridos($fecha_i,$fecha_f)
 {
 $intervalo = $fecha_i->diff($fecha_f);
-$formato = "h:i:s";
-$horaMinutosInicio = $fecha_i->format($formato);
-$horaMinutosFin = $fecha_i->format($formato);
 $minutos = $intervalo->i;
 $segundos = $intervalo->s;
 return " Finalizo en: $minutos Min y $segundos Seg.";
