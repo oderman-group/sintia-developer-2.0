@@ -157,5 +157,31 @@ class SysJobs {
         return $resultado;
     }
 
+    public static function actualizarMensaje($id,$intento,$mensaje){
+        $intento=intval($intento)+1;
+        $datos = array(
+            "id" => $id,
+            "mensaje" => "Advertencia: ".$mensaje."!",
+            "intentos" =>$intento,
+        );
+        self::actualizar($datos);
+    }
 
+    public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo){
+        global $conexion,$baseDatosServicios,$config;       
+        
+        $para=$destinatario;
+        try{
+            $asunto="Ejecuci&oacute;n Finalizada Crob jobs (".$idJob.") de tipo ".$tipo;
+			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
+			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
+            $contenido="<br>Hola Sr(a) ".$destinatario["uss_nombre"]."<br> <p>".$contenido."</p>";
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+				VALUES('" . $remitente["uss_id"] . "', '" . $para . "', '" . mysqli_real_escape_string($conexion,$asunto) . "', '" . mysqli_real_escape_string($conexion,$contenido) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $config["conf_agno"] . "')");
+						
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+         }
+    }
 }
