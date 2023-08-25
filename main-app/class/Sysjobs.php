@@ -1,5 +1,14 @@
 <?php
 class SysJobs {
+     /**
+     * Esta función  crea ó actualiza si ya existe un registro, llamando las funcions de crear o  atualizar 
+     * 
+     * @param string $tipo
+     * @param array $parametros
+     * @param string $msj
+     * 
+     * @return String // se retorna el mensaje de la operacion registrada sys_jobs
+     */
     public static function registrar($tipo,array $parametros = [],$msj ='')
     {
         global $config;
@@ -36,7 +45,15 @@ class SysJobs {
         }
         return $mensaje;
     }
-
+    /**
+     * Esta función  crea  un registro de en la tabla sys_jobs
+     * 
+     * @param string $tipo
+     * @param array $parametros
+     * @param string $msj
+     * 
+     * @return String // se retorna el id del registro
+     */
     public static function crear($tipo,array $parametros = [],$mensaje ='')
     {
         global $conexion, $baseDatosServicios,$config;
@@ -76,7 +93,13 @@ class SysJobs {
         
         return $idRegistro;
     }
-
+    /**
+     * Esta función  actualiza  un registro de en la tabla sys_jobs
+     * 
+     * @param array $datos // son los parametros que se va actualizar en la tabla
+     * 
+     * @return void 
+     */
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
@@ -104,7 +127,14 @@ class SysJobs {
 
         return $resultado;
     }
-
+     /**
+     * Esta función  consulta el registro en la tabla sys_jobs 
+     * hay que tener en ceunta que siempre debe venir en el array $parametros
+     *  los parametros["tipo"], parametros["responsable"] , parametros["agno"] 
+     * @param array $parametrosBusqueda 
+     * 
+     * // se retorna el registro consultado
+     */
     public static function consultar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
@@ -130,7 +160,14 @@ class SysJobs {
 
         return $resultado;
     }
-
+     /**
+     * Esta función  lista los registros en la tabla sys_jobs 
+     * hay que tener en ceunta que siempre debe venir en el array $parametros
+     * los parametros["estado"]
+     * @param array $parametros 
+     * 
+     * @return array // se retorna el registro para consultar
+     */
     public static function listar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
@@ -156,7 +193,16 @@ class SysJobs {
 
         return $resultado;
     }
-
+    /**
+     * Esta función  actauliza los intentos de cada crob jobs ejecutado
+     * 
+     * @param array $id
+     * @param array $intento 
+     * @param array $mensaje 
+     * 
+     * 
+     * @return void 
+     */
     public static function actualizarMensaje($id,$intento,$mensaje){
         $intento=intval($intento)+1;
         $datos = array(
@@ -166,7 +212,16 @@ class SysJobs {
         );
         self::actualizar($datos);
     }
-
+    /**
+     * Esta función  envia mensajes al usuario responsable del crobjobs notificando el estado
+     * 
+     * @param String $destinatario
+     * @param array $contenido 
+     * @param array $idJob 
+     * @param array $tipo
+     * 
+     * @return void 
+     */
     public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo){
         global $conexion,$baseDatosServicios,$config;       
         
