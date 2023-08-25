@@ -7,7 +7,7 @@ $_SESSION["bd"] = date("Y");
 <?php $idPaginaInterna = 'ES0010';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php
-if(isset($_GET["carga"]) and $_GET["carga"]!="" and is_numeric($_GET["carga"])){
+if(!empty($_GET["carga"]) && is_numeric($_GET["carga"])){
 	setcookie("cargaE",$_GET["carga"]);
 	setcookie("periodoE",$_GET["periodo"]);
 	
@@ -90,13 +90,9 @@ if($config['conf_activar_encuesta']==1){
 										if(!empty($cargaHistorial['carpa_id'])){
 											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 										}
-										if($rCargas[0]==$_COOKIE["cargaE"]){
+										if(!empty($_COOKIE["cargaE"]) && $rCargas[0]==$_COOKIE["cargaE"]){
 											$fondoCargaActual = 'cornsilk';
 										}
-										//PLAN DE CLASE
-										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$_COOKIE["periodoE"]."'");
-									    $Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
-									    $Npc = mysqli_num_rows($Cpc);
 										//DEFINITIVAS
 										$carga = $rCargas[0];
 										$periodo = $rCargas['car_periodo'];

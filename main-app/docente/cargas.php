@@ -71,8 +71,8 @@ require_once("../class/Sysjobs.php");
 									    $ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
 
-										if($rCargas['car_ultimo_acceso_docente']!=""){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if($rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk';}
+										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
+										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk';}
 										
 										$cargaSP = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];

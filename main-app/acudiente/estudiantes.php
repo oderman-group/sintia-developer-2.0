@@ -145,7 +145,7 @@ require_once("../class/Estudiantes.php");
                                                         	?>
                                                         	
                                                         </td>
-														<td><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']);?></td>
+														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 														<td><?=$genero[1];?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td>

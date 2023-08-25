@@ -252,7 +252,7 @@
 	                        </li>
 							-->
 							
-							<?php if(($_COOKIE["carga"]!="" and $_COOKIE["periodo"]!="") or ($_GET["carga"]!="" and $_GET["periodo"]!="")){?>
+							<?php if((!empty($_COOKIE["carga"]) && !empty($_COOKIE["periodo"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']]?></span> <span class="arrow"></span>
@@ -321,7 +321,7 @@
 							<?php }?>
 							
 							
-							<?php if(isset($datosCargaActual) && $datosCargaActual['car_id']!=""){?>
+							<?php if(isset($datosCargaActual) && !empty($datosCargaActual['car_id'])){?>
 							<li class="nav-item">
 	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Mis <?=$frases[55][$datosUsuarioActual['uss_idioma']];?></span> 
