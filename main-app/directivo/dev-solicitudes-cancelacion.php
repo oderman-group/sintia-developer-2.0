@@ -33,7 +33,7 @@ include("../compartido/head.php");
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <div class="page-title">Solicitudes de cancelacion</div>
-                            <?php include("../config-general/mensajes-informativos.php"); ?>
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ include("../compartido/head.php");
                                                 </thead>
                                                 <tbody>
                                                     <?php
-													include("includes/consulta-paginacion-dev-solicitudes-cancelacion.php");
+													
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($listaSolicitudes, MYSQLI_BOTH)) {?>
                                                         <tr>
@@ -102,9 +102,10 @@ include("../compartido/head.php");
                                         </div>
                                     </div>
                                 </div>
-                                <?php
+                                <?php 
                                 $solicitudesTotales = new Solicitudes;
-                                $solicitudesTotales::listar(null,true); // se realiza la misma consulta pero totalizando sus registros
+                                $solicitudesTotales::listar(null,true);
+                                // se realiza la misma consulta pero totalizando sus registros
                                 $numRegistros=$solicitudesTotales::$cantidadRegistros;
                                 $registros= $solicitudesTotales::$maxRegistro;
                                 include("enlaces-paginacion.php");?>

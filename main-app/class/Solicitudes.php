@@ -18,7 +18,11 @@ class Solicitudes {
         }        
        
         self::$maxRegistro= $config['conf_num_registros'];
-        $pagina=$_REQUEST["nume"];
+        $pagina=null;
+        $limite="";
+        if(!empty($_REQUEST["nume"])){
+            $pagina=$_REQUEST["nume"];
+        }        
         if (is_numeric($pagina)){
             self:: $inicio= (($pagina-1)* self::$maxRegistro);           
         }			     

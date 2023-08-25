@@ -77,32 +77,39 @@ class EnviarEmail {
                         }                         
                     }
                     $mail->send();
-                    self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
+                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
             }else{                 
                     if(!$validarRemitente){
-                        self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
                         self::mensajeError(EMAIL_SENDER);        
                     } 
                     if(!$validarDestinatario){
-                        self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
                         self::mensajeError($destinatario);        
                     }
                     if(!$validarDestinatario2){
-                        self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
                         self::mensajeError($destinatario2);        
                     }    
                     if(!$validarcopia){
-                        self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
                         self::mensajeError($correrocopia);        
                     } 
             }
 
         } catch (Exception $e) {
-            self::enviarReporte($data,$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,$e->getMessage());
+            self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,$e->getMessage());
             include("../compartido/error-catch-to-report.php");
         }
 
     }
+    /**
+     * Este función valida un correo electrónico que tenga la estructura correcta emplo@dominio.com
+     * 
+     * @param string $email
+     * 
+     * @return boolean
+     */
     public static function validarEmail($email) 
     {
         $matches = null;
@@ -111,6 +118,13 @@ class EnviarEmail {
        return (1 === preg_match($regex, $email, $matches));      
     }
 
+    /**
+     * Este función envia el mensaje de error a la pagina de donde se llamo
+     * 
+     * @param string $email
+     * 
+     * @return void
+     */
     private static function mensajeError($email) 
     {
         $msj=' el Correo '.$email.' no cumple con la estructura de un correo valido';
@@ -122,7 +136,22 @@ class EnviarEmail {
         exit();      
     }
 
-    private static function enviarReporte($data,$mail,$remitente,$destinatario,$asunto,$body,$estado,$descripcion){
+    
+    /**
+     * Este función envia el mensaje a la tabla de historial de correos enviados 
+     * 
+     * @param string $institucion
+     * @param Object $mail
+     * @param string $remitente
+     * @param string $destinatario
+     * @param string $asunto
+     * @param string $body
+     * @param string $estado
+     * @param string $descripcion
+     * 
+     * @return void
+     */
+    private static function enviarReporte($institucion,$mail,$remitente,$destinatario,$asunto,$body,$estado,$descripcion){
         global $conexion;
         global $baseDatosServicios;
         if(is_null($conexion)){
@@ -134,29 +163,29 @@ class EnviarEmail {
         
         $adjunto=$mail->attachmentExists();
         try{
-            mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".historial_correos_enviados(
-                    hisco_fecha,
-                    hisco_remitente,
-                    hisco_destinatario,
-                    hisco_asunto,
-                    hisco_contenido,
-                    hisco_adjunto,
-                    hisco_archivo_salida,
-                    hisco_estado,
-                    hisco_descripcion_error,
-                    hisco_id_institucion
-                    )VALUES(
-                    now(),
-                    '".$remitente."',
-                    '".$destinatario."',
-                    '".$asunto."',
-                    '".$body."',
-                    '".$adjunto."',
-                    '".$_SERVER["HTTP_REFERER"]."',
-                    '".$estado."',
-                    '".$descripcion."',
-                    '".$data['institucion_id']."')
-                ");
+            $sql="INSERT INTO ".$baseDatosServicios.".historial_correos_enviados(
+                hisco_fecha,
+                hisco_remitente,
+                hisco_destinatario,
+                hisco_asunto,
+                hisco_contenido,
+                hisco_adjunto,
+                hisco_archivo_salida,
+                hisco_estado,
+                hisco_descripcion_error,
+                hisco_id_institucion
+                )VALUES(
+                now(),
+                '".$remitente."',
+                '".$destinatario."',
+                '".$asunto."',
+                '".$body."',
+                '".$adjunto."',
+                '".$_SERVER["HTTP_REFERER"]."',
+                '".$estado."',
+                '".$descripcion."',
+                '".$institucion."')";
+            mysqli_query($conexion,$sql );
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

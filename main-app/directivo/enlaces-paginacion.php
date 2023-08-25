@@ -1,5 +1,6 @@
 <?php
-$paginaActual=$_REQUEST["nume"];
+$paginaActual=!empty($_REQUEST["nume"])?$_REQUEST["nume"]:1;
+$inicio=!empty($inicio)?$inicio:1;
 $ultima = $numRegistros / $registros;
 $totalPaginas=ceil($ultima);
 $ant = $paginaActual - 1;

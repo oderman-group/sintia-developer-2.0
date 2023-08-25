@@ -10,21 +10,14 @@ include("../compartido/head.php");
 require_once("../class/Solicitudes.php");
 $solicitudActual = Solicitudes::consultar($_GET["id"]);
 
-?>
 
-<!--bootstrap -->
-<link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
+?>
 <!-- Theme Styles -->
-<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-<!-- dropzone -->
-<link href="../../config-general/assets/plugins/dropzone/dropzone.css" rel="stylesheet" media="screen">
+    <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 <!--tagsinput-->
-<link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
-<!--select2-->
-<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
+<!-- data tables -->
+<link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -41,15 +34,13 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            Detalle Solicitud
+                            <div class="page-title">Detalle solicitud de cancelacion</div>
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                         </div>
-
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <?php include("../../config-general/mensajes-informativos.php"); ?>
-                        <div class="panel">
+
+                <div class="panel">
                             <header class="panel-heading panel-heading-purple">Detalle</header>
                             <div class="panel-body">
                                 <form action="solicitud-cancelacion-actualizar.php" method="post" enctype="multipart/form-data">
@@ -74,14 +65,12 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 ">Institución:</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control" value="<?= $solicitudActual['ins_siglas']; ?>" readonly>
+                                        
+                                        <div class="col-sm-4">
                                             <input type="text" name="ins_id" class="form-control" value="<?= $solicitudActual['ins_id']; ?>" readonly hidden>
-                                        </div>
-                                        <div class="col-sm-3">
                                             <input type="text" name="ins_contacto" class="form-control" value="<?= $solicitudActual['ins_contacto_principal']; ?>" readonly>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>
@@ -90,7 +79,7 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="material-icons">email</i></span>
@@ -107,9 +96,9 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                                         <label class="col-sm-2 ">Usuario que solicita: </label>
                                         <div class="col-sm-4">
                                             <input type="text" name="uss_id" class="form-control" value="<?= $solicitudActual['uss_id']; ?>" readonly hidden>
-                                            <input type="text" class="form-control" value="<?= $solicitudActual['uss_nombre']; ?> <?= $solicitudActual['uss_apellido']; ?>" readonly>
+                                            <input type="text" class="form-control" value="<?= $solicitudActual['uss_nombre']; ?> " readonly>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>
@@ -117,7 +106,7 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                                                 <input type="text" class="form-control" value="<?= $solicitudActual['uss_celular']; ?>" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="material-icons">email</i></span>
@@ -133,7 +122,7 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 ">Motivo de cancelacion:</label>
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-10">
                                             <textarea class="form-control" readonly rows="3">
                                               <?= $solicitudActual['solcan_motivo']; ?>
                                              </textarea>
@@ -144,14 +133,14 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 ">Respuesta:</label>
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-10">
                                             <textarea cols="80" id="editor1" name="respuesta" rows="10"><?= $solicitudActual['solcan_respuesta']; ?></textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 ">Estado: </label>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <select class="form-control" name="estado">
 
                                                 <option value="<?= SOLICITUD_CANCELACION_PENDIENTE ?>" <?php if (
@@ -179,16 +168,14 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                                 </form>
                             </div>
                         </div>
-                    </div>
-
-                </div>
             </div>
         </div>
-        <!-- end page container -->
-        <?php include("../compartido/footer.php"); ?>
     </div>
-    <!-- start js include path -->
-    <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- end page container -->
+    <?php include("../compartido/footer.php"); ?>
+</div>
+<!-- start js include path -->
+<script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
     <script src="../../config-general/assets/plugins/popper/popper.js"></script>
     <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
     <script src="../../config-general/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
@@ -226,7 +213,4 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
         CKEDITOR.replace('editor1');
     </script>
     </body>
-
-    <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
-
-    </html>
+</html>
