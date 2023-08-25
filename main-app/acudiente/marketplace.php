@@ -4,10 +4,10 @@
 <?php include("../compartido/head.php");?>
 
 <?php
-if($_SESSION["empresa"] == ""){
+if(empty($_SESSION["empresa"])){
 	$empresa = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'"), MYSQLI_BOTH);
 	
-	if($empresa[0]!=""){
+	if(!empty($empresa[0])){
 		$_SESSION["empresa"] = $empresa[0];
 	}
 	

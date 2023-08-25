@@ -46,7 +46,7 @@
                     $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
                     WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $_GET['periodo'] . "'"), MYSQLI_BOTH);
                        
-                    if($aspectos[0]!=""){
+                    if(!empty($aspectos[0])){
                         mysqli_query($conexion, "UPDATE disiplina_nota SET dn_ultima_lectura=now()
                         WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $_GET['periodo'] . "'");
                     }   
@@ -67,20 +67,20 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-10">
-                                            <?= $aspectos["dn_aspecto_academico"]; ?>
+                                            <?php if(!empty($aspectos["dn_aspecto_academico"])){ echo $aspectos["dn_aspecto_academico"];} ?>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual[8]];?></label>
                                         <div class="col-sm-10">
-                                            <?= $aspectos["dn_aspecto_convivencial"]; ?>
+                                            <?php if(!empty($aspectos["dn_aspecto_convivencial"])){ echo $aspectos["dn_aspecto_convivencial"];} ?>
                                         </div>
                                     </div>
 
-                                    <?php if($config['conf_ver_observador']==1 and $aspectos["dn_aprobado"]=='0'){ ?>
-						                    <input type="submit" class="btn btn-primary" value="He leído y estoy de acuerdo">&nbsp;
-						                <?php } ?>
+                                    <?php if($config['conf_ver_observador']==1 && (!empty($aspectos["dn_aprobado"]) && $aspectos["dn_aprobado"]=='0')){ ?>
+                                        <input type="submit" class="btn btn-primary" value="He leído y estoy de acuerdo">&nbsp;
+                                    <?php } ?>
 
                                 </form>
                             </div>
