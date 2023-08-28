@@ -42,6 +42,7 @@
 							
 							<?php
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
+									if(Modulos::validarSubRol(['DT0030'])){
 							?>
 								<div class="nav-item">
 									<div align="center" style="color:#FC0; font-weight:bold;">
@@ -49,7 +50,7 @@
 										<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
 									</div>
 								</div>
-							<?php }?>
+							<?php }}?>
 							
 							<?php
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3 || $datosUsuarioActual[3]==4){
@@ -91,83 +92,166 @@
 							
 							
 							<?php 
-							//MENÚ DIRECTIVOS
-							if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){							
-							
-							//MÓDULO ACADÉMICO
-							if(array_key_exists(1, $arregloModulos)){?>
+								//MENÚ DIRECTIVOS
+								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){							
+								
+								//MÓDULO ACADÉMICO
+								if(array_key_exists(1, $arregloModulos)){
+									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
+							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
-									<?php if(array_key_exists(8, $arregloModulos)){?>
-	                                	<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
-									<?php }?>
-
-	                                <li <?php agregarClass(MENU,["DT0001"]) ?>><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0195","DT0196","DT0197"]) ?>><a href="grupos.php" class="nav-link "> <span class="title"><?=$frases[254][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0017"]) ?>><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0020"]) ?>><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
-									<li <?php agregarClass(MENU,["DT0032"]) ?>><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
-
-									<?php if(array_key_exists(9, $arregloModulos)){?>
+									<?php
+										if(array_key_exists(8, $arregloModulos)){
+											if(Modulos::validarSubRol(['DT0102'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
+									<?php 
+											}
+										}
+									
+										if(Modulos::validarSubRol(['DT0001'])){
+									?>
+	                                	<li <?php agregarClass(MENU,["DT0001"]) ?>><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									
+										if(Modulos::validarSubRol(['DT0062'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									
+										if(Modulos::validarSubRol(['DT0195'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0195","DT0196","DT0197"]) ?>><a href="grupos.php" class="nav-link "> <span class="title"><?=$frases[254][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									
+										if(Modulos::validarSubRol(['DT0017'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0017"]) ?>><a href="areas.php" class="nav-link "> <span class="title"><?=$frases[93][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									
+										if(Modulos::validarSubRol(['DT0020'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0020"]) ?>><a href="asignaturas.php" class="nav-link "> <span class="title"><?=$frases[73][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									
+										if(Modulos::validarSubRol(['DT0032'])){
+									?>
+										<li <?php agregarClass(MENU,["DT0032"]) ?>><a href="cargas.php" class="nav-link "> <span class="title"><?=$frases[12][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+										
+										if(array_key_exists(9, $arregloModulos)){
+											if(Modulos::validarSubRol(['DT0121'])){
+									?>
 										<li <?php agregarClass(MENU,["DT0121"]) ?>><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
-									<?php }?>
+									<?php }}?>
 									
 	                            </ul>
 	                        </li>
-							<?php }?>
+							<?php }}?>
 							
 							<?php 
 							//MÓDULO FINANCIERO
-							if(array_key_exists(2, $arregloModulos)){?>
-							<li class="nav-item">
-	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
-	                                <span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-	                            </a>
-	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual[8]];?></span></a></li>
-
-	                            </ul>
-	                        </li>
-							<?php }?>
+							if(array_key_exists(2, $arregloModulos)){
+								if(Modulos::validarSubRol(["DT0104"])){
+							?>
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
+										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu">
+										<?php
+											if(Modulos::validarSubRol(["DT0104"])){
+										?>
+											<li class="nav-item"><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual[8]];?></span></a></li>
+										<?php }?>
+									</ul>
+								</li>
+							<?php }}?>
 							
 							<?php 
 							//MÓDULO DISCIPLINARIO
-							if(array_key_exists(3, $arregloModulos)){?>
-							<li class="nav-item">
-	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
-	                                <span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-	                            </a>
-	                            <ul class="sub-menu">
-									<?php if(Modulos::validarPermisoEdicion()){?>
-										<li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
-									<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<li class="nav-item"><a href="disciplina-categorias.php" class="nav-link"> <span class="title">Categorías</span></a></li>
-									<li class="nav-item"><a href="disciplina-faltas.php" class="nav-link"> <span class="title">Faltas</span></a></li>
-	                            </ul>
-	                        </li>
-							<?php }?>
+							if(array_key_exists(3, $arregloModulos)){
+								if(Modulos::validarSubRol(["DT0119","DT0117","DT0069","DT0066"])){
+							?>
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
+										<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu">
+										<?php
+											if(Modulos::validarPermisoEdicion()){
+												if(Modulos::validarSubRol(["DT0119"])){
+										?>
+											<li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+												}
+											}
+
+											if(Modulos::validarSubRol(["DT0117"])){
+										?>
+											<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+
+											if(Modulos::validarSubRol(["DT0069"])){
+										?>
+											<li class="nav-item"><a href="disciplina-categorias.php" class="nav-link"> <span class="title">Categorías</span></a></li>
+										<?php
+											}
+											
+											if(Modulos::validarSubRol(["DT0066"])){
+										?>
+											<li class="nav-item"><a href="disciplina-faltas.php" class="nav-link"> <span class="title">Faltas</span></a></li>
+										<?php
+											}
+										?>
+									</ul>
+								</li>
+							<?php }}?>
 							
 							<?php 
 							//MÓDULO ADMINISTRTIVO
-							if(array_key_exists(4, $arregloModulos)){?>
+							if(array_key_exists(4, $arregloModulos)){
+								if(Modulos::validarSubRol(["DT0126","DT0122","DT0011"])){
+							?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-tachometer"></i>
 	                                <span class="title"><?=$frases[87][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="usuarios.php" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
-									<li class="nav-item"><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
-
+									<?php
+										if(Modulos::validarSubRol(["DT0126"])){
+									?>
+										<li class="nav-item"><a href="usuarios.php" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+										
+										if(Modulos::validarSubRol(["DT0122"])){
+									?>
+										<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
+									<?php
+										}
+										
+										if(Modulos::validarSubRol(["DT0011"])){
+									?>
+										<li class="nav-item"><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
+									<?php
+										}
+									?>
 	                            </ul>
 	                        </li>
-							<?php }?>
+							<?php }}?>
 							
 							<?php 
 							//MÓDULO MERCADEO
@@ -183,22 +267,40 @@
 	                        </li>
 							<?php }?>
 							
-
+							<?php
+								if(Modulos::validarSubRol(["DT0057","DT0060"])){
+							?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-cogs"></i></i>
 	                                <span class="title">Configuraci&oacute;n </span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu">
-									<li><a href="configuracion-sistema.php">del Sistema</a></li>
-									<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
+									<?php
+										if(Modulos::validarSubRol(["DT0057"])){
+									?>
+										<li><a href="configuracion-sistema.php">del Sistema</a></li>
+									<?php
+										}
+										
+										if(Modulos::validarSubRol(["DT0060"])){
+									?>
+										<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
+									<?php
+										}
+									?>
 	                            </ul>
 	                        </li>
-
+							<?php }?>
+							
+							<?php
+								if(Modulos::validarSubRol(["DT0099"])){
+							?>
 							<li class="nav-item">
 	                            <a href="informes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-file-text"></i>
 	                                <span class="title">Informes</span> 
 	                            </a>
 	                        </li>
+							<?php }?>
 
 							<?php
 								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION){
