@@ -103,7 +103,6 @@ class SysJobs {
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
-        $resultado = [];
         
         $setIntentos=empty($datos["intentos"])?"":",job_intentos='".$datos["intentos"]."'";
         $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
@@ -124,8 +123,6 @@ class SysJobs {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
         }
-
-        return $resultado;
     }
      /**
      * Esta función  consulta el registro en la tabla sys_jobs 
