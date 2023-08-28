@@ -70,7 +70,7 @@ class Modulos {
     /**
      * Este metodo sirve para validar el acceso a las diferentes paginas de los directivos dependiendo de su rol
      * 
-     * @param intiger $idPagina
+     * @param string $idPagina
      * 
      * @return void
     **/
