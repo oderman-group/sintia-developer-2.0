@@ -70,11 +70,11 @@ class Modulos {
     /**
      * Este metodo sirve para validar el acceso a las diferentes paginas de los directivos dependiendo de su rol
      * 
-     * @param string $idPagina
+     * @param array $paginas
      * 
      * @return void
     **/
-    public static function validarSubRol($idPagina){
+    public static function validarSubRol($paginas){
         global $conexion, $baseDatosServicios, $datosUsuarioActual, $config;
 
         try{
@@ -86,22 +86,25 @@ class Modulos {
         $numSubRoles=mysqli_num_rows($consultaSubRoles);
         if ($numSubRoles<1) { 
             return true;
-        }
-
-        while($subRoles = mysqli_fetch_array($consultaSubRoles, MYSQLI_BOTH)){
-            try{
-                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
-                WHERE spp_id_rol='".$subRoles['spu_id_sub_rol']."' AND spp_id_pagina='".$idPagina."'");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
+        }else{
+            $subRoles = mysqli_fetch_array($consultaSubRoles, MYSQLI_BOTH);
+            $cont=0;
+            foreach ($paginas as $idPagina) {
+                try{
+                    $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
+                    WHERE spp_id_rol='".$subRoles['spu_id_sub_rol']."' AND spp_id_pagina='".$idPagina."'");
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+                $numPaginaSubRoles=mysqli_num_rows($consultaPaginaSubRoles);
+                if ($numPaginaSubRoles>0) { 
+                    $cont++;
+                }
             }
-            $numPaginaSubRoles=mysqli_num_rows($consultaPaginaSubRoles);
-
-            if ($numPaginaSubRoles>0) { 
+            if($cont>0){
                 return true;
-            }else{
-                return false;
             }
         }
+        return false;
     }
 }

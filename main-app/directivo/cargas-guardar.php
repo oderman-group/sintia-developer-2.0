@@ -5,7 +5,7 @@ require_once("../class/CargaAcademica.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0183';
 
-if(!Modulos::validarSubRol($idPaginaInterna)){
+if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
