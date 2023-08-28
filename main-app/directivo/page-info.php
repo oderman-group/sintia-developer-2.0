@@ -2,12 +2,7 @@
 <?php $idPaginaInterna = 'DT0107';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php include("../../config-general/page-info-contenido.php");
-
-if(!Modulos::validarSubRol($idPaginaInterna)){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}?>
+<?php include("../../config-general/page-info-contenido.php");?>
 </head>
 
 <!-- END HEAD -->
