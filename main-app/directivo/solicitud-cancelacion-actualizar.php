@@ -37,10 +37,12 @@ $data = [
 	'usuario_nombre'    => $_POST['ins_contacto'],
 	'solicitud_usuario'    => $_POST['ins_id'],
 	'solicitud_id'    => $idRegistro,
+	'institucion_id' => $_POST["ins_id"],
 	'solicitud_estado'    => $_POST["estado"],
 	'solicitud_respuesta'    => $_POST["respuesta"],
 	'solicitud_responsable'    => $datosUsuarioActual["uss_nombre"],
-	'usuario_email2'    => $datosUsuarioActual['uss_email']
+	'usuario2_email'    => $datosUsuarioActual['uss_email'],
+	'usuario2_nombre'    => $datosUsuarioActual['uss_email']
 ];
 
 
@@ -51,5 +53,5 @@ EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 }
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="dev-solicitudes-cancelacion-detalle.php?success=SC_DT_2&id=' . $idRegistro . '";</script>';
+echo '<script type="text/javascript">window.location.href="dev-solicitudes-cancelacion.php?success=SC_DT_2&id=' . $idRegistro . '";</script>';
 exit();
