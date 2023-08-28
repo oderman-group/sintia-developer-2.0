@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
     $consultaDatos=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2");
 } catch (Exception $e) {

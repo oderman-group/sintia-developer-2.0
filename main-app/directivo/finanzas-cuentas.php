@@ -1,6 +1,11 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DT0093';
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");

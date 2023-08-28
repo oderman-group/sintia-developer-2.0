@@ -7,6 +7,11 @@ include("verificar-periodos-diferentes.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 try{
 	$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
 } catch (Exception $e) {

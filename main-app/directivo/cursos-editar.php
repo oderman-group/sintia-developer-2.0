@@ -4,6 +4,11 @@ $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 try{
     $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
 } catch (Exception $e) {

@@ -28,6 +28,11 @@ $idPaginaInterna = 'DT0079';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 ?>
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">

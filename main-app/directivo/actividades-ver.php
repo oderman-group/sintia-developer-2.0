@@ -5,6 +5,11 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
 	$consultaActividad=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1");
 } catch (Exception $e) {

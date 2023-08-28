@@ -4,6 +4,11 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
 (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
 WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),

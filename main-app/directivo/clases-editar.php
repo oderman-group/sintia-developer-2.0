@@ -5,6 +5,11 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
     $consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
 } catch (Exception $e) {

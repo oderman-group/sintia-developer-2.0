@@ -1,5 +1,10 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0011';?>
+<?php $idPaginaInterna = 'DT0011';
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 </head>

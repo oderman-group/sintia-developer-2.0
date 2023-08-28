@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php 
+
+if(!Modulos::validarSubRol($idPaginaInterna)){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
     $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".$_GET["id"].";");
 } catch (Exception $e) {
