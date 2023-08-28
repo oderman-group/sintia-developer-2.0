@@ -67,4 +67,41 @@ class Modulos {
         return true;
     }
 
+    /**
+     * Este metodo sirve para validar el acceso a las diferentes paginas de los directivos dependiendo de su rol
+     * 
+     * @param intiger $idPagina
+     * 
+     * @return void
+    **/
+    public static function validarSubRol($idPagina){
+        global $conexion, $baseDatosServicios, $datosUsuarioActual, $config;
+
+        try{
+            $consultaSubRoles = mysqli_query($conexion, "SELECT spu_id_sub_rol FROM ".$baseDatosServicios.".sub_roles_usuarios 
+            WHERE spu_id_usuario='".$datosUsuarioActual['uss_id']."' AND spu_institucion='".$config['conf_id_institucion']."' AND spu_year='".$config['conf_agno']."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numSubRoles=mysqli_num_rows($consultaSubRoles);
+        if ($numSubRoles<1) { 
+            return true;
+        }
+
+        while($subRoles = mysqli_fetch_array($consultaSubRoles, MYSQLI_BOTH)){
+            try{
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
+                WHERE spp_id_rol='".$subRoles['spu_id_sub_rol']."' AND spp_id_pagina='".$idPagina."'");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+            $numPaginaSubRoles=mysqli_num_rows($consultaPaginaSubRoles);
+
+            if ($numPaginaSubRoles>0) { 
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 }
