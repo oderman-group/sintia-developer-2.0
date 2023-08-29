@@ -134,7 +134,7 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
                                     <div class="form-group row">
                                         <label class="col-sm-2 ">Respuesta:</label>
                                         <div class="col-sm-10">
-                                            <textarea cols="80" id="editor1" name="respuesta" rows="10"><?= $solicitudActual['solcan_respuesta']; ?></textarea>
+                                            <textarea cols="80" id="editor1" name="respuesta" rows="10" required><?= $solicitudActual['solcan_respuesta']; ?></textarea>
                                         </div>
                                     </div>
 
