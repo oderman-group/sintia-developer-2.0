@@ -51,7 +51,7 @@ if($extension == 'xlsx'){
 							$Separador=" , ";
 						}
 					}
-					if(count($_POST["actualizarCampo"])>0){
+					if(!empty($_POST["actualizarCampo"])){
 						$camposActualizar="Campos a actualizar (".$camposActualizar.")";
 					}
 					$mensaje='Se generó Jobs para importar excel del archivo ['.$archivo.'] hasta la fila '.$_POST["filaFinal"].' '.$camposActualizar;
