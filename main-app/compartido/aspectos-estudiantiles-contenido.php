@@ -1,14 +1,16 @@
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 require_once("../class/Estudiantes.php");
-$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["idR"]);
+$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idR);
 
 
 $usuarioEstudiante = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios
-WHERE uss_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
+WHERE uss_id='".$idR."'"), MYSQLI_BOTH);
 
 
 $agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
-WHERE mat_id_usuario='".$_GET["idR"]."'"), MYSQLI_BOTH);
+WHERE mat_id_usuario='".$idR."'"), MYSQLI_BOTH);
 
 
 $edad = date("Y") - $agnoNacimiento[0];
@@ -31,13 +33,13 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                         <div class="col-sm-12">
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
-                                <a href="reportes-lista.php?est=<?=$_GET['idR'];?>&fest=1" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
+                                <a href="reportes-lista.php?est=<?=$idR;?>&fest=1" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
                             <?php }?>
                             
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-                                <a href="estudiantes-editar.php?idR=<?=$_GET['idR'];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
+                                <a href="estudiantes-editar.php?idR=<?=$idR;?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
 
                             <?php }?>
 
