@@ -31,17 +31,23 @@ $listaRoles=SubRoles::listar();
         <!-- start page content -->
         <div class="page-content-wrapper">
             <div class="page-content">
+                
+               
                 <div class="page-bar">
-                    <div class="page-title-breadcrumb">
-                        <div class=" pull-left">
-                            <div class="page-title">Configuracion de Sub Rol</div>
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Crear Sub Rol</div>
+								<?php include("../compartido/texto-manual-ayuda.php");?>
+                            </div>
+							<ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Crear Sub Rol</li>
+                            </ol>
                         </div>
                     </div>
-                </div>
 
                 <div class="panel">
-                    <header class="panel-heading panel-heading-purple">Configuracion de sub rol</header>
+                    <header class="panel-heading panel-heading-purple">Configuracion</header>
                     <div class="panel-body">
                         <form action="sub-roles-guardar.php" method="post" enctype="multipart/form-data">
                             <i class="bi bi-eye-slash"></i>
