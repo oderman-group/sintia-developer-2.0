@@ -99,15 +99,8 @@ class Modulos {
             }
             $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
             $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
-            $cont=0;
-            foreach ($paginas as $idPagina) {
-                foreach ($valoresPaginas as $valoresIdPaginas) {
-                    if ($valoresIdPaginas==$idPagina) { 
-                        $cont++;
-                    }
-                }
-            }
-            if($cont>0){
+            $permitidos= array_intersect($paginas,$valoresPaginas);
+            if(!empty($permitidos)){
                 return true;
             }
         }
