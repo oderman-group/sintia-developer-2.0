@@ -58,7 +58,7 @@ include("../compartido/head.php");
 													<div class="btn-group">
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<a href="sub-roles-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-																Agregar nuevo <i class="fa fa-plus"></i>
+                                                            <?=$frases[231][$datosUsuarioActual['uss_idioma']];?><i class="fa fa-plus"></i>
 															</a>
 														<?php }?>
 													</div>
@@ -73,11 +73,11 @@ include("../compartido/head.php");
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Cod</th>
-                                                        <th>Rol</th>
-                                                        <th>Institucion</th>
-                                                        <th>Paginas</th>
-                                                        <th>Año</th>
-                                                        <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?> </th>
+                                                        <th>Sub rol</th>
+                                                        <th><?=$frases[372][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th><?=$frases[371][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th><?=$frases[373][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
