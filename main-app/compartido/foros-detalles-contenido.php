@@ -1,6 +1,8 @@
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 require_once("../class/Estudiantes.php");
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$idR."'"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -45,7 +47,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 
 													?>
 													<li class="list-group-item">
-														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
+														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
 													<?php }}?>
@@ -76,7 +78,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<div class="card-body " id="bar-parent1">
 										<form class="form-horizontal" action="../compartido/guardar.php" method="post">
 											<input type="hidden" name="id" value="8">
-											<input type="hidden" name="foro" value="<?=$_GET["idR"];?>">
+											<input type="hidden" name="foro" value="<?=$idR;?>">
 											
 											<div class="form-group row">
 												<div class="col-sm-12">
@@ -104,7 +106,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
-											WHERE com_id_foro='".$_GET["idR"]."'
+											WHERE com_id_foro='".$idR."'
 											$filtro
 											ORDER BY com_id DESC
 											");
@@ -218,12 +220,12 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<div class="panel-body">
 											<?php
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
-											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$_GET["idR"]."'
+											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$idR."'
 											ORDER BY foro_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['foro_id'];?>"><?=$regComun['foro_nombre'];?></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['foro_id']);?>"><?=$regComun['foro_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>

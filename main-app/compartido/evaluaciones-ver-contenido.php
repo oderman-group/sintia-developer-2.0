@@ -2,25 +2,27 @@
             <div class="page-content-wrapper">
 				
 				<?php
+				$idE="";
+				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-				WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1"), MYSQLI_BOTH);
+				WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
 
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1 
-				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
 				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
-				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
 				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0)
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0)
 				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
 				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 				INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-				WHERE evp_id_evaluacion='".$_GET["idE"]."'
+				WHERE evp_id_evaluacion='".$idE."'
 				");
 				
 				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -33,7 +35,7 @@
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
 				
 				if($nume==0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=203";</script>';
@@ -42,14 +44,14 @@
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
 				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-				WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 					exit();
 				}
 				?>
 
-				<input type="hidden" id="idE" name="idE" value="<?=$_GET["idE"];?>">
+				<input type="hidden" id="idE" name="idE" value="<?=$idE;?>">
                 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -71,7 +73,7 @@
 							if($datosUsuarioActual[3]==2){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$idE;?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 								<li class="active"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></li>
                             </ol>
 							<?php }?>
@@ -101,7 +103,7 @@
 											<p><?=$frases[159][$datosUsuarioActual[8]];?></p>
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -111,7 +113,7 @@
 												
 												if($nume==0){continue;}
 											?>
-												<p><a href="evaluaciones-ver.php?idE=<?=$evaComun['eva_id'];?>&usrEstud=<?=$datosEstudianteActual['mat_id_usuario'];?>" <?=$estiloResaltado;?>><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>" <?=$estiloResaltado;?>><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
@@ -122,7 +124,7 @@
 							<div class="col-md-6">
 									<form action="guardar.php" method="post">
 										<input type="hidden" name="id" value="9">
-										<input type="hidden" name="idE" value="<?=$_GET["idE"];?>">
+										<input type="hidden" name="idE" value="<?=$idE;?>">
 										<input type="hidden" name="cantPreguntas" value="<?=$cantPreguntas;?>">
 										
 									
@@ -149,11 +151,11 @@
 												$respuestasXpregunta = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1
-												WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_pregunta='".$preguntas['preg_id']."'),
+												WHERE res_id_evaluacion='".$idE."' AND res_id_pregunta='".$preguntas['preg_id']."'),
 												
 												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
 												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
-												WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_pregunta='".$preguntas['preg_id']."')
+												WHERE res_id_evaluacion='".$idE."' AND res_id_pregunta='".$preguntas['preg_id']."')
 												"), MYSQLI_BOTH);
 												
 												$totalPuntos +=$preguntas['preg_valor'];
@@ -172,16 +174,16 @@
 													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados
 													WHERE res_id_evaluacion='".$_GET['idE']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."'
 													"), MYSQLI_BOTH);
-													if($compararRespuestas[0]!="") $cheked = 'checked'; else $cheked = '';
+													if(!empty($compararRespuestas[0])) $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
-													if($respuestas['resp_correcta']==1 and $compararRespuestas[0]!=""){
+													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas[0])){
 														$puntosSumados += $preguntas['preg_valor'];
 													}
 											?>
 												<div>
 													<?php 
 													if($preguntas['preg_tipo_pregunta']==3){
-														if($compararRespuestas['res_archivo']!=""){
+														if(!empty($compararRespuestas['res_archivo'])){
 													?>
 														<p style="color: navy; font-weight: bold;">El maestro debe ver el archivo y evaluar esta respuesta manualmente.</p>
 														<a href="../files/evaluaciones/<?=$compararRespuestas['res_archivo'];?>" target="_blank"><?=$compararRespuestas['res_archivo'];?></a>

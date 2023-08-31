@@ -1,6 +1,11 @@
 <?php
-if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($_GET["carga"]) or !is_numeric($_GET["periodo"])){
-	if($_COOKIE["cargaE"]!="" and $_COOKIE["periodoE"]!=""){
+$carga="";
+if(!empty($_GET["carga"])){ $carga=base64_decode($_GET["carga"]);}
+$periodo="";
+if(!empty($_GET["periodo"])){ $periodo=base64_decode($_GET["periodo"]);}
+
+if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or !is_numeric($periodo)){
+	if(!empty($_COOKIE["cargaE"]) and !empty($_COOKIE["periodoE"])){
 		$cargaConsultaActual = $_COOKIE["cargaE"];
 		$periodoConsultaActual = $_COOKIE["periodoE"];
 	}else{
@@ -8,8 +13,8 @@ if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($_GET["carg
 			exit();
 	}
 }else{
-	$cargaConsultaActual = $_GET["carga"];
-	$periodoConsultaActual = $_GET["periodo"];
+	$cargaConsultaActual = $carga;
+	$periodoConsultaActual = $periodo;
 }
 
 $cargaHconsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas_acceso 

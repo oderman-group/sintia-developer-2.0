@@ -54,7 +54,7 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= $cargaConsultaActual; ?>&periodo=<?= $i; ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
 
 												<?php if (!empty($notapp[0]) and $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">
