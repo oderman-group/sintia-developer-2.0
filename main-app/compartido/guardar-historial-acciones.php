@@ -28,7 +28,13 @@ try {
     if ( isset($_POST) && !empty($_POST) ) {
         $post = " | ";
         foreach ($_POST as $key => $value) {
-            $post .= "&{$key}={$value}";
+            if(is_array($value)){
+                $valor=json_encode($value);
+                $post .= "&{$key}={$valor}";
+            }else{
+                $post .= "&{$key}={$value}";
+            }
+            
         }
     }
 

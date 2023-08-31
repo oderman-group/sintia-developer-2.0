@@ -156,14 +156,16 @@
 							<?php 
 							//MÓDULO ADMINISTRTIVO
 							if(array_key_exists(4, $arregloModulos)){?>
-							<li class="nav-item">
+							<li  <?php agregarClass(MENU_PADRE,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"]) ?> >
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-tachometer"></i>
 	                                <span class="title"><?=$frases[87][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="usuarios.php" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
-									<li class="nav-item"><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
-									<li class="nav-item"><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
+	                            <ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"])?>>
+	                                <li <?php agregarClass(MENU,["DT0126","DT0124"]) ?>><a href="usuarios.php" class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0122"]) ?>><a href="solicitudes.php" class="nav-link "> <span class="title">Solicitud desbloqueo</span></a></li>
+									<li <?php agregarClass(MENU,["DT0011"]) ?>><a href="galeria.php" class="nav-link "> <span class="title"><?=$frases[223][$datosUsuarioActual[8]];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0204","DT0205"]) ?>><a href="sub-roles.php" class="nav-link"> <span class="title">Sub Roles</span></a></li>
+									
 
 	                            </ul>
 	                        </li>
