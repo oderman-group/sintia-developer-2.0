@@ -9,7 +9,7 @@ include("../compartido/head.php");
 
 require_once("../class/SubRoles.php");
 $listaRoles=SubRoles::listar();
-
+$listaPaginas = SubRoles::listarPaginas();
 
 ?>
 <!-- Theme Styles -->
@@ -37,7 +37,7 @@ $listaRoles=SubRoles::listar();
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
-								<?php include("../compartido/texto-manual-ayuda.php");?>
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
@@ -53,7 +53,7 @@ $listaRoles=SubRoles::listar();
                             <i class="bi bi-eye-slash"></i>
 
                             <div class="form-group row">
-                                <label class="col-sm-2 "><?=$frases[187][$datosUsuarioActual['uss_idioma']];?> sub rol:</label>
+                                <label class="col-sm-1 "><?=$frases[187][$datosUsuarioActual['uss_idioma']];?> sub rol:</label>
 
                                 <div class="col-sm-6">
                                     <div class="input-group">
@@ -65,7 +65,7 @@ $listaRoles=SubRoles::listar();
 
                                 </div>
                                 <div class="col-sm-3">
-                                    <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
+                                    <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?> </button>
                                     
 
                                 </div>
@@ -74,7 +74,7 @@ $listaRoles=SubRoles::listar();
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?> ( <label  style="font-weight: bold;" id="cantSeleccionadas" ></label>/<?= mysqli_num_rows($listaPaginas)?> )</header>
                                         </div>
                                         <div class="card-body">
 
@@ -93,7 +93,6 @@ $listaRoles=SubRoles::listar();
                                                     <tbody>
                                                         <?php
                                                         $contReg = 1;
-                                                        $listaPaginas = SubRoles::listarPaginas();
                                                         while ($pagina = mysqli_fetch_array($listaPaginas, MYSQLI_BOTH)) {
 
                                                         ?>
@@ -102,7 +101,7 @@ $listaRoles=SubRoles::listar();
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox" name="paginas[]" value="<?= $pagina['pagp_id']; ?>">
+                                                                            <input type="checkbox"  onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>">
                                                                             <span class="slider red round"></span>
                                                                         </label>
                                                                     </div>
@@ -131,7 +130,8 @@ $listaRoles=SubRoles::listar();
                     </div>
 
 
-
+                    <select  id="paginasSeleccionadas"  style="width: 100% !important" name="paginas[]" multiple hidden/>
+                             						
 
 
 
@@ -145,37 +145,37 @@ $listaRoles=SubRoles::listar();
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
 <script type="text/javascript">
-    function agregarPagina(datos) {
+    var select = document.getElementById('paginasSeleccionadas');
+    contarPaginasSeleccionadas();
 
-        var idR = datos.id;
-        alert("iniivio" + idR);
-        // Valor que deseas agregar al array
-        var nuevoValor = "Nuevo valor desde JavaScript";
-
-        // Crear una instancia de XMLHttpRequest
-        var xhttp = new XMLHttpRequest();
-
-        // Definir el método y la URL del archivo PHP
-        xhttp.open("POST", "add_value.php", true);
-
-        // Configurar el encabezado de la solicitud
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        // Enviar la solicitud con el valor
-        xhttp.send("valor=" + nuevoValor);
-        var valor = 0;
-
-        if (document.getElementById(idR).checked) {
-            valor = 1;
-            document.getElementById("Reg" + idR).style.backgroundColor = "#ff572238";
-        } else {
-            valor = 0;
-            document.getElementById("Reg" + idR).style.backgroundColor = "white";
+    function seleccionarPagina(datos) {         
+        var page = datos.value;  
+        if(datos.checked) {
+            agregarPagina(page);
+        }else{
+            eliminarPagina(page);
         }
-        var operacion = 3;
-        alert(datos.id);
-
     }
+    function agregarPagina(page) {       
+        var nuevaOpcion = document.createElement('option');
+        nuevaOpcion.value = page;
+        nuevaOpcion.textContent = page;
+        nuevaOpcion.selected=true;      
+        select.appendChild(nuevaOpcion);
+        contarPaginasSeleccionadas();
+    }
+    function eliminarPagina(page) {          
+      var opcionAEliminar = select.querySelector('option[value='+page+']');      
+      if (opcionAEliminar) {
+        select.removeChild(opcionAEliminar);
+      }
+      contarPaginasSeleccionadas();
+    }
+    function contarPaginasSeleccionadas(){
+        var labelCant = document.getElementById('cantSeleccionadas');
+        var cantidadSeleccionadas = select.selectedOptions.length;
+        labelCant.textContent =cantidadSeleccionadas;
+    }  
 </script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
