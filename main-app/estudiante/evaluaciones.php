@@ -48,7 +48,7 @@
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 												</p>
 											<?php }?>
 										
@@ -78,7 +78,7 @@
 												  ORDER BY eva_id DESC
 												  ");
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-													  if($resultado['eva_clave']!="") $ulrEva = 'evaluaciones-clave.php'; else $ulrEva = 'evaluaciones-realizar.php';
+													  if(!empty($resultado['eva_clave'])) $ulrEva = 'evaluaciones-clave.php'; else $ulrEva = 'evaluaciones-realizar.php';
 													
 													//Cantidad de preguntas de la evaluación
 													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
@@ -107,7 +107,7 @@
 														  <h4 class="panel-title">
 															  <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse<?=$resultado['eva_id'];?>"> 
 																  <?=$resultado['eva_nombre'];?> 
-																  <?php if($datosTerminada[0]!=0){?><i class="fa fa-check-circle"></i><?php }?> 
+																  <?php if(!empty($datosTerminada[0])){?><i class="fa fa-check-circle"></i><?php }?> 
 															  </a>
 														  </h4>
 													  </div>
@@ -122,8 +122,8 @@
 															  </p>
 															  
 															  <p>
-																  <?php if($datosTerminada[0]==0){?>
-																  	<a class="btn red" href="<?=$ulrEva;?>?idE=<?=$resultado['eva_id'];?>"><?=strtoupper($frases[129][$datosUsuarioActual[8]]);?></a>
+																  <?php if(empty($datosTerminada[0])){?>
+																  	<a class="btn red" href="<?=$ulrEva;?>?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[129][$datosUsuarioActual[8]]);?></a>
 																  <?php }else{?>
 																  <hr>
 															  		<h4>RESULTADOS</h4>
@@ -133,7 +133,7 @@
 															  		<b>Preguntas incorrectas:</b> <?=$respuestasEvaluacion[1];?><br>
 															  		<b>Preguntas sin contestar:</b> <?=$respuestasEvaluacion[2];?><br>
 															  
-															  		<p><a class="btn blue" href="evaluaciones-ver.php?idE=<?=$resultado['eva_id'];?>"><?=strtoupper($frases[154][$datosUsuarioActual[8]]);?></a></p>
+															  		<p><a class="btn blue" href="evaluaciones-ver.php?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[154][$datosUsuarioActual[8]]);?></a></p>
 															  
 																  <?php }?>
 															  </p>

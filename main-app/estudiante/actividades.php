@@ -50,7 +50,7 @@
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 												</p>
 											<?php }?>
 										
@@ -121,7 +121,7 @@
                                                         </td>
 
 
-														<td><a href="actividades-ver.php?idR=<?=$resultado[0];?>"><?=$frases[154][$datosUsuarioActual[8]];?></a></td>
+														<td><a href="actividades-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$frases[154][$datosUsuarioActual[8]];?></a></td>
                                                     </tr>
 													<?php 
 														 $contReg++;

@@ -37,8 +37,10 @@
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <?php
-								if(is_numeric($_GET["carpeta"])){	
-									$idFolderActual = $_GET["carpeta"];
+                                $idFolderCarpetaActual="";
+                                if(!empty($_GET["carpeta"])){ $idFolderCarpetaActual=base64_decode($_GET["carpeta"]);}
+								if(is_numeric($idFolderCarpetaActual)){
+									$idFolderActual = $idFolderCarpetaActual;
 									$var = 1;
 									$i=0;
 									$vectorDatos = array();
@@ -46,7 +48,7 @@
                                         $consultaCarpetaActual=mysqli_query($conexion, "SELECT fold_id, fold_padre FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'");
 										$carpetaActual = mysqli_fetch_array($consultaCarpetaActual, MYSQLI_BOTH);
 										$vectorDatos[$i] = $carpetaActual['fold_id'];
-										if($carpetaActual['fold_padre']!="" and $carpetaActual['fold_padre']!='0'){
+										if(!empty($carpetaActual['fold_padre']) and $carpetaActual['fold_padre']!='0'){
 											$idFolderActual = $carpetaActual['fold_padre'];
 										}else{$var = 2;}
 										$i++;
@@ -62,7 +64,7 @@
 										$carpetaActual = mysqli_fetch_array($consultaCarpetaActual, MYSQLI_BOTH);
 
 									?>
-											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=$carpetaActual['fold_id'];?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=base64_encode($carpetaActual['fold_id']);?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<?php
 										$cont--;
 									}

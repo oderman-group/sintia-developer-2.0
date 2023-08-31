@@ -4,8 +4,8 @@ if(!empty($_GET["carga"])){ $carga=base64_decode($_GET["carga"]);}
 $periodo="";
 if(!empty($_GET["periodo"])){ $periodo=base64_decode($_GET["periodo"]);}
 
-if(!isset($carga) or !isset($periodo) or !is_numeric($carga) or !is_numeric($periodo)){
-	if($_COOKIE["cargaE"]!="" and $_COOKIE["periodoE"]!=""){
+if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or !is_numeric($periodo)){
+	if(!empty($_COOKIE["cargaE"]) and !empty($_COOKIE["periodoE"])){
 		$cargaConsultaActual = $_COOKIE["cargaE"];
 		$periodoConsultaActual = $_COOKIE["periodoE"];
 	}else{

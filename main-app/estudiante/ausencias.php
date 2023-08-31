@@ -53,7 +53,7 @@
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 													
 													<?php if(!empty($notapp[0])){?>
 														<div class="work-monitor work-progress">
@@ -124,11 +124,11 @@
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
-														<td><a href="clases-ver.php?idR=<?=$resultado[0];?>"><?=$resultado[1];?></a></td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$resultado[1];?></a></td>
 														<td><?=$resultado[2];?></td>
 														<td><?=$totalAusencia;?></td>
 														<td>
-															<a href="clases-ver.php?idR=<?=$resultado[0];?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

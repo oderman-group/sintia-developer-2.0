@@ -100,7 +100,7 @@
 													<tr id="reg<?=$resultado['foro_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
-														<td><a href="foros-detalles.php?idR=<?=$resultado['foro_id'];?>"><?=$resultado[1];?></a></td>
+														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>"><?=$resultado[1];?></a></td>
 														<td>
 															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 															
@@ -115,7 +115,7 @@
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="foros-detalles.php?idR=<?=$resultado['foro_id'];?>">Participación</a></li>
+																	  <li><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>">Participación</a></li>
 																	  <li><a href="foros-editar.php?idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
 																	  
 																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=16&idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>

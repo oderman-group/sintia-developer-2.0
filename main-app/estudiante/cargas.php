@@ -7,9 +7,15 @@ $_SESSION["bd"] = date("Y");
 <?php $idPaginaInterna = 'ES0010';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php
-if(!empty($_GET["carga"]) && is_numeric($_GET["carga"])){
-	setcookie("cargaE",$_GET["carga"]);
-	setcookie("periodoE",$_GET["periodo"]);
+$cargaE="";
+if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
+
+$periodoE="";
+if(!empty($_GET["periodo"])){ $periodoE=base64_decode($_GET["periodo"]);}
+
+if(is_numeric($cargaE)){
+	setcookie("cargaE",$cargaE);
+	setcookie("periodoE",$periodoE);
 	
 	$enlaceNext = 'calificaciones.php';
 	if($config['conf_sin_nota_numerica']==1){
@@ -18,7 +24,7 @@ if(!empty($_GET["carga"]) && is_numeric($_GET["carga"])){
 	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
 		$enlaceNext = 'ausencias.php';
 	}
-	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.base64_encode($cargaE).'&periodo='.base64_encode($periodoE).'";</script>';
 	exit();
 }
 ?>
@@ -103,10 +109,10 @@ if($config['conf_activar_encuesta']==1){
 							
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+									<a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
 								</div>
 	                        	<div class="course-box">
-	                        	<h4><a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h4><a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
 		                            <div class="text-muted">
 										<span class="m-r-10" style="font-size: 10px;"><?=$ultimoAcceso;?></span> 
 										
