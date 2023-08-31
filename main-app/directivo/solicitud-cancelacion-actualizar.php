@@ -9,12 +9,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 include("../compartido/historial-acciones-guardar.php");
+Modulos::validarAccesoDirectoPaginas();
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if (empty($_POST["respuesta"])) {
 	include("../compartido/guardar-historial-acciones.php");
-	$msj = ' Motivo de cancelacion no valido, verificar que el campo este lleno';
-	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' . $msj;;
+	$msj = 'Verificar que el campo respuesta este lleno';
+	$url = $_SERVER["HTTP_REFERER"] . '&error=ER_DT_15&msj=' . $msj;
 	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
 }
@@ -47,12 +48,12 @@ $data = [
 	'solicitud_respuesta'    => $_POST["respuesta"],
 	'solicitud_responsable'    => $datosUsuarioActual["uss_nombre"],
 	'usuario2_email'    => $datosUsuarioActual['uss_email'],
-	'usuario2_nombre'    => $datosUsuarioActual['uss_email']
+	'usuario2_nombre'    => $datosUsuarioActual['uss_nombre']
 ];
 
 
 $asunto = 'Respuesta solicitud de cancelacion';
-$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-respuesta-solicitud-cancelacion.php';
+$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-respuesta-solicitud.php';
 
 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 }

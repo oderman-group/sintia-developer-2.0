@@ -15,12 +15,13 @@ $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
 while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 // fecha1 es la primera fecha
 $fechaInicio = new DateTime();
-$finalizado = true;
+$finalizado = false;
 $parametros = json_decode($resultadoJobs["job_parametros"], true);
 $institucionId = $resultadoJobs["job_id_institucion"];
 $institucionBd = $resultadoJobs["ins_bd"];
 $anio = $resultadoJobs["job_year"];
 $institucionBdAnio = $resultadoJobs["ins_bd"]."_".$anio;
+$intento = intval($resultadoJobs["job_intentos"]);
 
 $grado =$parametros["grado"];
 $grupo =$parametros["grupo"];
@@ -37,9 +38,9 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-
+$num=0;
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
-
+        $num++;
 		$estudiante = $estudianteResultado["mat_id"];
 		include(ROOT_PATH."/main-app/definitivas.php");
 
@@ -49,17 +50,10 @@ $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional
 		$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
 
 		//Verificamos que el estudiante tenga sus notas al 100%
-		if($porcentajeActual<96 and $boletinDatos['bol_nota']==""){
+		if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
 			$mensaje=$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
-			
-			$datos = array(
-				"id" => $resultadoJobs['job_id'],			
-				"mensaje" =>$mensaje,
-				"intentos" =>$intentos
-			);
-			SysJobs::actualizar($datos);
-			$finalizado = false;
-			break;
+			SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje);
+			exit();
 		}
 		$caso = 1; //Inserta la definitiva que viene normal 
 		//Si ya existe un registro previo de definitiva TIPO 1
@@ -129,17 +123,32 @@ $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional
 		}		
 
 	}
+    $finalizado = true;
 	if($finalizado){
 		mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
+		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_cargas ac
+		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
+		WHERE  car_id='".$carga."'"));
+		$respuesta ="<br>Resumen del proceso:<br>
+		-Total Estudiantes calificafos: {$num}<br><br>
+		Datos registrados para<br>
+		- Carga : {$carga}<br>
+		- Materia :{$consulta_mat_area_est["mat_nombre"]}<br>
+		- Grado : {$grado}<br>
+		- Grupo : {$grupo}<br>
+		- Periodo : {$periodo}<br>		
+		<br>";
 		// fecha2 en este caso es la fecha actual
 		$fechaFinal = new DateTime();
-		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal); 
+		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal);
+		$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
 		$datos = array(
 			"id" => $resultadoJobs['job_id'],
-			"mensaje" => "Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!",
+			"mensaje" =>$mensaje,
 			"estado" =>JOBS_ESTADO_FINALIZADO,
 		);
 		SysJobs::actualizar($datos);
+		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES);
 	}
 	
 

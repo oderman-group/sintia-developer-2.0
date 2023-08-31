@@ -233,7 +233,7 @@ require_once("../class/Estudiantes.php");
 														 if($nota<$config[5])$color = $config[6]; elseif($nota>=$config[5]) $color = $config[7];
 														 
 														 //Exportar las notas
-														 if($_POST["exportar"]==1 and $nota!=""){
+														 if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and !empty($nota)){
 															 
 															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
 															
@@ -254,17 +254,17 @@ require_once("../class/Estudiantes.php");
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
 														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
-														<td><?=$datos1['epe_inicio'];?></td>
-														<td><?=$datos1['epe_fin'];?></td>
-														<td><?php if($datos1[2]>0){echo $datos1[2]." Min. y ";} if($datos1[3]>0){echo $datos1[3]." Seg.";}?></td>
-														<td><?php if($datos2[1]!=""){echo $datos2[2]."/".$cantPreguntas;}?></td>
-														<td align="center"><?php if($datos2[1]!=""){echo $datos2[1]."/".$datos2[0];}?></td>
-														<td align="center"><?php if($datos2[1]!=""){echo $porcentaje."%";}?></td>
-														<td style="color: <?=$color;?>;" align="center"><?php if($datos2[1]!=""){echo $nota;}?></td>
+														<td><?php if(!empty($datos1['epe_inicio'])){ echo $datos1['epe_inicio'];}?></td>
+														<td><?php if(!empty($datos1['epe_fin'])){ echo $datos1['epe_fin'];}?></td>
+														<td><?php if(!empty($datos2[2]) && $datos1[2]>0){echo $datos1[2]." Min. y ";} if(!empty($datos2[3]) && $datos1[3]>0){echo $datos1[3]." Seg.";}?></td>
+														<td><?php if(!empty($datos2[1])){echo $datos2[2]."/".$cantPreguntas;}?></td>
+														<td align="center"><?php if(!empty($datos2[1])){echo $datos2[1]."/".$datos2[0];}?></td>
+														<td align="center"><?php if(!empty($datos2[1])){echo $porcentaje."%";}?></td>
+														<td style="color: <?=$color;?>;" align="center"><?php if(!empty($datos2[1])){echo $nota;}?></td>
 														<td align="center">
-														<?php if($datos2[1]!="" or $datos1['epe_inicio']!=""){?>
+														<?php if(!empty($datos2[1]) or !empty($datos1['epe_inicio'])){?>
 															
-															<a href="evaluaciones-ver.php?idE=<?=$_GET["idE"];?>&usrEstud=<?=$resultado['mat_id_usuario'];?>" title="Ver resultados."><i class="fa fa-search-plus"></i></a>
+															<a href="evaluaciones-ver.php?idE=<?=base64_encode($_GET["idE"]);?>&usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>" title="Ver resultados."><i class="fa fa-search-plus"></i></a>
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
@@ -278,7 +278,7 @@ require_once("../class/Estudiantes.php");
 													<?php 
 														 $contReg++;
 													  }
-														if($_POST["exportar"]==1 and $registroNotas>=1){
+														if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and $registroNotas>=1){
 														?>
 														<script>
 															function enviarRespuesta(){

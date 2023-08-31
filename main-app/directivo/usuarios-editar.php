@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once("../class/SubRoles.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -122,7 +123,7 @@ if(!Modulos::validarPermisoEdicion()){
 													include("../compartido/error-catch-to-report.php");
 												}
 												?>
-                                                <select class="form-control  select2" name="tipoUsuario" required <?=$disabledPermiso;?>>
+                                                <select id="tipoUsuario" class="form-control  select2" name="tipoUsuario"  onchange="mostrarSubroles(this)" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -137,8 +138,43 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
-										
+										<div id="subRoles" >
+											<div class="form-group row"  >
+															<label class="col-sm-2 control-label" >Sub Roles</label>
+															<div class="col-sm-4" >
+																<?php
+																$listaRoles=SubRoles::listar();
+																$listaRolesUsuarios=SubRoles::listarRolesUsuarios($datosEditar['uss_id']);
+																?>
+																<select   class="form-control select2-multiple" style="width: 100% !important" name="subroles[]" multiple>
+																	<option value="">Seleccione una opción</option>
+																	<?php
+																	while ($subRol = mysqli_fetch_array($listaRoles, MYSQLI_BOTH)) {
+																		$selected = '';
+																		if (!empty($listaRolesUsuarios)) {
+																			$selecionado = array_key_exists($subRol["subr_id"], $listaRolesUsuarios);
+																			if ($selecionado) {
+																				$selected = 'selected';
+																			}
+																		}
+																		
+																		echo '<option value="' . $subRol["subr_id"] . '" ' . $selected . '>' . $subRol["subr_nombre"] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+																	}
+																	?>
+																</select>
+															</div>
+											</div>
+										</div>
 										<script>
+										$(document).ready(mostrarSubroles(document.getElementById("tipoUsuario")));
+										function mostrarSubroles(enviada) {
+											var valor = enviada.value;
+											if (valor == '5') {
+												document.getElementById("subRoles").style.display='block';
+											} else {
+												document.getElementById("subRoles").style.display='none';
+											}
+										}
 										function habilitarClave() {
 											var cambiarClave = document.getElementById("cambiarClave");
 											var clave = document.getElementById("clave");

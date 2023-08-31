@@ -251,7 +251,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
 																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
-																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
+																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	<?php if($config['conf_id_institucion']==1){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>

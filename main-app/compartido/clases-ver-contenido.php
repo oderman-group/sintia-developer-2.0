@@ -1,7 +1,9 @@
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 require_once("../class/Estudiantes.php");
 $consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_clases 
-WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+WHERE cls_id='".$idR."' AND cls_estado=1");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 					<div class="page-bar">
@@ -44,7 +46,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														if(empty($ingresoClase[0])){continue;}
 													?>
 													<li class="list-group-item">
-														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultado['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
+														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
 													<?php }?>
@@ -177,7 +179,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="card-body">
 										<form class="form-horizontal" action="#" method="post">
 											<input type="hidden" name="id" value="14">
-											<input type="hidden" name="idClase" value="<?=$_GET["idR"];?>">
+											<input type="hidden" name="idClase" value="<?=$idR;?>">
 											<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
 											<input type="hidden" name="bdConsulta" value="<?=$_SESSION["inst"];?>">
 											<input type="hidden" name="agnoConsulta" value="<?=$_SESSION["bd"];?>">
@@ -213,7 +215,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 																
 																function guardar(){																
 																	id="14";
-																	idClase=<?=$_GET["idR"];?>;
+																	idClase=<?=$idR;?>;
 																	sesionUsuario=<?=$_SESSION["id"];?>;
 																	contenido=document.getElementById("contenido").value;
 																	btn=document.getElementById("btnEnviar");
@@ -249,7 +251,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 																}
 																function consultarPreguntas(){
 
-																	var claseId = <?= $_GET["idR"]; ?>;
+																	var claseId = <?= $idR; ?>;
 																	var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
 																	
 
@@ -290,7 +292,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$resaltaItem = 'darkblue';
-														if($resultado['cls_id']==$_GET["idR"]){$resaltaItem = 'limegreen';}
+														if($resultado['cls_id']==$idR){$resaltaItem = 'limegreen';}
 														
 														$tachaItem = '';
 														if($resultado['cls_disponible']=='0'){$tachaItem = 'line-through';}
@@ -298,7 +300,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 														if($resultado['cls_disponible']=='0' and $datosUsuarioActual['uss_tipo']==4){continue;}
 													?>
 													<li class="list-group-item">
-														<a href="clases-ver.php?idR=<?=$resultado['cls_id'];?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado[1];?></a> 
+														<a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado[1];?></a> 
 														<div class="profile-desc-item pull-right">&nbsp;</div>
 													</li>
 													<?php }?>

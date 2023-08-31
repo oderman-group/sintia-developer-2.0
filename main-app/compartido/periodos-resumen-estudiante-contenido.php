@@ -130,11 +130,11 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
 															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
 															$usrEstud="";
-															if(!empty($_GET["usrEstud"])){ $usrEstud=$_GET["usrEstud"];}
+															if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones.php?carga=<?=$rCargas[0];?>&periodo=<?=$i;?>&usrEstud=<?=$usrEstud;?>" style="color:<?=$color;?>; text-decoration:underline;"><?php if(!empty($notasResultado[4])) { echo $notasResultado[4]."<br>".$tipo;} ?></a>
+																<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?php if(!empty($notasResultado[4])) { echo $notasResultado[4]."<br>".$tipo;} ?></a>
 															</td>
 														<?php		
 														 }

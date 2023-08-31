@@ -24,7 +24,7 @@
 										<input type="hidden" value="5" name="id">
 										<input type="hidden" value="<?=$cargaConsultaActual;?>" name="idRecursoP">
 										<input type="hidden" value="2" name="idCategoria">
-										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 											<div class="form-group row">
 												<label class="col-sm-3 control-label"><?=$frases[53][$datosUsuarioActual[8]];?></label>
@@ -90,7 +90,7 @@
 												<div class="col-sm-9">
 													<?php
 													$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders 
-													WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_tipo=1 AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "' AND fold_id!='".$_GET["idR"]."'
+													WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_categoria=2 AND fold_tipo=1 AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "' AND fold_id!='".$idR."'
 													ORDER BY fold_tipo, fold_nombre");
 													?>
 													<select class="form-control  select2" name="padre" required>
@@ -109,7 +109,7 @@
 												<div class="col-sm-9">
 													<select id="select_usuario" class="form-control select2-multiple" multiple name="compartirCon[]">
 														<?php
-														$infoConsulta = mysqli_query($conexion, "SELECT fxuc_usuario FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$_GET["idR"]."' AND fxuc_institucion='".$config['conf_id_institucion']."' AND fxuc_year='".$config['conf_agno']."'");
+														$infoConsulta = mysqli_query($conexion, "SELECT fxuc_usuario FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$idR."' AND fxuc_institucion='".$config['conf_id_institucion']."' AND fxuc_year='".$config['conf_agno']."'");
 														while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 
 															$consultaExiste=mysqli_query($conexion, "SELECT * FROM usuarios

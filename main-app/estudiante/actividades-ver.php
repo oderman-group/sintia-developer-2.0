@@ -7,8 +7,10 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $actividad = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1"), MYSQLI_BOTH);
+WHERE tar_id='".$idR."' AND tar_estado=1"), MYSQLI_BOTH);
 
 if($actividad[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=105";</script>';
@@ -16,7 +18,7 @@ if($actividad[0]==""){
 }
 
 $fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1"), MYSQLI_BOTH);
+WHERE tar_id='".$idR."' AND tar_estado=1"), MYSQLI_BOTH);
 if($fechas[0]<0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
@@ -133,9 +135,9 @@ if($fechas[0]<0){
 							                                    <h4 class="font-bold"><?=$frases[198][$datosUsuarioActual[8]];?></h4>
 							                                    <hr>
 							                                    <ul>
-							                                        <?php if($actividad['tar_archivo']!=""  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo2']!="" and file_exists('../files/tareas/'.$actividad['tar_archivo2'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo3']!="" and file_exists('../files/tareas/'.$actividad['tar_archivo3'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
+							                                        <?php if(!empty($actividad['tar_archivo'])  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo2']) and file_exists('../files/tareas/'.$actividad['tar_archivo2'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo3']) and file_exists('../files/tareas/'.$actividad['tar_archivo3'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
 							                                    </ul>
 							                                    
 							                                    <br>
@@ -150,7 +152,7 @@ if($fechas[0]<0){
 		                                                                <?php if($fechas[1]<=0 or $actividad['tar_impedir_retrasos']==0){?>
 																		<form id="form_subir" action="guardar.php" method="post" enctype="multipart/form-data">
 																			<input type="hidden" name="id" value="10">
-																			<input type="hidden" name="idR" value="<?=$_GET["idR"];?>">
+																			<input type="hidden" name="idR" value="<?=$idR;?>">
 		                                                                    
 																			<p><textarea class="form-control p-text-area" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
 																			
@@ -187,8 +189,8 @@ if($fechas[0]<0){
 																		}?>
 		                                                            </div>
 																	<?php
-																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
-																	if($enviada[0]!=""){
+																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$idR."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+																	if(!empty($enviada[0])){
 																	?>
 																		<div class="panel">
 																			<h4 class="font-bold"><?=$frases[200][$datosUsuarioActual[8]];?></h4>
@@ -197,19 +199,19 @@ if($fechas[0]<0){
 																			
 																			<p><b><?=$frases[202][$datosUsuarioActual[8]];?>:</b> <?=$enviada['ent_fecha'];?> </p>
 																			
-																			<?php if($enviada['ent_archivo']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
+																			<?php if(!empty($enviada['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 1:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if($enviada['ent_archivo2']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
+																			<?php if(!empty($enviada['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 2:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo2'];?>" target="_blank"><?=$enviada['ent_archivo2'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if($enviada['ent_archivo3']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
+																			<?php if(!empty($enviada['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 3:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo3'];?>" target="_blank"><?=$enviada['ent_archivo3'];?> </a>
 																			</p>

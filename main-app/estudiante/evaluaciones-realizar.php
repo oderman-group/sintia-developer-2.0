@@ -84,8 +84,10 @@
 </div>
 	
 	<?php
+	$idE="";
+	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1"), MYSQLI_BOTH);
+	WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
 
 	if($evaluacion[0]==""){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=106";</script>';
@@ -93,7 +95,7 @@
 	}
 	
 	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1"), MYSQLI_BOTH);
+	WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
 	if($fechas[2]>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=204&fechaD='.$evaluacion['eva_desde'].'&diasF='.$fechas[0].'&segundosF='.$fechas[2].'";</script>';
 		exit();
@@ -106,7 +108,7 @@
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
+	WHERE evp_id_evaluacion='".$idE."'
 	");
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -119,7 +121,7 @@
 
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-	WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
+	WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
 	
 	if($nume>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=200";</script>';
@@ -128,26 +130,26 @@
 	
 	//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
 	$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-	WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+	WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 	if($estadoSesionEvaluacion>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 		exit();
 	}
 	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
-	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
+	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
 	
-	mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$_GET["idE"]."', now())");
+	mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$idE."', now())");
 	
 
 	//CUANTOS ESTÁN REALIZANDO LA EVALUACIÓN EN ESTE MOMENTO Y CUANTOS TERMINARON
 	$Numerosevaluados = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_fin IS NULL),
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
+	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_fin IS NULL),
+	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
 	"), MYSQLI_BOTH);
 	
 	?>
 
-	<input type="hidden" id="idE" name="idE" value="<?=$_GET["idE"];?>">
+	<input type="hidden" id="idE" name="idE" value="<?=$idE;?>">
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
@@ -232,7 +234,7 @@
 									<form name="evaluacionEstudiante" action="guardar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" id="envioauto" name="envioauto" value="0">
 										<input type="hidden" name="id" value="9">
-										<input type="hidden" name="idE" value="<?=$_GET["idE"];?>">
+										<input type="hidden" name="idE" value="<?=$idE;?>">
 										<input type="hidden" name="cantPreguntas" value="<?=$cantPreguntas;?>">
 										
 									

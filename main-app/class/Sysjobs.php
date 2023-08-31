@@ -1,5 +1,14 @@
 <?php
 class SysJobs {
+     /**
+     * Esta función  crea ó actualiza si ya existe un registro, llamando las funcions de crear o  atualizar 
+     * 
+     * @param string $tipo
+     * @param array $parametros
+     * @param string $msj
+     * 
+     * @return String // se retorna el mensaje de la operacion registrada sys_jobs
+     */
     public static function registrar($tipo,array $parametros = [],$msj ='')
     {
         global $config;
@@ -36,7 +45,15 @@ class SysJobs {
         }
         return $mensaje;
     }
-
+    /**
+     * Esta función  crea  un registro de en la tabla sys_jobs
+     * 
+     * @param string $tipo
+     * @param array $parametros
+     * @param string $msj
+     * 
+     * @return String // se retorna el id del registro
+     */
     public static function crear($tipo,array $parametros = [],$mensaje ='')
     {
         global $conexion, $baseDatosServicios,$config;
@@ -76,11 +93,16 @@ class SysJobs {
         
         return $idRegistro;
     }
-
+    /**
+     * Esta función  actualiza  un registro de en la tabla sys_jobs
+     * 
+     * @param array $datos // son los parametros que se va actualizar en la tabla
+     * 
+     * @return void 
+     */
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
-        $resultado = [];
         
         $setIntentos=empty($datos["intentos"])?"":",job_intentos='".$datos["intentos"]."'";
         $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
@@ -101,10 +123,15 @@ class SysJobs {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
         }
-
-        return $resultado;
     }
-
+     /**
+     * Esta función  consulta el registro en la tabla sys_jobs 
+     * hay que tener en ceunta que siempre debe venir en el array $parametros
+     *  los parametros["tipo"], parametros["responsable"] , parametros["agno"] 
+     * @param array $parametrosBusqueda 
+     * 
+     * // se retorna el registro consultado
+     */
     public static function consultar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
@@ -130,7 +157,14 @@ class SysJobs {
 
         return $resultado;
     }
-
+     /**
+     * Esta función  lista los registros en la tabla sys_jobs 
+     * hay que tener en ceunta que siempre debe venir en el array $parametros
+     * los parametros["estado"]
+     * @param array $parametros 
+     * 
+     * @return array // se retorna el registro para consultar
+     */
     public static function listar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
@@ -156,6 +190,50 @@ class SysJobs {
 
         return $resultado;
     }
-
-
+    /**
+     * Esta función  actauliza los intentos de cada crob jobs ejecutado
+     * 
+     * @param array $id
+     * @param array $intento 
+     * @param array $mensaje 
+     * 
+     * 
+     * @return void 
+     */
+    public static function actualizarMensaje($id,$intento,$mensaje){
+        $intento=intval($intento)+1;
+        $datos = array(
+            "id" => $id,
+            "mensaje" => "Advertencia: ".$mensaje."!",
+            "intentos" =>$intento,
+        );
+        self::actualizar($datos);
+    }
+    /**
+     * Esta función  envia mensajes al usuario responsable del crobjobs notificando el estado
+     * 
+     * @param String $destinatario
+     * @param array $contenido 
+     * @param array $idJob 
+     * @param array $tipo
+     * 
+     * @return void 
+     */
+    public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo){
+        global $conexion,$baseDatosServicios,$config;       
+        
+        $para=$destinatario;
+        try{
+            $asunto="Ejecuci&oacute;n Finalizada Crob jobs (".$idJob.") de tipo ".$tipo;
+			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
+			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
+            $contenido="<br>Hola Sr(a) ".$destinatario["uss_nombre"]."<br> <p>".$contenido."</p>";
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
+				VALUES('" . $remitente["uss_id"] . "', '" . $para . "', '" . mysqli_real_escape_string($conexion,$asunto) . "', '" . mysqli_real_escape_string($conexion,$contenido) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $config["conf_agno"] . "')");
+						
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+         }
+    }
 }

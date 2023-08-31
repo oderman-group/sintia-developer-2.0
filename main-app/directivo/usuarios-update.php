@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0131';
 include("../compartido/sintia-funciones.php");
 include("../compartido/guardar-historial-acciones.php");
+require_once("../class/SubRoles.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -81,6 +82,14 @@ if ($_POST["tipoUsuario"] == 4) {
 	try{
 		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_email='" . strtolower($_POST["email"]) . "'
 		WHERE mat_id_usuario='" . $_POST["idR"] . "'");
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+}
+
+if(!empty($_POST["subroles"])){
+	try{
+		$listaRoles=SubRoles::crearRolesUsuario($_POST["idR"],$_POST["subroles"]);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

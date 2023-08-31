@@ -5,6 +5,7 @@ $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require ROOT_PATH.'/librerias/Excel/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
@@ -15,7 +16,6 @@ $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
 while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 	// fecha1 es la primera fecha
 	$fechaInicio = new DateTime();
-	$mensaje = "";
 	$finalizado = false;
 	$parametros = json_decode($resultadoJobs["job_parametros"], true);
 	$institucionId = $resultadoJobs["job_id_institucion"];
@@ -84,7 +84,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					try{
 						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
 					} catch (Exception $e) {
-					guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 					}
 					$idAcudiente = mysqli_insert_id($conexion);
 					$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
@@ -132,7 +132,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
 								WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
 				} catch (Exception $e) {
-					guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 				}
 				$num = mysqli_num_rows($consulta);
 				if($num > 0){
@@ -205,7 +205,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 							mysqli_query($conexion, "UPDATE academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
 									WHERE mat_id='".$datosEstudianteExistente['mat_id']."'");
 						} catch (Exception $e) {
-							guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+							SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 						}
 						//Verificamos que el array no venga vacio y adicionalmente que tenga el campo acudiente seleccionado para actualizarce
 						if (!empty($actualizarCampo) && in_array(4, $actualizarCampo)) {
@@ -213,17 +213,17 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 							try{
 								mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."'");
 							} catch (Exception $e) {
-								guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+								SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 							}
 							try{
 								mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."')");
 							} catch (Exception $e) {
-								guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+								SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 							}
 						}
 						$estudiantesActualizados["FILA_".$f] = $datosEstudianteExistente['mat_documento'];
 					} catch (Exception $e) {
-						guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+						SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 						exit();
 					}
 				} else {
@@ -250,7 +250,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					try{
 						mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
 					} catch (Exception $e) {
-						guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+						SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 					}
 					$idUsuarioEstudiante = mysqli_insert_id($conexion);
 					$sql .= "('".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."'),";
@@ -289,25 +289,22 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			$numeroAcudientesNoCreados = count($acudientesNoCreados);
 		}
 
-		$respuesta = [
-			"summary" => "
-				Resumen del proceso:<br>
-				- Total filas leidas: {$numFilas}<br><br>
+		$respuesta ="<br>Resumen del proceso:<br>
+		-Total filas leidas: {$numFilas}<br><br>
 				- Estudiantes creados nuevos: {$numeroEstudiantesCreados}<br>
-				- Estudiantes que ya estaban creados y se les actualizó alguna información seleccionada: {$numeroEstudiantesActualizados}<br>
-				- Estudiantes que les faltó algun campo obligatorio: {$numeroEstudiantesNoCreados}<br><br>
+				- Estudiantes que ya estaban creados y se les actualiz&oacute; alguna informaci&oacute;n seleccionada: {$numeroEstudiantesActualizados}<br>
+				- Estudiantes que les falt&oacute; algun campo obligatorio: {$numeroEstudiantesNoCreados}<br><br>
 				- Acudientes creados nuevos: {$numeroAcudientesCreados}<br>
 				- Acudientes que ya estaban creados y no hubo necesidad de volverlos a crear: {$numeroAcudientesExistentes}<br>
-				- Acudientes que les faltó el documento o el nombre: {$numeroAcudientesNoCreados}<br><br>"
-		];
-		$summary = http_build_query($respuesta);
+				- Acudientes que les falt&oacute; el documento o el nombre: {$numeroAcudientesNoCreados}<br><br>";
+		
 		if(!empty($estudiantesCreados) && count($estudiantesCreados) > 0) {
 			$sql = substr($sql, 0, -1);
 			try {
 				mysqli_query($conexion, $sql);
 			} catch(Exception $e){
 				print_r($sql);
-				guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+				SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 				exit();
 			}
 		}
@@ -320,17 +317,18 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			// fecha2 en este caso es la fecha actual
 			$fechaFinal = new DateTime();
 			$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal); 
+			$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
 			$datos = array(
 				"id" => $resultadoJobs['job_id'],
-				"mensaje" => "Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!",
-				"intentos" =>$intentos,		
+				"mensaje" => $mensaje,
 				"estado" =>JOBS_ESTADO_FINALIZADO,
 			);
 			SysJobs::actualizar($datos);
+			SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL);			
 		}	
 
 	}catch (Exception $e) {
-	guardarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+	SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 	}
 	
 	
@@ -338,16 +336,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 }
 exit();
 
-function guardarMensaje($id,$intento,$mensaje){
-	$intento=intval($intento)+1;
-	$datos = array(
-		"id" => $id,
-		"mensaje" => "Advertencia: ".$mensaje."!",
-		"intentos" =>$intento,
-	);
-	SysJobs::actualizar($datos);
 
-}
 
 function minutosTranscurridos($fecha_i,$fecha_f){
 	$intervalo = $fecha_i->diff($fecha_f);
