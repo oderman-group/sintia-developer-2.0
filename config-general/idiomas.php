@@ -732,6 +732,9 @@ $frases[367][$l] = 'Cancelar servicio';
 
 $frases[368][$l] = 'Motivo de Cancelacion';
 
+$frases[369][$l] = 'Crear';
+
+$frases[370][$l] = 'Páginas Disponibles';
 
 
 
@@ -1466,4 +1469,8 @@ $frases[362][$l] = 'All the most important options are in the menu option attend
 $frases[367][$l] = 'Cancel service';
 
 $frases[368][$l] = 'Reason for cancellation';
+
+$frases[369][$l] = 'Create';
+
+$frases[370][$l] = 'Available Pages';
 ?>

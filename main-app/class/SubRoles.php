@@ -101,7 +101,7 @@ class SubRoles {
         return $idRegistro;
     }
           /**
-     * Esta función  crea un actauliza  la tabla sub_roles_usuarios
+     * Esta función actauliza  la tabla sub_roles_usuarios
      * importante que la estructura del array pueda venir los valores:
      * ($datos["nombre"],$datos["id"],$datos["paginas"])
      * @param array $datos

@@ -4,7 +4,7 @@ include("session.php");
 $idPaginaInterna = 'DT0206';
 
 include("../compartido/historial-acciones-guardar.php");
-Modulos::verificarPermisoDev();
+
 include("../compartido/head.php");
 
 require_once("../class/SubRoles.php");
@@ -36,24 +36,24 @@ $listaRoles=SubRoles::listar();
                 <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Crear Sub Rol</div>
+                                <div class="page-title"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Crear Sub Rol</li>
+                                <li class="active"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?>  Sub Rol</li>
                             </ol>
                         </div>
                     </div>
 
                 <div class="panel">
-                    <header class="panel-heading panel-heading-purple">Configuracion</header>
+                    <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></header>
                     <div class="panel-body">
                         <form action="sub-roles-guardar.php" method="post" enctype="multipart/form-data">
                             <i class="bi bi-eye-slash"></i>
 
                             <div class="form-group row">
-                                <label class="col-sm-2 ">Nombre del sub rol:</label>
+                                <label class="col-sm-2 "><?=$frases[187][$datosUsuarioActual['uss_idioma']];?> sub rol:</label>
 
                                 <div class="col-sm-6">
                                     <div class="input-group">
@@ -65,7 +65,7 @@ $listaRoles=SubRoles::listar();
 
                                 </div>
                                 <div class="col-sm-3">
-                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                    <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
                                     
 
                                 </div>
@@ -74,7 +74,7 @@ $listaRoles=SubRoles::listar();
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Paginas Disponibles</header>
+                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?></header>
                                         </div>
                                         <div class="card-body">
 
@@ -85,9 +85,9 @@ $listaRoles=SubRoles::listar();
                                                             <th>#</th>
                                                             <th>Activa</th>
                                                             <th>Id</th>
-                                                            <th>Pagina</th>
+                                                            <th><?=$frases[115][$datosUsuarioActual['uss_idioma']];?></th>
                                                             <th>Modulo</th>
-                                                            <th>Palabras Claves</th>
+                                                            <th><?=$frases[228][$datosUsuarioActual['uss_idioma']];?></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -125,9 +125,8 @@ $listaRoles=SubRoles::listar();
                             </div>
                     </div>
                     <div class="form-group">
-                        <div class="offset-md-3 col-md-9">
-                            <button type="submit" class="btn btn-success">Guardar</button>
-                            <a href="#" name="sub-roles.php" onClick="deseaRegresar(this)" class="btn btn-round btn-danger">Regresar</a>
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
                         </div>
                     </div>
 

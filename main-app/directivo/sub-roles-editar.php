@@ -34,18 +34,18 @@ $listaPaginas = SubRoles::listarPaginas();
                 <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Configuracion de Sub Rol</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Configuracion de Sub Rol</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> Sub Rol</li>
                             </ol>
                         </div>
                     </div>
 
                 <div class="panel">
-                    <header class="panel-heading panel-heading-purple">Configuracion</header>
+                    <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></header>
                     <div class="panel-body">
                         <form action="sub-roles-actualizar.php" method="post" enctype="multipart/form-data">
                             <i class="bi bi-eye-slash"></i>
@@ -75,7 +75,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 ">Nombre del Sub Rol:</label>
+                                <label class="col-sm-2 "><?=$frases[187][$datosUsuarioActual['uss_idioma']];?>  Sub Rol:</label>
                                 <div class="col-sm-1">
                                     <input type="text" name="subr_id" class="form-control" value="<?= $rolActual['subr_id']; ?>" readonly>
                                 </div>
@@ -90,14 +90,14 @@ $listaPaginas = SubRoles::listarPaginas();
                                 </div>
                                 <div class="col-sm-3">
                                     
-                                    <button type="submit" class="btn btn-warning">Actualizar</button>
+                                    <button type="submit" class="btn btn-warning"><?=$frases[331][$datosUsuarioActual['uss_idioma']];?> </button>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Paginas Disponibles</header>
+                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?></header>
                                         </div>
                                         <div class="card-body">
 
@@ -106,12 +106,12 @@ $listaPaginas = SubRoles::listarPaginas();
                                                 <table id="example3" class="display" name="tabla1" style="width:100%;">
                                                     <thead>
                                                     <tr>
-                                                            <th>#</th>
-                                                            <th>Activa</th>
-                                                            <th>Id</th>
-                                                            <th>Pagina</th>
-                                                            <th>Modulo</th>
-                                                            <th>Palabras Claves</th>
+                                                         <th>#</th>
+                                                         <th>Activa</th>
+                                                         <th>Id</th>
+                                                         <th><?=$frases[115][$datosUsuarioActual['uss_idioma']];?></th>
+                                                         <th>Modulo</th>
+                                                         <th><?=$frases[228][$datosUsuarioActual['uss_idioma']];?></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -155,9 +155,9 @@ $listaPaginas = SubRoles::listarPaginas();
                             </div>
                     </div>
                     <div class="form-group">
-                        <div class="offset-md-3 col-md-9">
+                        <div class="col-md-9">
                          
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                            <button type="submit" class="btn btn-warning"><?=$frases[331][$datosUsuarioActual['uss_idioma']];?></button>
                         </div>
                     </div>
                 </div>
