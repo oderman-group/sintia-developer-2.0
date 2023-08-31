@@ -2,10 +2,12 @@
 <?php $idPaginaInterna = 'DT0201';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/UsuariosPadre.php");?>
+<?php require_once("../class/UsuariosPadre.php");
 
-
-<?php
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 $Plataforma = new Plataforma;
 $busqueda = $_GET['busqueda'];
 $msj = $_GET['msj'];

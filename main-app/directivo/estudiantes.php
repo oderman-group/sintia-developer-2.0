@@ -5,6 +5,10 @@
 <?php
 require_once("../class/Estudiantes.php");
 
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 
 $filtro = '';
 if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {

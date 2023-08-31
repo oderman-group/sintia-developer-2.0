@@ -67,4 +67,43 @@ class Modulos {
         return true;
     }
 
+    /**
+     * Este metodo sirve para validar el acceso a las diferentes paginas de los directivos dependiendo de su rol
+     * 
+     * @param array     $paginas
+     * @param bool      $menu
+     * 
+     * @return bool
+    **/
+    public static function validarSubRol($paginas){
+        global $conexion, $baseDatosServicios, $datosUsuarioActual, $config;
+
+        try{
+            $consultaSubRoles = mysqli_query($conexion, "SELECT spu_id_sub_rol FROM ".$baseDatosServicios.".sub_roles_usuarios 
+            WHERE spu_id_usuario='".$datosUsuarioActual['uss_id']."' AND spu_institucion='".$config['conf_id_institucion']."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numSubRoles=mysqli_num_rows($consultaSubRoles);
+        if ($numSubRoles<1) { 
+            return true;
+        }else{
+            $subRoles = mysqli_fetch_all($consultaSubRoles, MYSQLI_ASSOC);
+            $valoresArray = array_column($subRoles, 'spu_id_sub_rol');
+            $valoresCadena = implode(',', $valoresArray);
+            try{
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
+                WHERE spp_id_rol IN ($valoresCadena)");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
+            $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
+            $permitidos= array_intersect($paginas,$valoresPaginas);
+            if(!empty($permitidos)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

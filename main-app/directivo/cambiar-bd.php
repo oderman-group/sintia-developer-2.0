@@ -1,6 +1,11 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0030';?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 if(isset($_POST["cambiar"]))
 {
 	session_start();

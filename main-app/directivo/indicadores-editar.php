@@ -5,6 +5,11 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
 	$consultaIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 	INNER JOIN academico_indicadores ON ind_id=ipc_indicador

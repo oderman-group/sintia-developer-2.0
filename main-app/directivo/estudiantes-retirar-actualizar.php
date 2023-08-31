@@ -4,6 +4,11 @@ require_once("../class/Estudiantes.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0176';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 
 if ($_POST["estadoMatricula"] == 1){

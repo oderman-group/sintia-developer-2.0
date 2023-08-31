@@ -281,6 +281,7 @@ switch($_GET["idmsg"]){
 		$texto = 'Usted no tiene permisos para acceder a la página a la que intentó acceder.';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
+		$lottie = 'https://assets2.lottiefiles.com/packages/lf20_0emKnVT48m.json';
 	break;
 		
 	case 302:

@@ -5,6 +5,10 @@
 <?php
 require_once("../class/SubRoles.php");
 
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
 	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
 } catch (Exception $e) {
