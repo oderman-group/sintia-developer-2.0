@@ -41,7 +41,7 @@
 												<p><?=$frases[288][$datosUsuarioActual[8]];?></p>
 												<form class="form-horizontal" action="guardar.php" method="get">
 													<input type="hidden" name="get" value="1">
-													<input type="hidden" name="id" value="<?=$_GET["id"];?>">
+													<input type="hidden" name="id" value="<?=base64_decode($_GET["id"]);?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
 															<textarea name="comentario" class="form-control" rows="3" placeholder="<?=$frases[290][$datosUsuarioActual[8]];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
@@ -86,6 +86,9 @@
                                                 </thead>
                                                 <tbody>
 													<?php
+													$usrEstud="";
+													if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
+
 													 $filtro = '';
 													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
@@ -93,7 +96,7 @@
 													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta
 													 INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
 													 INNER JOIN usuarios ON uss_id=dr_usuario
-													 WHERE dr_estudiante='".$_GET["usrEstud"]."'
+													 WHERE dr_estudiante='".$usrEstud."'
 													 $filtro
 													 ");
 													 $contReg = 1;
@@ -116,7 +119,7 @@
 														</td>
 														<td>
 															<?php if($resultado['dr_aprobacion_acudiente']==0){?> 
-																<a href="reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$resultado['dr_id'];?>"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
+																<a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($usrEstud);?>&req=1&id=<?=base64_encode($resultado['dr_id']);?>"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
 															<?php } else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_acudiente_fecha'];?>"></i>
 															<?php }?>

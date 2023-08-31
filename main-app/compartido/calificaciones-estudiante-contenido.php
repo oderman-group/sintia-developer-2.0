@@ -1,6 +1,7 @@
-
-
-
+<?php
+	$usrEstud="";
+	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
+?>
 
 <div class="page-content">
 
@@ -46,7 +47,7 @@
 
 										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
-										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=$_GET["usrEstud"];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -112,7 +113,7 @@
 
 														<b><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?></b> 
 
-														<div class="profile-desc-item pull-right"><?=strtoupper($_GET["periodo"]);?></div>
+														<div class="profile-desc-item pull-right"><?=strtoupper($periodo);?></div>
 
 													</li>
 
@@ -161,14 +162,12 @@
 												if(!empty($notapp[0]) and $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
-												$usrEstud="";
-												if(!empty($_GET["usrEstud"])){ $usrEstud=$_GET["usrEstud"];}
 
 											?>
 
 												<p>
 
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>&usrEstud=<?=$usrEstud;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 
 													
 
