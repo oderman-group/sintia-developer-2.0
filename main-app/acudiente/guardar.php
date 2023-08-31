@@ -5,6 +5,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'AC0031';
 include("../compartido/historial-acciones-guardar.php");
 
+if(!empty($_POST["id"])){
 //SOLICITUD DE DESBLOQUEO
 if($_POST["id"]==1){
 
@@ -49,8 +50,10 @@ try{
 	exit();
 
 }
+}
 
 //========================================== GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET  GET GET GET GET GET GET GET GET GET GET GET GET GET ======================================================
+if(!empty($_GET["get"])){
 //FIRMA DIGITAL DE LOS REPORTES
 if($_GET["get"]==1){
 
@@ -63,6 +66,7 @@ if($_GET["get"]==1){
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="estudiantes.php";</script>';
 	exit();
+}
 }
 
 $_GET["get"] == 0;
