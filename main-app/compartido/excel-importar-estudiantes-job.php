@@ -35,7 +35,10 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 		$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
 	}
 	try{
-		$documento= IOFactory::load($nombreArchivo);
+		$archivo = explode("..", $nombreArchivo);
+		$direccionArchivo=ROOT_PATH."/main-app".$archivo[1];
+		
+		$documento= IOFactory::load($direccionArchivo);
 		$totalHojas= $documento->getSheetCount();
 		$hojaActual = $documento->getSheet(0);
 		$numFilas = $hojaActual->getHighestDataRow();
