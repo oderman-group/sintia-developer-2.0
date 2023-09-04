@@ -40,10 +40,10 @@
 	                            </div>
 	                        </li>
 							
-							<?php
-								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
-									if(Modulos::validarSubRol(['DT0030'])){
-							?>
+										<?php
+											if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
+												if(Modulos::validarSubRol(['DT0030'])){
+										?>
 								<div class="nav-item">
 									<div align="center" style="color:#FC0; font-weight:bold;">
 										AÑO CONSULTADO<br />
