@@ -1,6 +1,8 @@
 <?php
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+$usuario=0;
+if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
 $consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_clases 
 WHERE cls_id='".$idR."' AND cls_estado=1");
@@ -253,29 +255,18 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 																	var claseId = <?= $idR; ?>;
 																	var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
-																	
-
-																	datos = "claseId="+claseId+"&usuarioActual="+usuarioActual;
+																	var usuario = <?= $usuario; ?>;
+																	datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;
 																		$.ajax({
 																		type: "POST",
 																		url: "../compartido/ajax-comentarios-preguntas.php",
 																		data: datos,
 																		success: function(data){
 																			$('#preguntas').empty().hide().html(data).show(1);
-
 																		}
-																		});
-
-
-
-																}	
-
-																
-																															
+																	});
+																}
 															</script>
-														
-									
-											
                                 </div>
 								
 								
