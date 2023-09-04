@@ -16,7 +16,7 @@ $datosUsuarioActual[3]==1
         justify-content: center; 
         align-items: center;
         font-family:Arial;
-        font-size:14px;
+        font-size:11px;
 ">
 
 <?php 

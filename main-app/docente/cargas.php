@@ -29,7 +29,6 @@ require_once("../class/Sysjobs.php");
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?> (<a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>)</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
-								<?php include("../../config-general/mensajes-informativos.php"); ?>
                             </div>
                         </div>
                     </div>
@@ -39,6 +38,7 @@ require_once("../class/Sysjobs.php");
                      <div class="row">
 						 
 						 <div class="col-sm-12">
+						 <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 							 <?php
 							 $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 

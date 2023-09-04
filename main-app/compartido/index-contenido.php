@@ -185,6 +185,8 @@
 								</div>
 							</div>
 
+							<?php include("../compartido/peso.php");?>
+
 								
 							<?php include("../compartido/modulo-frases-lateral.php");?>
 							
