@@ -35,22 +35,17 @@
 	                                </div>
 	                                <div class="pull-left info">
 	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?></p>
-	                                    <a href="#"><i class="fa fa-circle user-online"></i><span class="txtOnline"> <?=$_SESSION["bd"];?></span></a>
-	                                </div>
-	                            </div>
-	                        </li>
-							
 										<?php
 											if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
 												if(Modulos::validarSubRol(['DT0030'])){
 										?>
-								<div class="nav-item">
-									<div align="center" style="color:#FC0; font-weight:bold;">
-										AÑO CONSULTADO<br />
-										<a href="cambiar-bd.php" style="font-size:36px; color:#FC0; font-weight:bold; text-decoration:underline;"><?=$_SESSION["bd"];?></a>
-									</div>
-								</div>
-							<?php }}?>
+	                                    <a href="cambiar-bd.php" style="text-decoration:underline;">
+										<i class="fa fa-calendar"></i>
+										<span class="txtOnline"> Año: <?=$_SESSION["bd"];?></span></a>
+										<?php }}?>
+	                                </div>
+	                            </div>
+	                        </li>
 							
 							<?php
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==3 || $datosUsuarioActual[3]==4){
@@ -333,10 +328,6 @@
 									</ul>
 								</li>
 							<?php }?>
-
-							<div class="nav-item">
-							<?php include("../compartido/peso.php");?>
-							</div>
 												
 							
 							<?php }?>
