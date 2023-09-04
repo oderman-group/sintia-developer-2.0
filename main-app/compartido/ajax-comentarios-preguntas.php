@@ -20,7 +20,7 @@ $usuarioActual= $_POST["usuarioActual"];
 					</div>
 
 					<div class="pull-left info">
-						<p><a href="clases-ver.php?idR=<?= base64_encode($preguntasDatos['cpp_id']); ?>&usuario=<?= base64_encode($preguntasDatos['cpp_usuario']); ?>"><?= $preguntasDatos['uss_nombre']; ?></a><br><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_contenido']; ?></span></p>
+						<p><a href="clases-ver.php?idR=<?= base64_encode($_POST["claseId"]); ?>&usuario=<?= base64_encode($preguntasDatos['cpp_usuario']); ?>"><?= $preguntasDatos['uss_nombre']; ?></a><br><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_contenido']; ?></span></p>
 					</div>
 				</div>
 				<div class="panel-body">
