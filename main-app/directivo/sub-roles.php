@@ -32,7 +32,6 @@ include("../compartido/head.php");
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <div class="page-title">Sub Roles</div>
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                         </div>
                     </div>
                 </div>
@@ -43,6 +42,7 @@ include("../compartido/head.php");
                             
 
                             <div class="col-md-12">
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
                                         <header>Sub Roles</header>
