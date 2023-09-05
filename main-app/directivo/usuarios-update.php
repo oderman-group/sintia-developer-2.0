@@ -86,13 +86,14 @@ if ($_POST["tipoUsuario"] == 4) {
 		include("../compartido/error-catch-to-report.php");
 	}
 }
-
-if(!empty($_POST["subroles"])){
-	try{
-		$listaRoles=SubRoles::crearRolesUsuario($_POST["idR"],$_POST["subroles"]);
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+try{
+if(!empty($_POST["subroles"])){	
+	$listaRoles=SubRoles::actualizarRolesUsuario($_POST["idR"],$_POST["subroles"]);
+}else{
+	$listaRoles=SubRoles::eliminarSubrolesUsuarios($_POST["idR"]);
+}
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
 }
 
 echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&success=SC_DT_2";</script>';
