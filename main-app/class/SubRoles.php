@@ -129,6 +129,44 @@ class SubRoles {
             exit();
         }
     }
+
+     /**
+     * Esta función  crea o elimina un registro si es necesario en la tabla sub_roles_usuarios
+     *
+     * @param string $idUsuario
+     * @param array $subRoles
+     *
+     * @return void // */
+     public static function actualizarRolesUsuario($idUsuario,array $subRoles= []){
+        global $conexion, $baseDatosServicios,$config;
+        $subRolesActualales= self::listarRolesUsuarios($idUsuario);
+        $subRolesCrear= [];
+        $subRolesElimnar= [];
+        $cantAgregar = 0;
+        $cantEliminar = 0; 
+        $subRolesArray= [];
+        foreach ($subRoles as $subRol ) {
+            $subRolesArray[$subRol]=$subRol;
+        } 
+        foreach ($subRolesActualales as $subrolBD ) {
+            if(!array_key_exists($subrolBD["spu_id_sub_rol"], $subRolesArray)){
+                $subRolesElimnar[$subrolBD["spu_id_sub_rol"]]= $subrolBD["spu_id_sub_rol"];
+                $cantEliminar ++;
+            }
+        }
+        foreach ($subRolesArray as $subrol ) {                
+            if(!array_key_exists($subrol, $subRolesActualales)){
+               $subRolesCrear[$subrol]= $subrol;
+               $cantAgregar ++;
+            }
+        }
+        if($cantEliminar>=1){
+            self::eliminarSubrolesUsuarios($idUsuario, $subRolesElimnar);
+        }
+        if($cantAgregar>=1){
+            self::crearRolesUsuario($idUsuario, $subRolesCrear);
+        }
+    }
      /**
      * Esta función  consulta  la tabla sub_roles por la identificaicon unica
      * @param String $id
@@ -162,15 +200,14 @@ class SubRoles {
      *
      *   */   
     public static function listar(array $parametrosBusqueda = []) {
-        global $conexion, $baseDatosServicios;
+        global $conexion,$config, $baseDatosServicios;
         $resultado = [];
-        $whereInstitucion=empty($parametrosBusqueda["institucion"])?" ":"WHERE subr_institucion ='".$parametrosBusqueda["institucion"]."'";
+        $institucion=empty($parametrosBusqueda["institucion"])?$config['conf_id_institucion']:$parametrosBusqueda['institucion'];
         $andYear=empty($parametrosBusqueda["year"])?" ":"AND subr_year='".$parametrosBusqueda["year"]."'";
-       
         
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles
-        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = subr_institucion"
-        .$whereInstitucion
+        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = subr_institucion
+        WHERE subr_institucion =".$institucion
         .$andYear;
         try {
             $resultado= mysqli_query($conexion,$sqlExecute);
@@ -237,11 +274,11 @@ class SubRoles {
      * @param String $idUsuario
      *  */
     public static function listarRolesUsuarios($idUsuario = '1'){
-        global $conexion, $baseDatosServicios;
+        global $conexion,$config, $baseDatosServicios;
         $arraysDatos = [];
-        
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles_usuarios
-        WHERE spu_id_usuario = '".$idUsuario."'";
+        WHERE spu_id_usuario = '".$idUsuario."'
+        AND spu_institucion =".$config['conf_id_institucion'];
         try {
             $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
             while($fila=$resultadoConsulta->fetch_assoc()){
@@ -253,6 +290,32 @@ class SubRoles {
             exit();
         }
         
+    }
+    /**
+     * Esta función  Elimina los  registros en la tabla sub_roles
+     *
+     * @param String $idUsuario
+     * @param array $subRoles
+     *
+     * @return void //   */
+
+     public static function eliminarSubrolesUsuarios(String $idUsuario = "",array $subRoles = []){
+        global $conexion, $baseDatosServicios,$config;               
+        try {
+            $INsubroles="";
+            if(!empty($subRoles)){
+                $INsubroles=" AND spu_id_sub_rol IN ('".implode(",",$subRoles)."')";
+            }
+            $sqlUpdate="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
+            WHERE spu_id_usuario=".$idUsuario.
+            " AND spu_institucion =".$config['conf_id_institucion'].
+            $INsubroles;
+            mysqli_query($conexion,$sqlUpdate);              
+            
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
     }
 
     /**
