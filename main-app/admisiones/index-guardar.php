@@ -3,19 +3,21 @@ include("bd-conexion.php");
 include("php-funciones.php");
 
 
+$year=(date('Y')+1);
+
 //DATOS SECRETARIA(O)
 $ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
 $uss = $pdoI->prepare($ussQuery);
 $uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_INT);
 $uss->execute();
-$num = $uss->rowCount();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
-$estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion";
+$estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion AND asp_agno = :years";
 $est = $pdo->prepare($estQuery);
 $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
 $est->bindParam(':institucion', $_POST['idInst'], PDO::PARAM_INT);
+$est->bindParam(':years', $year, PDO::PARAM_INT);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
