@@ -200,7 +200,7 @@ if (!Modulos::validarPermisoEdicion()) {
 										<?php
 										}
 										?>
-										<th rowspan="2" style="text-align:center;">PROM</th>
+										<th rowspan="2" style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;text-align:center;" >PROM</th>
 									</tr>
 
 									<tr>
