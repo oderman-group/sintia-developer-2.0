@@ -143,7 +143,10 @@ if(!Modulos::validarPermisoEdicion()){
 															<label class="col-sm-2 control-label" >Sub Roles</label>
 															<div class="col-sm-4" >
 																<?php
-																$listaRoles=SubRoles::listar();
+																$parametrosBuscar = array(
+																	"institucion" =>$config['conf_id_institucion']
+																);	
+																$listaRoles=SubRoles::listar($parametrosBuscar);
 																$listaRolesUsuarios=SubRoles::listarRolesUsuarios($datosEditar['uss_id']);
 																?>
 																<select   class="form-control select2-multiple" style="width: 100% !important" name="subroles[]" multiple>
