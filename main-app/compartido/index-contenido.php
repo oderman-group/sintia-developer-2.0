@@ -184,8 +184,12 @@
 									<?php }?>
 								</div>
 							</div>
-
-							<?php include("../compartido/peso.php");?>
+							
+							<?php 
+							if($datosUsuarioActual['uss_tipo'] == 1 || $datosUsuarioActual['uss_tipo'] == 5) {
+								include("../compartido/peso.php");
+							}
+							?>
 
 								
 							<?php include("../compartido/modulo-frases-lateral.php");?>
