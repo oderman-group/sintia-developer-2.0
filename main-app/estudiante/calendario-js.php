@@ -10,7 +10,7 @@ while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 			title: "'.$resultado["cro_tema"].'",
 			start: new Date('.$resultado["agno"].', '.$resultado["mes"].', '.$resultado["dia"].', 6, 0),
 			backgroundColor: "'.$resultado["cro_color"].'",
-			url: "cronograma-detalles.php?idR='.$resultado["cro_id"].'&usrEstud='.$_GET["usrEstud"].'&carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'"
+			url: "cronograma-detalles.php?idR='.base64_encode($resultado["cro_id"]).'&usrEstud='.$_GET["usrEstud"].'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'"
 		},
 	'; 
 }
