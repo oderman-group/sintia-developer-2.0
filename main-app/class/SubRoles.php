@@ -288,7 +288,7 @@ class SubRoles {
         
     }
     /**
-     * Esta función  Elimina los  registros en la tabla sub_roles
+     * Esta función  Elimina los  registros en la tabla sub_roles_usuarios
      *
      * @param String $idUsuario
      * @param array $subRoles
@@ -300,13 +300,13 @@ class SubRoles {
         try {
             $INsubroles="";
             if(!empty($subRoles)){
-                $INsubroles=" AND spu_id_sub_rol IN ('".implode(",",$subRoles)."')";
+                $INsubroles=" AND spu_id_sub_rol IN (".implode(",",$subRoles).")";
             }
-            $sqlUpdate="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
+            $sql="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
             WHERE spu_id_usuario=".$idUsuario.
             " AND spu_institucion =".$config['conf_id_institucion'].
             $INsubroles;
-            mysqli_query($conexion,$sqlUpdate);              
+            mysqli_query($conexion,$sql);              
             
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
