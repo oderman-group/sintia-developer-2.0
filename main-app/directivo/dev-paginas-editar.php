@@ -15,6 +15,11 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+$disabled='';
+if(!Modulos::validarPaginasHijasSubRol($_GET["idP"])){
+    $disabled='disabled';
+}
 ?>
 
 	<!--bootstrap -->
@@ -32,13 +37,15 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
     <script type="application/javascript">
         function actualizarPagina(enviada){
+            var tipoUss = document.getElementById('tipoUsuario');
             var idPagina = enviada.alt;
             var dato = enviada.value;
             if(dato!=""){
                 $('#resp').empty().hide().html("Validado Dato...").show(1);
 
                 datos = "idPagina="+(idPagina)+
-                        "&dato="+(dato);
+                        "&dato="+(dato)+
+                        "&tipoUss="+(tipoUss);
                     $.ajax({
                     type: "POST",
                     url: "ajax-dev-paginas-editar.php",
@@ -102,14 +109,14 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre Pagina<span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="nombrePagina" class="form-control" id="nombrePagina" value="<?=$datosPaginas['pagp_pagina'];?>" required>
+                                                <input type="text" name="nombrePagina" class="form-control" id="nombrePagina" value="<?=$datosPaginas['pagp_pagina'];?>" required <?=$disabled;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de Usuario</label>
                                             <div class="col-sm-3">
-                                                <select class="form-control  select2" name="tipoUsuario" id="tipoUsuario">
+                                                <select class="form-control  select2" name="tipoUsuario" id="tipoUsuario" <?=$disabled;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
@@ -132,7 +139,7 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Modulo</label>
                                             <div class="col-sm-3">
-                                                <select class="form-control  select2" name="modulo" id="modulo">
+                                                <select class="form-control  select2" name="modulo" id="modulo" <?=$disabled;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
@@ -155,14 +162,14 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Ruta Pagina<span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="rutaPagina" class="form-control" onChange="actualizarPagina(this)" alt="<?=$_GET["idP"];?>" id="rutaPagina" value="<?=$datosPaginas['pagp_ruta'];?>" required>
+                                                <input type="text" name="rutaPagina" class="form-control" onChange="actualizarPagina(this)" alt="<?=$_GET["idP"];?>" id="rutaPagina" value="<?=$datosPaginas['pagp_ruta'];?>" required <?=$disabled;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Navegable?</label>
                                             <div class="col-sm-3">
-                                                <select class="form-control  select2" name="navegable" id="navegable">
+                                                <select class="form-control  select2" name="navegable" id="navegable" <?=$disabled;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($datosPaginas['pagp_navegable']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($datosPaginas['pagp_navegable']==0){ echo "selected";} ?>>NO</option>
@@ -173,7 +180,7 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">CRUD</label>
                                             <div class="col-sm-3">
-                                                <select class="form-control  select2" name="crud" id="crud">
+                                                <select class="form-control  select2" name="crud" id="crud" <?=$disabled;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="CREATE" <?php if($datosPaginas['pagp_crud']=='CREATE'){ echo "selected";} ?>>CREATE</option>
                                                     <option value="READ" <?php if($datosPaginas['pagp_crud']=='READ'){ echo "selected";} ?>>READ</option>
@@ -183,24 +190,47 @@ $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             </div>
                                         </div>
 										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Pagina Padre</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control select2" name="paginaPadre" id="paginaPadre" <?=$disabled;?>>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    try{
+                                                        $consultaPaginas=mysqli_query($conexion, "SELECT pagp_id, pagp_pagina FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_tipo_usuario =5 AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) ORDER BY pagp_id");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
+                                                    while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                        $selected="";
+                                                        if($datosPaginas['pagp_pagina_padre']==$pagina["pagp_id"]){
+                                                            $selected="selected";
+                                                        }
+                                                        echo'<option value="'.$pagina["pagp_id"].'" '.$selected.'>'.$pagina["pagp_pagina"].'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Url para youtube</label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="urlYoutube" class="form-control" id="urlYoutube" value="<?=$datosPaginas['pagp_url_youtube'];?>">
+                                                <input type="text" name="urlYoutube" class="form-control" id="urlYoutube" value="<?=$datosPaginas['pagp_url_youtube'];?>" <?=$disabled;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Palabras Claves</label>
 											<div class="col-sm-6">
-                                                <textarea cols="80" id="editor1" name="palabrasClaves" rows="10"><?=$datosPaginas['pagp_palabras_claves'];?></textarea>
+                                                <textarea cols="80" id="editor1" name="palabrasClaves" rows="10" <?=$disabled;?>><?=$datosPaginas['pagp_palabras_claves'];?></textarea>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Descripción</label>
 											<div class="col-sm-6">
-                                                <textarea cols="80" id="editor2" name="descripcion" rows="10"><?=$datosPaginas['pagp_descripcion'];?></textarea>
+                                                <textarea cols="80" id="editor2" name="descripcion" rows="10" <?=$disabled;?>><?=$datosPaginas['pagp_descripcion'];?></textarea>
 											</div>
 										</div>
 

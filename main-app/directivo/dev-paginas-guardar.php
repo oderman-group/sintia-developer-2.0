@@ -28,7 +28,7 @@
     }
 
     try{
-        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".paginas_publicidad(pagp_id, pagp_pagina, pagp_tipo_usuario, pagp_modulo, pagp_ruta, pagp_palabras_claves, pagp_navegable, pagp_crud) VALUES ('".$_POST["codigoPagina"]."', '".$_POST["nombrePagina"]."', '".$_POST["tipoUsuario"]."', '".$_POST["modulo"]."', '".$_POST["rutaPagina"]."', '".$_POST["palabrasClaves"]."', '".$_POST["navegable"]."', '".$_POST["crud"]."')");
+        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".paginas_publicidad(pagp_id, pagp_pagina, pagp_tipo_usuario, pagp_modulo, pagp_ruta, pagp_palabras_claves, pagp_navegable, pagp_crud, pagp_pagina_padre) VALUES ('".$_POST["codigoPagina"]."', '".$_POST["nombrePagina"]."', '".$_POST["tipoUsuario"]."', '".$_POST["modulo"]."', '".$_POST["rutaPagina"]."', '".$_POST["palabrasClaves"]."', '".$_POST["navegable"]."', '".$_POST["crud"]."', '".$_POST["paginaPadre"]."')");
     } catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

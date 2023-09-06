@@ -167,6 +167,25 @@ include("../compartido/head.php");
                                         </div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Pagina Padre</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="paginaPadre" id="paginaPadre">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    try{
+                                                        $consultaPaginas=mysqli_query($conexion, "SELECT pagp_id, pagp_pagina FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_tipo_usuario =5 AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) ORDER BY pagp_id");
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
+                                                    while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                        echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
 											<label class="col-sm-2 control-label">Palabras Claves</label>
 											<div class="col-sm-6">
                                                 <textarea cols="80" id="editor1" name="palabrasClaves" rows="10" id="palabrasClaves"></textarea>
