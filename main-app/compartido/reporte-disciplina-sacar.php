@@ -42,21 +42,21 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
     <?php
     $cont = 1;
     $filtro = '';
-    if ($_POST["est"] != "") {
+    if (!empty($_POST["est"])) {
       $filtro .= " AND dr_estudiante='" . $_POST["est"] . "'";
     }
-    if ($_POST["falta"] != "") {
+    if (!empty($_POST["falta"])) {
       $filtro .= " AND dr_falta='" . $_POST["falta"] . "'";
     }
-    if ($_POST["usuario"] != "") {
+    if (!empty($_POST["usuario"])) {
       $filtro .= " AND dr_usuario='" . $_POST["usuario"] . "'";
     }
 
     $filtroMat = '';
-    if ($_POST["grado"] != "") {
+    if (!empty($_POST["grado"])) {
       $filtro .= " AND mat_grado='" . $_POST["grado"] . "'";
     }
-    if ($_POST["grupo"] != "") {
+    if (!empty($_POST["grupo"])) {
       $filtro .= " AND mat_grupo='" . $_POST["grupo"] . "'";
     }
 
@@ -74,7 +74,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
     ?>
 
-      <tr style="border-color:<?= $Plataforma->colorDos; ?>;">s
+      <tr style="border-color:<?= $Plataforma->colorDos; ?>;">
         <td><?= $cont; ?></td>
         <td><?= $resultado['dr_fecha']; ?></td>
         <td><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres']); ?></td>
