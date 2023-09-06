@@ -7,6 +7,7 @@ include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
 
+if (!empty($_POST["id"])) {
 //GUARDAR MOVIMIENTO
 if ($_POST["id"] == 8) {
 	if (trim($_POST["fecha"]) == "" or trim($_POST["detalle"]) == "" or trim($_POST["valor"]) == "" or trim($_POST["tipo"]) == "" or trim($_POST["forma"]) == "") {
@@ -896,8 +897,10 @@ if ($_POST["id"] == 61) {
 	echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
 	exit();
 }
+}
 //========================================== GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET  GET GET GET GET GET GET GET GET GET GET GET GET GET ======================
 
+if (!empty($_GET["get"])) {
 //CAMBIAR DE ESTADO LAS NOTICIAS
 if ($_GET["get"] == 1) {
 	try{
@@ -1683,6 +1686,7 @@ if($_GET["get"]==71){
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
 	exit();
+}
 }
 
 //EN CASO DE QUE NO ENTRE POR NINGUNA DE LAS ANTERIORES
