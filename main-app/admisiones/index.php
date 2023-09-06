@@ -22,6 +22,7 @@ WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
             <div class="row justify-content-md-center">
                 <div class="col col-lg-12">
                     <hr class="my-4">
+                    <?php include("alertas.php"); ?>
                     <h3 style="text-align: center;">ESCOGE LA INSTITUCIÓN A LA QUE DESEAS INGRESAR</h3>
                     <div class="col col-lg-12">
                         <form action="admision.php" method="post">

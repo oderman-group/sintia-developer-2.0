@@ -3,9 +3,10 @@ include("bd-conexion.php");
 include("php-funciones.php");
 
 
-if ($_FILES['foto']['name'] != "") {
+if (!empty($_FILES['foto']['name'])) {
 	$destino = "files/fotos";
-	$extension = end(explode(".", $_FILES['foto']['name']));
+    $explode = explode(".", $_FILES['foto']['name']);
+	$extension = end($explode);
 	$foto = uniqid('foto_') . "." . $extension;
 	@unlink($destino . "/" . $foto);
 	move_uploaded_file($_FILES['foto']['tmp_name'], $destino . "/" . $foto);
@@ -70,9 +71,10 @@ $asp->execute();
 
 
 //Documentos
-if ($_FILES['pazysalvo']['name'] != "") {
+if (!empty($_FILES['pazysalvo']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['pazysalvo']['name']));
+    $explode = explode(".", $_FILES['pazysalvo']['name']);
+	$extension = end($explode);
 	$pazysalvo = uniqid('pyz_') . "." . $extension;
 	@unlink($destino . "/" . $pazysalvo);
 	move_uploaded_file($_FILES['pazysalvo']['tmp_name'], $destino . "/" . $pazysalvo);
@@ -80,9 +82,10 @@ if ($_FILES['pazysalvo']['name'] != "") {
 	$pazysalvo = $_POST['pazysalvoA'];
 }
 
-if ($_FILES['observador']['name'] != "") {
+if (!empty($_FILES['observador']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['observador']['name']));
+    $explode = explode(".", $_FILES['observador']['name']);
+	$extension = end($explode);
 	$observador = uniqid('obs_') . "." . $extension;
 	@unlink($destino . "/" . $observador);
 	move_uploaded_file($_FILES['observador']['tmp_name'], $destino . "/" . $observador);
@@ -90,9 +93,10 @@ if ($_FILES['observador']['name'] != "") {
 	$observador = $_POST['observadorA'];
 }
 
-if ($_FILES['eps']['name'] != "") {
+if (!empty($_FILES['eps']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['eps']['name']));
+    $explode = explode(".", $_FILES['eps']['name']);
+	$extension = end($explode);
 	$eps = uniqid('eps_') . "." . $extension;
 	@unlink($destino . "/" . $eps);
 	move_uploaded_file($_FILES['eps']['tmp_name'], $destino . "/" . $eps);
@@ -100,9 +104,10 @@ if ($_FILES['eps']['name'] != "") {
 	$eps = $_POST['epsA'];
 }
 
-if ($_FILES['recomendacion']['name'] != "") {
+if (!empty($_FILES['recomendacion']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['recomendacion']['name']));
+    $explode = explode(".", $_FILES['recomendacion']['name']);
+	$extension = end($explode);
 	$recomendacion = uniqid('rec_') . "." . $extension;
 	@unlink($destino . "/" . $recomendacion);
 	move_uploaded_file($_FILES['recomendacion']['tmp_name'], $destino . "/" . $recomendacion);
@@ -110,9 +115,10 @@ if ($_FILES['recomendacion']['name'] != "") {
 	$recomendacion = $_POST['recomendacionA'];
 }
 
-if ($_FILES['vacunas']['name'] != "") {
+if (!empty($_FILES['vacunas']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['vacunas']['name']));
+    $explode = explode(".", $_FILES['vacunas']['name']);
+	$extension = end($explode);
 	$vacunas = uniqid('vac_') . "." . $extension;
 	@unlink($destino . "/" . $vacunas);
 	move_uploaded_file($_FILES['vacunas']['tmp_name'], $destino . "/" . $vacunas);
@@ -120,9 +126,10 @@ if ($_FILES['vacunas']['name'] != "") {
 	$vacunas = $_POST['vacunasA'];
 }
 
-if ($_FILES['boletines']['name'] != "") {
+if (!empty($_FILES['boletines']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['boletines']['name']));
+    $explode = explode(".", $_FILES['boletines']['name']);
+	$extension = end($explode);
 	$boletines = uniqid('bol_') . "." . $extension;
 	@unlink($destino . "/" . $boletines);
 	move_uploaded_file($_FILES['boletines']['tmp_name'], $destino . "/" . $boletines);
@@ -130,9 +137,10 @@ if ($_FILES['boletines']['name'] != "") {
 	$boletines = $_POST['boletinesA'];
 }
 
-if ($_FILES['documentoIde']['name'] != "") {
+if (!empty($_FILES['documentoIde']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['documentoIde']['name']));
+    $explode = explode(".", $_FILES['documentoIde']['name']);
+	$extension = end($explode);
 	$documentoIde = uniqid('doc_') . "." . $extension;
 	@unlink($destino . "/" . $documentoIde);
 	move_uploaded_file($_FILES['documentoIde']['tmp_name'], $destino . "/" . $documentoIde);
@@ -140,9 +148,10 @@ if ($_FILES['documentoIde']['name'] != "") {
 	$documentoIde = $_POST['documentoIdeA'];
 }
 
-if ($_FILES['certificado']['name'] != "") {
+if (!empty($_FILES['certificado']['name'])) {
 	$destino = "files/otros";
-	$extension = end(explode(".", $_FILES['certificado']['name']));
+    $explode = explode(".", $_FILES['certificado']['name']);
+	$extension = end($explode);
 	$certificado = uniqid('cert_') . "." . $extension;
 	@unlink($destino . "/" . $certificado);
 	move_uploaded_file($_FILES['certificado']['tmp_name'], $destino . "/" . $certificado);

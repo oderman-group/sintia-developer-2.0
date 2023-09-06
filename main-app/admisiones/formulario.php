@@ -86,7 +86,7 @@ $datosMadre = $madre->fetch();
 
         <div class="row">
             <div class="col-sm offset-sm-8">
-                <?php if ($datos['mat_foto'] != "" and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
+                <?php if (!empty($datos['mat_foto']) and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
 
                     <img class="img-thumbnail float-right" src="files/fotos/<?= $datos['mat_foto']; ?>">
 
@@ -787,7 +787,7 @@ $datosMadre = $madre->fetch();
 
                     <input type="file" class="form-control" name="foto">
 
-                    <?php if ($datos['mat_foto'] != "" and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
+                    <?php if (!empty($datos['mat_foto']) and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
                         <p><a href="files/fotos/<?= $datos['mat_foto']; ?>" target="_blank" class="link"><?= $datos['mat_foto']; ?></a></p>
                     <?php } ?>
 
@@ -802,7 +802,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="pazysalvo">
                     <input type="hidden" name="pazysalvoA" value="<?= $datosDocumentos['matd_pazysalvo']; ?>">
 
-                    <?php if ($datosDocumentos['matd_pazysalvo'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_pazysalvo'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_pazysalvo']) and file_exists('files/otros/' . $datosDocumentos['matd_pazysalvo'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_pazysalvo']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_pazysalvo']; ?></a></p>
                     <?php } ?>
 
@@ -821,7 +821,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="observador">
                     <input type="hidden" name="observadorA" value="<?= $datosDocumentos['matd_observador']; ?>">
 
-                    <?php if ($datosDocumentos['matd_observador'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_observador'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_observador']) and file_exists('files/otros/' . $datosDocumentos['matd_observador'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_observador']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_observador']; ?></a></p>
                     <?php } ?>
 
@@ -835,7 +835,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="eps">
                     <input type="hidden" name="epsA" value="<?= $datosDocumentos['matd_eps']; ?>">
 
-                    <?php if ($datosDocumentos['matd_eps'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_eps'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_eps']) and file_exists('files/otros/' . $datosDocumentos['matd_eps'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_eps']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_eps']; ?></a></p>
                     <?php } ?>
 
@@ -854,7 +854,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="recomendacion">
                     <input type="hidden" name="recomendacionA" value="<?= $datosDocumentos['matd_recomendacion']; ?>">
 
-                    <?php if ($datosDocumentos['matd_recomendacion'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_recomendacion'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_recomendacion']) and file_exists('files/otros/' . $datosDocumentos['matd_recomendacion'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_recomendacion']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_recomendacion']; ?></a></p>
                     <?php } ?>
 
@@ -873,7 +873,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="vacunas">
                     <input type="hidden" name="vacunasA" value="<?= $datosDocumentos['matd_vacunas']; ?>">
 
-                    <?php if ($datosDocumentos['matd_vacunas'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_vacunas'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_vacunas']) and file_exists('files/otros/' . $datosDocumentos['matd_vacunas'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_vacunas']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_vacunas']; ?></a></p>
                     <?php } ?>
 
@@ -886,7 +886,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="boletines">
                     <input type="hidden" name="boletinesA" value="<?= $datosDocumentos['matd_boletines_actuales']; ?>">
 
-                    <?php if ($datosDocumentos['matd_boletines_actuales'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_boletines_actuales'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_boletines_actuales']) and file_exists('files/otros/' . $datosDocumentos['matd_boletines_actuales'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_boletines_actuales']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_boletines_actuales']; ?></a></p>
                     <?php } ?>
 
@@ -904,7 +904,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="documentoIde">
                     <input type="hidden" name="documentoIdeA" value="<?= $datosDocumentos['matd_documento_identidad']; ?>">
 
-                    <?php if ($datosDocumentos['matd_documento_identidad'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_documento_identidad'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_documento_identidad']) and file_exists('files/otros/' . $datosDocumentos['matd_documento_identidad'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_documento_identidad']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_documento_identidad']; ?></a></p>
                     <?php } ?>
 
@@ -917,7 +917,7 @@ $datosMadre = $madre->fetch();
                     <input type="file" class="form-control" name="certificado">
                     <input type="hidden" name="certificadoA" value="<?= $datosDocumentos['matd_certificados']; ?>">
 
-                    <?php if ($datosDocumentos['matd_certificados'] != "" and file_exists('files/otros/' . $datosDocumentos['matd_certificados'])) { ?>
+                    <?php if (!empty($datosDocumentos['matd_certificados']) and file_exists('files/otros/' . $datosDocumentos['matd_certificados'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_certificados']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_certificados']; ?></a></p>
                     <?php } ?>
 
