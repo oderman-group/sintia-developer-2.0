@@ -1256,9 +1256,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR COMENTARIOS DE LA CLASE
-	if ($_GET["get"] == 24) {
+	if (base64_decode($_GET["get"]) == 24) {
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_clases_preguntas WHERE cpp_id='" . $_GET["idCom"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_clases_preguntas WHERE cpp_id='" . base64_decode($_GET["idCom"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
