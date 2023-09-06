@@ -106,4 +106,41 @@ class Modulos {
         }
         return false;
     }
+
+    /**
+     * Este metodo sirve para validar si las paginas hijas estan asignadas aun rol
+     * 
+     * @param string     $idPagina
+     * 
+     * @return bool
+    **/
+    public static function validarPaginasHijasSubRol($idPagina){
+        global $conexion, $baseDatosServicios;
+
+        try{
+            $consultaPaginasHijas=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_pagina_padre='".$idPagina."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numPaginasHijas=mysqli_num_rows($consultaPaginasHijas);
+        if ($numPaginasHijas>0) {
+            $datosPaginasHijas = mysqli_fetch_all($consultaPaginasHijas, MYSQLI_ASSOC);
+            $arrayPaginasHijas = array_column($datosPaginasHijas, 'pagp_id');
+            $arrayPaginasHijasCadena = array_map(function($valor) { return "'" . $valor . "'"; }, $arrayPaginasHijas);
+            $idPaginasHijas = implode(',', $arrayPaginasHijasCadena);
+            try{
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
+                WHERE spp_id_pagina IN ($idPaginasHijas)");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
+            $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
+            $permitidos= array_intersect($arrayPaginasHijas,$valoresPaginas);
+            if(!empty($permitidos)){
+                return false;
+            }
+        }
+        return true;
+    }
 }
