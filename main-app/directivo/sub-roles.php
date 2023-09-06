@@ -4,7 +4,10 @@ $idPaginaInterna = 'DT0204';
 require_once("../class/SubRoles.php");
 include("../compartido/historial-acciones-guardar.php");
 Modulos::verificarPermisoDev();
-$listaRoles=SubRoles::listar();
+$parametrosBuscar = array(
+	"institucion" =>$config['conf_id_institucion']
+);	
+$listaRoles=SubRoles::listar($parametrosBuscar);
 include("../compartido/head.php");
 
 
@@ -74,7 +77,6 @@ include("../compartido/head.php");
                                                         <th>#</th>
                                                         <th>Cod</th>
                                                         <th>Sub rol</th>
-                                                        <th><?=$frases[372][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th><?=$frases[371][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th><?=$frases[373][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
@@ -91,7 +93,6 @@ include("../compartido/head.php");
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['subr_id']; ?></td>
                                                             <td><?= $resultado['subr_nombre']; ?></td>
-                                                            <td><?= $resultado['ins_nombre']; ?></td>
                                                             <td><?php if(!empty($subRol['paginas']) && $subRol['paginas']!=null){
                                                                     echo count($subRol['paginas']);
                                                                   }else{echo 0;}?></td>
