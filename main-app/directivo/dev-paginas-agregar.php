@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once("../class/SubRoles.php");
 
 $idPaginaInterna = 'DV0017';
 
@@ -173,7 +174,7 @@ include("../compartido/head.php");
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $consultaPaginas=mysqli_query($conexion, "SELECT pagp_id, pagp_pagina FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_tipo_usuario =5 AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) ORDER BY pagp_id");
+                                                        $consultaPaginas = SubRoles::listarPaginas();
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
