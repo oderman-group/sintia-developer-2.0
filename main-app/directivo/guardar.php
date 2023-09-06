@@ -852,7 +852,7 @@ if ($_POST["id"] == 58) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-categorias-editar.php?success=SC_DT_2&id='.$_POST["idR"].'";</script>';
 	exit();
 }
 //ACTUALIZAR FALTAS
@@ -865,7 +865,7 @@ if ($_POST["id"] == 59) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-faltas-editar.php?success=SC_DT_2&id='.$_POST["idR"].'";</script>';
 	exit();
 }
 //AGREGAR FALTAS
@@ -876,9 +876,10 @@ if ($_POST["id"] == 60) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
+	$idRegistro=mysqli_insert_id($conexion);
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-faltas.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
 	exit();
 }
 //AGREGAR categoria
@@ -889,9 +890,10 @@ if ($_POST["id"] == 61) {
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
+	$idRegistro=mysqli_insert_id($conexion);
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
 	exit();
 }
 //========================================== GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET  GET GET GET GET GET GET GET GET GET GET GET GET GET ======================
