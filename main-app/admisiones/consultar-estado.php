@@ -31,13 +31,9 @@
                 <?php
                 $solicitud = '';
                 $documento = '';
-                if (isset($_POST["solicitud"])) {
-                    $solicitud = $_POST['solicitud'];
-                    $documento = $_POST['documento'];
-                }
-                if (isset($_GET["solicitud"])) {
-                    $solicitud = $_GET['solicitud'];
-                    $documento = $_GET['documento'];
+                if (!empty($_REQUEST["solicitud"])) {
+                    $solicitud = $_REQUEST['solicitud'];
+                    $documento = $_REQUEST['documento'];
                 }
                 ?>
 
@@ -59,12 +55,12 @@
                 </form>
 
                 <?php
-                if (isset($_POST["solicitud"])) {
+                if (!empty($_REQUEST["solicitud"])) {
                     include("bd-conexion.php");
                     $estQuery = "SELECT * FROM aspirantes WHERE asp_id = :id AND asp_documento = :documento";
                     $est = $pdo->prepare($estQuery);
-                    $est->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
-                    $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
+                    $est->bindParam(':id', $_REQUEST['solicitud'], PDO::PARAM_INT);
+                    $est->bindParam(':documento', $_REQUEST['documento'], PDO::PARAM_INT);
                     $est->execute();
                     $num = $est->rowCount();
                     $datos = $est->fetch();
@@ -94,21 +90,6 @@
                         </div>
 
                         <?php if ($datos['asp_estado_solicitud'] == 1 or $datos['asp_estado_solicitud'] == 2) { ?>
-                            <!--
-                            <h3>Pagar online</h3>
-                            <p>Puede realizar el pago de manera online, o si ya lo ha realizado puede adjuntar su comprobante para que lo validemos.</p>
-
-                            <form action="pagar-online.php" method="post">
-                                <input type="hidden" class="form-control" name="id" value="<?= $datos['asp_id']; ?>">
-                                <input type="hidden" class="form-control" name="email" value="<?= $datos['asp_email_acudiente']; ?>">
-                                <input type="hidden" class="form-control" name="documentoAcudiente" value="<?= $datos['asp_documento_acudiente']; ?>">
-                                <input type="hidden" class="form-control" name="nombre" value="<?= $datos['asp_nombre_acudiente']; ?>">
-                                <input type="hidden" class="form-control" name="celular" value="<?= $datos['asp_celular_acudiente']; ?>">
-
-                                <button type="submit" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i> Pagar online</button>
-                            </form>
-
-                            <hr class="my-4">-->
 
                             <h3>Adjuntar comprobante</h3>
 
