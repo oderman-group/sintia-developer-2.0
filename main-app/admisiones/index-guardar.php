@@ -1,6 +1,7 @@
 <?php
 include("bd-conexion.php");
 include("php-funciones.php");
+require_once("../class/EnviarEmail.php");
 
 
 $year=(date('Y')+1);
@@ -118,7 +119,8 @@ if ($newId > 0) {
 		'usuario_email'    => $_POST['email'],
 		'usuario_nombre'   => strtoupper($_POST['nombreAcudiente']),
         'usuario2_email'    => $datosUss['uss_email'],
-        'usuario2_nombre'    =>$nombreUss
+        'usuario2_nombre'    =>$nombreUss,
+        'institucion_id'   => $datosInfo['info_institucion']
         
 	];
 	$asunto = 'Solicitud de admisión ' . $newId;
