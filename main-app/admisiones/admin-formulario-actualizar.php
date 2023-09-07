@@ -102,15 +102,15 @@ if($_POST['enviarCorreo'] == 1){
         //Server settings
         $mail->SMTPDebug = 0;                                       // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'jemima.dongee.com';  // Specify main and backup SMTP servers
+        $mail->Host       = EMAIL_SERVER;  // Specify main and backup SMTP servers
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = 'info@plataformasintia.com';                     // SMTP username
-        $mail->Password   = 'B=XKY?y{VWiH';                              // SMTP password
+        $mail->Username   = EMAIL_USER;                     // SMTP username
+        $mail->Password   = EMAIL_PASSWORD;                              // SMTP password
         $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
         $mail->Port       = 465;                                    // TCP port to connect to
 
         //Recipients
-        $mail->setFrom('info@plataformasintia.com', 'Plataforma SINTIA');
+        $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
 
         $mail->addAddress($_POST['emailAcudiente'], '');     // Add a recipient
         $mail->addAddress('sec.academica@icolven.edu.co', 'Sec. Académica');     // Add a recipient
