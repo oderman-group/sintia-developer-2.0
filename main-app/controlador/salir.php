@@ -15,6 +15,8 @@ mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial
 mysqli_query($conexion, "UPDATE usuarios SET uss_estado=0, uss_ultima_salida=now() WHERE uss_id='".$_SESSION["id"]."'");
 setcookie("carga","",time()-3600);
 setcookie("periodo","",time()-3600);
+setcookie("cargaE","",time()-3600);
+setcookie("periodoE","",time()-3600);
 session_destroy();
 
 header("Location:".REDIRECT_ROUTE);
