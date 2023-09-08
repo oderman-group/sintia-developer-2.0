@@ -37,7 +37,7 @@
 										<header class="panel-heading panel-heading-blue">PRIMEROS PASOS</header>
 										<div class="panel-body">
                                             <p>
-                                                <b>1.</b> Primeramente organiceremos la configuración del sistema para tu institución.<br>
+                                                <b>1.</b> En primer lugar organizaremos la configuración del sistema para tu institución.<br>
                                                 <mark>Menú principal -> Configuración -> del sistema</mark>
                                             </p>
 
@@ -73,7 +73,7 @@
                                             </p>
                                             <p>
                                                 <b>8.</b> Excelente trabajo hasta ahora. Podemos pasar a las <b>Matrículas</b>. Es momento de crear a los estudiantes uno por uno o también puedes importarlos desde un archivo de excel para que te sea más fácil y rápido (La plataforma te da la plantilla adecuada para hacer este llenado de datos y la posterior carga del archivo).<br>
-                                            Recuerda que si has creado cursos nuevos diferentes a los que la plataforma había generado automáticamente entonces después de importar el listado de estudiantes debes relacionarlos con su curso (Esto solo lo debes hacer para los cursos nuevos que hayas creado).<br>
+                                            Recuerda que si has creado cursos nuevos, diferentes a los que la plataforma había generado automáticamente, entonces después de importar el listado de estudiantes, debes relacionarlos con su curso correspondiente (Esto solo lo debes hacer para los cursos nuevos que hayas creado).<br>
                                             <mark>Menú principal -> G. Académica -> Matrículas -> Agregar nuevo | Importar matrículas excel</mark>
                                             </p>
                                             

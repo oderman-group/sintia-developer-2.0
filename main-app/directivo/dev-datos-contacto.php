@@ -146,6 +146,14 @@ $datosContacto = mysqli_fetch_array($consultaDatosContacto, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Animación del login de acceso</label>
+                                        <div class="col-sm-8">
+                                            <input type="url" name="animacionLogin" class="form-control" value="<?= $datosContacto['dtc_animacion_login']; ?>">
+                                            <a href="https://lottiefiles.com/" target="_blank">https://lottiefiles.com/</a>
+                                        </div>
+                                    </div>
+
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>
                             </div>
