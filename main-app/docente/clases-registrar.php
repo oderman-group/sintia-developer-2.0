@@ -1,14 +1,16 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0071';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0071';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$idR."' AND cls_estado=1");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -16,7 +18,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
-  var codNota = <?=$_GET["idR"];?>;	 
+  var codNota = <?=$idR;?>;	 
   var nota = enviada.value;
   var codEst = enviada.id;
   var nombreEst = enviada.alt;
@@ -84,12 +86,12 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 											<p>Puedes cambiar a otra clases rápidamente para registrar la asistencia a tus estudiantes o hacer modificaciones de las mismas.</p>
 											<?php
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_clases 
-											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$_GET["idR"]."'
+											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$idR."'
 											ORDER BY cls_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['cls_id'];?>"><?=$regComun['cls_tema'];?></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['cls_id']);?>"><?=$regComun['cls_tema'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
@@ -141,7 +143,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$_GET["idR"]."'");
+															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$idR."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														 }
 													 ?>
@@ -155,7 +157,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 														<td>
 															<input type="number" style="text-align: center;" size="5" maxlength="3" value="<?=$notas['aus_ausencias'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)" tabindex="<?=$contReg;?>">
 															<?php if(!empty($notas['aus_ausencias'])){?>
-															<a href="#" name="guardar.php?get=29&id=<?=$notas['aus_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="guardar.php?get=<?=base64_encode(29);?>&id=<?=base64_encode($notas['aus_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
                                                     </tr>

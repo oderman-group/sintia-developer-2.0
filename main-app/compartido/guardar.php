@@ -503,7 +503,7 @@ if (!empty($_POST["id"])) {
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . $_POST["comentario"] . '";</script>';
+		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . base64_encode($_POST["comentario"]) . '";</script>';
 		exit();
 	}
 	//SUGERENCIA PARA MEJORAR SINTIA
@@ -1043,10 +1043,10 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR CARPETA
-	if ($_GET["get"] == 9) {
+	if (base64_decode($_GET["get"]) == 9) {
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . base64_decode($_GET["idR"]) . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1080,15 +1080,15 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR COMETARIO DEL FORO
-	if ($_GET["get"] == 12) {
+	if (base64_decode($_GET["get"]) == 12) {
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id_comentario='" . $_GET["idCom"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id_comentario='" . base64_decode($_GET["idCom"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id='" . $_GET["idCom"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id='" . base64_decode($_GET["idCom"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1098,9 +1098,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR COMETARIO DEL FORO
-	if ($_GET["get"] == 13) {
+	if (base64_decode($_GET["get"]) == 13) {
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id='" . $_GET["idResp"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id='" . base64_decode($_GET["idResp"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1196,9 +1196,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR REPORTE DISCIPLINARIO
-	if ($_GET["get"] == 19) {
+	if (base64_decode($_GET["get"]) == 19) {
 		try{
-			mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1208,9 +1208,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//FIRMA DIGITAL POR EL ESTUDIANTE
-	if ($_GET["get"] == 20) {
+	if (base64_decode($_GET["get"]) == 20) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1220,9 +1220,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//FIRMA DIGITAL POR EL ACUDIENTE
-	if ($_GET["get"] == 21) {
+	if (base64_decode($_GET["get"]) == 21) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=1, dr_aprobacion_acudiente_fecha=now() WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=1, dr_aprobacion_acudiente_fecha=now() WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1232,9 +1232,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//DESHACER FIRMA DEL ESTUDIANTE
-	if ($_GET["get"] == 22) {
+	if (base64_decode($_GET["get"]) == 22) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1244,9 +1244,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//DESHACER FIRMA DEL ACUDIENTE
-	if ($_GET["get"] == 23) {
+	if (base64_decode($_GET["get"]) == 23) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=0, dr_aprobacion_acudiente_fecha='0000-00-00' WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=0, dr_aprobacion_acudiente_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

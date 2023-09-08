@@ -80,7 +80,7 @@ $porcentajeRestante = 100 - $valores[0];
 											?>
 											
 													<div class="btn-group">
-														<a href="calificaciones-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="calificaciones-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -99,7 +99,7 @@ $porcentajeRestante = 100 - $valores[0];
 											<?php }?>
 													
 													<div class="btn-group">
-														<a href="calificaciones-todas-rapido.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" class="btn bg-purple">
+														<a href="calificaciones-todas-rapido.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" class="btn bg-purple">
 															LLenar más rápido las calificaciones
 														</a>
 													</div>
@@ -163,7 +163,7 @@ $porcentajeRestante = 100 - $valores[0];
 													<tr id="reg<?=$resultado['act_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['act_id'];?></td>
-														<td><a href="calificaciones-registrar.php?idR=<?=$resultado['act_id'];?>" style="text-decoration: underline;" title="Calificar"><?=$resultado['act_descripcion'];?></a></td>
+														<td><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>" style="text-decoration: underline;" title="Calificar"><?=$resultado['act_descripcion'];?></a></td>
 														<td><?=$resultado['act_fecha'];?></td>
 														<td><?=$resultado['act_valor'];?></td>
 														
@@ -175,7 +175,7 @@ $porcentajeRestante = 100 - $valores[0];
 															<td><?=$evidencia['evid_nombre']." (".$evidencia['evid_valor']."%)";?></td>
 														<?php }?>
 														
-														<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=$resultado['act_id'];?>&grado=<?=$datosCargaActual[2];?>&grupo=<?=$datosCargaActual[3];?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></a></td>
+														<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=base64_encode($resultado['act_id']);?>&grado=<?=base64_encode($datosCargaActual[2]);?>&grupo=<?=base64_encode($datosCargaActual[3]);?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></a></td>
 														<td>
 															
 															<?php
@@ -191,11 +191,9 @@ $porcentajeRestante = 100 - $valores[0];
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
-																	<li><a href="calificaciones-registrar.php?idR=<?=$resultado['act_id'];?>">Calificar</a></li>
-																	  <!-- <li><a href="calificaciones-excel-importar.php?idR=<?=$resultado['act_id'];?>">Importar notas de excel</a></li> -->
-
-																	<li><a href="calificaciones-editar.php?idR=<?=$resultado['act_id'];?>">Editar</a></li>
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="guardar.php?get=12&idR=<?=$resultado['act_id'];?>&idIndicador=<?=$resultado['act_id_tipo'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>">Calificar</a></li>
+																	<li><a href="calificaciones-editar.php?idR=<?=base64_encode($resultado['act_id']);?>">Editar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="guardar.php?get=<?=base64_encode(12);?>&idR=<?=base64_encode($resultado['act_id']);?>&idIndicador=<?=base64_encode($resultado['act_id_tipo']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																</ul>
 															</div>
 															

@@ -11,17 +11,19 @@ $archivoSubido = new Archivos;
 $operacionBD = new BaseDatos;
 
 //SELECCIONAR UNA CARGA - DEBE ESTAR ARRIBA POR LAS COOKIES QUE CREA.
-if(!empty($_GET["get"]) && $_GET["get"]==100){
-	if(is_numeric($_GET["carga"])){
-		setcookie("carga",$_GET["carga"]);
-		setcookie("periodo",$_GET["periodo"]);
+if(!empty($_GET["get"]) && base64_decode($_GET["get"])==100){
+	$carga = base64_decode($_GET["carga"]);
+	$periodo = base64_decode($_GET["periodo"]);
+	if(is_numeric($carga)){
+		setcookie("carga",$carga);
+		setcookie("periodo",$periodo);
 		$infoCargaActual = [];
 		try{
 			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 			INNER JOIN academico_materias ON mat_id=car_materia
 			INNER JOIN academico_grados ON gra_id=car_curso
 			INNER JOIN academico_grupos ON gru_id=car_grupo
-			WHERE car_id='".$_GET["carga"]."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
+			WHERE car_id='".$carga."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -53,9 +55,24 @@ if(!empty($_POST["id"])){
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
+		$infoCargaActual = [];
+		try{
+			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+			INNER JOIN academico_materias ON mat_id=car_materia
+			INNER JOIN academico_grados ON gra_id=car_curso
+			INNER JOIN academico_grupos ON gru_id=car_grupo
+			WHERE car_id='".$carga."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
+		$infoCargaActual = [
+			'datosCargaActual'  => $datosCargaActual
+		];
+		$_SESSION["infoCargaActual"] = $infoCargaActual;
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="cargas-configurar.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="cargas-configurar.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'";</script>';
 		exit();
 	}
 
@@ -192,7 +209,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="evaluaciones-preguntas.php?idE='.$_POST["idE"].'#pregunta'.$idPregunta.'";</script>';
+		echo '<script type="text/javascript">window.location.href="evaluaciones-preguntas.php?idE='.base64_encode($_POST["idE"]).'#pregunta'.base64_encode($idPregunta).'";</script>';
 		exit();
 	}
 
@@ -221,7 +238,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="evaluaciones-preguntas.php?idE='.$_POST["idE"].'#pregunta'.$_POST["idR"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="evaluaciones-preguntas.php?idE='.base64_encode($_POST["idE"]).'#pregunta'.base64_encode($_POST["idR"]).'";</script>';
 		exit();
 	}
 
@@ -380,7 +397,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="indicadores.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="indicadores.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -472,7 +489,7 @@ if(!empty($_POST["id"])){
 		}
 		
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="calificaciones.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="calificaciones.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -482,6 +499,7 @@ if(!empty($_POST["id"])){
 		include("verificar-periodos-diferentes.php");
 
 		//Archivos
+		$archivo = '';
 		$destino = "../files/clases";
 		if(!empty($_FILES['file']['name'])){
 			$archivoSubido->validarArchivo($_FILES['file']['size'], $_FILES['file']['name']);
@@ -492,6 +510,7 @@ if(!empty($_POST["id"])){
 			move_uploaded_file($_FILES['file']['tmp_name'], $destino ."/".$archivo);
 		}
 
+		$archivo2 = '';
 		if(!empty($_FILES['file2']['name'])){
 			$archivoSubido->validarArchivo($_FILES['file2']['size'], $_FILES['file2']['name']);
 			$explode=explode(".", $_FILES['file2']['name']);
@@ -501,6 +520,7 @@ if(!empty($_POST["id"])){
 			move_uploaded_file($_FILES['file2']['tmp_name'], $destino ."/".$archivo2);
 		}
 
+		$archivo3 = '';
 		if(!empty($_FILES['file3']['name'])){
 			$archivoSubido->validarArchivo($_FILES['file3']['size'], $_FILES['file3']['name']);
 			$explode=explode(".", $_FILES['file3']['name']);
@@ -527,7 +547,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="clases.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="clases.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -688,7 +708,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="clases.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="clases.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -853,7 +873,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="foros.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="foros.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -878,6 +898,7 @@ if(!empty($_POST["id"])){
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
 
+		$archivo = '';
 		if(!empty($_FILES['file']['name'])){
 			$nombreInputFile = 'file';
 			$archivoSubido->validarArchivo($_FILES['file']['size'], $_FILES['file']['name']);
@@ -922,7 +943,7 @@ if(!empty($_POST["id"])){
 			}
 		}
 
-		if($_POST["retrasos"]!=1) $_POST["retrasos"]='0';
+		if(empty($_POST["retrasos"]) || $_POST["retrasos"]!=1) $_POST["retrasos"]='0';
 
 		try{
 			mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_titulo='".mysqli_real_escape_string($conexion,$_POST["titulo"])."', tar_descripcion='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', tar_fecha_disponible='".$_POST["desde"]."', tar_fecha_entrega='".$_POST["hasta"]."', tar_impedir_retrasos='".$_POST["retrasos"]."' WHERE tar_id='".$_POST["idR"]."'");
@@ -951,7 +972,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="preguntas-agregar.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'&idE='.$idRegistro.'&idMsg=1";</script>';
+		echo '<script type="text/javascript">window.location.href="preguntas-agregar.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'&idE='.base64_encode($idRegistro).'&idMsg='.base64_encode(1).'";</script>';
 		exit();
 	}
 
@@ -965,7 +986,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="evaluaciones-editar.php?idR='.$_POST["idR"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="evaluaciones-editar.php?idR='.base64_encode($_POST["idR"]).'";</script>';
 		exit();
 	}
 
@@ -1639,7 +1660,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="'.$ULR.'?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="'.$ULR.'?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
@@ -1902,23 +1923,23 @@ if(!empty($_GET["get"])){
 	}
 
 	//CAMBIAR DE ESTADO LAS RESPUESTAS DE LOS EXAMENES
-	if($_GET["get"]==8){
-		if($_GET["estado"]==0) $estado=1; else $estado=0;
+	if(base64_decode($_GET["get"])==8){
+		if(base64_decode($_GET["estado"])==0) $estado=1; else $estado=0;
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".$_GET["idR"]."'");
+			mysqli_query($conexion, "UPDATE academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'#pregunta'.$_GET["preg"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'#pregunta'.base64_encode($_GET["preg"]).'";</script>';
 		exit();
 	}
 
 	//ELIMINAR RESPUESTAS
-	if($_GET["get"]==9){
+	if(base64_decode($_GET["get"])==9){
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_respuestas WHERE resp_id='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_respuestas WHERE resp_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1929,12 +1950,12 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR INDICADORES
-	if($_GET["get"]==10){
+	if(base64_decode($_GET["get"])==10){
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
 		try{
 			$actividadesRelacionadasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-			WHERE act_id_tipo='".$_GET["idIndicador"]."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1");
+			WHERE act_id_tipo='".base64_decode($_GET["idIndicador"])."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1948,7 +1969,7 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_id='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2021,11 +2042,11 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR CLASES
-	if($_GET["get"]==11){
+	if(base64_decode($_GET["get"])==11){
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
 		try{
-		$consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."'");
+		$consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2045,30 +2066,30 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "UPDATE academico_clases SET cls_estado=0 WHERE cls_id=".$_GET["idR"]);
+			mysqli_query($conexion, "UPDATE academico_clases SET cls_estado=0 WHERE cls_id=".base64_decode($_GET["idR"]));
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id_clase=".$_GET["idR"]);
+			mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id_clase=".base64_decode($_GET["idR"]));
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="clases.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
+		echo '<script type="text/javascript">window.location.href="clases.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 		exit();
 	}
 
 	//ELIMINAR CALIFICACIONES
-	if($_GET["get"]==12){
+	if(base64_decode($_GET["get"])==12){
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
 
 		try{
 			$consultaIndicadoresDatos=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-			WHERE ipc_indicador='".$_GET["idIndicador"]."' AND ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+			WHERE ipc_indicador='".base64_decode($_GET["idIndicador"])."' AND ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2076,7 +2097,7 @@ if(!empty($_GET["get"])){
 		
 		//"Borramos" la actividad
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Eliminar la actividad de carga: ".$cargaConsultaActual.", del P: ".$periodoConsultaActual."' WHERE act_id=".$_GET["idR"]);
+			mysqli_query($conexion, "UPDATE academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Eliminar la actividad de carga: ".$cargaConsultaActual.", del P: ".$periodoConsultaActual."' WHERE act_id=".base64_decode($_GET["idR"]));
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2108,9 +2129,9 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR CRONOGRAMA
-	if($_GET["get"]==13){
+	if(base64_decode($_GET["get"])==13){
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_cronograma WHERE cro_id=".$_GET["idR"]);
+			mysqli_query($conexion, "DELETE FROM academico_cronograma WHERE cro_id=".base64_decode($_GET["idR"]));
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2154,9 +2175,9 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR FOROS
-	if($_GET["get"]==16){
+	if(base64_decode($_GET["get"])==16){
 		try{
-			$foroC = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios WHERE com_id_foro='".$_GET["idR"]."'");
+			$foroC = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios WHERE com_id_foro='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2170,13 +2191,13 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id_foro='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id_foro='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2187,9 +2208,9 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR TAREAS
-	if($_GET["get"]==17){
+	if(base64_decode($_GET["get"])==17){
 		try{
-			$rEntregas = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."'");
+			$rEntregas = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2210,13 +2231,13 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			$consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$_GET["idR"]."'");
+			$consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2236,7 +2257,7 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_estado=0 WHERE tar_id='".$_GET["idR"]."'");
+			mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_estado=0 WHERE tar_id='".base64_decode($_GET["idR"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2247,16 +2268,19 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR EVALUACIONES
-	if($_GET["get"]==18){
+	if(base64_decode($_GET["get"])==18){
+		$idR="";
+		if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluacion_preguntas WHERE evp_id_evaluacion='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluacion_preguntas WHERE evp_id_evaluacion='".$idR."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		//Eliminamos los archivos de respuestas de las preguntas de esta evaluacion.
 		try{
-			$rEntregas = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$_GET["idR"]."'");
+			$rEntregas = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$idR."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2269,19 +2293,19 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$_GET["idR"]."'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$idR."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion=".$_GET["idR"]);
+			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion=".$idR);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones WHERE eva_id=".$_GET["idR"]);
+			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones WHERE eva_id=".$idR);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2346,9 +2370,9 @@ if(!empty($_GET["get"])){
 
 	//ELIMINAR NOTA ACADEMICA DE UN ESTUDIANTE
 
-	if($_GET["get"]==21){
+	if(base64_decode($_GET["get"])==21){
 
-		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id='".$_GET["id"]."'");
+		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id='".base64_decode($_GET["id"])."'");
 
 		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
 
@@ -2441,10 +2465,10 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR PREGUNTAS DE LAS EVALUACIONES
-	if($_GET["get"]==27){
+	if(base64_decode($_GET["get"])==27){
 		try{
 			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluacion_preguntas 
-			WHERE evp_id_evaluacion='".$_GET["idE"]."' AND evp_id_pregunta='".$_GET["idP"]."'");
+			WHERE evp_id_evaluacion='".base64_decode($_GET["idE"])."' AND evp_id_pregunta='".base64_decode($_GET["idP"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2455,17 +2479,17 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR INTENTO DE LAS EVALUACIONES
-	if($_GET["get"]==28){
+	if(base64_decode($_GET["get"])==28){
 		try{
 			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes 
-			WHERE epe_id_evaluacion='".$_GET["idE"]."' AND epe_id_estudiante='".$_GET["idEstudiante"]."'");
+			WHERE epe_id_evaluacion='".base64_decode($_GET["idE"])."' AND epe_id_estudiante='".base64_decode($_GET["idEstudiante"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
 			mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados 
-			WHERE res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$_GET["idEstudiante"]."'");
+			WHERE res_id_evaluacion='".base64_decode($_GET["idE"])."' AND res_id_estudiante='".base64_decode($_GET["idEstudiante"])."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -2476,14 +2500,16 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR AUSENCIA DE UN ESTUDIANTE
-	if($_GET["get"]==29){
-		$tabla = 'academico_ausencias';
-		$clave = 'aus_id'; 
-		$id = $_GET["id"];
-		$urlRetorno = $_SERVER['HTTP_REFERER'];
+	if(base64_decode($_GET["get"])==29){
+		try{
+			mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id='".base64_decode($_GET["id"])."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		$operacionBD->eliminarPorId($tabla, $clave, $id, $urlRetorno);
+		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
+		exit();
 	}
 
 	//ELIMINAR FORMATO
@@ -2507,14 +2533,16 @@ if(!empty($_GET["get"])){
 	}
 
 	//ELIMINAR NOTA DISCIPLINARIA DE UN ESTUDIANTE
-	if($_GET["get"]==31){
-		$tabla = 'disiplina_nota';
-		$clave = 'dn_id'; 
-		$id = $_GET["id"];
-		$urlRetorno = $_SERVER['HTTP_REFERER'];
+	if(base64_decode($_GET["get"])==31){
+		try{
+			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota=NULL WHERE dn_id=".base64_decode($_GET["id"]));
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		$operacionBD->eliminarPorId($tabla, $clave, $id, $urlRetorno);
+		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
+		exit();
 	}
 }
 

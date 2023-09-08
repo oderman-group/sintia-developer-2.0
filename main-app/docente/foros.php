@@ -66,7 +66,7 @@
 											?>
 											
 													<div class="btn-group">
-														<a href="foros-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="foros-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -116,9 +116,9 @@
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>">Participación</a></li>
-																	  <li><a href="foros-editar.php?idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
+																	  <li><a href="foros-editar.php?idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	  
-																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=16&idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=<?=base64_encode(16);?>&idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>

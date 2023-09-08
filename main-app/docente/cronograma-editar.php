@@ -1,11 +1,15 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0014';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$_GET["idR"]."'");
+include("session.php");
+$idPaginaInterna = 'DC0014';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$idR."'");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
@@ -65,9 +69,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="15" name="id">
-										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 
 											<div class="form-group row">

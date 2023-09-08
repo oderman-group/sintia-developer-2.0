@@ -56,10 +56,10 @@ require_once("../class/Sysjobs.php");
 							 ?>
 								
 							 <p>
-								 	<a href="../compartido/planilla-docentes.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
+								 	<a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
 							 </p>
 							 <p>
-								 	<a href="../compartido/planilla-docentes-notas.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+								 	<a href="../compartido/planilla-docentes-notas.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir planillas con resumen de notas</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
@@ -122,12 +122,12 @@ require_once("../class/Sysjobs.php");
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" title="Entrar">
+									<a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar">
 										<img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg">
 									</a>	
 								</div>
 	                        	<div class="course-box">
-	                        	<h4 <?=$induccionEntrar;?>><a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h4 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h4>
 		                            
 									<p>
 										<a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($rCargas['car_id']);?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;
@@ -136,7 +136,7 @@ require_once("../class/Sysjobs.php");
 									
 									
 									<p align="center" <?=$induccionSabanas;?>>
-                                      	<?php for($i=1; $i<$rCargas["car_periodo"]; $i++){?><a href="../compartido/informes-generales-sabanas.php?curso=<?=$rCargas["car_curso"];?>&grupo=<?=$rCargas["car_grupo"];?>&per=<?=$i;?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Sabanas"><?=$i;?></a>&nbsp;&nbsp;&nbsp;&nbsp;<?php }?>
+                                      	<?php for($i=1; $i<$rCargas["car_periodo"]; $i++){?><a href="../compartido/informes-generales-sabanas.php?curso=<?=base64_encode($rCargas["car_curso"]);?>&grupo=<?=base64_encode($rCargas["car_grupo"]);?>&per=<?=base64_encode($i);?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Sabanas"><?=$i;?></a>&nbsp;&nbsp;&nbsp;&nbsp;<?php }?>
                                     </p>
 									
 		                            

@@ -5,9 +5,12 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 $consultaIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-WHERE ipc_id='".$_GET["idR"]."'");
+WHERE ipc_id='".$idR."'");
 $indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
 (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
@@ -72,11 +75,11 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										<?php
 										$indicadoresEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 										INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-										WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_id!='".$_GET["idR"]."'
+										WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_id!='".$idR."'
 										");
 										while($indComun = mysqli_fetch_array($indicadoresEnComun, MYSQLI_BOTH)){
 										?>
-										<p><a href="indicadores-editar.php?idR=<?=$indComun['ipc_id'];?>"><?=$indComun['ind_nombre'];?></a></p>
+										<p><a href="indicadores-editar.php?idR=<?=base64_encode($indComun['ipc_id']);?>"><?=$indComun['ind_nombre'];?></a></p>
 										<?php }?>
 									</div>
 							 </div>	
@@ -91,7 +94,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="25" name="id">
 										<input type="hidden" value="<?=$indicador['ipc_id'];?>" name="idR">
 										<input type="hidden" value="<?=$indicador['ipc_indicador'];?>" name="idInd">

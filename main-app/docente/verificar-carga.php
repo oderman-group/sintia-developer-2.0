@@ -1,9 +1,14 @@
 <?php
+$carga="";
+if(!empty($_GET["carga"])){ $carga=base64_decode($_GET["carga"]);}
+$periodo="";
+if(!empty($_GET["periodo"])){ $periodo=base64_decode($_GET["periodo"]);}
+
 //SELECCIONAR UNA CARGA - DEBE ESTAR ARRIBA POR LAS COOKIES QUE CREA.
-if(isset($_GET["get"]) && $_GET["get"]==100){
-	if(is_numeric($_GET["carga"]) and is_numeric($_GET["periodo"])){
-		setcookie("carga",$_GET["carga"]);
-		setcookie("periodo",$_GET["periodo"]);
+if(isset($_GET["get"]) && base64_decode($_GET["get"])==100){
+	if(is_numeric($carga) and is_numeric($periodo)){
+		setcookie("carga",$carga);
+		setcookie("periodo",$periodo);
 		
 		$infoCargaActual = [];
 
@@ -11,7 +16,7 @@ if(isset($_GET["get"]) && $_GET["get"]==100){
 		INNER JOIN academico_materias ON mat_id=car_materia
 		INNER JOIN academico_grados ON gra_id=car_curso
 		INNER JOIN academico_grupos ON gru_id=car_grupo
-		WHERE car_id='".$_GET["carga"]."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
+		WHERE car_id='".$carga."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
 
 		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
 
@@ -23,7 +28,7 @@ if(isset($_GET["get"]) && $_GET["get"]==100){
 	}
 }
 
-if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($_GET["carga"]) or !is_numeric($_GET["periodo"])){
+if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or !is_numeric($periodo)){
 	if($_COOKIE["carga"]!="" and $_COOKIE["periodo"]!=""){
 		$cargaConsultaActual = $_COOKIE["carga"];
 		$periodoConsultaActual = $_COOKIE["periodo"];
@@ -32,8 +37,8 @@ if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($_GET["carg
 			exit();
 	}
 }else{
-	$cargaConsultaActual = $_GET["carga"];
-	$periodoConsultaActual = $_GET["periodo"];
+	$cargaConsultaActual = $carga;
+	$periodoConsultaActual = $periodo;
 }
 
 

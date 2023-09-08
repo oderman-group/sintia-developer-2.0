@@ -195,7 +195,7 @@ require_once("../class/Estudiantes.php");
 																		  <?php }?>
 
 																		  <?php if(!isset($_SESSION['admin'])){?>
-																		  	<li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>">Autologin</a></li>
+																		  	<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>">Autologin</a></li>
 																		  <?php }?>
 
 																	  </ul>
