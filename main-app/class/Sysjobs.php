@@ -232,12 +232,12 @@ class SysJobs {
      * 
      * @return void 
      */
-    public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo){
+    public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo,$estado){
         global $conexion,$baseDatosServicios,$config;       
         
         $para=$destinatario;
         try{
-            $asunto="Ejecuci&oacute;n Finalizada Crob jobs (".$idJob.") de tipo ".$tipo;
+            $asunto="Ejecuci&oacute;n del Crob jobs (".$idJob.") de tipo ".$tipo."en estado".$estado;
 			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
 			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
             $contenido="<br>Hola Sr(a) ".$destinatario["uss_nombre"]."<br> <p>".$contenido."</p>";
