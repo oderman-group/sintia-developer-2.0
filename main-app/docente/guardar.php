@@ -6,6 +6,7 @@ $idPaginaInterna = 'DC0089';
 include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
+require_once("../class/CargaAcademica.php");
 
 $archivoSubido = new Archivos;
 $operacionBD = new BaseDatos;
@@ -15,20 +16,8 @@ if(!empty($_GET["get"]) && $_GET["get"]==100){
 	if(is_numeric($_GET["carga"])){
 		setcookie("carga",$_GET["carga"]);
 		setcookie("periodo",$_GET["periodo"]);
-		$infoCargaActual = [];
-		try{
-			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-			INNER JOIN academico_materias ON mat_id=car_materia
-			INNER JOIN academico_grados ON gra_id=car_curso
-			INNER JOIN academico_grupos ON gru_id=car_grupo
-			WHERE car_id='".$_GET["carga"]."' AND car_docente='".$_SESSION["id"]."' AND car_activa=1");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
-		$infoCargaActual = [
-			'datosCargaActual'  => $datosCargaActual
-		];
+		
+		$infoCargaActual = CargaAcademica::cargasDatosEnSesion($_GET["carga"], $_SESSION["id"]);
 		$_SESSION["infoCargaActual"] = $infoCargaActual;
 
 		include("../compartido/guardar-historial-acciones.php");
@@ -53,6 +42,9 @@ if(!empty($_POST["id"])){
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
+
+		$infoCargaActual = CargaAcademica::cargasDatosEnSesion($_GET["carga"], $_SESSION["id"]);
+		$_SESSION["infoCargaActual"] = $infoCargaActual;
 
 		include("../compartido/guardar-historial-acciones.php");
 		echo '<script type="text/javascript">window.location.href="cargas-configurar.php?carga='.$cargaConsultaActual.'&periodo='.$periodoConsultaActual.'";</script>';
