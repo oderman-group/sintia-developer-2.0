@@ -22,21 +22,23 @@ class SysJobs {
         $buscarJobs=self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
         if($cantidad<1){
+            $msj="Se generó correctamente la peticion, espere pronta respuesta!";
             $idRegistro =self::crear($tipo,$parametros,$msj);
             $mensaje="Se realizó exitosamente el proceso de ".$tipo." con el código ".$idRegistro;
         }else{
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
             $idRegistro = $jobsEncontrado["job_id"];           
-            if($jobsEncontrado["job_intentos"]==JOBS_ESTADO_PENDIENTE){
-                $intentos = intval($jobsEncontrado["job_intentos"])+1;            
+            if($jobsEncontrado["job_estado"]==JOBS_ESTADO_ERROR){          
                 $datos = array(
-                    "intentos" =>$intentos,
-                    "id" => $jobsEncontrado['job_id']
+                    "estado" =>JOBS_ESTADO_PENDIENTE,
+                    "intentos" =>'0',
+                    "id" => $jobsEncontrado['job_id'],
+                    "mensaje" => 'Se actualizó correctamente la peticion con codigo '.$idRegistro.', espere pronta respuesta!'
                 );
                 self::actualizar($datos);
-                $mensaje="Se actualizó exitosamente el proceso de ".$tipo." con el código ".$idRegistro." intentos(".$intentos.")";
+                $mensaje="Se actualizó exitosamente el proceso de ".$tipo." con el código ".$idRegistro;
             }else{
-                $mensaje="Proceso ".$tipo." con el código ".$idRegistro." ya está marcado como finalizado";
+                $mensaje="Proceso ".$tipo." con el código ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];               
             }
             
             
@@ -69,7 +71,8 @@ class SysJobs {
                 job_parametros,
                 job_year, 
                 job_intentos,
-                job_prioridad)
+                job_prioridad,
+                job_ambiente)
             VALUES(
                 '".JOBS_ESTADO_PENDIENTE."',
                 '".$tipo."',
@@ -79,8 +82,9 @@ class SysJobs {
                 '".$mensaje."', 
                 '".json_encode($parametros)."', 
                 '".$config['conf_agno']."', 
-                '1', 
-                '".JOBS_PRIORIDAD_MEDIA."'
+                '0', 
+                '".JOBS_PRIORIDAD_MEDIA."',
+                '".ENVIROMENT."'
             )";
             mysqli_query($conexion,$sqlUpdate);
             $idRegistro = mysqli_insert_id($conexion);
@@ -103,8 +107,14 @@ class SysJobs {
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
+        if(!is_null($datos["intentos"])){
+            $intento = intval($datos["intentos"]);
+            if($intento>3){               
+                $datos["estado"]=JOBS_ESTADO_ERROR;
+            }
+        }
         
-        $setIntentos=empty($datos["intentos"])?"":",job_intentos='".$datos["intentos"]."'";
+        $setIntentos=is_null($datos["intentos"])?"":",job_intentos='".$datos["intentos"]."'";
         $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
         $setMensaje=empty($datos["mensaje"])?"":",job_mensaje='".$datos["mensaje"]."'";
         $setPrioridad=empty($datos["prioriedad"])?"":",job_prioriedad='".$datos["prioriedad"]."'";
@@ -145,6 +155,7 @@ class SysJobs {
         WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
         AND job_responsable ='".$parametrosBusqueda["responsable"]."'
         AND job_year='".$parametrosBusqueda["agno"]."'
+        AND job_ambiente='".ENVIROMENT."'
         ".$andParametros
          .$andEstado."       
         ORDER BY job_fecha_creacion";
@@ -177,6 +188,7 @@ class SysJobs {
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
         LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
         WHERE job_estado = '".$andEstado."'
+        AND job_ambiente='".ENVIROMENT."'
         ".$andTipo
         . $andResponsable
         .$andAgno."            
@@ -200,12 +212,13 @@ class SysJobs {
      * 
      * @return void 
      */
-    public static function actualizarMensaje($id,$intento,$mensaje){
+    public static function actualizarMensaje($id,$intento,$mensaje,$estado=JOBS_ESTADO_ERROR){
         $intento=intval($intento)+1;
         $datos = array(
             "id" => $id,
             "mensaje" => "Advertencia: ".$mensaje."!",
             "intentos" =>$intento,
+            "estado"=>$estado
         );
         self::actualizar($datos);
     }
