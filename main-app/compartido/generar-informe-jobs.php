@@ -53,7 +53,7 @@ $finalizado = true;
 		//Verificamos que el estudiante tenga sus notas al 100%
 		if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
 			$mensaje=$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
-			SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje);
+			SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
 			SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES);
 			$finalizado = false;
 			break;
