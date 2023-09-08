@@ -11,7 +11,7 @@
 								<?php }?>
 								
 								<?php if($datosUsuarioActual[3]==3){?>
-                                	<li><a class="parent-item" href="notas-actuales.php?usrEstud=<?=$_GET["usrEstud"];?>">Defintivas actuales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                	<li><a class="parent-item" href="notas-actuales.php?usrEstud=<?=base64_encode($_GET["usrEstud"]);?>">Defintivas actuales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 	<li class="active"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></li>
 								<?php }?>
                             </ol>

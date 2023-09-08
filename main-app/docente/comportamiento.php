@@ -1,15 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0005';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php //include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0005';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
-$calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
+include("../compartido/head.php");
 ?>
 
 <!--bootstrap -->
@@ -186,7 +181,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado[0]." AND dn_periodo='".$periodoConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-														if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
+														if(!empty($notas[4]) && $notas[4]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[4]) && $notas[4]>=$config[5]) $colorNota = $config[7];
 
 														$observacion="";
 														if(!empty($notas['dn_observacion'])){
@@ -205,9 +200,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td width="15%">
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['dn_nota'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="5" onChange="notas(this)" tabindex="<?=$contReg;?>">
-															<?php if($notas['dn_nota']!=""){?>
-															<a href="#" name="guardar.php?get=31&id=<?=$notas['dn_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['dn_nota'])){ echo $notas['dn_nota'];}?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="5" onChange="notas(this)" tabindex="<?=$contReg;?>">
+															<?php if(!empty($notas['dn_nota'])){?>
+															<a href="#" name="guardar.php?get=<?=base64_encode(31);?>&id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														<td width="50%">

@@ -5,10 +5,23 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 $Plataforma = new Plataforma;
 
-$asig = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='" . $_GET["curso"] . "' AND mat_grupo='" . $_GET["grupo"] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+$curso='';
+if(!empty($_GET["curso"])) {
+  $curso = base64_decode($_GET["curso"]);
+}
+$grupo='';
+if(!empty($_GET["grupo"])) {
+  $grupo = base64_decode($_GET["grupo"]);
+}
+$per='';
+if(!empty($_GET["per"])) {
+  $per = base64_decode($_GET["per"]);
+}
+
+$asig = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='" . $curso . "' AND mat_grupo='" . $grupo . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 $num_asg = mysqli_num_rows($asig);
 
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='" . $_GET["curso"] . "' AND gru_id='" . $_GET["grupo"] . "'");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='" . $curso . "' AND gru_id='" . $grupo . "'");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 
@@ -22,7 +35,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	<div align="center" style="margin-bottom:20px;">
 		<img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="150"><br>
 		<?= $informacion_inst["info_nombre"] ?><br>
-		INFORME DE SABANAS CON INDICADOR - PERIODO: <?= $_GET["per"]; ?></br>
+		INFORME DE SABANAS CON INDICADOR - PERIODO: <?= $per; ?></br>
 		<b><?= strtoupper($grados["gra_nombre"] . " " . $grados["gru_nombre"]); ?></b><br>
 	</div>
 	<table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?= $config[13] ?>" style="border:solid; border-color:<?= $config[11] ?>;" align="center">
@@ -31,13 +44,13 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			<td align="center" rowspan="2">Estudiante</td>
 			<!--<td align="center">Gru</td>-->
 			<?php
-			$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $_GET["curso"] . " AND car_grupo='" . $_GET["grupo"] . "'");
+			$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 			while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 				
 				$nombresMat = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=" . $mat1[4]);
 				$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 
-				$consultaActividades=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $_GET['per'] . "'");
+				$consultaActividades=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "'");
 				$activivdadesNum = mysqli_num_rows($consultaActividades);
 				if ($activivdadesNum == 0) {
 					$activivdadesNum = 1;
@@ -51,11 +64,11 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 		<tr style="font-weight:bold; font-size:12px; height:30px; background:#6017dc; color:white;">
 			<?php
-			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $_GET["curso"] . " AND car_grupo='" . $_GET["grupo"] . "'");
+			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 			while ($car = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 				$activivdades = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 				INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-				WHERE ipc_carga='" . $car['car_id'] . "' AND ipc_periodo='" . $_GET['per'] . "' ");
+				WHERE ipc_carga='" . $car['car_id'] . "' AND ipc_periodo='" . $per . "' ");
 
 				$activivdadesNum = mysqli_num_rows($activivdades);
 				if ($activivdadesNum == 0) {
@@ -85,26 +98,28 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 										else echo "B"; ?></td> -->
 				<?php
 				$suma = 0;
-				$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $_GET["curso"] . " AND car_grupo='" . $_GET["grupo"] . "'");
+				$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 
 					$activivdades = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-					WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $_GET['per'] . "'");
+					WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "'");
 					$activivdadesNum = mysqli_num_rows($activivdades);
 					if ($activivdadesNum == 0) {
 						echo '<td align="center">-</td>';
 					}
 					while ($act = mysqli_fetch_array($activivdades, MYSQLI_BOTH)) {
 						//Consulta de recuperaciones si ya la tienen puestas.
-						$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila[0] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $_GET["per"] . "' AND rind_carga='" . $mat1['car_id'] . "'");
+						$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila[0] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $per . "' AND rind_carga='" . $mat1['car_id'] . "'");
 						$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
-						if($notas['rind_valor_indicador_registro']>0){
+						$notaRecuperacion = 0;
+						if(!empty($notas['rind_valor_indicador_registro']) && $notas['rind_valor_indicador_registro']>0){
 							$notaRecuperacion = round($notas['rind_nota_actual']/($notas['rind_valor_indicador_registro']/100),2);
 						}
 						
-						if ($notas['rind_nota'] > $notas['rind_nota_original']) {
+						$notaRecuperacion = 0;
+						if ((!empty($notas['rind_nota']) && !empty($notas['rind_nota_original'])) && ($notas['rind_nota'] > $notas['rind_nota_original'])) {
 							$notaRecuperacion = round($notas['rind_nota'],2);
 						}
 

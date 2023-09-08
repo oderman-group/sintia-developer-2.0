@@ -7,6 +7,10 @@ require_once("../class/Estudiantes.php");
 if(!empty($_GET["carga"])) {
   $carga = base64_decode($_GET["carga"]);
 }
+
+if(!empty($_GET["docente"])) {
+  $docente = base64_decode($_GET["docente"]);
+}
 ?>
 
 <head>
@@ -39,7 +43,7 @@ $filtro = '';
 
 if(!empty($carga)) {$filtro .= " AND car_id='".$carga."'";}	
 
-if(!empty($_GET["docente"])) {$filtro .= " AND car_docente='".$_GET["docente"]."'";}
+if(!empty($docente)) {$filtro .= " AND car_docente='".$docente."'";}
 
 if(!empty($_GET["grado"])) {$filtro .= " AND car_curso='".$_GET["grado"]."'";}
 

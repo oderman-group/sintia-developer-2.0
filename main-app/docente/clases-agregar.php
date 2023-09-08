@@ -82,7 +82,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="11" name="id">
 										<input type="hidden" value="<?=$config['conf_id_institucion']."".$cargaConsultaActual;?>" name="idMeeting">
 

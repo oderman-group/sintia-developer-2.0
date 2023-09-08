@@ -1,11 +1,15 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0070';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+include("session.php");
+$idPaginaInterna = 'DC0070';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$idR."' AND cls_estado=1");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 
@@ -73,9 +77,9 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="13" name="id">
-										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 
 											<div class="form-group row">

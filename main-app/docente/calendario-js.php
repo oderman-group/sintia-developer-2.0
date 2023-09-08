@@ -10,7 +10,7 @@ while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 			title: "'.mysqli_real_escape_string($conexion,$resultado["cro_tema"]).'",
 			start: new Date('.$resultado["agno"].', '.$resultado["mes"].', '.$resultado["dia"].', 6, 0),
 			backgroundColor: "'.$resultado["cro_color"].'",
-			url: "cronograma-editar.php?idR='.$resultado["cro_id"].'"
+			url: "cronograma-editar.php?idR='.base64_encode($resultado["cro_id"]).'"
 		},
 	'; 
 }

@@ -1,15 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0063';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php //include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0063';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
 require_once("../class/Estudiantes.php");
-?>
-<?php
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
-$calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
+include("../compartido/head.php");
 ?>
 
 <!--bootstrap -->
@@ -87,15 +82,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                 
 								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									
-									
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
+									<?php
+                                    include("info-carga-actual.php");
+                                    include("filtros-cargas.php");
+                                    include("../compartido/publicidad-lateral.php");
+                                    ?>
 									
 								</div>
 									

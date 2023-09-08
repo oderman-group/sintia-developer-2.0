@@ -1,11 +1,17 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0006';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0006';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
 require_once("../class/Estudiantes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$idR."' AND tar_estado=1");
+$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
@@ -13,14 +19,7 @@ require_once("../class/Estudiantes.php");
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
-	
-<?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1");
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
-
-?>
-
-	<input type="hidden" id="idR" name="idR" value="<?=$_GET["idR"];?>">
+	<input type="hidden" id="idR" name="idR" value="<?=$idR;?>">
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
@@ -79,7 +78,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas
-											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$_GET["idR"]."' AND tar_estado=1
+											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$idR."' AND tar_estado=1
 											ORDER BY tar_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -135,7 +134,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM academico_actividad_tareas_entregas 
-														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$_GET["idR"]."'");
+														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$idR."'");
 														$numEntregas=mysqli_num_rows($consultaDatos1);
 														if ($numEntregas>0){
 															$datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
