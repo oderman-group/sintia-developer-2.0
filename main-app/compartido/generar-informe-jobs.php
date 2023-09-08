@@ -39,6 +39,7 @@ if(empty($config)){
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 $num=0;
+$finalizado = true;
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
         $num++;
 		$estudiante = $estudianteResultado["mat_id"];
@@ -53,7 +54,9 @@ $num=0;
 		if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
 			$mensaje=$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
 			SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje);
-			exit();
+			SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES);
+			$finalizado = false;
+			break;
 		}
 		$caso = 1; //Inserta la definitiva que viene normal 
 		//Si ya existe un registro previo de definitiva TIPO 1
@@ -123,7 +126,7 @@ $num=0;
 		}		
 
 	}
-    $finalizado = true;
+    
 	if($finalizado){
 		mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
 		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_cargas ac
