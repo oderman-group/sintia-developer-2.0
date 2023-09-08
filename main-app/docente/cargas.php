@@ -101,14 +101,12 @@ require_once("../class/Sysjobs.php");
 												);
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
-												$estadoColor ="btn red";
 												if(empty($jobsEncontrado)){
-													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="'.$estadoColor.'">Generar Informe </a>';
+													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="btn red">Generar Informe </a>';
 												}else{
 													switch($jobsEncontrado["job_estado"]){
-														case JOBS_ESTADO_ERROR:
-														$estadoColor ="btn btn-warning";
-														$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="'.$estadoColor.'">Generar Informe </a>'
+														case JOBS_ESTADO_ERROR:														
+														$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="btn red">Generar Informe </a>'
 																	.'<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
 														case JOBS_ESTADO_PENDIENTE:
