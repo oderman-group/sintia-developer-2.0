@@ -108,7 +108,7 @@ require_once("../class/Sysjobs.php");
 													$estadoCrobJob ="(".$jobsEncontrado["job_estado"].")";
 													$estadoColor ="btn btn-success";
 												}
-												$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
+												$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
 											  }	
 										}
 										
