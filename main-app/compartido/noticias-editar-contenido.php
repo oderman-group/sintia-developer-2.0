@@ -28,7 +28,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
-											<?php if(!empty($datosConsulta[7]) || file_exists("../files/publicaciones/".$datosConsulta[7])){?>
+											<?php if(file_exists("../files/publicaciones/".$datosConsulta[7])){?>
 												<div class="item col-sm-4">
 													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
 													<a href="#" name="../compartido/guardar.php?get=11&idR=<?=$datosConsulta['not_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
