@@ -76,7 +76,7 @@ include("../compartido/head.php");
 														$contReg = 1;
 														while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-															$consultaClases = mysqli_query($conexion, "SELECT * FROM academico_clases 
+															$consultaClases = mysqli_query($conexion, "SELECT cls_id FROM academico_clases 
 															WHERE cls_id_carga='" . $cargaConsultaActual . "' AND cls_periodo='" . $periodoConsultaActual . "' AND cls_unidad='" . $resultado['uni_id'] . "'");
 															$numClases=mysqli_num_rows($consultaClases);
 													?>
