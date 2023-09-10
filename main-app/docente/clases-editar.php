@@ -120,6 +120,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 										<p class="text-warning">Opcional.</p>
 											<div class="form-group row">
+												<label class="col-sm-2 control-label">Hipervinculo</label>
+												<div class="col-sm-10">
+													<input type="text" name="vinculo" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_hipervinculo'];?>">
+												</div>
+											</div>
+											
+											<div class="form-group row">
 												<label class="col-sm-2 control-label">Video de youtube</label>
 												<div class="col-sm-10">
 													<input type="text" name="video" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_video_url'];?>">
