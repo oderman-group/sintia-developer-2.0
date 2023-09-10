@@ -379,6 +379,8 @@
 									
 									<li class="nav-item"><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
+	                                <li class="nav-item"><a href="unidades.php" class="nav-link "> <span class="title"><?=$frases[374][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									
 									<li class="nav-item"><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
 									<?php if(isset($datosCargaActual) && $datosCargaActual['car_tematica']==1){?>
