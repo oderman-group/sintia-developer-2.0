@@ -104,10 +104,28 @@ if(
 											</div>
 											
 											<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
-													</div>
+												<label class="col-sm-2 control-label">Fecha</label>
+												<div class="col-sm-4">
+													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Unidad</label>
+												<div class="col-sm-4">
+													<?php
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													?>
+													<select class="form-control  select2" name="unidad">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
+														?>
+															<option value="<?=$unidadDatos['uni_id'];?>"><?=$unidadDatos['uni_nombre']?></option>
+														<?php }?>
+													</select>
+												</div>
 											</div>
 
 											<div class="form-group row">
