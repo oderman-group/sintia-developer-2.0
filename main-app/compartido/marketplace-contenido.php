@@ -1,105 +1,14 @@
-<div class="row mb-4">
+<div class="row mb-2 mt-2">
 	<div class="col-sm-12">
-		<img class="img-responsive" src="https://plataformasintia.com/files-general/main-app/marketplace/marketplace1.png">
+		<img class="img-responsive" src="../../files-general/instituciones/marketplace/marketplace1.png">
 	</div>
 </div>	
 <!-- start course list -->
-<div class="row">
-	<div class="col-sm-3" style="width: 100%; height: 800px; overflow-y: scroll;">
-		<p align="center">
-			<?php if (empty($_SESSION["empresa"])) { ?>
-				<a href="empresas-agregar.php" class="btn btn-danger btn-lg"><i class="fa fa-shopping-cart"></i> VENDE TUS PRODUCTOS AQUÍ </a>
-			<?php } else { ?>
-				<a href="productos-agregar.php" class="btn btn-danger btn-lg"><i class="fa fa-plus"></i> NUEVO PRODUCTO </a>
-			<?php } ?>
-		</p>
-
-		<?php if (!empty($_SESSION["empresa"])) { ?>
-			<div class="panel">
-				<header class="panel-heading panel-heading-red">Menú Marketplace</header>
-				<div class="panel-body">
-					<p><a href="productos-agregar.php">Agregar otro producto</span></a></p>
-					<p><a href="marketplace.php?company=<?= $_SESSION["empresa"]; ?>">Ver mis productos</span></a></p>
-					<p><a href="marketplace.php">Ver todos los productos</span></a></p>
-					<hr>
-					<p><a href="https://youtu.be/cmsQDO9tIrQ" target="_blank">Ver tutorial de uso de MarketPlace</span></a></p>
-					<p><a href="mensajes-redactar.php?para=1&asunto=REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE">Solicitar asesoría</span></a></p>
-				</div>
-			</div>
-		<?php } else { ?>
-
-			<div class="panel">
-				<header class="panel-heading panel-heading-red">Menú Marketplace</header>
-				<div class="panel-body">
-					<p><a href="marketplace.php">Ver todos los productos</span></a></p>
-					<hr>
-					<p><a href="https://youtu.be/cmsQDO9tIrQ" target="_blank">Ver tutorial de uso de MarketPlace</span></a></p>
-					<p><a href="mensajes-redactar.php?para=1&asunto=REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE">Solicitar asesoría</span></a></p>
-				</div>
-			</div>
-		<?php } ?>
-
-		<div class="panel">
-			<header class="panel-heading panel-heading-blue"><?= $frases[8][$datosUsuarioActual['uss_idioma']]; ?> productos</header>
-			<div class="panel-body">
-				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-					<div class="form-group row">
-						<div class="col-sm-8">
-							<input type="text" name="busqueda" class="form-control" value="<?php if (!empty($_GET["busqueda"])) { echo $_GET["busqueda"]; }?>" placeholder="<?= $frases[235][$datosUsuarioActual[8]]; ?>...">
-						</div>
-						<div class="col-sm-4">
-							<input type="submit" class="btn btn-primary" value="<?= $frases[8][$datosUsuarioActual[8]]; ?>">
-						</div>
-					</div>
-				</form>
-				<?php if (!empty($_GET["busqueda"])) { ?><div align="center"><a href="<?= $_SERVER['PHP_SELF']; ?>"><?= $frases[230][$datosUsuarioActual['uss_idioma']]; ?></a></div><?php } ?>
-			</div>
-		</div>
-
-		<div class="panel">
-			<header class="panel-heading panel-heading-purple">Categorías</header>
-			<div class="panel-body">
-				<?php
-				$categorias = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".categorias_productos");
-				while ($cat = mysqli_fetch_array($categorias, MYSQLI_BOTH)) {
-					$estiloResaltado = '';
-					if (!empty($_GET["cat"]) && $_GET["cat"]==$cat[0]){ $estiloResaltado = 'style="color: orange;"';}
-				?>
-					<p>
-						<a href="<?= $_SERVER['PHP_SELF']; ?>?cat=<?= $cat[0]; ?>" <?= $estiloResaltado; ?>>
-							<span><?= strtoupper($cat['catp_nombre']); ?></span>
-						</a>
-					</p>
-				<?php } ?>
-				<p align="center"><a href="<?= $_SERVER['PHP_SELF']; ?>"><?= strtoupper($frases[180][$datosUsuarioActual[8]]); ?></span></a></p>
-			</div>
-		</div>
-
-
-
-	</div>
-
-	<div class="col-sm-9">
+<?php include("barra-superior-marketplace.php"); ?>
+<div class="row mt-2">
+	<div class="col-sm-12">
 		<div class="row">
 			<?php
-			$filtro = '';
-			if (!empty($_GET["cat"])) {
-				$filtro .= " AND prod_categoria='" . $_GET["cat"] . "'";
-			}
-			if (!empty($_GET["prod"]) && is_numeric($_GET["prod"])) {
-				$filtro .= " AND prod_id='" . $_GET["prod"] . "'";
-			}
-			if (!empty($_GET["company"]) && is_numeric($_GET["company"])) {
-				$filtro .= " AND prod_empresa='" . $_GET["company"] . "'";
-			}
-
-			if (!empty($_GET["busqueda"])) {
-				$filtro .= " AND (prod_nombre LIKE '%" . $_GET["busqueda"] . "%' 
-						OR prod_descripcion LIKE '%" . $_GET["busqueda"] . "%' 
-						OR prod_keywords LIKE '%" . $_GET["busqueda"] . "%'
-						)";
-			}
-
 			$serviciosConsulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos
 						INNER JOIN " . $baseDatosMarketPlace . ".categorias_productos ON catp_id=prod_categoria
 						INNER JOIN " . $baseDatosMarketPlace . ".empresas ON emp_id=prod_empresa
@@ -119,7 +28,7 @@
 				}
 
 				$class = 'col-lg-3 col-md-6 col-12 col-sm-6';
-				if (!empty($_GET["prod"]) && is_numeric($_GET["prod"])) {
+				if (is_numeric($prod)) {
 					$class = 'col-sm-12';
 				}
 
@@ -141,17 +50,17 @@
 							</div>
 							<p><span style="font-weight: bold;"> $<?= number_format($datosConsulta['prod_precio'], 0, ",", "."); ?></span></p>
 							<?php
-							if (!empty($_GET["prod"]) && is_numeric($_GET["prod"])) {
+							if (is_numeric($prod)) {
 								$consultaVisita = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos_visitas 
-										WHERE pxvis_producto='" . $_GET["prod"] . "' AND pxvis_usuario='" . $_SESSION["id"] . "' AND pxvis_institucion='" . $config['conf_id_institucion'] . "'");
+										WHERE pxvis_producto='" . $prod . "' AND pxvis_usuario='" . $_SESSION["id"] . "' AND pxvis_institucion='" . $config['conf_id_institucion'] . "'");
 
 								$numVisita = mysqli_num_rows($consultaVisita);
 								$datoVisita = mysqli_fetch_array($consultaVisita, MYSQLI_BOTH);
 								if ($numVisita > 0) {
 									mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".productos_visitas SET pxvis_cantidad=pxvis_cantidad+1 
-											WHERE pxvis_usuario='" . $_SESSION["id"] . "' AND pxvis_institucion='" . $config['conf_id_institucion'] . "' AND pxvis_producto='" . $_GET["prod"] . "'");
+											WHERE pxvis_usuario='" . $_SESSION["id"] . "' AND pxvis_institucion='" . $config['conf_id_institucion'] . "' AND pxvis_producto='" . $prod . "'");
 								} else {
-									mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos_visitas(pxvis_producto, pxvis_institucion, pxvis_usuario, pxvis_fecha, pxvis_cantidad)VALUES('" . $_GET["prod"] . "', '" . $config['conf_id_institucion'] . "', '" . $_SESSION["id"] . "', now(), 1)");
+									mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos_visitas(pxvis_producto, pxvis_institucion, pxvis_usuario, pxvis_fecha, pxvis_cantidad)VALUES('" . $prod . "', '" . $config['conf_id_institucion'] . "', '" . $_SESSION["id"] . "', now(), 1)");
 								}
 							?>
 
