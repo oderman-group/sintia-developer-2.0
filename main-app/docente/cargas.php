@@ -27,7 +27,7 @@ require_once("../class/Sysjobs.php");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?> (<a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>)</div>
+                                <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -56,10 +56,11 @@ require_once("../class/Sysjobs.php");
 							 ?>
 								
 							 <p>
-								 	<a href="../compartido/planilla-docentes.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
-							 </p>
-							 <p>
-								 	<a href="../compartido/planilla-docentes-notas.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+								 	<a href="../compartido/planilla-docentes.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="text-decoration: underline;">Imprimir todas mis planillas</a>
+									&nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="../compartido/planilla-docentes-notas.php?docente=<?=$_SESSION["id"];?>" target="_blank" style="text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+									 &nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
@@ -134,16 +135,22 @@ require_once("../class/Sysjobs.php");
 									</a>	
 								</div>
 	                        	<div class="course-box">
-	                        	<h4 <?=$induccionEntrar;?>><a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h5 <?=$induccionEntrar;?>>
+								<a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($rCargas['car_id']);?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;&nbsp;
+								<a href="guardar.php?get=100&carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($rCargas['car_id']);?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;
-										<span><i class="fa  fa-group"></i> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
+										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
 									</p>
 									
 									
 									<p align="center" <?=$induccionSabanas;?>>
-                                      	<?php for($i=1; $i<$rCargas["car_periodo"]; $i++){?><a href="../compartido/informes-generales-sabanas.php?curso=<?=$rCargas["car_curso"];?>&grupo=<?=$rCargas["car_grupo"];?>&per=<?=$i;?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Sabanas"><?=$i;?></a>&nbsp;&nbsp;&nbsp;&nbsp;<?php }?>
+
+                                      	<?php 
+										for($i=1; $i<$rCargas["car_periodo"]; $i++){
+										?>
+											<a href="../compartido/informes-generales-sabanas.php?curso=<?=$rCargas["car_curso"];?>&grupo=<?=$rCargas["car_grupo"];?>&per=<?=$i;?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Sabanas"><?=$i;?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+										<?php }?>
                                     </p>
 									
 		                            
