@@ -34,8 +34,11 @@ if (isset($_GET['busqueda'])) {
             <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
-          <a class="dropdown-item" href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
+          <a class="dropdown-item" href="guardar.php?get=69&tipo=4" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
+          <a class="dropdown-item" href="guardar.php?get=70&tipo=4" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
+          <a class="dropdown-item" href="guardar.php?get=69&tipo=2" onClick="if(!confirm('Desea Bloquear a todos los docentes?')){return false;}">Bloquear docentes</a>
+          <a class="dropdown-item" href="guardar.php?get=70&tipo=2" onClick="if(!confirm('Desea Desbloquear a todos los docentes?')){return false;}">Desbloquear docentes</a>
+          <a>&nbsp;</a>
           <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
           <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
           <a class="dropdown-item" href="usuarios-anios.php">Consultar todos los años</a>
@@ -59,6 +62,7 @@ if (isset($_GET['busqueda'])) {
             ?>	
             <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>&busqueda=<?=$busqueda?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
         <?php }?>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
   </ul> 
