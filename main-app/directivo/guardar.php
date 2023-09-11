@@ -1652,25 +1652,25 @@ if ($_GET["get"] == 68) {
 //BLOQUEAR ESTUDIANTES
 if ($_GET["get"] == 69) {
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_tipo=4");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_tipo='".$_GET["tipo"]."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo=4&cantidad=50";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'&cantidad=50";</script>';
 	exit();
 }
 //DESBLOQUEAR ESTUDIANTES
 if ($_GET["get"] == 70) {
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=0 WHERE uss_tipo=4");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=0 WHERE uss_tipo='".$_GET["tipo"]."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo=4&cantidad=50";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'&cantidad=50";</script>';
 	exit();
 }
 //ENCUESTA RESERVA DE CUPO
