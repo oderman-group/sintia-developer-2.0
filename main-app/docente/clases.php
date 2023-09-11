@@ -160,37 +160,34 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+													<?php 
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND (cls_unidad='' OR cls_unidad IS NULL)");
+														if(mysqli_num_rows($consulta)>0){
+													?>
 													<tr style="background-color: antiquewhite; font-weight: bold;">
-														<td colspan="7">Unidad 1: Todos los temas.</td>
+														<td colspan="7">Unidad 0: Todos los temas.</td>
 													</tr>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1
-													 ");
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$bg = '';
-														$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_ausencias 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-														WHERE aus_id_clase='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas 
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
-														$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
-														 
-														$cheked = '';
-														if($resultado['cls_disponible']==1){$cheked = 'checked';}
-														 
-													 ?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
+														$contReg = 1;
+														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+															$bg = '';
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
+															(SELECT count(*) FROM academico_ausencias 
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+															WHERE aus_id_clase='".$resultado[0]."'),
+															(SELECT count(*) FROM academico_matriculas 
+															WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+															$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
+															if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+															
+															$cheked = '';
+															if($resultado['cls_disponible']==1){$cheked = 'checked';}
+
+															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
 													?>
-                                                    
-													
 													<tr id="reg<?=$resultado['cls_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['cls_id'];?></td>
@@ -224,10 +221,81 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														</td>
                                                     </tr>
 													<?php 
-														 $contReg++;
-													  }
+															$contReg++;
+														}
+													}
+													$consultaUnidad = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													$contUni = 1;
+													while($datosUnidad = mysqli_fetch_array($consultaUnidad, MYSQLI_BOTH)){
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_unidad='".$datosUnidad['uni_id']."'");
+														if(mysqli_num_rows($consulta)>0){
+													?>
+													<tr style="background-color: antiquewhite; font-weight: bold;">
+														<td colspan="7"><?=$datosUnidad['uni_nombre'];?>: <?=$datosUnidad['uni_descripcion'];?>.</td>
+													</tr>
+													<?php
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_unidad='".$datosUnidad['uni_id']."'");
+														$contReg = 1;
+														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+															$bg = '';
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
+															(SELECT count(*) FROM academico_ausencias 
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+															WHERE aus_id_clase='".$resultado[0]."'),
+															(SELECT count(*) FROM academico_matriculas 
+															WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+															$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
+															if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+															
+															$cheked = '';
+															if($resultado['cls_disponible']==1){$cheked = 'checked';}
 
-													  ?>
+															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
+													?>
+													<tr id="reg<?=$resultado['cls_id'];?>">
+                                                        <td><?=$contReg;?></td>
+														<td><?=$resultado['cls_id'];?></td>
+														<td>
+															<div class="input-group spinner col-sm-10">
+																<label class="switchToggle">
+																	<input type="checkbox" id="<?=$resultado['cls_id'];?>" name="disponible" value="1" onChange="guardarAjax(this)" <?=$cheked;?>>
+																	<span class="slider yellow round"></span>
+																</label>
+															</div>
+														</td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado['cls_tema'];?></a></td>
+														<td><?=$resultado['cls_fecha'];?></td>
+														<td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></td>
+														<td>
+															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
+															
+															<div class="btn-group">
+																<button class="btn btn-xs btn-info dropdown-toggle center no-margin" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+																	<i class="fa fa-angle-down"></i>
+																</button>
+																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
+																		<li><a href="clases-registrar.php?idR=<?=base64_encode($resultado['cls_id']);?>">Inasistencias</a></li>
+																	  <li><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>">Acceder</a></li>
+																	  <li><a href="clases-editar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
+																	  
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																</ul>
+															</div>
+															<?php } ?>
+														</td>
+                                                    </tr>
+													<?php 
+																$contReg++;
+															}
+															$contUni++;
+														}
+													}
+													?>
                                                 </tbody>
                                             </table>
                                             </div>
