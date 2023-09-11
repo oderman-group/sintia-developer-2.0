@@ -47,7 +47,7 @@ WHERE prod_id='".$_GET["id"]."'
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre de quien recibe (*)</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombre" class="form-control" value="<?=$datosUsuarioActual['uss_nombre'];?>" required>
+                                                <input type="text" name="nombre" class="form-control" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?>" required>
                                             </div>
                                         </div>
 										

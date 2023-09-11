@@ -672,22 +672,25 @@ if (!empty($_POST["id"])) {
 		}
 		$idRegistro = mysqli_insert_id($conexion);
 
-
-		$cont = count($_POST["sector"]);
-		$i = 0;
-		while ($i < $cont) {
-			try{
-				mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
+		if(!empty($_POST["sector"])){
+			$cont = count($_POST["sector"]);
+			$i = 0;
+			while ($i < $cont) {
+				try{
+					mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$i++;
 			}
-			$i++;
 		}
 
 		$_SESSION["empresa"] = $idRegistro;
 
+		$destinos = validarUsuarioActual($datosUsuarioActual);
+
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="../acudiente/productos-agregar.php?pp=1";</script>';
+		echo '<script type="text/javascript">window.location.href="' .$destinos. 'productos-agregar.php?pp=1";</script>';
 		exit();
 	}
 
@@ -708,7 +711,7 @@ if (!empty($_POST["id"])) {
 		$video = substr($_POST["video"], $pos, 11);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_ref, prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["ref"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
