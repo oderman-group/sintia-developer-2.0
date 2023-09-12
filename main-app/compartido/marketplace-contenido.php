@@ -34,10 +34,10 @@
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">
 				<div class="blogThumb" style="height: 100%;">
 					<div class="thumb-center" style="height: 55%;">
-						<a href="marketplace.php?prod=<?= $datosConsulta['prod_id']; ?>"><img class="img-responsive" style="height: 100%;" src="<?= $foto; ?>"></a>
+						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 100%;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
-						<h5><a href="marketplace.php?prod=<?= $datosConsulta['prod_id']; ?>"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
+						<h5><a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
 						<div class="text-muted">
 							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['catp_nombre']; ?></span>
 						</div>
@@ -63,9 +63,15 @@
 				</div>
 			</div>
 		<?php
+			include('modal-marketplace-detalles.php');
 			}
 		?>
 		</div>
 	</div>
 </div>
 <!-- End course list -->
+<script>
+	function mostrarDetalles(datos){
+		$("#"+datos.name).modal("show");
+	}
+</script>
