@@ -30,7 +30,7 @@ if (!empty($_POST["id"])) {
 
 		$destinatarios = "1,2,3,4,5";
 	try{
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year,not_imagen)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "','')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
