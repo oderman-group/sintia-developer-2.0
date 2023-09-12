@@ -18,7 +18,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción del producto (*)</label>
                                             <div class="col-sm-10">
-                                                <textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                                                <textarea name="descripcion" id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
                                             </div>
                                         </div>
 										
@@ -104,3 +104,11 @@
                         </div>
 						
                     </div>
+                    
+<script src="../ckeditor/ckeditor.js"></script>
+
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor 4
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>
