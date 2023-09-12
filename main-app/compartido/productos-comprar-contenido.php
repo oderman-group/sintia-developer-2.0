@@ -12,14 +12,15 @@ WHERE prod_id='".$_GET["id"]."'
                                     <header>Confirme los datos</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="http://oderman.com.co/sql.php" method="post" enctype="multipart/form-data" target="_blank">
-										<input type="hidden" name="idSQL" value="5">
-										<input type="hidden" name="precio" value="<?=$producto['prod_precio'];?>">
+                                    <form class="form-horizontal" action="../pagos-online/index.php" method="post" enctype="multipart/form-data" target="_target">
+										<input type="hidden" name="monto" value="<?=$producto['prod_precio'];?>">
+                                        <input type="hidden" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
+                                        <input type="hidden" name="idInstitucion" value="<?=$config['conf_id_institucion'];?>">
                                         
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Producto</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="producto" class="form-control" value="<?=$producto['prod_nombre'];?>" readonly>
+                                                <input type="text" name="nombre" class="form-control" value="<?=$producto['prod_nombre'];?>" readonly>
                                             </div>
                                         </div>
 										
@@ -40,28 +41,28 @@ WHERE prod_id='".$_GET["id"]."'
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Documento de quien recibe (*)</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="documento" class="form-control" value="<?=$datosUsuarioActual['uss_usuario'];?>" required>
+                                                <input type="text" name="documentoUsuario" class="form-control" value="<?=$datosUsuarioActual['uss_documento'];?>" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre de quien recibe (*)</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombre" class="form-control" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?>" required>
+                                                <input type="text" name="nombreUsuario" class="form-control" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?>" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Email (*)</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="email" class="form-control" value="<?=$datosUsuarioActual['uss_email'];?>" required>
+                                                <input type="text" name="emailUsuario" class="form-control" value="<?=$datosUsuarioActual['uss_email'];?>" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Teléfono (*)</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="telefono" class="form-control" value="<?=$datosUsuarioActual['uss_celular'];?>" required>
+                                                <input type="text" name="celularUsuario" class="form-control" value="<?=$datosUsuarioActual['uss_celular'];?>" required>
                                             </div>
                                         </div>
 										
@@ -78,7 +79,8 @@ WHERE prod_id='".$_GET["id"]."'
 										</p>
 										
 										<div align="right">
-											<input type="submit" class="btn btn-primary" value="Continuar al pago">&nbsp;
+											<!-- <input type="submit" class="btn btn-primary" value="Continuar al pago">&nbsp; -->
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-credit-card" aria-hidden="true"></i>Continuar al pago</button>
 										</div>
 										
 
