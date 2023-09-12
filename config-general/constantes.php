@@ -66,13 +66,8 @@ switch($_SERVER['HTTP_HOST']){
         error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
-        case 'mt.plataformasintia.com':
-        define('REDIRECT_ROUTE', 'https://mt.plataformasintia.com/app-sintia/main-app');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
-
         default:
-        define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+        define('REDIRECT_ROUTE', $_SERVER['HTTP_HOST'].'/app-sintia/main-app');
         error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 }
