@@ -48,6 +48,8 @@ if (!empty($_POST["id"])) {
 		}
 
 		$destinatarios = "1,2,3,4,5";
+
+		$imagen = '';
 		if (!empty($_FILES['imagen']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['imagen']['size'], $_FILES['imagen']['name']);
 			$explode=explode(".", $_FILES['imagen']['name']);
@@ -56,6 +58,7 @@ if (!empty($_POST["id"])) {
 			$destino = "../files/publicaciones";
 			move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
 		}
+		$archivo = '';
 		if (!empty($_FILES['archivo']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['archivo']['size'], $_FILES['archivo']['name']);
 			$explode=explode(".", $_FILES['archivo']['name']);
@@ -81,7 +84,8 @@ if (!empty($_POST["id"])) {
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		if($_POST["cursos"]>0){
+
+		if(!empty($_POST["cursos"])){
 			$cont = count($_POST["cursos"]);
 			$i = 0;
 			while ($i < $cont) {
