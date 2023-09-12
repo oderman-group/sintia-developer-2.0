@@ -1,8 +1,13 @@
 <?php
+$id = '';
+if (!empty($_GET["id"])) {
+    $id = base64_decode($_GET["id"]);
+}
+
 $producto = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".productos
 INNER JOIN ".$baseDatosMarketPlace.".categorias_productos ON catp_id=prod_categoria
 INNER JOIN ".$baseDatosMarketPlace.".empresas ON emp_id=prod_empresa
-WHERE prod_id='".$_GET["id"]."'
+WHERE prod_id='".$id."'
 "), MYSQLI_BOTH);
 ?>
 <div class="row">

@@ -91,7 +91,7 @@
 								<header class="panel-heading panel-heading-yellow">¿REQUIERES AYUDA?</header>
 
 									<p><a href="https://youtu.be/cmsQDO9tIrQ?t=122" target="_blank">Ver tutorial de uso de MarketPlace</span></a></p>
-									<p><a href="mensajes-redactar.php?para=1&asunto=REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE">Solicitar asesoría</span></a></p>
+									<p><a href="mensajes-redactar.php?para=<?=base64_encode(1)?>&asunto=<?=base64_encode('REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE')?>">Solicitar asesoría</span></a></p>
 
 									<p>
 										<b>AYUDA SINTIA MARKETPLACE</b><br>

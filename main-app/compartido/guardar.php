@@ -1275,9 +1275,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR PRODUCTOS DEL MARKETPLACE
-	if ($_GET["get"] == 25) {
+	if (base64_decode($_GET["get"]) == 25) {
 		try{
-			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

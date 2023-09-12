@@ -216,7 +216,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
 														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
-															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
+															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente[0]);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
 

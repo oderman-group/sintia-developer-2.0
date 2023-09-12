@@ -37,7 +37,7 @@
 						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 100%;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
-						<h5><a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
+						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
 						<div class="text-muted">
 							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['catp_nombre']; ?></span>
 						</div>
@@ -47,12 +47,12 @@
 						if (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] == $datosConsulta['emp_id']) {
 						?>
 							<a href="#" class="btn btn-success"><i class="fa fa-edit"></i></a>
-							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/guardar.php?get=25&idR=<?= $datosConsulta['prod_id']; ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/guardar.php?get=<?= base64_encode(25); ?>&idR=<?= base64_encode($datosConsulta['prod_id']); ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
 						<?php
 							} else {
 								if ($datosConsulta['prod_precio'] >= 10000) {
 						?>
-									<a href="productos-comprar.php?id=<?= $datosConsulta['prod_id']; ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
+									<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
 						<?php
 								}
 						?>
