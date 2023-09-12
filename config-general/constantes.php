@@ -67,7 +67,7 @@ switch($_SERVER['HTTP_HOST']){
         break;
 
         default:
-        define('REDIRECT_ROUTE', $_SERVER['HTTP_HOST'].'/app-sintia/main-app');
+        define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
         error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 }
