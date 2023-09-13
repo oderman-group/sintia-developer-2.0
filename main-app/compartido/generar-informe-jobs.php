@@ -40,6 +40,7 @@ $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (ma
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 $num=0;
 $finalizado = true;
+$erroresNumero=0;
 	while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
         $num++;
 		$estudiante = $estudianteResultado["mat_id"];
@@ -52,14 +53,10 @@ $finalizado = true;
 
 		//Verificamos que el estudiante tenga sus notas al 100%
 		if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
-			$mensaje=$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
-			SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
-			if($intento>=3){
-				SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
-			}
-			
+			$erroresNumero++;
+			$mensaje=$mensaje."<br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
 			$finalizado = false;
-			break;
+			continue;
 		}
 		$caso = 1; //Inserta la definitiva que viene normal 
 		//Si ya existe un registro previo de definitiva TIPO 1
@@ -155,6 +152,11 @@ $finalizado = true;
 		);
 		SysJobs::actualizar($datos);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO);
+	}else{		
+		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
+		if($intento>=3){
+		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
+		}
 	}
 	
 
