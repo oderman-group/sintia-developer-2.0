@@ -327,7 +327,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 				"estado" =>JOBS_ESTADO_FINALIZADO,
 			);
 			SysJobs::actualizar($datos);
-			SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL);			
+			SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,JOBS_ESTADO_FINALIZADO);			
 		}	
 
 	}catch (Exception $e) {
