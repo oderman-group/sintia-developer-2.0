@@ -1,3 +1,12 @@
+<?php
+	if(empty($_SESSION["empresa"])){
+		$consultaEmpresa=mysqli_query($conexion, "SELECT * FROM $baseDatosMarketPlace.empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
+		$empresa = mysqli_fetch_array($consultaEmpresa, MYSQLI_BOTH);
+		if(!empty($empresa[0])){
+			$_SESSION["empresa"] = $empresa[0];
+		}
+	}
+?>
 <div class="row mb-2 mt-2">
 	<div class="col-sm-12">
 		<img class="img-responsive" src="../../files-general/instituciones/marketplace/marketplace1.png">
