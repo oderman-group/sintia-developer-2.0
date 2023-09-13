@@ -54,7 +54,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 	<div class="panel-body">
 
                                    
-                                    <form action="estudiantes-nivelaciones-registrar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                    <form action="estudiantes-nivelaciones-registrar2.php" method="post" target="_blank" class="form-horizontal">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso</label>
