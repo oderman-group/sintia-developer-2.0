@@ -48,6 +48,8 @@ if (!empty($_POST["id"])) {
 		}
 
 		$destinatarios = "1,2,3,4,5";
+
+		$imagen = '';
 		if (!empty($_FILES['imagen']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['imagen']['size'], $_FILES['imagen']['name']);
 			$explode=explode(".", $_FILES['imagen']['name']);
@@ -56,6 +58,7 @@ if (!empty($_POST["id"])) {
 			$destino = "../files/publicaciones";
 			move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
 		}
+		$archivo = '';
 		if (!empty($_FILES['archivo']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['archivo']['size'], $_FILES['archivo']['name']);
 			$explode=explode(".", $_FILES['archivo']['name']);
@@ -81,7 +84,8 @@ if (!empty($_POST["id"])) {
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		if($_POST["cursos"]>0){
+
+		if(!empty($_POST["cursos"])){
 			$cont = count($_POST["cursos"]);
 			$i = 0;
 			while ($i < $cont) {
@@ -672,22 +676,25 @@ if (!empty($_POST["id"])) {
 		}
 		$idRegistro = mysqli_insert_id($conexion);
 
-
-		$cont = count($_POST["sector"]);
-		$i = 0;
-		while ($i < $cont) {
-			try{
-				mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
+		if(!empty($_POST["sector"])){
+			$cont = count($_POST["sector"]);
+			$i = 0;
+			while ($i < $cont) {
+				try{
+					mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$i++;
 			}
-			$i++;
 		}
 
 		$_SESSION["empresa"] = $idRegistro;
 
+		$destinos = validarUsuarioActual($datosUsuarioActual);
+
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="../acudiente/productos-agregar.php?pp=1";</script>';
+		echo '<script type="text/javascript">window.location.href="' .$destinos. 'productos-agregar.php?pp=1";</script>';
 		exit();
 	}
 
@@ -708,7 +715,7 @@ if (!empty($_POST["id"])) {
 		$video = substr($_POST["video"], $pos, 11);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_ref, prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["ref"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1268,9 +1275,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR PRODUCTOS DEL MARKETPLACE
-	if ($_GET["get"] == 25) {
+	if (base64_decode($_GET["get"]) == 25) {
 		try{
-			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
