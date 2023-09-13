@@ -11,9 +11,9 @@ $parametros = array(
 );
 try{
     //HISTORIAL DE ACCIONES
-	$mensaje=SysJobs::registrar(JOBS_TIPO_GENERAR_INFORMES,$parametros);	
+	$mensaje=SysJobs::registrar(JOBS_TIPO_GENERAR_INFORMES,JOBS_PRIORIDAD_BAJA,$parametros);	
 	include("../compartido/guardar-historial-acciones.php");
-    echo '<script type="text/javascript">window.location.href="../docente/cargas.php?success=SC_DT_4&summary=' . $mensaje.'";</script>';
+    echo '<script type="text/javascript">window.location.href="../docente/cargas.php";</script>';
 	exit();
 
 } catch (Exception $e) {

@@ -102,16 +102,21 @@ require_once("../class/Sysjobs.php");
 												);
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+												
 												if(empty($jobsEncontrado)){
 													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="btn red">Generar Informe </a>';
 												}else{
+													$intento = intval($jobsEncontrado["job_intentos"]);
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
 														$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.$rCargas["car_id"].'&periodo='.$rCargas["car_periodo"].'&grado='.$rCargas["car_curso"].'&grupo='.$rCargas["car_grupo"].'" class="btn red">Generar Informe </a>'
 																	.'<div class="alert alert-danger" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
-														case JOBS_ESTADO_PENDIENTE:
+														case JOBS_ESTADO_PENDIENTE && $intento==0:
 															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															break;
+														case JOBS_ESTADO_PENDIENTE && $intento>0:
+															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														
 													}

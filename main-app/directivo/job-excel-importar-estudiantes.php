@@ -55,7 +55,7 @@ if($extension == 'xlsx'){
 						$camposActualizar="Campos a actualizar (".$camposActualizar.")";
 					}
 					$mensaje='Se generó Jobs para importar excel del archivo ['.$archivo.'] hasta la fila '.$_POST["filaFinal"].' '.$camposActualizar;
-					$mensaje=SysJobs::registrar(JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,$parametros,$mensaje);	
+					$mensaje=SysJobs::registrar(JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,JOBS_PRIORIDAD_BAJA,$parametros,$mensaje);	
 					include("../compartido/guardar-historial-acciones.php");	
 					echo '<script type="text/javascript">window.location.href="../directivo/estudiantes-importar-excel.php?success=SC_DT_4&summary=' . $mensaje.'";</script>';
 					exit();
