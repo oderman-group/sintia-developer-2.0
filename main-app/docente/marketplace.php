@@ -3,14 +3,6 @@ include("session.php");
 $idPaginaInterna = 'DC0078';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-
-if(empty($_SESSION["empresa"])){
-    $consultaEmpresa=mysqli_query($conexion, "SELECT * FROM $baseDatosMarketPlace.empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
-	$empresa = mysqli_fetch_array($consultaEmpresa, MYSQLI_BOTH);
-	if(!empty($empresa[0])){
-		$_SESSION["empresa"] = $empresa[0];
-	}
-}
 ?>
 </head>
 <!-- END HEAD -->
