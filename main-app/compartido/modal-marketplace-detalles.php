@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="z-index:9999;">
 	<div class="modal-dialog" style="max-width: 1350px!important;">
 		<div class="modal-content">
 			<div class="modal-body">

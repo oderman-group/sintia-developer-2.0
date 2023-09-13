@@ -1,6 +1,6 @@
 
 
-<div class="modal fade bd-example-modal-sm" id="modalMsjMarketplace" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-sm" id="modalMsjMarketplace" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="z-index:10000;">
 	   <div class="modal-dialog modal-sm"  style="max-width: 600px!important;">
 		  <div class="modal-content">
 			 <div class="modal-body">
