@@ -503,6 +503,7 @@
 	                        </li>
 
 
+							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -538,6 +539,7 @@
 									
 	                            </ul>
 	                        </li>
+							<?php }?>
 							
 							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
 	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart fa-spin"></i>
