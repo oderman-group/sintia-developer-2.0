@@ -32,7 +32,7 @@
 			<div class="modal-footer">
 				<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 				<a href="#" class="btn btn-info" name="<?= $datosConsulta['emp_usuario']; ?>" title="<?= $datosConsulta['prod_nombre']; ?>" onClick="msjMarketplace(this)"><i class="fa fa-envelope"></i> Enviar mensaje</a>
-				<?php if ($datosConsulta['prod_precio'] >= 10000 && (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] != $datosConsulta['emp_id'])) { ?>
+				<?php if ($datosConsulta['prod_precio'] >= 10000 && (empty($_SESSION["empresa"]) || (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] != $datosConsulta['emp_id']))) { ?>
 					<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
 				<?php } ?>
 			</div>
