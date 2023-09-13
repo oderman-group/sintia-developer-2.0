@@ -28,7 +28,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
-											<?php if(file_exists("../files/publicaciones/".$datosConsulta[7])){?>
+											<?php if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta[7])){?>
 												<div class="item col-sm-4">
 													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
 													<a href="#" name="../compartido/guardar.php?get=11&idR=<?=$datosConsulta['not_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
@@ -88,7 +88,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="archivo" class="form-control">
                                             </div>
-											<?php if(!empty($datosConsulta['not_archivo']) || file_exists("../files/publicaciones/".$datosConsulta['not_archivo'])){?>
+											<?php if(!empty($datosConsulta['not_archivo']) && file_exists("../files/publicaciones/".$datosConsulta['not_archivo'])){?>
 												<div class="col-sm-4">
 													<a href="../files/publicaciones/<?=$datosConsulta['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
 											</div>
