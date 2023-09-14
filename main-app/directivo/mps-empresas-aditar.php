@@ -10,7 +10,12 @@ try {
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
+
 $infoDatos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+$foto = 'https://via.placeholder.com/510?text=Sin+Imagen';
+if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.$infoDatos['emp_logo'])) {
+    $foto = '../files/marketplace/logos/'.$infoDatos['emp_logo'];
+}
 ?>
 
 <!--bootstrap -->
@@ -61,6 +66,34 @@ $infoDatos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
                                 <form name="formularioGuardar" action="mps-empresas-actualizar.php" method="post" enctype="multipart/form-data">
                                     <input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										
+                                    <div class="form-group row">
+                                        <div class="col-sm-4" style="margin: 0 auto 10px">
+                                            <div class="item">
+                                                <img src="<?=$foto?>" alt="Logo de la empresa" id="imgLogo" width="300" height="300" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        function cambiarLogo() {
+                                            let img = document.getElementById("imgLogo");
+                                            let input = document.getElementById("customFile");
+
+                                            if(input.files[0]){
+                                                img.src= URL.createObjectURL(input.files[0]);
+                                            }
+                                        }
+                                    </script>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Logo</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" id="customFile" name="logoEmp" class="form-control" onchange="cambiarLogo()">
+                                            <span style="color: #6017dc;">El logo debe estar en formato JPG o PNG.</span>
+                                        </div>
+                                    </div>
+                                    <hr>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Nombre Empresa<span style="color: red;">(*)</span></label>

@@ -11,6 +11,20 @@
         echo '<script type="text/javascript">window.location.href="mps-empresas-aditar.php?error=ER_DT_4&idR='.$_POST["idR"].'";</script>';
         exit();
     }
+    
+	if (!empty($_FILES['logoEmp']['name'])) {
+        $explode = explode(".", $_FILES['logoEmp']['name']);
+        $extension = end($explode);
+        $archivo = uniqid('logo_'.date('Ymd')) . "." . $extension;
+        $destino = "../files/marketplace/logos";
+        move_uploaded_file($_FILES['logoEmp']['tmp_name'], $destino . "/" . $archivo);
+
+        try{
+            mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".empresas SET  emp_logo='".$archivo."' WHERE emp_id='".$_POST["idR"]."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+	}
 
     $responsable=''; if(!empty($_POST["responsable"])){ $responsable=$_POST["responsable"]; }
 
