@@ -21,7 +21,7 @@
 			$serviciosConsulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos
 			INNER JOIN " . $baseDatosMarketPlace . ".categorias_productos ON catp_id=prod_categoria
 			INNER JOIN " . $baseDatosMarketPlace . ".empresas ON emp_id=prod_empresa
-			WHERE prod_id=prod_id $filtro ");
+			WHERE prod_estado!=1 AND prod_activo=1 $filtro ");
 			$numProductos = mysqli_num_rows($serviciosConsulta);
 			if ($numProductos == 0) {
 				echo '
