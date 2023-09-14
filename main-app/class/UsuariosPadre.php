@@ -114,11 +114,11 @@ class UsuariosPadre {
         }        	
     }
 
-    public static function listarUsuariosCompartir($nombre='')
+    public static function listarUsuariosCompartir($nombre='',$BD='')
     {
         global $conexion,$baseDatosServicios;
 
-        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM usuarios 
+        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".$BD.".usuarios 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
         WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
          
