@@ -70,7 +70,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
@@ -93,7 +93,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 													
 													
 											<?php
-											if(
+																						if(
 												($datosCargaActual['car_configuracion']==0 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] 
 												 and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
 																	
@@ -244,13 +244,13 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 								
 								<div class="col-md-6 col-lg-4">
 									
-									<?php include("filtros-cargas.php");?>
+									
 									
 								</div>
                                 
 								<div class="col-md-6 col-lg-4">
 									
-									<?php include("info-carga-actual.php");?>
+									
 									
 									<?php include("../compartido/publicidad-lateral.php");?>
 
