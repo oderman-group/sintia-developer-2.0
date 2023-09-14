@@ -7,6 +7,13 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/Sysjobs.php");
 ?>
 </head>
+<style>
+	.alert-warning-select {
+    color: #4f3e0d;
+    background-color: #f5c426;
+    border-color: #ffeeba;
+}
+</style>
  <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 
@@ -115,8 +122,11 @@ require_once("../class/Sysjobs.php");
 														case JOBS_ESTADO_PENDIENTE && $intento==0:
 															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0:
+														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
 															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															break;
+														case JOBS_ESTADO_PENDIENTE && $intento>0 :
+															$mensajeI ='<div class="alert alert-warning-select" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														
 													}
