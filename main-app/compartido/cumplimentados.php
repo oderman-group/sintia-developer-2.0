@@ -18,7 +18,7 @@ include("../modelo/conexion.php");
 															<?=strtoupper($cumple['uss_nombre']);?>
 															<?php if($cumple['uss_mostrar_edad']==1){echo "(".$edad.")";}?>
 														</a><br>
-														<a href="mensajes-redactar.php?para=<?=$cumple['uss_id'];?>&asunto=TE DESEO UN FELIZ CUMPLEAÑOS" style="font-size: 12px; color: crimson;"><i class="fa fa-envelope-o"></i> Felicitar <?php //echo $frases[236][$datosUsuarioActual[8]];?></a>
+														<a href="mensajes-redactar.php?para=<?=base64_encode($cumple['uss_id']);?>&asunto=<?=base64_encode('TE DESEO UN FELIZ CUMPLEAÑOS')?>" style="font-size: 12px; color: crimson;"><i class="fa fa-envelope-o"></i> Felicitar <?php //echo $frases[236][$datosUsuarioActual[8]];?></a>
 													</p>
 												</div>
 											</div>	

@@ -295,7 +295,7 @@
 
 													 $filtro = '';
 
-													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".$_GET["indicador"]."'";}
+													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".base64_decode($_GET["indicador"])."'";}
 
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 

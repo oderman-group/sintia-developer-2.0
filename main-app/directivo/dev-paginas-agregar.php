@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once("../class/SubRoles.php");
 
 $idPaginaInterna = 'DV0017';
 
@@ -162,6 +163,25 @@ include("../compartido/head.php");
                                                     <option value="READ">READ</option>
                                                     <option value="UPDATE">UPDATE</option>
                                                     <option value="DELETE">DELETE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Pagina Padre</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="paginaPadre" id="paginaPadre">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    try{
+                                                        $consultaPaginas = SubRoles::listarPaginas();
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
+                                                    while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                        echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                    }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>

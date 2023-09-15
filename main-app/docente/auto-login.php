@@ -6,7 +6,7 @@ $idPaginaInterna = 'DC0065';
 
 $_SESSION['docente'] = $_SESSION['id'];
 
-$_SESSION['id'] = $_GET['user'];
+$_SESSION['id'] = base64_decode($_GET['user']);
 
 $_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 

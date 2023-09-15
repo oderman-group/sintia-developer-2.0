@@ -73,7 +73,7 @@
 							if($datosUsuarioActual[3]==2){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$idE;?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 								<li class="active"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></li>
                             </ol>
 							<?php }?>

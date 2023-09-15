@@ -1,11 +1,15 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0070';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$_GET["idR"]."' AND cls_estado=1");
+include("session.php");
+$idPaginaInterna = 'DC0070';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$idR."' AND cls_estado=1");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 
@@ -73,9 +77,9 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="13" name="id">
-										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 
 											<div class="form-group row">
@@ -88,15 +92,37 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
 												<div class="col-sm-10">
-													<textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['cls_descripcion'];?></textarea>
+													<textarea id="editor1" name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['cls_descripcion'];?></textarea>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_fecha'];?>"  required>
-													</div>
+												<label class="col-sm-2 control-label">Fecha</label>
+												<div class="col-sm-4">
+													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_fecha'];?>"  required>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Unidad</label>
+												<div class="col-sm-4">
+													<?php
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													?>
+													<select class="form-control  select2" name="unidad">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
+															$selected='';
+															if($unidadDatos['uni_id']==$datosConsulta['cls_unidad']){
+																$selected='selected';
+															}
+														?>
+															<option value="<?=$unidadDatos['uni_id'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
+														<?php }?>
+													</select>
+												</div>
 											</div>
 										
 										<div class="form-group row">
@@ -115,6 +141,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 											 </div>
 										
 										<p class="text-warning">Opcional.</p>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Hipervinculo</label>
+												<div class="col-sm-10">
+													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com" value="<?=$datosConsulta['cls_hipervinculo'];?>">
+												</div>
+											</div>
+											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Video de youtube</label>
 												<div class="col-sm-10">
@@ -224,6 +257,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
     <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+    </script>
 </body>
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

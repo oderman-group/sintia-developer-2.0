@@ -162,6 +162,7 @@ if(!empty($_POST["id"])){
 			}
 
 			//GUARDAR RESPUESTAS
+			$archivo = '';
 			if($preguntas['preg_tipo_pregunta']==3){
 				$idPregunta = $preguntas['preg_id'];
 				$destino = "../files/evaluaciones";
@@ -340,7 +341,7 @@ if(!empty($_POST["id"])){
 
 if(!empty($_GET["get"])){
 	//FIRMA DIGITAL DE LOS REPORTES
-	if($_GET["get"]==1){
+	if(base64_decode($_GET["get"])==1){
 		$id=base64_decode($_GET["id"]);
 		try{
 			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='".$id."'");

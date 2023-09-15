@@ -44,7 +44,7 @@
 											?>
 											
 													<div class="btn-group">
-														<a href="cronograma-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="cronograma-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>

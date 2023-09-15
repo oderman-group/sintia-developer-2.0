@@ -55,7 +55,8 @@ class SubRoles {
                     '".$page."'                        
                 )";
                 mysqli_query($conexion,$sqlinsert);
-                $idRegistro = mysqli_insert_id($conexion);                   
+                $idRegistro = mysqli_insert_id($conexion);
+                self::guardarPaginasHijasSubRol($idSubRol,$page);                   
             }                  
             
         } catch (Exception $e) {
@@ -112,21 +113,83 @@ class SubRoles {
         
         $setNombre=empty($datos["nombre"])?"":$datos["nombre"];            
 
-        try {
-            $sqlUpdate="
-            UPDATE ".$baseDatosServicios.".sub_roles
-            SET subr_nombre='".$setNombre."'
-            WHERE subr_id='".$datos["id"]."'";  
-            mysqli_query($conexion,$sqlUpdate);
-            if(!empty($datos["paginas"])){
-                $sqlDelete="DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
-                WHERE spp_id_rol='".$datos["id"]."'";
-                mysqli_query($conexion,$sqlDelete);               
-                self::crearRolesPaginas($datos["id"],$datos["paginas"]);
+        $sqlUpdate="
+        UPDATE ".$baseDatosServicios.".sub_roles
+        SET subr_nombre='".$setNombre."'
+        WHERE subr_id='".$datos["id"]."'";  
+        mysqli_query($conexion,$sqlUpdate);
+        if(!empty($datos["paginas"])){
+            try{
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol = '".$datos["id"]."'");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
             }
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
+            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
+            $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
+
+            $resultadoAgregar= array_diff($datos["paginas"],$valoresPaginas);
+            if(!empty($resultadoAgregar)){
+                try{
+                    self::crearRolesPaginas($datos["id"],$resultadoAgregar);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }
+
+            $resultadoEliminar= array_diff($valoresPaginas,$datos["paginas"]);
+            if(!empty($resultadoEliminar)){
+                try{
+                    self::eliminarRolesPaginas($datos["id"],$resultadoEliminar);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }
+        }else{
+            $sqlDelete="DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
+            WHERE spp_id_rol='".$datos["id"]."'";
+            try{
+                mysqli_query($conexion,$sqlDelete);
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }
+    }
+
+     /**
+     * Esta función  crea o elimina un registro si es necesario en la tabla sub_roles_usuarios
+     *
+     * @param string $idUsuario
+     * @param array $subRoles
+     *
+     * @return void // */
+     public static function actualizarRolesUsuario($idUsuario,array $subRoles= []){
+        global $conexion, $baseDatosServicios,$config;
+        $subRolesActualales= self::listarRolesUsuarios($idUsuario);
+        $subRolesCrear= [];
+        $subRolesElimnar= [];
+        $cantAgregar = 0;
+        $cantEliminar = 0; 
+        $subRolesArray= [];
+        foreach ($subRoles as $subRol ) {
+            $subRolesArray[$subRol]=$subRol;
+        } 
+        foreach ($subRolesActualales as $subrolBD ) {
+            if(!array_key_exists($subrolBD["spu_id_sub_rol"], $subRolesArray)){
+                $subRolesElimnar[$subrolBD["spu_id_sub_rol"]]= $subrolBD["spu_id_sub_rol"];
+                $cantEliminar ++;
+            }
+        }
+        foreach ($subRolesArray as $subrol ) {                
+            if(!array_key_exists($subrol, $subRolesActualales)){
+               $subRolesCrear[$subrol]= $subrol;
+               $cantAgregar ++;
+            }
+        }
+        if($cantEliminar>=1){
+            self::eliminarSubrolesUsuarios($idUsuario, $subRolesElimnar);
+        }
+        if($cantAgregar>=1){
+            self::crearRolesUsuario($idUsuario, $subRolesCrear);
         }
     }
 
@@ -183,6 +246,7 @@ class SubRoles {
            $resultadoConsuta = mysqli_query($conexion,$sqlExecute);
            while($fila=$resultadoConsuta->fetch_assoc()){
                $fila["paginas"]=self::listarPaginasRoles($fila["subr_id"]); 
+               $fila["usuarios"]=self::listarUsuariosRoles($fila["subr_id"]); 
                $resultado=$fila; 
            } 
            return $resultado;
@@ -220,16 +284,20 @@ class SubRoles {
     }
      /**
      * Esta función  Lista  la tabla paginas_publicidad por el tipo de usuario
-     * por defecto se buscará por el tipo de usuario=5
+     * por defecto se buscará por el tipo de usuario=5 y las ordenara teniendo encuenta el sub rol selecionado
      * @param String $tipoUsuario
+     * @param String $subRol
      * */
-    public static function listarPaginas($tipoUsuario = '5'){
+    public static function listarPaginas($subRol='-1',$tipoUsuario = '5',$soloActivas='0'){
         global $conexion, $baseDatosServicios;
         $resultado = [];
-        
+        $sqlJoin=$soloActivas=='1'?"INNER":"LEFT";
+       
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
-        LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo  
-        WHERE pagp_tipo_usuario = '".$tipoUsuario."'";
+        LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo
+        ".$sqlJoin." JOIN ".$baseDatosServicios .".sub_roles_paginas ON spp_id_pagina=pagp_id AND spp_id_rol='".$subRol."'
+        WHERE pagp_tipo_usuario = '".$tipoUsuario."' AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) 
+        ORDER BY spp_id_pagina DESC";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
             
@@ -251,7 +319,7 @@ class SubRoles {
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas
         LEFT JOIN ".$baseDatosServicios .".sub_roles ON subr_id=spp_id_rol  
         LEFT JOIN ".$baseDatosServicios .".paginas_publicidad ON pagp_id=spp_id_pagina
-        WHERE spp_id_rol = '".$idRol."'";
+        WHERE spp_id_rol = '".$idRol."' AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) " ;
         try {
             $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
             while($fila=$resultadoConsulta->fetch_assoc()){
@@ -267,7 +335,7 @@ class SubRoles {
  /**
      * Esta función  Lista  la tabla sub_roles_usuarios teniendo en cuenta el id del usuario
      * por defecto se buscará por el  usuario=1
-     * @param String $idRol
+     * @param String $idUsuario
      *  */
     public static function listarRolesUsuarios($idUsuario = '1'){
         global $conexion,$config, $baseDatosServicios;
@@ -311,6 +379,127 @@ class SubRoles {
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
+        }
+    }
+
+    /**
+     * Esta función  Lista sirve para listar los usuarios que tienen un Subrol en especifico
+     * por defecto se buscará por el  usuario=1
+     * @param String $subrol
+     *  */
+    public static function listarUsuariosRoles($subrol){
+        global $conexion, $baseDatosServicios;
+        $arraysDatos = [];
+        
+        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles_usuarios
+        WHERE spu_id_sub_rol = '".$subrol."'";
+        try {
+            $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
+            while($fila=$resultadoConsulta->fetch_assoc()){
+                $arraysDatos[$fila["spu_id_usuario"]]=$fila;
+            } 
+            return $arraysDatos;              
+            
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /* * Este metodo sirve para guardar las paginas hijas
+     * 
+     * @param int       $idSubRol
+     * @param string    $idPagina
+     * 
+     * @return void
+    **/
+    public static function guardarPaginasHijasSubRol($idSubRol,$idPagina){
+        global $conexion, $baseDatosServicios;
+
+        try{
+            $consultaPaginasHijas=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_pagina_padre='".$idPagina."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numPaginasHijas=mysqli_num_rows($consultaPaginasHijas);
+        if ($numPaginasHijas>0) {
+            $datosPaginasHijas = mysqli_fetch_all($consultaPaginasHijas, MYSQLI_ASSOC);
+            $arrayPaginasHijas = array_column($datosPaginasHijas, 'pagp_id');
+
+            $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
+                spp_id_rol, 
+                spp_id_pagina
+            )
+            VALUES";
+            foreach ($arrayPaginasHijas as $page ) {
+                $sqlinsert.="(
+                    '".$idSubRol."',
+                    '".$page."'                        
+                ),";             
+            }
+            $sqlinsert = substr($sqlinsert, 0, -1);
+            try{
+                mysqli_query($conexion,$sqlinsert);
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }
+    }
+
+    /**
+     * Esta función  elimina los registro en la tabla sub_roles_paginas
+     *
+     * @param int $idSubRol
+     * @param array $paginas
+     *
+     * @return void
+    **/
+    public static function eliminarRolesPaginas($idSubRol,array $paginas= []){
+        global $conexion, $baseDatosServicios;
+        try {
+            foreach ($paginas as $page ) {
+                self::eliminarPaginasHijasSubRol($idSubRol,$page);
+                try{
+                    mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
+                    WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }    
+        }catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo sirve para eliminar las paginas hijas
+     * 
+     * @param int       $idSubRol
+     * @param string    $idPagina
+     * 
+     * @return void
+    **/
+    public static function eliminarPaginasHijasSubRol($idSubRol,$idPagina){
+        global $conexion, $baseDatosServicios;
+
+        try{
+            $consultaPaginasHijas=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_pagina_padre='".$idPagina."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numPaginasHijas=mysqli_num_rows($consultaPaginasHijas);
+        if ($numPaginasHijas>0) {
+            $datosPaginasHijas = mysqli_fetch_all($consultaPaginasHijas, MYSQLI_ASSOC);
+            $arrayPaginasHijas = array_column($datosPaginasHijas, 'pagp_id');
+
+            foreach ($arrayPaginasHijas as $page ) {
+                try{
+                    mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
+                    WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }          
+            }
         }
     }
 

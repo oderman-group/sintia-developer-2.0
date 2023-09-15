@@ -221,7 +221,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	<?php }?>
 																	  
 																	<?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
-																		<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas de las cargas</a></li>
+																		<li><a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($resultado['uss_id']);?>" target="_blank">Planillas de las cargas</a></li>
 																	<?php }?>
 
 																  </ul>

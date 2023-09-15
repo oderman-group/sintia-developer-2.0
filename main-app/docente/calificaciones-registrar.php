@@ -1,25 +1,19 @@
-<?php include("session.php");?>
-
-<?php $idPaginaInterna = 'DC0021';?>
-
-<?php include("../compartido/historial-acciones-guardar.php");?>
-
-<?php include("verificar-carga.php");?>
-
-<?php include("verificar-periodos-diferentes.php");?>
-
-<?php include("../compartido/head.php");?>
-
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0021';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
-?>
 
-<?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
-WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+WHERE act_id='".$idR."' AND act_estado=1");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
-
 ?>
 
 <!-- Theme Styles -->
@@ -31,7 +25,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 //CALIFICACIONES
 function notasGuardar(enviada){
 
-	var codNota = <?=$_GET["idR"];?>;	 
+	var codNota = <?=$idR;?>;	 
 	var nota = enviada.value;
 	var notaAnterior = enviada.name;	
 	var codEst = enviada.id;
@@ -63,7 +57,7 @@ function notasGuardar(enviada){
 
 function notas(enviada){
 
-  var codNota = <?=$_GET["idR"];?>;	 
+  var codNota = <?=$idR;?>;	 
 
   var nota = enviada.value;
 
@@ -269,7 +263,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 
-											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$_GET["idR"]."'
+											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$idR."'
 
 											ORDER BY act_id DESC
 
@@ -279,7 +273,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 											?>
 
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['act_id'];?>"><?=$regComun['act_descripcion']." (".$regComun['act_valor']."%)";?></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['act_id']);?>"><?=$regComun['act_descripcion']." (".$regComun['act_valor']."%)";?></a></p>
 
 											<?php }
 
@@ -383,7 +377,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														 if($calificacion['act_registrada']==1){
 
 															 //Consulta de calificaciones si ya la tienen puestas.
-															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$_GET["idR"]."'");
+															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad='".$idR."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
 															 if(!empty($notas[3]) && $notas[3]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[3]) && $notas[3]>=$config[5]) $colorNota = $config[7];
@@ -432,7 +426,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="guardar.php?get=21&id=<?=$notas['cal_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 
 															<?php }?>
 

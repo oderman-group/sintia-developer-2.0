@@ -1,5 +1,6 @@
 <?php
-if (isset($_GET['busqueda'])) {
+$busqueda = '';
+if (!empty($_GET['busqueda'])) {
   $busqueda = $_GET['busqueda'];
   $filtro .= " AND (
       dr_observaciones LIKE '%".$busqueda."%'
@@ -46,22 +47,22 @@ if (isset($_GET['busqueda'])) {
       <?php
         if(!empty($_GET["est"])){
       ?>
-        <input type="hidden" name="est" value="<?= $_GET['est']; ?>"/>
+        <input type="hidden" name="est" value="<?= base64_decode($_GET['est']); ?>"/>
       <?php
         }
         if(!empty($_GET["falta"])){
       ?>
-        <input type="hidden" name="falta" value="<?= $_GET['falta']; ?>"/>
+        <input type="hidden" name="falta" value="<?= base64_decode($_GET['falta']); ?>"/>
       <?php
         }
         if($datosUsuarioActual[3]!=5 and !empty($_GET["fest"])){
       ?>
-        <input type="hidden" name="fest" value="<?= $_GET['fest']; ?>"/>
+        <input type="hidden" name="fest" value="<?= base64_decode($_GET['fest']); ?>"/>
       <?php
         }
       ?>
       <input type="hidden" name="filtros" value="1"/>
-      <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+      <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda; ?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
 

@@ -63,7 +63,7 @@
 				                        </ul>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+                                    <form action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="1" name="id">
 										
                                         <div class="form-group row">

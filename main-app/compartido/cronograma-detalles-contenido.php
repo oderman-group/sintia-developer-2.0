@@ -1,7 +1,8 @@
 <?php
-if(!empty($_GET["idR"])) {
-	$idR = base64_decode($_GET["idR"]);
-}
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$idR."'"), MYSQLI_BOTH);
 ?>
 <div class="page-content">

@@ -82,7 +82,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="11" name="id">
 										<input type="hidden" value="<?=$config['conf_id_institucion']."".$cargaConsultaActual;?>" name="idMeeting">
 
@@ -99,15 +99,33 @@ if(
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
 												<div class="col-sm-10">
-													<textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+													<textarea id="editor1" name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
-													</div>
+												<label class="col-sm-2 control-label">Fecha</label>
+												<div class="col-sm-4">
+													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Unidad</label>
+												<div class="col-sm-4">
+													<?php
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													?>
+													<select class="form-control  select2" name="unidad">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
+														?>
+															<option value="<?=$unidadDatos['uni_id'];?>"><?=$unidadDatos['uni_nombre']?></option>
+														<?php }?>
+													</select>
+												</div>
 											</div>
 
 											<div class="form-group row">
@@ -134,6 +152,13 @@ if(
 											
 											
 											<p class="text-warning">Opcional.</p>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Hipervinculo</label>
+												<div class="col-sm-10">
+													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com">
+												</div>
+											</div>
+
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Video de youtube</label>
 												<div class="col-sm-10">
@@ -237,6 +262,9 @@ if(
 
 												form.addEventListener("submit", function(event) {
 													event.preventDefault();
+													// Obtén el contenido del editor CKEditor y asígnalo al textarea
+													let editor = CKEDITOR.instances.editor1;
+													document.querySelector("textarea[name='descripcion']").value = editor.getData();
 
 													subir_archivos(this);
 												});
@@ -318,6 +346,13 @@ if(
     <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+    </script>
 </body>
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

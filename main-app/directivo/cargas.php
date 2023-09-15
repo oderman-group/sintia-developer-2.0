@@ -78,7 +78,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div>
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
@@ -139,13 +139,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
-																  <ul class="dropdown-menu" role="menu">
+																  <ul class="dropdown-menu" role="menu" style="z-index: 9000;">
 																		<?php if(Modulos::validarPermisoEdicion()){?>
 																			<li><a href="cargas-editar.php?idR=<?=$resultado['car_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
 																				<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																			<?php }?>
-																	  		<li><a href="auto-login.php?user=<?=$resultado['car_docente'];?>&tipe=2&carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>" onClick="if(!confirm('Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?')){return false;}">Ver como docente</a></li>
+																	  		<li><a href="auto-login.php?user=<?=$resultado['car_docente'];?>&tipe=2&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>" onClick="if(!confirm('Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?')){return false;}">Ver como docente</a></li>
 																		<?php }?>
 																	  <li><a href="cargas-horarios.php?id=<?=$resultado[0];?>" title="Ingresar horarios">Ingresar Horarios</a></li>
 																	  <li><a href="periodos-resumen.php?carga=<?=$resultado[0];?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>

@@ -70,7 +70,7 @@ if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']==
 			                                            </div>
 														
 			                                            <div class="compose-btn pull-left">
-			                                                <a href="mensajes-redactar.php?para=<?=$datosConsulta['ema_de'];?>&asunto=RE: <?=$datosConsulta['ema_asunto'];?>" class="btn btn-sm btn-primary"><i
+			                                                <a href="mensajes-redactar.php?para=<?=base64_encode($datosConsulta['ema_de']);?>&asunto=<?=base64_encode('RE: '.$datosConsulta['ema_asunto'])?>" class="btn btn-sm btn-primary"><i
 																class="fa fa-reply"></i> Responder</a>
 			                                                <button class="btn btn-sm btn-default">
 			                                                    <i class="fa fa-arrow-right"></i> Reenviar

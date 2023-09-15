@@ -19,7 +19,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['not_descripcion'];?></textarea>
+                                                <textarea name="contenido" id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['not_descripcion'];?></textarea>
                                             </div>
                                         </div>
 										
@@ -28,7 +28,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
-											<?php if($datosConsulta[7]!=""){?>
+											<?php if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta[7])){?>
 												<div class="item col-sm-4">
 													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
 													<a href="#" name="../compartido/guardar.php?get=11&idR=<?=$datosConsulta['not_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
@@ -49,7 +49,7 @@
                                             <div class="col-sm-6">
                                                 <input type="text" name="video" class="form-control" value="<?=$datosConsulta['not_video_url'];?>">
                                             </div>
-											<?php if($datosConsulta['not_video']!=""){?>
+											<?php if(!empty($datosConsulta['not_video'])){?>
 													<div class="col-sm-4">
 														<iframe width="100" height="80" src="https://www.youtube.com/embed/<?=$datosConsulta['not_video'];?>?rel=0&amp;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen volume="0"></iframe>
 													</div>
@@ -88,7 +88,7 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="archivo" class="form-control">
                                             </div>
-											<?php if($datosConsulta['not_archivo']!=""){?>
+											<?php if(!empty($datosConsulta['not_archivo']) && file_exists("../files/publicaciones/".$datosConsulta['not_archivo'])){?>
 												<div class="col-sm-4">
 													<a href="../files/publicaciones/<?=$datosConsulta['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
 											</div>
@@ -139,3 +139,10 @@
                         </div>
 						
                     </div>
+<script src="../ckeditor/ckeditor.js"></script>
+
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor 4
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>

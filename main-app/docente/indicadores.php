@@ -82,7 +82,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																{
 																?>
 																<div class="btn-group" id="agregarNuevo">
-					                                                <a href="indicadores-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+					                                                <a href="indicadores-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 					                                                    Agregar nuevo<i class="fa fa-plus"></i>
 					                                                </a>
 					                                            </div>
@@ -149,13 +149,13 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 																	
 																		<?php if($resultado['ipc_creado']==1 and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)){?>
-																		  <li><a href="indicadores-editar.php?idR=<?=$resultado['ipc_id'];?>">Editar</a></li>
+																		  <li><a href="indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>">Editar</a></li>
 																	
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="guardar.php?get=10&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="guardar.php?get=<?=base64_encode(10);?>&idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																	  <?php } ?>
 																	  
 																	  <?php if($periodoConsultaActual<$datosCargaActual['car_periodo']){?>
-																	  <li><a href="indicadores-recuperar.php?idR=<?=$resultado['ipc_indicador'];?>">Recuperar</a></li>
+																	  <li><a href="indicadores-recuperar.php?idR=<?=base64_encode($resultado['ipc_indicador']);?>">Recuperar</a></li>
 																	  <?php } ?>
 																</ul>
 															</div>

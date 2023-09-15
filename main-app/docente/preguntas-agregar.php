@@ -1,18 +1,22 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0023';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0023';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idE="";
+if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+
 $consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+WHERE eva_id='".$idE."' AND eva_estado=1");
 $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 //Cantidad de preguntas de la evaluación
 $preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-WHERE evp_id_evaluacion='".$_GET["idE"]."'
+WHERE evp_id_evaluacion='".$idE."'
 ORDER BY preg_id DESC");
 
 $cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -101,7 +105,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 						
                         <div class="col-sm-9">
 								
-								<?php if(!empty($_GET["idMsg"]) && $_GET["idMsg"]==1){?>
+								<?php if(!empty($_GET["idMsg"]) && base64_decode($_GET["idMsg"])==1){?>
 									<p class="text-success">La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b></p>
 											
 								<?php }?>
@@ -112,9 +116,9 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="7" name="id">
-										<input type="hidden" value="<?=$_GET["idE"];?>" name="idE">
+										<input type="hidden" value="<?=$idE;?>" name="idE">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>

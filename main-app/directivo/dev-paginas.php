@@ -44,10 +44,14 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["uss"])) {
+                                $ussDev='';
+                                if (!empty($_GET["uss"]) && is_numeric($_GET["uss"])) {
+                                    $ussDev=$_GET["uss"];
                                     $filtro .= " AND pagp_tipo_usuario='" . $_GET["uss"] . "'";
                                 }
-                                if (is_numeric($_GET["modulo"])) {
+                                $moduloDev='';
+                                if (!empty($_GET["modulo"]) && is_numeric($_GET["modulo"])) {
+                                    $moduloDev=$_GET["modulo"];
                                     $filtro .= " AND pagp_modulo='" . $_GET["modulo"] . "'";
                                 }
                             ?>

@@ -130,7 +130,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											?>
 											
 													<div class="btn-group">
-														<a href="clases-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="clases-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nueva clase <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -160,37 +160,38 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+													<?php
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+														LEFT JOIN academico_unidades ON uni_id=cls_unidad AND uni_eliminado!=1
+														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
+														$contReg = 1;
+														$unidadAnterior=0;
+														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+															if(!empty($resultado['cls_unidad']) && $resultado['cls_unidad']!=$unidadAnterior){
+																$unidadAnterior=$resultado['cls_unidad'];
+													?>
 													<tr style="background-color: antiquewhite; font-weight: bold;">
-														<td colspan="7">Unidad 1: Todos los temas.</td>
+														<td colspan="7"><?=$resultado['uni_nombre'];?>.</td>
 													</tr>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1
-													 ");
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$bg = '';
-														$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_ausencias 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-														WHERE aus_id_clase='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas 
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
-														$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
-														 
-														$cheked = '';
-														if($resultado['cls_disponible']==1){$cheked = 'checked';}
-														 
-													 ?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
+															}
+															$bg = '';
+															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
+															(SELECT count(*) FROM academico_ausencias 
+															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+															WHERE aus_id_clase='".$resultado[0]."'),
+															(SELECT count(*) FROM academico_matriculas 
+															WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
+															$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
+															if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+															
+															$cheked = '';
+															if($resultado['cls_disponible']==1){$cheked = 'checked';}
+
+															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
 													?>
-                                                    
-													
 													<tr id="reg<?=$resultado['cls_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['cls_id'];?></td>
@@ -213,21 +214,20 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
-																		<li><a href="clases-registrar.php?idR=<?=$resultado['cls_id'];?>">Inasistencias</a></li>
+																		<li><a href="clases-registrar.php?idR=<?=base64_encode($resultado['cls_id']);?>">Inasistencias</a></li>
 																	  <li><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>">Acceder</a></li>
-																	  <li><a href="clases-editar.php?idR=<?=$resultado['cls_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
+																	  <li><a href="clases-editar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	  
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=11&idR=<?=$resultado['cls_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																</ul>
 															</div>
 															<?php } ?>
 														</td>
                                                     </tr>
 													<?php 
-														 $contReg++;
-													  }
-
-													  ?>
+														$contReg++;
+													}
+													?>
                                                 </tbody>
                                             </table>
                                             </div>

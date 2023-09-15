@@ -30,7 +30,7 @@ if (!empty($_POST["id"])) {
 
 		$destinatarios = "1,2,3,4,5";
 	try{
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year,not_imagen)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "','')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -48,6 +48,8 @@ if (!empty($_POST["id"])) {
 		}
 
 		$destinatarios = "1,2,3,4,5";
+
+		$imagen = '';
 		if (!empty($_FILES['imagen']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['imagen']['size'], $_FILES['imagen']['name']);
 			$explode=explode(".", $_FILES['imagen']['name']);
@@ -56,6 +58,7 @@ if (!empty($_POST["id"])) {
 			$destino = "../files/publicaciones";
 			move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
 		}
+		$archivo = '';
 		if (!empty($_FILES['archivo']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['archivo']['size'], $_FILES['archivo']['name']);
 			$explode=explode(".", $_FILES['archivo']['name']);
@@ -81,7 +84,8 @@ if (!empty($_POST["id"])) {
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		if($_POST["cursos"]>0){
+
+		if(!empty($_POST["cursos"])){
 			$cont = count($_POST["cursos"]);
 			$i = 0;
 			while ($i < $cont) {
@@ -503,7 +507,7 @@ if (!empty($_POST["id"])) {
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . $_POST["comentario"] . '";</script>';
+		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '#PUB' . base64_encode($_POST["comentario"]) . '";</script>';
 		exit();
 	}
 	//SUGERENCIA PARA MEJORAR SINTIA
@@ -666,28 +670,31 @@ if (!empty($_POST["id"])) {
 		$clave = rand(10000, 99999);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas(emp_nombre, emp_email, emp_telefono, emp_verificada, emp_estado, emp_clave, emp_usuario, emp_institucion)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["email"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["telefono"]) . "', 0, 0, '" . $clave . "', '" . $_SESSION["id"] . "', '" . $config['conf_id_institucion'] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas(emp_nombre, emp_email, emp_telefono, emp_verificada, emp_estado, emp_clave, emp_usuario, emp_institucion)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["email"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["telefono"]) . "', 0, 1, '" . $clave . "', '" . $_SESSION["id"] . "', '" . $config['conf_id_institucion'] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 		$idRegistro = mysqli_insert_id($conexion);
 
-
-		$cont = count($_POST["sector"]);
-		$i = 0;
-		while ($i < $cont) {
-			try{
-				mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
+		if(!empty($_POST["sector"])){
+			$cont = count($_POST["sector"]);
+			$i = 0;
+			while ($i < $cont) {
+				try{
+					mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas_categorias(excat_empresa, excat_categoria)VALUES('" . $idRegistro . "', '" . $_POST["sector"][$i] . "')");
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$i++;
 			}
-			$i++;
 		}
 
 		$_SESSION["empresa"] = $idRegistro;
 
+		$destinos = validarUsuarioActual($datosUsuarioActual);
+
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="../acudiente/productos-agregar.php?pp=1";</script>';
+		echo '<script type="text/javascript">window.location.href="' .$destinos. 'productos-agregar.php?pp=1";</script>';
 		exit();
 	}
 
@@ -708,7 +715,7 @@ if (!empty($_POST["id"])) {
 		$video = substr($_POST["video"], $pos, 11);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_ref, prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["ref"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 1, 0, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1043,10 +1050,10 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR CARPETA
-	if ($_GET["get"] == 9) {
+	if (base64_decode($_GET["get"]) == 9) {
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . $_GET["idR"] . "'");
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_padre='" . base64_decode($_GET["idR"]) . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".general_folders SET fold_estado='0', fold_fecha_eliminacion=now() WHERE fold_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1080,15 +1087,15 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR COMETARIO DEL FORO
-	if ($_GET["get"] == 12) {
+	if (base64_decode($_GET["get"]) == 12) {
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id_comentario='" . $_GET["idCom"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id_comentario='" . base64_decode($_GET["idCom"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id='" . $_GET["idCom"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id='" . base64_decode($_GET["idCom"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1098,9 +1105,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR COMETARIO DEL FORO
-	if ($_GET["get"] == 13) {
+	if (base64_decode($_GET["get"]) == 13) {
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id='" . $_GET["idResp"] . "'");
+			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id='" . base64_decode($_GET["idResp"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1196,9 +1203,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR REPORTE DISCIPLINARIO
-	if ($_GET["get"] == 19) {
+	if (base64_decode($_GET["get"]) == 19) {
 		try{
-			mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1208,9 +1215,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//FIRMA DIGITAL POR EL ESTUDIANTE
-	if ($_GET["get"] == 20) {
+	if (base64_decode($_GET["get"]) == 20) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1220,9 +1227,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//FIRMA DIGITAL POR EL ACUDIENTE
-	if ($_GET["get"] == 21) {
+	if (base64_decode($_GET["get"]) == 21) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=1, dr_aprobacion_acudiente_fecha=now() WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=1, dr_aprobacion_acudiente_fecha=now() WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1232,9 +1239,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//DESHACER FIRMA DEL ESTUDIANTE
-	if ($_GET["get"] == 22) {
+	if (base64_decode($_GET["get"]) == 22) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1244,9 +1251,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//DESHACER FIRMA DEL ACUDIENTE
-	if ($_GET["get"] == 23) {
+	if (base64_decode($_GET["get"]) == 23) {
 		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=0, dr_aprobacion_acudiente_fecha='0000-00-00' WHERE dr_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_acudiente=0, dr_aprobacion_acudiente_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1268,9 +1275,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR PRODUCTOS DEL MARKETPLACE
-	if ($_GET["get"] == 25) {
+	if (base64_decode($_GET["get"]) == 25) {
 		try{
-			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "DELETE FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

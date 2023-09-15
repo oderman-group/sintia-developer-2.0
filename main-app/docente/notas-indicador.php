@@ -1,14 +1,9 @@
-<?php include("session.php"); ?>
-
-<?php $idPaginaInterna = 'DC0079'; ?>
-
-<?php include("../compartido/historial-acciones-guardar.php"); ?>
-
-<?php include("verificar-carga.php"); ?>
-
-<?php include("../compartido/head.php"); ?>
-
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0079';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 ?>
 
@@ -126,7 +121,7 @@ require_once("../class/Estudiantes.php");
 
 														while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
-															echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="indicadores-editar.php?idR=' . $rA['ipc_id'] . '">' . $rA['ind_nombre'] . '<br>
+															echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="indicadores-editar.php?idR=' . base64_encode($rA['ipc_id']) . '">' . $rA['ind_nombre'] . '<br>
 
 														' . $rA['ind_id'] . '<br>
 
@@ -210,7 +205,7 @@ require_once("../class/Estudiantes.php");
 															?>
 
 																<td style="width: 100px; text-align:center;">
-																	<a href="calificaciones-estudiante.php?usrEstud=<?= $resultado['mat_id_usuario']; ?>&periodo=<?= $periodoConsultaActual; ?>&carga=<?= $cargaConsultaActual; ?>&indicador=<?= $rA['ipc_indicador']; ?>" style="color:<?php if ($notasResultado < $config[5] and $notasResultado != "") echo $config[6];
+																	<a href="calificaciones-estudiante.php?usrEstud=<?= base64_encode($resultado['mat_id_usuario']); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>&indicador=<?= base64_encode($rA['ipc_indicador']); ?>" style="color:<?php if ($notasResultado < $config[5] and $notasResultado != "") echo $config[6];
 																																																																						elseif ($notasResultado >= $config[5]) echo $config[7];
 																																																																						else echo "black"; ?>; text-decoration:underline;"><?= $notasResultado; ?></a>
 																</td>
@@ -231,7 +226,7 @@ require_once("../class/Estudiantes.php");
 
 															<td style="color:<?php if ($definitiva < $config[5] and $definitiva != "") echo $config[6];
 																				elseif ($definitiva >= $config[5]) echo $config[7];
-																				else echo "black"; ?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?= $resultado['mat_id_usuario']; ?>&periodo=<?= $periodoConsultaActual; ?>&carga=<?= $cargaConsultaActual; ?>" style="text-decoration:underline; color:<?= $colorDef; ?>;"><?= $definitiva; ?></a></td>
+																				else echo "black"; ?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?= base64_encode($resultado['mat_id_usuario']); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>" style="text-decoration:underline; color:<?= $colorDef; ?>;"><?= $definitiva; ?></a></td>
 
 														</tr>
 

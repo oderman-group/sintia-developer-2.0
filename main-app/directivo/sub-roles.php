@@ -41,11 +41,9 @@ include("../compartido/head.php");
 
                 <div class="row">
                     <div class="col-md-12">
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="row">
-                            
-
-                            <div class="col-md-12">
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
+                            <div class="col-md-12">                           
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
                                         <header>Sub Roles</header>
@@ -77,8 +75,10 @@ include("../compartido/head.php");
                                                         <th>#</th>
                                                         <th>Cod</th>
                                                         <th>Sub rol</th>
-                                                        <th><?=$frases[371][$datosUsuarioActual['uss_idioma']];?></th>
-                                                        <th><?=$frases[373][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th  style="text-align: center;"><?=$frases[372][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th  style="text-align: center;"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th  style="text-align: center;"><?=$frases[371][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th  style="text-align: center;"><?=$frases[373][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
                                                     </tr>
                                                 </thead>
@@ -93,10 +93,14 @@ include("../compartido/head.php");
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['subr_id']; ?></td>
                                                             <td><?= $resultado['subr_nombre']; ?></td>
-                                                            <td><?php if(!empty($subRol['paginas']) && $subRol['paginas']!=null){
+                                                            <td><?= $resultado['ins_nombre']; ?></td>
+                                                            <td  style="text-align: center;"><?php if(!empty($subRol['usuarios']) && $subRol['usuarios']!=null){
+                                                                    echo count($subRol['usuarios']);
+                                                                  }else{echo 0;}?></td>
+                                                            <td  style="text-align: center;"><?php if(!empty($subRol['paginas']) && $subRol['paginas']!=null){
                                                                     echo count($subRol['paginas']);
                                                                   }else{echo 0;}?></td>
-                                                            <td><?= $resultado['subr_year']; ?></td>
+                                                            <td style="text-align: center;"><?= $resultado['subr_year']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>

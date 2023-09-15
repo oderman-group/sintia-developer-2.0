@@ -31,7 +31,8 @@ require_once("../class/UsuariosPadre.php");
     $filtro .= " AND car_id='" . $_REQUEST["carga"] . "'";
   }
   if (!empty($_REQUEST["docente"])) {
-    $filtro .= " AND car_docente='" . $_REQUEST["docente"] . "'";
+    $docente = base64_decode($_REQUEST["docente"]);
+    $filtro .= " AND car_docente='" . $docente . "'";
   }
   if (!empty($_REQUEST["grado"])) {
     $filtro .= " AND car_curso='" . $_REQUEST["grado"] . "'";

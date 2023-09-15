@@ -327,8 +327,19 @@
 										<li class="nav-item"><a href="dev-datos-contacto.php" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
 									</ul>
 								</li>
+								
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
+										<span class="title">ADMIN-MPS</span> <span class="arrow"></span>
+									</a>
+									<ul  class="sub-menu">
+										<li class="nav-item"><a href="mps-categorias-productos.php" class="nav-link"> <span class="title">Categorias productos</span></a></li>
+										<li class="nav-item"><a href="mps-categorias-servicios.php" class="nav-link"> <span class="title">Categorias servicios</span></a></li>
+										<li class="nav-item"><a href="mps-productos.php" class="nav-link"> <span class="title">Productos</span></a></li>
+										<li class="nav-item"><a href="mps-empresas.php" class="nav-link"> <span class="title">Empresas</span></a></li>
+									</ul>
+								</li>
 							<?php }?>
-												
 							
 							<?php }?>
 							
@@ -378,6 +389,8 @@
 									<li class="nav-item"><a href="importar-info.php" class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
 									
 									<li class="nav-item"><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									
+	                                <li class="nav-item"><a href="unidades.php" class="nav-link "> <span class="title"><?=$frases[374][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
 									<li class="nav-item"><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
@@ -503,6 +516,7 @@
 	                        </li>
 
 
+							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -538,6 +552,7 @@
 									
 	                            </ul>
 	                        </li>
+							<?php }?>
 							
 							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
 	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart fa-spin"></i>

@@ -52,7 +52,7 @@
 								<?php }else{?>
 
 
-									<div class="col-xl-3 col-md-6 col-12" onClick="url('../compartido/planilla-definitivas-docentes.php?curso=<?=$datosCargaActual['car_curso'];?>&grupo=<?=$datosCargaActual['car_grupo'];?>&per=<?=$periodoConsultaActual;?>')" style="cursor: pointer;">
+									<div class="col-xl-3 col-md-6 col-12" onClick="url('../compartido/planilla-definitivas-docentes.php?curso=<?=base64_encode($datosCargaActual['car_curso']);?>&grupo=<?=base64_encode($datosCargaActual['car_grupo']);?>&per=<?=base64_encode($periodoConsultaActual);?>')" style="cursor: pointer;">
 						          <div class="info-box bg-b-green">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-file-text"></i></span>
 						            <div class="info-box-content">

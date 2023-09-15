@@ -4,10 +4,10 @@ include("../../config-general/config.php");
 require_once("../class/Sysjobs.php");
 Modulos::validarAccesoDirectoPaginas();
 $parametros = array(
-    "carga" =>$_GET['carga'],
-    "periodo" => $_GET['periodo'],
-    "grado" => $_GET['grado'],
-	"grupo"=>$_GET['grupo']
+    "carga" =>base64_decode($_GET['carga']),
+    "periodo" => base64_decode($_GET['periodo']),
+    "grado" => base64_decode($_GET['grado']),
+	"grupo"=> base64_decode($_GET['grupo'])
 );
 try{
     //HISTORIAL DE ACCIONES

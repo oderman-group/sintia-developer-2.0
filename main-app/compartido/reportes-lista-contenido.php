@@ -1,3 +1,4 @@
+<?php require_once("../class/Estudiantes.php"); ?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -17,7 +18,7 @@
                             <div class="row">
 								
 								<div class="col-md-12">
-									<?php if(!empty($_GET["filtros"]) && $_GET["filtros"]==1){?>
+									<?php if(!empty($_GET["filtros"]) && base64_decode($_GET["filtros"])==1){?>
 									<p style="background-color: antiquewhite; color: darkblue; padding: 5px;">
 									Estás viendo este listado con filtros; para verlo completo quita los filtros.
 									<a href="reportes-lista.php">Quitar filtros</a>
@@ -81,8 +82,8 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													if(!empty($_GET["est"]) && $_GET["est"]){$filtro .= " AND dr_estudiante='".$_GET["est"]."'";}
-													if(!empty($_GET["falta"]) && $_GET["falta"]){$filtro .= " AND dr_falta='".$_GET["falta"]."'";}
+													if(!empty($_GET["est"])){$filtro .= " AND dr_estudiante='".base64_decode($_GET["est"])."'";}
+													if(!empty($_GET["falta"])){$filtro .= " AND dr_falta='".base64_decode($_GET["falta"])."'";}
 												
 													if($datosUsuarioActual[3]!=5 and !isset($_GET["fest"])){
 													$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";
@@ -108,10 +109,10 @@
 													<tr id="reg<?=$resultado['dr_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['dr_fecha'];?></td>
-														<td><a href="reportes-lista.php?est=<?=$resultado['mat_id_usuario'];?>&filtros=1"><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']);?></a><br><?=$resultado['gra_nombre']." ".$resultado['gru_nombre'];?></td>
+														<td><a href="reportes-lista.php?est=<?=base64_encode($resultado['mat_id_usuario']);?>&filtros=<?=base64_encode(1);?>"><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></a><br><?=$resultado['gra_nombre']." ".$resultado['gru_nombre'];?></td>
 														<td><?=$resultado['dcat_nombre'];?></td>
 														<td><?=$resultado['dfal_codigo'];?></td>
-														<td><a href="reportes-lista.php?falta=<?=$resultado['dfal_codigo'];?>&filtros=1"><?=$resultado['dfal_nombre'];?></a></td>
+														<td><a href="reportes-lista.php?falta=<?=base64_encode($resultado['dfal_id']);?>&filtros=<?=base64_encode(1);?>"><?=$resultado['dfal_nombre'];?></a></td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){ echo "-"; }else{?>
@@ -124,7 +125,7 @@
 															<?php }?>
 														</td>
 														<td>
-															<?php if($resultado['dr_comentario']!=""){?>
+															<?php if(!empty($resultado['dr_comentario'])){?>
 																<i class="fa fa-eye" title="<?=$resultado['dr_comentario'];?>"></i>
 															<?php }?>
 														</td>
@@ -142,14 +143,14 @@
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="../compartido/guardar.php?get=20&idR=<?=$resultado['dr_id'];?>">Firmar por el estudiante</a></li>
-																		<li><a href="../compartido/guardar.php?get=21&idR=<?=$resultado['dr_id'];?>">Firmar por el acudiente</a></li>
-																		<li><a href="../compartido/guardar.php?get=22&idR=<?=$resultado['dr_id'];?>">Quitar firma estudiante</a></li>
-																		<li><a href="../compartido/guardar.php?get=23&idR=<?=$resultado['dr_id'];?>">Quitar firma acudiente</a></li>
+																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(20);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
+																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(21);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
+																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(22);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
+																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(23);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
 																		
 																		<?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-																			<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=19&idR=<?=$resultado['dr_id'];?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																			<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(19);?>&idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																			
 																		<?php }?>
 

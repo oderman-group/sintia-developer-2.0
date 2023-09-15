@@ -44,7 +44,7 @@ $listaPaginas = SubRoles::listarPaginas();
                             </ol>
                         </div>
                     </div>
-
+                    <?php include("../../config-general/mensajes-informativos.php"); ?>
                 <div class="panel">
                     <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></header>
                     <div class="panel-body">

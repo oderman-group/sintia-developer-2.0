@@ -33,13 +33,13 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                         <div class="col-sm-12">
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
-                                <a href="reportes-lista.php?est=<?=$idR;?>&fest=1" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
+                                <a href="reportes-lista.php?est=<?=$_GET["idR"];?>&fest=<?=base64_encode(1);?>" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
                             <?php }?>
                             
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-                                <a href="estudiantes-editar.php?idR=<?=$idR;?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
+                                <a href="estudiantes-editar.php?idR=<?=$_GET["idR"];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
 
                             <?php }?>
 
@@ -344,9 +344,9 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                     <td>
                                                             <?php if($aspectos['mata_aprobacion_acudiente']==0 and $datosUsuarioActual['uss_tipo'] == 3){?> 
-                                                                <a href="#reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$resultado['dr_id'];?>">Firmar</a>
+                                                                <a href="#reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$aspectos['dr_id'];?>">Firmar</a>
                                                             <?php } else{?>
-                                                                <i class="fa fa-check-circle" title="<?=$resultado['mata_aprobacion_acudiente_fecha'];?>"></i>
+                                                                <i class="fa fa-check-circle" title="<?=$aspectos['mata_aprobacion_acudiente_fecha'];?>"></i>
                                                             <?php }?>
                                     </td>
 

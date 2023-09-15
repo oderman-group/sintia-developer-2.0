@@ -1,18 +1,21 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0077';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php 
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0077';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+
 //Hay acciones que solo son permitidos en periodos diferentes al actual.
-include("verificar-periodos-iguales.php");?>
-<?php include("../compartido/head.php");?>
-<?php
+include("verificar-periodos-iguales.php");
+include("../compartido/head.php");
+
 require_once("../class/Estudiantes.php");
-?>
-<?php
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
 INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
-WHERE ind_id='".$_GET["idR"]."'");
+WHERE ind_id='".$idR."'");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -22,7 +25,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 function notas(enviada){
   var carga = <?=$cargaConsultaActual;?>;	
   var periodo = <?=$periodoConsultaActual;?>;
-  var codNota = <?=$_GET["idR"];?>;
+  var codNota = <?=$idR;?>;
   var valorDecimalIndicador = <?=($calificacion['ipc_valor']/100);?>;
   
   var nota = enviada.value;
@@ -164,12 +167,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 											<?php
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 											INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-											WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_indicador!='".$_GET["idR"]."'
+											WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_indicador!='".$idR."'
 											ORDER BY ipc_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['ipc_indicador'];?>"><?=$regComun['ind_nombre']." (".$regComun['ipc_valor']."%)";?></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['ipc_indicador']);?>"><?=$regComun['ind_nombre']." (".$regComun['ipc_valor']."%)";?></a></p>
 											<?php }
 											mysqli_free_result($registrosEnComun);
 											?>
@@ -220,27 +223,27 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$_GET["idR"]."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
+														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$idR."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
 														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$_GET["idR"]."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
+														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$idR."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
 														WHERE cal_id_estudiante='".$resultado['mat_id']."'");
 														$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";
-														if($notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){
+														if(!empty($notas['rind_nota']) && $notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){
 															$notaRecuperacion = $notas['rind_nota'];
 															
 															//Color nota
-															if($notaRecuperacion<$config[5] and $notaRecuperacion!="") $colorNota = $config[6]; elseif($notaRecuperacion>=$config[5]) $colorNota = $config[7];
+															if(!empty($notaRecuperacion) && $notaRecuperacion<$config[5]) $colorNota = $config[6]; elseif(!empty($notaRecuperacion) && $notaRecuperacion>=$config[5]) $colorNota = $config[7];
 														}
 														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$periodoConsultaActual);
 														$notasResultado = mysqli_fetch_array($consultaNotasResultado, MYSQLI_BOTH);
 														 
-														if($notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7]; 
+														if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7]; 
 														 
 														 
 														 $colorEstudiante = '#000;';
@@ -255,16 +258,16 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td>
-															<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>&indicador=<?=$_GET["idR"];?>" style="text-decoration:underline;">
+															<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>&indicador=<?=$_GET["idR"];?>" style="text-decoration:underline;">
 																<?=$notaIndicador[0];?>
 															</a>	
 														</td>
 														<td>
 															<?php 
-														 	if($notaIndicador[0]==""){
+														 	if(empty($notaIndicador[0])){
 																echo "<span title='No hay notas relacionadas este indicador. Revise las actividades.'>-</span>";	
 															}
-															elseif($notas['rind_id']==""){
+															elseif(empty($notas['rind_id'])){
 																echo "<span title='No hay un registro de definitiva para este Indicador. Por favor Genere Informe.'>?</span>";	
 															}
 															elseif($notaIndicador[0]>=$config[5]){
@@ -276,14 +279,16 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?php }?>
 															
 															
-															<?php if($notas['cal_nota']!=""){?>
-															<a href="#" name="guardar.php?get=21&id=<?=$notas['cal_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<?php if(!empty($notas['cal_nota'])){?>
+															<a href="#" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														
 														<td>
-																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notasResultado[4]."</a>";?>
-															</td>
+															<?php if(!empty($notasResultado[4])){?>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notasResultado[4];?></a>
+															<?php }?>
+														</td>
 														
                                                     </tr>
 													<?php 
