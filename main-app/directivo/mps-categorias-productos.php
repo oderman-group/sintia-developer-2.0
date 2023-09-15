@@ -90,7 +90,7 @@ $Plataforma = new Plataforma;
                                                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                     ?>
                                                         <tr id="reg<?= $resultado['catp_id']; ?>">
-                                                            <td><?= $resultado['catp_id']; ?></td>
+                                                            <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['catp_nombre']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
