@@ -171,7 +171,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																$unidadAnterior=$resultado['cls_unidad'];
 													?>
 													<tr style="background-color: antiquewhite; font-weight: bold;">
-														<td colspan="7"><?=$resultado['uni_nombre'];?>: <?=$resultado['uni_descripcion'];?>.</td>
+														<td colspan="7"><?=$resultado['uni_nombre'];?>.</td>
 													</tr>
 													<?php
 															}
