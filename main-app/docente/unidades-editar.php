@@ -76,7 +76,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Nombre:</label>
-										<div class="col-sm-4">
+										<div class="col-sm-10">
 											<input type="text" name="nombre" class="form-control" autocomplete="off" value="<?= $datosUnidad['uni_nombre']; ?>" required>
 										</div>
 									</div>
@@ -84,7 +84,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Descripción:</label>
 										<div class="col-sm-10">
-											<input type="text" name="contenido" class="form-control" autocomplete="off" value="<?= $datosUnidad['uni_descripcion']; ?>">
+											<textarea id="editor1" name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosUnidad['uni_descripcion'];?></textarea>
 										</div>
 									</div>
 									<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
@@ -131,6 +131,13 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 	<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 	<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
 	<!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+	<script>
+		// Replace the <textarea id="editor1"> with a CKEditor 4
+		// instance, using default configuration.
+		CKEDITOR.replace( 'editor1' );
+	</script>
 	</body>
 
 	<!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

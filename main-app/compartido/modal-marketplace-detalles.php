@@ -17,7 +17,7 @@
 										<div class="text-muted">
 											<span class="m-r-10" style="font-size: 20px;">Cat: <?= $datosConsulta['catp_nombre']; ?></span>
 										</div>
-										<p><span style="font-weight: bold;"> $<?= number_format($datosConsulta['prod_precio'], 0, ",", "."); ?></span></p>
+										<p><span style="font-weight: bold;"> $<?= number_format($precio, 0, ",", "."); ?></span></p>
 										<p><?= $datosConsulta['prod_descripcion']; ?></p>
 										<hr>
 										<p><span> <b>Negocio:</b><br> <?= $datosConsulta['emp_nombre']; ?></span></p>
@@ -32,7 +32,7 @@
 			<div class="modal-footer">
 				<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual[8]];?></button>
 				<a href="#" class="btn btn-info" name="<?= $datosConsulta['emp_usuario']; ?>" title="<?= $datosConsulta['prod_nombre']; ?>" onClick="msjMarketplace(this)"><i class="fa fa-envelope"></i> Enviar mensaje</a>
-				<?php if ($datosConsulta['prod_precio'] >= 10000 && (empty($_SESSION["empresa"]) || (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] != $datosConsulta['emp_id']))) { ?>
+				<?php if ($precio >= 10000 && (empty($_SESSION["empresa"]) || (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] != $datosConsulta['emp_id']))) { ?>
 					<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
 				<?php } ?>
 			</div>

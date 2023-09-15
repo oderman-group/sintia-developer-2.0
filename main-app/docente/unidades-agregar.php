@@ -56,7 +56,7 @@ include("../compartido/head.php");
 
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Nombre:</label>
-										<div class="col-sm-4">
+										<div class="col-sm-10">
 											<input type="text" name="nombre" class="form-control" autocomplete="off" required>
 										</div>
 									</div>
@@ -64,7 +64,7 @@ include("../compartido/head.php");
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Descripción:</label>
 										<div class="col-sm-10">
-											<input type="text" name="contenido" class="form-control" autocomplete="off">
+											<textarea id="editor1" name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 										</div>
 									</div>
 
@@ -111,4 +111,11 @@ include("../compartido/head.php");
 	<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 	<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
 	<!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+	<script>
+		// Replace the <textarea id="editor1"> with a CKEditor 4
+		// instance, using default configuration.
+		CKEDITOR.replace( 'editor1' );
+	</script>
 </html>

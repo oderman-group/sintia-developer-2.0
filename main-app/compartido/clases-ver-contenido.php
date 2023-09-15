@@ -17,6 +17,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 					<div class="row">
                         <div class="col-md-12">
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="row">
                                 
 								<div class="col-md-4 col-lg-3">
@@ -145,7 +146,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											<p><?=$datosConsultaBD['cls_descripcion'];?></p>
 											
 											<?php if(!empty($datosConsultaBD['cls_hipervinculo'])){?>
-												<p><a href="http://<?=$datosConsultaBD['cls_hipervinculo'];?>" style="text-decoration: underline;" target="_blank"><?=$datosConsultaBD['cls_hipervinculo'];?></a></p>
+												<p><a href="<?=$datosConsultaBD['cls_hipervinculo'];?>" style="text-decoration: underline;" target="_blank"><?=$datosConsultaBD['cls_hipervinculo'];?></a></p>
 											<?php }?>
 											
 											<?php if(!empty($datosConsultaBD['cls_archivo'])){
