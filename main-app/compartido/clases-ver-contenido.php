@@ -63,7 +63,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 								<div class="col-md-4 col-lg-6">
 									
 									<?php 
-									if($datosConsultaBD['cls_meeting']!="" and $datosConsultaBD['cls_clave_docente']!="" and $datosConsultaBD['cls_clave_estudiante']!=""){
+									if(!empty($datosConsultaBD['cls_meeting']) and !empty($datosConsultaBD['cls_clave_docente']) and !empty($datosConsultaBD['cls_clave_estudiante'])){
 										
 										if($datosUsuarioActual['uss_tipo']==2){
 											$nombreSala = trim($datosCargaActual['mat_nombre'])."_".trim($datosCargaActual['gra_nombre'])."_".trim($datosCargaActual['gru_nombre']);
@@ -116,7 +116,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										
 										<div class="card-body">
 											
-											<?php if($datosConsultaBD['cls_video']!=""){?>
+											<?php if(!empty($datosConsultaBD['cls_video'])){?>
 											<p class="iframe-container">
 												<iframe width="100%" height="400" src="https://www.youtube.com/embed/<?=$datosConsultaBD['cls_video'];?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 											</p>
@@ -144,24 +144,28 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="card-body">
 											<p><?=$datosConsultaBD['cls_descripcion'];?></p>
 											
-											<?php if($datosConsultaBD['cls_archivo']!=""){
+											<?php if(!empty($datosConsultaBD['cls_hipervinculo'])){?>
+												<p><a href="http://<?=$datosConsultaBD['cls_hipervinculo'];?>" style="text-decoration: underline;" target="_blank"><?=$datosConsultaBD['cls_hipervinculo'];?></a></p>
+											<?php }?>
+											
+											<?php if(!empty($datosConsultaBD['cls_archivo'])){
 												$nombre1 = $datosConsultaBD['cls_archivo'];
-												if($datosConsultaBD['cls_nombre_archivo1']!=""){$nombre1 = $datosConsultaBD['cls_nombre_archivo1'];}
+												if(!empty($datosConsultaBD['cls_nombre_archivo1'])){$nombre1 = $datosConsultaBD['cls_nombre_archivo1'];}
 											?>
 												<h4 style="font-weight: bold;">Archivos adjuntos</h4>
 												<p><a href="../files/clases/<?=$datosConsultaBD['cls_archivo'];?>" style="text-decoration: underline;" target="_blank"><?=$nombre1;?></a></p>
 											<?php }?>
 											
-											<?php if($datosConsultaBD['cls_archivo2']!=""){
+											<?php if(!empty($datosConsultaBD['cls_archivo2'])){
 												$nombre2 = $datosConsultaBD['cls_archivo2'];
-												if($datosConsultaBD['cls_nombre_archivo2']!=""){$nombre2 = $datosConsultaBD['cls_nombre_archivo2'];}
+												if(!empty($datosConsultaBD['cls_nombre_archivo2'])){$nombre2 = $datosConsultaBD['cls_nombre_archivo2'];}
 											?>
 												<p><a href="../files/clases/<?=$datosConsultaBD['cls_archivo2'];?>" style="text-decoration: underline;" target="_blank"><?=$nombre2;?></a></p>
 											<?php }?>
 											
-											<?php if($datosConsultaBD['cls_archivo3']!=""){
+											<?php if(!empty($datosConsultaBD['cls_archivo3'])){
 												$nombre3 = $datosConsultaBD['cls_archivo3'];
-												if($datosConsultaBD['cls_nombre_archivo3']!=""){$nombre3 = $datosConsultaBD['cls_nombre_archivo3'];}
+												if(!empty($datosConsultaBD['cls_nombre_archivo3'])){$nombre3 = $datosConsultaBD['cls_nombre_archivo3'];}
 											?>
 												<p><a href="../files/clases/<?=$datosConsultaBD['cls_archivo3'];?>" style="text-decoration: underline;" target="_blank"><?=$nombre3;?></a></p>
 											<?php }?>

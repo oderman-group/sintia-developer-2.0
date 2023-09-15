@@ -6,8 +6,6 @@ $idPaginaInterna = 'DV0014';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-
 define('ENVIROMENT_TWO', $_POST['enviroment']);
 
 switch (ENVIROMENT_TWO) {

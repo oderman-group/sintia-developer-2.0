@@ -518,6 +518,11 @@ if(!empty($_POST["id"])){
 		$findme   = '?v=';
 		$pos = strpos($_POST["video"], $findme) + 3;
 		$video = substr($_POST["video"],$pos,11);
+		
+		$enlace = $_POST["vinculo"];
+		if (strpos($enlace, 'http://') === 0) {
+			$enlace = substr($enlace, 7);
+		}
 
 		if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 			$date = date('Y-m-d', strtotime(str_replace('-', '/', $_POST["fecha"])));
@@ -525,7 +530,7 @@ if(!empty($_POST["id"])){
 			if($_POST["disponible"]==1) $disponible=1;
 
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_clave_docente, cls_clave_estudiante)"." VALUES('".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$date."', '".$cargaConsultaActual."', 1, '".$periodoConsultaActual."', '".$video."', '".$_POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$_POST["archivo1"]."', '".$_POST["archivo2"]."', '".$_POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', '".$disponible."', '".$_POST["idMeeting"]."', '".$_POST["claveDocente"]."', '".$_POST["claveEstudiante"]."')");
+				mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_clave_docente, cls_clave_estudiante, cls_hipervinculo)"." VALUES('".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$date."', '".$cargaConsultaActual."', 1, '".$periodoConsultaActual."', '".$video."', '".$_POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$_POST["archivo1"]."', '".$_POST["archivo2"]."', '".$_POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', '".$disponible."', '".$_POST["idMeeting"]."', '".$_POST["claveDocente"]."', '".$_POST["claveEstudiante"]."', '".$enlace."')");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -679,6 +684,11 @@ if(!empty($_POST["id"])){
 		$findme   = '?v=';
 		$pos = strpos($_POST["video"], $findme) + 3;
 		$video = substr($_POST["video"],$pos,11);
+		
+		$enlace = $_POST["vinculo"];
+		if (strpos($enlace, 'http://') === 0) {
+			$enlace = substr($enlace, 7);
+		}
 
 		$disponible=0;
 		if($_POST["disponible"]==1) $disponible=1;
@@ -686,7 +696,7 @@ if(!empty($_POST["id"])){
 		$date = date('Y-m-d', strtotime(str_replace('-', '/', $_POST["fecha"])));
 
 		try{
-			mysqli_query($conexion, "UPDATE academico_clases SET cls_tema='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', cls_fecha='".$date."', cls_video='".$video."', cls_video_url='".$_POST["video"]."', cls_descripcion='".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', cls_nombre_archivo1='".$_POST["archivo1"]."', cls_nombre_archivo2='".$_POST["archivo2"]."', cls_nombre_archivo3='".$_POST["archivo3"]."', cls_disponible='".$disponible."'
+			mysqli_query($conexion, "UPDATE academico_clases SET cls_tema='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', cls_fecha='".$date."', cls_video='".$video."', cls_video_url='".$_POST["video"]."', cls_descripcion='".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', cls_nombre_archivo1='".$_POST["archivo1"]."', cls_nombre_archivo2='".$_POST["archivo2"]."', cls_nombre_archivo3='".$_POST["archivo3"]."', cls_disponible='".$disponible."', cls_hipervinculo='".$enlace."'
 			WHERE cls_id='".$_POST["idR"]."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
