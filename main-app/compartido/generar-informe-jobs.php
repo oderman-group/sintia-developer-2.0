@@ -46,14 +46,6 @@ $mensaje="";
    //Verificamos que el estudiante tenga sus notas al 100%
    if(mysqli_num_rows($consultaListaEstudantesError)>0){
 	 $erroresNumero=mysqli_num_rows($consultaListaEstudantesError);
-	 $texto="";
-	 if($erroresNumero>1){
-        $texto= $erroresNumero."  estudiantes que les";
-	 }else{
-		$texto= $erroresNumero."  estudiante que le";
-	 }
-	
-	 $mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
 	 $finalizado = false;
    }
    
@@ -169,10 +161,21 @@ $mensaje="";
 		);
 		SysJobs::actualizar($datos);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO);
-	}else{		
-		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
-		if($intento>=3){
+	}else{
+		
+		if($intento>=3){				
+		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
+		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_FINALIZADO);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
+		}else{
+			$texto="";
+			if($erroresNumero>1){
+				$texto= $erroresNumero."  estudiantes que les";
+			 }else{
+				$texto= $erroresNumero."  estudiante que le";
+			 }
+			 $mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
+			 SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
 		}
 	}
 	
