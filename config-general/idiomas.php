@@ -742,6 +742,8 @@ $frases[372][$l] = 'Institución';
 
 $frases[373][$l] = 'Año';
 
+$frases[374][$l] = 'Unidades Tematicas';
+
 
 
 //ENGLISH
@@ -1486,4 +1488,6 @@ $frases[371][$l] = 'Páginas';
 $frases[372][$l] = 'Institution';
 
 $frases[373][$l] = 'Year';
+
+$frases[374][$l] = 'Thematic Units';
 ?>
