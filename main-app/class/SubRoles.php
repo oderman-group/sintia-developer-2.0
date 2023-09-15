@@ -145,6 +145,7 @@ class SubRoles {
            $resultadoConsuta = mysqli_query($conexion,$sqlExecute);
            while($fila=$resultadoConsuta->fetch_assoc()){
                $fila["paginas"]=self::listarPaginasRoles($fila["subr_id"]); 
+               $fila["usuarios"]=self::listarUsuariosRoles($fila["subr_id"]); 
                $resultado=$fila; 
            } 
            return $resultado;
@@ -183,16 +184,19 @@ class SubRoles {
     }
      /**
      * Esta función  Lista  la tabla paginas_publicidad por el tipo de usuario
-     * por defecto se buscará por el tipo de usuario=5
+     * por defecto se buscará por el tipo de usuario=5 y las ordenara teniendo encuenta el sub rol selecionado
      * @param String $tipoUsuario
+     * @param String $subRol
      * */
-    public static function listarPaginas($tipoUsuario = '5'){
+    public static function listarPaginas($subRol,$tipoUsuario = '5'){
         global $conexion, $baseDatosServicios;
         $resultado = [];
         
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
-        LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo  
-        WHERE pagp_tipo_usuario = '".$tipoUsuario."'";
+        LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo
+        LEFT JOIN ".$baseDatosServicios .".sub_roles_paginas ON spp_id_pagina=pagp_id AND spp_id_rol='".$subRol."'
+        WHERE pagp_tipo_usuario = '".$tipoUsuario."' 
+        ORDER BY spp_id_pagina DESC";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
             
@@ -230,7 +234,7 @@ class SubRoles {
  /**
      * Esta función  Lista  la tabla sub_roles_usuarios teniendo en cuenta el id del usuario
      * por defecto se buscará por el  usuario=1
-     * @param String $idRol
+     * @param String $idUsuario
      *  */
     public static function listarRolesUsuarios($idUsuario = '1'){
         global $conexion, $baseDatosServicios;
@@ -242,6 +246,30 @@ class SubRoles {
             $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
             while($fila=$resultadoConsulta->fetch_assoc()){
                 $arraysDatos[$fila["spu_id_sub_rol"]]=$fila;
+            } 
+            return $arraysDatos;
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        
+    }
+
+    /**
+     * Esta función  Lista sirve para listar los usuarios que tienen un Subrol en especifico
+     * por defecto se buscará por el  usuario=1
+     * @param String $subrol
+     *  */
+    public static function listarUsuariosRoles($subrol){
+        global $conexion, $baseDatosServicios;
+        $arraysDatos = [];
+        
+        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles_usuarios
+        WHERE spu_id_sub_rol = '".$subrol."'";
+        try {
+            $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
+            while($fila=$resultadoConsulta->fetch_assoc()){
+                $arraysDatos[$fila["spu_id_usuario"]]=$fila;
             } 
             return $arraysDatos;
         } catch (Exception $e) {
