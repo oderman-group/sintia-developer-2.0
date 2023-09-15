@@ -7,7 +7,7 @@
     include("../compartido/historial-acciones-guardar.php");
 
     //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-    if(empty($_POST["nombre"]) || empty($_POST["descripcion"]) || empty($_POST["precio"]) || empty($_POST["categoria"]) || empty($_POST["empresa"])){
+    if(empty($_POST["nombre"]) || empty($_POST["descripcion"]) || $_POST["precio"]=='' || empty($_POST["categoria"]) || empty($_POST["empresa"])){
         include("../compartido/guardar-historial-acciones.php");
         echo '<script type="text/javascript">window.location.href="mps-productos-agregar.php?error=ER_DT_4";</script>';
         exit();
