@@ -155,7 +155,7 @@ if(
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Hipervinculo</label>
 												<div class="col-sm-10">
-													<input type="text" name="vinculo" class="form-control" autocomplete="off">
+													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com">
 												</div>
 											</div>
 
