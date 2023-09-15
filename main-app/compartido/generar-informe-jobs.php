@@ -42,13 +42,21 @@ $consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($car
 $num=0;
 $finalizado = true;
 $erroresNumero=0;
+$listadoEstudiantesError="";
 $mensaje="";
    //Verificamos que el estudiante tenga sus notas al 100%
    if(mysqli_num_rows($consultaListaEstudantesError)>0){
 	 $erroresNumero=mysqli_num_rows($consultaListaEstudantesError);
+	 $contador=0;
+	 while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
+	 $contador++;
+	 $listadoEstudiantesError=$listadoEstudiantesError."<br>".$contador."): ".$estudianteResultadoError['mat_nombres']
+	 ." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
+	 ." no tiene notas completas  id: ".$estudianteResultadoError['mat_id']." Valor Actual: ".$estudianteResultadoError['acumulado']."%";
+	 }
 	 $finalizado = false;
    }
-   
+      
    if($finalizado){
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 			$num++;
@@ -166,7 +174,7 @@ $mensaje="";
 		if($intento>=3){				
 		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
 		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_FINALIZADO);
-		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
+		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje.$listadoEstudiantesError,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
 		}else{
 			$texto="";
 			if($erroresNumero>1){
