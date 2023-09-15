@@ -27,7 +27,9 @@
 </head>
 <body>
     <?php
-	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1"), MYSQLI_BOTH);
+	$idE="";
+	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
 	//Si la evaluación no tiene clave, lo mandamos de una vez a realizarla.
 	if($evaluacion['eva_clave']==""){
 		echo '<script type="text/javascript">window.location.href="evaluaciones-realizar.php?idE='.$_GET["idE"].'";</script>';
@@ -37,7 +39,7 @@
 	if(isset($_GET["claveE"]) and trim($_GET["claveE"])!=""){
 		//VERIFICAMOS QUE LA CLAVE DE LA EVALUACIÓN ESTÉ CORRECTA
 		if($_GET["claveE"]!=$evaluacion['eva_clave']){
-			echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=202&idE='.$_GET["idE"].'&claveErrada='.$_GET["claveE"].'";</script>';
+			echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=202&idE='.$idE.'&claveErrada='.$_GET["claveE"].'";</script>';
 			exit();
 		}
 		
