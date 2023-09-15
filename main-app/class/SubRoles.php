@@ -188,13 +188,14 @@ class SubRoles {
      * @param String $tipoUsuario
      * @param String $subRol
      * */
-    public static function listarPaginas($subRol,$tipoUsuario = '5'){
+    public static function listarPaginas($subRol='-1',$tipoUsuario = '5',$soloActivas='0'){
         global $conexion, $baseDatosServicios;
         $resultado = [];
-        
+        $sqlJoin=$soloActivas=='1'?"INNER":"LEFT";
+       
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
         LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo
-        LEFT JOIN ".$baseDatosServicios .".sub_roles_paginas ON spp_id_pagina=pagp_id AND spp_id_rol='".$subRol."'
+        ".$sqlJoin." JOIN ".$baseDatosServicios .".sub_roles_paginas ON spp_id_pagina=pagp_id AND spp_id_rol='".$subRol."'
         WHERE pagp_tipo_usuario = '".$tipoUsuario."' 
         ORDER BY spp_id_pagina DESC";
         try {
