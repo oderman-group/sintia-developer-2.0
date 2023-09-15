@@ -9,7 +9,9 @@ include("../compartido/head.php");
 
 require_once("../class/SubRoles.php");
 $rolActual = SubRoles::consultar($_GET["id"]);
-$listaPaginas = SubRoles::listarPaginas($_GET["id"]);
+$activasTodas=empty($_GET["activas"]) ?"0":"1";
+$checkActivas=($activasTodas=="0")?"":"checked";
+$listaPaginas = SubRoles::listarPaginas($_GET["id"],"5",$activasTodas);
 
 ?>
 <!-- Theme Styles -->
@@ -35,7 +37,6 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol</div>
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
                             <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
@@ -43,7 +44,7 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
                         </ol>
                     </div>
                 </div>
-
+                <?php include("../../config-general/mensajes-informativos.php"); ?>
                 <div class="panel">
                     <header class="panel-heading panel-heading-purple"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?></header>
                     <div class="panel-body">
@@ -100,7 +101,7 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
                                             <header><?= $frases[370][$datosUsuarioActual['uss_idioma']]; ?> ( <label style="font-weight: bold;" id="cantSeleccionadas"></label>/<?= mysqli_num_rows($listaPaginas) ?> )
                                                 <label class="switchToggle">
 
-                                                    <input type="checkbox" onchange="mostrarActivas(this.checked)">
+                                                    <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,<?= $_GET["id"]; ?>)">
                                                     <span class="slider red round"></span>
                                                 </label>
                                             </header>
@@ -111,9 +112,9 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
 
                                         </div>
                                         <div class="card-body">
-
+                                            
                                             <div>
-                                               
+                                            
 
                                                 <table id="example3" class="display" name="tabla1" style="width:100%;">
                                                     <thead>
@@ -142,13 +143,13 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
                                                             <tr>
                                                                 <td><?= $contReg; ?></td>
                                                                 <td>
-                                                              
-                                                                    
-                                                                        <label class="switchToggle">
-                                                                            <input type="checkbox" onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>" <?= $cheked; ?>>
-                                                                            <span class="slider red round"></span>
-                                                                        </label>
-                                                                    
+
+
+                                                                    <label class="switchToggle">
+                                                                        <input type="checkbox" onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>" <?= $cheked; ?>>
+                                                                        <span class="slider red round"></span>
+                                                                    </label>
+
                                                                 </td>
                                                                 <td><?= $pagina['pagp_id']; ?></td>
                                                                 <td><?= $pagina['pagp_pagina']; ?></td>
@@ -197,42 +198,13 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"]);
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
 <script type="text/javascript">
-    function mostrarActivas(check) {
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("example3");
-  switching = true;
-  while (switching) {
-    switching = false;
-    rows = table.rows;
-    for (i = 1; i < (rows.length - 1); i++) {
-      shouldSwitch = false;
-      if(check){
-        l1 =rows[i].getElementsByTagName("td")[1].getElementsByTagName("input")[0].checked;
-        l2 =rows[i+1].getElementsByTagName("td")[1].getElementsByTagName("input")[0].checked;
-        y=l1?1:0;
-        x=l2?1:0;        
-      }else{
-        x = parseInt(rows[i].getElementsByTagName("td")[0].textContent);
-        y = parseInt(rows[i + 1].getElementsByTagName("td")[0].textContent);
-
-      } 
-      if (x > y) {
-        shouldSwitch = true;
-        break;
-      }
-    }
     
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-    }
-  }
+function mostrarActivas(check,idSubrol) {
+    var nuevaURL = "sub-roles-editar.php?id="+idSubrol+"&activas="+(check?1:0);            
+    window.location.href = nuevaURL;
+    onclick="redireccionar()"
 }
 
-// Agregar un controlador de eventos al encabezado de la columna "ID"
-document.querySelector("th:nth-child(1)").addEventListener("click", function() {
-    mostrarActivas();
-});
     var select = document.getElementById('paginasSeleccionadas');
     contarPaginasSeleccionadas();
 

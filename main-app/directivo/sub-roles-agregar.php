@@ -37,7 +37,7 @@ $listaPaginas = SubRoles::listarPaginas();
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
                                 <div class="page-title"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
-                                <?php include("../../config-general/mensajes-informativos.php"); ?>
+                                
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
@@ -45,7 +45,7 @@ $listaPaginas = SubRoles::listarPaginas();
                             </ol>
                         </div>
                     </div>
-
+                    <?php include("../../config-general/mensajes-informativos.php"); ?>
                 <div class="panel">
                     <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></header>
                     <div class="panel-body">

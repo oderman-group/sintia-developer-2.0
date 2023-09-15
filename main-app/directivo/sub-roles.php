@@ -41,11 +41,9 @@ include("../compartido/head.php");
 
                 <div class="row">
                     <div class="col-md-12">
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="row">
-                            
-
-                            <div class="col-md-12">
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
+                            <div class="col-md-12">                           
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
                                         <header>Sub Roles</header>
