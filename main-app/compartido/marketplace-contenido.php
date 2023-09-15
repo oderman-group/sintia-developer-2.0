@@ -35,6 +35,11 @@
 				if (!empty($datosConsulta['prod_foto']) && file_exists($ruta.$datosConsulta['prod_foto'])) {
 					$foto = $ruta.$datosConsulta['prod_foto'];
 				}
+				
+				$precio = 0;
+				if (!empty($datosConsulta['prod_precio'])) {
+					$precio = $datosConsulta['prod_precio'];
+				}
 				//JSON PARA ELIMINAR
 				$arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
 				$arrayDatos = json_encode($arrayEnviar);
@@ -50,7 +55,7 @@
 						<div class="text-muted">
 							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['catp_nombre']; ?></span>
 						</div>
-						<p><span style="font-weight: bold;"> $<?= number_format($datosConsulta['prod_precio'], 0, ",", "."); ?></span></p>
+						<p><span style="font-weight: bold;"> $<?=number_format($precio, 0, ",", ".")?></span></p>
 						<p>
 						<?php
 						if (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] == $datosConsulta['emp_id']) {
@@ -59,7 +64,7 @@
 							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/guardar.php?get=<?= base64_encode(25); ?>&idR=<?= base64_encode($datosConsulta['prod_id']); ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
 						<?php
 							} else {
-								if ($datosConsulta['prod_precio'] >= 10000) {
+								if ($precio >= 10000) {
 						?>
 									<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
 						<?php
