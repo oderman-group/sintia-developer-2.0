@@ -97,10 +97,32 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 											</div>
 											
 											<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_fecha'];?>"  required>
-													</div>
+												<label class="col-sm-2 control-label">Fecha</label>
+												<div class="col-sm-4">
+													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_fecha'];?>"  required>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Unidad</label>
+												<div class="col-sm-4">
+													<?php
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													?>
+													<select class="form-control  select2" name="unidad">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
+															$selected='';
+															if($unidadDatos['uni_id']==$datosConsulta['cls_unidad']){
+																$selected='selected';
+															}
+														?>
+															<option value="<?=$unidadDatos['uni_id'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
+														<?php }?>
+													</select>
+												</div>
 											</div>
 										
 										<div class="form-group row">
@@ -122,7 +144,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Hipervinculo</label>
 												<div class="col-sm-10">
-													<input type="text" name="vinculo" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_hipervinculo'];?>">
+													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com" value="<?=$datosConsulta['cls_hipervinculo'];?>">
 												</div>
 											</div>
 											

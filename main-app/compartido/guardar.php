@@ -670,7 +670,7 @@ if (!empty($_POST["id"])) {
 		$clave = rand(10000, 99999);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas(emp_nombre, emp_email, emp_telefono, emp_verificada, emp_estado, emp_clave, emp_usuario, emp_institucion)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["email"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["telefono"]) . "', 0, 0, '" . $clave . "', '" . $_SESSION["id"] . "', '" . $config['conf_id_institucion'] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".empresas(emp_nombre, emp_email, emp_telefono, emp_verificada, emp_estado, emp_clave, emp_usuario, emp_institucion)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["email"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["telefono"]) . "', 0, 1, '" . $clave . "', '" . $_SESSION["id"] . "', '" . $config['conf_id_institucion'] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -715,7 +715,7 @@ if (!empty($_POST["id"])) {
 		$video = substr($_POST["video"], $pos, 11);
 
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 0, 1, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 1, 0, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

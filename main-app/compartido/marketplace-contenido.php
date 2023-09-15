@@ -35,6 +35,11 @@
 				if (!empty($datosConsulta['prod_foto']) && file_exists($ruta.$datosConsulta['prod_foto'])) {
 					$foto = $ruta.$datosConsulta['prod_foto'];
 				}
+				
+				$precio = 0;
+				if (!empty($datosConsulta['prod_precio'])) {
+					$precio = $datosConsulta['prod_precio'];
+				}
 				//JSON PARA ELIMINAR
 				$arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
 				$arrayDatos = json_encode($arrayEnviar);
@@ -43,14 +48,14 @@
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">
 				<div class="blogThumb" style="height: 100%;">
 					<div class="thumb-center" style="height: 55%;">
-						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 100%;" src="<?= $foto; ?>"></a>
+						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
 						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
 						<div class="text-muted">
 							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['catp_nombre']; ?></span>
 						</div>
-						<p><span style="font-weight: bold;"> $<?= number_format($datosConsulta['prod_precio'], 0, ",", "."); ?></span></p>
+						<p><span style="font-weight: bold;"> $<?=number_format($precio, 0, ",", ".")?></span></p>
 						<p>
 						<?php
 						if (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] == $datosConsulta['emp_id']) {
@@ -59,7 +64,7 @@
 							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/guardar.php?get=<?= base64_encode(25); ?>&idR=<?= base64_encode($datosConsulta['prod_id']); ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
 						<?php
 							} else {
-								if ($datosConsulta['prod_precio'] >= 10000) {
+								if ($precio >= 10000) {
 						?>
 									<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
 						<?php

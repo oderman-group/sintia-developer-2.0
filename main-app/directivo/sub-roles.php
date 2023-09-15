@@ -4,7 +4,10 @@ $idPaginaInterna = 'DT0204';
 require_once("../class/SubRoles.php");
 include("../compartido/historial-acciones-guardar.php");
 Modulos::verificarPermisoDev();
-$listaRoles=SubRoles::listar();
+$parametrosBuscar = array(
+	"institucion" =>$config['conf_id_institucion']
+);	
+$listaRoles=SubRoles::listar($parametrosBuscar);
 include("../compartido/head.php");
 
 
