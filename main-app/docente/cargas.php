@@ -7,6 +7,13 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/Sysjobs.php");
 ?>
 </head>
+<style>
+	.alert-warning-select {
+    color: #4f3e0d;
+    background-color: #f5c426;
+    border-color: #ffeeba;
+}
+</style>
  <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 
@@ -27,7 +34,7 @@ require_once("../class/Sysjobs.php");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?> (<a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>)</div>
+                                <div class="page-title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -56,10 +63,11 @@ require_once("../class/Sysjobs.php");
 							 ?>
 								
 							 <p>
-								 	<a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir todas mis planillas</a>
-							 </p>
-							 <p>
-								 	<a href="../compartido/planilla-docentes-notas.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="color: blue; text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+								 	<a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="text-decoration: underline;">Imprimir todas mis planillas</a>
+									&nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="../compartido/planilla-docentes-notas.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="text-decoration: underline;">Imprimir planillas con resumen de notas</a>
+									 &nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
@@ -101,14 +109,29 @@ require_once("../class/Sysjobs.php");
 												);
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
-												if(Empty($jobsEncontrado["job_estado"])){
-													$estadoCrobJob ="";
-													$estadoColor ="btn red";
+												
+												if(empty($jobsEncontrado)){
+													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
 												}else{
-													$estadoCrobJob ="(".$jobsEncontrado["job_estado"].")";
-													$estadoColor ="btn btn-success";
+													$intento = intval($jobsEncontrado["job_intentos"]);
+													switch($jobsEncontrado["job_estado"]){
+														case JOBS_ESTADO_ERROR:														
+															$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>'
+																	.'<div class="alert alert-danger" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+																	break;
+														case JOBS_ESTADO_PENDIENTE && $intento==0:
+															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															break;
+														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
+															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															break;
+														case JOBS_ESTADO_PENDIENTE && $intento>0 :
+															$mensajeI ='<div class="alert alert-warning-select" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															break;
+														
+													}
 												}
-												$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
+												
 											  }	
 										}
 										
@@ -127,11 +150,10 @@ require_once("../class/Sysjobs.php");
 									</a>	
 								</div>
 	                        	<div class="course-box">
-	                        	<h4 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h5 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($rCargas['car_id']);?>" title="Planilla" target="_blank"><img src="../files/iconos/emblem-library.png" width="25"></a>&nbsp;
-										<span><i class="fa  fa-group"></i> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
+										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
 									</p>
 									
 									

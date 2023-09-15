@@ -24,4 +24,35 @@ class Plataforma {
         return $resultado;
 
     }
+
+    /**
+     * Este consulta la información de la plataforma sintia y la
+     * disponibiliza
+     * 
+     * @return array
+     */
+    public static function infoContactoSintia()
+    {
+
+        global $conexion, $baseDatosServicios;
+        $conexionReal = $conexion;
+
+        if(!$conexion) {
+            global $servidorConexion, $usuarioConexion, $claveConexion;
+            $conexionReal = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+        }
+
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexionReal, "SELECT * FROM ".$baseDatosServicios.".datos_contacto WHERE dtc_id=1");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+
+    }
 }

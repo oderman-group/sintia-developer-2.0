@@ -57,6 +57,30 @@ class Estudiantes {
         return $resultado;
     }
 
+    public static function listarEstudiantesNotasFaltantes(
+        string $carga, 
+        string $periodo,
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $sqlString= "SELECT *,cal_id_estudiante, sum(act_valor) as acumulado 
+            FROM academico_calificaciones
+            INNER JOIN academico_matriculas on mat_id=cal_id_estudiante
+            INNER JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga='".$carga."' and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
+            GROUP BY cal_id_estudiante
+            HAVING acumulado<100";
+            $resultado = mysqli_query($conexion,$sqlString);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
     public static function listarEstudiantesParaDocentes(string $filtroDocentes = '',string $filtroLimite = '')
     {
         global $conexion, $baseDatosServicios;

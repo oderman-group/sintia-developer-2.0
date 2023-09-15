@@ -43,3 +43,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
 WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+
+$datosContactoSintia = Plataforma::infoContactoSintia();

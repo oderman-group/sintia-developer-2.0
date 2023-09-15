@@ -192,6 +192,44 @@ class SubRoles {
             self::crearRolesUsuario($idUsuario, $subRolesCrear);
         }
     }
+
+     /**
+     * Esta función  crea o elimina un registro si es necesario en la tabla sub_roles_usuarios
+     *
+     * @param string $idUsuario
+     * @param array $subRoles
+     *
+     * @return void // */
+     public static function actualizarRolesUsuario($idUsuario,array $subRoles= []){
+        global $conexion, $baseDatosServicios,$config;
+        $subRolesActualales= self::listarRolesUsuarios($idUsuario);
+        $subRolesCrear= [];
+        $subRolesElimnar= [];
+        $cantAgregar = 0;
+        $cantEliminar = 0; 
+        $subRolesArray= [];
+        foreach ($subRoles as $subRol ) {
+            $subRolesArray[$subRol]=$subRol;
+        } 
+        foreach ($subRolesActualales as $subrolBD ) {
+            if(!array_key_exists($subrolBD["spu_id_sub_rol"], $subRolesArray)){
+                $subRolesElimnar[$subrolBD["spu_id_sub_rol"]]= $subrolBD["spu_id_sub_rol"];
+                $cantEliminar ++;
+            }
+        }
+        foreach ($subRolesArray as $subrol ) {                
+            if(!array_key_exists($subrol, $subRolesActualales)){
+               $subRolesCrear[$subrol]= $subrol;
+               $cantAgregar ++;
+            }
+        }
+        if($cantEliminar>=1){
+            self::eliminarSubrolesUsuarios($idUsuario, $subRolesElimnar);
+        }
+        if($cantAgregar>=1){
+            self::crearRolesUsuario($idUsuario, $subRolesCrear);
+        }
+    }
      /**
      * Esta función  consulta  la tabla sub_roles por la identificaicon unica
      * @param String $id
@@ -318,7 +356,7 @@ class SubRoles {
         
     }
     /**
-     * Esta función  Elimina los  registros en la tabla sub_roles
+     * Esta función  Elimina los  registros en la tabla sub_roles_usuarios
      *
      * @param String $idUsuario
      * @param array $subRoles
@@ -330,13 +368,13 @@ class SubRoles {
         try {
             $INsubroles="";
             if(!empty($subRoles)){
-                $INsubroles=" AND spu_id_sub_rol IN ('".implode(",",$subRoles)."')";
+                $INsubroles=" AND spu_id_sub_rol IN (".implode(",",$subRoles).")";
             }
-            $sqlUpdate="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
+            $sql="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
             WHERE spu_id_usuario=".$idUsuario.
             " AND spu_institucion =".$config['conf_id_institucion'].
             $INsubroles;
-            mysqli_query($conexion,$sqlUpdate);              
+            mysqli_query($conexion,$sql);              
             
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

@@ -132,7 +132,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario;?>&tipo=<?=$resultado['fcu_tipo'];?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=strtoupper($resultado['uss_nombre']);?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
 
 														<?php if(Modulos::validarPermisoEdicion()){?>

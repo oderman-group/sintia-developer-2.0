@@ -2,54 +2,10 @@
 <div class="row">
 
     <div class="col-md-12">
+        <?php include("../compartido/barra-superior-noticias.php");?>
         <div class="row">
 
             <div class="col-md-4 col-lg-3">
-
-                <div class="panel">
-                    <header class="panel-heading panel-heading-blue"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></header>
-                    
-
-                    <div class="panel-body">
-                        <form action="<?=$_SERVER['PHP_SELF'];?>" method="get">
-                            <div class="form-group row">
-                                <div class="col-sm-8"
-                                    data-hint="Aquí podrás buscar noticias específicas, dentro de todas las publicadas, usando palabras que claves que se encuentren en su titulo, descripción, etc.">
-                                    <input type="text" name="busqueda" class="form-control"
-                                        value="<?php if(isset($_GET['busqueda'])) echo $_GET["busqueda"];?>"
-                                        placeholder="<?=$frases[235][$datosUsuarioActual[8]];?>...">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="submit" class="btn btn-primary"
-                                        value="<?=$frases[8][$datosUsuarioActual[8]];?>">
-                                </div>
-                            </div>
-                        </form>
-                        <?php if(isset($_GET["busqueda"])){?><div align="center"><a
-                                href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual['uss_idioma']];?></a>
-                        </div><?php }?>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <header class="panel-heading panel-heading-purple">
-                        <?=$frases[132][$datosUsuarioActual['uss_idioma']];?></header>
-                    <div class="panel-body">
-                        <p data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)."><a
-                                href="noticias-agregar.php"><i class="fa fa-plus-circle"></i>
-                                <?=$frases[134][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se mostrarán todas tus publicaciones que estén ocultas."><a
-                                href="../compartido/guardar.php?get=7&e=1"><i class="fa fa-eye"></i>
-                                <?=$frases[135][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se ocultarán todas tus publicaciones que estén siendo mostradas."><a
-                                href="../compartido/guardar.php?get=7&e=0"><i class="fa fa-eye-slash"></i>
-                                <?=$frases[136][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se eliminarán todas tus publicaciones realizadas."><a
-                                href="../compartido/guardar.php?get=7&e=2"
-                                onClick="if(!confirm('Deseas eliminar todas tus publicaciones?')){return false;}"><i
-                                    class="fa fa-trash"></i> <?=$frases[137][$datosUsuarioActual[8]];?></a></p>
-                    </div>
-                </div>
 
                 <?php
                     include("../compartido/datos-fechas.php");
@@ -130,9 +86,6 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                    <div class="card-footer" align="center">
-                        <a href="noticias-agregar.php" class="btn btn-danger"><?=$frases[263][$datosUsuarioActual[8]];?></a>
                     </div>
                 </div>
 

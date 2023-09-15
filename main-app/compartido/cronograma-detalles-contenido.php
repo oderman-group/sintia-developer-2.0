@@ -28,11 +28,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-                        </div>
+						
 						
                         <div class="col-sm-9">
 
@@ -74,6 +70,12 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<?php }?>
                                 </div>
                             </div>
+                        </div>
+
+						<div class="col-sm-3">
+							
+						<?php include("../compartido/publicidad-lateral.php");?>	
+
                         </div>
 						
                     </div>

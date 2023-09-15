@@ -86,7 +86,7 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">Puntos</label>
 													<div class="col-sm-2">
-														<input type="text" name="valor" value="<?=$pregunta['preg_valor'];?>" class="form-control" autocomplete="off" required>
+														<input type="number" name="valor" value="<?=$pregunta['preg_valor'];?>" class="form-control" autocomplete="off" required>
 													</div>
 												</div>
 										

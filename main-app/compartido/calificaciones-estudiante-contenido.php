@@ -311,6 +311,7 @@
 
 													 $sumaNota = 0;
 
+													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
@@ -330,6 +331,7 @@
 														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
+														$porcentajeActualActividad +=$resultado[3];
 
 														//COLOR DE CADA NOTA
 
@@ -399,7 +401,7 @@
 
 														<td colspan="4"><?=strtoupper($frases[107][$datosUsuarioActual['uss_idioma']]);?></td>
 
-														<td><?=$porcentajeActual;?>%</td>
+														<td><?=$porcentajeActualActividad;?>%</td>
 
 														<td style="color:<?=$colorDefinitiva;?>"><?=$definitiva;?></td>
 

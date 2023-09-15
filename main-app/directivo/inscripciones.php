@@ -160,7 +160,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
                                                                 <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Editar</a></li>
                                                                 
-                                                                <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
+                                                                <?php if ($resultado["asp_estado_solicitud"] == 6) { ?>
                                                                     
                                                                 <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
 
@@ -168,7 +168,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 
                                                                 <?php } ?>
 
-                                                                <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2) { ?>
+                                                                <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
                                                                 <li><a href="inscripciones-eliminar-aspirante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?')){return false;}">Eliminar aspirante</a></li>
                                                                 <?php } ?>
                                                             </ul>
