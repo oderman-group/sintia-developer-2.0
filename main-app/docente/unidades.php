@@ -96,7 +96,7 @@ include("../compartido/head.php");
 																	</button>
 																	<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 																		<li><a href="unidades-editar.php?idR=<?= base64_encode($resultado['uni_id']); ?>">Editar</a></li>
-																		<?php if($numClases>0){?>
+																		<?php if($numClases<1){?>
 																			<li><a href="#" title="<?= $objetoEnviar; ?>" id="<?= $resultado['uni_id']; ?>" name="unidades-eliminar.php?idR=<?= base64_encode($resultado['uni_id']); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																		<?php }?>
 																	</ul>
