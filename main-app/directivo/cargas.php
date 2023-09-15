@@ -78,7 +78,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div>
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
@@ -139,7 +139,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
-																  <ul class="dropdown-menu" role="menu">
+																  <ul class="dropdown-menu" role="menu" style="z-index: 9000;">
 																		<?php if(Modulos::validarPermisoEdicion()){?>
 																			<li><a href="cargas-editar.php?idR=<?=$resultado['car_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
