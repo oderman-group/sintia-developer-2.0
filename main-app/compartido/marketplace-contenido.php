@@ -48,7 +48,7 @@
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">
 				<div class="blogThumb" style="height: 100%;">
 					<div class="thumb-center" style="height: 55%;">
-						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 100%;" src="<?= $foto; ?>"></a>
+						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
 						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
