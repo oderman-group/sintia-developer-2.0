@@ -327,8 +327,19 @@
 										<li class="nav-item"><a href="dev-datos-contacto.php" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
 									</ul>
 								</li>
+								
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
+										<span class="title">ADMIN-MPS</span> <span class="arrow"></span>
+									</a>
+									<ul  class="sub-menu">
+										<li class="nav-item"><a href="mps-categorias-productos.php" class="nav-link"> <span class="title">Categorias productos</span></a></li>
+										<li class="nav-item"><a href="mps-categorias-servicios.php" class="nav-link"> <span class="title">Categorias servicios</span></a></li>
+										<li class="nav-item"><a href="mps-productos.php" class="nav-link"> <span class="title">Productos</span></a></li>
+										<li class="nav-item"><a href="mps-empresas.php" class="nav-link"> <span class="title">Empresas</span></a></li>
+									</ul>
+								</li>
 							<?php }?>
-												
 							
 							<?php }?>
 							
