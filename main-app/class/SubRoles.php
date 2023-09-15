@@ -281,7 +281,7 @@ class SubRoles {
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas
         LEFT JOIN ".$baseDatosServicios .".sub_roles ON subr_id=spp_id_rol  
         LEFT JOIN ".$baseDatosServicios .".paginas_publicidad ON pagp_id=spp_id_pagina
-        WHERE spp_id_rol = '".$idRol."'";
+        WHERE spp_id_rol = '".$idRol."' AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) " ;
         try {
             $resultadoConsulta = mysqli_query($conexion,$sqlExecute);
             while($fila=$resultadoConsulta->fetch_assoc()){
