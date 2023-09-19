@@ -71,7 +71,6 @@ $listaPaginas = SubRoles::listarPaginas();
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                <?php include("../../config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?> ( <label  style="font-weight: bold;" id="cantSeleccionadas" ></label>/<?= mysqli_num_rows($listaPaginas)?> )</header>
