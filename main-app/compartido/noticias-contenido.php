@@ -100,8 +100,8 @@
 
                 <?php 
 											$filtro = '';
-											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
+											if(!empty($_GET["busqueda"])){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
+											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 											INNER JOIN usuarios ON uss_id=not_usuario
@@ -145,7 +145,7 @@
 												
 												
 											?>
-                <div id="PUB<?=$resultado['not_id'];?>" class="row">
+                <div id="PUB<?=base64_encode($resultado['not_id']);?>" class="row">
                     <div class="col-sm-12">
                         <div class="panel" <?=$colorFondo;?>>
 
@@ -161,21 +161,21 @@
                                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                                     data-mdl-for="panel-<?=$resultado['not_id'];?>">
                                     <li class="mdl-menu__item"><a
-                                            href="noticias-editar.php?idR=<?=$resultado['not_id'];?>"><i
+                                            href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
                                                 class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
                                     </li>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=6&e=1&idR=<?=$resultado['not_id'];?>"><i
+                                            href="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"><i
                                                 class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
                                     </li>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=6&e=0&idR=<?=$resultado['not_id'];?>"><i
+                                            href="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"><i
                                                 class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?></a>
                                     </li>
 
                                     <li class="mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>"
                                             id="<?=$resultado['not_id'];?>"
-                                            name="../compartido/guardar.php?get=6&e=2&idR=<?=$resultado['not_id'];?>"
+                                            name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                             onClick="deseaEliminar(this)"><i
                                                 class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
                                     </li>
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="pull-left info">
                                     <p><a
-                                            href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>"><?=$resultado['uss_nombre'];?></a><br><span
+                                            href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>"><?=$resultado['uss_nombre'];?></a><br><span
                                             style="font-size: 11px;"><?=$resultado['not_fecha'];?></span></p>
                                 </div>
                             </div>
@@ -265,13 +265,13 @@
 									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=8&r=<?=$i;?>&idR=<?=$resultado['not_id'];?>&postname=<?=$resultado['not_titulo'];?>&usrname=<?=$datosUsuarioActual['uss_nombre'];?>&postowner=<?=$resultado['not_usuario'];?>"><i
+                                            href="../compartido/guardar.php?get=<?=base64_encode(8)?>&r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
                                                 class="fa <?=$rIcons[$i];?>"></i><?=$rName[$i];?></a></li>
                                     <?php $i++;}?>
                                 </ul>
                                 <?php if($numReacciones>0){?>
                                 <a class="pull-right" onClick="mostrarDetalles(this)"
-                                    id="<?=$resultado['not_id'];?>"><?=number_format($numReacciones,0,",",".");?>
+                                    id="<?=base64_encode($resultado['not_id']);?>"><?=number_format($numReacciones,0,",",".");?>
                                     reacciones</a>
                                 <?php }?>
                             </div>
@@ -288,11 +288,11 @@
                             document.getElementById(id).style.display = "none";
                         }
                         </script>
-                        <div class="panel" id="pub<?=$resultado['not_id'];?>" style="display: none;">
+                        <div class="panel" id="pub<?=base64_encode($resultado['not_id']);?>" style="display: none;">
                             <header class="panel-heading panel-heading-purple">
                                 Reacciones (<?=number_format($numReacciones,0,",",".");?>)
                                 <a class="pull-right" onClick="ocultarDetalles(this)"
-                                    name="<?=$resultado['not_id'];?>">Ocultar</a>
+                                    name="<?=base64_encode($resultado['not_id']);?>">Ocultar</a>
                             </header>
                             <div class="panel-body">
                                 <?php

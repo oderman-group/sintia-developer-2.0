@@ -1,11 +1,11 @@
 <?php
-if(isset($_GET["opt"])&&$_GET["opt"]==2){
+if(isset($_GET["opt"]) && base64_decode($_GET["opt"])==2){
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN usuarios ON uss_id=ema_para
 	WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de='0'
 	ORDER BY ema_id DESC
 	");
-	$opt=$_GET["opt"];
+	$opt=base64_decode($_GET["opt"]);
 }else{
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN usuarios ON uss_id=ema_de
@@ -31,7 +31,7 @@ $numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDa
 															<span class="label mail-counter-style label-danger pull-right"><?=$numR;?></span></a>
 				                                        </li>
 														
-				                                        <li <?php if(isset($_GET["opt"])&&$_GET["opt"]==2){echo 'class="active"';}?>><a href="mensajes.php?opt=2"><i class="fa fa-envelope"></i> Enviados <span class="label mail-counter-style label-danger pull-right"><?=$numRenviados;?></span></a></li>
+				                                        <li <?php if(isset($_GET["opt"]) && base64_decode($_GET["opt"])==2){echo 'class="active"';}?>><a href="mensajes.php?opt=<?=base64_encode(2)?>"><i class="fa fa-envelope"></i> Enviados <span class="label mail-counter-style label-danger pull-right"><?=$numRenviados;?></span></a></li>
 				                                    </ul>
 				                                </div>
 				                            </div>
@@ -104,7 +104,7 @@ $numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDa
 				                                                        </a>
 				                                                    </td>
 				                                                    <td class="view-message  dont-show"><?=$resultado['uss_nombre'];?></td>
-				                                                    <td class="view-message"><a href="mensajes-ver.php?idR=<?=$resultado['ema_id'];?>&opt=<?php if(isset($opt)){ echo $opt;}?>"><?=$resultado['ema_asunto'];?></a></td>
+				                                                    <td class="view-message"><a href="mensajes-ver.php?idR=<?=base64_encode($resultado['ema_id']);?>&opt=<?php if(isset($opt)){ echo base64_encode($opt);}?>"><?=$resultado['ema_asunto'];?></a></td>
 				                                                    <td class="view-message  text-right"><?=$resultado['ema_fecha'];?></td>
 																	
 																	<?php if($resultado['ema_de']==$_SESSION["id"]){?>
@@ -112,7 +112,7 @@ $numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDa
 																		('.$resultado['ema_fecha_visto'].')</span>';?></td>
 																	<?php }?>
 																	
-																	<td class="view-message  text-right"><a href="../compartido/guardar.php?get=17&idR=<?=$resultado['ema_id'];?>&elm=<?=$eliminar;?>"><i class="fa fa-trash"></i></a></td>
+																	<td class="view-message  text-right"><a href="../compartido/guardar.php?get=<?=base64_encode(17)?>&idR=<?=base64_encode($resultado['ema_id']);?>&elm=<?=base64_encode($eliminar);?>"><i class="fa fa-trash"></i></a></td>
 				                                                </tr>
 																<?php
 																	$contReg++;	 

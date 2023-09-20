@@ -204,10 +204,10 @@ function niv(enviada){
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo."</a><br>".$tipo;?><br>
-																<?php if(!empty($notasResultado[4]) && Modulos::validarPermisoEdicion()){?>
-																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
-																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo?></a><br><?=$tipo;?><br>
+																<?php if(Modulos::validarPermisoEdicion()){?>
+																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?php if(!empty($notasResultado[4])) echo $notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
+																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
 														<?php		

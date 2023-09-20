@@ -10,7 +10,7 @@
 				                                        <i class="fa fa-edit"></i> Redactar </a>
 				                                    <ul class="inbox-nav inbox-divider">
 				                                        <li class="active"><a href="mensajes.php"><iclass="fa fa-inbox"></i> Recibidos</a></li>
-				                                        <li><a href="mensajes.php?opt=2"><i class="fa fa-envelope"></i> Enviados</a></li>
+				                                        <li><a href="mensajes.php?opt=<?=base64_encode(2)?>"><i class="fa fa-envelope"></i> Enviados</a></li>
 				                                    </ul>
 				                                </div>
 				                            </div>

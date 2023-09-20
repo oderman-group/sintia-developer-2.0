@@ -26,5 +26,5 @@ $datos = array(
 SubRoles::actualizar($datos);	
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="sub-roles-editar.php?success=SC_DT_2&id=' . $_POST["subr_id"] . '";</script>';
+echo '<script type="text/javascript">window.location.href="sub-roles-editar.php?success=SC_DT_2&id=' . base64_encode($_POST["subr_id"]) . '";</script>';
 exit();

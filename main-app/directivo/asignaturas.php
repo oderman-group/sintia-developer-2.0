@@ -80,7 +80,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(isset($_GET["area"]) and is_numeric($_GET["area"])){$filtro .= " AND mat_area='".$_GET["area"]."'";}
+													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND mat_area='".base64_decode($_GET["area"])."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
 														INNER JOIN academico_areas ON ar_id=mat_area
@@ -105,7 +105,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<td><?=$resultado['mat_valor'];?></td>
 														<?php }?>	
 														<td><?=$resultado['ar_nombre'];?></td>
-														<td><a href="cargas.php?asignatura=<?=$resultado['mat_id'];?>" style="text-decoration: underline;"><?=$numeros[0];?></a></td>
+														<td><a href="cargas.php?asignatura=<?=base64_encode($resultado['mat_id']);?>" style="text-decoration: underline;"><?=$numeros[0];?></a></td>
 														
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<td>
@@ -115,8 +115,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="asignaturas-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<?php if($numeros[0]==0){?><li><a href="asignaturas-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php if($numeros[0]==0){?><li><a href="asignaturas-eliminar.php?id=<?=base64_encode($resultado[0]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
 																	</ul>
 																</div>
 															</td>

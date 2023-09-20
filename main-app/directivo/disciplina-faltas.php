@@ -76,7 +76,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     $filtro = '';
-                                                    if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".$_GET["cat"]."'";}
+                                                    if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".base64_decode($_GET["cat"])."'";}
 
                                                     try{
                                                         $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas
@@ -102,8 +102,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="disciplina-faltas-editar.php?idR=<?=$resultado['dfal_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <li><a href="disciplina-faltas-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
+                                                                        <li><a href="disciplina-faltas-editar.php?idR=<?=base64_encode($resultado['dfal_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                        <li><a href="disciplina-faltas-eliminar.php?id=<?=base64_encode($resultado[0]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

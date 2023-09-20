@@ -68,5 +68,5 @@ try{
 }
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id=' . $idRegistro . '&success=SC_DT_1";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id=' . base64_encode($idRegistro) . '&success=SC_DT_1";</script>';
 exit();

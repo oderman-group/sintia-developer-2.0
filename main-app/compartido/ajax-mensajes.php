@@ -20,7 +20,7 @@ $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 										while($mensajesDatos = mysqli_fetch_array($mensajesConsulta, MYSQLI_BOTH)){
 										?>
 											<li>
-												<a href="mensajes-ver.php?idR=<?=$mensajesDatos['ema_id'];?>">
+												<a href="mensajes-ver.php?idR=<?=base64_encode($mensajesDatos['ema_id']);?>">
 													<span class="from"> <?=$mensajesDatos['uss_nombre'];?></span><br>
 													<span class="message"> <?=$mensajesDatos['ema_asunto'];?> </span><br>
 													<span class="time"><?=$mensajesDatos['ema_fecha'];?> </span>

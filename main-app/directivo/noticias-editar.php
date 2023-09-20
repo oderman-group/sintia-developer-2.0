@@ -2,15 +2,6 @@
 <?php $idPaginaInterna = 'DT0006';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php
-try{
-    $consultaDatos=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
-
-?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">

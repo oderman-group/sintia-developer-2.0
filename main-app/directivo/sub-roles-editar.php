@@ -7,11 +7,14 @@ include("../compartido/historial-acciones-guardar.php");
 Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
 require_once("../class/SubRoles.php");
-$rolActual = SubRoles::consultar($_GET["id"]);
+$rolActual = SubRoles::consultar($id);
 $activasTodas=empty($_GET["activas"]) ?"0":"1";
 $checkActivas=($activasTodas=="0")?"":"checked";
-$listaPaginas = SubRoles::listarPaginas($_GET["id"],"5",$activasTodas);
+$listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
 
 ?>
 <!-- Theme Styles -->
@@ -101,7 +104,7 @@ $listaPaginas = SubRoles::listarPaginas($_GET["id"],"5",$activasTodas);
                                             <header><?= $frases[370][$datosUsuarioActual['uss_idioma']]; ?> ( <label style="font-weight: bold;" id="cantSeleccionadas"></label>/<?= mysqli_num_rows($listaPaginas) ?> )
                                                 <label class="switchToggle">
 
-                                                    <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,<?= $_GET["id"]; ?>)">
+                                                    <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,<?= $id; ?>)">
                                                     <span class="slider red round"></span>
                                                 </label>
                                             </header>

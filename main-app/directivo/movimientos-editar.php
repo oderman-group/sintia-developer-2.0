@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".$_GET['idU']."'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

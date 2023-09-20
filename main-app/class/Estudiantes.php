@@ -134,7 +134,18 @@ class Estudiantes {
     }
 
     public static function NombreCompletoDelEstudiante(array $estudiante){
-        return strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
+        
+        $nombre=$estudiante['mat_nombres'];
+        if(!empty($estudiante['mat_nombre2'])){
+            $nombre.=" ".$estudiante['mat_nombre2'];
+        }
+        if(!empty($estudiante['mat_segundo_apellido'])){
+            $nombre=$estudiante['mat_segundo_apellido']." ".$nombre;
+        }
+        if(!empty($estudiante['mat_primer_apellido'])){
+            $nombre=$estudiante['mat_primer_apellido']." ".$nombre;
+        }
+        return strtoupper($nombre);
     }
 
     public static function listarEstudiantesParaAcudientes($acudiente)
@@ -262,12 +273,30 @@ class Estudiantes {
 
     public static function NombreCompletoDelEstudianteParaInformes(array $estudiante, $orden){
         
-        $nombre=strtoupper($estudiante['mat_nombres']." ".$estudiante['mat_nombre2']." ".$estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']);
+        $nombre=$estudiante['mat_nombres'];
+        if(!empty($estudiante['mat_nombre2'])){
+            $nombre.=" ".$estudiante['mat_nombre2'];
+        }
+        if(!empty($estudiante['mat_primer_apellido'])){
+            $nombre.=" ".$estudiante['mat_primer_apellido'];
+        }
+        if(!empty($estudiante['mat_segundo_apellido'])){
+            $nombre.=" ".$estudiante['mat_segundo_apellido'];
+        }
         
         if($orden==2){
-            $nombre=strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
+            $nombre=$estudiante['mat_nombres'];
+            if(!empty($estudiante['mat_nombre2'])){
+                $nombre.=" ".$estudiante['mat_nombre2'];
+            }
+            if(!empty($estudiante['mat_segundo_apellido'])){
+                $nombre=$estudiante['mat_segundo_apellido']." ".$nombre;
+            }
+            if(!empty($estudiante['mat_primer_apellido'])){
+                $nombre=$estudiante['mat_primer_apellido']." ".$nombre;
+            }
         }
-        return $nombre;
+        return strtoupper($nombre);
     }
 
     public static function ActualizarEstadoMatricula($idEstudiante, $estadoMatricula)
