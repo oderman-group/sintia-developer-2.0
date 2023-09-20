@@ -359,14 +359,14 @@ function alertValidarNota(nota){
      * 
      * @param titulo
 	 * @param mensaje
-	 * 
+	 *  @param tipos  [success,error,warning,info,question]
      * @return boolean 
      */
-function sweetConfirmacion(mensaje,titulo) {
+function sweetConfirmacion(mensaje,titulo,tipo ='question') {
 	Swal.fire({
   		title: titulo,
  		 text: mensaje,
- 		 icon: 'warning',
+ 		 icon: tipo,
  		 showCancelButton: true,
  		 confirmButtonText: 'Si!',
  		 cancelButtonText: 'No!'
