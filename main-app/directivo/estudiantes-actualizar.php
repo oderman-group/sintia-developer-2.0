@@ -14,17 +14,33 @@ include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&error=ER_DT_4";</script>';
 	exit();
 }
 $validacionEstudiante = Estudiantes::validarRepeticionDocumento($_POST["nDoc"], $_POST["id"]);
 
 if($validacionEstudiante > 0){
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&documento='.$_POST["nDoc"].'&error=ER_DT_11";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&documento='.base64_encode($_POST["nDoc"]).'&error=ER_DT_11";</script>';
 	exit();
 }
 
+$estado='';
+$mensaje='';
+$pasosMatricula='';
 if($config['conf_id_institucion']==1){
+	$pasosMatricula="
+		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
+		mat_actualizar_datos='".$_POST["actualizarDatos"]."',
+		mat_pago_matricula='".$_POST["pagoMatricula"]."',
+		mat_contrato='".$_POST["contrato"]."',
+		mat_pagare='".$_POST["pagare"]."',
+		mat_compromiso_academico='".$_POST["compromisoA"]."',
+		mat_compromiso_convivencia='".$_POST["compromisoC"]."',
+		mat_manual='".$_POST["manual"]."',
+		mat_mayores14='".$_POST["contrato14"]."',
+		mat_compromiso_convivencia_opcion='".$_POST["compromisoOpcion"]."',
+		mat_hoja_firma='".$_POST["firmaHoja"]."',
+	";
 	require_once("apis-sion-modify-student.php");
 }
 $fechaNacimiento="";
@@ -43,7 +59,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
-		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_8";</script>';
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&error=ER_DT_8";</script>';
 		exit();
 	}
 
@@ -92,17 +108,7 @@ try{
 	mat_extranjero='".$_POST["extran"]."', 
 	mat_fecha=now(), 
 	mat_numero_matricula='".$_POST["NumMatricula"]."', 
-	mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
-	mat_actualizar_datos='".$_POST["actualizarDatos"]."',
-	mat_pago_matricula='".$_POST["pagoMatricula"]."',
-	mat_contrato='".$_POST["contrato"]."',
-	mat_pagare='".$_POST["pagare"]."',
-	mat_compromiso_academico='".$_POST["compromisoA"]."',
-	mat_compromiso_convivencia='".$_POST["compromisoC"]."',
-	mat_manual='".$_POST["manual"]."',
-	mat_mayores14='".$_POST["contrato14"]."',
-	mat_compromiso_convivencia_opcion='".$_POST["compromisoOpcion"]."',
-	mat_hoja_firma='".$_POST["firmaHoja"]."',
+	$pasosMatricula
 	mat_estado_agno='".$_POST["estadoAgno"]."',
 	mat_tipo_sangre='".$_POST["tipoSangre"]."', 
 	mat_eps='".$_POST["eps"]."', 
@@ -217,7 +223,7 @@ if(!empty($_POST["idAcudiente2"])){
 	}	
 
 }else {
-	if($_POST["documentoA2"]!=""){
+	if(!empty($_POST["documentoA2"])){
 	
 		try {
 			$existeAcudiente2 = Usuarios::validarExistenciaUsuario($_POST["documentoA2"]);
@@ -273,5 +279,5 @@ include("../compartido/guardar-historial-acciones.php");
 $estadoSintia=true;
 $mensajeSintia='La información del estudiante se actualizó correctamente en SINTIA.';
 
-echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&stadsion='.base64_encode($estado).'&msgsion='.base64_encode($mensaje).'&stadsintia='.base64_encode($estadoSintia).'&msgsintia='.base64_encode($mensajeSintia).'";</script>';
 exit();

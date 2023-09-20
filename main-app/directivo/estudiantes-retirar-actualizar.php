@@ -11,6 +11,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
+if(empty($_POST["motivo"]))     $_POST["motivo"]    = '';
+
 if ($_POST["estadoMatricula"] == 1){
 
    Estudiantes::retirarRestaurarEstudiante($_POST["estudiante"], $_POST["motivo"]);
@@ -24,5 +26,5 @@ if ($_POST["estadoMatricula"] == 1){
 }
 include("../compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="estudiantes-retirar.php?id='.$_POST["estudiante"].'"</script>';
+echo '<script type="text/javascript">window.location.href="estudiantes-retirar.php?id='.base64_encode($_POST["estudiante"]).'"</script>';
 exit();    

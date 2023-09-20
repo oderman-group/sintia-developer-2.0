@@ -9,15 +9,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-
-$filtro = '';
-if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
-	$filtro .= " AND mat_grado='".$_GET["curso"]."'";
-	$fcurso = $_GET["curso"];
-}
-if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
-	$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";
-}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -60,8 +51,8 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 											$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
 											if($_GET['msgsion']!=''){
 												$aler='alert-success';
-												$mensajeSion=$_GET['msgsion'];
-												if($_GET['stadsion']!=true){
+												$mensajeSion=base64_decode($_GET['msgsion']);
+												if(base64_decode($_GET['stadsion'])!=true){
 													$aler='alert-danger';
 												}
 											}
@@ -192,9 +183,9 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
-																<a href="estudiantes-activar.php?id=<?=$resultado["mat_id"];?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
+																<a href="estudiantes-activar.php?id=<?=base64_encode($resultado["mat_id"]);?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
 															<?php }else{?>
-																<a href="estudiantes-bloquear.php?id=<?=$resultado["mat_id"];?>" title="Bloquear para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
+																<a href="estudiantes-bloquear.php?id=<?=base64_encode($resultado["mat_id"]);?>" title="Bloquear para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
 															<?php }?>
 															<?=$resultado["mat_id"];?>
 														</td>
@@ -214,7 +205,7 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														<td style="color:<?=$color;?>;"><?=$nombre;?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
-														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
+														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
 														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
 															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente[0]);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
@@ -228,35 +219,35 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																</button>
 																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<li><a href="estudiantes-editar.php?id=<?=$resultado['mat_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																		<?php if($config['conf_id_institucion']==1){ ?>
-																			<li><a href="estudiantes-crear-sion.php?id=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
+																			<li><a href="estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
 																		<?php } ?>
-																		<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
-																		<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
+																		<li><a href="guardar.php?get=<?=base64_encode(17);?>&idR=<?=base64_encode($resultado['mat_id_usuario']);?>&lock=<?=base64_encode($resultado['uss_bloqueado']);?>">Bloquear/Desbloquear</a></li>
+																		<li><a href="estudiantes-cambiar-grupo.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Cambiar de grupo</a></li>
 																		<?php 
 																		$retirarRestaurar='Retirar';
 																		if($resultado['mat_estado_matricula']==3){
 																				$retirarRestaurar='Restaurar';
 																		}
 																		?>
-																		<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank"><?=$retirarRestaurar?></a></li>
-																		<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
-																		<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
-																		<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
-																		<li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>&tipe=4">Autologin</a></li>
+																		<li><a href="estudiantes-retirar.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank"><?=$retirarRestaurar?></a></li>
+																		<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado["mat_id"]);?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
+																		<li><a href="estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
+																		<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
+																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>
 																	<?php }?>
 
-																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
-																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
-																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
-																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
+																	<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
+																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
+																	<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
+																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	<?php if($config['conf_id_institucion']==1){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
-																	<li><a href="finanzas-cuentas.php?id=<?=$resultado["mat_id_usuario"];?>" target="_blank">Estado de cuenta</a></li>
-																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
+																	<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
+																	<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
 																</ul>
 															</div>
 														</td>
