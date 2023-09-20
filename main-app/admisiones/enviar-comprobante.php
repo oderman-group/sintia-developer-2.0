@@ -6,7 +6,6 @@ if(!empty($_FILES['comprobante']['name'])){
 	$destino = "files/comprobantes";
     $explode = explode(".", $_FILES['comprobante']['name']);
 	$extension = end($explode);
-	$extension = end(explode(".", $_FILES['comprobante']['name']));
 	$archivo = uniqid('comp_').".".$extension;
 	@unlink($destino."/".$archivo);
 	move_uploaded_file($_FILES['comprobante']['tmp_name'], $destino ."/".$archivo);
@@ -20,4 +19,4 @@ $stmt->bindParam(':comprobante', $archivo, PDO::PARAM_STR);
 
 $stmt->execute();
 
-redireccionBien('respuestas-usuario.php?idInst='.$_REQUEST['idInst'].'', 2);
+echo '<script type="text/javascript">window.location.href="respuestas-usuario.php?idInst='.$_REQUEST['idInst'].'&msg='.base64_encode(2).'";</script>';
