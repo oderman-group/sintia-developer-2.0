@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 try{
-    $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".$_GET["id"]);
+    $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".base64_decode($_GET["id"]));
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -67,7 +67,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 <div class="panel-body">
                                 
                                     <form name="formularioGuardar" action="cursos-actualizar.php" method="post">
-                                        <input type="hidden" name="id_curso" value="<?php echo $_GET["id"] ?>">
+                                        <input type="hidden" name="id_curso" value="<?=base64_decode($_GET["id"]) ?>">
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Codigo</label>

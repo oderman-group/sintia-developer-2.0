@@ -6,7 +6,7 @@
 	$consultaGrado=Grados::obtenerDatosGrados($_POST["curso"]);
 	$grado = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
 	if ($grado['gra_grado_siguiente']=="") {
-		echo '<script type="text/javascript">window.location.href="cursos-promocionar-estudiantes-detalles.php?curso='.$_POST["curso"].'&error=ER_DT_10";</script>';
+		echo '<script type="text/javascript">window.location.href="cursos-promocionar-estudiantes-detalles.php?curso='.base64_encode($_POST["curso"]).'&error=ER_DT_10";</script>';
 		exit();
 	}
 
@@ -29,5 +29,5 @@
 	$consultaGrado=Grados::obtenerDatosGrados($grado['gra_grado_siguiente']);
 	$gradoSiguiente = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.$grado['gra_nombre'].'&siguiente='.$gradoSiguiente['gra_nombre'].'&numEstudiantesPromocionados='.$numEstudiantesPromocionados.'";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_7&curso='.base64_encode($grado['gra_nombre']).'&siguiente='.base64_encode($gradoSiguiente['gra_nombre']).'&numEstudiantesPromocionados='.base64_encode($numEstudiantesPromocionados).'";</script>';
 	exit();
