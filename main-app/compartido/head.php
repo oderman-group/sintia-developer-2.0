@@ -80,6 +80,8 @@ require_once("../class/Grupos.php");
     <link rel="shortcut icon" href="../sintia-icono.png" />
 	<!-- Jquery Toast css -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
+	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="./../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
 	
 	<?php 
 	//SE INCLUYE PARA EL FORMULARIO QUE SOLICITA LOS DATOS

@@ -320,23 +320,20 @@ function tipoFolder(dato){
 
 		
 
-function deseaRegresar(dato){
-
+function deseaRegresar(dato){	
 	var url = dato.name;
-
-	var v = confirm('Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?');
-
-	if(v == true)
-
-	{	
-
-		window.location.href=url;
-
-	}else{
-
-		return false;
-
-	}
+Swal.fire({
+  title: 'Desea regresar?',
+  text: "Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, deseo regresar!',
+  cancelButtonText: 'No'
+}).then((result) => {
+  if (result.isConfirmed) {
+	window.location.href=url;
+  }
+})
 
 }
 
