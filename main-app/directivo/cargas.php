@@ -41,10 +41,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								
 								<?php 
 								$filtro = '';
-								if(!empty($_GET["curso"])){$filtro .= " AND car_curso='".$_GET["curso"]."'";}
-								if(!empty($_GET["grupo"])){$filtro .= " AND car_grupo='".$_GET["grupo"]."'";}
-								if(!empty($_GET["docente"])){$filtro .= " AND car_docente='".$_GET["docente"]."'";}
-								if(!empty($_GET["asignatura"])){$filtro .= " AND car_materia='".$_GET["asignatura"]."'";}
+								$curso = '';
+								if(!empty($_GET["curso"])){ $curso = base64_decode($_GET['curso']); $filtro .= " AND car_curso='".$curso."'";}
+								if(!empty($_GET["grupo"])){$filtro .= " AND car_grupo='".base64_decode($_GET["grupo"])."'";}
+								if(!empty($_GET["docente"])){$filtro .= " AND car_docente='".base64_decode($_GET["docente"])."'";}
+								if(!empty($_GET["asignatura"])){$filtro .= " AND car_materia='".base64_decode($_GET["asignatura"])."'";}
 
 								//include("includes/cargas-filtros.php");
 								?>
@@ -130,7 +131,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
 														<td><?=$resultado['car_ih'];?></td>
 														<td><?=$resultado['car_periodo'];?></td>
-                                        				<td><a href="../compartido/reporte-notas.php?carga=<?=$resultado[0];?>&per=<?=$resultado['car_periodo'];?>&grado=<?=$resultado["car_curso"];?>&grupo=<?=$resultado["car_grupo"];?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Calificaciones"><?=$spcd[0];?>%&nbsp;&nbsp;-&nbsp;&nbsp;<?=$spcr[0];?>%</a></td>
+                                        				<td><a href="../compartido/reporte-notas.php?carga=<?=base64_encode($resultado[0]);?>&per=<?=base64_encode($resultado['car_periodo']);?>&grado=<?=base64_encode($resultado["car_curso"]);?>&grupo=<?=base64_encode($resultado["car_grupo"]);?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Calificaciones"><?=$spcd[0];?>%&nbsp;&nbsp;-&nbsp;&nbsp;<?=$spcr[0];?>%</a></td>
 
 														
 														<td>
@@ -141,17 +142,17 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  </button>
 																  <ul class="dropdown-menu" role="menu" style="z-index: 9000;">
 																		<?php if(Modulos::validarPermisoEdicion()){?>
-																			<li><a href="cargas-editar.php?idR=<?=$resultado['car_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
-																				<li><a href="cargas-eliminar.php?id=<?=$resultado[0];?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																				<li><a href="cargas-eliminar.php?id=<?=base64_encode($resultado[0]);?>" title="Eliminar" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																			<?php }?>
-																	  		<li><a href="auto-login.php?user=<?=$resultado['car_docente'];?>&tipe=2&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>" onClick="if(!confirm('Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?')){return false;}">Ver como docente</a></li>
+																	  		<li><a href="auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>" onClick="if(!confirm('Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?')){return false;}">Ver como docente</a></li>
 																		<?php }?>
-																	  <li><a href="cargas-horarios.php?id=<?=$resultado[0];?>" title="Ingresar horarios">Ingresar Horarios</a></li>
-																	  <li><a href="periodos-resumen.php?carga=<?=$resultado[0];?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
-																	  <li><a href="cargas-indicadores.php?carga=<?=$resultado['car_id'];?>&docente=<?=$resultado['car_docente'];?>">Indicadores</a></li>
+																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado[0]);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
+																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado[0]);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																	  <li><a href="cargas-indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&docente=<?=base64_encode($resultado['car_docente']);?>">Indicadores</a></li>
 																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla</a></li>
-																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=$resultado['car_id'];?>" target="_blank">Ver Planilla con notas</a></li>
+																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla con notas</a></li>
 																  </ul>
 															  </div>
 														</td>

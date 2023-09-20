@@ -95,8 +95,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="cargas-estilo-notas-especifica.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                            <?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-eliminar.php?idR=<?=$resultado["catn_id"];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+                                                                        <li><a href="cargas-estilo-notas-especifica.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                        <li><a href="cargas-estilo-notas-eliminar.php?idR=<?=base64_encode($resultado["catn_id"]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

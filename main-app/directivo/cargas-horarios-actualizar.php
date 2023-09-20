@@ -23,5 +23,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_POST["idC"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . base64_encode($_POST["idC"]) . '";</script>';
 	exit();

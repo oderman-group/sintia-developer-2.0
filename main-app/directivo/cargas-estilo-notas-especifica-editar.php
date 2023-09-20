@@ -45,7 +45,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["id"]?>" onClick="deseaRegresar(this)">Estilio Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="#" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["idCN"]?>" onClick="deseaRegresar(this)">Estilio Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Categoria Notas especifica</li>
                             </ol>
                         </div>
@@ -61,7 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                     <?php 
                                     try{
-                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
+                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".base64_decode($_GET["id"]).";");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -71,7 +71,7 @@ if(!Modulos::validarPermisoEdicion()){
                                    
 									<form name="formularioGuardar" action="cargas-estilo-notas-especifica-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=$_GET["idCN"]?>" name="idCN">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idN">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idN">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>

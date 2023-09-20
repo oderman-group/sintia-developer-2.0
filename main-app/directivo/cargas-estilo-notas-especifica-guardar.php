@@ -24,5 +24,5 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . base64_encode($_POST["idCN"]) . '";</script>';
 	exit();

@@ -28,5 +28,5 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_POST["idH"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . base64_encode($_POST["idH"]) . '";</script>';
 	exit();

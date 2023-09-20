@@ -37,5 +37,5 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-indicadores-obligatorios.php";</script>';
 	exit();

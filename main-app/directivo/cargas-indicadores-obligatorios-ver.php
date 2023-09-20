@@ -51,7 +51,7 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Grados por asignatura: <b><?=$_GET["indNombre"];?></b></div>
+                                <div class="page-title">Grados por asignatura: <b><?=base64_decode($_GET["indNombre"]);?></b></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
@@ -67,7 +67,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<div class="col-md-8 col-lg-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Grados por asignatura: <b><?=$_GET["indNombre"];?></b></header>
+                                            <header>Grados por asignatura: <b><?=base64_decode($_GET["indNombre"]);?></b></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -122,12 +122,14 @@ if(!Modulos::validarPermisoEdicion()){
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
-                                                        try{
-                                                            $consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".$_GET["ind"]."' AND ipc_creado=0");
-                                                        } catch (Exception $e) {
-                                                            include("../compartido/error-catch-to-report.php");
+                                                        if(!empty($carga[0])){
+                                                            try{
+                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0");
+                                                            } catch (Exception $e) {
+                                                                include("../compartido/error-catch-to-report.php");
+                                                            }
+                                                            $ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH);
                                                         }
-                                                        $ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH);
                                                         
                                                         try{
                                                             $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
@@ -155,7 +157,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>
-                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=$_GET["ind"];?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m[2];?>" <?php if($ipc[0]!=""){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
+                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=base64_decode($_GET["ind"]);?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m[2];?>" <?php if(!empty($ipc[0])){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
                                                     <?php
                                                     }
                                                     ?>

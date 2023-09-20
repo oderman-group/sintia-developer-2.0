@@ -61,7 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="cargas-horarios-guardar.php" method="post">
-                                        <input type="hidden" name="idH" value="<?=$_GET["id"];?>">
+                                        <input type="hidden" name="idH" value="<?=base64_decode($_GET["id"]);?>">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Dia</label>
