@@ -40,18 +40,17 @@ var notaAnteriorTransformada = (notaAnterior/valorDecimalIndicador);
 notaAnteriorTransformada = Math.round(notaAnteriorTransformada * 10) / 10;
 
 if(isNaN(nota)){
-	alert('Esto no es un valor numérico: '+nota+'. Si estás usando comas, reemplacelas por un punto.'); 
+	Swal.fire('Esto no es un valor numérico: '+nota+'. Si estás usando comas, reemplacelas por un punto.'); 
 	casilla.value="";
 	casilla.focus();
 	return false;	
 }	
 	
-if (nota><?=$config[4];?> || nota < <?=$config[3];?>) {
-	alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); 
+if (alertValidarNota(nota)) {
 	casilla.value="";
 	casilla.focus();
 	return false;
-}
+	}
 
 /*
 if(nota<notaAnteriorTransformada){
@@ -62,7 +61,7 @@ if(nota<notaAnteriorTransformada){
 }*/
 	
 if(nota==notaAnteriorTransformada){
-   alert(`No es permitido colocar una nota de recuperación igual: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
+	Swal.fire(`No es permitido colocar una nota de recuperación igual: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
 	casilla.value="";
 	casilla.focus();
 	return false;

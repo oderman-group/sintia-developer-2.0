@@ -26,7 +26,9 @@ function notas(enviada){
   var notaAnterior = enviada.step;
  
 if(operacion == 1 || operacion == 3){
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+	if (alertValidarNota(nota)) {
+		return false;
+	}
 }
 	  
 $('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);

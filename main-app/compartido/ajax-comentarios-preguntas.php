@@ -27,7 +27,7 @@ $usuarioActual= $_POST["usuarioActual"];
 					<p><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_fecha']; ?></span>
 					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){?>
 						
-						<a href="../compartido/guardar.php?get=<?= base64_encode(24); ?>&idCom=<?= base64_encode($preguntasDatos['cpp_id']); ?>" onClick="if(!confirm('Deseas eliminar este mensaje?')){return false;}">
+						<a href="../compartido/guardar.php?get=<?= base64_encode(24); ?>&idCom=<?= base64_encode($preguntasDatos['cpp_id']); ?>" onClick="if(!sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?')){return false;}">
 							<i class="fa fa-trash"></i>
 						</a>
 				<?php } ?>	

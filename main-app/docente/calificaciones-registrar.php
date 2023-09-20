@@ -6,6 +6,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+include("../compartido/sintia-funciones-js.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
@@ -31,8 +32,8 @@ function notasGuardar(enviada){
 	var codEst = enviada.id;
 	var nombreEst = enviada.alt;
 
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
-		alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); 
+	
+	if (alertValidarNota(nota)) {		
 		return false;
 	}
 
@@ -73,7 +74,9 @@ function notas(enviada){
 
 if(operacion == 1 || operacion == 3){
 
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+	if (alertValidarNota(nota)) {
+		return false;
+	}
 
 }
 
