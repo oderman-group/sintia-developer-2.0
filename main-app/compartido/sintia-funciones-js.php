@@ -372,14 +372,14 @@ function sweetConfirmacion(titulo,mensaje,tipo ='question',varHeref) {
  		 cancelButtonText: 'No!'
 }).then((result) => {
   if (result.isConfirmed) {
-	if(empty(varHeref)){
+	if(varHeref === null){
 		return true;
 	}else{
 		window.location.href=varHeref;
 	}
 	
   }else{
-	if(empty(varHeref)){
+	if(varHeref === null){
 		return false;
 	}else{
 		window.location.href='#';
@@ -426,6 +426,7 @@ function deseaEliminar(dato) {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				if (typeof id !== "undefined") {
+					var input = document.getElementById(parseInt(varObjet.idInput));
 					axios.get(url).then(function(response) {
 							// handle success
 							console.log("El registro fue eliminado correctamente.");
