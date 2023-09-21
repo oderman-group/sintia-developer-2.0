@@ -25,9 +25,11 @@ $porcentajeRestante = 100 - $valores[0];
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
+	
+  const idSplit = enviada.id.split('-');
   var codNota = enviada.name;	 
   var nota = enviada.value;
-  var codEst = enviada.id;
+  var codEst = idSplit[0];
   var nombreEst = enviada.alt;
   var operacion = enviada.title;
   var notaAnterior = enviada.step;
@@ -37,6 +39,11 @@ if(operacion == 1 || operacion == 3){
 		return false;
 	}
 }
+
+if(operacion == 1) {
+	aplicarColorNota(nota, enviada.id);
+}
+
 	  
 $('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);
 	datos = "nota="+(nota)+
@@ -169,7 +176,7 @@ th {
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 														?>
 															<td style="text-align:center;">
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
 															<?php if(!empty($notasResultado[3])){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
 																<?php if($notasResultado[3]<$config[5]){?>

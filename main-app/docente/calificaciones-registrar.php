@@ -37,6 +37,8 @@ function notasGuardar(enviada){
 		return false;
 	}
 
+	aplicarColorNota(nota, codEst);
+
 	$('#respNota').empty().hide().html("Guardando la nota, espere por favor...").show(1);
 
 	datos = "nota="+(nota)+
