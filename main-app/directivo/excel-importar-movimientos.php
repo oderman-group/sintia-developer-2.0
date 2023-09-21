@@ -1,123 +1,215 @@
-<?php include("session.php");?>
 <?php
-if($_FILES['planilla']['name']!=""){
-	$archivo = $_FILES['planilla']['name']; $destino = "../files/excel";
-	move_uploaded_file($_FILES['planilla']['tmp_name'], $destino ."/".$archivo);
-}
-?>
-<?php
-//set_time_limit (0);
+include("session.php");
+require_once("../class/Usuarios.php");
+require_once("../class/Estudiantes.php");
+require '../../librerias/Excel/vendor/autoload.php';
 
-// Test CVS
-require_once '../../librerias/Excel/reader.php';
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
+$temName=$_FILES['planilla']['tmp_name'];
+$archivo = $_FILES['planilla']['name'];
+$destino = "../files/excel/";
+$explode = explode(".", $archivo);
+$extension = end($explode);
+$fullArchivo = uniqid('importado_').".".$extension;
+$nombreArchivo= $destino.$fullArchivo;
 
-// ExcelFile($filename, $encoding);
-$data = new Spreadsheet_Excel_Reader();
+if($extension == 'xlsx'){
 
-// Set output Encoding.
-$data->setOutputEncoding('CP1251');
-
-//Read File
-$data->read('../files/excel/'.$archivo);
-
-error_reporting(E_ALL ^ E_NOTICE);
-
-$datosInsert = '';
-for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
-	if(trim($data->sheets[0]['cells'][$i][1])!=""){
-
-		$saldo = abs($data->sheets[0]['cells'][$i][2]);
-
-		//Si es por documento
-		if($_POST["datoID"]==1){
-			try{
-				$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM usuarios
-				WHERE uss_usuario='".$data->sheets[0]['cells'][$i][1]."'");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);	
-			
-			$idUsuario = $datosUsuario['uss_id'];
-			
-		}
-		//Si es por código de tesorería
-		elseif($_POST["datoID"]==2){
-			try{
-				$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-				WHERE mat_codigo_tesoreria='".$data->sheets[0]['cells'][$i][1]."' AND mat_eliminado=0");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);	
-			
-			$idUsuario = $datosUsuario['mat_id_usuario'];	
-		}
+	if (move_uploaded_file($temName, $nombreArchivo)) {		
 		
-		
-		if($idUsuario!=""){
-			try{
-				mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
+		if ($_FILES['planilla']['error'] === UPLOAD_ERR_OK){
 
-			//No hacer nada
-			if($_POST["accion"]==1){
-				
-				if($data->sheets[0]['cells'][$i][4] == 1){
-					$tipo = 3;
-				}else{
-					$tipo = 4;
-				}
-				
+			$documento= IOFactory::load($nombreArchivo);
+			$totalHojas= $documento->getSheetCount();
+
+			$hojaActual = $documento->getSheet(0);
+			$numFilas = $hojaActual->getHighestDataRow();
+			if($_POST["filaFinal"] > 0){
+				$numFilas = $_POST["filaFinal"];
 			}
-			//Bloquear a los que deben
-			elseif($_POST["accion"]==2){
-				if($data->sheets[0]['cells'][$i][4] == 1){
-					$tipo = 3;
-					try{
-						mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
-					} catch (Exception $e) {
-						include("../compartido/error-catch-to-report.php");
-					}
-				}else{
-					$tipo = 4;
-					try{
-						mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
-					} catch (Exception $e) {
-						include("../compartido/error-catch-to-report.php");
+			$letraColumnas= $hojaActual->getHighestDataColumn();
+			$f=3;
+			$arrayTodos = [];
+			$claves_validar = array('fcu_usuario', 'fcu_valor', 'fcu_tipo');
+			$tiposMovimientos = ['DEUDA'   => '1', 'A FAVOR'   => '2'];
+			$sql = "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES";
+			
+			$movimientosCreados     = array();
+			$movimientosNoCreados   = array();
+			$usuariosBloqueados    	= array();
+
+			while($f<=$numFilas){
+
+				$todoBien = true;
+
+				$arrayIndividual = [
+					'fcu_usuario'   		=> $hojaActual->getCell('A'.$f)->getValue(),
+					'fcu_valor'        		=> $hojaActual->getCell('B'.$f)->getValue(),
+					'fcu_observaciones'     => $hojaActual->getCell('C'.$f)->getValue(),
+					'fcu_tipo'          	=> $hojaActual->getCell('D'.$f)->getValue(),
+				];
+
+				//Validamos que los campos más importantes no vengan vacios
+				foreach ($claves_validar as $clave) {
+					if (empty($arrayIndividual[$clave])) {
+						$todoBien = false;
 					}
 				}
+
+				$tipoMovimiento = $tiposMovimientos[$arrayIndividual['fcu_tipo']];
+
+				//Si los campos están completos entonces ordenamos los datos del usuario
+				if($todoBien) {
+
+					if($_POST["datoID"]==1){//Si es por documento
+
+						$datosUsuario  = Usuarios::obtenerDatosUsuario($arrayIndividual['fcu_usuario']);						
+						$idUsuario = $datosUsuario['uss_id'];
+
+					}elseif($_POST["datoID"]==2){//Si es por código de tesorería
+
+						try{
+							$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
+							WHERE mat_codigo_tesoreria='".$arrayIndividual['fcu_usuario']."' AND mat_eliminado=0");
+						} catch (Exception $e) {
+							include("../compartido/error-catch-to-report.php");
+						}
+						$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);
+						$idUsuario = $datosUsuario['mat_id_usuario'];
+
+					}
+
+					if(!empty($idUsuario)){
+						try{
+							mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
+						} catch (Exception $e) {
+							include("../compartido/error-catch-to-report.php");
+						}
+
+						if($_POST["accion"]==1){//No hacer nada
+							
+							if($tipoMovimiento == 1){
+								$tipo = 3;
+							}else{
+								$tipo = 4;
+							}
+							
+						}elseif($_POST["accion"]==2){//Bloquear a los que deben
+							if($tipoMovimiento == 1){
+								$tipo = 3;
+								try{
+									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
+								} catch (Exception $e) {
+									include("../compartido/error-catch-to-report.php");
+								}
+								$usuariosBloqueados[] = "FILA ".$f;
+							}else{
+								$tipo = 4;
+								try{
+									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
+								} catch (Exception $e) {
+									include("../compartido/error-catch-to-report.php");
+								}
+							}
+						}
+
+						$sql .="(now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0),";
+
+						$movimientosCreados["FILA_".$f] = $arrayIndividual['fcu_usuario'];
+					} else {
+						$movimientosNoCreados[] = "FILA ".$f;
+					}
+
+				} else {
+					$movimientosNoCreados[] = "FILA ".$f;
+				}
+
+				$f++;
+			}
+			
+			$numeroMovimientosCreados = 0;
+			if(!empty($movimientosCreados)){
+				$numeroMovimientosCreados = count($movimientosCreados);
 			}
 
-			//echo $saldo." - ".$tipo." - ".$idUsuario."<br>";
+			$numeroMovimientosNoCreados = 0;
+			if(!empty($movimientosNoCreados)){
+				$numeroMovimientosNoCreados = count($movimientosNoCreados);
+			}
+			
+			$numeroUsuariosBloqueados = 0;
+			if(!empty($usuariosBloqueados)){
+				$numeroUsuariosBloqueados = count($usuariosBloqueados);
+			}
 
-			$datosInsert .="(
-			now(),
-			'".$_POST["detalle"]."',
-			'".$saldo."',
-			'".$tipo."',
-			'".$data->sheets[0]['cells'][$i][3]."',
-			'".$idUsuario."',
-			0
-			),";
-		}	
-	}
+			$respuesta = [
+				"summary" => "
+					Resumen del proceso:<br>
+					- Total filas leidas: {$numFilas}<br><br>
+					- Movimientos creados nuevos: {$numeroMovimientosCreados}<br>
+					- Movimientos que les faltó algun campo obligatorio: {$numeroMovimientosNoCreados}<br><br>
+					- Usuarios bloqueados por deuda: {$numeroUsuariosBloqueados}
+				"
+			];
+
+			$summary = http_build_query($respuesta);
+
+			if(!empty($movimientosCreados) && count($movimientosCreados) > 0) {
+				$sql = substr($sql, 0, -1);
+				try {
+					mysqli_query($conexion, $sql);
+				} catch(Exception $e){
+					print_r($sql);
+					echo "<br>Hubo un error al guardar todo los datos: ".$e->getMessage();
+					exit();
+				}
+			}
+
+			if(file_exists($nombreArchivo)){
+				unlink($nombreArchivo);
+			}
+			
+			echo '<script type="text/javascript">window.location.href="movimientos.php?success=SC_DT_4&'.$summary.'";</script>';
+			exit();
+
+		}else{
+			switch ($_FILES['planilla']['error']) {
+				case UPLOAD_ERR_INI_SIZE:
+					$message = "El fichero subido excede la directiva upload_max_filesize de php.ini.";
+					break;
+				case UPLOAD_ERR_FORM_SIZE:
+					$message = "El fichero subido excede la directiva MAX_FILE_SIZE especificada en el formulario HTML.";
+					break;
+		
+				case UPLOAD_ERR_PARTIAL:
+					$message = "El fichero fue sólo parcialmente subido.";
+					break;
+		
+				case UPLOAD_ERR_NO_FILE:
+					$message = "No se subió ningún fichero.";
+					break;
+		
+				case UPLOAD_ERR_NO_TMP_DIR:
+					$message = "Falta la carpeta temporal.";
+					break;
+		
+				case UPLOAD_ERR_CANT_WRITE:
+					$message = "No se pudo escribir el fichero en el disco.";
+					break;
+				case UPLOAD_ERR_EXTENSION:
+					$message = "Una extensión de PHP detuvo la subida de ficheros. PHP no proporciona una forma de determinar la extensión que causó la parada de la subida de ficheros; el examen de la lista de extensiones cargadas con phpinfo() puede ayudar.";
+					break;
+			}
+			echo '<script type="text/javascript">window.location.href="movimientos-importar.php?error=ER_DT_7&msj='.$message.'";</script>';
+			exit();
+		}
+	}else{
+		echo '<script type="text/javascript">window.location.href="movimientos-importar.php?error=ER_DT_8";</script>';
+		exit();
+	}	
+}else{
+	$message = "Este archivo no es admitido, por favor verifique que el archivo a importar sea un excel (.xlsx)";
+	echo '<script type="text/javascript">window.location.href="movimientos-importar.php?error=ER_DT_7&msj='.$message.'";</script>';
+	exit();
 }
-
-$datosInsert = substr($datosInsert,0,-1);
-try{
-	mysqli_query($conexion, "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES ".$datosInsert."");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-
-echo '<script type="text/javascript">window.location.href="movimientos.php";</script>';
-exit();
-
-
-//print_r($data);
-//print_r($data->formatRecords);
-?>
