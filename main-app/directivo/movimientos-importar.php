@@ -20,11 +20,10 @@
 <?php include("../compartido/body.php");?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
-		
         <?php include("../compartido/panel-color.php");?>
         <!-- start page container -->
         <div class="page-container">
- 			<?php include("../compartido/menu.php");?>
+            <?php include("../compartido/menu.php");?>
 			<!-- start page content -->
             <div class="page-content-wrapper">
                 <div class="page-content">
@@ -41,40 +40,60 @@
                         </div>
                     </div>
                     <div class="row">
-						
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
 						<div class="col-sm-3">
-							
 							<div class="panel">
-								<header class="panel-heading panel-heading-red">1 sólo paso</header>
-									<div class="panel-body">
-										<p><b>1.</b> Suba la planilla de saldos y LISTO!</p>
-									</div>
-							 </div>
+								<header class="panel-heading panel-heading-blue">Paso a paso</header>
+                                <div class="panel-body">
+                                    <p><b>1.</b> Descargue la plantilla de excel.</p>
+                                    <p><b>2.</b> Llene los campos de los usuarios en el orden que la plantilla los solicita.</p>
+                                    <p><b>3.</b> Finalmente cargue la plantilla en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar saldos.</p>
+                                </div>
 
+                                <header class="panel-heading panel-heading-blue">Consideraciones</header>
+                                <div class="panel-body">
+                                    <b>PARA LA PLANTILLA</b></br>
+                                    <p><b>-></b> Tenga en cuenta, para importar los movimientos, los siguientes campos son obligatorios, el ID de usuario, saldo y tipo de movimiento.</p>
+                                    <b>PARA EL FORMULARIO</b></br>
+                                    <p><b>-></b> En el campo <mark>Qué acción desea ejecutar?</mark>. Desbe escoger si bloquear o no los usuarios con deudas.</p>
+                                    <p><b>-></b> En el campo <mark>Qué dato está en la primera columna de excel?</mark>. Debe especificar qué ID de usuario uso en la plantilla de excel, recuerde que puede ser el documento o el código de tesorería <mark>(sólo si todos son estudiantes)</mark>.<br>Este campo no debe llevar puntos ni coma.</p>
+                                </div>
+                            </div>
                         </div>
 						
                         <div class="col-sm-9">
 
-
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple">Importar saldos </header>
-                                	<div class="panel-body">
-
-                                   
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-purple">Importar saldos </header>
+                                <div class="panel-body">
 									<form name="formularioGuardar" action="excel-importar-movimientos.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="12" name="id">
-										
-										<div class="form-group row">
-												<label class="col-sm-3 control-label">Detalle</label>
-												<div class="col-sm-9">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" required>
-												</div>
-											</div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Qué acción desea ejecutar?</label>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Descargar formato de plantilla</label>
+                                            <div class="col-sm-9">
+                                                <a href="../files/excel/saldos_usuarios_sintia.xlsx" target="_blank">Plantilla Financiera</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Subir la planilla lista <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="accion">
+                                                <input type="file" class="form-control" name="planilla" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="number" class="form-control" name="filaFinal" placeholder="200" required><br>
+                                                <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los usuarios. Esto se usa para evitar que se lean filas que no tienen información.</span>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-3 control-label">Qué acción desea ejecutar? <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control select2" name="accion" require>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">No hacer nada</option>
 													<option value="2">Bloquear usuarios con deuda</option>
@@ -83,9 +102,9 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Qué dato está en la primera columna de excel?</label>
+                                            <label class="col-sm-3 control-label">Qué dato está en la primera columna de excel? <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="datoID">
+                                                <select class="form-control select2" name="datoID" require>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">Documento</option>
 													<option value="2">Código de tesorería</option>
@@ -93,34 +112,22 @@
                                             </div>
                                         </div>
 										
-										
 										<div class="form-group row">
-												<label class="col-sm-3 control-label">Descargar formato de plantilla</label>
-												<div class="col-sm-9">
-													<a href="../files/saldos_usuarios_sintia2020.xls" target="_blank">Plantilla Financiera</a>
-												</div>
-											</div>
-										
-										<div class="form-group row">
-												<label class="col-sm-3 control-label">Subir la plantilla diligenciada</label>
-												<div class="col-sm-9">
-													<input type="file" name="planilla" required>
-												</div>
-											</div>
+                                            <label class="col-sm-3 control-label">Detalle <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" name="detalle" class="form-control" autocomplete="off" required>
+                                            </div>
+                                        </div>
 
-										<input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
-										
+                                        <input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
 										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>
                         </div>
-						
                     </div>
-
                 </div>
                 <!-- end page content -->
-             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

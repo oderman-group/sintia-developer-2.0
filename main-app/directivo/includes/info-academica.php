@@ -74,6 +74,7 @@
 														<option value="2"  <?php if(2==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Asistente </option>
 														<option value="3"  <?php if(3==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Cancelado </option>
 														<option value="4"  <?php if(4==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>No matriculado </option>
+														<option value="5"  <?php if(5==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>En inscripción</option>
 													</select>
 												</div>
 											</div>
