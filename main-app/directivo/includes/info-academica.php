@@ -82,7 +82,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>
 												<div class="col-sm-2">
-													<input type="text" name="va_matricula" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
+													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_valor_matricula'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>	
 												
