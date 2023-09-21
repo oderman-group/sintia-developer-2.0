@@ -1054,6 +1054,28 @@ function deseaGenerarIndicadores(dato){
 		})
 	}
 }
+/**
+ * Esta función sirve para aplicar color instantaneo a la nota colocada
+ * por el docente a los estudiantes
+ * 
+ * @param nota
+ * @param idInput
+ * 
+ * return void
+ */
+function aplicarColorNota(nota, idInput) {
+
+	var aplicarColor = null;
+	
+	if(nota >= <?=$config['conf_nota_minima_aprobar'];?>) {
+		aplicarColor = "<?=$config['conf_color_ganada'];?>";
+	} else {
+		aplicarColor = "<?=$config['conf_color_perdida'];?>";
+	}
+
+	document.getElementById(idInput).style.color=aplicarColor;
+
+}
 
 	
 
