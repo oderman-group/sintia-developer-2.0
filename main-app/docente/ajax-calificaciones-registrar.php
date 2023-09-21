@@ -4,7 +4,7 @@ require_once("../class/Estudiantes.php");
 include("verificar-carga.php");
 
 $consultaNum = mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
-WHERE academico_calificaciones.cal_id_actividad='".$_POST["nota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
+WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
 $num = mysqli_num_rows($consultaNum);
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
@@ -16,9 +16,9 @@ if($_POST["operacion"]==1){
 	if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<$config[3]) $_POST["nota"] = $config[3];
 
 	if($num==0){
-		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["nota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
+		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
 		
-		mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["nota"]."', now(), 0)");
+		mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."', now(), 0)");
 		
 		mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["nota"]."'");
 
@@ -29,7 +29,7 @@ if($_POST["operacion"]==1){
 		if($_POST["notaAnterior"]==""){$_POST["notaAnterior"] = "0.0";}
 		
 		mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior='".$_POST["notaAnterior"]."', cal_tipo=1 
-		WHERE cal_id_actividad='".$_POST["nota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
+		WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
 		
 		mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["nota"]."'");
 
@@ -40,14 +40,14 @@ if($_POST["operacion"]==1){
 //Para guardar observaciones
 if($_POST["operacion"]==2){
 	if($num==0){
-		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["nota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
+		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
 		
-		mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_observaciones, cal_id_actividad)VALUES('".$_POST["codEst"]."','".mysqli_real_escape_string($conexion,$_POST["nota"])."','".$_POST["nota"]."')");
+		mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_observaciones, cal_id_actividad)VALUES('".$_POST["codEst"]."','".mysqli_real_escape_string($conexion,$_POST["nota"])."','".$_POST["codNota"]."')");
 		
 		mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["nota"]."'");
 		
 	}else{
-		mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_observaciones='".mysqli_real_escape_string($conexion,$_POST["nota"])."' WHERE cal_id_actividad='".$_POST["nota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
+		mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_observaciones='".mysqli_real_escape_string($conexion,$_POST["nota"])."' WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
 		
 		mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["nota"]."'");
 		
@@ -62,30 +62,36 @@ if($_POST["operacion"]==3){
 	
 	
 	$accionBD = 0;
+	$insertBD = 0;
+	$updateBD = 0;
 	$datosInsert = '';
 	$datosUpdate = '';
 	$datosDelete = '';
 	
 	while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
+		
 		$consultaNumE=mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
-		WHERE academico_calificaciones.cal_id_actividad='".$_POST["nota"]."' AND academico_calificaciones.cal_id_estudiante='".$estudiantes['mat_id']."'");
+		WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$estudiantes['mat_id']."'");
 		$numE = mysqli_num_rows($consultaNumE);
 		
 		if($numE==0){
 			$accionBD = 1;
+			$insertBD = 1;
 			$datosDelete .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
-			$datosInsert .="('".$estudiantes['mat_id']."','".$_POST["nota"]."','".$_POST["nota"]."', now(), 0),";
+			$datosInsert .="('".$estudiantes['mat_id']."','".$_POST["nota"]."','".$_POST["codNota"]."', now(), 0),";
 		}else{
 			$accionBD = 2;
+			$updateBD = 1;
 			$datosUpdate .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
 		}
 	}
+	//exit();
 	
-	if($accionBD==1){
+	if($insertBD==1){
 		$datosInsert = substr($datosInsert,0,-1);
 		$datosDelete = substr($datosDelete,0,-4);
 		
-		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["nota"]."' AND (".$datosDelete.")");
+		mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND (".$datosDelete.")");
 		
 		
 		mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES
@@ -95,10 +101,10 @@ if($_POST["operacion"]==3){
 		//echo "Este es:". $idNotify = mysqli_insert_id($conexion); exit();
 	}
 	
-	if($accionBD==2){
+	if($updateBD==1){
 		$datosUpdate = substr($datosUpdate,0,-4);
 		mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
-		WHERE cal_id_actividad='".$_POST["nota"]."' AND (".$datosUpdate.")");
+		WHERE cal_id_actividad='".$_POST["codNota"]."' AND (".$datosUpdate.")");
 			
 	}
 	
@@ -109,12 +115,12 @@ if($_POST["operacion"]==3){
 
 //Para guardar recuperaciones
 if($_POST["operacion"]==4){
-	$consultaNotaA=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$_POST["codEst"]." AND cal_id_actividad='".$_POST["nota"]."'");
+	$consultaNotaA=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$_POST["codEst"]." AND cal_id_actividad='".$_POST["codNota"]."'");
 	$notaA = mysqli_fetch_array($consultaNotaA, MYSQLI_BOTH);
 	
 	mysqli_query($conexion, "INSERT INTO academico_recuperaciones_notas(rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior)VALUES('".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["nota"]."', now(),'".$notaA[3]."')");
 	
-	mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior='".$_POST["notaAnterior"]."', cal_tipo=2 WHERE cal_id_actividad='".$_POST["nota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
+	mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior='".$_POST["notaAnterior"]."', cal_tipo=2 WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."'");
 
 	$mensajeNot = 'La nota de recuperación se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
 
