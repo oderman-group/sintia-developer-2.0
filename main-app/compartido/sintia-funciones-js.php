@@ -362,7 +362,7 @@ function alertValidarNota(nota){
 	 *  @param tipos  [success,error,warning,info,question]
      * @return boolean 
      */
-function sweetConfirmacion(mensaje,titulo,tipo ='question') {
+function sweetConfirmacion(titulo,mensaje,tipo ='question',varHeref) {
 	Swal.fire({
   		title: titulo,
  		 text: mensaje,
@@ -372,9 +372,19 @@ function sweetConfirmacion(mensaje,titulo,tipo ='question') {
  		 cancelButtonText: 'No!'
 }).then((result) => {
   if (result.isConfirmed) {
-	return true;
+	if(empty(varHeref)){
+		return true;
+	}else{
+		window.location.href=varHeref;
+	}
+	
   }else{
-	return false;
+	if(empty(varHeref)){
+		return false;
+	}else{
+		window.location.href='#';
+	}
+	
   }
 })
 
