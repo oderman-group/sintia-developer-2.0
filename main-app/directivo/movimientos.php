@@ -33,6 +33,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
                     <div class="row">
                         <div class="col-md-12">
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
 								
 									<?php
 										$filtro = '';
