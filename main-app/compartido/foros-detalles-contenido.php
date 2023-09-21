@@ -135,7 +135,8 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																	</button>
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['com_id'];?>">
-																	   <li class = "mdl-menu__item"><a href="../compartido/guardar.php?get=<?=base64_encode(12);?>&e=<?=base64_encode(2);?>&idCom=<?=base64_encode($resultado['com_id']);?>" onClick="if(!sweetConfirmacion('Alerta!','Deseas eliminar esta publicación?')){return false;}"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <?=$href='../compartido/guardar.php?get='.$base64_encode(12).'&e='.base64_encode(2).'&idCom='.base64_encode($resultado['com_id']);?>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>
