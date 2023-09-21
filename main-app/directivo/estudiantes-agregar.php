@@ -187,31 +187,31 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-4">
-													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Email</label>
 												<div class="col-sm-6">
-													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off" <?=$disabledPermiso;?>>
+													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off" <?=$disabledPermiso;?> style="text-transform: lowercase;">
 												</div>
 											</div>
 											
