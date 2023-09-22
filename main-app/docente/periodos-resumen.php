@@ -16,7 +16,9 @@ require_once("../class/Estudiantes.php");
   
   var casilla = document.getElementById(codEst);
   
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+  if (alertValidarNota(nota)) {
+		return false;
+	}
 	
 	casilla.disabled="disabled";
 	casilla.style.fontWeight="bold";
@@ -46,7 +48,9 @@ function niv(enviada){
   
   var casilla = document.getElementById(codEst);
   
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+  if (alertValidarNota(nota)) {
+		return false;
+	}
 	
 	casilla.disabled="disabled";
 	casilla.style.fontWeight="bold";

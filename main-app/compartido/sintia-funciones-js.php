@@ -320,140 +320,155 @@ function tipoFolder(dato){
 
 		
 
-function deseaRegresar(dato){
-
+function deseaRegresar(dato){	
 	var url = dato.name;
+Swal.fire({
+  title: 'Desea regresar?',
+  text: "Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, deseo regresar!',
+  cancelButtonText: 'No'
+}).then((result) => {
+  if (result.isConfirmed) {
+	window.location.href=url;
+  }
+})
 
-	var v = confirm('Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?');
+}
+ /**
+     * Esta funcion genera una alerta validadno la nota ingresada
+     * 
+     * @param nota
+     * @return boolean 
+     */
+function alertValidarNota(nota){	
 
-	if(v == true)
-
-	{	
-
-		window.location.href=url;
-
+	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
+		Swal.fire('Nota '+nota+' no valida','Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>')
+		return true;
 	}else{
-
 		return false;
-
 	}
+	
 
 }
 
-	
-
-function deseaEliminar(dato){
-
-	//alert(typeof dato.title);
-
-	if(dato.title !== ''){
-
-		let variable = (dato.title);
-
-		var varObjet = JSON.parse(variable);
-
-		console.log(varObjet);
-
-		var input = document.getElementById(parseInt(varObjet.idInput));
-
+ /**
+     * Esta funcion genera una confimacion de warning personalizada 
+     * 
+     * @param titulo
+	 * @param mensaje
+	 *  @param tipos  [success,error,warning,info,question]
+     * @return boolean 
+     */
+function sweetConfirmacion(titulo,mensaje,tipo ='question',varHeref) {
+	Swal.fire({
+  		title: titulo,
+ 		 text: mensaje,
+ 		 icon: tipo,
+ 		 showCancelButton: true,
+ 		 confirmButtonText: 'Si!',
+ 		 cancelButtonText: 'No!'
+}).then((result) => {
+  if (result.isConfirmed) {
+	if(varHeref === null){
+		return true;
+	}else{
+		window.location.href=varHeref;
 	}
-
-
-
-	var v = confirm('Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?');
-
-	var url = dato.name;
-
-	var id = dato.id;
-
-	var registro = document.getElementById("reg"+id);
-
-	var evaPregunta = document.getElementById("pregunta"+id);
-
-	var publicacion = document.getElementById("PUB"+id);
-
-	console.log("id:"+id);
-
 	
+  }else{
+	if(varHeref === null){
+		return false;
+	}else{
+		window.location.href='#';
+	}
+	
+  }
+})
 
-	if(v == true)
+}
+function deseaEliminar(dato) {
 
-	{	
+		//alert(typeof dato.title);
 
-		if(typeof id !== "undefined"){
+		if (dato.title !== '') {
 
-			axios.get(url)
+			let variable = (dato.title);
 
-			  .then(function (response) {
+			var varObjet = JSON.parse(variable);
 
-				// handle success
+			console.log(varObjet);
 
-				console.log("El registro fue eliminado correctamente.");
-
-				//divRespuesta.innerHTML = response.data;
-
-				
-
-				if(varObjet.tipo === 1){registro.style.display="none";}
-
-
-
-				if(varObjet.tipo === 2){
-
-				   document.getElementById(id).style.display="none";
-
-				   input.value="";
-
-				}
-
-				
-
-				if(varObjet.tipo === 3){evaPregunta.style.display="none";}
-
-				
-
-				if(varObjet.tipo === 4){publicacion.style.display="none";}
-
-				
-
-				$.toast({
-
-					heading: 'Acción realizada', text: 'El reigstro fue eliminado correctamente.', position: 'mid-center',
-
-					loaderBg:'#26c281', icon: 'success', hideAfter: 5000, stack: 6
-
-				});
-
-				
-
-			  })
-
-			  .catch(function (error) {
-
-				// handle error
-
-				console.log(error);
-
-			  });
-
-
-
-		}else{
-
-			window.location.href=url;
+			var input = document.getElementById(parseInt(varObjet.idInput));
 
 		}
 
-		
+		var url = dato.name;
 
-	}else{
+		var id = dato.id;
 
-		return false;
+		var registro = document.getElementById("reg" + id);
+
+		var evaPregunta = document.getElementById("pregunta" + id);
+
+		var publicacion = document.getElementById("PUB" + id);
+
+		console.log("id:" + id);
+		Swal.fire({
+			title: 'Desea eliminar?',
+			text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Si, deseo eliminar!',
+			cancelButtonText: 'No'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				if (typeof id !== "undefined") {
+					var input = document.getElementById(parseInt(varObjet.idInput));
+					axios.get(url).then(function(response) {
+							// handle success
+							console.log("El registro fue eliminado correctamente.");
+							//divRespuesta.innerHTML = response.data;
+							if (varObjet.tipo === 1) {
+								registro.style.display = "none";
+							}
+							if (varObjet.tipo === 2) {
+								document.getElementById(id).style.display = "none";
+								input.value = "";
+							}
+							if (varObjet.tipo === 3) {
+								evaPregunta.style.display = "none";
+							}
+							if (varObjet.tipo === 4) {
+								publicacion.style.display = "none";
+							}
+							$.toast({
+								heading: 'Acción realizada',
+								text: 'El reigstro fue eliminado correctamente.',
+								position: 'mid-center',
+								loaderBg: '#26c281',
+								icon: 'success',
+								hideAfter: 5000,
+								stack: 6
+							});
+
+						}).catch(function(error) {
+							// handle error
+							console.log(error);
+						});
+					} else {
+					window.location.href = url;
+					}
+				
+			}else{
+				return false;
+			}
+		})
+
 
 	}
-
-}
-
 	
 
 function archivoPeso(dato){
@@ -474,7 +489,7 @@ function archivoPeso(dato){
 
 		msj = `Este archivo ${extension} pesa ${tama}MB. Lo ideal es que pese menos de ${maxPeso}MB. Intenta comprimirlo o reducir su tamaño.`;
 
-		alert(msj);
+		Swal.fire(msj);
 
 		dato.value = '';
 
@@ -1013,7 +1028,7 @@ function deseaGenerarIndicadores(dato){
 	document.getElementById('agregarNuevo').style.display="none";
 	document.getElementById('preestablecidos').style.display="none";
 
-	var respuesta = window.confirm('Al ejecutar esta acción se eliminaran los indicadores y actividades ya creados. Desea continuar bajo su responsabilidad?');
+	var respuesta = sweetConfirmacion('Eliminar indiacdores','Al ejecutar esta acción se eliminaran los indicadores y actividades ya creados. Desea continuar bajo su responsabilidad?');
 	var url = dato.name;
 
 	if(respuesta == true){

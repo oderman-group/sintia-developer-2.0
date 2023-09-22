@@ -120,7 +120,8 @@ require_once("../class/Estudiantes.php");
 																	</button>
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['chatg_id'];?>">
-																	   <li class = "mdl-menu__item"><a href="../compartido/guardar.php?get=18&idR=<?=$resultado['chatg_id'];?>" onClick="if(!confirm('Deseas eliminar este mensaje?')){return false;}"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <?=$href='../compartido/guardar.php?get=18&idR='.$resultado['chatg_id'];?>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>

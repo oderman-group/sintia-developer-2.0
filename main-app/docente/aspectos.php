@@ -34,7 +34,9 @@ function notas(enviada){
   var operacion = enviada.title;
  
 if(operacion == 1 || operacion == 3 || operacion == 5){
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+    if (alertValidarNota(nota)) {
+		return false;
+	}
 }
 	  
 $('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
@@ -129,8 +131,10 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota 
                                                          WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-
-														if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
+                                                        if(!empty($notas[4])){
+                                                            if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
+                                                        }
+														
 														
 													 ?>
                                                     
@@ -142,11 +146,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														</td>
 														<td width="20%">
 															
-															<textarea rows="7" cols="50" name="A<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="10" onChange="notas(this)"><?=$notas['dn_aspecto_academico'];?></textarea>
+															<textarea rows="7" cols="50" name="A<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="10" onChange="notas(this)"><?=!empty($notas['dn_aspecto_academico'])?$notas['dn_aspecto_academico']:"";?></textarea>
 														</td>
 														<td width="20%">
 															
-															<textarea rows="7" cols="50" name="C<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="11" onChange="notas(this)"><?=$notas['dn_aspecto_convivencial'];?></textarea>
+															<textarea rows="7" cols="50" name="C<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="11" onChange="notas(this)"><?=!empty($notas['dn_aspecto_convivencial'])?$notas['dn_aspecto_convivencial']:"";?></textarea>
 														</td>
                                                     </tr>
 													<?php 

@@ -302,7 +302,7 @@
 											//Cuando hay un error
 											ws.onerror = (e) => {
 												msjChat.disabled = "disabled";
-												alert("Hubo un error en el chat, recargue la página."); 
+												Swal.fire("Hubo un error en el chat, recargue la página."); 
 												console.log("Error en el chat ", e);
 											}
 
@@ -321,7 +321,7 @@
 											var msjChat = document.getElementById("msjChat");
 											
 											if(ws.readyState!=1){
-												alert("No es posible enviar mensaje en este momento.");
+												Swal.fire("No es posible enviar mensaje en este momento.");
 												msjChat.disabled = "disabled";
 												return false;
 											}
