@@ -387,6 +387,9 @@ if (!empty($_POST["id"])) {
 				$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 				switch ($_POST['tipoUsuario']) {
+					case 1:
+						$url = '../directivo/perfil-recortar-foto.php';
+						break;
 					case 2:
 						$url = '../docente/perfil-recortar-foto.php';
 						break;

@@ -30,6 +30,7 @@ if(isset($_POST['crop_image']))
   imagejpeg($dest,"../files/fotos/".$datosUsuarioActual['uss_foto'], 100);
 
   switch($_POST['tipoUsuario']){	
+		case 1: $url = '../directivo/perfil.php'; break;
 		case 2: $url = '../docente/perfil.php'; break;
 		case 3: $url = '../acudiente/perfil.php'; break;
 		case 4: $url = '../estudiante/perfil.php'; break;
