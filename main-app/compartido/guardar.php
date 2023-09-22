@@ -296,9 +296,9 @@ if (!empty($_POST["id"])) {
 		}
 
 		$notificaciones = 0;
-		if ($_POST["notificaciones"] == 1) $notificaciones = 1;
+		if (!empty($_POST["notificaciones"]) && $_POST["notificaciones"] == 1) $notificaciones = 1;
 		$mostrarEdad = 0;
-		if ($_POST["mostrarEdad"] == 1) $mostrarEdad = 1;
+		if (!empty($_POST["mostrarEdad"]) && $_POST["mostrarEdad"] == 1) $mostrarEdad = 1;
 
 		if (empty($_POST["tipoNegocio"])) $_POST["tipoNegocio"] = '0';
 
@@ -383,27 +383,13 @@ if (!empty($_POST["id"])) {
 			$alto = $imagen[1];               //Alto
 
 			if ($ancho != $alto) {
-				switch ($_POST['tipoUsuario']) {
-					case 2:
-						$url = '../docente/perfil-recortar-foto.php';
-						break;
-					case 3:
-						$url = '../acudiente/perfil-recortar-foto.php';
-						break;
-					case 4:
-						$url = '../estudiante/perfil-recortar-foto.php';
-						break;
-					case 5:
-						$url = '../directivo/perfil-recortar-foto.php';
-						break;
 
-					default:
-						$url = '../controlador/salir.php';
-						break;
-				}
+				$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
+				$destinos = validarUsuarioActual($_SESSION["datosUsuario"]);
 
 				include("../compartido/guardar-historial-acciones.php");
-				echo '<script type="text/javascript">window.location.href="' . $url . '?ancho=' . $ancho . '&alto=' . $alto . '&ext=' . $extension . '";</script>';
+				echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil-recortar-foto.php?ancho=' . base64_encode($ancho) . '&alto=' . base64_encode($alto) . '&ext=' . base64_encode($extension) . '";</script>';
 				exit();
 			}
 		}
