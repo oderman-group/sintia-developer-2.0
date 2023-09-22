@@ -13,9 +13,9 @@
 							
 							<div style="background-color: tan; color:black; padding: 10px;">
 								<h4 style="font-weight: bold;">RECORTA TU FOTO</h4>
-								Al parecer esta foto no es cuadrada. Tiene un ancho de <b><?=$_GET["ancho"];?></b> y un alto de <b><?=$_GET["alto"];?></b><br>
+								Al parecer esta foto no es cuadrada. Tiene un ancho de <b><?=base64_decode($_GET["ancho"]);?></b> y un alto de <b><?=base64_decode($_GET["alto"]);?></b><br>
 								Puedes recortarla con la herramienta de recorte de SINTIA en este momento.<br>
-								<mark>El formato de esta foto es: <b><?=strtoupper($_GET["ext"]);?></b></mark>
+								<mark>El formato de esta foto es: <b><?=strtoupper(base64_decode($_GET["ext"]));?></b></mark>
 							</div>
 							
                             <div class="card card-box">
