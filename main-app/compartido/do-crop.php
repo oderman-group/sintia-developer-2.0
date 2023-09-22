@@ -1,8 +1,8 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_SESSION["id"]."'");
-$datosUsuarioActual = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+require_once("../class/UsuariosPadre.php");
+$datosUsuarioActual =UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 if(isset($_POST['crop_image']))
 {
