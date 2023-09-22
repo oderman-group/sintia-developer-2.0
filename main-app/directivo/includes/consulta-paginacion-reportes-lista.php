@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="reportes-lista.php";
-    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
         $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
         INNER JOIN disciplina_faltas ON dfal_id=dr_falta
@@ -15,7 +15,7 @@
     }
     $numRegistros=mysqli_num_rows($consulta);
     $registros= $config['conf_num_registros'];
-    $pagina=$_REQUEST["nume"];
+    $pagina=base64_decode($_REQUEST["nume"]);
     if (is_numeric($pagina)){
         $inicio= (($pagina-1)*$registros);
     }			     

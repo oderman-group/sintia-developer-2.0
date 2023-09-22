@@ -21,7 +21,7 @@ class Solicitudes {
         $pagina=null;
         $limite="";
         if(!empty($_REQUEST["nume"])){
-            $pagina=$_REQUEST["nume"];
+            $pagina=base64_decode($_REQUEST["nume"]);
         }        
         if (is_numeric($pagina)){
             self:: $inicio= (($pagina-1)* self::$maxRegistro);           
