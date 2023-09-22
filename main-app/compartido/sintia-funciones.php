@@ -224,6 +224,10 @@ function validarUsuarioActual($datosUsuarioActual) {
 		case 1:
 			$destinos = "../directivo/";
 			break;	
+
+		default:
+			echo '<script type="text/javascript">window.location.href="../controlador/salir.php";</script>'; exit();
+			break;
 	}
 	return $destinos;
 }
