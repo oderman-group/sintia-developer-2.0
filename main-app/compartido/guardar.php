@@ -383,6 +383,9 @@ if (!empty($_POST["id"])) {
 			$alto = $imagen[1];               //Alto
 
 			if ($ancho != $alto) {
+
+				$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
+
 				switch ($_POST['tipoUsuario']) {
 					case 2:
 						$url = '../docente/perfil-recortar-foto.php';
