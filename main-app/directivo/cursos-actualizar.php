@@ -37,5 +37,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.$_POST["id_curso"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_2&id='.base64_encode($_POST["id_curso"]).'";</script>';
 	exit();

@@ -841,7 +841,7 @@ if ($_POST["id"] == 57) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-indicadores.php?carga=' . $cargaConsultaActual . '&periodo=' . $periodoConsultaActual . '&docente=' . $_GET["docente"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-indicadores.php?carga=' . base64_encode($cargaConsultaActual) . '&periodo=' . base64_encode($periodoConsultaActual) . '&docente=' . $_GET["docente"] . '";</script>';
 	exit();
 }
 //ACTUALIZAR CATEGORÍAS FALTAS
@@ -853,7 +853,7 @@ if ($_POST["id"] == 58) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-categorias-editar.php?success=SC_DT_2&id='.$_POST["idR"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-categorias-editar.php?success=SC_DT_2&idR='.base64_encode($_POST["idR"]).'&id='.base64_encode($_POST["idR"]).'";</script>';
 	exit();
 }
 //ACTUALIZAR FALTAS
@@ -866,7 +866,7 @@ if ($_POST["id"] == 59) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-faltas-editar.php?success=SC_DT_2&id='.$_POST["idR"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-faltas-editar.php?success=SC_DT_2&idR='.base64_encode($_POST["idR"]).'&id='.base64_encode($_POST["idR"]).'";</script>';
 	exit();
 }
 //AGREGAR FALTAS
@@ -880,7 +880,7 @@ if ($_POST["id"] == 60) {
 	$idRegistro=mysqli_insert_id($conexion);
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-faltas.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-faltas.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
 	exit();
 }
 //AGREGAR categoria
@@ -894,7 +894,7 @@ if ($_POST["id"] == 61) {
 	$idRegistro=mysqli_insert_id($conexion);
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
+	echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
 	exit();
 }
 }
@@ -1032,9 +1032,9 @@ if ($_GET["get"] == 10) {
 	exit();
 }
 //ANULAR MOVIMIENTO
-if ($_GET["get"] == 11) {
+if (base64_decode($_GET["get"]) == 11) {
 	try{
-		mysqli_query($conexion, "UPDATE finanzas_cuentas SET fcu_anulado=1 WHERE fcu_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE finanzas_cuentas SET fcu_anulado=1 WHERE fcu_id='" . base64_decode($_GET["idR"]) . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -1080,11 +1080,11 @@ if ($_GET["get"] == 15) {
 	exit();
 }
 //BLOQUEAR O DESBLOQUEAR UN USUARIO
-if ($_GET["get"] == 17) {
-	if ($_GET["lock"] == 1) $estado = 0;
+if (base64_decode($_GET["get"]) == 17) {
+	if (base64_decode($_GET["lock"]) == 1) $estado = 0;
 	else $estado = 1;
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='" . $estado . "' WHERE uss_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='" . $estado . "' WHERE uss_id='" . base64_decode($_GET["idR"]) . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -1565,7 +1565,7 @@ if ($_GET["get"] == 68) {
 
 	try{
 		$actividadesRelacionadasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-		WHERE act_id_tipo='" . $_GET["idIndicador"] . "' AND act_id_carga='" . $_GET["carga"] . "' AND act_periodo='" . $_GET["periodo"] . "' AND act_estado=1");
+		WHERE act_id_tipo='" . base64_decode($_GET["idIndicador"]) . "' AND act_id_carga='" . base64_decode($_GET["carga"]) . "' AND act_periodo='" . base64_decode($_GET["periodo"]) . "' AND act_estado=1");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -1578,7 +1578,7 @@ if ($_GET["get"] == 68) {
 	}
 
 	try{
-		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_id='" . $_GET["idR"] . "'");
+		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_id='" . base64_decode($_GET["idR"]) . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -1650,27 +1650,27 @@ if ($_GET["get"] == 68) {
 	exit();
 }
 //BLOQUEAR ESTUDIANTES
-if ($_GET["get"] == 69) {
+if (base64_decode($_GET["get"]) == 69) {
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_tipo='".$_GET["tipo"]."'");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_tipo='".base64_decode($_GET["tipo"])."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'&cantidad=50";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'";</script>';
 	exit();
 }
 //DESBLOQUEAR ESTUDIANTES
-if ($_GET["get"] == 70) {
+if (base64_decode($_GET["get"]) == 70) {
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=0 WHERE uss_tipo='".$_GET["tipo"]."'");
+		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=0 WHERE uss_tipo='".base64_decode($_GET["tipo"])."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'&cantidad=50";</script>';
+	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'";</script>';
 	exit();
 }
 //ENCUESTA RESERVA DE CUPO

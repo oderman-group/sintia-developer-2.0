@@ -46,5 +46,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="cargas-editar.php?idR='.$_POST["idR"].'&success=SC_DT_2&id='.$_POST["idR"].'";</script>';
+echo '<script type="text/javascript">window.location.href="cargas-editar.php?idR='.base64_encode($_POST["idR"]).'&success=SC_DT_2&id='.base64_encode($_POST["idR"]).'";</script>';
 exit();

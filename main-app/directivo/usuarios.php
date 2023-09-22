@@ -30,10 +30,10 @@ function guardarAjax(datos){
 
 	if(document.getElementById(idR).checked){
 		valor = 1;
-		document.getElementById("Reg"+idR).style.backgroundColor="#ff572238";
+		document.getElementById("reg"+idR).style.backgroundColor="#ff572238";
 	}else{
 		valor = 0;
-		document.getElementById("Reg"+idR).style.backgroundColor="white";
+		document.getElementById("reg"+idR).style.backgroundColor="white";
 	}
   var operacion = 1;	
 
@@ -76,12 +76,6 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-								
-							<?php
-							$filtro = '';
-							$tipo = '';
-							if(!empty($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'"; $tipo = $_GET["tipo"];}
-							?>
 								
 								<div class="col-md-12">
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
@@ -145,6 +139,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													$contReg = 1;
 													$bloqueado = array("NO","SI");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+														$arrayDatos = json_encode($arrayEnviar);
+														$objetoEnviar = htmlentities($arrayDatos);
+
 														 $bgColor = '';
 														 if($resultado['uss_bloqueado']==1) $bgColor = '#ff572238';
 														 
@@ -171,7 +169,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$avisoRepetido = null;
 														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';
 													 ?>
-													<tr id="Reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
+													<tr id="reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td>
 															<?php if(Modulos::validarPermisoEdicion()){?>
@@ -204,11 +202,11 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
 																		<?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
-																			<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
 																		<?php }?>	
 
 																		<?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
-																		<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
+																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
 																		<?php }?>
 																		
 																		<?php if($resultado['uss_tipo']==3){?>
@@ -216,7 +214,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 
 																		<?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
-																			<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
+																			<li><a href="#" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
 																		<?php }?>
 																	<?php }?>
 																	  

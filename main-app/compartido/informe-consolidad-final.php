@@ -12,12 +12,21 @@ if(isset($_REQUEST["agno"])){
 	$year = $_REQUEST["agno"];
 	$BD   = $_SESSION["inst"]."_".$_REQUEST["agno"];
 }
-?>
-<?php
-  $consultaCurso = Grados::obtenerDatosGrados($_REQUEST["curso"]);
+
+$cursoV = '';
+$grupoV = '';
+if (!empty($_GET["curso"])) {
+	$cursoV = base64_decode($_GET['curso']);
+	$grupoV = base64_decode($_GET['grupo']);
+}elseif(!empty($_POST["curso"])) {
+	$cursoV = $_POST['curso'];
+	$grupoV = $_POST['grupo'];
+}
+
+  $consultaCurso = Grados::obtenerDatosGrados($cursoV);
 	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
   
-  $consultaGrupo = Grupos::obtenerDatosGrupos($_REQUEST["grupo"]);
+  $consultaGrupo = Grupos::obtenerDatosGrupos($grupoV);
 	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
   ?>
 <head>
@@ -43,7 +52,7 @@ include("../compartido/head-informes.php") ?>
                                         <th rowspan="2" style="font-size:9px;">Mat</th>
                                         <th rowspan="2" style="font-size:9px;">Estudiante</th>
                                         <?php
-										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1");
+										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1");
 										//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
@@ -59,7 +68,7 @@ include("../compartido/head-informes.php") ?>
                                         
                                         <tr>
                                             <?php
-                                            $cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+                                            $cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1"); 
                                             while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
                                                 $p = 1;
                                                 //PERIODOS DE CADA MATERIA
@@ -73,7 +82,7 @@ include("../compartido/head-informes.php") ?>
                                             ?>
                                         </tr>
 									<?php
-									 if(isset($_REQUEST["curso"]) and isset($_REQUEST["grupo"])) $adicional = " AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."'"; else $adicional = "";
+									 if(isset($_REQUEST["curso"]) and isset($_REQUEST["grupo"])) $adicional = " AND mat_grado='".$cursoV."' AND mat_grupo='".$grupoV."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)"; else $adicional = "";
 									 $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $BD);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									 $defPorEstudiante = 0;
@@ -82,7 +91,7 @@ include("../compartido/head-informes.php") ?>
 										<td style="font-size:9px;"><?=$resultado[1];?></td>
                                         <td style="font-size:9px;"><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
                                         <?php
-										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1"); 
+										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1"); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_materias WHERE mat_id='".$carga[4]."'");
 											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);

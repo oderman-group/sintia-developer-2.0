@@ -95,7 +95,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado['ar_id'];?></td>
 														<td><?=$resultado['ar_posicion'];?></td>
 														<td><?=$resultado['ar_nombre'];?></td>
-														<td><a href="asignaturas.php?area=<?=$resultado['ar_id'];?>" style="text-decoration: underline;"><?=$numMaterias[0];?></a></td>
+														<td><a href="asignaturas.php?area=<?=base64_encode($resultado['ar_id']);?>" style="text-decoration: underline;"><?=$numMaterias[0];?></a></td>
 														
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
                                                             <td>
@@ -105,8 +105,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="areas-editar.php?id=<?php echo $resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                            <?php if($numMaterias[0]==0){?><li><a href="areas-eliminar.php?id=<?php echo $resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
+                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                            <?php if($numMaterias[0]==0){?><li><a href="areas-eliminar.php?id=<?=base64_encode($resultado[0]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

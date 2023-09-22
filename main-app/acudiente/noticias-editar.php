@@ -2,11 +2,6 @@
 <?php $idPaginaInterna = 'AC0009';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php
-$consultaNoticias=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$_GET["idR"]."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2 AND not_year='" . $_SESSION["bd"] . "'");
-$datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
-
-?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">

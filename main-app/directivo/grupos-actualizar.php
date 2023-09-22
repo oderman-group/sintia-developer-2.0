@@ -33,5 +33,5 @@ try {
 
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_2&id=' . $idRegistro . '";</script>';
+echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_2&id=' . base64_encode($idRegistro) . '";</script>';
 exit();

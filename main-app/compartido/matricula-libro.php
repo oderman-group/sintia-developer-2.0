@@ -5,14 +5,17 @@ require_once("../class/Estudiantes.php");
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
+
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 //contador materias
 $contPeriodos=0;
 $contadorIndicadores=0;
 $materiasPerdidas=0;
 $contadorMaterias=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$numUsr=Estudiantes::validarExistenciaEstudiante($_GET["id"]);
-$datosUsr=Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+$numUsr=Estudiantes::validarExistenciaEstudiante($id);
+$datosUsr=Estudiantes::obtenerDatosEstudiante($id);
 $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 if($numUsr==0)
 {
@@ -92,21 +95,21 @@ $consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_not
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
 GROUP BY ar_id;");
 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 $consultaMat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id FROM academico_materias am
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
 GROUP BY mat_id
 ORDER BY mat_id;");
 $consultaMat2=mysqli_query($conexion, "SELECT mat_id FROM academico_materias am
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
 GROUP BY mat_id
 ORDER BY mat_id;");
 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
@@ -114,13 +117,13 @@ $consultaMatPer=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,m
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
 ORDER BY mat_id,bol_periodo
 ;");
 
 $numMaterias=mysqli_num_rows($consultaMat);
 $resultadoNotArea=mysqli_fetch_array($consultaNotdefArea, MYSQLI_BOTH);
-	$totalPromedio=round($resultadoNotArea["suma"],1);
+if(!empty($resultadoNotArea["suma"])) $totalPromedio=round($resultadoNotArea["suma"],1);
 if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio="2.0";		if($totalPromedio==3)	$totalPromedio="3.0";	if($totalPromedio==4)	$totalPromedio="4.0";	if($totalPromedio==5)	$totalPromedio="5.0";
 ?> 
 <tr style="background:#F3F3F3;">

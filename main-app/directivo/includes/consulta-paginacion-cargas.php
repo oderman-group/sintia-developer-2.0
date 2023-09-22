@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="cargas.php";
-    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM academico_cargas
         INNER JOIN academico_grados ON gra_id=car_curso
@@ -14,7 +14,7 @@
     }
     $numRegistros=mysqli_num_rows($consulta);
     $registros= $config['conf_num_registros'];
-    $pagina=$_REQUEST["nume"];
+    $pagina=base64_decode($_REQUEST["nume"]);
     if (is_numeric($pagina)){
         $inicio= (($pagina-1)*$registros);
     }			     

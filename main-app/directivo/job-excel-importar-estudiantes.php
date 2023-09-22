@@ -57,7 +57,7 @@ if($extension == 'xlsx'){
 					$mensaje='Se generó Jobs para importar excel del archivo ['.$archivo.'] hasta la fila '.$_POST["filaFinal"].' '.$camposActualizar;
 					$mensaje=SysJobs::registrar(JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,JOBS_PRIORIDAD_BAJA,$parametros,$mensaje);	
 					include("../compartido/guardar-historial-acciones.php");	
-					echo '<script type="text/javascript">window.location.href="../directivo/estudiantes-importar-excel.php?success=SC_DT_4&summary=' . $mensaje.'";</script>';
+					echo '<script type="text/javascript">window.location.href="../directivo/estudiantes-importar-excel.php?success=SC_DT_4&summary=' . base64_encode($mensaje).'";</script>';
 					exit();
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
@@ -90,7 +90,7 @@ if($extension == 'xlsx'){
 					$message = "Una extensión de PHP detuvo la subida de ficheros. PHP no proporciona una forma de determinar la extensión que causó la parada de la subida de ficheros; el examen de la lista de extensiones cargadas con phpinfo() puede ayudar.";
 					break;
 			}
-			echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.$message.'";</script>';
+			echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.base64_encode($message).'";</script>';
 			exit();
 		}
 	}else{
@@ -99,6 +99,6 @@ if($extension == 'xlsx'){
 	}	
 }else{
 	$message = "Este archivo no es admitido, por favor verifique que el archivo a importar sea un excel (.xlsx)";
-	echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.$message.'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-importar-excel.php?error=ER_DT_7&msj='.base64_encode($message).'";</script>';
 	exit();
 }

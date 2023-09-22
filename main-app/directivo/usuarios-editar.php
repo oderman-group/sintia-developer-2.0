@@ -9,8 +9,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$id."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

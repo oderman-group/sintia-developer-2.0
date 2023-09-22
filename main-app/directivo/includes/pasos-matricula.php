@@ -136,7 +136,7 @@
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">9. Firma hoja matrícula</label>
 													<div class="col-sm-2">
-														<select <?=$disabledPermiso;?> class="form-control  select2" name="contrato14">
+														<select <?=$disabledPermiso;?> class="form-control  select2" name="firmaHoja">
 															<option value="">Seleccione una opción</option>
 															<option value="1"<?php if ($datosEstudianteActual['mat_hoja_firma'] == 1){echo "selected";}?>>Listo</option>
 															<option value="0"<?php if ($datosEstudianteActual['mat_hoja_firma'] == '0'){echo "selected";}?>>Pendiente</option>

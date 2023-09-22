@@ -79,7 +79,7 @@ if($_POST['enviarCorreo'] == 1){
 
     EnviarEmail::enviar($data,$asunto,$bodyTemplateRoute,null,$archivos);
 
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($_POST["solicitud"]).'&id='.base64_encode($_POST["solicitud"]).'&idInst='.$_REQUEST['idInst'].'";</script>';
 }else{
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($_POST["solicitud"]).'&id='.base64_encode($_POST["solicitud"]).'&idInst='.$_REQUEST['idInst'].'";</script>';
 }

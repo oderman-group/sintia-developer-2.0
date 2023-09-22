@@ -10,12 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-if (trim($_POST["nombreG"]) == "") {
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="grupos-agregar.php?error=ER_DT_4";</script>';
-	exit();
-}
-if (trim($_POST["codigoG"]) == "") {
+if (trim($_POST["nombreG"]) == "" || trim($_POST["codigoG"]) == "") {
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="grupos-agregar.php?error=ER_DT_4";</script>';
 	exit();
@@ -41,5 +36,5 @@ try {
 
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_1&id=' . $idRegistro . '";</script>';
+echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_1&id=' . base64_encode($idRegistro) . '";</script>';
 exit();

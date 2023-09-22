@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_id='".$_GET['id']."'");
+	mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

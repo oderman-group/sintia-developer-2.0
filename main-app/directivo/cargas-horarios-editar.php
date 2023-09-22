@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".$_GET["id"].";");
+    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".base64_decode($_GET["id"]).";");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -69,7 +69,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="cargas-horarios-actualizar.php" method="post">
-                                        <input type="hidden" name="idH" value="<?=$_GET["id"];?>">
+                                        <input type="hidden" name="idH" value="<?=base64_decode($_GET["id"]);?>">
                                         <input type="hidden" name="idC" value="<?=$rHorario["hor_id_carga"];?>">
 										
 										<div class="form-group row">

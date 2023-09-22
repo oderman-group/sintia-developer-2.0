@@ -1,5 +1,8 @@
 <?php
-  $busqueda = '';
+$filtro = '';
+$tipo = '';
+if(!empty($_GET["tipo"])){ $tipo = base64_decode($_GET["tipo"]); $filtro .= " AND uss_tipo='".$tipo."'";}
+$busqueda = '';
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -34,10 +37,10 @@ if (isset($_GET['busqueda'])) {
             <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="guardar.php?get=69&tipo=4" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
-          <a class="dropdown-item" href="guardar.php?get=70&tipo=4" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
-          <a class="dropdown-item" href="guardar.php?get=69&tipo=2" onClick="if(!confirm('Desea Bloquear a todos los docentes?')){return false;}">Bloquear docentes</a>
-          <a class="dropdown-item" href="guardar.php?get=70&tipo=2" onClick="if(!confirm('Desea Desbloquear a todos los docentes?')){return false;}">Desbloquear docentes</a>
+          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(4)?>" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
+          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(4)?>" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
+          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(2)?>" onClick="if(!confirm('Desea Bloquear a todos los docentes?')){return false;}">Bloquear docentes</a>
+          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(2)?>" onClick="if(!confirm('Desea Desbloquear a todos los docentes?')){return false;}">Desbloquear docentes</a>
           <a>&nbsp;</a>
           <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
           <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
@@ -60,15 +63,21 @@ if (isset($_GET['busqueda'])) {
                 $estiloResaltado = '';
                 if($tipoUsuario['pes_id'] == $tipo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
             ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=$tipoUsuario['pes_id'];?>&busqueda=<?=$busqueda?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=base64_encode($tipoUsuario['pes_id']);?>&busqueda=<?=$busqueda?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
         <?php }?>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
+
+      <?php if (!empty($filtro)) { ?>
+        <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+
+        <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+      <?php } ?>
   </ul> 
 
     <form class="form-inline my-2 my-lg-0" action="usuarios.php" method="get">
-        <input type="hidden" name="tipo" value="<?= $tipo; ?>"/>
+        <input type="hidden" name="tipo" value="<?= base64_encode($tipo); ?>"/>
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>

@@ -18,6 +18,7 @@ include("../compartido/historial-acciones-guardar.php");
     }
 
     if(empty($_POST["siglasM"])) {$_POST["siglasM"] = substr($_POST["nombreM"], 0, 3);}
+    if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
 	$codigoAsignatura = "ASG".strtotime("now");
 
     try{
@@ -43,5 +44,5 @@ include("../compartido/historial-acciones-guardar.php");
 	$idRegistro=mysqli_insert_id($conexion);
     
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
+	echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
     exit();

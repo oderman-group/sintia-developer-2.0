@@ -2,9 +2,12 @@
     $modulo = 4;
     include("session.php");
     require_once("../class/Estudiantes.php");
+
+    $id="";
+    if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
         
     //ESTUDIANTE ACTUAL
-    $datosEstudianteActual =Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+    $datosEstudianteActual =Estudiantes::obtenerDatosEstudiante($id);
     
     $datosEstudianteActual["mat_ciudad_residencia"]=trim($datosEstudianteActual["mat_ciudad_residencia"]);
     
@@ -71,5 +74,5 @@
         }
     }
 
-	echo '<script type="text/javascript">window.location.href="estudiantes.php?stadsion='.$estado.'&msgsion='.$mensaje.'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes.php?stadsion='.base64_encode($estado).'&msgsion='.base64_encode($mensaje).'";</script>';
 	exit();

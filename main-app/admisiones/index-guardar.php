@@ -3,6 +3,9 @@ include("bd-conexion.php");
 include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
 
+$idInst="";
+if(!empty($_GET["idInst"])){ $idInst=base64_decode($_GET["idInst"]);}
+
 
 $year=(date('Y')+1);
 
@@ -17,14 +20,14 @@ $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 $estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion AND asp_agno = :years";
 $est = $pdo->prepare($estQuery);
 $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
-$est->bindParam(':institucion', $_POST['idInst'], PDO::PARAM_INT);
+$est->bindParam(':institucion', $idInst, PDO::PARAM_INT);
 $est->bindParam(':years', $year, PDO::PARAM_INT);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
 
 if ($num > 0) {
-    header("Location:index.php?error=2&documento=" . $_POST['documento']);
+    header("Location:index.php?error=".base64_encode(2)."&documento=" . $_POST['documento']);
     exit();
 }
 
@@ -36,7 +39,7 @@ $nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
 $sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".(date('Y')+1)."', 8, :documentoAcudiente, :grado)";
 $stmt = $pdo->prepare($sql);
 
-$stmt->bindParam(':institucion', $_POST['idInst'], PDO::PARAM_INT);
+$stmt->bindParam(':institucion', $idInst, PDO::PARAM_INT);
 $stmt->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
 $stmt->bindParam(':documento', $_POST['documento'], PDO::PARAM_STR);
 $stmt->bindParam(':nombreEstudiante', $nombreCompleto, PDO::PARAM_STR);
@@ -128,7 +131,7 @@ if ($newId > 0) {
 
 	EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
-    echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.$newId.'&documento='.$_POST['documento'].'&idInst='.$_REQUEST['idInst'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="consultar-estado.php?solicitud='.base64_encode($newId).'&documento='.base64_encode($_POST['documento']).'&idInst='.$_REQUEST['idInst'].'";</script>';
     exit();
 } else {
     redireccionMal('index.php', 3);

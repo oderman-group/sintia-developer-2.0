@@ -11,7 +11,7 @@
 
     $year=$agnoBD;
     if(isset($_REQUEST["year"])){
-    $year=$_REQUEST["year"];
+    $year=base64_decode($_REQUEST["year"]);
     }
     $BD=$_SESSION["inst"]."_".$year;
 
@@ -20,7 +20,7 @@
     if (empty($_REQUEST["periodo"])) {
         $periodoActual = 1;
     } else {
-        $periodoActual = $_REQUEST["periodo"];
+        $periodoActual = base64_decode($_REQUEST["periodo"]);
     }
 
     switch($periodoActual){
@@ -43,15 +43,15 @@
     }
 
     if (!empty($_REQUEST["id"])) {
-        $filtro .= " AND mat_id='" . $_REQUEST["id"] . "'";
+        $filtro .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
     }
 
     if (!empty($_REQUEST["curso"])) {
-        $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
+        $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
     }
 
     if(!empty($_REQUEST["grupo"])){
-        $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
+        $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
     }
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
@@ -303,7 +303,7 @@
                             }
 
                             //NOTA PARA LAS AREAS
-                            $notaArea+=round($datosMaterias['notaArea'], 1);
+                            if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
                             $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
 
                         } //FIN WHILE DE LAS MATERIAS
@@ -328,7 +328,7 @@
                                         WHERE mat_area = ".$datosAreas['ar_id']."
                                         GROUP BY mat_area");
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
-                                        $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
+                                        if(!empty($datosAreasPeriodos['notaArea'])) $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
                                         switch($i){
                                             case 1:

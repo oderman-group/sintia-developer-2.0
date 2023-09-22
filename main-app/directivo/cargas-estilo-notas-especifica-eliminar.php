@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "DELETE FROM academico_notas_tipos WHERE notip_id=" . $_GET["idN"] . ";");
+	mysqli_query($conexion, "DELETE FROM academico_notas_tipos WHERE notip_id=" . base64_decode($_GET["idN"]) . ";");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

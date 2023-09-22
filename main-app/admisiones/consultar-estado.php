@@ -31,9 +31,12 @@
                 <?php
                 $solicitud = '';
                 $documento = '';
-                if (!empty($_REQUEST["solicitud"])) {
-                    $solicitud = $_REQUEST['solicitud'];
-                    $documento = $_REQUEST['documento'];
+                if (!empty($_GET["solicitud"])) {
+                    $solicitud = base64_decode($_GET['solicitud']);
+                    $documento = base64_decode($_GET['documento']);
+                }elseif(!empty($_POST["solicitud"])) {
+                    $solicitud = $_POST['solicitud'];
+                    $documento = $_POST['documento'];
                 }
                 ?>
 
@@ -59,8 +62,8 @@
                     include("bd-conexion.php");
                     $estQuery = "SELECT * FROM aspirantes WHERE asp_id = :id AND asp_documento = :documento";
                     $est = $pdo->prepare($estQuery);
-                    $est->bindParam(':id', $_REQUEST['solicitud'], PDO::PARAM_INT);
-                    $est->bindParam(':documento', $_REQUEST['documento'], PDO::PARAM_INT);
+                    $est->bindParam(':id', $solicitud, PDO::PARAM_INT);
+                    $est->bindParam(':documento', $documento, PDO::PARAM_INT);
                     $est->execute();
                     $num = $est->rowCount();
                     $datos = $est->fetch();
@@ -77,7 +80,7 @@
                                 <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>-->
 
                                 <?php if ($datos['asp_estado_solicitud'] == 3 or $datos['asp_estado_solicitud'] == 4) { ?>
-                                    <a class="btn btn-primary btn-lg" href="formulario.php?token=<?= md5($datos['asp_id']); ?>&id=<?= $datos['asp_id']; ?>&idInst=<?= $_REQUEST['idInst']; ?>" role="button">Ir al formulario</a>
+                                    <a class="btn btn-primary btn-lg" href="formulario.php?token=<?= md5($datos['asp_id']); ?>&id=<?= base64_encode($datos['asp_id']); ?>&idInst=<?= $_REQUEST['idInst']; ?>" role="button">Ir al formulario</a>
                                 <?php } ?>
 
                                 <hr class="my-4">

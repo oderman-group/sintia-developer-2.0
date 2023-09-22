@@ -180,7 +180,7 @@ require_once("../class/Estudiantes.php");
 																			if($config['conf_permiso_descargar_boletin'] == 1){
 																				if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																		?>
-																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank" ><?=$frases[266][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank" ><?=$frases[267][$datosUsuarioActual[8]];?></a></li>
 
 																		<?php
 																				}

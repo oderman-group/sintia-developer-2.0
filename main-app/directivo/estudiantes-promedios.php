@@ -46,19 +46,6 @@ $Plataforma = new Plataforma;
 										<header class="panel-heading panel-heading-blue">PROMEDIOS GENERALES </header>
 										<div class="panel-body">
 											<?php
-											$filtro = '';
-											if(isset($_GET["curso"])&&is_numeric($_GET["curso"])){$filtro .= " AND mat_grado='".$_GET["curso"]."'";}
-											if(isset($_GET["grupo"])&&is_numeric($_GET["grupo"])){$filtro .= " AND mat_grupo='".$_GET["grupo"]."'";}
-											
-											$filtroBoletin = '';
-											if(isset($_GET["periodo"])&&is_numeric($_GET["periodo"])){$filtroBoletin .= " AND bol_periodo='".$_GET["periodo"]."'";}
-											if(isset($_GET["carga"])&&is_numeric($_GET["carga"])){$filtroBoletin .= " AND bol_carga='".$_GET["carga"]."'";}
-											
-											$filtroLimite = '';
-											if(isset($_GET["cantidad"])&&is_numeric($_GET["cantidad"])){$filtroLimite = "LIMIT 0,".$_GET["cantidad"];}
-											
-											$filtroOrden ='DESC';
-											if(isset($_GET["orden"])&&$_GET["orden"]!=""){$filtroOrden = $_GET["orden"];}
 											
 											try{
 												$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin

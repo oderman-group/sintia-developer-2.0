@@ -1,6 +1,6 @@
 <?php
-$paginaActual=!empty($_REQUEST["nume"])?$_REQUEST["nume"]:1;
-$inicio=!empty($inicio)?$inicio:1;
+$paginaActual=!empty($_REQUEST["nume"])?base64_decode($_REQUEST["nume"]):1;
+$inicio=!empty($inicio)?$inicio:0;
 $ultima = $numRegistros / $registros;
 $totalPaginas=ceil($ultima);
 $ant = $paginaActual - 1;
@@ -26,7 +26,7 @@ if ( isset($_GET) ) {
 
         <li class="page-item">
             <?php if ($paginaActual > 1) { ?>
-                <a class='page-link' aria-label='Previous' href='<?=$nombrePagina?>?nume=<?=$ant."".$parametros;?>'>Previous</a>
+                <a class='page-link' aria-label='Previous' href='<?=$nombrePagina?>?nume=<?=base64_encode($ant)."".$parametros;?>'>Previous</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Previous'>Previous</span>
             <?php } ?>
@@ -42,7 +42,7 @@ if ( isset($_GET) ) {
             </li>
         <?php       } else { ?>
             <li class="page-item" style="padding-left: 5px!important;">
-                <a href="<?=$nombrePagina?>?nume=<?=$i."".$parametros;?>" class="page-link"><?=$i?></a>
+                <a href="<?=$nombrePagina?>?nume=<?=base64_encode($i)."".$parametros;?>" class="page-link"><?=$i?></a>
             </li>
         <?php
                     }
@@ -59,7 +59,7 @@ if ( isset($_GET) ) {
 
         <li class="page-item" style="padding-left: 5px!important;">
             <?php if ($paginaActual < $totalPaginas - 0) { ?>
-                <a class='page-link' aria-label='Next' href='<?=$nombrePagina?>?nume=<?=$sigui."".$parametros;?>'>Next</a>
+                <a class='page-link' aria-label='Next' href='<?=$nombrePagina?>?nume=<?=base64_encode($sigui)."".$parametros;?>'>Next</a>
             <?php } else { ?>
                 <span class='page-link' aria-label='Next'>Next</span>
             <?php } ?>

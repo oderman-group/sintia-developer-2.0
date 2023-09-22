@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="#" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></li>
+                                <li class="active">Agregar <?=$frases[63][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&docente=<?=$_GET["docente"];?>" method="post">
 										<input type="hidden" value="57" name="id">
 										
 											<div class="form-group row">

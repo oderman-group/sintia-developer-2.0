@@ -274,5 +274,5 @@ $filasAfectadasMad = $madre->rowCount();
 
 
 
-header('Location:formulario.php?msg=3&token=' . md5($_POST['solicitud']) . '&idInst=' . $_REQUEST['idInst'] . '&id=' . $_POST['solicitud'] . '&fa=' . $filasAfectadas . '&faa=' . $filasAfectadasAcu);
+header('Location:formulario.php?msg='.base64_encode(3).'&token=' . md5($_POST['solicitud']) . '&idInst=' . $_REQUEST['idInst'] . '&id=' . base64_encode($_POST['solicitud']) . '&fa=' . base64_encode($filasAfectadas) . '&faa=' . base64_encode($filasAfectadasAcu));
 exit();
