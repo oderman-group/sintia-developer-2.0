@@ -417,7 +417,7 @@ function deseaEliminar(dato) {
 
 		console.log("id:" + id);
 		Swal.fire({
-			title: 'Desea elimiar?',
+			title: 'Desea eliminar?',
 			text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
 			icon: 'warning',
 			showCancelButton: true,
