@@ -386,30 +386,10 @@ if (!empty($_POST["id"])) {
 
 				$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
-				switch ($_POST['tipoUsuario']) {
-					case 1:
-						$url = '../directivo/perfil-recortar-foto.php';
-						break;
-					case 2:
-						$url = '../docente/perfil-recortar-foto.php';
-						break;
-					case 3:
-						$url = '../acudiente/perfil-recortar-foto.php';
-						break;
-					case 4:
-						$url = '../estudiante/perfil-recortar-foto.php';
-						break;
-					case 5:
-						$url = '../directivo/perfil-recortar-foto.php';
-						break;
-
-					default:
-						$url = '../controlador/salir.php';
-						break;
-				}
+				$destinos = validarUsuarioActual($_SESSION["datosUsuario"]);
 
 				include("../compartido/guardar-historial-acciones.php");
-				echo '<script type="text/javascript">window.location.href="' . $url . '?ancho=' . $ancho . '&alto=' . $alto . '&ext=' . $extension . '";</script>';
+				echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil-recortar-foto.php?ancho=' . $ancho . '&alto=' . $alto . '&ext=' . $extension . '";</script>';
 				exit();
 			}
 		}

@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 require_once("../class/UsuariosPadre.php");
+include("../compartido/sintia-funciones.php");
 $datosUsuarioActual =UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 if(isset($_POST['crop_image']))
@@ -29,17 +30,9 @@ if(isset($_POST['crop_image']))
   imagecopyresampled($dest,$im,0,0,$x1,$y1,$w,$h,$w,$h);
   imagejpeg($dest,"../files/fotos/".$datosUsuarioActual['uss_foto'], 100);
 
-  switch($_POST['tipoUsuario']){	
-		case 1: $url = '../directivo/perfil.php'; break;
-		case 2: $url = '../docente/perfil.php'; break;
-		case 3: $url = '../acudiente/perfil.php'; break;
-		case 4: $url = '../estudiante/perfil.php'; break;
-		case 5: $url = '../directivo/perfil.php'; break;
-		  
-		default: $url = '../controlador/salir.php'; break;
-  }
+  $destinos = validarUsuarioActual($datosUsuarioActual);
 	
-  echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
+  echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil.php"</script>';
   exit();
 }
 ?>
