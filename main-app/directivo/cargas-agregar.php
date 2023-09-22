@@ -80,7 +80,7 @@ if(!Modulos::validarPermisoEdicion()){
 														$disabled = '';
 														if($opcionesDatos['uss_bloqueado']==1) $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
+                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -182,7 +182,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Intensidad H. <span style="color: red;">(*)</span></label>
 											<div class="col-sm-2">
-												<input type="text" name="ih" class="form-control" value="<?=$datosEditar['car_ih'];?>" <?=$disabledPermiso;?>>
+												<input type="text" name="ih" class="form-control" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 

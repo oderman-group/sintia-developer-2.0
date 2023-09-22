@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN usuarios ON uss_id=car_responsable WHERE car_id='".$_GET["idR"]."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN usuarios ON uss_id=car_responsable WHERE car_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

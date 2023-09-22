@@ -34,7 +34,7 @@ WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
                                         while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
                                         $selected = (isset($_GET['inst']) and $_GET['inst']==$instituciones['ins_id']) ? 'selected' : '';
                                         ?>
-                                        <option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
+                                        <option value="<?=base64_encode($instituciones['ins_id']);?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
                                         <?php }?>
                                     </select>
                                 </div>

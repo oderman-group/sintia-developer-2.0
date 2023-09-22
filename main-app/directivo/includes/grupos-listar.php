@@ -53,7 +53,7 @@
                                             <i class="fa fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="grupos-editar.php?id=<?=$resultado["gru_id"];?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
+                                            <li><a href="grupos-editar.php?id=<?=base64_encode($resultado["gru_id"]);?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
                                         </ul>
                                     </div>
                                 </td>

@@ -63,7 +63,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                     <?php
                                     try{
-                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$_GET["id"].";");
+                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".base64_decode($_GET["id"]).";");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -71,7 +71,7 @@ if(!Modulos::validarPermisoEdicion()){
                                     ?>
                                    
 									<form name="formularioGuardar" action="asignaturas-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idM">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idM">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Codigo</label>

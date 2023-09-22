@@ -2,7 +2,10 @@
 include("bd-conexion.php");
 include("php-funciones.php");
 
-if (md5($_GET['id']) != $_GET['token']) {
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
+if (md5($id) != $_GET['token']) {
     redireccionMal('respuestas-usuario.php', 4);
 }
 
@@ -18,7 +21,7 @@ $estQuery = "SELECT * FROM academico_matriculas
 LEFT JOIN usuarios ON uss_id=mat_acudiente
 WHERE mat_solicitud_inscripcion = :id";
 $est = $pdoI->prepare($estQuery);
-$est->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+$est->bindParam(':id', $id, PDO::PARAM_INT);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
@@ -96,7 +99,7 @@ $datosMadre = $madre->fetch();
 
         <form action="formulario-guardar.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="idMatricula" value="<?= $datos['mat_id']; ?>">
-            <input type="hidden" name="solicitud" value="<?= $_GET["id"]; ?>">
+            <input type="hidden" name="solicitud" value="<?= $id; ?>">
             <input type="hidden" name="idAcudiente" value="<?= $datos['mat_acudiente']; ?>">
             <input type="hidden" name="idPadre" value="<?= $datos['mat_padre']; ?>">
             <input type="hidden" name="idMadre" value="<?= $datos['mat_madre']; ?>">

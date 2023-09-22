@@ -80,7 +80,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".$_GET["id"]." AND hor_estado=1;");
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".base64_decode($_GET["id"])." AND hor_estado=1;");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
@@ -116,8 +116,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="cargas-horarios-editar.php?id=<?=$resultado[0];?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
-																		<li><a href="cargas-horarios-eliminar.php?idH=<?=$resultado[0];?>&idC=<?=$resultado[1];?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado[0]);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado[0]);?>&idC=<?=base64_encode($resultado[1]);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
 																	</ul>
 																</div>
 															</td>

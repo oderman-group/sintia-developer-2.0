@@ -144,7 +144,7 @@ if (!Modulos::validarPermisoEdicion()) {
 						<div class="row" style="margin-bottom: 10px;">
 							<div class="col-sm-12">
 								<div class="btn-group">
-									<a href="../compartido/informe-nivelaciones.php?curso=<?= $_REQUEST["curso"]; ?>&grupo=<?= $_REQUEST["grupo"]; ?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
+									<a href="../compartido/informe-nivelaciones.php?curso=<?= base64_encode($_REQUEST["curso"]); ?>&grupo=<?= base64_encode($_REQUEST["grupo"]); ?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
 										Sacar Informe
 									</a>
 								</div>

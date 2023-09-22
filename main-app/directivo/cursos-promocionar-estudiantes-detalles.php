@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
-$consultaCursoActual = Grados::obtenerDatosGrados($_GET["curso"]);
+$consultaCursoActual = Grados::obtenerDatosGrados(base64_decode($_GET["curso"]));
 $cursoActual = mysqli_fetch_array($consultaCursoActual, MYSQLI_BOTH);
 $consultaCursoSiguiente = Grados::obtenerDatosGrados($cursoActual['gra_grado_siguiente']);
 $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
@@ -91,7 +91,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 </div>
                                 <div class="card-body">
                                     <form name="formularioGuardar" id="formularioPromocionar" action="cursos-promocionar-estudiantes.php" method="post">
-                                        <input type="hidden" name="curso" value="<?=$_GET["curso"];?>">
+                                        <input type="hidden" name="curso" value="<?=base64_decode($_GET["curso"]);?>">
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
@@ -106,7 +106,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $filtro = " AND mat_grado=".$_GET['curso']." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
+                                                        $filtro = " AND mat_grado=".base64_decode($_GET["curso"])." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
                                                         $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                                         $numeroEstudiantes=mysqli_num_rows($consultaEstudiantes);
                                                         while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){

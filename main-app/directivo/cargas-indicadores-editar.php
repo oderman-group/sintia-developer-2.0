@@ -12,7 +12,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 try{
     $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
     INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-    WHERE ipc_id='".$_GET["idR"]."'");
+    WHERE ipc_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

@@ -35,8 +35,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                         <div class="col-md-12">
                             <div class="row">								
 								<div class="col-md-12">								
-									<?php include("../../config-general/mensajes-informativos.php");									
-									 	  include ("includes/grupos-listar.php"); ?>						
+									<?php
+                                        include("../../config-general/mensajes-informativos.php");									
+                                        include ("includes/grupos-listar.php");
+                                    ?>						
                             </div>
                         </div>
                     </div>

@@ -47,14 +47,14 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
-                                    <?php if (isset($_GET["msg"]) and $_GET["msg"] == 1) { ?>
+                                    <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 1) { ?>
                                     <div class="alert alert-block alert-success">
                                         <h4 class="alert-heading">Documentación eliminada!</h4>
                                         <p>La documentación del aspirante se ha borrado correctamente.</p>
                                     </div>
                                     <?php } ?>
 
-                                    <?php if (isset($_GET["msg"]) and $_GET["msg"] == 2) { ?>
+                                    <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 2) { ?>
                                     <div class="alert alert-block alert-success">
                                         <h4 class="alert-heading">Apisrante eliminado!</h4>
                                         <p>El aspirante se ha borrado correctamente.</p>
@@ -84,11 +84,6 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                             </div>
                                         </div>
 
-                                        <?php
-                                            if(!empty($_GET["curso"])){
-                                                $filtro .= " AND asp_grado='".$_GET["curso"]."'";
-                                            }
-                                        ?>
                                         <div class="table-scrollable">
                                     		<table id="example1" class="display" style="width:100%;">
 												<thead>
@@ -157,19 +152,19 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Editar</a></li>
+                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Editar</a></li>
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6) { ?>
                                                                     
-                                                                <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
+                                                                <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
 
-                                                                <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agnoBD+1); ?></a></li>
+                                                                <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agnoBD+1); ?></a></li>
 
                                                                 <?php } ?>
 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
-                                                                <li><a href="inscripciones-eliminar-aspirante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?')){return false;}">Eliminar aspirante</a></li>
+                                                                <li><a href="inscripciones-eliminar-aspirante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>" onclick="if(!confirm('Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?')){return false;}">Eliminar aspirante</a></li>
                                                                 <?php } ?>
                                                             </ul>
                                                         </div>

@@ -47,7 +47,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_2':
                 $tipo = 'danger';
-                $mensaje = 'No tienes permiso para editar a este usuario: <b>' . $_GET["usuario"] . '</b>';
+                $mensaje = 'No tienes permiso para editar a este usuario: <b>' . base64_decode($_GET["usuario"]) . '</b>';
             break;
 
             case 'ER_DT_3':
@@ -72,7 +72,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_7':
                 $tipo = 'danger';
-                $mensaje = $_GET['msj'];
+                $mensaje = base64_decode($_GET['msj']);
             break;
 
             case 'ER_DT_8':
@@ -92,7 +92,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_11':
                 $tipo = 'danger';
-                $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
+                $mensaje = 'Este documento(<b>' . base64_decode($_GET["documento"]) . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
             break;
 
             case 'ER_DT_12':
@@ -131,22 +131,22 @@ if(isset($_GET['error']) || isset($_GET['success'])){
         switch($_GET['success']){
             case 'SC_DT_1':
                 $tipo = 'success';
-                $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_2':
                 $tipo = 'success';
-                $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_3':
                 $tipo = 'success';
-                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_4':
                 $tipo = 'primary';
-                $mensaje = $_GET["summary"];
+                $mensaje = base64_decode($_GET["summary"]);
             break;
 
             case 'SC_DT_5':
@@ -157,18 +157,18 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_6':
                 $tipo = 'success';
                 $mensaje = '
-                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.
+                Fueron creadas <b>' . base64_decode($_GET["creadas"]) . '</b> cargas académicas nuevas.
                 ';
-                if($_GET["noCreadas"] > 0) {
+                if(base64_decode($_GET["noCreadas"]) > 0) {
                     $mensaje .= '
-                    <br>No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                    <br>No se pudieron crear <b>' . base64_decode($_GET["noCreadas"]) . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
                     ';
                 }
             break;
 
             case 'SC_DT_7':
                 $tipo = 'success';
-                $mensaje = 'Del curso <b>'.$_GET["curso"].'</b> se promovieron <b>'.$_GET["numEstudiantesPromocionados"].'</b> estudiantes al curso <b>'.$_GET["siguiente"].'</b> correctamente.';
+                $mensaje = 'Del curso <b>'.base64_decode($_GET["curso"]).'</b> se promovieron <b>'.base64_decode($_GET["numEstudiantesPromocionados"]).'</b> estudiantes al curso <b>'.base64_decode($_GET["siguiente"]).'</b> correctamente.';
             break;
 
             case 'SC_DT_8':
@@ -179,7 +179,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_9':
                 $tipo = 'success';
                 $mensaje = '
-                Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.$_GET['numRegistros'].'</b><br>
+                Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.base64_decode($_GET['numRegistros']).'</b><br>
                 Ahora la plataforma está más limpia y puedes trabajar con los estudiantes que necesitas para este año.</b>
                 ';
             break;

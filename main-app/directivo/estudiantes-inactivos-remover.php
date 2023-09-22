@@ -8,4 +8,4 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 
-echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_9&numRegistros='.$columnasAfectadas.'";</script>';
+echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_9&numRegistros='.base64_encode($columnasAfectadas).'";</script>';

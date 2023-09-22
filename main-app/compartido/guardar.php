@@ -976,7 +976,7 @@ if (!empty($_POST["id"])) {
 ##############################################
 if (!empty($_GET["get"])) {
 	//CAMBIAR IDIOMA y TEMA
-	if ($_GET["get"] >= 1 && $_GET["get"]<=5) {	
+	if (base64_decode($_GET["get"]) >= 1 && base64_decode($_GET["get"])<=5) {	
 		try{
 			UsuariosPadre::actualizarUsuariosAnios();	
 		} catch (Exception $e) {
@@ -988,9 +988,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR/MOSTRAR/OCULTAR UNA NOTICIA
-	if ($_GET["get"] == 6) {
+	if (base64_decode($_GET["get"]) == 6) {
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . base64_decode($_GET["e"]) . "' WHERE not_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1000,9 +1000,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR/MOSTRAR/OCULTAR TODAS LAS NOTICIAS DE UN USUARIO
-	if ($_GET["get"] == 7) {
+	if (base64_decode($_GET["get"]) == 7) {
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . $_GET["e"] . "' WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_estado='" . base64_decode($_GET["e"]) . "' WHERE not_usuario='" . $_SESSION["id"] . "' AND not_estado!=2");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1012,21 +1012,21 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//REACCIONES POR NOTICIA
-	if ($_GET["get"] == 8) {
+	if (base64_decode($_GET["get"]) == 8) {
 		try{
-			$reaccion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'"), MYSQLI_BOTH);
+			$reaccion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . base64_decode($_GET["idR"]) . "'"), MYSQLI_BOTH);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 		if (empty($reaccion[0])) {
 			try{
-				mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_institucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . $_GET["idR"] . "','" . $_GET["r"] . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+				mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias_reacciones(npr_usuario, npr_noticia, npr_reaccion, npr_fecha, npr_estado, npr_institucion, npr_year)VALUES('" . $_SESSION["id"] . "', '" . base64_decode($_GET["idR"]) . "','" . base64_decode($_GET["r"]) . "',now(),1,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
 		} else {
 			try{
-				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias_reacciones SET npr_reaccion='" . $_GET["r"] . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . $_GET["idR"] . "'");
+				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias_reacciones SET npr_reaccion='" . base64_decode($_GET["r"]) . "' WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . base64_decode($_GET["idR"]) . "'");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -1034,7 +1034,7 @@ if (!empty($_GET["get"])) {
 
 		try{
 			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas (alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_categoria, alr_importancia, alr_vista, alr_institucion, alr_year)
-			VALUES('<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación', '<b>" . $_GET["usrname"] . "</b> ha reaccionado a tu publicación " . $_GET["postname"] . ".', 2, '" . $_GET["postowner"] . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+			VALUES('<b>" . base64_decode($_GET["usrname"]) . "</b> ha reaccionado a tu publicación', '<b>" . base64_decode($_GET["usrname"]) . "</b> ha reaccionado a tu publicación " . base64_decode($_GET["postname"]) . ".', 2, '" . base64_decode($_GET["postowner"]) . "', now(), 3, 2, 0,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1075,9 +1075,9 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR IMAGEN DE LA NOTICIA
-	if ($_GET["get"] == 11) {
+	if (base64_decode($_GET["get"]) == 11) {
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_imagen='' WHERE not_id='" . $_GET["idR"] . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_imagen='' WHERE not_id='" . base64_decode($_GET["idR"]) . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -1171,16 +1171,16 @@ if (!empty($_GET["get"])) {
 		exit();
 	}
 	//ELIMINAR MENSAJES
-	if ($_GET["get"] == 17) {
-		if ($_GET["elm"] == 1) {
+	if (base64_decode($_GET["get"]) == 17) {
+		if (base64_decode($_GET["elm"]) == 1) {
 			try{
-				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_de=1 WHERE ema_id='" . $_GET["idR"] . "'");
+				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_de=1 WHERE ema_id='" . base64_decode($_GET["idR"]) . "'");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
 		} else {
 			try{
-				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_para=1 WHERE ema_id='" . $_GET["idR"] . "'");
+				mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_eliminado_para=1 WHERE ema_id='" . base64_decode($_GET["idR"]) . "'");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}

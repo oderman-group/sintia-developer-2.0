@@ -36,12 +36,12 @@ function pagarOnline($p_id_invoice, $p_email, $p_amount, $p_billing_document, $p
 
 function redireccionBien($pagina, $msg)
 {
-    header("Location:".$pagina."?msg=".$msg);
+    header("Location:".$pagina."?msg=".base64_encode($msg));
     exit();
 }
 
 function redireccionMal($pagina, $error)
 {
-    header("Location:".$pagina."?error=".$error);
+    header("Location:".$pagina."?error=".base64_encode($error));
     exit();
 }

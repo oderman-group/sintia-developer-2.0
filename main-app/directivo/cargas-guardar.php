@@ -46,5 +46,5 @@ while ($contCurso < $numCurso) {
 }
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="cargas.php?docente='.$_POST["docente"].'&id='.$idInsercion.'&success=SC_DT_6&creadas='.$cargasCreadas.'&noCreadas='.$cargasNoCreadas.'";</script>';
+echo '<script type="text/javascript">window.location.href="cargas.php?docente='.base64_encode($_POST["docente"]).'&id='.base64_encode($idInsercion).'&success=SC_DT_6&creadas='.base64_encode($cargasCreadas).'&noCreadas='.base64_encode($cargasNoCreadas).'";</script>';
 exit();

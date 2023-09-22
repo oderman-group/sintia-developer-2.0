@@ -77,10 +77,10 @@ $institucionNombre = $institucion['ins_siglas'];
 							
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=2" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(2)?>" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=1" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(1)?>" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                             </ul>
                         </li>

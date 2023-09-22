@@ -61,14 +61,14 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
                                     <?php 
                                     try{
-                                        $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas WHERE ar_id=".$_GET["id"].";");
+                                        $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas WHERE ar_id=".base64_decode($_GET["id"]).";");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
                                     $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                     ?>
 									<form name="formularioGuardar" action="areas-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idA">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idA">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre del Areas</label>

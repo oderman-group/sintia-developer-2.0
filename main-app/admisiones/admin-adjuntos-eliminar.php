@@ -9,21 +9,24 @@ if ($_SESSION["id"] == "") {
 include("bd-conexion.php");
 include("php-funciones.php");
 
-if($_GET["adj"] == 1){
+$solicitud="";
+if(!empty($_GET["solicitud"])){ $solicitud=base64_decode($_GET["solicitud"]);}
+
+if(base64_decode($_GET["adj"]) == 1){
     $aspQuery = 'UPDATE aspirantes SET asp_archivo1 = "" WHERE asp_id = :id';
 }
 
-if($_GET["adj"] == 2){
+if(base64_decode($_GET["adj"]) == 2){
     $aspQuery = 'UPDATE aspirantes SET asp_archivo2 = "" WHERE asp_id = :id';
 }
 
 $asp = $pdo->prepare($aspQuery);
-$asp->bindParam(':id', $_GET['solicitud'], PDO::PARAM_INT);
+$asp->bindParam(':id', $solicitud, PDO::PARAM_INT);
 $asp->execute();
 
 $ruta = 'files/adjuntos';
-if(file_exists($ruta."/".$_GET["file"])){	unlink($ruta."/".$_GET["file"]);	}
+if(file_exists($ruta."/".base64_decode($_GET["file"]))){	unlink($ruta."/".base64_decode($_GET["file"]));	}
 
 
- echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_GET["solicitud"]).'&id='.$_GET["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+ echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($solicitud).'&id='.$_GET["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 

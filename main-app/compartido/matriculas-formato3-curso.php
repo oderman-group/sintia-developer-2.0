@@ -18,7 +18,7 @@ include("head.php");
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
-  $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."'";
+  $filtroAdicional= "AND mat_grado='".base64_decode($_REQUEST["curso"])."'";
   $curso = Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
   while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
   $resultado = Estudiantes::obtenerDatosEstudiante($c[0]);

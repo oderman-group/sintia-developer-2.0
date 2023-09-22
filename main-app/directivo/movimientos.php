@@ -36,12 +36,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 								
 									<?php
-										$filtro = '';
 										include("includes/barra-superior-movimientos-financieros.php");
-										if(!empty($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
-										if(!empty($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
-										if(!empty($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
-										if(!empty($_GET["fecha"])){$filtro .= " AND fcu_fecha='".$_GET["fecha"]."'";}
 
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
@@ -125,15 +120,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario?>&fecha=<?=$resultado['fcu_fecha'];?>&tipo=<?=$tipo;?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
 														<td>$<?=number_format($resultado['fcu_valor'],0,",",".");?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario;?>&tipo=<?=$resultado['fcu_tipo'];?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
 
 														<?php if(Modulos::validarPermisoEdicion()){?>
@@ -144,9 +139,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																		<?php if($resultado['fcu_anulado']!=1){?>
-																			<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
+																			<li><a href="guardar.php?get=<?=base64_encode(11)?>&idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>">Anular</a></li>
 																		<?php } ?>
 																	</ul>
 																</div>

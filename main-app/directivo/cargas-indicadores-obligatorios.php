@@ -112,9 +112,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        							    <li><a href="cargas-indicadores-obligatorios-eliminar.php?idN=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>	
-																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=$resultado[0];?>&indNombre=<?=$resultado[1];?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
+																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                        							    <li><a href="cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado[0]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>	
+																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado[0]);?>&indNombre=<?=base64_encode($resultado[1]);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
 																  </ul>
 															  </div>
 														</td>

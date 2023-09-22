@@ -61,7 +61,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>&docente=<?=$_GET["docente"];?>&get=100" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%) <?=$msjPeriodoActual;?></a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$_GET['carga'];?>&periodo=<?=base64_encode($i);?>&docente=<?=$_GET["docente"];?>&get=<?=base64_encode(100);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%) <?=$msjPeriodoActual;?></a>
 											
 												</p>
 											<?php }?>
@@ -88,7 +88,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 												if($rCargas['car_director_grupo']==1) {$estiloDG = 'style="font-weight: bold;"'; $msjDG = ' - D.G';} else {$estiloDG = ''; $msjDG = '';}
 											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$rCargas['car_id'];?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$rCargas['car_docente'];?>&get=100" <?=$estiloResaltado;?>><span <?=$estiloDG;?>><?=$rCargas['car_posicion_docente'];?>. <?=strtoupper($rCargas['mat_nombre']);?> (<?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?>) <?=$msjDG;?></span></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&docente=<?=base64_encode($rCargas['car_docente']);?>&get=<?=base64_encode(100);?>" <?=$estiloResaltado;?>><span <?=$estiloDG;?>><?=$rCargas['car_posicion_docente'];?>. <?=strtoupper($rCargas['mat_nombre']);?> (<?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?>) <?=$msjDG;?></span></a></p>
 											<?php }?>
 										</div>
                                     </div>
@@ -139,11 +139,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$_GET["periodo"]."'";}
+													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$periodoConsultaActual."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 														INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-														WHERE ipc_carga='".$_GET["carga"]."' $filtro
+														WHERE ipc_carga='".$cargaConsultaActual."' $filtro
 														ORDER BY ipc_periodo");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
@@ -153,7 +153,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 $sumaPorcentaje = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
+															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -178,11 +178,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual[8]];?></a></li>
 																		
-																		<li><a href="cargas-indicadores-editar.php?idR=<?=$resultado['ipc_id'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="cargas-indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																		
-																		<li><a href="#" name="guardar.php?get=68&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$_GET["carga"];?>&periodo=<?=$resultado['ipc_periodo'];?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="#" name="guardar.php?get=<?=base64_encode(68)?>&idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	</ul>
 																</div>
 															</td>

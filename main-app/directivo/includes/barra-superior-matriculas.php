@@ -1,4 +1,5 @@
 <?php
+  $filtro = '';
   $busqueda='';
   if (!empty($_GET['busqueda'])) {
       $busqueda = $_GET['busqueda'];
@@ -19,11 +20,13 @@
   }
   $curso = '';
   if (!empty($_GET['curso'])) {
-      $curso = $_GET['curso'];
+      $curso = base64_decode($_GET['curso']);
+      $filtro .= " AND mat_grado='".$curso."'";
   }
   $estadoM = '';
   if (!empty($_GET['estadoM'])) {
-      $estadoM = $_GET['estadoM'];
+      $estadoM = base64_decode($_GET['estadoM']);
+      $filtro .= " AND mat_estado_matricula='".$estadoM."'";
   }
 ?>
 
@@ -83,7 +86,7 @@
             $estiloResaltado = '';
             if($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=$estadoM;?>&curso=<?=$grado['gra_id'];?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode($estadoM);?>&curso=<?=base64_encode($grado['gra_id']);?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -95,21 +98,26 @@
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>No Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=5&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>En Inscripción</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(1)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==1) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(2)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==2) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Asistentes</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(3)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==3) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Cancelados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(4)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==4) echo 'style="color: '.$Plataforma->colorUno.';"';?>>No Matriculados</a>
+        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(5)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==5) echo 'style="color: '.$Plataforma->colorUno.';"';?>>En Inscripción</a>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
+      <?php if (!empty($filtro)) { ?>
+          <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+
+          <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+      <?php } ?>
 
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
-        <input type="hidden" name="curso" value="<?=$curso;?>"/>
-        <input type="hidden" name="estadoM" value="<?=$estadoM;?>"/>
+        <input type="hidden" name="curso" value="<?=base64_encode($curso);?>"/>
+        <input type="hidden" name="estadoM" value="<?=base64_encode($estadoM);?>"/>
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>

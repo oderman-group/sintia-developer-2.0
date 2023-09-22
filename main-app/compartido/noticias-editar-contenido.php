@@ -1,3 +1,10 @@
+<?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaNoticias=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$idR."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2 AND not_year='" . $_SESSION["bd"] . "'");
+$datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
+?>
 					<div class="row">
                         <div class="col-sm-9">
                             <div class="card card-box">
@@ -7,7 +14,7 @@
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="id" value="4">
-										<input type="hidden" name="idR" value="<?=$_GET["idR"];?>">
+										<input type="hidden" name="idR" value="<?=$idR;?>">
                                         
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[127][$datosUsuarioActual[8]];?></label>
@@ -28,10 +35,15 @@
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
-											<?php if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta[7])){?>
-												<div class="item col-sm-4">
+											<?php
+                                                if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta[7])){
+                                                $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+                                                $arrayDatos = json_encode($arrayEnviar);
+                                                $objetoEnviar = htmlentities($arrayDatos);
+                                            ?>
+												<div class="item col-sm-4" id="reg<?=$datosConsulta['not_id']?>">
 													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
-													<a href="#" name="../compartido/guardar.php?get=11&idR=<?=$datosConsulta['not_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
+													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$datosConsulta['not_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($datosConsulta['not_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 												</div>
 												<p>&nbsp;</p>
 											<?php }?>
@@ -116,7 +128,7 @@
 													<?php
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$_GET["idR"]."' AND notpc_curso='".$infoDatos['gra_id']."'"));
+														$existe = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$idR."' AND notpc_curso='".$infoDatos['gra_id']."'"));
 														
 													?>	
 													  <option value="<?=$infoDatos['gra_id'];?>" <?php if($existe>0){echo "selected";}?>><?=strtoupper($infoDatos['gra_nombre']);?></option>

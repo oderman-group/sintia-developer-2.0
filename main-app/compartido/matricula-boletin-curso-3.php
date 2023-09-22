@@ -7,18 +7,18 @@ require_once("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
-$year=$_GET["year"];
+$year=base64_decode($_GET["year"]);
 }
 $BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 
-if ($_GET["periodo"] == "") {
+if (empty($_GET["periodo"])) {
 
     $periodoActual = 1;
 } else {
 
-    $periodoActual = $_GET["periodo"];
+    $periodoActual = base64_decode($_GET["periodo"]);
 }
 
 //$periodoActual=2;
@@ -39,15 +39,15 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 $filtro = "";
 if (!empty($_GET["id"])) {
 
-    $filtro .= " AND mat_id='" . $_GET["id"] . "'";
+    $filtro .= " AND mat_id='" . base64_decode($_GET["id"]) . "'";
 }
 
 if (!empty($_REQUEST["curso"])) {
 
-    $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
+    $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
 }
 if(!empty($_REQUEST["grupo"])){
-    $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";
+    $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
 }
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
@@ -378,7 +378,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
                                     $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion 
-                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
+                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$periodoActual."' AND rind_indicador='".$fila4["ind_id"]."'");
                                     $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                     
@@ -437,7 +437,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         $consultaObsevacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
 
-						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
+						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $periodoActual . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
                         $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
 
                         if (!empty($observacion['bol_observaciones_boletin'])) {

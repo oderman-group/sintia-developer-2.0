@@ -53,7 +53,9 @@ require_once("../class/Estudiantes.php");
                         <div class="col-sm-12">
                         
                                 <?php
-                                    $e = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+                                    $id="";
+                                    if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+                                    $e = Estudiantes::obtenerDatosEstudiante($id);
                                 ?>
 
 								<div class="panel">

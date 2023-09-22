@@ -14,6 +14,22 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
+$carga='';
+$grado='';
+$grupo='';
+$periodo='';
+if(!empty($_GET['carga'])){
+	$carga=base64_decode($_GET['carga']);
+	$grado=base64_decode($_GET['grado']);
+	$grupo=base64_decode($_GET['grupo']);
+	$periodo=base64_decode($_GET['periodo']);
+}
+if(!empty($_POST['carga'])){
+	$carga=$_POST['carga'];
+	$grado=$_POST['grado'];
+	$grupo=$_POST['grupo'];
+	$periodo=$_POST['periodo'];
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -21,8 +37,8 @@ if(!Modulos::validarPermisoEdicion()){
 	<script type="text/javascript">
 	function notas(nota,codigoe,observacion){
 	var codEst =codigoe;
-	var periodo=<?=$_REQUEST["periodo"]?>;
-	var carga=<?=$_REQUEST["carga"]?>;
+	var periodo=<?=$periodo?>;
+	var carga=<?=$carga?>;
 	if(nota!=''){
 		if (nota < <?=$config[3];?> || Number.isNaN(nota) || nota > <?=$config[4];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
 	}
@@ -85,7 +101,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<div class="card-body">
 											<div class="alert alert-block alert-warning">
 												<h4 class="alert-heading">Información importante!</h4>
-												<p>Usted est&aacute; registrando las nota de comportamiento del periodo <span style="font-size:20px; font-weight:bold;"><?=$_REQUEST["periodo"];?></span>.</p>
+												<p>Usted est&aacute; registrando las nota de comportamiento del periodo <span style="font-size:20px; font-weight:bold;"><?=$periodo;?></span>.</p>
 											</div>
 
 											<div class="table-scrollable">
@@ -155,13 +171,13 @@ if(!Modulos::validarPermisoEdicion()){
 													<tbody>
 														<?php
 														$con = 1;
-														$filtroAdicional= "AND mat_grado='".$_REQUEST['grado']."' AND mat_grupo='".$_REQUEST['grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+														$filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 														$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 														
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 															$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 															try{
-																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$_REQUEST["carga"]."' AND dn_periodo='".$_REQUEST["periodo"]."'");
+																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$carga."' AND dn_periodo='".$periodo."'");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -172,15 +188,15 @@ if(!Modulos::validarPermisoEdicion()){
 															<td style="text-align:center;"><?=$resultado[0];?></td>
 															<td><?=$nombre?></td>
 															<td style="text-align: center;">
-																<input size="5" maxlength="3" name="" id="" value="<?=$rndisiplina["dn_nota"]?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
+																<input size="5" maxlength="3" name="" id="" value="<?php if(!empty($rndisiplina["dn_nota"])) echo $rndisiplina["dn_nota"];?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 
-																<?php if($rndisiplina[4]!="" && Modulos::validarPermisoEdicion()){?>
-																	<a href="cargas-comportamiento-eliminar.php?get=22&id=<?=$rndisiplina[0];?>&periodo=<?=$_REQUEST["periodo"];?>&carga=<?=$_REQUEST["carga"];?>&grado=<?=$_REQUEST["grado"];?>&grupo=<?=$_REQUEST["grupo"];?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">X</a>
+																<?php if(!empty($rndisiplina[4]) && Modulos::validarPermisoEdicion()){?>
+																	<a href="cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">X</a>
 																<?php }?>
 
 															</td>
 															<td style="text-align:center;">
-																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50" <?=$disabledPermiso;?>><?=$rndisiplina["dn_observacion"]?></textarea>
+																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50" <?=$disabledPermiso;?>><?php if(!empty($rndisiplina["dn_observacion"])) echo $rndisiplina["dn_observacion"];?></textarea>
 															</td>
 														</tr>
 														<?php 

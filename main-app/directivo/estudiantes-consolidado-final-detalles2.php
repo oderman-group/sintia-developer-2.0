@@ -158,7 +158,7 @@ if (!Modulos::validarPermisoEdicion()) {
 						
 						<div class="col-sm-4">
 							<div class="btn-group">
-								<a href="../compartido/informe-consolidad-final.php?curso=<?= $_POST["curso"]; ?>&grupo=<?= $_POST["grupo"]; ?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
+								<a href="../compartido/informe-consolidad-final.php?curso=<?= base64_encode($_POST["curso"]); ?>&grupo=<?= base64_encode($_POST["grupo"]); ?>" id="addRow" class="btn deepPink-bgcolor" target="_blank">
 									Sacar Informe
 								</a>
 							</div>
@@ -236,7 +236,7 @@ if (!Modulos::validarPermisoEdicion()) {
 								<!-- BEGIN -->
 								<tbody>
 									<?php
-									$filtro = " AND mat_grado='" . $_POST["curso"] . "' AND mat_grupo='" . $_POST["grupo"] . "'";
+									$filtro = " AND mat_grado='" . $_POST["curso"] . "' AND mat_grupo='" . $_POST["grupo"] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 									$consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
 									//PRIMER PUESTO
 									$primerPuestoNota = 0;

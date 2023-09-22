@@ -1,22 +1,25 @@
 <?php
 include("session.php");
 
+$matricula="";
+if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
+
 	//SE CREA MATRICULA EN AÑO SIGUIENTE
 	try{
-		mysqli_query($conexion, "INSERT INTO ".$bdApasar.".academico_matriculas SELECT * FROM ".$bdActual.".academico_matriculas WHERE mat_id='".$_GET["matricula"]."' ");
+		mysqli_query($conexion, "INSERT INTO ".$bdApasar.".academico_matriculas SELECT * FROM ".$bdActual.".academico_matriculas WHERE mat_id='".$matricula."' ");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	try{
-		mysqli_query($conexion, "UPDATE ".$bdApasar.".academico_matriculas SET mat_estado_matricula=4, mat_grupo=1 WHERE mat_id='".$_GET["matricula"]."'");
+		mysqli_query($conexion, "UPDATE ".$bdApasar.".academico_matriculas SET mat_estado_matricula=4, mat_grupo=1 WHERE mat_id='".$matricula."'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	//CONSULTAMOS DATOS DEL ESTUDIANTE
 	try{
-		$consultaMatricula=mysqli_query($conexion, "SELECT * FROM ".$bdActual.".academico_matriculas WHERE mat_id='".$_GET["matricula"]."' ");
+		$consultaMatricula=mysqli_query($conexion, "SELECT * FROM ".$bdActual.".academico_matriculas WHERE mat_id='".$matricula."' ");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

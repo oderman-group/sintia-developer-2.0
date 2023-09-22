@@ -61,7 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="cargas-estilo-notas-especifica-guardar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idCN">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idCN">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>

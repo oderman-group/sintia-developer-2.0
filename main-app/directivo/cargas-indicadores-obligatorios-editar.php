@@ -55,7 +55,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 	<div class="panel-body">
                                     <?php 
                                     try{
-                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_GET["id"]."'");
+                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".base64_decode($_GET["id"])."'");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -64,7 +64,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
                                    
 									<form name="formularioGuardar" action="cargas-indicadores-obligatorios-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idI">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idI">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>

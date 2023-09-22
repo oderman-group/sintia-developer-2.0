@@ -133,7 +133,7 @@ if(!Modulos::validarPermisoEdicion()){
 															}
 															$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH); 
 														?>
-															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?=$ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>" <?=$disabledPermiso;?>></td>
+															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>" <?=$disabledPermiso;?>></td>
 														<?php
 														}
 														?>

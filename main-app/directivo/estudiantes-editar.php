@@ -1,17 +1,19 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0078';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0078';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
 require_once("../class/Estudiantes.php");
-?>
-<?php
-$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
+$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($id);
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
@@ -82,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 <div class="page-title">Editar matrículas</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="#" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar matrículas</li>
                             </ol>
                         </div>
@@ -109,8 +111,8 @@ if(!Modulos::validarPermisoEdicion()){
 							if($config['conf_id_institucion']==1){
 								if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
 									$aler='alert-success';
-									$mensajeSion=$_GET['msgsion'];
-									if($_GET['stadsion']!=true){
+									$mensajeSion=base64_decode($_GET['msgsion']);
+									if(base64_decode($_GET['stadsion'])!=true){
 										$aler='alert-danger';
 									}
 								?>
@@ -124,14 +126,14 @@ if(!Modulos::validarPermisoEdicion()){
 							}
 							if(isset($_GET['msgsintia'])){
 								$aler='alert-success';
-								if($_GET['stadsintia']!=true){
+								if(base64_decode($_GET['stadsintia'])!=true){
 								$aler='alert-danger';
 								}
 							?>
 							<div class="alert alert-block <?=$aler;?>">
 								<button type="button" class="close" data-dismiss="alert">×</button>
 								<h4 class="alert-heading">SINTIA!</h4>
-								<p><?=$_GET['msgsintia'];?></p>
+								<p><?=base64_decode($_GET['msgsintia']);?></p>
 							</div>
 							<?php }?>
                              <div class="card-box">
@@ -140,7 +142,7 @@ if(!Modulos::validarPermisoEdicion()){
                                  </div>
                                  <div class="card-body">
                                  	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-actualizar.php" method="post" enctype="multipart/form-data">
-									<input type="hidden" name="id" value="<?=$_GET["id"];?>">
+									<input type="hidden" name="id" value="<?=$id;?>">
 									<input type="hidden" name="idU" value="<?=$datosEstudianteActual["mat_id_usuario"];?>">
 									  
 										<h3>Información personal</h3>

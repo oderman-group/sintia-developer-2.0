@@ -23,7 +23,8 @@ if (!empty($_GET['busqueda'])) {
 }
 $curso = '';
 if (!empty($_GET['curso'])) {
-  $curso = $_GET['curso'];
+  $curso = base64_decode($_GET['curso']);
+  $filtro .= " AND asp_grado='".$curso."'";
 }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
@@ -47,17 +48,22 @@ if (!empty($_GET['curso'])) {
             $estiloResaltado = '';
             if ($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= $grado['gra_id']; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
           <?php } ?>
           <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
+      <?php if (!empty($filtro)) { ?>
+          <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+
+          <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+      <?php } ?>
 
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-      <input type="hidden" name="curso" value="<?= $curso; ?>" />
+      <input type="hidden" name="curso" value="<?= base64_encode($curso); ?>" />
       <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>

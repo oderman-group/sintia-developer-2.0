@@ -15,7 +15,7 @@ if (!empty($_FILES['fotoUss']['name'])) {
 	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
-		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&error=ER_DT_8";</script>';
+		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.base64_encode($_POST["idR"]).'&error=ER_DT_8";</script>';
 		exit();
 	}
 
@@ -64,7 +64,7 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 
 	$validarClave=validarClave($_POST["clave"]);
 	if($validarClave!=true){
-		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.$_POST["idR"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.base64_encode($_POST["idR"]).'";</script>';
 		exit();
 	}
 
@@ -96,5 +96,5 @@ if(!empty($_POST["subroles"])){
 	include("../compartido/error-catch-to-report.php");
 }
 
-echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&success=SC_DT_2";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.base64_encode($_POST["idR"]).'&success=SC_DT_2";</script>';
 exit();

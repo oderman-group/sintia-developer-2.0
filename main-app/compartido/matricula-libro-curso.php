@@ -22,8 +22,15 @@ $year=$_POST["year"];
 }
 $BD=$_SESSION["inst"]."_".$year;
 //CONSULTA ESTUDIANTES MATRICULADOS
+$curso='';
+if(isset($_POST["curso"])){
+$curso=$_POST["curso"];
+}
+if(isset($_GET["curso"])){
+$curso=base64_decode($_GET["curso"]);
+}
 $filtro = '';
-if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
+if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$curso."'";}
 if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>

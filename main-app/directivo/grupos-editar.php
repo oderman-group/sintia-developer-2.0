@@ -17,7 +17,7 @@ if(!Modulos::validarPermisoEdicion()){
 </head>
 <?php 
  if (!is_null($_GET["id"])) {
-    $grupoActual = Grupos::obtenerGrupo($_GET["id"]);
+    $grupoActual = Grupos::obtenerGrupo(base64_decode($_GET["id"]));
     
 } ;
 ?>
@@ -51,7 +51,7 @@ if(!Modulos::validarPermisoEdicion()){
                                     <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
                                     <div class="panel-body">
                                         <form name="formularioGuardar" action="grupos-actualizar.php" method="post">
-                                        <input type="hidden" name="id" value="<?php echo $_GET["id"] ?>">                                        
+                                        <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">                                        
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Codigo Gupo <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-10">

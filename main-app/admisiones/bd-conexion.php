@@ -7,7 +7,7 @@ $pass   		   = $claveConexion;
 $dbName 		   = $baseDatosAdmisiones;
 
 if(!empty($_REQUEST['idInst'])){
-	$idInsti=$_REQUEST['idInst'];
+	$idInsti=base64_decode($_REQUEST['idInst']);
 	try{
 		$pdoAdmin = new PDO('mysql:host='.$server.';dbname='.$baseDatosServicios, $user, $pass);
 	}catch (PDOException $e) {

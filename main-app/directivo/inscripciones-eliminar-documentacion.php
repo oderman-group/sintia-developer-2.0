@@ -10,8 +10,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
+$matricula="";
+if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
+
 try{
-	$consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$_GET["matricula"]."'");
+	$consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$matricula."'");
 	$documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
@@ -29,12 +32,12 @@ if(!empty($documentos['matd_documento_identidad']) && file_exists($ruta."/".$doc
 if(!empty($documentos['matd_certificados']) && file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$documentos['matd_certificados']);	}
 
 try{
-	mysqli_query($conexion, "UPDATE academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados='".$_SESSION["id"]."' WHERE matd_matricula='".$_GET["matricula"]."'");
+	mysqli_query($conexion, "UPDATE academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados='".$_SESSION["id"]."' WHERE matd_matricula='".$matricula."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
 	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="inscripciones.php?msg=1";</script>';
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?msg='.base64_encode(1).'";</script>';
 	exit();

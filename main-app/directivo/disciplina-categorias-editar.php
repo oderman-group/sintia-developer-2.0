@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".$_GET["idR"]."'");
+    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

@@ -6,15 +6,15 @@ require_once("../class/Estudiantes.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
-$year=$_GET["year"];
+$year=base64_decode($_GET["year"]);
 }
 $BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
-if($_GET["periodo"]==""){
+if(empty($_GET["periodo"])){
 	$periodoActual = 1;
 }else{
-	$periodoActual = $_GET["periodo"];
+	$periodoActual = base64_decode($_GET["periodo"]);
 }
 //$periodoActual=2;
 if($periodoActual==1) $periodoActuales = "Primero";
@@ -23,13 +23,14 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
+$filtro = '';
 if (!empty($_GET["id"])) {
-    $filtro .= " AND mat_id='" . $_GET["id"] . "'";
+    $filtro .= " AND mat_id='" . base64_decode($_GET["id"]) . "'";
 }
 if (!empty($_REQUEST["curso"])) {
-    $filtro .= " AND mat_grado='" . $_REQUEST["curso"] . "'";
+    $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
 }
-if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
