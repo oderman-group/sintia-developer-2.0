@@ -389,7 +389,7 @@ if (!empty($_POST["id"])) {
 				$destinos = validarUsuarioActual($_SESSION["datosUsuario"]);
 
 				include("../compartido/guardar-historial-acciones.php");
-				echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil-recortar-foto.php?ancho=' . $ancho . '&alto=' . $alto . '&ext=' . $extension . '";</script>';
+				echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil-recortar-foto.php?ancho=' . base64_encode($ancho) . '&alto=' . base64_encode($alto) . '&ext=' . base64_encode($extension) . '";</script>';
 				exit();
 			}
 		}
