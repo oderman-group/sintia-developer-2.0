@@ -296,9 +296,9 @@ if (!empty($_POST["id"])) {
 		}
 
 		$notificaciones = 0;
-		if ($_POST["notificaciones"] == 1) $notificaciones = 1;
+		if (!empty($_POST["notificaciones"]) && $_POST["notificaciones"] == 1) $notificaciones = 1;
 		$mostrarEdad = 0;
-		if ($_POST["mostrarEdad"] == 1) $mostrarEdad = 1;
+		if (!empty($_POST["mostrarEdad"]) && $_POST["mostrarEdad"] == 1) $mostrarEdad = 1;
 
 		if (empty($_POST["tipoNegocio"])) $_POST["tipoNegocio"] = '0';
 
