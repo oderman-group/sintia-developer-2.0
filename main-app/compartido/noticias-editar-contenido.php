@@ -2,7 +2,12 @@
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaNoticias=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$idR."' AND not_usuario='".$_SESSION["id"]."' AND not_estado!=2 AND not_year='" . $_SESSION["bd"] . "'");
+$condicionAdicional = '';
+if($datosUsuarioActual['uss_tipo'] != 1) {
+    $condicionAdicional = "AND not_usuario='".$_SESSION["id"]."'";
+}
+
+$consultaNoticias=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias WHERE not_id='".$idR."' {$condicionAdicional} AND not_estado!=2 AND not_year='" . $_SESSION["bd"] . "'");
 $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 ?>
 					<div class="row">
