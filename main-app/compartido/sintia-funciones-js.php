@@ -425,9 +425,12 @@ function deseaEliminar(dato) {
 			cancelButtonText: 'No'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				if (typeof id !== "undefined") {
-					var input = document.getElementById(parseInt(varObjet.idInput));
+				if (typeof id !== "undefined" && id !== "") {
+					if (typeof varObjet !== "undefined") {
+						var input = document.getElementById(parseInt(varObjet.idInput));
+					}
 					axios.get(url).then(function(response) {
+						if (typeof varObjet !== "undefined") {
 							// handle success
 							console.log("El registro fue eliminado correctamente.");
 							//divRespuesta.innerHTML = response.data;
@@ -444,9 +447,11 @@ function deseaEliminar(dato) {
 							if (varObjet.tipo === 4) {
 								publicacion.style.display = "none";
 							}
+						}
+
 							$.toast({
 								heading: 'Acción realizada',
-								text: 'El reigstro fue eliminado correctamente.',
+								text: 'El registro fue eliminado correctamente.',
 								position: 'mid-center',
 								loaderBg: '#26c281',
 								icon: 'success',
@@ -454,13 +459,13 @@ function deseaEliminar(dato) {
 								stack: 6
 							});
 
-						}).catch(function(error) {
-							// handle error
-							console.log(error);
-						});
-					} else {
+					}).catch(function(error) {
+						// handle error
+						console.error(error);
+					});
+				} else {
 					window.location.href = url;
-					}
+				}
 				
 			}else{
 				return false;
