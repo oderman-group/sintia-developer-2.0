@@ -309,6 +309,17 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                     </div>
 
                                     <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Generar informes con estudiantes con menos de 100%?</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control  select2" name="generarInforme" <?=$disabledPermiso;?>>
+                                                <option value="0" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==0){ echo "selected";} ?>>No generar informe hasta que todos estén al 100%</option>
+                                                <option value="1" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==1){ echo "selected";} ?>>Omitir los estudiantes que no tengan el 100%</option>
+                                                <option value="2" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==2){ echo "selected";} ?>>Registrar la definitiva con el porcentaje actual</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho - Alto)</label>
                                         <div class="col-sm-10">
                                             <input type="text" style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?= $datosInstitucion[30]; ?>">

@@ -48,7 +48,8 @@ try {
 	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
 	conf_certificado='" . $_POST["certificado"] . "',
 	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "',
-	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "'
+	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "',
+	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
