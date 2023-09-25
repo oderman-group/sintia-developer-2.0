@@ -211,20 +211,20 @@ try{
 		mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
 		mat_inclusion, mat_extranjero, mat_tipo_sangre, 
 		mat_eps, mat_celular2, mat_ciudad_residencia, 
-		mat_nombre2)
+		mat_nombre2, mat_estado_agno)
 		VALUES(
 		".$result_numMat.", now(), ".$_POST["tipoD"].",
 		".$_POST["nDoc"].", ".$_POST["religion"].", '".strtolower($_POST["email"])."',
 		'".$_POST["direccion"]."', '".$_POST["barrio"]."', '".$_POST["telefono"]."',
 		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
-		'".$_POST["fNac"]."', '".$_POST["apellido1"]."', '".$_POST["apellido2"]."', 
-		'".$_POST["nombres"]."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
+		'".$_POST["fNac"]."', '".strtoupper($_POST["apellido1"])."', '".strtoupper($_POST["apellido2"])."', 
+		'".strtoupper($_POST["nombres"])."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
 		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
 		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
 		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
 		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
 		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
-		'".$_POST["nombre2"]."'
+		'".strtoupper($_POST["nombre2"])."', 3
 		)");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");

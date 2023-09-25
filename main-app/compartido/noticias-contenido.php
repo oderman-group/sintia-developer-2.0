@@ -152,18 +152,17 @@
                             <div class="card-head">
                                 <header><?=$resultado['not_titulo'];?></header>
 
-                                <?php if($_SESSION["id"]==$resultado['not_usuario'] or $datosUsuarioActual[3]==5){?>
-                                <button id="panel-<?=$resultado['not_id'];?>"
-                                    class="mdl-button mdl-js-button mdl-button--icon pull-right"
-                                    data-upgraded=",MaterialButton">
-                                    <i class="material-icons">more_vert</i>
-                                </button>
-                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                                    data-mdl-for="panel-<?=$resultado['not_id'];?>">
-                                    <li class="mdl-menu__item"><a
-                                            href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
-                                                class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
-                                    </li>
+                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==5){?>
+
+                                    <button id="panel-<?=$resultado['not_id'];?>"
+                                        class="mdl-button mdl-js-button mdl-button--icon pull-right"
+                                        data-upgraded=",MaterialButton">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                
+                                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                        data-mdl-for="panel-<?=$resultado['not_id'];?>">
+
                                     <li class="mdl-menu__item"><a
                                             href="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"><i
                                                 class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
@@ -172,14 +171,23 @@
                                             href="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"><i
                                                 class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?></a>
                                     </li>
+                                    
+                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1){?>
+                                        <li class="mdl-menu__item"><a
+                                                href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
+                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
+                                        </li>
+                                        
+                                        <li class="mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>"
+                                                id="<?=base64_encode($resultado['not_id']);?>"
+                                                name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                                onClick="deseaEliminar(this)"><i
+                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
+                                        </li>
+                                    <?php }?>
 
-                                    <li class="mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>"
-                                            id="<?=$resultado['not_id'];?>"
-                                            name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
-                                            onClick="deseaEliminar(this)"><i
-                                                class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
-                                    </li>
-                                </ul>
+
+                                    </ul>
                                 <?php }?>
                             </div>
 

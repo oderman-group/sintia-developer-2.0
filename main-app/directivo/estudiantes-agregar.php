@@ -55,6 +55,36 @@ if(!Modulos::validarPermisoEdicion()){
 
 			}
 		}
+
+		function lugarNacimiento(data) {
+			var idEnviado = data.id;
+			var idDisabled = 'ciudadPro';
+
+			if(idEnviado === 'ciudadPro') {
+				idDisabled = 'lNacM';
+			}
+
+			if(data.value !== null && data.value !== "") {
+				document.getElementById(idDisabled).disabled='disabled';
+				document.getElementById(idDisabled).value='';
+			} else {
+				document.getElementById(idDisabled).disabled='';
+			}
+		}
+
+		function habilitarCiudadProcedencia() {
+			// Habilitar el campo de entrada con id "ciudadPro"
+			document.getElementById("ciudadPro").disabled = false;
+
+			// Obtener una referencia al elemento select con id "lNacM"
+			const selectElement = document.getElementById("lNacM");
+
+			// Verificar si hay una opción seleccionada
+			if (selectElement.selectedIndex !== -1) {
+				// Eliminar la opción seleccionada del select
+				selectElement.remove(selectElement.selectedIndex);
+			}
+		}
 	</script>
 
 </head>
@@ -187,31 +217,31 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="apellido1" name="apellido1" class="form-control" autocomplete="off" required value="<?=$datosMatricula['apellido1'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-4">
-													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="apellido2" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosMatricula['apellido2'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>" <?=$disabledPermiso;?>>
+													<input type="text" id="nombres" name="nombres" class="form-control" autocomplete="off" required value="<?=$datosMatricula['nombre'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
 												<div class="col-sm-4">
-													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosMatricula['nombre2'];?>" <?=$disabledPermiso;?> style="text-transform: uppercase;">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Email</label>
 												<div class="col-sm-6">
-													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off" <?=$disabledPermiso;?>>
+													<input type="text" name="email" class="form-control" value="<?=$datosMatricula['email'];?>" autocomplete="off" <?=$disabledPermiso;?> style="text-transform: lowercase;">
 												</div>
 											</div>
 											
@@ -225,11 +255,13 @@ if(!Modulos::validarPermisoEdicion()){
 												</div>
 												<input type="hidden" id="dtp_input1" name="fNac">
 											</div>
+
+											<div style="text-align: center; padding: 10px;"><mark>Escoja una opción del listado ó escriba la ciudad de procedencia si el estudiante es extranjero</mark></div>
 												
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Lugar de Nacimiento</label>
 												<div class="col-sm-4">
-													<select class="form-control  select2" name="lNacM" <?=$disabledPermiso;?>>
+													<select class="form-control  select2" name="lNacM" id="lNacM" onChange="lugarNacimiento(this)" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														try{
@@ -247,8 +279,8 @@ if(!Modulos::validarPermisoEdicion()){
 												</div>
 												
 												<label class="col-sm-2 control-label">Ciudad de Procedencia</label>
-												<div class="col-sm-4" id="ciudadPro2" >
-													<input type="text" name="ciudadPro" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
+												<div class="col-sm-4" id="ciudadPro2">
+													<input type="text" name="ciudadPro" id="ciudadPro" onChange="lugarNacimiento(this)" ondblClick="habilitarCiudadProcedencia()" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
