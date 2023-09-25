@@ -259,3 +259,21 @@ function deseaEliminar(dato) {
     })
 
 }
+
+function inhabilitarBotones(idBtn) {
+    // Obtener el botón por su ID
+    const miBoton = document.getElementById(idBtn);
+
+    // Deshabilitar el botón
+    miBoton.disabled = true;
+}
+
+function ejecutarOtrasFunciones(params) {
+    // Esperar a que el documento esté listo (DOMContentLoaded)
+    document.addEventListener("DOMContentLoaded", function() {
+        // Después de que el documento esté listo, esperar 1 milisegundo y luego llamar a la función
+        setTimeout(function() {
+            inhabilitarBotones(params);
+        }, 100);
+    });
+}
