@@ -1,37 +1,5 @@
 <script type="application/javascript">
 
-function hayInternet(){
-
-	if(navigator.onLine) {
-
-		if(localStorage.getItem("internet")==0){
-
-			document.getElementById("siInternet").style.display="block";
-
-		}
-
-		
-
-		localStorage.setItem("internet", 1);
-
-		document.getElementById("noInternet").style.display="none";
-
-	} 
-
-	else {
-
-		localStorage.setItem("internet", 0);
-
-		document.getElementById("noInternet").style.display="block";
-
-	}
-
-}
-
-setInterval('hayInternet()', 1000);
-
-	
-
 function cupoNo(dato){
 
 	var opcion = dato;
@@ -320,22 +288,7 @@ function tipoFolder(dato){
 
 		
 
-function deseaRegresar(dato){	
-	var url = dato.name;
-Swal.fire({
-  title: 'Desea regresar?',
-  text: "Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonText: 'Si, deseo regresar!',
-  cancelButtonText: 'No'
-}).then((result) => {
-  if (result.isConfirmed) {
-	window.location.href=url;
-  }
-})
 
-}
  /**
      * Esta funcion genera una alerta validadno la nota ingresada
      * 
@@ -353,128 +306,8 @@ function alertValidarNota(nota){
 	
 
 }
-
- /**
-     * Esta funcion genera una confimacion de warning personalizada 
-     * 
-     * @param titulo
-	 * @param mensaje
-	 *  @param tipos  [success,error,warning,info,question]
-     * @return boolean 
-     */
-function sweetConfirmacion(titulo,mensaje,tipo ='question',varHeref) {
-	Swal.fire({
-  		title: titulo,
- 		 text: mensaje,
- 		 icon: tipo,
- 		 showCancelButton: true,
- 		 confirmButtonText: 'Si!',
- 		 cancelButtonText: 'No!'
-}).then((result) => {
-  if (result.isConfirmed) {
-	if(varHeref === null){
-		return true;
-	}else{
-		window.location.href=varHeref;
-	}
 	
-  }else{
-	if(varHeref === null){
-		return false;
-	}else{
-		window.location.href='#';
-	}
-	
-  }
-})
 
-}
-function deseaEliminar(dato) {
-
-		//alert(typeof dato.title);
-
-		if (dato.title !== '') {
-
-			let variable = (dato.title);
-
-			var varObjet = JSON.parse(variable);
-
-			console.log(varObjet);
-
-			var input = document.getElementById(parseInt(varObjet.idInput));
-
-		}
-
-		var url = dato.name;
-
-		var id = dato.id;
-
-		var registro = document.getElementById("reg" + id);
-
-		var evaPregunta = document.getElementById("pregunta" + id);
-
-		var publicacion = document.getElementById("PUB" + id);
-
-		console.log("id:" + id);
-		Swal.fire({
-			title: 'Desea eliminar?',
-			text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonText: 'Si, deseo eliminar!',
-			cancelButtonText: 'No'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				if (typeof id !== "undefined" && id !== "") {
-					if (typeof varObjet !== "undefined") {
-						var input = document.getElementById(parseInt(varObjet.idInput));
-					}
-					axios.get(url).then(function(response) {
-						if (typeof varObjet !== "undefined") {
-							// handle success
-							console.log("El registro fue eliminado correctamente.");
-							//divRespuesta.innerHTML = response.data;
-							if (varObjet.tipo === 1) {
-								registro.style.display = "none";
-							}
-							if (varObjet.tipo === 2) {
-								document.getElementById(id).style.display = "none";
-								input.value = "";
-							}
-							if (varObjet.tipo === 3) {
-								evaPregunta.style.display = "none";
-							}
-							if (varObjet.tipo === 4) {
-								publicacion.style.display = "none";
-							}
-						}
-
-							$.toast({
-								heading: 'Acción realizada',
-								text: 'El registro fue eliminado correctamente.',
-								position: 'mid-center',
-								loaderBg: '#26c281',
-								icon: 'success',
-								hideAfter: 5000,
-								stack: 6
-							});
-
-					}).catch(function(error) {
-						// handle error
-						console.error(error);
-					});
-				} else {
-					window.location.href = url;
-				}
-				
-			}else{
-				return false;
-			}
-		})
-
-
-	}
-	
 
 function archivoPeso(dato){
 
@@ -937,44 +770,6 @@ if($datosUsuarioActual['uss_tipo']==5){
 <?php }?>
 
 
-function axiosAjax(datos){
-
-	let url = datos.id;
-
-	let divRespuestaNombre = 'RESP_'+datos.title;
-
-	let divRespuesta = document.getElementById(divRespuestaNombre);
-
-	
-
-	axios.get(url)
-
-	  .then(function (response) {
-
-		// handle success
-
-		console.log(response.data);
-
-		divRespuesta.innerHTML = response.data;
-
-	  })
-
-	  .catch(function (error) {
-
-		// handle error
-
-		console.log(error);
-
-	  })
-
-	  .then(function () {
-
-		// always executed
-
-	  });
-
-}
-
 	
 
 	
@@ -1029,36 +824,6 @@ function usuariosChat(){
 
 }
 
-function deseaGenerarIndicadores(dato){
-	document.getElementById('agregarNuevo').style.display="none";
-	document.getElementById('preestablecidos').style.display="none";
-
-	var respuesta = sweetConfirmacion('Eliminar indiacdores','Al ejecutar esta acción se eliminaran los indicadores y actividades ya creados. Desea continuar bajo su responsabilidad?');
-	var url = dato.name;
-
-	if(respuesta == true){
-		// window.location.href=url;
-		$.toast({
-
-			heading: 'Acción en proceso', text: 'Estamos creando los indicadores y actividades para ti, te avisaremos encuanto esten creados.', position: 'mid-center',
-			loaderBg:'#26c281', icon: 'warning', hideAfter: 5000, stack: 6
-
-		});
-
-		document.getElementById('msjPree').style.display="block";
-
-		axios.get(url).then(function (response) {
-			document.getElementById('msjPree').style.display="none";
-			$.toast({
-
-				heading: 'Acción realizada', text: 'Los indicadores y actividades fueron creados correctamente, racargaremos la página.', position: 'mid-center',
-				loaderBg:'#26c281', icon: 'success', hideAfter: 5000, stack: 6
-
-			});
-			location.reload();
-		})
-	}
-}
 /**
  * Esta función sirve para aplicar color instantaneo a la nota colocada
  * por el docente a los estudiantes
