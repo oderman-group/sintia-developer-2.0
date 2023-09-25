@@ -19,6 +19,14 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
+
+if($resultado['fcu_anulado'] == 1) {
+    $disabledPermiso = "disabled";
+    echo '<script>
+    var idBtn = "btnEditarMovimientos";
+    ejecutarOtrasFunciones(idBtn);
+    </script>';
+}
 ?>
 
 	<!--bootstrap -->
@@ -189,7 +197,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios" id="btnEditarMovimientos">&nbsp;
                                         <?php }?>
 										
 										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
