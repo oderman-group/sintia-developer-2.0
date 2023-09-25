@@ -45,7 +45,7 @@ if(!empty($_POST["id"])){
 			include("../compartido/error-catch-to-report.php");
 		}
 
-		$infoCargaActual = CargaAcademica::cargasDatosEnSesion($_GET["carga"], $_SESSION["id"]);
+		$infoCargaActual = CargaAcademica::cargasDatosEnSesion(base64_decode($_GET["carga"]), $_SESSION["id"]);
 		$_SESSION["infoCargaActual"] = $infoCargaActual;
 
 		include("../compartido/guardar-historial-acciones.php");
