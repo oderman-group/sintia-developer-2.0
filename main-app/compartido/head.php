@@ -124,7 +124,8 @@ require_once("../class/Grupos.php");
 	<!-- Axios -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
 	
-	
+	<!-- Mis funciones JS -->
+	<script src="../compartido/funciones.js" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
