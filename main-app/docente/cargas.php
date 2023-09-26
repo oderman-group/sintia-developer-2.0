@@ -4,6 +4,7 @@
 <?php 
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
 ?>
 </head>
@@ -111,22 +112,31 @@ require_once("../class/Sysjobs.php");
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 												
 												if(empty($jobsEncontrado)){
-													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
+													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="btn red">Generar Informe</a>';
+													if($config['conf_porcentaje_completo_generar_informe']==1){
+														$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
+														$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
+														if($numSinNotas>0){
+															$mensajeI = '<div class="alert alert-danger" role="alert" style="margin-right: 20px;">
+																			<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
+																		</div>';
+														}
+													}
 												}else{
 													$intento = intval($jobsEncontrado["job_intentos"]);
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
-															$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>'
-																	.'<div class="alert alert-danger" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="btn red">Generar Informe</a>'
+																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
 														case JOBS_ESTADO_PENDIENTE && $intento==0:
-															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
-															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														case JOBS_ESTADO_PENDIENTE && $intento>0 :
-															$mensajeI ='<div class="alert alert-warning-select" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														
 													}
