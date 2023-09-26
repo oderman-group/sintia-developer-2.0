@@ -1090,7 +1090,7 @@ if (base64_decode($_GET["get"]) == 17) {
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo $estado;
 	exit();
 }
 //ME GUSTA MURO
