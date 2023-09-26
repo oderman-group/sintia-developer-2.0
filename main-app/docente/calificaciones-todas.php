@@ -61,6 +61,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 <?php include("../compartido/body.php");?>
 	
     <div class="page-wrapper">
+		<?php include("../compartido/texto-manual-ayuda.php");?>
         <?php include("../compartido/encabezado.php");?>
 		
         <?php include("../compartido/panel-color.php");?>
@@ -190,12 +191,6 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														
 														$colorEstudiante = '#000;';
 														if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
-													?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado[0]);
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
 													?>
                                                     
 													<tr>

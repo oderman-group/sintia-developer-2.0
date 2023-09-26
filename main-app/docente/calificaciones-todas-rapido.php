@@ -96,8 +96,7 @@ th {
 <!-- END HEAD -->
 
 <body>
-	
-
+<?php include("../compartido/texto-manual-ayuda.php");?>
                                             <span id="respRCT"></span>
 		
 											<p>
@@ -154,12 +153,6 @@ th {
 														
 														$colorFondo = '';
 														if(!empty($_GET["idEst"]) && $resultado['mat_id']==$_GET["idEst"]){$colorFondo = 'yellow;';}
-													?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado[0]);
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
 													?>
                                                     
 													<tr style="background-color: <?=$colorFondo;?>">
