@@ -214,6 +214,15 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														?>
 															<td style="text-align:center;">
 																
+															<?php
+															$arrayEnviar = [
+																"tipo"=>5, 
+																"descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
+																"idInput"=>$resultado[0]."-".$rA[0]
+															];
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
+															?>
 															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
 																
 															<?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
