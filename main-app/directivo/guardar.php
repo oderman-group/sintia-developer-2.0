@@ -1559,7 +1559,7 @@ if ($_GET["get"] == 67) {
 	exit();
 }
 //ELIMINAR INDICADORES DE LOS DOCENTES
-if ($_GET["get"] == 68) {
+if (base64_decode($_GET["get"]) == 68) {
 	include("verificar-carga.php");
 	//include("verificar-periodos-diferentes.php");
 
