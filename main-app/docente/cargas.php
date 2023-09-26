@@ -4,6 +4,7 @@
 <?php 
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
 ?>
 </head>
@@ -129,13 +130,13 @@ require_once("../class/Sysjobs.php");
 																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
 														case JOBS_ESTADO_PENDIENTE && $intento==0:
-															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
-															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														case JOBS_ESTADO_PENDIENTE && $intento>0 :
-															$mensajeI ='<div class="alert alert-warning-select" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															break;
 														
 													}
