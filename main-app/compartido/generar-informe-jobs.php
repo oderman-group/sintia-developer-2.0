@@ -172,7 +172,7 @@ $mensaje="";
 	}else{
 		
 		if($intento>=3){				
-		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
+		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
 		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_FINALIZADO);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje.$listadoEstudiantesError,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
 		}else{
@@ -182,7 +182,7 @@ $mensaje="";
 			 }else{
 				$texto= $erroresNumero."  estudiante que le";
 			 }
-			 $mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-todas-rapido.php?carga=".$carga."&periodo=".$periodo."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
+			 $mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
 			 SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
 		}
 	}
