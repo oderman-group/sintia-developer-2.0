@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DC0067';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 
 $consultaValores=mysqli_query($conexion, "SELECT
@@ -13,14 +14,8 @@ WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsult
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
+include("../compartido/sintia-funciones-js.php");
 ?>
-
-<!-- Axios -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
-<?php include("../compartido/sintia-funciones-js.php");?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
 	<title>Resumen de notas</title>
 <script type="application/javascript">
 //CALIFICACIONES	
@@ -91,12 +86,6 @@ th {
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="./../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
-	<!-- Axios -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
-	<!-- Mis funciones JS -->
-	<script src="../compartido/funciones.js" ></script>
 	
 </head>
 <!-- END HEAD -->
@@ -208,10 +197,11 @@ th {
                                             </table>
 											
 
-    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
-	
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- notifications -->
+<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
+<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
     <!-- end js include path -->
 </body>
 
