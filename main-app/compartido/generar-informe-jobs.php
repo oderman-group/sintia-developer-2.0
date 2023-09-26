@@ -38,26 +38,28 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-$consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($carga,$periodo);
 $num=0;
 $finalizado = true;
 $erroresNumero=0;
 $listadoEstudiantesError="";
 $mensaje="";
-   //Verificamos que el estudiante tenga sus notas al 100%
-   if(mysqli_num_rows($consultaListaEstudantesError)>0){
-	 $erroresNumero=mysqli_num_rows($consultaListaEstudantesError);
-	 $contador=0;
-	 while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
-	 $contador++;
-	 $listadoEstudiantesError=$listadoEstudiantesError."<br>".$contador."): ".$estudianteResultadoError['mat_nombres']
-	 ." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
-	 ." no tiene notas completas  id: ".$estudianteResultadoError['mat_id']." Valor Actual: ".$estudianteResultadoError['acumulado']."%";
-	 }
-	 $finalizado = false;
-   }
-      
-   if($finalizado){
+	if($config['conf_porcentaje_completo_generar_informe']==1){
+		$consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($carga,$periodo);
+		//Verificamos que el estudiante tenga sus notas al 100%
+		if(mysqli_num_rows($consultaListaEstudantesError)>0){
+			$erroresNumero=mysqli_num_rows($consultaListaEstudantesError);
+			$contador=0;
+			while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
+			$contador++;
+			$listadoEstudiantesError=$listadoEstudiantesError."<br>".$contador."): ".$estudianteResultadoError['mat_nombres']
+			." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
+			." no tiene notas completas  id: ".$estudianteResultadoError['mat_id']." Valor Actual: ".$estudianteResultadoError['acumulado']."%";
+			}
+			$finalizado = false;
+		}
+	}
+
+	if($finalizado){
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 			$num++;
 			$estudiante = $estudianteResultado["mat_id"];
@@ -68,12 +70,14 @@ $mensaje="";
 			WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");
 			$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
 
-			//Verificamos que el estudiante tenga sus notas al 100%
-			if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
-				$erroresNumero++;
-				$mensaje=$mensaje."<br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
-				$finalizado = false;
-				continue;
+			if($config['conf_porcentaje_completo_generar_informe']==2){
+				//Verificamos que el estudiante tenga sus notas al 100%
+				if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
+					$erroresNumero++;
+					$mensaje=$mensaje."<br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
+					$finalizado = false;
+					continue;
+				}
 			}
 			$caso = 1; //Inserta la definitiva que viene normal 
 			//Si ya existe un registro previo de definitiva TIPO 1
