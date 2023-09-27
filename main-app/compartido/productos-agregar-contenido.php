@@ -27,7 +27,15 @@
                                             <div class="col-sm-4">
                                                 <input type="number" name="precio" class="form-control" required placeholder="Ejemplo: 10000">
 												<span style="color: navy;">Solamente digite el número sin puntos ni simbolos.</span><br>
-												<span style="color: tomato;">Si desea recibir el pago en línea, el valor mínimo debe ser de $10.000 COP.</span>
+												<span style="color: tomato;">Para pagos en línea el valor mínimo a comprar por el cliente debe ser de $10.000 COP.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Stock (*)</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" name="stock" id="stock" class="form-control" value="1" required placeholder="Ejemplo: 9" onChange="minimoUno(this)">
+												<span style="color: navy;">Solamente digite el número sin puntos ni simbolos.</span><br>
                                             </div>
                                         </div>
 										
