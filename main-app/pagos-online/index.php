@@ -1,5 +1,10 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+    $cantidad = 1;
+    if( !empty($_POST['cantidad']) && $_POST['cantidad'] > 0 ) {
+        $cantidad = $_POST['cantidad']; 
+    }
+    $montoFinal = $_POST['monto'] * $cantidad;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +142,7 @@
                 data-epayco-key="<?=PUBLIC_KEY_EPAYCO?>"
                 data-epayco-country="co"
                 data-epayco-currency="cop"
-                data-epayco-amount="<?=$_POST['monto']?>"
+                data-epayco-amount="<?=$montoFinal;?>"
                 data-epayco-name="<?=$_POST['nombre']?>"
                 data-epayco-description="<?=$_POST['nombre']?>"
 
