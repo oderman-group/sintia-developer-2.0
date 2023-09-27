@@ -40,7 +40,9 @@ if(!empty($_POST['carga'])){
 	var periodo=<?=$periodo?>;
 	var carga=<?=$carga?>;
 	if(nota!=''){
-		if (nota < <?=$config[3];?> || Number.isNaN(nota) || nota > <?=$config[4];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+		if (alertValidarNota(nota)) {
+		return false;
+		}
 	}
 	$('#resp').empty().hide().html("esperando...").show(1);
 		
@@ -191,8 +193,8 @@ if(!empty($_POST['carga'])){
 																<input size="5" maxlength="3" name="" id="" value="<?php if(!empty($rndisiplina["dn_nota"])) echo $rndisiplina["dn_nota"];?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 
 																<?php if(!empty($rndisiplina[4]) && Modulos::validarPermisoEdicion()){?>
-																	<a href="cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">X</a>
-																<?php }?>
+																	<a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>')">X</a>
+																	<?php }?>
 
 															</td>
 															<td style="text-align:center;">
