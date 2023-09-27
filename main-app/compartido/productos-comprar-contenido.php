@@ -42,6 +42,28 @@ WHERE prod_id='".$id."'
                                                 <input class="form-control" value="<?=number_format($producto['prod_precio'],0,".",".");?>" readonly>
                                             </div>
                                         </div>
+                                        <input type="hidden" value="<?=$producto['prod_precio'];?>" id="precio">
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Stock</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="text" value="<?=$producto['prod_existencias'];?>" name="stock" id="stock" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Cantidad</label>
+                                            <div class="col-sm-2">
+                                                <input class="form-control" type="number" value="1" name="cantidad" id="cantidad" onChange="calcularTotal()">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Total</label>
+                                            <div class="col-sm-4">
+                                                <input class="form-control" name="total" id="total" readonly>
+                                            </div>
+                                        </div>
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Documento de quien recibe (*)</label>
@@ -85,7 +107,7 @@ WHERE prod_id='".$id."'
 										
 										<div align="right">
 											<!-- <input type="submit" class="btn btn-primary" value="Continuar al pago">&nbsp; -->
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-credit-card" aria-hidden="true"></i>Continuar al pago</button>
+                                            <button type="submit" id="continuarPago" class="btn btn-primary"><i class="fa fa-credit-card" aria-hidden="true"></i>Continuar al pago</button>
 										</div>
 										
 
@@ -99,3 +121,39 @@ WHERE prod_id='".$id."'
                         </div>
 						
                     </div>
+
+                    <script>
+                        /**
+                         * Esta función calcula el precio total a pagar al momento
+                         * de comprar un producto en merkaplace
+                         */
+                        function calcularTotal() {
+
+                            var precio        = document.getElementById("precio").value;
+                            var total         = document.getElementById("total");
+                            var cantidad      = document.getElementById("cantidad");
+                            var stock         = document.getElementById("stock");
+                            var continuarPago = document.getElementById("continuarPago");
+                            
+                            minimoUno(cantidad);
+
+                            if(parseInt(cantidad.value) > parseInt(stock.value)) {
+                                cantidad.value = stock.value;
+                            }
+                            
+                            var calculo = parseInt(precio) * parseInt(cantidad.value);
+
+                            continuarPago.disabled = false;
+                            if(calculo <= 0) {
+                                continuarPago.disabled = true;
+                            }
+                            const formatoDinero = calculo.toLocaleString('es-ES', { style: 'currency', currency: 'COP' });
+                            
+                            total.value = formatoDinero;
+
+                        }
+
+                        document.addEventListener("DOMContentLoaded", function() {
+                            calcularTotal();
+                        });
+                    </script>

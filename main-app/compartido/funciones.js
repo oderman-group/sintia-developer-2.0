@@ -277,3 +277,9 @@ function ejecutarOtrasFunciones(params) {
         }, 100);
     });
 }
+
+function minimoUno(data) {
+    if( parseInt(data.value) <= 0 ) {
+        data.value = 1;
+    }
+}
