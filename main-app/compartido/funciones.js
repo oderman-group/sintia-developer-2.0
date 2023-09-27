@@ -332,46 +332,23 @@ function crearNoticia() {
 
     axios.get(url)
     .then(function(response) {
+        var idRegistro           = response.data;
+        var idRegistroEncriptado = btoa(idRegistro.toString());
 
-        console.log(response.data);
-
-        nuevoDiv.id = btoa(response.data);
+        nuevoDiv.id = "PUB"+idRegistroEncriptado;
         nuevoDiv.className = "row";
 
     // Establece el contenido HTML en el nuevo div
         nuevoDiv.innerHTML = `
             <div class="col-sm-12">
-                <div class="panel">
+                <div id="PANEL${idRegistroEncriptado}" class="panel">
                     <div class="card-head">
                         <header></header>
-                        <button id="panel-${response.data}"
+                        <button id="panel-${idRegistro}"
                             class="mdl-button mdl-js-button mdl-button--icon pull-right"
                             data-upgraded=",MaterialButton">
                             <i class="material-icons">more_vert</i>
                         </button>
-                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                                        data-mdl-for="panel-${response.data}">
-
-                                    <li class="mdl-menu__item">
-                                        <a
-                                        href="javascript:void(0);"
-                                        id="${btoa(response.data)}|1"  
-                                        name="../compartido/guardar.php?get=${btoa(6)}?>&e=${btoa(1)}&idR=${btoa(response.data)}"
-                                        onClick="ocultarNoticia(this)"
-                                        >
-                                        <i class="fa fa-eye"></i>Mostrar</a>
-                                    </li>
-                                    <li class="mdl-menu__item">
-                                    <a
-                                    href="javascript:void(0);"
-                                    id="${btoa(response.data)}|2"  
-                                    name="../compartido/guardar.php?get=${btoa(6)}&e=${btoa(0)}&idR=${btoa(response.data)}"
-                                    onClick="ocultarNoticia(this)"
-                                    >
-                                        <i class="fa fa-eye-slash"></i>Ocultar
-                                    </a>
-                                    </li>
-                        </ul>
                     </div>
 
                     <div class="user-panel">
@@ -388,7 +365,13 @@ function crearNoticia() {
                     <div class="card-body">
                         ${campoContenido.value}
                     </div>
+
+                    <div class="card-body">
+                        <a id="#" class="pull-left"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+                    </div>
+
                 </div>
+                
             </div>
         `;
 
