@@ -17,7 +17,7 @@ WHERE prod_id='".$id."'
                                     <header>Confirme los datos</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../pagos-online/index.php" method="post" enctype="multipart/form-data" target="_target">
+                                    <form class="form-horizontal" id="formularioCompraMP" action="../pagos-online/index.php" method="post" enctype="multipart/form-data" target="_target">
 										<input type="hidden" name="monto" value="<?=$producto['prod_precio'];?>">
                                         <input type="hidden" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
                                         <input type="hidden" name="idInstitucion" value="<?=$config['conf_id_institucion'];?>">
@@ -54,7 +54,7 @@ WHERE prod_id='".$id."'
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Cantidad</label>
                                             <div class="col-sm-2">
-                                                <input class="form-control" type="number" value="1" name="cantidad" id="cantidad" onChange="calcularTotal()">
+                                                <input class="form-control" type="number" value="1" name="cantidad" id="cantidad" required onChange="calcularTotal()">
                                             </div>
                                         </div>
 
@@ -107,7 +107,7 @@ WHERE prod_id='".$id."'
 										
 										<div align="right">
 											<!-- <input type="submit" class="btn btn-primary" value="Continuar al pago">&nbsp; -->
-                                            <button type="submit" id="continuarPago" class="btn btn-primary"><i class="fa fa-credit-card" aria-hidden="true"></i>Continuar al pago</button>
+                                            <button type="button" onClick="enviarFormulario()" id="continuarPago" class="btn btn-primary"><i class="fa fa-credit-card" aria-hidden="true"></i>Continuar al pago</button>
 										</div>
 										
 
@@ -134,26 +134,64 @@ WHERE prod_id='".$id."'
                             var cantidad      = document.getElementById("cantidad");
                             var stock         = document.getElementById("stock");
                             var continuarPago = document.getElementById("continuarPago");
+
+                            if(parseInt(stock.value) <= 0) {
+                                continuarPago.disabled = true;
+                                cantidad.value = 0;
+                                Swal.fire('Este producto no tiene stock');
+
+                                const formulario = document.getElementById('formularioCompraMP');
+                                const inputs = formulario.getElementsByTagName('input');
+                                for (let i = 0; i < inputs.length; i++) {
+                                    inputs[i].disabled = true;
+                                }
+
+                                return false;
+                            }
                             
                             minimoUno(cantidad);
 
                             if(parseInt(cantidad.value) > parseInt(stock.value)) {
+                                Swal.fire('El stock de este producto es de '+stock.value);
                                 cantidad.value = stock.value;
                             }
                             
                             var calculo = parseInt(precio) * parseInt(cantidad.value);
 
                             continuarPago.disabled = false;
-                            if(calculo <= 0) {
+                            if(calculo <= 0 || isNaN(calculo)) {
+                                Swal.fire('AVISPATE!', 'La cantidad minima para comprar debe ser 1', 'info');
                                 continuarPago.disabled = true;
+                                total.value = 0;
+                                return false;
                             }
+
+                            
                             const formatoDinero = calculo.toLocaleString('es-ES', { style: 'currency', currency: 'COP' });
                             
                             total.value = formatoDinero;
+
+                            return parseInt(calculo);
 
                         }
 
                         document.addEventListener("DOMContentLoaded", function() {
                             calcularTotal();
                         });
+
+                        function enviarFormulario() {
+                            var calculo = calcularTotal();
+                            // Obtén una referencia al formulario por su ID
+                            const formularioEnviar = document.getElementById('formularioCompraMP');
+
+                            var valorMinimo = 10000;
+                            if( parseInt(calculo) > 0 && parseInt(calculo) < parseInt(valorMinimo) ) {
+                                Swal.fire('El valor minimo para comprar debe ser de $10.000 COP.');
+                                continuarPago.disabled = true;
+                                return false;
+                            }
+
+                            // Llama al método submit() del formulario para enviarlo
+                            formularioEnviar.submit();
+                        }
                     </script>
