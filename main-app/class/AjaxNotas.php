@@ -1,0 +1,96 @@
+<?php
+
+class AjaxNotas {
+
+    /**
+     * Este metodo sirve para registrar la nota por periodo de un estudiante
+     * 
+     * @param int $codEstudiante 
+     * @param int $carga 
+     * @param int $periodo
+     * @param double $nota
+     * @param double $notaAnterior
+     * 
+     * @return array // se retorna mensaje de confirmación
+    **/
+    public static function ajaxPeriodosRegistrar($codEstudiante,$carga,$periodo,$nota,$notaAnterior)
+    {
+        global $conexion, $config;        
+
+        if(trim($nota)==""){
+            $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
+            return $datosMensaje;
+        }
+        if($nota>$config[4]) $nota = $config[4]; if($nota<1) $nota = 1;
+
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$codEstudiante." AND bol_carga=".$carga." AND bol_periodo=".$periodo);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        $num = mysqli_num_rows($consulta);
+        $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        if($num==0){
+            try{
+                mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_observaciones)VALUES('".$carga."', '".$codEstudiante."', '".$periodo."', '".$nota."', 2, now(), 0, 'Recuperación del periodo.')");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }else{
+            try{
+                mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$nota."', bol_nota_anterior='".$notaAnterior."', bol_observaciones='Recuperación del periodo.', bol_tipo=2, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=".$rB[0]);
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }
+
+        $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>"Los cambios se ha guardado correctamente!."];
+        return $datosMensaje;
+    }
+
+    /**
+     * Este metodo sirve para registrar la nota por periodo de un estudiante
+     * 
+     * @param int $codEstudiante 
+     * @param int $carga 
+     * @param double $nota
+     * 
+     * @return array // se retorna mensaje de confirmación
+    **/
+    public static function ajaxNivelacionesRegistrar($codEstudiante,$carga,$nota)
+    {
+        global $conexion, $config;        
+
+        if(trim($nota)==""){
+            $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
+            return $datosMensaje;
+        }
+        if($nota>$config[4]) $nota = $config[4]; if($nota<1) $nota = 1;
+
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$codEstudiante." AND niv_id_asg=".$carga);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        $num = mysqli_num_rows($consulta);
+        $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        if($num==0){
+            try{
+                mysqli_query($conexion, "INSERT INTO academico_nivelaciones(niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha)VALUES('".$carga."','".$codEstudiante."','".$nota."',now())");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }else{
+            try{
+                mysqli_query($conexion, "UPDATE academico_nivelaciones SET niv_definitiva='".$nota."', niv_fecha=now() WHERE niv_id=".$rB[0]);
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }
+
+        $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>"Los cambios se ha guardado correctamente!."];
+        return $datosMensaje;
+    }
+}
