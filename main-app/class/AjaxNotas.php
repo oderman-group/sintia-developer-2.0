@@ -50,7 +50,7 @@ class AjaxNotas {
     }
 
     /**
-     * Este metodo sirve para registrar la nota por periodo de un estudiante
+     * Este metodo sirve para registrar la nivelación desde resumen por periodo de un estudiante
      * 
      * @param int $codEstudiante 
      * @param int $carga 
