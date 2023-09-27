@@ -106,7 +106,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="areas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <?php if($numMaterias[0]==0){?><li><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li><?php }?>
+                                                                        <?php if($numMaterias[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li><?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

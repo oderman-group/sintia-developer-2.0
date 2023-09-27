@@ -88,7 +88,7 @@ if(!empty($_POST['carga'])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-comportamiento-filtros.php" onClick="deseaRegresar(this)">Comportamiento</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-comportamiento-filtros.php" onClick="deseaRegresar(this)">Comportamiento</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Nota de Comportamiento</li>
                             </ol>
                         </div>
@@ -193,7 +193,7 @@ if(!empty($_POST['carga'])){
 																<input size="5" maxlength="3" name="" id="" value="<?php if(!empty($rndisiplina["dn_nota"])) echo $rndisiplina["dn_nota"];?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 
 																<?php if(!empty($rndisiplina[4]) && Modulos::validarPermisoEdicion()){?>
-																	<a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>')">X</a>
+																	<a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>')">X</a>
 																	<?php }?>
 
 															</td>

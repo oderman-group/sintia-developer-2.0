@@ -41,7 +41,7 @@
       <li class="nav-item"> <a class="nav-link" href="estudiantes-promedios.php" style="color:<?=$Plataforma->colorUno;?>;">Promedios estudiantiles</a></li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Menú matrículas
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -53,36 +53,36 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Más opciones
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <?php if(Modulos::validarPermisoEdicion()){?>
-          <a class="dropdown-item" href="#"
+          <a class="dropdown-item" href="javascript:void(0);"
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matricular-todos.php')">Matricular a todos</a>
-          <a class="dropdown-item" href="#"
+          <a class="dropdown-item" href="javascript:void(0);"
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matriculas-cancelar.php')">Cancelar a todos</a>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-grupoa-todos.php')">Asignar a todos al grupo A</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?','question','estudiantes-inactivos-remover.php')"
           >Remover estudiantes Inactivos este año</a></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-documento-usuario-actualizar.php')">Colocar documento como usuario de acceso</a>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-crear-usuarios.php')">Verificar y generar credenciales a estudiantes</a>
         <?php }?>
         <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
         </div>
       </li>
 
-      <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+      <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
             Filtrar por curso
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -100,7 +100,7 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
         Filtrar por estados
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -115,7 +115,7 @@
       </li>
 
       <?php if (!empty($filtro)) { ?>
-          <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+          <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
 
           <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
       <?php } ?>

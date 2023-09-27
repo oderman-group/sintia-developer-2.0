@@ -209,7 +209,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														<td>
 															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notas['cal_nota'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)">
 															<?php if($notas['cal_nota']!=""){?>
-															<a href="#" name="guardar.php?get=21&id=<?=$notas['cal_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<a href="javascript:void(0);" name="guardar.php?get=21&id=<?=$notas['cal_id'];?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														<td>

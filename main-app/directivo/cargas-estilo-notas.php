@@ -97,7 +97,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="cargas-estilo-notas-especifica.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
                                                                         <li>
-                                                                            <a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-eliminar.php?idR=<?=base64_encode($resultado["catn_id"]);?>')">Eliminar</a>                                                                            
+                                                                            <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-eliminar.php?idR=<?=base64_encode($resultado["catn_id"]);?>')">Eliminar</a>                                                                            
                                                                         </li>
                                                                     </ul>
                                                                 </div>

@@ -168,7 +168,7 @@ $porcentajeRestante = 100 - $valores[0];
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="calificaciones-registrar.php?idR=<?=$resultado['act_id'];?>">Calificar</a></li>
 																	  <li><a href="calificaciones-editar.php?idR=<?=$resultado['act_id'];?>">Editar</a></li>
-																	  <li><a href="#" name="guardar.php?get=12&idR=<?=$resultado['act_id'];?>&idIndicador=<?=$resultado['act_id_tipo'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="javascript:void(0);" name="guardar.php?get=12&idR=<?=$resultado['act_id'];?>&idIndicador=<?=$resultado['act_id_tipo'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>

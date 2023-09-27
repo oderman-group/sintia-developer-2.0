@@ -57,7 +57,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 						 
 						<div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							<div class="blogThumb">
-								<div class="thumb-center"><a href="#"><img class="img-responsive" alt="user" src="../files/modulos/mod4.jpg"></a></div>
+								<div class="thumb-center"><a href="javascript:void(0);"><img class="img-responsive" alt="user" src="../files/modulos/mod4.jpg"></a></div>
 	                        </div>	
                     	</div>
 						  

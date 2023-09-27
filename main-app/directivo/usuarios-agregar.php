@@ -162,7 +162,7 @@ $(document).ready(function() {
                             <?php include("../compartido/texto-manual-ayuda.php");?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10"
+                            <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=10"
                                     onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i>
                             </li>
                             <li class="active">Agregar usuarios</li>
@@ -340,7 +340,7 @@ $(document).ready(function() {
                                         <input type="submit" class="btn btn-primary" id="btnEnviar" value="Guardar cambios">&nbsp;
                                     <?php }?>
 
-                                    <a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary"
+                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary"
                                         onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>

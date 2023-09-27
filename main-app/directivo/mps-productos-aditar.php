@@ -51,7 +51,7 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="mps-productos.php" onClick="deseaRegresar(this)">Productos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="mps-productos.php" onClick="deseaRegresar(this)">Productos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Editar Productos</li>
                         </ol>
                     </div>

@@ -57,7 +57,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Intesidad por cursos</li>
                             </ol>
                         </div>
@@ -73,7 +73,7 @@ if(!Modulos::validarPermisoEdicion()){
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<a href="#" class="btn btn-danger" 
+															<a href="javascript:void(0);" class="btn btn-danger" 
 															onClick="sweetConfirmacion('Alerta!','A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?','question','cursos-actualizar-cargas.php')"
 															>
 																Actualizar con las cargas <i class="fa fa-plus"></i>

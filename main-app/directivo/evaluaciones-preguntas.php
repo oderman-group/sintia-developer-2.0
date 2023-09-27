@@ -212,9 +212,9 @@ function mostrarNuevaRespuesta(datos){
 
 																		<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																		   data-mdl-for="panel-<?=$preguntas['preg_id'];?>">
-																		   <li class = "mdl-menu__item"><a href="#" id="<?=$preguntas['preg_id'];?>" onClick="mostrarNuevaRespuesta(this)"><i class="fa fa-plus-circle"></i> Agregar respuesta</a></li>	
+																		   <li class = "mdl-menu__item"><a href="javascript:void(0);" id="<?=$preguntas['preg_id'];?>" onClick="mostrarNuevaRespuesta(this)"><i class="fa fa-plus-circle"></i> Agregar respuesta</a></li>	
 																		   <li class = "mdl-menu__item"><a href="preguntas-editar.php?idR=<?=$preguntas['preg_id'];?>&idE=<?=$_GET["idE"];?>"><i class="fa fa-edit"></i> Editar pregunta</a></li>
-																		   <li class = "mdl-menu__item"><a href="#" name="guardar.php?get=27&idP=<?=$preguntas['preg_id'];?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
+																		   <li class = "mdl-menu__item"><a href="javascript:void(0);" name="guardar.php?get=27&idP=<?=$preguntas['preg_id'];?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
 																		</ul>
 													</div>
 													
@@ -229,7 +229,7 @@ function mostrarNuevaRespuesta(datos){
 													}
 											?>
 												<p>	
-													<a href="#" name="guardar.php?get=9&idR=<?=$respuestas['resp_id'];?>&estado=<?=$respuestas['resp_correcta'];?>&preg=<?=$preguntas['preg_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
+													<a href="javascript:void(0);" name="guardar.php?get=9&idR=<?=$respuestas['resp_id'];?>&estado=<?=$respuestas['resp_correcta'];?>&preg=<?=$preguntas['preg_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
 													
 													<a href="guardar.php?get=8&idR=<?=$respuestas['resp_id'];?>&estado=<?=$respuestas['resp_correcta'];?>&preg=<?=$preguntas['preg_id'];?>">
 														<i class="fa fa-exchange"></i>

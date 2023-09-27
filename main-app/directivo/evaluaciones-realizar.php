@@ -118,7 +118,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
             El tiempo para esta evaluación ha finalizado.  
      	</div>
          <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
      </div>
       </div>
    </div>

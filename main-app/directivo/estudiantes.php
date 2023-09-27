@@ -183,11 +183,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<tr style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
-																<a href="#" title="Activar para la matricula"
+																<a href="javascript:void(0);" title="Activar para la matricula"
 																 onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-activar.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
 																 ><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
 															<?php }else{?>
-																<a href="#" title="Bloquear para la matricula" 
+																<a href="javascript:void(0);" title="Bloquear para la matricula" 
 																onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-bloquear.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
 																><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
 															<?php }?>
@@ -225,7 +225,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<?php if(Modulos::validarPermisoEdicion()){?>
 																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																		<?php if($config['conf_id_institucion']==1){ ?>
-																			<li><a href="#" 
+																			<li><a href="javascript:void(0);" 
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
@@ -238,13 +238,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		}
 																		?>
 																		<li><a href="estudiantes-retirar.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank"><?=$retirarRestaurar?></a></li>
-																		<li><a href="#"
+																		<li><a href="javascript:void(0);"
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')" 
 																		>Reservar cupo</a></li>
-																		 <li><a href="#" 
+																		 <li><a href="javascript:void(0);" 
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
 																		>Eliminar</a></li>
-																		<li><a href="#" target="_blank" 
+																		<li><a href="javascript:void(0);"  
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
 																		>Generar usuario</a></li>
 																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>

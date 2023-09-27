@@ -169,7 +169,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 														<td>
 															<input type="number" style="text-align: center;" size="5" maxlength="3" value="<?=$notas['aus_ausencias'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)">
 															<?php if($notas['aus_ausencias']!=""){?>
-															<a href="#" name="guardar.php?get=29&id=<?=$notas['aus_id'];?>" onClick="deseaEliminar(this)">X</a>
+															<a href="javascript:void(0);" name="guardar.php?get=29&id=<?=$notas['aus_id'];?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
                                                     </tr>

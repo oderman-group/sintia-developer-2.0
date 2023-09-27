@@ -157,18 +157,18 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6) { ?>
                                                                     
-                                                                <li><a href="#" 
+                                                                <li><a href="javascript:void(0);" 
                                                                 onClick="sweetConfirmacion('Alerta!','Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-documentacion.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Borrar documentación</a></li>
 
-                                                                <li><a href="#" 
+                                                                <li><a href="javascript:void(0);" 
                                                                 onClick="sweetConfirmacion('Alerta!','Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?','question','inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Pasar a <?=($agnoBD+1); ?></a></li>
 
                                                                 <?php } ?>
 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
-                                                                <li><a href="#" 
+                                                                <li><a href="javascript:void(0);" 
                                                                 onClick="sweetConfirmacion('Alerta!','Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-aspirante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Eliminar aspirante</a></li>
                                                                 <?php } ?>

@@ -223,7 +223,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
-																	<a href="#" name="guardar.php?get=28&idE=<?=$_GET["idE"];?>&idEstudiante=<?=$resultado['mat_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser"></i></a>
+																	<a href="javascript:void(0);" name="guardar.php?get=28&idE=<?=$_GET["idE"];?>&idEstudiante=<?=$resultado['mat_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser"></i></a>
 															<?php }?>
 															
 															<a href="evaluaciones-ver.php?idE=<?=$_GET["idE"];?>&usrEstud=<?=$resultado['mat_id_usuario'];?>"><i class="fa fa-search-plus"></i></a>

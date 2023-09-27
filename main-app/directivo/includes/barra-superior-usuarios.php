@@ -32,21 +32,21 @@ if (isset($_GET['busqueda'])) {
   <ul class="navbar-nav mr-auto">
     <?php if(Modulos::validarPermisoEdicion()){?>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Más acciones
             <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(4)?>')"
           >Bloquear estudiantes</a>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(4)?>')"
           >Desbloquear estudiantes</a>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(2)?>')"
           >Bloquear docentes</a>
-          <a class="dropdown-item" href="#" 
+          <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(2)?>')"
           >Desbloquear docentes</a>
           <a>&nbsp;</a>
@@ -56,11 +56,11 @@ if (isset($_GET['busqueda'])) {
         </div>
       </li>
 
-      <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+      <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
     <?php }?>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
         Filtrar por tipo de usuario
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -78,7 +78,7 @@ if (isset($_GET['busqueda'])) {
       </li>
 
       <?php if (!empty($filtro)) { ?>
-        <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+        <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
 
         <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
       <?php } ?>

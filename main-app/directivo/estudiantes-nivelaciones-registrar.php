@@ -214,7 +214,7 @@ if(!Modulos::validarPermisoEdicion()){
 															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?=$defPorMateria;?>" id="<?=$resultado[0];?>" name="<?=$carga[0];?>" alt="1" onChange="niv(this)" <?=$disabledPermiso;?>><br>
 																<?php if(!empty($cNiv[0])){?>
 																	<span style="font-size:10px; color:rgb(255,0,0);"><?=$msj;?></span><br>
-																	<a href="#" 
+																	<a href="javascript:void(0);" 
 																	onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','guardar.php?get=57&idNiv=<?=$cNiv[0];?>&curso=<?=$_REQUEST["curso"];?>&grupo=<?=$_REQUEST["grupo"];?>')"
 																	>
 																	<img src="../files/iconos/1363803022_001_052.png"></a>

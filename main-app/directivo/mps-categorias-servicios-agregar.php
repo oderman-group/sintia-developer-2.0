@@ -38,7 +38,7 @@ include("../compartido/head.php");
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="mps-categorias-servicios.php" onClick="deseaRegresar(this)">Categorias de Servicios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="mps-categorias-servicios.php" onClick="deseaRegresar(this)">Categorias de Servicios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Agregar Categorias de Servicios</li>
                         </ol>
                     </div>
