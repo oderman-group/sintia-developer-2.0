@@ -1,11 +1,18 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0033';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php 
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0033';
+include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
+
+try{
+	$config = Plataforma::sesionConfiguracion();
+	$_SESSION["configuracion"] = $config;
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 ?>
 </head>
 <style>
