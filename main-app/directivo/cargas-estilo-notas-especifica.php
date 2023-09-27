@@ -101,7 +101,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <li><a href="cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
+                                                                        <li>
+                                                                        <a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>')">Eliminar</a>    
+                                                                       </li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

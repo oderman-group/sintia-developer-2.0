@@ -49,8 +49,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<ul class="dropdown-menu" role="menu">
 												<li><a href="cursos-intensidad.php">I.H por curso</a></li>
 												<!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
-												<li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
-												<li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
+												<li><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','cursos-cambiar-matricula.php')">Poner en $0 la matricula</a></li>
+												<li><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cursos-cambiar-pension.php')">Poner en $0 la pensión</a></li>
 											</ul>
 										</div>
 									<?php }?>

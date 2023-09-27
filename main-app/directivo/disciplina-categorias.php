@@ -105,7 +105,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <li><a href="disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado[0]);?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
+                                                                        <li><a href="#" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

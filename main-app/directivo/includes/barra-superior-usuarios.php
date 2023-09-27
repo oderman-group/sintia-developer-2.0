@@ -37,10 +37,18 @@ if (isset($_GET['busqueda'])) {
             <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(4)?>" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
-          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(4)?>" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
-          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(2)?>" onClick="if(!confirm('Desea Bloquear a todos los docentes?')){return false;}">Bloquear docentes</a>
-          <a class="dropdown-item" href="guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(2)?>" onClick="if(!confirm('Desea Desbloquear a todos los docentes?')){return false;}">Desbloquear docentes</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(4)?>')"
+          >Bloquear estudiantes</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(4)?>')"
+          >Desbloquear estudiantes</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(2)?>')"
+          >Bloquear docentes</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(2)?>')"
+          >Desbloquear docentes</a>
           <a>&nbsp;</a>
           <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
           <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>

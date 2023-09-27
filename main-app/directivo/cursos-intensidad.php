@@ -73,7 +73,9 @@ if(!Modulos::validarPermisoEdicion()){
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<a href="cursos-actualizar-cargas.php" class="btn btn-danger" onClick="if(!confirm('A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?')){return false;}">
+															<a href="#" class="btn btn-danger" 
+															onClick="sweetConfirmacion('Alerta!','A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?','question','cursos-actualizar-cargas.php')"
+															>
 																Actualizar con las cargas <i class="fa fa-plus"></i>
 															</a>
 														<?php }?>

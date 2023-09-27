@@ -59,14 +59,21 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <?php if(Modulos::validarPermisoEdicion()){?>
-          <a class="dropdown-item" href="estudiantes-matricular-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Matricular a todos</a>
-          <a class="dropdown-item" href="estudiantes-matriculas-cancelar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Cancelar a todos</a>
-          <a class="dropdown-item" href="estudiantes-grupoa-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Asignar a todos al grupo A</a>
+          <a class="dropdown-item" href="#"
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matricular-todos.php')">Matricular a todos</a>
+          <a class="dropdown-item" href="#"
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matriculas-cancelar.php')">Cancelar a todos</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-grupoa-todos.php')">Asignar a todos al grupo A</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="estudiantes-inactivos-remover.php" onClick="if(!confirm('Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?')){return false;}">Remover estudiantes Inactivos este año</a></a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?','question','estudiantes-inactivos-remover.php')"
+          >Remover estudiantes Inactivos este año</a></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="estudiantes-documento-usuario-actualizar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Colocar documento como usuario de acceso</a>
-          <a class="dropdown-item" href="estudiantes-crear-usuarios.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Verificar y generar credenciales a estudiantes</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-documento-usuario-actualizar.php')">Colocar documento como usuario de acceso</a>
+          <a class="dropdown-item" href="#" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-crear-usuarios.php')">Verificar y generar credenciales a estudiantes</a>
         <?php }?>
         <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
         </div>
