@@ -35,6 +35,7 @@ if(!Modulos::validarPermisoEdicion()){
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
 				   "&codEst="+(codEst)+
+				   "&notaAnterior="+(notaAnterior)+
 				   "&carga="+(carga);
 			   $.ajax({
 				   type: "POST",
