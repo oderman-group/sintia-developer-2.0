@@ -1,5 +1,6 @@
 <?php
 session_start();
+$idPaginaInterna = 'CM0006';
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 
@@ -130,6 +131,8 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
 $lineaError = __LINE__;
 include("../compartido/reporte-errores.php");
+
+include("../compartido/guardar-historial-acciones.php");
 ?>
 	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109";</script>
 <?php
