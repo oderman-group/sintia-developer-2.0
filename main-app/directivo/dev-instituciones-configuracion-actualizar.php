@@ -44,7 +44,8 @@ try {
 	conf_cambiar_clave_estudiantes='" . $_POST["cambiarClaveEstudiantes"] . "',
 	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "',
 	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "',
-	conf_permiso_edicion_years_anteriores='" . $_POST["editarInfoYears"] . "'
+	conf_permiso_edicion_years_anteriores='" . $_POST["editarInfoYears"] . "',
+	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "'
 
 	WHERE conf_id_institucion='".$_POST["id"]."' AND conf_agno='".$_POST["year"]."'");
 } catch (Exception $e) {
