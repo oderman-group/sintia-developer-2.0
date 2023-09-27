@@ -279,7 +279,7 @@ function ejecutarOtrasFunciones(params) {
 }
 
 function minimoUno(data) {
-    if( data.value <= 0 ) {
+    if( parseInt(data.value) <= 0 ) {
         data.value = 1;
     }
 }

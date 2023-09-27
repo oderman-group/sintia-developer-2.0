@@ -137,11 +137,11 @@ WHERE prod_id='".$id."'
                             
                             minimoUno(cantidad);
 
-                            if(cantidad.value > stock.value) {
+                            if(parseInt(cantidad.value) > parseInt(stock.value)) {
                                 cantidad.value = stock.value;
                             }
                             
-                            var calculo = precio * cantidad.value;
+                            var calculo = parseInt(precio) * parseInt(cantidad.value);
 
                             continuarPago.disabled = false;
                             if(calculo <= 0) {
