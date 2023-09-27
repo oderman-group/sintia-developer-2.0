@@ -299,7 +299,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Generar informes con estudiantes con menos de 100%?</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="generarInforme" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_porcentaje_completo_generar_informe']==1){ echo "selected";} ?>>No generar informe hasta que todos estén al 100%</option>
                                                     <option value="2" <?php if($cfg['conf_porcentaje_completo_generar_informe']==2){ echo "selected";} ?>>Omitir los estudiantes que no tengan el 100%</option>
