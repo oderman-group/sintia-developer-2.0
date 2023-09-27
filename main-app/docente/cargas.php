@@ -199,7 +199,7 @@ try{
 		                            	<?php if($rCargas['car_director_grupo']==1){?><br><a class="course-likes m-l-10" style="color: slateblue;"><i class="fa fa-user-circle-o"></i> Director de grupo</a><?php }?>
 		                            </div>
 									
-									<p><?=$mensajeI;?></p>
+									<span id="mensajeI<?=$rCargas['car_id']?>"><?=$mensajeI;?></span>
 									
 	                        	</div>
 	                        </div>	
@@ -213,6 +213,33 @@ try{
 						</div>		 
 	                    
 			        </div>
+					<script>
+						function mensajeGenerarInforme(datos){
+							var id = datos.id;
+    						var url = datos.name;
+    						var contenedorMensaje = document.getElementById('mensajeI'+id);
+							var nuevoContenido = '<div class="alert alert-success" role="alert" style="margin-right: 20px;">La petición de generación de informe se envió correctamente.</div>';
+
+							axios.get(url).then(function(response) {
+									contenedorMensaje.innerHTML = nuevoContenido;
+
+									$.toast({
+										heading: 'Acción realizada',
+										text: 'La petición de generación de informe se envió correctamente.',
+										position: 'botom-left',
+										loaderBg: '#26c281',
+										icon: 'success',
+										hideAfter: 5000,
+										stack: 6
+									});
+
+							}).catch(function(error) {
+								// handle error
+								console.error(error);
+								window.location.href = url;
+							});
+						}
+					</script>
 					
 					<div class="row">
 						 
