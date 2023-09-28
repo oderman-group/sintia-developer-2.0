@@ -40,6 +40,14 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Verifica que hayas seleccionado la institución y el año correctamente.';
             break;
 
+            case 8:
+                $tipo = 'danger';
+                $mensaje = '
+                No se pudo establecer una conexión. Revise su red.<br>
+                <a href="index.php" class="btn btn-primary">Intente nuevamente</a>
+                ';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
