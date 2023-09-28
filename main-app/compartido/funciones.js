@@ -204,6 +204,9 @@ function deseaEliminar(dato) {
 
                 if (typeof varObjet !== "undefined") {
                     var input = document.getElementById(parseInt(varObjet.idInput));
+                    if (varObjet.tipo === 5) {
+                        var input = document.getElementById(varObjet.idInput);
+                    }
                 }
 
                 axios.get(url).then(function(response) {
@@ -213,7 +216,7 @@ function deseaEliminar(dato) {
                             registro.style.display = "none";
                         }
 
-                        if (varObjet.tipo === 2) {
+                        if (varObjet.tipo === 2 || varObjet.tipo === 5) {
                             document.getElementById(id).style.display = "none";
                             input.value = "";
                         }
