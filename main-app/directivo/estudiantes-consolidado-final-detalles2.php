@@ -106,8 +106,7 @@ if (!Modulos::validarPermisoEdicion()) {
 		var codEst = enviada.id;
 		var carga = enviada.name;
 		var per = enviada.alt;
-		if (nota > <?= $config[4]; ?> || isNaN(nota) || nota < <?= $config[3]; ?>) {
-			alert('Ingrese un valor numerico entre <?= $config[3]; ?> y <?= $config[4]; ?>');
+		if (alertValidarNota(nota)) {
 			return false;
 		}
 		$('#resp').empty().hide().html("Esperando...").show(1);

@@ -51,7 +51,7 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="mps-empresas.php" onClick="deseaRegresar(this)">Empresa</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="mps-empresas.php" onClick="deseaRegresar(this)">Empresa</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Editar Empresa</li>
                         </ol>
                     </div>

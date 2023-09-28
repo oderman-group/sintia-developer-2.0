@@ -66,7 +66,7 @@ if(!empty($datosReportes['rperr_usuario'])){
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="dev-historial-acciones.php" onClick="deseaRegresar(this)">Errores del Sistema</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="dev-historial-acciones.php" onClick="deseaRegresar(this)">Errores del Sistema</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Errores del Sistema Detalles</li>
                         </ol>
                     </div>
@@ -164,7 +164,7 @@ if(!empty($datosReportes['rperr_usuario'])){
                                         </div>
                                     </div>
 
-                                    <a href="#" name="dev-errores-sistema.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
+                                    <a href="javascript:void(0);" name="dev-errores-sistema.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
                                 </form>
                             </div>
                         </div>

@@ -29,7 +29,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Notas especifica</li>
                             </ol>
                         </div>
@@ -101,7 +101,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <li><a href="cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
+                                                                        <li>
+                                                                        <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>')">Eliminar</a>    
+                                                                       </li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

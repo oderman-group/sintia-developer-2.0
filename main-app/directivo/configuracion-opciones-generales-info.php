@@ -40,7 +40,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="configuracion-opciones-generales.php" onClick="deseaRegresar(this)">Opciones Generales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="configuracion-opciones-generales.php" onClick="deseaRegresar(this)">Opciones Generales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Crear Opciones</li>
                             </ol>
                         </div>

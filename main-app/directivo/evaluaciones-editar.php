@@ -50,7 +50,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="evaluaciones.php" onClick="deseaRegresar(this)"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="evaluaciones.php" onClick="deseaRegresar(this)"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[114][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -138,7 +138,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 										
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 
-										<a href="#" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>
 
 

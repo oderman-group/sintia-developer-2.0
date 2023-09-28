@@ -40,7 +40,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="informes-todos.php" onClick="deseaRegresar(this)">Informes Todos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Consolidados</li>
                             </ol>
                         </div>
@@ -98,7 +98,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                     
                                     <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     
-                                    <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>

@@ -50,7 +50,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="actividades.php" onClick="deseaRegresar(this)"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="actividades.php" onClick="deseaRegresar(this)"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[112][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -144,7 +144,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 
-										<a href="#" name="actividades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="actividades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>
 
 

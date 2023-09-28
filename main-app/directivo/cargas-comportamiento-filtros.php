@@ -47,7 +47,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php?cantidad=10" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php?cantidad=10" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Comportamiento</li>
                             </ol>
                         </div>
@@ -177,7 +177,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     <?php }?>
                                     
-                                    <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>

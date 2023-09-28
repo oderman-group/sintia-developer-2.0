@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 <div class="page-title">Editar matrículas</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar matrículas</li>
                             </ol>
                         </div>

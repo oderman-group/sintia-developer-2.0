@@ -46,7 +46,7 @@ $datosCategorias = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="mps-categorias-productos.php" onClick="deseaRegresar(this)">Categorias de Producto</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="mps-categorias-productos.php" onClick="deseaRegresar(this)">Categorias de Producto</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Editar Categorias de Producto</li>
                         </ol>
                     </div>

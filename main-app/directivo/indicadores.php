@@ -147,7 +147,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="indicadores-editar.php?idR=<?=$resultado['ipc_id'];?>">Editar</a></li>
-																	  <li><a href="#" name="guardar.php?get=10&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="javascript:void(0);" name="guardar.php?get=10&idR=<?=$resultado['ipc_id'];?>&idIndicador=<?=$resultado['ipc_indicador'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>
