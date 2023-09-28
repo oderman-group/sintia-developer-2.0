@@ -21,6 +21,7 @@ if(isset($yearEnd) and is_numeric($yearEnd)){
 }
 
 include("../modelo/conexion.php");
+require_once("../class/Plataforma.php");
 
 
 $rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
@@ -79,8 +80,7 @@ if($num>0)
 		break;
 	}
 	
-	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
-	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
+	$config = Plataforma::sesionConfiguracion();
 	$_SESSION["configuracion"] = $config;
 
 	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");

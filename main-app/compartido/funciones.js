@@ -482,3 +482,29 @@ function minimoUno(data) {
         data.value = 1;
     }
 }
+
+function mensajeGenerarInforme(datos){
+    var id = datos.id;
+    var url = datos.name;
+    var contenedorMensaje = document.getElementById('mensajeI'+id);
+    var nuevoContenido = '<div class="alert alert-success" role="alert" style="margin-right: 20px;">La petición de generación de informe se envió correctamente.</div>';
+
+    axios.get(url).then(function(response) {
+            contenedorMensaje.innerHTML = nuevoContenido;
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'La petición de generación de informe se envió correctamente.',
+                position: 'botom-left',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+
+    }).catch(function(error) {
+        // handle error
+        console.error(error);
+        window.location.href = url;
+    });
+}

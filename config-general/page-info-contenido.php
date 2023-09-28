@@ -64,9 +64,9 @@ switch($_GET["idmsg"]){
 	case 108:
 		$color = 'yellow';
 		$titulo = 'NO SE PUDO GENERAR';
-		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades. Por favor revisa al estudiante <b>'.$_GET["est"].'</b>. Solo tiene registrado el <b>'.$_GET["valorActual"]."%</b> de las notas.";
-		$url1 = 'calificaciones-todas-rapido.php?idEst='.$_GET["idEst"].'#estudiante'.$_GET["idEst"];
-		$boton1 = 'IR A VISTA RÁPIDA DE CALIFICACIONES';
+		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades.';
+		$url1 = 'calificaciones-faltantes.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'&get='.base64_encode(100);
+		$boton1 = 'VER ESTUDIANTES SIN NOTAS';
 	break;
 		
 	case 109:

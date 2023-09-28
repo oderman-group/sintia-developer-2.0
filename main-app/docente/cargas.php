@@ -1,11 +1,14 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0033';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php 
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0033';
+include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
+
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
 ?>
 </head>
 <style>
@@ -110,9 +113,22 @@ require_once("../class/Sysjobs.php");
 												);
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+
+												$btnGenerarInforme='
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn red">Generar Informe</button>
+                                                                    <button type="button" class="btn red dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a title="Se generará el informe de forma inmediata" href="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'">Forma tradicional</a></li>
+                                                                        <li><a title="Se programara la generación de informe y se te notificará cuando esté listo" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
+                                                                    </ul>
+                                                                </div>
+															';
 												
 												if(empty($jobsEncontrado)){
-													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="btn red">Generar Informe</a>';
+													$mensajeI = $btnGenerarInforme;
 													if($config['conf_porcentaje_completo_generar_informe']==1){
 														$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
 														$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
@@ -126,7 +142,7 @@ require_once("../class/Sysjobs.php");
 													$intento = intval($jobsEncontrado["job_intentos"]);
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
-															$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="btn red">Generar Informe</a>'
+															$mensajeI = $btnGenerarInforme
 																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
 														case JOBS_ESTADO_PENDIENTE && $intento==0:
@@ -179,7 +195,7 @@ require_once("../class/Sysjobs.php");
 		                            	<?php if($rCargas['car_director_grupo']==1){?><br><a class="course-likes m-l-10" style="color: slateblue;"><i class="fa fa-user-circle-o"></i> Director de grupo</a><?php }?>
 		                            </div>
 									
-									<p><?=$mensajeI;?></p>
+									<span id="mensajeI<?=$rCargas['car_id']?>"><?=$mensajeI;?></span>
 									
 	                        	</div>
 	                        </div>	

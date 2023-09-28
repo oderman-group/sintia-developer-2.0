@@ -11,13 +11,9 @@ if(isset($_POST["cambiar"]))
 	session_start();
     $_SESSION["yearAnterior"]=$_SESSION["bd"];
 	$_SESSION["bd"] = $_POST["agno"];
-    try{
-        $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
-    } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
-    }
-	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
-	$_SESSION["configuracion"] = $config;
+    
+    $config = Plataforma::sesionConfiguracion();
+    $_SESSION["configuracion"] = $config;
     
 	header("Location:cambiar-bd.php");
 	exit();
