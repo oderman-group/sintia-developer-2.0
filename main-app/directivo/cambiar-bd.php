@@ -11,12 +11,9 @@ if(isset($_POST["cambiar"]))
 	session_start();
     $_SESSION["yearAnterior"]=$_SESSION["bd"];
 	$_SESSION["bd"] = $_POST["agno"];
-    try{
-        $config = Plataforma::sesionConfiguracion();
-        $_SESSION["configuracion"] = $config;
-    } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
-    }
+    
+    $config = Plataforma::sesionConfiguracion();
+    $_SESSION["configuracion"] = $config;
     
 	header("Location:cambiar-bd.php");
 	exit();
