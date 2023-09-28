@@ -40,9 +40,30 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 }
 
 //include(ROOT_PATH."/conexion-datos.php");
-$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
-$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+try {
+	$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+	$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+	WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+} catch(Exception $e){
+
+	switch($e->getCode()){
+		case 1044:
+			$exception = "error=7";
+		break;
+
+		case 2002:
+			$exception = "error=8&nodb=1";
+		break;
+
+		default:
+			$exception = "nodb=1&error=".$e->getMessage()."&code=".$e->getCode();
+		break;	
+	}
+
+	session_destroy();
+	header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
+	exit();
+}
 
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 

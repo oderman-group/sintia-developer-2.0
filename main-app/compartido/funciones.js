@@ -9,15 +9,11 @@ function hayInternet() {
 		if(localStorage.getItem("internet") == 0){
 			document.getElementById("siInternet").style.display="block";
 
-            $.toast({
-                heading: 'La conexión ha vuelto!',  
-                text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.',
-                position: 'mid-center',
-                loaderBg:'#ff6849',
-                icon: 'success',
-                hideAfter: 10000, 
-                stack: 6
-            });
+            Swal.fire(
+                'AVISPATE que la conexión ha vuelto!', 
+                'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
+                'success'
+                );
 
 		}
 
@@ -31,15 +27,11 @@ function hayInternet() {
 	} else {
 
 		if(localStorage.getItem("internet") == 1 || localStorage.getItem("internet") == null) {
-            $.toast({
-                heading: 'Se ha perdido la conexión!',  
-                text: 'Se ha perdido tu conexión a internet. Por favor verifica antes de continuar trabajando en la plataforma.',
-                position: 'mid-center',
-                loaderBg:'#ff6849',
-                icon: 'error',
-                hideAfter: 10000, 
-                stack: 6
-            });
+            Swal.fire(
+                'AVISPATE que se ha perdido la conexión!', 
+                'Se ha perdido tu conexión a internet. Por favor verifica antes de continuar trabajando en la plataforma.', 
+                'error'
+                );
         }
         
 
@@ -276,4 +268,10 @@ function ejecutarOtrasFunciones(params) {
             inhabilitarBotones(params);
         }, 100);
     });
+}
+
+function minimoUno(data) {
+    if( parseInt(data.value) <= 0 ) {
+        data.value = 1;
+    }
 }
