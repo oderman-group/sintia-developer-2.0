@@ -55,12 +55,8 @@ try {
 	include("../compartido/error-catch-to-report.php");
 }
 
-try{
-	$config = Plataforma::sesionConfiguracion();
-	$_SESSION["configuracion"] = $config;
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
 
 include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';

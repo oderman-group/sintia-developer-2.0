@@ -7,12 +7,8 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
 
-try{
-	$config = Plataforma::sesionConfiguracion();
-	$_SESSION["configuracion"] = $config;
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
 ?>
 </head>
 <style>
