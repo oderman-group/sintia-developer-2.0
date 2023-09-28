@@ -273,6 +273,210 @@ function ejecutarOtrasFunciones(params) {
     });
 }
 
+
+function ocultarNoticia(datos) {
+    arrayInfo   = datos.id.split('|');
+    var url     = datos.name;
+    var pub     = document.getElementById("PANEL"+arrayInfo[0]);
+    var accion  = arrayInfo[1];
+    var mensaje = null;
+
+    axios.get(url).then(function(response) {
+
+        //Ocultar
+        if(accion == 2) {
+            pub.style.backgroundColor="#999";
+            pub.style.opacity="0.7";
+            mensaje = 'La noticia fue ocultada correctamente.';
+        } 
+        // Mostrar
+        else {
+            pub.style.backgroundColor="#fff";
+            pub.style.opacity="1";
+            mensaje = 'La noticia fue mostrada correctamente.';
+        }
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: mensaje,
+            position: 'mid-center',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+
+    }).catch(function(error) {
+        // handle error
+        console.error(error);
+    });
+
+}
+
+/**
+ * Esta función crea una publicación rápida
+ * @param {Array} datos 
+ */
+function crearNoticia() {
+
+    var campoContenido = document.getElementById("contenido");
+    const contenedor   = document.getElementById("nuevaPublicacion");
+    const nuevoDiv     = document.createElement("div");
+    var infoGeneral    = document.getElementById("infoGeneral");
+    var arrayInfo      = infoGeneral.value.split('|');
+    var idUsuario      = arrayInfo[0];
+    var fotoUsuario    = arrayInfo[1]; 
+    var nombreUsuario  = arrayInfo[2]; 
+
+    const url = "../compartido/noticia-rapida-guardar.php?contenido="+campoContenido.value;
+
+    axios.get(url)
+    .then(function(response) {
+        var idRegistro           = response.data;
+        var idRegistroEncriptado = btoa(idRegistro.toString());
+
+        nuevoDiv.id = "PUB"+idRegistroEncriptado;
+        nuevoDiv.className = "row";
+
+    // Establece el contenido HTML en el nuevo div
+        nuevoDiv.innerHTML = `
+            <div class="col-sm-12">
+                <div id="PANEL${idRegistroEncriptado}" class="panel">
+                    <div class="card-head">
+                        <header></header>
+                        <button id="panel-${idRegistro}"
+                            class="mdl-button mdl-js-button mdl-button--icon pull-right"
+                            data-upgraded=",MaterialButton">
+                            <i class="material-icons">more_vert</i>
+                        </button>
+                    </div>
+
+                    <div class="user-panel">
+                        <div class="pull-left image">
+                            <img src="${fotoUsuario}" class="img-circle user-img-circle" alt="User Image"
+                                height="50" width="50" />
+                        </div>
+                        <div class="pull-left info">
+                            <p><a href="<?=$_SERVER['PHP_SELF'];?>?usuario=${nombreUsuario}">${nombreUsuario}</a><br>
+                                    <span style="font-size: 11px;">Ahora mismo</span></p>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        ${campoContenido.value}
+                    </div>
+
+                    <div class="card-body">
+                        <a id="#" class="pull-left"><i class="fa fa-thumbs-o-up"></i> Me gusta</a>
+                    </div>
+
+                </div>
+                
+            </div>
+        `;
+
+        contenedor.insertBefore(nuevoDiv, contenedor.firstChild);
+
+        campoContenido.value="";
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'La noticia se publicado correctamente',
+            position: 'mid-center',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+
+    }).catch(function(error) {
+        // handle error
+        console.error(error);
+    });
+}
+
+const estudiantesPorEstados = {};
+
+function cambiarEstadoMatricula(data) {
+    let idHref = 'estadoMatricula'+data.id_estudiante;
+    let href   = document.getElementById(idHref);
+    
+    if (!estudiantesPorEstados.hasOwnProperty(data.id_estudiante)) {
+        estudiantesPorEstados[data.id_estudiante] = data.estado_matricula;
+    }
+
+    if(estudiantesPorEstados[data.id_estudiante] == 1) {
+        href.innerHTML = `<span class="text-warning">No Matriculado</span>`;
+        estudiantesPorEstados[data.id_estudiante] = 4;
+    } else {
+        href.innerHTML = `<span class="text-success">Matriculado</span>`;
+        estudiantesPorEstados[data.id_estudiante] = 1;
+    }
+
+    let datos = "nuevoEstado="+estudiantesPorEstados[data.id_estudiante]+
+                "&idEstudiante="+data.id_estudiante;
+
+    $.ajax({
+        type: "POST",
+        url: "ajax-cambiar-estado-matricula.php",
+        data: datos,
+        success: function(data){
+            $('#respuestaCambiarEstado').empty().hide().html(data).show(1);
+        }
+
+    });
+}
+
+
+const estudiantesPorEstadosBloqueo = {};
+
+function cambiarBloqueo(data) {
+
+    let tr   = document.getElementById("EST"+data.id_estudiante);
+    
+    if (!estudiantesPorEstadosBloqueo.hasOwnProperty(data.id_estudiante)) {
+        estudiantesPorEstadosBloqueo[data.id_estudiante] = data.bloqueado;
+    }
+
+    var numero = 17;
+    var estadoFinal = estudiantesPorEstadosBloqueo[data.id_estudiante];
+    let datos = "get="+btoa(numero.toString())+
+                "&idR="+btoa(data.id_usuario.toString())+
+                "&lock="+btoa(estadoFinal.toString())
+                ;
+
+    if(estudiantesPorEstadosBloqueo[data.id_estudiante] == 0) {
+        tr.style.backgroundColor="#ff572238";
+        estudiantesPorEstadosBloqueo[data.id_estudiante] = 1;
+    } else {
+        tr.style.backgroundColor="";
+        estudiantesPorEstadosBloqueo[data.id_estudiante] = 0;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "guardar.php",
+        data: datos,
+        success: function(data){
+            var mensaje = 'El estudiante fue desbloqueado.';
+            if(data == 1) {
+                mensaje = 'El estudiante fue bloqueado';
+            }
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: mensaje,
+                position: 'mid-center',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        }
+
+    });
+}
+
 function minimoUno(data) {
     if( parseInt(data.value) <= 0 ) {
         data.value = 1;

@@ -20,25 +20,7 @@ $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
 if (!empty($_POST["id"])) {
-	//GUARDAR NOTICIA RÁPIDA
-	if ($_POST["id"] == 1) {
-
-		$estado = 1;
-		if ($datosUsuarioActual['uss_tipo'] == 4) {
-			$estado = 0;
-		}
-
-		$destinatarios = "1,2,3,4,5";
-	try{
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year,not_imagen)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "','')");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-		include("../compartido/guardar-historial-acciones.php");
-
-		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-		exit();
-	}
+	
 	//GUARDAR NOTICIA COMPLETA
 	if ($_POST["id"] == 2) {
 

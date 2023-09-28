@@ -115,39 +115,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-													<script type="text/javascript">
-														const estudiantesPorEstados = {};
-
-														function cambiarEstadoMatricula(data) {
-															let idHref = 'estadoMatricula'+data.id_estudiante;
-															let href   = document.getElementById(idHref);
-															
-															if (!estudiantesPorEstados.hasOwnProperty(data.id_estudiante)) {
-																estudiantesPorEstados[data.id_estudiante] = data.estado_matricula;
-															}
-
-															if(estudiantesPorEstados[data.id_estudiante] == 1) {
-																href.innerHTML = `<span class="text-warning">No Matriculado</span>`;
-																estudiantesPorEstados[data.id_estudiante] = 4;
-															} else {
-																href.innerHTML = `<span class="text-success">Matriculado</span>`;
-																estudiantesPorEstados[data.id_estudiante] = 1;
-															}
-
-															let datos = "nuevoEstado="+estudiantesPorEstados[data.id_estudiante]+
-																		"&idEstudiante="+data.id_estudiante;
-
-															$.ajax({
-																type: "POST",
-																url: "ajax-cambiar-estado-matricula.php",
-																data: datos,
-																success: function(data){
-																	$('#respuestaCambiarEstado').empty().hide().html(data).show(1);
-																}
-
-															});
-														}
-													</script>
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
@@ -176,11 +143,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 														$miArray = [
 															'id_estudiante'    => $resultado['mat_id'], 
-															'estado_matricula' => $resultado['mat_estado_matricula']
+															'estado_matricula' => $resultado['mat_estado_matricula'],
+															'bloqueado' 	   => $resultado['uss_bloqueado'],
+															'id_usuario'       => $resultado['uss_id'],
 														];
 														$dataParaJavascript = json_encode($miArray);
 													?>
-													<tr style="background-color:<?=$bgColor;?>;">
+													<tr id="EST<?=$resultado['mat_id'];?>" style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
 																<a href="estudiantes-activar.php?id=<?=base64_encode($resultado["mat_id"]);?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
@@ -223,7 +192,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if($config['conf_id_institucion']==1){ ?>
 																			<li><a href="estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
 																		<?php } ?>
-																		<li><a href="guardar.php?get=<?=base64_encode(17);?>&idR=<?=base64_encode($resultado['mat_id_usuario']);?>&lock=<?=base64_encode($resultado['uss_bloqueado']);?>">Bloquear/Desbloquear</a></li>
+																		<li><a 
+																		href="javascript:void(0);"
+																		onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
+																		>Bloquear/Desbloquear</a></li>
 																		<li><a href="estudiantes-cambiar-grupo.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Cambiar de grupo</a></li>
 																		<?php 
 																		$retirarRestaurar='Retirar';
