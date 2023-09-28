@@ -118,7 +118,7 @@ require_once("../class/Estudiantes.php");
                                         </div>
 
                                         <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
-                                        <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

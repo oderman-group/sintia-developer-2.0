@@ -42,7 +42,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" onClick="deseaRegresar(this)"><?=$frases[139][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" onClick="deseaRegresar(this)"><?=$frases[139][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[139][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -241,7 +241,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 									
 									<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 
-												<a href="#" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+												<a href="javascript:void(0);" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>
 							
                         </div>

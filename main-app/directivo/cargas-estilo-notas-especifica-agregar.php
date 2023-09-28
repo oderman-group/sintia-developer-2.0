@@ -45,7 +45,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["id"]?>" onClick="deseaRegresar(this)">Estilo Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["id"]?>" onClick="deseaRegresar(this)">Estilo Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Crear Categoria Notas especifica</li>
                             </ol>
                         </div>

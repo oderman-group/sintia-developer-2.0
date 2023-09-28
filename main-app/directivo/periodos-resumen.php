@@ -26,7 +26,9 @@ if(!Modulos::validarPermisoEdicion()){
   
   var casilla = document.getElementById(codEst);
   
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+ 	if (alertValidarNota(nota)) {
+		return false;
+	}	
 	
 	casilla.disabled="disabled";
 	casilla.style.fontWeight="bold";
@@ -52,7 +54,9 @@ function niv(enviada){
   var codEst = enviada.id;
   var per = enviada.name;
   var carga = <?=$cargaConsultaActual;?>;
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+  if (alertValidarNota(nota)) {
+		return false;
+	}
 	  $('#respRP').empty().hide().html("esperando...").show(1);
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
@@ -90,7 +94,7 @@ function niv(enviada){
                                 <div class="page-title"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></div>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>

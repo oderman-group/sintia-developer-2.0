@@ -133,7 +133,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>">Entregas</a></li>
 																	  <li><a href="actividades-editar.php?idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
-																	  <li><a href="#" name="guardar.php?get=17&idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="javascript:void(0);" name="guardar.php?get=17&idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>

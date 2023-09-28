@@ -56,7 +56,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="usuarios.php?cantidad=50" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=50" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Generar Contraseña</li>
                             </ol>
                         </div>
@@ -103,7 +103,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                     
                                     <input type="submit" class="btn btn-primary" value="Generar Contraseña">&nbsp;
                                     
-                                    <a href="#" name="usuarios.php?cantidad=50" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=50" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>

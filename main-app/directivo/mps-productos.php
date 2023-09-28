@@ -116,7 +116,7 @@ $Plataforma = new Plataforma;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="mps-productos-aditar.php?idR=<?= $resultado['prod_id']; ?>">Editar</a></li>
-                                                                        <li><a href="#" title="<?= $objetoEnviar; ?>" id="<?= $resultado['prod_id']; ?>" name="mps-productos-eliminar.php?idR=<?= $resultado['prod_id']; ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['prod_id']; ?>" name="mps-productos-eliminar.php?idR=<?= $resultado['prod_id']; ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

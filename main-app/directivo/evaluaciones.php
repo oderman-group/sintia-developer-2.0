@@ -108,7 +108,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 																  <a class="btn green-color" href="evaluaciones-preguntas.php?idE=<?=$resultado['eva_id'];?>"><i class="fa fa-question"></i> Preguntas</a>
 																  <a class="btn blue" href="evaluaciones-editar.php?idR=<?=$resultado['eva_id'];?>"><i class="fa fa-edit"></i></a>
-																  <a class="btn red" href="#" name="guardar.php?get=18&idR=<?=$resultado['eva_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
+																  <a class="btn red" href="javascript:void(0);" name="guardar.php?get=18&idR=<?=$resultado['eva_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 																  <?php }?>
 															  </p>
 															  

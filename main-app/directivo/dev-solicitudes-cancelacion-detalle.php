@@ -161,7 +161,7 @@ $solicitudActual = Solicitudes::consultar($_GET["id"]);
 
                                     <div class="form-group">
                                         <div class="offset-md-3 col-md-9">
-                                            <a href="#" name="dev-solicitudes-cancelacion.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
+                                            <a href="javascript:void(0);" name="dev-solicitudes-cancelacion.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
                                             <button type="submit" class="btn btn-warning">Actualizar solicitud</button>
                                         </div>
                                     </div>
