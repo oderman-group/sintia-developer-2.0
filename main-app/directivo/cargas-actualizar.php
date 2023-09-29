@@ -58,7 +58,8 @@ if($_POST["periodo"]<$_POST["periodoActual"]){
 		"tipo" 			=>JOBS_TIPO_GENERAR_INFORMES,
 		"responsable" 	=> $_POST["docente"],
 		"parametros" 	=> json_encode($parametros),
-		"agno"			=>$config['conf_agno']
+		"agno"			=>$config['conf_agno'],
+		"estado"		=>JOBS_ESTADO_FINALIZADO
 	);
 
 	$buscarJobs=SysJobs::consultar($parametrosBuscar);
