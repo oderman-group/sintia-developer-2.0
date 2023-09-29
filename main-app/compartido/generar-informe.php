@@ -127,8 +127,8 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
 		$numActualizacion= $boletinDatos['bol_actualizaciones']+1;
 		$actualizacion[$numActualizacion] = [
-			"nota" 			=> $boletinDatos['bol_nota'],
-			"fecha" 		=> $fecha,
+			"nota anterior" 			=> $boletinDatos['bol_nota'],
+			"fecha de actualización" 		=> $fecha,
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
 
