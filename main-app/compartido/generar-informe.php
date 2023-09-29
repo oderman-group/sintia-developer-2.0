@@ -4,6 +4,9 @@ $idPaginaInterna = 'CM0006';
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
+
 $grado =base64_decode($_GET["grado"]);
 $grupo =base64_decode($_GET["grupo"]);
 $carga = base64_decode($_GET["carga"]);
