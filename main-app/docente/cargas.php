@@ -82,9 +82,10 @@ $_SESSION["configuracion"] = $config;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 									    $ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
+										$seleccionado=false;
 
 										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk';}
+										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
 										
 										$cargaSP = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];
@@ -148,16 +149,22 @@ $_SESSION["configuracion"] = $config;
 															$mensajeI = $btnGenerarInforme
 																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
-														case JOBS_ESTADO_PENDIENTE && $intento==0:
-															$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+														case JOBS_ESTADO_PENDIENTE:
+															if($intento==0){
+																$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0 && $seleccionado){
+																$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0){
+																$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
-															$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+
+														default:
+															$mensajeI = $btnGenerarInforme;
+															if($config['conf_porcentaje_completo_generar_informe']==1 && $numSinNotas>0){
+																$mensajeI = $alertaNotasFaltantes;
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 :
-															$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
-															break;
-														
 													}
 												}
 												
