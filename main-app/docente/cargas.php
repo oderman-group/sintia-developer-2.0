@@ -115,6 +115,11 @@ $_SESSION["configuracion"] = $config;
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 
+												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
+
+												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
+												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
+
 												$btnGenerarInforme='
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn red">Generar Informe</button>
@@ -122,8 +127,8 @@ $_SESSION["configuracion"] = $config;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a title="Lo hará usted manualmente como siempre." href="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'">Forma tradicional</a></li>
-                                                                        <li><a title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
                                                                     </ul>
                                                                 </div>
 															';
@@ -133,13 +138,10 @@ $_SESSION["configuracion"] = $config;
 																<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
 															</div>
 															';
-
-												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
-												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
 												
 												if(empty($jobsEncontrado)){
 													$mensajeI = $btnGenerarInforme;
-													if($config['conf_porcentaje_completo_generar_informe']==1 && $numSinNotas>0){
+													if($configGenerarJobs==1 && $numSinNotas>0){
 														$mensajeI = $alertaNotasFaltantes;
 													}
 												}else{
@@ -161,7 +163,7 @@ $_SESSION["configuracion"] = $config;
 
 														default:
 															$mensajeI = $btnGenerarInforme;
-															if($config['conf_porcentaje_completo_generar_informe']==1 && $numSinNotas>0){
+															if($configGenerarJobs==1 && $numSinNotas>0){
 																$mensajeI = $alertaNotasFaltantes;
 															}
 															break;
