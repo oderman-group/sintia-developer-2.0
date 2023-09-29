@@ -179,6 +179,10 @@ $_SESSION["configuracion"] = $config;
 											$induccionEntrar = 'data-hint="Haciendo click sobre el nombre o sobre la imagen puedes entrar a administrar esta carga académica."';
 											$induccionSabanas = 'data-hint="Puedes ver las sábanas de cada uno de los periodos pasados."';
 										}
+
+										$filtro = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
+										$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+										$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
 									?>
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
@@ -191,7 +195,7 @@ $_SESSION["configuracion"] = $config;
 	                        	<h5 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
+										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
 									</p>
 									
 									
