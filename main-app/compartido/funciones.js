@@ -484,27 +484,90 @@ function minimoUno(data) {
 }
 
 function mensajeGenerarInforme(datos){
-    var id = datos.id;
+    arrayInfo   = datos.rel.split('-');
+    var config= arrayInfo[0];
+    var sinNotas= arrayInfo[1];
+    var opcion= arrayInfo[2];
     var url = datos.name;
-    var contenedorMensaje = document.getElementById('mensajeI'+id);
-    var nuevoContenido = '<div class="alert alert-success" role="alert" style="margin-right: 20px;">La petición de generación de informe se envió correctamente.</div>';
+    
+    if(opcion==2){   
+        var id = datos.id;
+        var contenedorMensaje = document.getElementById('mensajeI'+id);
+        var nuevoContenido = '<div class="alert alert-success" role="alert" style="margin-right: 20px;">La petición de generación de informe se envió correctamente.</div>';
+    }
 
-    axios.get(url).then(function(response) {
-            contenedorMensaje.innerHTML = nuevoContenido;
+    var mensajeSinNotas='';
+    if(sinNotas>0){
+        var mensajeSinNotas='Tienes estudiantes a los que les faltan notas por registrar. ';
+    }
 
-            $.toast({
-                heading: 'Acción realizada',
-                text: 'La petición de generación de informe se envió correctamente.',
-                position: 'botom-left',
-                loaderBg: '#26c281',
-                icon: 'success',
-                hideAfter: 5000,
-                stack: 6
+    if(config==1){
+        if(opcion==1){
+            window.location.href = url;
+        }
+        if(opcion==2){            
+            axios.get(url).then(function(response) {
+                    contenedorMensaje.innerHTML = nuevoContenido;
+        
+                    $.toast({
+                        heading: 'Acción realizada',
+                        text: 'La petición de generación de informe se envió correctamente.',
+                        position: 'botom-left',
+                        loaderBg: '#26c281',
+                        icon: 'success',
+                        hideAfter: 5000,
+                        stack: 6
+                    });
+        
+            }).catch(function(error) {
+                // handle error
+                console.error(error);
+                window.location.href = url;
             });
-
-    }).catch(function(error) {
-        // handle error
-        console.error(error);
-        window.location.href = url;
-    });
+        }
+    }else{
+        if(config==2){
+            var mensaje= mensajeSinNotas+'El informe se generará omitiendo los estudiantes que les falten notas por registrar.';
+        }
+        if(config==3){
+            var mensaje= mensajeSinNotas+'El informe se generará guardando los estudiantes con el porcentaje que tienen actualmente.';
+        }
+        
+        Swal.fire({
+            title: 'Generar informe',
+            text: mensaje+' Desea continuar con la generación de este informe?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Si, deseo continuar!',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if(opcion==1){
+                    window.location.href = url;
+                }
+                if(opcion==2){            
+                    axios.get(url).then(function(response) {
+                            contenedorMensaje.innerHTML = nuevoContenido;
+                
+                            $.toast({
+                                heading: 'Acción realizada',
+                                text: 'La petición de generación de informe se envió correctamente.',
+                                position: 'botom-left',
+                                loaderBg: '#26c281',
+                                icon: 'success',
+                                hideAfter: 5000,
+                                stack: 6
+                            });
+                
+                    }).catch(function(error) {
+                        // handle error
+                        console.error(error);
+                        window.location.href = url;
+                    });
+                }
+            }else{
+                return false;
+            }
+        });
+    }
 }

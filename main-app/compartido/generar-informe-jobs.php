@@ -135,8 +135,26 @@ $mensaje="";
 			}
 			$sumaNotaIndicador = round($sumaNotaIndicador,1); 
 			if($caso == 2 or $caso == 4 or $caso == 5){
-				mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");
-				
+		
+				if(!empty($boletinDatos['bol_historial_actualizacion']) && $boletinDatos['bol_historial_actualizacion']!=NULL){
+					$actualizacion = json_decode($boletinDatos['bol_historial_actualizacion'], true);
+				}else{
+					$actualizacion = array();
+				}
+		
+				$fecha=$boletinDatos['bol_fecha_registro'];
+				if(!empty($boletinDatos['bol_ultima_actualizacion']) && $boletinDatos['bol_ultima_actualizacion']!=NULL){
+					$fecha=$boletinDatos['bol_ultima_actualizacion'];
+				}
+		
+				$numActualizacion= $boletinDatos['bol_actualizaciones']+1;
+				$actualizacion[$numActualizacion] = [
+					"nota anterior" 			=> $boletinDatos['bol_nota'],
+					"fecha de actualización" 		=> $fecha,
+					"porcentaje" 	=> $boletinDatos['bol_porcentaje']
+				];
+		
+				mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");
 			}elseif($caso == 1){
 				//Eliminamos por si acaso hay algún registro
 				mysqli_query($conexion, "DELETE FROM academico_boletin 

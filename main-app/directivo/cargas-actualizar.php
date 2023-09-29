@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once("../class/Sysjobs.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0167';
@@ -44,7 +45,36 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-	include("../compartido/guardar-historial-acciones.php");
+
+if($_POST["periodo"] != $_POST["periodoActual"]){
+	$parametros = array(
+		"carga" 	=>$_POST["idR"],
+		"periodo" 	=>$_POST["periodo"],
+		"grado" 	=> $_POST["curso"],
+		"grupo"		=>$_POST["grupo"]
+	);
+
+	$parametrosBuscar = array(
+		"tipo" 			=>JOBS_TIPO_GENERAR_INFORMES,
+		"responsable" 	=> $_POST["docente"],
+		"parametros" 	=> json_encode($parametros),
+		"agno"			=>$config['conf_agno'],
+		"estado"		=>JOBS_ESTADO_FINALIZADO
+	);
+
+	$buscarJobs=SysJobs::consultar($parametrosBuscar);
+	if(mysqli_num_rows($buscarJobs)>0){
+		$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+
+		try{
+			mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".sys_jobs WHERE job_id='".$jobsEncontrado["job_id"]."'");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+	}
+}
+
+include("../compartido/guardar-historial-acciones.php");
 
 echo '<script type="text/javascript">window.location.href="cargas-editar.php?idR='.base64_encode($_POST["idR"]).'&success=SC_DT_2&id='.base64_encode($_POST["idR"]).'";</script>';
 exit();

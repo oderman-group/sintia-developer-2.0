@@ -82,9 +82,10 @@ $_SESSION["configuracion"] = $config;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 									    $ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
+										$seleccionado=false;
 
 										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk';}
+										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
 										
 										$cargaSP = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];
@@ -114,6 +115,11 @@ $_SESSION["configuracion"] = $config;
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 
+												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
+
+												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
+												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
+
 												$btnGenerarInforme='
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn red">Generar Informe</button>
@@ -121,22 +127,22 @@ $_SESSION["configuracion"] = $config;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a title="Se generará el informe de forma inmediata" href="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'">Forma tradicional</a></li>
-                                                                        <li><a title="Se programara la generación de informe y se te notificará cuando esté listo" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
                                                                     </ul>
                                                                 </div>
+															';
+
+												$alertaNotasFaltantes='
+															<div class="alert alert-danger" role="alert" style="margin-right: 20px;">
+																<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
+															</div>
 															';
 												
 												if(empty($jobsEncontrado)){
 													$mensajeI = $btnGenerarInforme;
-													if($config['conf_porcentaje_completo_generar_informe']==1){
-														$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
-														$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
-														if($numSinNotas>0){
-															$mensajeI = '<div class="alert alert-danger" role="alert" style="margin-right: 20px;">
-																			<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
-																		</div>';
-														}
+													if($configGenerarJobs==1 && $numSinNotas>0){
+														$mensajeI = $alertaNotasFaltantes;
 													}
 												}else{
 													$intento = intval($jobsEncontrado["job_intentos"]);
@@ -145,16 +151,22 @@ $_SESSION["configuracion"] = $config;
 															$mensajeI = $btnGenerarInforme
 																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
-														case JOBS_ESTADO_PENDIENTE && $intento==0:
-															$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+														case JOBS_ESTADO_PENDIENTE:
+															if($intento==0){
+																$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0 && $seleccionado){
+																$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0){
+																$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
-															$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+
+														default:
+															$mensajeI = $btnGenerarInforme;
+															if($configGenerarJobs==1 && $numSinNotas>0){
+																$mensajeI = $alertaNotasFaltantes;
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 :
-															$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
-															break;
-														
 													}
 												}
 												
