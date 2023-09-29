@@ -4,6 +4,9 @@ $idPaginaInterna = 'CM0006';
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
+
 $grado =base64_decode($_GET["grado"]);
 $grupo =base64_decode($_GET["grupo"]);
 $carga = base64_decode($_GET["carga"]);
@@ -124,8 +127,8 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
 		$numActualizacion= $boletinDatos['bol_actualizaciones']+1;
 		$actualizacion[$numActualizacion] = [
-			"nota" 			=> $boletinDatos['bol_nota'],
-			"fecha" 		=> $fecha,
+			"nota anterior" 			=> $boletinDatos['bol_nota'],
+			"fecha de actualización" 		=> $fecha,
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
 

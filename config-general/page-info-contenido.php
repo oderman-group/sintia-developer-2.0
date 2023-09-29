@@ -72,6 +72,9 @@ switch($_GET["idmsg"]){
 	case 109:
 		$color = 'green';
 		$titulo = 'INFORME GENERADO';
+		if($config['conf_porcentaje_completo_generar_informe']==1){
+			$texto = 'El informe fue generado correctamente. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		}
 		if($config['conf_porcentaje_completo_generar_informe']==2){
 			$texto = 'El informe fue generado correctamente omitiendo los estudiantes que no tenian el 100% de sus notas registradas para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
 		}
