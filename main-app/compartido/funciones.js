@@ -503,9 +503,9 @@ function mensajeGenerarInforme(datos){
     }
 
     Swal.fire({
-        title: 'Desea generar el informe?',
-        text: mensaje+' Deseas continuar bajo su responsabilidad?',
-        icon: 'warning',
+        title: 'Generar informe',
+        text: mensaje+' Desea continuar con la generación de este informe?',
+        icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Si, deseo continuar!',
         cancelButtonText: 'No'
