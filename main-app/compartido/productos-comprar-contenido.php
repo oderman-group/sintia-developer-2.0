@@ -19,6 +19,7 @@ WHERE prod_id='".$id."'
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" id="formularioCompraMP" action="../pagos-online/index.php" method="post" enctype="multipart/form-data" target="_target">
 										<input type="hidden" name="monto" value="<?=$producto['prod_precio'];?>">
+                                        <input type="hidden" name="idProducto" value="<?=$producto['prod_id'];?>">
                                         <input type="hidden" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
                                         <input type="hidden" name="idInstitucion" value="<?=$config['conf_id_institucion'];?>">
                                         

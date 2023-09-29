@@ -5,6 +5,11 @@
         $cantidad = $_POST['cantidad']; 
     }
     $montoFinal = $_POST['monto'] * $cantidad;
+
+    $idProducto = '';
+    if(!empty($_POST['idProducto'])) {
+        $idProducto = $_POST['idProducto']; 
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,6 +157,10 @@
                 data-epayco-extra4="<?=$_POST['nombreUsuario']?>"
                 data-epayco-extra5="<?=$_POST['celularUsuario']?>"
                 data-epayco-extra6="<?=$_POST['idInstitucion']?>"
+                data-epayco-extra7="<?=$idProducto?>"
+                data-epayco-extra8="<?=$cantidad?>"
+                data-epayco-extra9="<?=$_POST['monto']?>"
+                data-epayco-extra10="<?=$montoFinal?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"
