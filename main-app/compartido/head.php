@@ -126,6 +126,7 @@ require_once("../class/Grupos.php");
 	
 	<!-- Mis funciones JS -->
 	<script src="../compartido/funciones.js" ></script>
+	<script src="../js/Utilidades.js" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
