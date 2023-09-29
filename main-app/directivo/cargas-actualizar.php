@@ -46,7 +46,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 
-if($_POST["periodo"]<$_POST["periodoActual"]){
+if($_POST["periodo"] != $_POST["periodoActual"]){
 	$parametros = array(
 		"carga" 	=>$_POST["idR"],
 		"periodo" 	=>$_POST["periodo"],
