@@ -95,7 +95,7 @@ require_once("index-logica.php");
             </div>
         </div>
         <div class="logo-container vertical-center">
-            <lottie-player src="https://lottie.host/3c87c3be-0113-4666-9258-5bda464c7980/139Z4h7qcj.json" background="transparent"
+            <lottie-player src="https://lottie.host/a51156cb-446f-4a44-b56d-0838b81a94e1/GpQe5lZNPM.json" background="transparent"
                 speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
         </div>
     </div>
