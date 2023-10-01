@@ -79,4 +79,10 @@ class Plataforma {
         return $config;
 
     }
+
+    public static function getConexion() {
+        global $conexion;
+
+        return $conexion;
+    }
 }
