@@ -70,10 +70,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<a href="cursos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+															<a href="javascript:void(0);"  data-toggle="modal" data-target="#nuevoCursoModal"  class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
-														<?php }?>
+														<?php 
+													$idModal="nuevoCursoModal";															
+													$contenido="../directivo/cursos-agregar-modal.php"; 
+													include("../compartido/contenido-modal.php");
+													}?>
 													</div>
 												</div>
 											</div>
