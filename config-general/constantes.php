@@ -29,6 +29,14 @@ define('ESTADO_EMAIL_ERROR', 'error');
 define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');
 define('SOLICITUD_CANCELACION_APROBADO', 'Aprobado');
 define('SOLICITUD_CANCELACION_CANCELADO', 'Cancelado');
+
+/* TIPOS DE USUARIO DE LA PLATAFORMA */
+define('TIPO_DEV', 1);
+define('TIPO_DOCENTE', 2);
+define('TIPO_ACUDIENTE', 3);
+define('TIPO_ESTUDIANTE', 4);
+define('TIPO_DIRECTIVO', 5);
+
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");

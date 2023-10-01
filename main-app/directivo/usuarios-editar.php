@@ -225,9 +225,9 @@ if(!Modulos::validarPermisoEdicion()){
 										<?php
 										$readOnly = '';
 										$leyenda = '';
-										if($datosEditar['uss_tipo']==4){
+										if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE){
 											$readOnly='readonly'; 
-											$leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idR='.$datosEditar['uss_id'].'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
+											$leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idUsuario='.base64_encode($datosEditar['uss_id']).'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
 										}
 										?>
 										
