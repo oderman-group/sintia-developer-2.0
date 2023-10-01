@@ -172,22 +172,22 @@ $mensaje="";
 		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 		WHERE  car_id='".$carga."'"));
 		$respuesta ="<br>Resumen del proceso:<br>
-		-Total Estudiantes calificafos: {$num}<br><br>
+		- Total estudiantes calificados: {$num}<br><br>
 		Datos registrados para<br>
 		- Carga : {$carga}<br>
-		- Materia :{$consulta_mat_area_est["mat_nombre"]}<br>
+		- Asignatura :{$consulta_mat_area_est["mat_nombre"]}<br>
 		- Grado : {$grado}<br>
 		- Grupo : {$grupo}<br>
-		- Periodo : {$periodo}<br>		
+		- Periodo : {$periodo}<br>	
 		<br>";
 		// fecha2 en este caso es la fecha actual
 		$fechaFinal = new DateTime();
 		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal);
 		$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
 		$datos = array(
-			"id" => $resultadoJobs['job_id'],
-			"mensaje" =>$mensaje,
-			"estado" =>JOBS_ESTADO_FINALIZADO,
+			"id" 	  => $resultadoJobs['job_id'],
+			"mensaje" => $mensaje,
+			"estado"  => JOBS_ESTADO_FINALIZADO,
 		);
 		SysJobs::actualizar($datos);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO);
@@ -216,10 +216,10 @@ $mensaje="";
 
 function minutosTranscurridos($fecha_i,$fecha_f)
 {
-$intervalo = $fecha_i->diff($fecha_f);
-$minutos = $intervalo->i;
-$segundos = $intervalo->s;
-return " Finalizo en: $minutos Min y $segundos Seg.";
+	$intervalo = $fecha_i->diff($fecha_f);
+	$minutos = $intervalo->i;
+	$segundos = $intervalo->s;
+	return " Finalizó en: $minutos Min y $segundos Seg.";
 }
 
 exit()

@@ -3,7 +3,12 @@ include("session.php");
 $idPaginaInterna = 'DT0204';
 require_once("../class/SubRoles.php");
 include("../compartido/historial-acciones-guardar.php");
-Modulos::verificarPermisoDev();
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 $parametrosBuscar = array(
 	"institucion" =>$config['conf_id_institucion']
 );	
