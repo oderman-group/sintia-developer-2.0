@@ -55,13 +55,8 @@ try {
 	include("../compartido/error-catch-to-report.php");
 }
 
-try{
-	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
-	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
-	$_SESSION["configuracion"] = $config;
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
 
 include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';

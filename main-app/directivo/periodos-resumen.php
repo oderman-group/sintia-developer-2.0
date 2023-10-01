@@ -37,6 +37,7 @@ if(!Modulos::validarPermisoEdicion()){
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
 				   "&codEst="+(codEst)+
+				   "&notaAnterior="+(notaAnterior)+
 				   "&carga="+(carga);
 			   $.ajax({
 				   type: "POST",
@@ -201,7 +202,12 @@ function niv(enviada){
 																$definitiva += $notasResultado[4]*$decimal;
 															}
 															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
-															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															 
+															if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
+															 elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+															 else $tipo='';
 															$notaPeriodo="";
 															if(!empty($notasResultado[4]))$notaPeriodo=$notasResultado[4];
 

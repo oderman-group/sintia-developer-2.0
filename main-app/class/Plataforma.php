@@ -55,4 +55,28 @@ class Plataforma {
         return $resultado;
 
     }
+
+    /**
+     * Este metodo sirve para consultar la configuración de la institución
+     * 
+     * @return array
+     */
+    public static function sesionConfiguracion()
+    {
+
+        global $conexion, $baseDatosServicios;
+
+        $config = [];
+
+        try {
+            $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+            $config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $config;
+
+    }
 }

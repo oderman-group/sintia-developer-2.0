@@ -126,6 +126,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = $_GET["msj"];
             break;
 
+            case 'ER_DT_16':
+                $tipo = 'warning';
+                $mensaje = 'No se encontró ninguna coincidencia o usted no tiene permisos para ver este registro.';
+            break;
+
 
             default:
                 $tipo = 'secondary';

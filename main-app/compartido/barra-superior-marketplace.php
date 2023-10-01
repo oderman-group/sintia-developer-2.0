@@ -41,16 +41,12 @@ if (!empty($_GET["busqueda"])) {
                     <?php if (!empty($_SESSION["empresa"])) { ?>
                         <a class="dropdown-item" href="productos-agregar.php">Agregar otro producto</span></a>
                         <a class="dropdown-item" href="marketplace.php?company=<?= base64_encode($_SESSION["empresa"]); ?>">Ver mis productos</span></a>
-                        <a class="dropdown-item" href="marketplace.php">Ver todos los productos</span></a>
-                        <hr>
-                        <a class="dropdown-item" href="https://youtu.be/cmsQDO9tIrQ" target="_blank">Ver tutorial de uso de MarketPlace</span></a>
-                        <a class="dropdown-item" href="mensajes-redactar.php?para=<?=base64_encode(1)?>&asunto=<?=base64_encode('REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE')?>">Solicitar asesoría</span></a>
-                    <?php } else { ?>
-                        <a class="dropdown-item" href="marketplace.php">Ver todos los productos</span></a>
-                        <hr>
-                        <a class="dropdown-item" href="https://youtu.be/cmsQDO9tIrQ" target="_blank">Ver tutorial de uso de MarketPlace</span></a>
-                        <a class="dropdown-item" href="mensajes-redactar.php?para=<?=base64_encode(1)?>&asunto=<?=base64_encode('REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE')?>">Solicitar asesoría</span></a>
                     <?php } ?>
+                        <a class="dropdown-item" href="marketplace.php">Ver todos los productos</span></a>
+                        <a class="dropdown-item" href="mis-compras.php">Ver mis compras</span></a>
+                        <hr>
+                        <a class="dropdown-item" href="https://youtu.be/cmsQDO9tIrQ" target="_blank">Ver tutorial de uso de MarketPlace</span></a>
+                        <a class="dropdown-item" href="mensajes-redactar.php?para=<?=base64_encode(1)?>&asunto=<?=base64_encode('REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE')?>">Solicitar asesoría</span></a>
                 </div>
             </li>
 

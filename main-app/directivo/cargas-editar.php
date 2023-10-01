@@ -72,6 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
 									<form name="formularioGuardar" action="cargas-actualizar.php" method="post">
 
 										<input type="hidden" value="<?=$datosEditar['car_id'];?>" name="idR">
+										<input type="hidden" value="<?=$datosEditar['car_periodo'];?>" name="periodoActual">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>

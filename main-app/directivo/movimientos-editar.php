@@ -161,21 +161,42 @@ if($resultado['fcu_anulado'] == 1) {
 												<?php
                                                 try{
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+                                                    WHERE uss_id='".$resultado['fcu_usuario']."'");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
+                                                $resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH);
 												?>
-                                                <select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$resultadosDatos[0];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos[0]){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
-													<?php }?>
+                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
+                                                    <option value="<?=$resultadosDatos[0];?>" selected><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#select_usuario').select2({
+                                                placeholder: 'Seleccione el usuario...',
+                                                theme: "bootstrap",
+                                                multiple: false,
+                                                    ajax: {
+                                                        type: 'GET',
+                                                        url: '../compartido/ajax-listar-usuarios.php',
+                                                        processResults: function(data) {
+                                                            data = JSON.parse(data);
+                                                            return {
+                                                                results: $.map(data, function(item) {
+                                                                    return {
+                                                                        id: item.value,
+                                                                        text: item.label
+                                                                    }
+                                                                })
+                                                            };
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        </script>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Notificar al usuario</label>

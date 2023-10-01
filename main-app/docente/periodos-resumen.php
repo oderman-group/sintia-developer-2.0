@@ -200,10 +200,10 @@ function niv(enviada){
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?php if(isset($notasResultado)) echo $notasResultado[4]."</a><br>".$tipo;?><br>
-																<?php if(isset($notasResultado) && $notasResultado[4]!="" and $notasResultado[4]<$config[5]){?>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?php if(isset($notasResultado)){ echo $notasResultado[4];}?></a><br><?=$tipo;?><br>
+																<?php if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5]){?>
 																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
-																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
+																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
 														<?php		

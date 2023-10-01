@@ -4,8 +4,13 @@ include("session.php");
 $idPaginaInterna = 'DT0205';
 
 include("../compartido/historial-acciones-guardar.php");
-Modulos::verificarPermisoDev();
+
 include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}

@@ -23,23 +23,33 @@
 															<input type="hidden" name="id" value="7">
 															<label>Para:</label>
 		                                                    <div class="form-group">
-																<select id="multiple" class="form-control select2-multiple" multiple name="para[]" required>
-																	<option value="">Seleccione una opción</option>
-																<?php
-																$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios 
-																LEFT JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-																LEFT JOIN academico_matriculas ON mat_id_usuario=uss_id
-																LEFT JOIN academico_grados ON gra_id=mat_grado
-																ORDER BY uss_tipo, mat_grado
-																");
-																while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
-																	
-																?>
-																  <option value="<?=$datos['uss_id'];?>" <?php if(isset($_GET["para"])&&$datos['uss_id']==base64_decode($_GET["para"])){echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($datos)." (".$datos['pes_nombre']." ".$datos['gra_nombre'].")";?></option>	
-																<?php }?>
+																<select id="select_usuario" class="form-control select2-multiple" multiple name="para[]" required>
 																</select>
-		                                                        
 		                                                    </div>
+															<script>
+																$(document).ready(function() {
+																	$('#select_usuario').select2({
+																	placeholder: 'Seleccione el usuario...',
+																	theme: "bootstrap",
+																	multiple: true,
+																		ajax: {
+																			type: 'GET',
+																			url: '../compartido/ajax-listar-usuarios.php',
+																			processResults: function(data) {
+																				data = JSON.parse(data);
+																				return {
+																					results: $.map(data, function(item) {
+																						return {
+																							id: item.value,
+																							text: item.label
+																						}
+																					})
+																				};
+																			}
+																		}
+																	});
+																});
+															</script>
 															<label>Asunto:</label>
 		                                                    <div class="form-group">
 		                                                        <input type="text" tabindex="1" class="form-control" name="asunto" value="<?php if(isset($_GET["asunto"])){ echo base64_decode($_GET["asunto"]);}?>" required>

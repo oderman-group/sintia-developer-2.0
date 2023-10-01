@@ -135,8 +135,26 @@ $mensaje="";
 			}
 			$sumaNotaIndicador = round($sumaNotaIndicador,1); 
 			if($caso == 2 or $caso == 4 or $caso == 5){
-				mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");
-				
+		
+				if(!empty($boletinDatos['bol_historial_actualizacion']) && $boletinDatos['bol_historial_actualizacion']!=NULL){
+					$actualizacion = json_decode($boletinDatos['bol_historial_actualizacion'], true);
+				}else{
+					$actualizacion = array();
+				}
+		
+				$fecha=$boletinDatos['bol_fecha_registro'];
+				if(!empty($boletinDatos['bol_ultima_actualizacion']) && $boletinDatos['bol_ultima_actualizacion']!=NULL){
+					$fecha=$boletinDatos['bol_ultima_actualizacion'];
+				}
+		
+				$numActualizacion= $boletinDatos['bol_actualizaciones']+1;
+				$actualizacion[$numActualizacion] = [
+					"nota anterior" 			=> $boletinDatos['bol_nota'],
+					"fecha de actualización" 		=> $fecha,
+					"porcentaje" 	=> $boletinDatos['bol_porcentaje']
+				];
+		
+				mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."'");
 			}elseif($caso == 1){
 				//Eliminamos por si acaso hay algún registro
 				mysqli_query($conexion, "DELETE FROM academico_boletin 
@@ -154,22 +172,22 @@ $mensaje="";
 		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 		WHERE  car_id='".$carga."'"));
 		$respuesta ="<br>Resumen del proceso:<br>
-		-Total Estudiantes calificafos: {$num}<br><br>
+		- Total estudiantes calificados: {$num}<br><br>
 		Datos registrados para<br>
 		- Carga : {$carga}<br>
-		- Materia :{$consulta_mat_area_est["mat_nombre"]}<br>
+		- Asignatura :{$consulta_mat_area_est["mat_nombre"]}<br>
 		- Grado : {$grado}<br>
 		- Grupo : {$grupo}<br>
-		- Periodo : {$periodo}<br>		
+		- Periodo : {$periodo}<br>	
 		<br>";
 		// fecha2 en este caso es la fecha actual
 		$fechaFinal = new DateTime();
 		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal);
 		$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
 		$datos = array(
-			"id" => $resultadoJobs['job_id'],
-			"mensaje" =>$mensaje,
-			"estado" =>JOBS_ESTADO_FINALIZADO,
+			"id" 	  => $resultadoJobs['job_id'],
+			"mensaje" => $mensaje,
+			"estado"  => JOBS_ESTADO_FINALIZADO,
 		);
 		SysJobs::actualizar($datos);
 		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO);
@@ -198,10 +216,10 @@ $mensaje="";
 
 function minutosTranscurridos($fecha_i,$fecha_f)
 {
-$intervalo = $fecha_i->diff($fecha_f);
-$minutos = $intervalo->i;
-$segundos = $intervalo->s;
-return " Finalizo en: $minutos Min y $segundos Seg.";
+	$intervalo = $fecha_i->diff($fecha_f);
+	$minutos = $intervalo->i;
+	$segundos = $intervalo->s;
+	return " Finalizó en: $minutos Min y $segundos Seg.";
 }
 
 exit()
