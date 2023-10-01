@@ -192,16 +192,25 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																</button>
 																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> matrícula</a></li>
+																		
 																		<?php if($config['conf_id_institucion']==1){ ?>
 																			<li><a href="javascript:void(0);" 
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
-																		<li><a 
-																		href="javascript:void(0);"
-																		onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
-																		>Bloquear/Desbloquear</a></li>
+																		
+																		<?php if(!empty($resultado['uss_usuario'])) {?>
+																			<li><a 
+																			href="javascript:void(0);"
+																			onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
+																			>Bloquear/Desbloquear</a></li>
+																		<?php }?>
+
+																		<?php if(!empty($resultado['uss_id'])) {?>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> usuario</a></li>
+																		<?php }?>
+
 																		<li><a href="estudiantes-cambiar-grupo.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Cambiar de grupo</a></li>
 																		<?php 
 																		$retirarRestaurar='Retirar';
@@ -216,10 +225,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		 <li><a href="javascript:void(0);" 
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
 																		>Eliminar</a></li>
+																		
 																		<li><a href="javascript:void(0);"  
-																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
+																		onClick="sweetConfirmacion('Alerta!','Está seguro de ejecutar esta acción?','question','estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
 																		>Generar usuario</a></li>
-																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>
+
+																		<?php if(!empty($resultado['uss_usuario'])) {?>
+																			<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>
+																		<?php }?>
+
 																	<?php }?>
 
 																	<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
@@ -227,11 +241,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
+																	
 																	<?php if($config['conf_id_institucion']==1){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
-																	<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
-																	<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
+
+																	<?php if(!empty($resultado['uss_usuario'])) {?>
+																		<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
+																		<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
+																	<?php }?>
 																</ul>
 															</div>
 														</td>
