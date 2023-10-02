@@ -39,19 +39,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue">MATRICULAS</header>
 										<div class="panel-body">
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal1"  >1. Boletines</a></p>											
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal2"  >2. Certificados</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal3"  >3. Consolidado de asignaturas perdidas</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal4"  >4. Libro final por curso</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal5"  >5. Listado de estudiantes</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal6"  >6. Informe parcial por grupo</a></p>
+											<p><a href="informes-boletines.php">1. Boletines</a></p>
+											<p><a href="estudiantes-certificados.php">2. Certificados</a></p>
+											<p><a href="consolidado-perdidos.php">3. Consolidado de asignaturas perdidas</a></p>
+											<p><a href="informe-libro-cursos.php">4. Libro final por curso</a></p>
+											<p><a href="informe-estudiantes.php">5. Listado de estudiantes</a></p>
+											<p><a href="informe-parcial-grupo.php">6. Informe parcial por grupo</a></p>
 											<p><a href="../compartido/reporte-pasos.php" target="_blank">7. Informe pasos matrícula</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal8"  >8. Informe de consolidado final</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal9"  >9. Planilla de estudiantes</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal10" >10. Reporte general de estudiantes</a></p>
+											<p><a href="consolidado-final-filtro.php">8. Informe de consolidado final</a></p>
+											<p><a href="estudiantes-planilla.php">9. Planilla de estudiantes</a></p>
+											<p><a href="reportes-academicos-consultas.php">10. Reporte general de estudiantes</a></p>
 											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
-											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal12" >12. Reporte de asistencia a entrega de informes</a></p>
-											<p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
+											<p><a href="asistencia-entrega-informes-filtros.php">12. Reporte de asistencia a entrega de informes</a></p>
+                                            <p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
 										</div>
                                 	</div>
 								</div>
@@ -61,11 +61,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<header class="panel-heading panel-heading-blue">CARGAS ACADÉMICAS</header>
 										<div class="panel-body">
 											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">1. Docentes y cargas académicas</a></p>
-											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont2">2. Informe de sábanas</a></p>
-											<p><a href="javascript:void(0);" href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
-											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont4" >4. Planilla de asistencia</a></p>
-											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont5" >5. Planilla docentes con notas</a></p>
-											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont6" >6. Notas declaradas y registradas</a></p>
+											<p><a href="informe-reporte-sabana.php">2. Informe de sábanas</a></p>
+											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
+											<p><a href="asistencia-planilla.php">4. Planilla de asistencia</a></p>
+											<p><a href="planilla-docentes-filtros.php">5. Planilla docentes con notas</a></p>
+											<p><a href="notas-registradas-informes-filtros.php" >6. Notas declaradas y registradas</a></p>
 										</div>
                                 	</div>
 								</div>
@@ -86,7 +86,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 									<div class="panel">
 										<header class="panel-heading panel-heading-red">INFORMES DISCPLINARIOS</header>
 										<div class="panel-body">
-											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalInfDist1" >1. Sacar reportes</a></p>
+											<p><a href="reportes-sacar-filtro.php">1. Sacar reportes</a></p>
 											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">2. Reporte vista observador</a></p>
 										</div>
                                 	</div>
@@ -116,28 +116,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     </div>
                 </div>
             </div>
-			 <!-- comienzan los modal -->
-			<?php $idModal = "modal1"; $contenido = "informes-boletines-modal.php";  include("../compartido/contenido-modal.php");?> 
-			<?php $idModal = "modal2"; $contenido  = "estudiantes-certificados-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal3"; $contenido  = "consolidado-perdidos-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal4"; $contenido  = "informe-libro-cursos-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal5"; $contenido  = "informe-estudiantes-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal6"; $contenido  = "informe-parcial-grupo-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal8"; $contenido  = "consolidado-final-filtro-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal9"; $contenido  = "estudiantes-planilla-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal10"; $contenido = "reportes-academicos-consultas-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal12"; $contenido = "asistencia-entrega-informes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-
-			<?php $idModal = "modalCont2"; $contenido = "informe-reporte-sabana-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont4"; $contenido = "asistencia-planilla-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont5"; $contenido = "planilla-docentes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont6"; $contenido = "notas-registradas-informes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-			<!-- modal informe disciplinario -->
-			<?php $idModal = "modalInfDist1"; $contenido = "reportes-sacar-filtro-modal.php";  include("../compartido/contenido-modal.php");?>
-			
-			 <!-- terminan  los modal -->
-			
-
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
@@ -165,8 +143,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
-	
-	
     <!-- end js include path -->
 </body>
 

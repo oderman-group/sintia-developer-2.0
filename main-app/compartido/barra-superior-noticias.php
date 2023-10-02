@@ -2,9 +2,11 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+
   <div class="navbar-collapse" id="navbarSupportedContent">
-  <a data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)." data-toggle="modal" data-target="#ModalSintia" class="btn deepPink-bgcolor"><?=$frases[263][$datosUsuarioActual[8]];?>  <i class="fa fa-plus"></i></a>
-  <?php $idModal="ModalSintia"; $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
+
+  <a data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)." href="noticias-agregar.php" class="btn deepPink-bgcolor"><?=$frases[263][$datosUsuarioActual[8]];?> <i class="fa fa-plus"></i></a>
+  
   <ul class="navbar-nav mr-auto">
     
     
