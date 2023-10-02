@@ -4,6 +4,20 @@
 
 $l = 1;
 
+/**
+ * Propuesta #2 parea manejar los idiomas
+*/
+$language = [
+    'social.amigos' => [
+        'ES' => 'Amigos',  1 => 'Amigos',
+        'EN' => 'Friends', 2 => 'Friends'
+    ],
+    'academico.clases' => [
+        'ES' => 'Clases', 1 => 'Clases',
+        'EN' => 'Lesson', 2 => 'Lesson'
+    ]
+];
+
 $frases[1][$l] = 'Amigos';
 
 $frases[2][$l] = 'Enviar mensaje';
@@ -743,6 +757,7 @@ $frases[372][$l] = 'Institución';
 $frases[373][$l] = 'Año';
 
 $frases[374][$l] = 'Unidades Tematicas';
+$frases[375][$l] = 'Editar';
 
 
 
@@ -1490,4 +1505,4 @@ $frases[372][$l] = 'Institution';
 $frases[373][$l] = 'Year';
 
 $frases[374][$l] = 'Thematic Units';
-?>
+$frases[375][$l] = 'Edit';
