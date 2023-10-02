@@ -72,6 +72,8 @@ $_SESSION["configuracion"] = $config;
 									 <a href="../compartido/planilla-docentes-notas.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="text-decoration: underline;">Imprimir planillas con resumen de notas</a>
 									 &nbsp;&nbsp;|&nbsp;&nbsp;
 									 <a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>
+									 &nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="javascript:void(0);" onClick="fetchGeneral('../compartido/progreso-docentes.php', 'Progreso de los docentes')" style="text-decoration: underline;">Ver progreso de los docentes</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
@@ -127,8 +129,8 @@ $_SESSION["configuracion"] = $config;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
-                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" data-toggle="tooltip" data-placement="right" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" data-toggle="tooltip" data-placement="right" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
                                                                     </ul>
                                                                 </div>
 															';
@@ -225,14 +227,6 @@ $_SESSION["configuracion"] = $config;
 						</div>		 
 	                    
 			        </div>
-					
-					<div class="row">
-						 
-						 <div class="col-sm-12">
-						 	<?php include("../compartido/progreso-docentes.php");?>
-						 </div>
-						
-					</div>
 					
 			        <!-- End course list -->
 			        
