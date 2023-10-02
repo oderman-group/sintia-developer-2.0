@@ -202,14 +202,16 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		href="javascript:void(0);"
 																		onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
 																		>Bloquear/Desbloquear</a></li>
-																		<li><a href="estudiantes-cambiar-grupo.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Cambiar de grupo</a></li>
+																		<?php if(!empty($resultado['gra_nombre'])){ ?>
+																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#cambiarGrupoModal<?=$resultado['mat_id'];?>" >Cambiar de grupo</a></li>
+																		<?php } ?>
 																		<?php 
 																		$retirarRestaurar='Retirar';
 																		if($resultado['mat_estado_matricula']==3){
 																				$retirarRestaurar='Restaurar';
 																		}
 																		?>
-																		<li><a href="estudiantes-retirar.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank"><?=$retirarRestaurar?></a></li>
+																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#retirarModal<?=$resultado['mat_id'];?>"><?=$retirarRestaurar?></a></li>
 																		<li><a href="javascript:void(0);"
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')" 
 																		>Reservar cupo</a></li>
@@ -237,6 +239,17 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														</td>
                                                     </tr>
 													<?php 
+														  $_GET["id"]=base64_encode($resultado['mat_id']); 
+													      if(!empty($resultado['gra_nombre'])){
+															$idModal="cambiarGrupoModal".$resultado['mat_id'];															
+															$contenido="../directivo/estudiantes-cambiar-grupo-modal.php"; 
+															include("../compartido/contenido-modal.php");
+														  }
+														 
+															$idModal="retirarModal".$resultado['mat_id'];															
+															$contenido="../directivo/estudiantes-retirar-modal.php"; 
+															include("../compartido/contenido-modal.php");
+													     
 														 $contReg++;
 													  }
 													  ?>
@@ -255,6 +268,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
+		
+		
+		<?php $idModal="ModalSintia1"; $_GET["id"]=base64_encode(2803); $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
