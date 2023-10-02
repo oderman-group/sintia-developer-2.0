@@ -73,7 +73,7 @@ $_SESSION["configuracion"] = $config;
 									 &nbsp;&nbsp;|&nbsp;&nbsp;
 									 <a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>
 									 &nbsp;&nbsp;|&nbsp;&nbsp;
-									 <a href="javascript:void(0);" onClick="fetchGeneral('../compartido/progreso-docentes.php', 'Progreso de los docentes')" style="text-decoration: underline;">Ver progreso de los docentes</a>
+									 <a href="javascript:void(0);" onClick="fetchGeneral('../compartido/progreso-docentes.php?modal=1', 'Progreso de los docentes')" style="text-decoration: underline;">Ver progreso de los docentes</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
