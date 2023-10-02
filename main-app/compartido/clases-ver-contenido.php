@@ -23,42 +23,73 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                             <div class="row">
                                 
 								<div class="col-md-4 col-lg-3">
-									
-									<div class="panel">
-											<header class="panel-heading panel-heading-yellow">Participantes</header>
+
+								<div class="panel">
+											<header class="panel-heading panel-heading-purple">Clases
+											<a href="clases-agregar.php" class="btn float-right btn-primary"><i class="fa fa-plus"></i></a>
+											</header>
 
 											<div class="panel-body">
-												<p>Este es el listado de los que han entrado a esta clase.</p>
+												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
-													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-													$contReg = 1;
+													$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
+													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
-														$consultaIngresoClase=mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
-														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'
-														UNION 
-														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
-														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-														WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
-														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+														$resaltaItem = $Plataforma->colorDos;
+														if($resultado['cls_id']==$idR){$resaltaItem = $Plataforma->colorUno;}
 														
-														if(empty($ingresoClase[0])){continue;}
+														$tachaItem = '';
+														if($resultado['cls_disponible']=='0'){$tachaItem = 'line-through';}
+														
+														if($resultado['cls_disponible']=='0' and $datosUsuarioActual['uss_tipo']==4){continue;}
 													?>
 													<li class="list-group-item">
-														<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
-														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
+														<a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado[1];?></a> 
+														<div class="profile-desc-item pull-right">&nbsp;</div>
 													</li>
 													<?php }?>
 												</ul>
-												
-												<p align="center"><a href="clases-ver.php?idR=<?=$_GET["idR"];?>">VER TODOS</a></p>
 
 											</div>
-										</div>
+									</div>
+
+								<div class="panel">
+									<header class="panel-heading panel-heading-blue">Participantes</header>
+
+									<div class="panel-body">
+										<p>Este es el listado de los que han entrado a esta clase.</p>
+										<ul class="list-group list-group-unbordered">
+											<?php
+											$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
+											$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+											$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+											$contReg = 1;
+											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+												$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
+												$consultaIngresoClase=mysqli_query($conexion, "SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha
+												FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+												WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'
+												UNION 
+												SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
+												FROM ".$baseDatosServicios.".seguridad_historial_acciones 
+												WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
+												$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+												
+												if(empty($ingresoClase[0])){continue;}
+											?>
+											<li class="list-group-item">
+												<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
+												<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
+											</li>
+											<?php }?>
+										</ul>
+										
+										<p align="center"><a href="clases-ver.php?idR=<?=$_GET["idR"];?>">VER TODOS</a></p>
+
+									</div>
+								</div>
+									
 									
 								</div>
 								
@@ -110,7 +141,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 													<i class = "material-icons">more_vert</i>
 												</button>
 												<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-p">
-													<li class = "mdl-menu__item"><a href="clases-editar.php?idR=<?=$datosConsultaBD['cls_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>"><i class="fa fa-edit"></i>Editar</a></li>
+													<li class = "mdl-menu__item"><a href="clases-editar.php?idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>"><i class="fa fa-edit"></i>Editar</a></li>
 													<li class = "mdl-menu__item"><a href="#" name="guardar.php?get=11&idR=<?=$datosConsultaBD['cls_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar</a></li>
 												</ul>
 											<?php }?>
@@ -175,137 +206,171 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										</div>
 
 									</div>
-									
-									
+
 									<div class="card card-box">
-										
 										<div class="card-head">
-											<header>COMENTARIOS / PREGUNTAS</header>
+											<header>FEEDBACK</header>
 										</div>
 										
 										<div class="card-body">
-										<form class="form-horizontal" action="#" method="post">
-											<input type="hidden" name="id" value="14">
-											<input type="hidden" name="idClase" value="<?=$idR;?>">
-											<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
-											<input type="hidden" name="bdConsulta" value="<?=$_SESSION["inst"];?>">
-											<input type="hidden" name="agnoConsulta" value="<?=$_SESSION["bd"];?>">
-											
-											<input type="hidden" name="envia" id="envia">
-											
+
+										<div class="alert alert-info" role="alert">
+											<h4 class="alert-heading">Ayuda a mejorar!</h4>
+											<p>Queremos saber cómo te fue en esta clase. Dejanos un comentario y una valoración. </p>
+											<hr>
+											<p class="mb-0">Recuerda que si ya has dejado una valoración previa, esta se actualizará si envias otra.</p>
+										</div>
+										
+										<div id="feedbackPanel">
 											<div class="form-group row">
 												<div class="col-sm-12">
-													<textarea id="contenido" name="contenido" class="form-control" rows="3" placeholder="Escribe aquí una pregunta o comentario para este tema..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+													<textarea id="feedbackContent" name="feedbackContent" class="form-control" rows="3" placeholder="Dejanos tu opinión sobre este tema" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 												</div>
 											</div>
-											
-											<div class="form-group">
-												<div class="offset-md-3 col-md-9">
-													<button  id="btnEnviar" class="btn btn-info"  onclick="this.disabled=true;guardar()">Enviar</button>
-													
-													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
-												</div>
+
+											<div class="d-flex justify-content-center">
+												<span class="rating"> 
+													<span class="star" id="star-5" onClick="feedbackSend(this)"></span> 
+													<span class="star" id="star-4" onClick="feedbackSend(this)"></span> 
+													<span class="star" id="star-3" onClick="feedbackSend(this)"></span> 
+													<span class="star" id="star-2" onClick="feedbackSend(this)"></span> 
+													<span class="star" id="star-1" onClick="feedbackSend(this)"></span>
+												</span>
 											</div>
-										</form>
-											
 										</div>
+											
+
+										</div>
+
 									</div>
 									
-											<p style="color: tomato;">Los comentarios y/o preguntas más recientes aparecen automáticamente en la parte de abajo.</p>	
-
-											<div id="preguntas"></div>
-											
-															<script>
-																setInterval('consultarPreguntas()',10000);
-
-																window.onload = consultarPreguntas();	
-																
-																function guardar(){																
-																	id="14";
-																	idClase=<?=$idR;?>;
-																	sesionUsuario=<?=$_SESSION["id"];?>;
-																	contenido=document.getElementById("contenido").value;
-																	btn=document.getElementById("btnEnviar");
-																	if(validar()){
-																		datos = "id="+id
-																				+"&idClase="+idClase
-																				+"&sesionUsuario="+sesionUsuario
-																				+"&contenido="+contenido;
-																			
-																		
-																			$.ajax({
-																			type: "POST",
-																			url: "../compartido/guardar.php",
-																			data: datos,
-																			success: function(data){
-																				document.getElementById("contenido").value="";
-																				btn.disabled=false;																				
-																				consultarPreguntas();
-																			}
-																			});
-																	}else{
-																		btn.disabled=false;
-																	}
-
-																};
-																function validar(){
-																	contenido=document.getElementById("contenido").value;
-																	if( contenido == null || contenido.length == 0 || /^\s+$/.test(contenido) ) {
-																		return false;
-																	}else{
-																		return true;
-																	}
-																}
-																function consultarPreguntas(){
-
-																	var claseId = <?= $idR; ?>;
-																	var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
-																	var usuario = <?= $usuario; ?>;
-																	datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;
-																		$.ajax({
-																		type: "POST",
-																		url: "../compartido/ajax-comentarios-preguntas.php",
-																		data: datos,
-																		success: function(data){
-																			$('#preguntas').empty().hide().html(data).show(1);
-																		}
-																	});
-																}
-															</script>
+									
                                 </div>
 								
+								<script>
+										function feedbackSend(data) {
+											var starSplit = data.id.split('-');
+											var star = starSplit[1];
+											var panel = document.getElementById("feedbackPanel");
+											var comment = document.getElementById("feedbackContent");
+											var claseId = <?= $idR; ?>;
+											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
+
+											datos = "claseId="+claseId+
+													"&usuarioActual="+usuarioActual+
+													"&comment="+comment.value+
+													"&star="+star;
+
+												$.ajax({
+												type: "POST",
+												url: "../compartido/ajax-feedback.php",
+												data: datos,
+												success: function(data){
+													panel.style.display = "none";
+												}
+											});
+
+										}
+										
+										setInterval('consultarPreguntas()',10000);
+
+										window.onload = consultarPreguntas();	
+										
+										function guardar(){																
+											id="14";
+											idClase=<?=$idR;?>;
+											sesionUsuario=<?=$_SESSION["id"];?>;
+											contenido=document.getElementById("contenido").value;
+											btn=document.getElementById("btnEnviar");
+											if(validar()){
+												datos = "id="+id
+														+"&idClase="+idClase
+														+"&sesionUsuario="+sesionUsuario
+														+"&contenido="+contenido;
+													
+												
+													$.ajax({
+													type: "POST",
+													url: "../compartido/guardar.php",
+													data: datos,
+													success: function(data){
+														document.getElementById("contenido").value="";
+														btn.disabled=false;																				
+														consultarPreguntas();
+													}
+													});
+											}else{
+												btn.disabled=false;
+											}
+
+										};
+										function validar(){
+											contenido=document.getElementById("contenido").value;
+											if( contenido == null || contenido.length == 0 || /^\s+$/.test(contenido) ) {
+												return false;
+											}else{
+												return true;
+											}
+										}
+										function consultarPreguntas(){
+
+											var claseId = <?= $idR; ?>;
+											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
+											var usuario = <?= $usuario; ?>;
+											datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;
+												$.ajax({
+												type: "POST",
+												url: "../compartido/ajax-comentarios-preguntas.php",
+												data: datos,
+												success: function(data){
+													$('#preguntas').empty().hide().html(data).show(1);
+												}
+											});
+										}
+									</script>
+
+									
 								
 								<div class="col-md-4 col-lg-3">
-									
-									<div class="panel" style="position: sticky; top:0;">
-											<header class="panel-heading panel-heading-red">Clases</header>
-
-											<div class="panel-body">
-												<p>&nbsp;</p>
-												<ul class="list-group list-group-unbordered">
-													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1");
-													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$resaltaItem = 'darkblue';
-														if($resultado['cls_id']==$idR){$resaltaItem = 'limegreen';}
+								<div style="max-height: 700px; overflow-y: auto; padding: 15px;">
+									<div class="card card-box">
+											
+											<div class="card-head">
+												<header>COMENTARIOS</header>
+											</div>
+											
+											<div class="card-body">
+											<form class="form-horizontal" action="#" method="post">
+												<input type="hidden" name="id" value="14">
+												<input type="hidden" name="idClase" value="<?=$idR;?>">
+												<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
+												<input type="hidden" name="bdConsulta" value="<?=$_SESSION["inst"];?>">
+												<input type="hidden" name="agnoConsulta" value="<?=$_SESSION["bd"];?>">
+												
+												<input type="hidden" name="envia" id="envia">
+												
+												<div class="form-group row">
+													<div class="col-sm-12">
+														<textarea id="contenido" name="contenido" class="form-control" rows="3" placeholder="Escribe aquí una pregunta o comentario para este tema..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+													</div>
+												</div>
+												
+												<div class="form-group">
+													<div class="offset-md-3 col-md-9">
+														<button  id="btnEnviar" class="btn btn-info"  onclick="this.disabled=true;guardar()">Enviar</button>
 														
-														$tachaItem = '';
-														if($resultado['cls_disponible']=='0'){$tachaItem = 'line-through';}
-														
-														if($resultado['cls_disponible']=='0' and $datosUsuarioActual['uss_tipo']==4){continue;}
-													?>
-													<li class="list-group-item">
-														<a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado[1];?></a> 
-														<div class="profile-desc-item pull-right">&nbsp;</div>
-													</li>
-													<?php }?>
-												</ul>
-
+														<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+													</div>
+												</div>
+											</form>
+												
 											</div>
 										</div>
-									
-                                </div>
+										
+										<div id="preguntas"></div>
+										
+									</div>
+								</div>
 								
 							
                             </div>

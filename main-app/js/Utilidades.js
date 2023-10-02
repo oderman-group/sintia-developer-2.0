@@ -6,7 +6,9 @@ $(function () {
  * Esta función hace una petición asincrona y recibe una respuesta.
  * Pueden enviarse parametros POST o GET de ser necesario.
  * @param {String} url 
- * @param {String} title 
+ * @param {String} title
+ * @param {String} method = 'POST'
+ * @param {String} paramsJSON 
  */
 function fetchGeneral(url, title, method='POST', paramsJSON=null) {
 

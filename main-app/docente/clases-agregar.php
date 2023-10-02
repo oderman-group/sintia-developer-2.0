@@ -90,7 +90,7 @@ if(
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Tema</label>
+												<label class="col-sm-2 control-label">Tema <span style="color: red;">(*)</span></label>
 												<div class="col-sm-10">
 													<input type="text" name="contenido" class="form-control" autocomplete="off" required>
 												</div>
@@ -104,7 +104,7 @@ if(
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Fecha</label>
+												<label class="col-sm-2 control-label">Fecha <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
 												</div>
@@ -112,7 +112,7 @@ if(
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Unidad</label>
-												<div class="col-sm-4">
+												<div class="col-sm-10">
 													<?php
 													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
 													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
@@ -129,14 +129,13 @@ if(
 											</div>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Disponible para estudiantes</label>
+												<label class="col-sm-2 control-label">Disponible para estudiantes <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puede o no ser vista por los estudiantes."><i class="fa fa-question"></i></button></label>
 												<div class="input-group spinner col-sm-4">
 													<label class="switchToggle">
 														<input type="checkbox" name="disponible" value="1" checked>
 														<span class="slider yellow round"></span>
 													</label>
 												</div>
-												<span class="col-sm-6 control-label" style="color: tomato;">Puede o no ser vista por los estudiantes.</span>
 											 </div>
 											
 											<div class="form-group row">
@@ -153,14 +152,14 @@ if(
 											
 											<p class="text-warning">Opcional.</p>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Hipervinculo</label>
+												<label class="col-sm-2 control-label">Hipervinculo <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Un link que quiere que los estudiantes tengan de referencia para esta clase en particular."><i class="fa fa-question"></i></button></label>
 												<div class="col-sm-10">
 													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com">
 												</div>
 											</div>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Video de youtube</label>
+												<label class="col-sm-2 control-label">Video de youtube <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Pegue la URL del video"><i class="fa fa-question"></i></button></label>
 												<div class="col-sm-10">
 													<input type="text" name="video" class="form-control" autocomplete="off">
 												</div>
@@ -204,7 +203,7 @@ if(
 												</div>	
 											</div>
 
-											
+											<!--
 											<p class="text-info">Para clases en vivo.</p>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Clave para moderadores</label>
@@ -219,6 +218,7 @@ if(
 													<input type="text" name="claveEstudiante" class="form-control" autocomplete="off">
 												</div>
 											</div>
+											-->
 											
 											
 										</div>
