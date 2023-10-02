@@ -28,7 +28,7 @@ $usuarioActual= $_POST["usuarioActual"];
 					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){
 						$href='../compartido/guardar.php?get='.base64_encode(24).'&idCom='.base64_encode($preguntasDatos['cpp_id']);?>
 						
-						<a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')">
+						<a href="javascript:void(0);" id="<?= base64_encode($preguntasDatos['cpp_id']); ?>" name="<?= $href ?>" onClick="deseaEliminar(this)">
 							<i class="fa fa-trash"></i>
 						</a>
 				<?php } ?>	
