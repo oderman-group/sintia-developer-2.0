@@ -26,5 +26,5 @@ if ($_POST["estadoMatricula"] == 1){
 }
 include("../compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="estudiantes.php?id='.base64_encode($_POST["estudiante"]).'"</script>';
+echo '<script type="text/javascript">window.location.href="estudiantes-retirar.php?id='.base64_encode($_POST["estudiante"]).'"</script>';
 exit();    

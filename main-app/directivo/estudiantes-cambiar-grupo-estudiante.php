@@ -38,5 +38,5 @@ try{
 	}
 	include("../compartido/guardar-historial-acciones.php");
 	$msj="Se actualizaron (".$contador.") cargas para el estudiante ".Estudiantes::NombreCompletoDelEstudiante($estudiante);
-	echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_4&summary='.base64_encode($msj).'&id='.base64_encode($_POST["estudiante"]).'";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-cambiar-grupo.php?success=SC_DT_4&summary='.base64_encode($msj).'&id='.base64_encode($_POST["estudiante"]).'";</script>';
 	exit();

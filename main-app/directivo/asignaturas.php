@@ -51,15 +51,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if (Modulos::validarPermisoEdicion()) { ?>
-                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAsigModal" class="btn deepPink-bgcolor">
-														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
-                                                        </a>
-                                                        <?php
-                                                        $idModal = "nuevaAsigModal";
-                                                        $contenido = "../directivo/asignaturas-agregar-modal.php";
-                                                        include("../compartido/contenido-modal.php");
-                                                        } ?>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="asignaturas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
