@@ -1,12 +1,14 @@
 <?php
-include("../docente/session.php");
-$idPaginaInterna = 'CM0008';
-include("historial-acciones-guardar.php");
-require_once("../class/UsuariosPadre.php");
-require_once("../class/Estudiantes.php");
+if( !empty($_GET["modal"]) && $_GET["modal"] == 1 ) {
+	include("../docente/session.php");
+	$idPaginaInterna = 'CM0008';
+	include("historial-acciones-guardar.php");
+	require_once("../class/UsuariosPadre.php");
+	require_once("../class/Estudiantes.php");
 
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
+	$config = Plataforma::sesionConfiguracion();
+	$_SESSION["configuracion"] = $config;
+}
 ?>
 <div class="panel">
 											<header class="panel-heading panel-heading-blue"><i class="fa fa-signal"></i> PROGRESO DE DOCENTES</header>
