@@ -15,3 +15,6 @@ main-app/admisiones/bd-conexion.php
 main-app/admisiones/files
 sensitive.php
 .vscode
+/vendor
+/composer.json
+/composer.lock

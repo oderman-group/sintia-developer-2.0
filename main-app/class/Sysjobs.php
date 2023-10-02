@@ -193,13 +193,13 @@ class SysJobs {
         ".$andTipo
         . $andResponsable
         .$andAgno."            
-        ORDER BY job_prioridad,job_fecha_creacion";
+        ORDER BY job_prioridad,job_fecha_creacion
+        LIMIT 0, 20
+        ";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
         } catch (Exception $e) {
-            echo "Excepci&oacute;n catpurada: ".$e->getMessage();
-            
-            exit();
+            throw new Exception("Excepción capturada: " . $e->getMessage());
         }
 
         return $resultado;

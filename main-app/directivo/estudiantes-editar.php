@@ -11,9 +11,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 require_once("../class/Estudiantes.php");
 
 $id="";
-if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+if(!empty($_GET["id"])){
+	$id=base64_decode($_GET["id"]);
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($id);
+} else if(!empty($_GET["idUsuario"])){ 
+	$idUsuario=base64_decode($_GET["idUsuario"]);
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idUsuario);
+}
 
-$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($id);
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";

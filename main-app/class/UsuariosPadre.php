@@ -27,11 +27,12 @@ class UsuariosPadre {
         global $yearEnd;
         global $baseDatosServicios;
         global $filtro;
-        $index=0;        
+        $index=0;
+        $tableName = BDT_GeneralPerfiles::getTableName();        
         while($yearStart <= $yearEnd){
             $instYear =$_SESSION["inst"] ."_". $yearStart;            
             $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios 
-            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+            INNER JOIN ".$baseDatosServicios.".{$tableName} ON pes_id=uss_tipo
             WHERE uss_usuario LIKE '".$usuario."%'");
             if($consultaUsuarioAuto->num_rows>0){               
                 while($fila=$consultaUsuarioAuto->fetch_assoc()){
