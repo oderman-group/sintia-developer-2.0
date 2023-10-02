@@ -35,18 +35,14 @@ if (!empty($_GET['busqueda'])) {
                         <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
                         <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0);"  data-toggle="modal" data-target="#modalTranferirCargas"  >Transferir cargas</a>
+                        <a class="dropdown-item" href="cargas-transferir.php">Transferir cargas</a>
                         <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
 
                     </div>
                 </li>
 
                 <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
-                <?php
-                $idModal = "modalTranferirCargas";
-                $contenido = "../directivo/cargas-transferir-modal.php";
-                include("../compartido/contenido-modal.php");
-                } ?>
+            <?php }?>
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
