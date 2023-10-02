@@ -66,8 +66,8 @@ if (isset($_GET['busqueda'])) {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <?php
-            $tiposUsuarios = TipoUsuario::listarTiposUsuarios($baseDatosServicios);
-            while($tipoUsuario = mysqli_fetch_array($tiposUsuarios, MYSQLI_BOTH)){
+            $tiposUsuarios = TipoUsuario::listarTiposUsuarios($baseDatosServicios, $conexionPDO);
+            while($tipoUsuario = $tiposUsuarios->fetch()){
                 $estiloResaltado = '';
                 if($tipoUsuario['pes_id'] == $tipo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
             ?>	

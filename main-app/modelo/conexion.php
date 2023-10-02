@@ -29,6 +29,13 @@ if($_SESSION["inst"]==""){
 	try{
 	//Conexion con el Servidor
 	$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agnoBD);
+	
+	// Crear una instancia de PDO
+    $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
+
+    // Establecer el modo de error PDO a excepciones
+    $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 	} catch(Exception $e){
 
 		switch($e->getCode()){
