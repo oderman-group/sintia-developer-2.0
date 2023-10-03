@@ -33,7 +33,7 @@ WHERE prod_id='".$id."'
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción</label>
                                             <div class="col-sm-10">
-                                                <textarea class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" readonly><?=$producto['prod_descripcion'];?></textarea>
+                                                <textarea id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" readonly><?=$producto['prod_descripcion'];?></textarea>
                                             </div>
                                         </div>
 										
@@ -122,8 +122,12 @@ WHERE prod_id='".$id."'
                         </div>
 						
                     </div>
+                    <script src="../ckeditor/ckeditor.js"></script>
 
                     <script>
+                        // Replace the <textarea id="editor1"> with a CKEditor 4
+                        // instance, using default configuration.
+                        CKEDITOR.replace( 'editor1' );
                         /**
                          * Esta función calcula el precio total a pagar al momento
                          * de comprar un producto en merkaplace
