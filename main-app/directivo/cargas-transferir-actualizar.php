@@ -17,5 +17,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-transferir.php?success='.base64_encode('SC_DT_13').'";</script>';
 	exit();
