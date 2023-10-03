@@ -63,7 +63,7 @@
 									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="40" name="id">
 										
-										<p style="color: darkblue;">Escoge la carga y el periodo desde donde quieres importar la información.</p>	
+										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual[8]];?></p>	
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></label>
@@ -106,7 +106,7 @@
                                             </div>
                                         </div>
 										
-										<p style="color: darkblue;">Ahora puedes especificar la información que quieres importar.</p>	
+										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual[8]];?></p>	
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></label>
