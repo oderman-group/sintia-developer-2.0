@@ -18,15 +18,22 @@ $porcentajeRestante = 100 - $valores[0];
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
+  const idSplit = enviada.id.split('-');
   var codNota = enviada.name;	 
   var nota = enviada.value;
-  var codEst = enviada.id;
+  var codEst = idSplit[0];
   var nombreEst = enviada.alt;
   var operacion = enviada.title;
   var notaAnterior = enviada.step;
  
 if(operacion == 1 || operacion == 3){
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+	if (alertValidarNota(nota)) {
+		return false;
+	}
+}
+
+if(operacion == 1) {
+	aplicarColorNota(nota, enviada.id);
 }
 	  
 $('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);
@@ -54,6 +61,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 <?php include("../compartido/body.php");?>
 	
     <div class="page-wrapper">
+		<?php include("../compartido/texto-manual-ayuda.php");?>
         <?php include("../compartido/encabezado.php");?>
 		
         <?php include("../compartido/panel-color.php");?>
@@ -184,12 +192,6 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														$colorEstudiante = '#000;';
 														if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
 													?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado[0]);
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
-													?>
                                                     
 													<tr>
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
@@ -205,9 +207,18 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$rA[0]);
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 														?>
-															<td>
+															<td style="text-align:center;">
 																
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
+															<?php
+															$arrayEnviar = [
+																"tipo"=>5, 
+																"descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
+																"idInput"=>$resultado[0]."-".$rA[0]
+															];
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
+															?>
+															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
 																
 															<?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21)?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>

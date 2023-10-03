@@ -109,20 +109,20 @@ class SysJobs {
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
-        if(!is_null($datos["intentos"])){
+        if(isset($datos["intentos"]) && !is_null($datos["intentos"])){
             $intento = intval($datos["intentos"]);
             if($intento>3){               
                 $datos["estado"]=JOBS_ESTADO_ERROR;
             }
         }
         
-        $setIntentos=is_null($datos["intentos"])?"":",job_intentos='".$datos["intentos"]."'";
+        $setIntentos=empty($datos["intentos"]) ? "" : ",job_intentos='".$datos["intentos"]."'";
         $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
         $setMensaje=empty($datos["mensaje"])?"":",job_mensaje='".$datos["mensaje"]."'";
         $setPrioridad=empty($datos["prioriedad"])?"":",job_prioriedad='".$datos["prioriedad"]."'";
 
         $sqlUpdate="UPDATE ".$baseDatosServicios.".sys_jobs
-        SET job_fecha_modificacion=NOW()"
+        SET job_fecha_modificacion=NOW(), job_host = '".$_SERVER['HTTP_HOST']."'"
          .$setIntentos
          .$setEstado
          .$setMensaje
@@ -193,13 +193,13 @@ class SysJobs {
         ".$andTipo
         . $andResponsable
         .$andAgno."            
-        ORDER BY job_prioridad,job_fecha_creacion";
+        ORDER BY job_prioridad,job_fecha_creacion
+        LIMIT 0, 20
+        ";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
         } catch (Exception $e) {
-            echo "Excepci&oacute;n catpurada: ".$e->getMessage();
-            
-            exit();
+            throw new Exception("Excepción capturada: " . $e->getMessage());
         }
 
         return $resultado;

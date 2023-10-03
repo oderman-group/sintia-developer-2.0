@@ -12,9 +12,11 @@ else
 	include("../../config-general/consulta-usuario-actual.php");
 	include("../../config-general/verificar-usuario-bloqueado.php");
 	
-	if($datosUsuarioActual[3]!=4)
+	if($datosUsuarioActual[3] != TIPO_ESTUDIANTE)
 	{
-		echo "Usted no tiene permisos para acceder a esta opci&oacute;n";
+		include("../compartido/sintia-funciones.php");
+		$destinos = validarUsuarioActual($datosUsuarioActual);
+		echo '<script type="text/javascript">window.location.href="'.$destinos.'page-info.php?idmsg=301;</script>';
 		exit();		
 	}	
 

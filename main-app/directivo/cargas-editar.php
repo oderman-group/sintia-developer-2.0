@@ -53,7 +53,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[12][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -72,6 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
 									<form name="formularioGuardar" action="cargas-actualizar.php" method="post">
 
 										<input type="hidden" value="<?=$datosEditar['car_id'];?>" name="idR">
+										<input type="hidden" value="<?=$datosEditar['car_periodo'];?>" name="periodoActual">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
@@ -348,7 +349,7 @@ if(!Modulos::validarPermisoEdicion()){
 											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										<?php }?>
 										
-										<a href="#" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

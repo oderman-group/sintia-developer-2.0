@@ -26,7 +26,9 @@ if(!Modulos::validarPermisoEdicion()){
   
   var casilla = document.getElementById(codEst);
   
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+ 	if (alertValidarNota(nota)) {
+		return false;
+	}	
 	
 	casilla.disabled="disabled";
 	casilla.style.fontWeight="bold";
@@ -35,6 +37,7 @@ if(!Modulos::validarPermisoEdicion()){
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
 				   "&codEst="+(codEst)+
+				   "&notaAnterior="+(notaAnterior)+
 				   "&carga="+(carga);
 			   $.ajax({
 				   type: "POST",
@@ -52,7 +55,9 @@ function niv(enviada){
   var codEst = enviada.id;
   var per = enviada.name;
   var carga = <?=$cargaConsultaActual;?>;
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+  if (alertValidarNota(nota)) {
+		return false;
+	}
 	  $('#respRP').empty().hide().html("esperando...").show(1);
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
@@ -90,7 +95,7 @@ function niv(enviada){
                                 <div class="page-title"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></div>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
@@ -197,7 +202,12 @@ function niv(enviada){
 																$definitiva += $notasResultado[4]*$decimal;
 															}
 															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
-															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															 
+															if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
+															 elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+															 else $tipo='';
 															$notaPeriodo="";
 															if(!empty($notasResultado[4]))$notaPeriodo=$notasResultado[4];
 

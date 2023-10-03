@@ -130,7 +130,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
 														INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-														WHERE uss_id=uss_id $filtro
+														WHERE uss_id!={$_SESSION["id"]} $filtro
 														ORDER BY uss_id
 														LIMIT $inicio,$registros;");
 													} catch (Exception $e) {
@@ -155,6 +155,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															include("../compartido/error-catch-to-report.php");
 														}
 														$numCarga = mysqli_num_rows($consultaNumCarga);
+														$mostrarNumCargas = '';
+														if( $resultado['uss_tipo']==2 ) {
+															$mostrarNumCargas = '<br><span style="font-size:9px; color:darkblue">('.$numCarga.' Cargas)</span>';
+														}
 
 														try{
 															$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
@@ -187,7 +191,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=$resultado['pes_nombre'];?></td>
+														<td><?=$resultado['pes_nombre']."".$mostrarNumCargas;?></td>
 														<td>
 															<?=$resultado['uss_estado'];?><br>
 															<span style="font-size: 11px;"><?=$resultado['uss_ultimo_ingreso'];?></span>
@@ -214,7 +218,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 
 																		<?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
-																			<li><a href="#" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
+																			<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
 																		<?php }?>
 																	<?php }?>
 																	  

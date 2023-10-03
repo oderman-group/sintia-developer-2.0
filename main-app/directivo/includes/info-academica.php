@@ -82,7 +82,7 @@
 											<div class="form-group row">												
 												<label class="col-sm-2 control-label">Valor Matricula</label>
 												<div class="col-sm-2">
-													<input type="text" name="va_matricula" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
+													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_valor_matricula'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>	
 												
@@ -93,7 +93,7 @@
 														<option value="0">Seleccione una opción</option>
 														<option value="1"<?php if ($datosEstudianteActual['mat_estado_agno']==1){echo "selected";}?>>Ganado</option>
 														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']==2){echo "selected";}?>>Perdido</option>
-														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']=='0'){echo "selected";}?>>En curso</option>
+														<option value="3"<?php if ($datosEstudianteActual['mat_estado_agno']=='0'){echo "selected";}?>>En curso</option>
 													</select>
 												</div>
 											</div>

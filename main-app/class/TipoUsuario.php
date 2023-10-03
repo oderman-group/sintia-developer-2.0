@@ -1,22 +1,27 @@
 <?php
+require_once 'Plataforma.php';
+require_once 'Tables/BDT_general_perfiles.php';
 
 class TipoUsuario {
 
-    public static function listarTiposUsuarios()
+    public static function listarTiposUsuarios($baseDatosServicios, $conexionPDO)
     {
-
-        global $conexion, $baseDatosServicios;
-        $resultado = [];
+        $tableName = BDT_GeneralPerfiles::getTableName();
 
         try {
-            $resultado     = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
+            $consulta = "SELECT * FROM {$baseDatosServicios}.{$tableName}";
+            $stmt = $conexionPDO->prepare($consulta);
+
+            if ($stmt) {
+                $stmt->execute();
+
+                return $stmt;
+            } else {
+                throw new Exception("Error al preparar la consulta.");
+            }
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: " . $e->getMessage();
+            return null;
         }
-
-        return $resultado;
-
     }
-
 }

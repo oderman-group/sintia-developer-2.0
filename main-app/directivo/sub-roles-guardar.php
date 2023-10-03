@@ -4,6 +4,12 @@ $idPaginaInterna = 'DT0207';
 
 include("../compartido/historial-acciones-guardar.php");
 Modulos::validarAccesoDirectoPaginas();
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 require_once("../class/SubRoles.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS

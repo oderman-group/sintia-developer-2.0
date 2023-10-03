@@ -25,9 +25,10 @@ $usuarioActual= $_POST["usuarioActual"];
 				</div>
 				<div class="panel-body">
 					<p><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_fecha']; ?></span>
-					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){?>
+					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){
+						$href='../compartido/guardar.php?get='.base64_encode(24).'&idCom='.base64_encode($preguntasDatos['cpp_id']);?>
 						
-						<a href="../compartido/guardar.php?get=<?= base64_encode(24); ?>&idCom=<?= base64_encode($preguntasDatos['cpp_id']); ?>" onClick="if(!confirm('Deseas eliminar este mensaje?')){return false;}">
+						<a href="javascript:void(0);" id="<?= base64_encode($preguntasDatos['cpp_id']); ?>" name="<?= $href ?>" onClick="deseaEliminar(this)">
 							<i class="fa fa-trash"></i>
 						</a>
 				<?php } ?>	

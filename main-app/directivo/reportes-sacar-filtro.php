@@ -185,7 +185,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										
 										<input type="submit" class="btn btn-primary" value="Sacar reporte">&nbsp;
 										
-										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
                                     </form>
                                 </div>

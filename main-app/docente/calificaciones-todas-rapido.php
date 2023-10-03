@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DC0067';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 
 $consultaValores=mysqli_query($conexion, "SELECT
@@ -13,28 +14,31 @@ WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsult
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
+include("../compartido/sintia-funciones-js.php");
 ?>
-
-<!-- Axios -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
-<?php include("../compartido/sintia-funciones-js.php");?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
 	<title>Resumen de notas</title>
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
+	
+  const idSplit = enviada.id.split('-');
   var codNota = enviada.name;	 
   var nota = enviada.value;
-  var codEst = enviada.id;
+  var codEst = idSplit[0];
   var nombreEst = enviada.alt;
   var operacion = enviada.title;
   var notaAnterior = enviada.step;
  
 if(operacion == 1 || operacion == 3){
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}
+	if (alertValidarNota(nota)) {
+		return false;
+	}
 }
+
+if(operacion == 1) {
+	aplicarColorNota(nota, enviada.id);
+}
+
 	  
 $('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);
 	datos = "nota="+(nota)+
@@ -87,8 +91,7 @@ th {
 <!-- END HEAD -->
 
 <body>
-	
-
+<?php include("../compartido/texto-manual-ayuda.php");?>
                                             <span id="respRCT"></span>
 		
 											<p>
@@ -146,12 +149,6 @@ th {
 														$colorFondo = '';
 														if(!empty($_GET["idEst"]) && $resultado['mat_id']==$_GET["idEst"]){$colorFondo = 'yellow;';}
 													?>
-													
-													<?php
-													$arrayEnviar = array("tipo"=>2, "descripcionTipo"=>"Para ocultar la X y limpiar valor.", "idInput"=>$resultado[0]);
-													$arrayDatos = json_encode($arrayEnviar);
-													$objetoEnviar = htmlentities($arrayDatos);
-													?>
                                                     
 													<tr style="background-color: <?=$colorFondo;?>">
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
@@ -165,9 +162,17 @@ th {
 															//LAS CALIFICACIONES
 															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$rA[0]);
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
+															
+															$arrayEnviar = [
+																"tipo"=>5, 
+																"descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
+																"idInput"=>$resultado[0]."-".$rA[0]
+															];
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
 														?>
 															<td style="text-align:center;">
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
 															<?php if(!empty($notasResultado[3])){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
 																<?php if($notasResultado[3]<$config[5]){?>
@@ -192,10 +197,11 @@ th {
                                             </table>
 											
 
-    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
-	
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- notifications -->
+<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
+<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
     <!-- end js include path -->
 </body>
 

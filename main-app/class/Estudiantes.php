@@ -66,12 +66,15 @@ class Estudiantes {
         $resultado = [];
 
         try {
-            $sqlString= "SELECT *,cal_id_estudiante, sum(act_valor) as acumulado 
-            FROM academico_calificaciones
-            INNER JOIN academico_matriculas on mat_id=cal_id_estudiante
-            INNER JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga='".$carga."' and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
-            GROUP BY cal_id_estudiante
-            HAVING acumulado<100";
+            $sqlString= "SELECT *, sum(act_valor) as acumulado 
+            FROM academico_matriculas
+            LEFT JOIN academico_cargas on car_id='".$carga."'
+            LEFT JOIN academico_calificaciones on cal_id_estudiante=mat_id 
+            LEFT JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga=car_id and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
+            WHERE mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grado=car_curso AND mat_grupo=car_grupo
+            GROUP BY mat_id
+            HAVING acumulado<100 OR acumulado IS NULL
+            ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres";
             $resultado = mysqli_query($conexion,$sqlString);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

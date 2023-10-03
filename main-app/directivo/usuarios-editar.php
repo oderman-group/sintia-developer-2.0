@@ -14,10 +14,16 @@ $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$id."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$id."' AND uss_id!={$_SESSION["id"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+
+if( mysqli_num_rows($consultaDatos) == 0 ){
+	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_16";</script>';
+	exit();
+}
+
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
@@ -62,7 +68,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=10" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar usuarios</li>
                             </ol>
                         </div>
@@ -219,9 +225,9 @@ if(!Modulos::validarPermisoEdicion()){
 										<?php
 										$readOnly = '';
 										$leyenda = '';
-										if($datosEditar['uss_tipo']==4){
+										if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE){
 											$readOnly='readonly'; 
-											$leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idR='.$datosEditar['uss_id'].'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
+											$leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idUsuario='.base64_encode($datosEditar['uss_id']).'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
 										}
 										?>
 										
@@ -395,7 +401,7 @@ if(!Modulos::validarPermisoEdicion()){
 											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										<?php }?>
 										
-										<a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
 								</div>
                             </div>

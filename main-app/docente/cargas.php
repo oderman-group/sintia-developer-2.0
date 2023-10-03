@@ -1,10 +1,14 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0033';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php 
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0033';
+include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
+
+$config = Plataforma::sesionConfiguracion();
+$_SESSION["configuracion"] = $config;
 ?>
 </head>
 <style>
@@ -68,6 +72,8 @@ require_once("../class/Sysjobs.php");
 									 <a href="../compartido/planilla-docentes-notas.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="text-decoration: underline;">Imprimir planillas con resumen de notas</a>
 									 &nbsp;&nbsp;|&nbsp;&nbsp;
 									 <a href="cargas-general.php" style="text-decoration: underline;">Ir a vista general</a>
+									 &nbsp;&nbsp;|&nbsp;&nbsp;
+									 <a href="javascript:void(0);" onClick="fetchGeneral('../compartido/progreso-docentes.php?modal=1', 'Progreso de los docentes')" style="text-decoration: underline;">Ver progreso de los docentes</a>
 							 </p>
 							 <?php }?>
 							 <div class="row">
@@ -78,9 +84,10 @@ require_once("../class/Sysjobs.php");
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 									    $ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
+										$seleccionado=false;
 
 										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk';}
+										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
 										
 										$cargaSP = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];
@@ -109,26 +116,59 @@ require_once("../class/Sysjobs.php");
 												);
 												$buscarJobs=SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+
+												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
+
+												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
+												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
+
+												$btnGenerarInforme='
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn red">Generar Informe</button>
+                                                                    <button type="button" class="btn red dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" data-toggle="tooltip" data-placement="right" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
+                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" data-toggle="tooltip" data-placement="right" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
+                                                                    </ul>
+                                                                </div>
+															';
+
+												$alertaNotasFaltantes='
+															<div class="alert alert-danger" role="alert" style="margin-right: 20px;">
+																<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
+															</div>
+															';
 												
 												if(empty($jobsEncontrado)){
-													$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>';
+													$mensajeI = $btnGenerarInforme;
+													if($configGenerarJobs==1 && $numSinNotas>0){
+														$mensajeI = $alertaNotasFaltantes;
+													}
 												}else{
 													$intento = intval($jobsEncontrado["job_intentos"]);
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
-															$mensajeI = '<a href="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" class="'.$estadoColor.'">Generar Informe '.$estadoCrobJob.'</a>'
-																	.'<div class="alert alert-danger" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+															$mensajeI = $btnGenerarInforme
+																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 																	break;
-														case JOBS_ESTADO_PENDIENTE && $intento==0:
-															$mensajeI ='<div class="alert alert-success" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+														case JOBS_ESTADO_PENDIENTE:
+															if($intento==0){
+																$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0 && $seleccionado){
+																$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}elseif($intento>0){
+																$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 &&  $fondoCargaActual=="#FFF":
-															$mensajeI ='<div class="alert alert-warning" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
+
+														default:
+															$mensajeI = $btnGenerarInforme;
+															if($configGenerarJobs==1 && $numSinNotas>0){
+																$mensajeI = $alertaNotasFaltantes;
+															}
 															break;
-														case JOBS_ESTADO_PENDIENTE && $intento>0 :
-															$mensajeI ='<div class="alert alert-warning-select" role="alert">'.$jobsEncontrado["job_mensaje"].'</div>';
-															break;
-														
 													}
 												}
 												
@@ -141,6 +181,10 @@ require_once("../class/Sysjobs.php");
 											$induccionEntrar = 'data-hint="Haciendo click sobre el nombre o sobre la imagen puedes entrar a administrar esta carga académica."';
 											$induccionSabanas = 'data-hint="Puedes ver las sábanas de cada uno de los periodos pasados."';
 										}
+
+										$filtro = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
+										$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+										$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
 									?>
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
@@ -153,7 +197,7 @@ require_once("../class/Sysjobs.php");
 	                        	<h5 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre']);?></span>
+										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
 									</p>
 									
 									
@@ -169,7 +213,7 @@ require_once("../class/Sysjobs.php");
 		                            	<?php if($rCargas['car_director_grupo']==1){?><br><a class="course-likes m-l-10" style="color: slateblue;"><i class="fa fa-user-circle-o"></i> Director de grupo</a><?php }?>
 		                            </div>
 									
-									<p><?=$mensajeI;?></p>
+									<span id="mensajeI<?=$rCargas['car_id']?>"><?=$mensajeI;?></span>
 									
 	                        	</div>
 	                        </div>	
@@ -183,14 +227,6 @@ require_once("../class/Sysjobs.php");
 						</div>		 
 	                    
 			        </div>
-					
-					<div class="row">
-						 
-						 <div class="col-sm-12">
-						 	<?php include("../compartido/progreso-docentes.php");?>
-						 </div>
-						
-					</div>
 					
 			        <!-- End course list -->
 			        

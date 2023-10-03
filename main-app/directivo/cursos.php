@@ -49,8 +49,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<ul class="dropdown-menu" role="menu">
 												<li><a href="cursos-intensidad.php">I.H por curso</a></li>
 												<!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
-												<li><a href="cursos-cambiar-matricula.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la matricula</a></li>
-												<li><a href="cursos-cambiar-pension.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Poner en $0 la pensión</a></li>
+												<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-matricula.php')">Poner en $0 la matricula</a></li>
+												<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-pension.php')">Poner en $0 la pensión</a></li>
 											</ul>
 										</div>
 									<?php }?>
@@ -116,7 +116,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
 																		<li><a href="cursos-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<li><a href="cursos-eliminar.php?id=<?=base64_encode($resultado[0]);?>">Eliminar</a></li>
+																		<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas eliminar este curso?','question','cursos-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
 																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=base64_encode($resultado[0]);?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
 																	<?php }?>
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=base64_encode($resultado[0]);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>

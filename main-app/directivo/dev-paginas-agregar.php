@@ -65,7 +65,7 @@ include("../compartido/head.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Paginas</li>
                             </ol>
                         </div>

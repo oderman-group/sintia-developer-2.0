@@ -1,5 +1,7 @@
 <?php
-require_once("index-logica.php");
+if(!isset($_GET['nodb'])) {
+    require_once("index-logica.php");
+}
 ?>
 
 <!DOCTYPE html>

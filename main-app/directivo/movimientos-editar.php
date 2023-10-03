@@ -19,6 +19,14 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
+
+if($resultado['fcu_anulado'] == 1) {
+    $disabledPermiso = "disabled";
+    echo '<script>
+    var idBtn = "btnEditarMovimientos";
+    ejecutarOtrasFunciones(idBtn);
+    </script>';
+}
 ?>
 
 	<!--bootstrap -->
@@ -53,7 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Movimientos</li>
                             </ol>
                         </div>
@@ -153,21 +161,42 @@ if(!Modulos::validarPermisoEdicion()){
 												<?php
                                                 try{
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+                                                    WHERE uss_id='".$resultado['fcu_usuario']."'");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
+                                                $resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH);
 												?>
-                                                <select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$resultadosDatos[0];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos[0]){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
-													<?php }?>
+                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
+                                                    <option value="<?=$resultadosDatos[0];?>" selected><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#select_usuario').select2({
+                                                placeholder: 'Seleccione el usuario...',
+                                                theme: "bootstrap",
+                                                multiple: false,
+                                                    ajax: {
+                                                        type: 'GET',
+                                                        url: '../compartido/ajax-listar-usuarios.php',
+                                                        processResults: function(data) {
+                                                            data = JSON.parse(data);
+                                                            return {
+                                                                results: $.map(data, function(item) {
+                                                                    return {
+                                                                        id: item.value,
+                                                                        text: item.label
+                                                                    }
+                                                                })
+                                                            };
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        </script>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Notificar al usuario</label>
@@ -189,10 +218,10 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios" id="btnEditarMovimientos">&nbsp;
                                         <?php }?>
 										
-										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

@@ -4,8 +4,13 @@ include("session.php");
 $idPaginaInterna = 'DT0205';
 
 include("../compartido/historial-acciones-guardar.php");
-Modulos::verificarPermisoDev();
+
 include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -42,7 +47,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                             <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol</div>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="sub-roles.php?cantidad=10" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol</li>
                         </ol>
                     </div>

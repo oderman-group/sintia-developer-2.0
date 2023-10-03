@@ -20,25 +20,7 @@ $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
 if (!empty($_POST["id"])) {
-	//GUARDAR NOTICIA RÁPIDA
-	if ($_POST["id"] == 1) {
-
-		$estado = 1;
-		if ($datosUsuarioActual['uss_tipo'] == 4) {
-			$estado = 0;
-		}
-
-		$destinatarios = "1,2,3,4,5";
-	try{
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_usuario, not_descripcion, not_fecha, not_estado, not_para, not_institucion, not_year,not_imagen)VALUES('" . $_SESSION["id"] . "','" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',now(), '" . $estado . "', '" . $destinatarios . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "','')");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-		include("../compartido/guardar-historial-acciones.php");
-
-		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
-		exit();
-	}
+	
 	//GUARDAR NOTICIA COMPLETA
 	if ($_POST["id"] == 2) {
 
@@ -700,8 +682,13 @@ if (!empty($_POST["id"])) {
 		$pos = strpos($_POST["video"], $findme) + 3;
 		$video = substr($_POST["video"], $pos, 11);
 
+		$stock = 1;
+		if( !empty($_POST['stock']) && $_POST['stock'] > 0 ) {
+			$stock = $_POST['stock']; 
+		}
+
 		try{
-			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 1, 0, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "')");
+			mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".productos(prod_nombre, prod_descripcion, prod_foto, prod_precio, prod_activo, prod_estado, prod_empresa, prod_video, prod_keywords, prod_categoria, prod_existencias)VALUES('" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["descripcion"]) . "', '" . $foto . "', '" . $_POST["precio"] . "', 1, 0, '" . $_SESSION["empresa"] . "', '" . $video . "', '" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', '" . $_POST["categoria"] . "', '" . $stock . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

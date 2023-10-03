@@ -68,6 +68,8 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="configuracion-sistema-guardar.php" method="post">
+
+                                    <p class="h3">General</p>
 										
 									<div class="form-group row">
 											<label class="col-sm-2 control-label">Año Actual</label>
@@ -77,17 +79,21 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Periodos a trabajar <span style="color: red;">(*)</span></label>
+											<label class="col-sm-2 control-label">
+                                                Periodos a trabajar <span style="color: red;">(*)</span> 
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Las instituciones normalmente manejan 4 periodos. Los colegios semestralizados o de bachillerato acelerado manejan 2 periodos."><i class="fa fa-question"></i></button>
+                                        </label>
 											<div class="col-sm-8">
 												<input type="text" name="periodoTrabajar" class="form-control col-sm-2" value="<?=$cfg[19];?>" required pattern="[0-9]+" <?=$disabledPermiso;?>>
-                                                <span style="color:#6017dc;">Las instituciones normalmente manejan 4 periodos. Los colegios semestralizados o de bachillerato acelerado manejan 2 periodos.</span>
 											</div>
 										</div>
 										
 										
 										
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Periodo Actual <span style="color: red;">(*)</span></label>
+											<label class="col-sm-2 control-label">Periodo Actual <span style="color: red;">(*)</span>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este valor solo se verá reflejado en los informes que obtienen los directivos."><i class="fa fa-question"></i></button>    
+                                        </label>
 											<div class="col-sm-3">
                                                 <select class="form-control  select2" name="periodo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
@@ -108,11 +114,40 @@ if(!Modulos::validarPermisoEdicion()){
 													}
 													?>
                                                 </select>
-                                                <span style="color:#6017dc;">Este valor solo se verá reflejado en los informes que obtiene los directivos.</span>
+											</div>
+										</div>
+										
+										
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta) <span style="color: red;">(*)</span></label>
+											<div class="col-sm-10">
+												<input type="text"style="margin-top: 20px;" name="desde" class="col-sm-1" value="<?=$cfg[3];?>" <?=$disabledPermiso;?>>
+												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
+											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
+											<div class="col-sm-2">
+												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>" <?=$disabledPermiso;?>>
+											</div>
+										</div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignar porcentaje a las asignaturas? 
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica si las asignaturas tendrán un porcentaje diferente dentro del área al momento de calcular las notas en el boletín."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="porcenAsigna" <?=$disabledPermiso;?>>
+                                                    <option value="SI" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='SI'){ echo "selected";} ?>>SI</option>
+                                                    <option value="NO" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='NO'){ echo "selected";} ?>>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+                                        <p class="h3">Estilos y apariencia</p>
+
+                                        <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estilo de calificación <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="estiloNotas" required <?=$disabledPermiso;?>>
@@ -133,14 +168,16 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Rango de las notas (Desde - Hasta) <span style="color: red;">(*)</span></label>
-											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="desde" class="col-sm-1" value="<?=$cfg[3];?>" <?=$disabledPermiso;?>>
-												<input type="text"style="margin-top: 20px;" name="hasta" class="col-sm-1" value="<?=$cfg[4];?>" <?=$disabledPermiso;?>>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Cantidad de decimales en las notas <span style="color: red;">(*)</span>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica cuántos decimales aparecerán en los cálculos de las notas."><i class="fa fa-question"></i></button> 
+                                        </label>
+											<div class="col-sm-2">
+												<input type="number" name="decimalesNotas" class="form-control" value="<?=$cfg['conf_decimales_notas'];?>">
 											</div>
 										</div>
+
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estilo de certificado</label>
                                             <div class="col-sm-2">
@@ -172,22 +209,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     }
                                             </script>
                                         </div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Nota minima para aprobar <span style="color: red;">(*)</span></label>
-											<div class="col-sm-2">
-												<input type="text" name="notaMinima" class="form-control" value="<?=$cfg[5];?>" <?=$disabledPermiso;?>>
-											</div>
-										</div>
 
-                                        <div class="form-group row">
-											<label class="col-sm-2 control-label">Cantidad de decimales en las notas <span style="color: red;">(*)</span></label>
-											<div class="col-sm-2">
-												<input type="text" name="decimalesNotas" class="form-control" value="<?=$cfg['conf_decimales_notas'];?>">
-                                                <span style="color:#6017dc;">Indica cuántos decimales aparecerán en los cálculos de las notas.</span>
-											</div>
-										</div>
-										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Color de las notas (Perdidas -  Ganadas) <span style="color: red;">(*)</span></label>
 											<div class="col-sm-10">
@@ -195,20 +217,8 @@ if(!Modulos::validarPermisoEdicion()){
 												<input type="color"style="margin-top: 20px;" name="ganada" class="col-sm-1" value="<?=$cfg[7];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
-                                        
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Asignar porcentaje a las asignaturas?</label>
-                                            <div class="col-sm-2">
-                                                <select class="form-control  select2" name="porcenAsigna" <?=$disabledPermiso;?>>
-                                                    <option value="SI" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='SI'){ echo "selected";} ?>>SI</option>
-                                                    <option value="NO" <?php if($cfg['conf_agregar_porcentaje_asignaturas']=='NO'){ echo "selected";} ?>>No</option>
-                                                </select>
-                                                <span style="color:#6017dc;">Indica si las asignaturas tendrán un porcentaje diferente dentro del área al momento de calcular las notas en el boletín.</span>
-                                            </div>
-                                        </div>
-										
-                                        <hr>
-										<div class="form-group row">
+
+                                        <div class="form-group row">
                                             <label class="col-sm-2 control-label">En qué orden desea ver el nombre de los estudiantes?</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="ordenEstudiantes" <?=$disabledPermiso;?>>
@@ -217,6 +227,41 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Numero de registros en listados
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción permite escoger la cantidad de registros que desea que se listen al entrar, por ejemplo, a matrículas, cargas académicas o usuarios."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="numRegistros" <?=$disabledPermiso;?>>
+                                                    <option value="20" <?php if($cfg['conf_num_registros']==20){ echo "selected";} ?>>20</option>
+                                                    <option value="30" <?php if($cfg['conf_num_registros']==30){ echo "selected";} ?>>30</option>
+                                                    <option value="50" <?php if($cfg['conf_num_registros']==50){ echo "selected";} ?>>50</option>
+                                                    <option value="100" <?php if($cfg['conf_num_registros']==100){ echo "selected";} ?>>100</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho -  Alto)</label>
+											<div class="col-sm-10">
+												<input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$cfg[30];?>" <?=$disabledPermiso;?>>
+												<input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$cfg[31];?>" <?=$disabledPermiso;?>>
+											</div>
+										</div>
+										
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Mostrar Nombre del colegio en el encabezado de los informes</label>
+											<div class="col-sm-2">
+                                                <select class="form-control  select2" name="mostrarNombre" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg[32]==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="2" <?php if($cfg[32]==2){ echo "selected";} ?>>NO</option>
+                                                </select>
+											</div>
+										</div>
+										
+                                        
+                                        <p class="h3">Permisos</p>
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Mostrar calificaciones a los acudientes?</label>
@@ -239,13 +284,14 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Permiso de actualizar las definitivas en consolidado final?</label>
+                                            <label class="col-sm-2 control-label">Permiso de actualizar las definitivas en consolidado final?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite o no actualizar las definitivas, en el consolidado final, en cualquier momento."><i class="fa fa-question"></i></button> 
+                                            </label>
                                             <div class="col-sm-8">
                                                 <select class="form-control col-sm-2 select2" name="permisoConsolidado" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_editar_definitivas_consolidado']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_editar_definitivas_consolidado']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
-                                                <span style="color:#6017dc;">Esta acción permite o no actualizar las definitivas, en el consolidado final, en cualquier momento.</span>
                                             </div>
                                         </div>
 
@@ -261,18 +307,41 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Numero de registros en listados?</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="numRegistros" <?=$disabledPermiso;?>>
-                                                    <option value="20" <?php if($cfg['conf_num_registros']==20){ echo "selected";} ?>>20</option>
-                                                    <option value="30" <?php if($cfg['conf_num_registros']==30){ echo "selected";} ?>>30</option>
-                                                    <option value="50" <?php if($cfg['conf_num_registros']==50){ echo "selected";} ?>>50</option>
-                                                    <option value="100" <?php if($cfg['conf_num_registros']==100){ echo "selected";} ?>>100</option>
+                                            <label class="col-sm-2 control-label">Permitir descargar informe parcial a acudientes</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="informeParcial" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_informe_parcial']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_informe_parcial']==0){ echo "selected";} ?>>No</option>
                                                 </select>
-                                                <span style="color:#6017dc;">Esta acción permite escoger la cantidad de registros que desea que se listen al entrar a matrículas, cargas o usuarios.</span>
                                             </div>
                                         </div>
-										
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Generar informes con estudiantes con menos de 100%?</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="generarInforme" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_porcentaje_completo_generar_informe']==1){ echo "selected";} ?>>No generar informe hasta que todos estén al 100%</option>
+                                                    <option value="2" <?php if($cfg['conf_porcentaje_completo_generar_informe']==2){ echo "selected";} ?>>Omitir los estudiantes que no tengan el 100%</option>
+                                                    <option value="3" <?php if($cfg['conf_porcentaje_completo_generar_informe']==3){ echo "selected";} ?>>Registrar la definitiva con el porcentaje actual</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Permitir a acudientes descargar el boletín?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los acudientes descargar el boletín de sus acudidos."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="descargarBoletin" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_permiso_descargar_boletin']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_permiso_descargar_boletin']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        
+										<p class="h3">Otras</p>
+
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fecha que aparecerá en el proximo Informe Parcial</label>
 											<div class="col-sm-2">
@@ -288,52 +357,14 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Permitir descargar informe parcial a acudientes</label>
-                                            <div class="col-sm-2">
-                                                <select class="form-control  select2" name="informeParcial" <?=$disabledPermiso;?>>
-                                                    <option value="1" <?php if($cfg['conf_informe_parcial']==1){ echo "selected";} ?>>SI</option>
-                                                    <option value="0" <?php if($cfg['conf_informe_parcial']==0){ echo "selected";} ?>>No</option>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho -  Alto)</label>
-											<div class="col-sm-10">
-												<input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$cfg[30];?>" <?=$disabledPermiso;?>>
-												<input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$cfg[31];?>" <?=$disabledPermiso;?>>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Mostrar Nombre del colegio en el encabezado de los informes</label>
-											<div class="col-sm-4">
-                                                <select class="form-control  select2" name="mostrarNombre" <?=$disabledPermiso;?>>
-                                                    <option value="1" <?php if($cfg[32]==1){ echo "selected";} ?>>SI</option>
-                                                    <option value="2" <?php if($cfg[32]==2){ echo "selected";} ?>>NO</option>
-                                                </select>
-											</div>
-										</div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Permitir a acudientes descargar el boletín?</label>
-                                            <div class="col-sm-8">
-                                                <select class="form-control col-sm-2 select2" name="descargarBoletin" <?=$disabledPermiso;?>>
-                                                    <option value="1" <?php if($cfg['conf_permiso_descargar_boletin']==1){ echo "selected";} ?>>SI</option>
-                                                    <option value="0" <?php if($cfg['conf_permiso_descargar_boletin']==0){ echo "selected";} ?>>NO</option>
-                                                </select>
-                                                <span style="color:#6017dc;">Esta acción permite a los acudientes descargar el boletín de sus acudidos.</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Mostrar campo para firma del estudiante en reporte de asistencia?</label>
+                                            <label class="col-sm-2 control-label">Mostrar campo para firma del estudiante en reporte de asistencia?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción permite dar un espacio para que el estudiante firme en el reporte de asistencia a la entrega de informes."><i class="fa fa-question"></i></button> 
+                                            </label>
                                             <div class="col-sm-8">
                                                 <select class="form-control col-sm-2 select2" name="firmaEstudiante" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_firma_estudiante_informe_asistencia']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_firma_estudiante_informe_asistencia']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
-                                                <span style="color:#6017dc;">Esta acción permite dar un espacio para que el estudiante firme en el reporte de asistencia a la entrega de informes.</span>
                                             </div>
                                         </div>
 

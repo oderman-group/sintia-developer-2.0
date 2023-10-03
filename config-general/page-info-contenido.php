@@ -64,15 +64,23 @@ switch($_GET["idmsg"]){
 	case 108:
 		$color = 'yellow';
 		$titulo = 'NO SE PUDO GENERAR';
-		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades. Por favor revisa al estudiante <b>'.$_GET["est"].'</b>. Solo tiene registrado el <b>'.$_GET["valorActual"]."%</b> de las notas.";
-		$url1 = 'calificaciones-todas-rapido.php?idEst='.$_GET["idEst"].'#estudiante'.$_GET["idEst"];
-		$boton1 = 'IR A VISTA RÁPIDA DE CALIFICACIONES';
+		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades.';
+		$url1 = 'calificaciones-faltantes.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'&get='.base64_encode(100);
+		$boton1 = 'VER ESTUDIANTES SIN NOTAS';
 	break;
 		
 	case 109:
 		$color = 'green';
 		$titulo = 'INFORME GENERADO';
-		$texto = 'El informe fue generado correctamente para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		if($config['conf_porcentaje_completo_generar_informe']==1){
+			$texto = 'El informe fue generado correctamente. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		}
+		if($config['conf_porcentaje_completo_generar_informe']==2){
+			$texto = 'El informe fue generado correctamente omitiendo los estudiantes que no tenian el 100% de sus notas registradas para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		}
+		if($config['conf_porcentaje_completo_generar_informe']==3){
+			$texto = 'El informe fue generado correctamente registrando la definitiva segun el porcentaje actual de los estudiantes para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		}
 		$url1 = 'cargas.php';
 		$boton1 = 'IR A CARGAS';
 	break;

@@ -27,7 +27,7 @@ if (!empty($_GET['busqueda'])) {
 
             <?php if(Modulos::validarPermisoEdicion()){?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
                         Más opciones
                         <span class="fa fa-angle-down"></span>
                     </a>
@@ -41,11 +41,11 @@ if (!empty($_GET['busqueda'])) {
                     </div>
                 </li>
 
-                <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+                <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
             <?php }?>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
                     Filtrar por curso
                     <span class="fa fa-angle-down"></span>
                 </a>
@@ -63,7 +63,7 @@ if (!empty($_GET['busqueda'])) {
             </li>
 
             <?php if (!empty($filtro)) { ?>
-                <li class="nav-item"> <a class="nav-link" href="#" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+                <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
 
                 <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
             <?php } ?>

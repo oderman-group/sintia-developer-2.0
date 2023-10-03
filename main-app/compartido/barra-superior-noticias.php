@@ -18,7 +18,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" data-hint="Se mostrarán todas tus publicaciones que estén ocultas." href="../compartido/guardar.php?get=<?=base64_encode(7)?>&e=<?=base64_encode(1)?>"><?=$frases[135][$datosUsuarioActual[8]];?></a>
           <a class="dropdown-item" data-hint="Se ocultarán todas tus publicaciones que estén siendo mostradas." href="../compartido/guardar.php?get=<?=base64_encode(7)?>&e=<?=base64_encode(0)?>"><?=$frases[136][$datosUsuarioActual[8]];?></a>
-          <a class="dropdown-item" data-hint="Se eliminarán todas tus publicaciones realizadas." href="../compartido/guardar.php?get=<?=base64_encode(7)?>&e=<?=base64_encode(2)?>"><?=$frases[137][$datosUsuarioActual[8]];?></a>
+          <a class="dropdown-item" data-hint="Se eliminarán todas tus publicaciones realizadas." href="#" name="../compartido/guardar.php?get=<?=base64_encode(7)?>&e=<?=base64_encode(2)?>" onClick="deseaEliminar(this)"><?=$frases[137][$datosUsuarioActual[8]];?></a>
         </div>
       </li>
 

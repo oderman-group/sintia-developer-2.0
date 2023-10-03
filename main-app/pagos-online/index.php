@@ -1,5 +1,15 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+    $cantidad = 1;
+    if( !empty($_POST['cantidad']) && $_POST['cantidad'] > 0 ) {
+        $cantidad = $_POST['cantidad']; 
+    }
+    $montoFinal = $_POST['monto'] * $cantidad;
+
+    $idProducto = '';
+    if(!empty($_POST['idProducto'])) {
+        $idProducto = $_POST['idProducto']; 
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +147,7 @@
                 data-epayco-key="<?=PUBLIC_KEY_EPAYCO?>"
                 data-epayco-country="co"
                 data-epayco-currency="cop"
-                data-epayco-amount="<?=$_POST['monto']?>"
+                data-epayco-amount="<?=$montoFinal;?>"
                 data-epayco-name="<?=$_POST['nombre']?>"
                 data-epayco-description="<?=$_POST['nombre']?>"
 
@@ -147,6 +157,10 @@
                 data-epayco-extra4="<?=$_POST['nombreUsuario']?>"
                 data-epayco-extra5="<?=$_POST['celularUsuario']?>"
                 data-epayco-extra6="<?=$_POST['idInstitucion']?>"
+                data-epayco-extra7="<?=$idProducto?>"
+                data-epayco-extra8="<?=$cantidad?>"
+                data-epayco-extra9="<?=$_POST['monto']?>"
+                data-epayco-extra10="<?=$montoFinal?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"
