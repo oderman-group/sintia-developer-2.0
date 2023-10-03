@@ -265,7 +265,19 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												type: "POST",
 												url: "../compartido/ajax-feedback.php",
 												data: datos,
-												success: function(data){
+												success: function(response){
+													data = JSON.parse(response);
+													comment.value = "";
+													console.log(data, response);
+													$.toast({
+														heading: data.titulo, 
+														text: data.mensaje, 
+														position: 'mid-center',
+														loaderBg:'#26c281', 
+														icon: data.estado, 
+														hideAfter: 5000, 
+														stack: 6
+													});
 													panel.style.display = "none";
 												}
 											});
