@@ -131,13 +131,13 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 									}
 									?>
 									
-									<div class="card card-box">
+									<div class="card">
 										
 										<div class="card-head">
 											<header><?=$datosConsultaBD['cls_tema'];?></header>
 											
 											<?php if($datosUsuarioActual['uss_tipo']==2){?>
-												<button id ="panel-p"  class = "mdl-button mdl-js-button mdl-button--icon pull-right" data-upgraded = ",MaterialButton">
+												<button id ="panel-p"  class = "mdl-button mdl-js-button mdl-button--icon pull-right">
 													<i class = "material-icons">more_vert</i>
 												</button>
 												<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-p">
