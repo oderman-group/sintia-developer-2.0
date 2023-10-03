@@ -65,7 +65,7 @@ class Usuarios{
 
 		
 
-		$fotoUsr = '../files/fotos//avatar/man1.png';
+		$fotoUsr = '../files/fotos/default.png';
 
 		
 
