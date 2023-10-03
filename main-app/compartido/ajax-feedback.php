@@ -1,10 +1,18 @@
 <?php
 session_start();
 include("../../config-general/config.php");
+require_once '../class/Tables/BDT_clases_feedback.php';
+
+$tableName = BDT_ClasesFeedback::getTableName();
+
+$respuesta = [
+    'estado'  => 'success',
+    'mensaje' => 'El registro fue guardado'
+];
 
 try {
     // Preparar la consulta SQL
-    $sql = "INSERT INTO {$baseDatosServicios}.clases_feedback(fcls_id_clase, fcls_id_institucion, fcls_usuario, fcls_comentario, fcls_star) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
+    $sql = "INSERT INTO {$baseDatosServicios}.{$tableName}(fcls_id_clase, fcls_id_institucion, fcls_usuario, fcls_comentario, fcls_star) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
 	fcls_comentario = VALUES(fcls_comentario),
 	fcls_star = VALUES(fcls_star)";
     
@@ -26,8 +34,24 @@ try {
     }
 
     // La inserción se realizó con éxito
-    echo "Inserción exitosa.";
+    $respuesta = [
+        'titulo'  => 'Excelente',
+        'estado'  => 'success',
+        'mensaje' => 'El feedback fue guardado correctamente.'
+    ];
+
+    echo json_encode($respuesta);
+
 } catch (Exception $e) {
     // Manejar errores
-    echo "Excepción capturada: " . $e->getMessage();
+    $logError = Plataforma::soloRegistroErrores($e);
+    //echo $logError;
+    $respuesta = [
+        'titulo'  => 'Error',
+        'estado'  => 'error',
+        'mensaje' => 'Ha ocurrido un error mientras se intenta guardar el feedback. <br> Código del registro de error: <b>'.$logError.'</b>'
+    ];
+
+    echo json_encode($respuesta);
+
 }
