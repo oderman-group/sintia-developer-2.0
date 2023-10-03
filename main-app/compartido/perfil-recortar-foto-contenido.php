@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="../../librerias/croppie/croppie.css">
+<script src="../../librerias/croppie/croppie.js"></script>
 						<div class="col-sm-3">
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue">Indicaciones</header>
@@ -20,26 +22,77 @@
 							
                             <div class="card card-box">
                                 <div class="card-body " id="bar-parent6">
-
-									<div id="crop_wrapper">
-									  <img src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>">
-									  <div id="crop_div"></div>
+									<div id="croppie-editor" class="d-none">
+										<div id="croppie-field"></div>
+										<div class="mx-0 text-center">
+											<button class="btn btn-sm btn-light border border-dark rounded-0" id="rotate-left" type="button">Rotar a la izquierda</button>
+											<button class="btn btn-sm btn-light border border-dark rounded-0" id="rotate-right" type="button">Rotar a la derecha</button>
+											<button class="btn btn-sm btn-primary rounded-0" id="upload-btn" type="button">RECORTAR Y FINALIZAR</button>
+										</div>
 									</div>
-
-									<p>&nbsp;</p>
-									<div style="margin-left:150px;">
-										<form method="post" action="../compartido/do-crop.php" onsubmit="return crop();">
-										  <input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
-											
-										  <input type="hidden" value="" id="top" name="top">
-										  <input type="hidden" value="" id="left" name="left">
-										  <input type="hidden" value="" id="right" name="right">
-										  <input type="hidden" value="" id="bottom" name="bottom">
-										  <input type="submit" name="crop_image" value="RECORTAR Y FINALIZAR" style="width:200px; height:50px; background:#036; color:#FFF;">
-										</form>
-									</div>
-									
-									
                                 </div>
                             </div>
                         </div>
+						<?php
+							$destinos = validarUsuarioActual($datosUsuarioActual);
+							$url = $destinos.'perfil.php';
+						?>
+						<script>
+							var $croppie = new Croppie($('#croppie-field')[0], {
+								enableExif: true,
+								enableResize:false,
+								enableZoom:true,
+								boundary: { width: 800, height: 800 },
+								viewport: {
+									height: 600,
+									width: 600
+								},
+								enableOrientation: true
+							})
+							$(document).ready(function(){
+								var img_name;
+
+								function cargarImagenPreexistente(src) {
+									img_name = '<?=$datosUsuarioActual['uss_foto'];?>';
+									$croppie.bind({
+										url: src
+									});
+									$('#croppie-editor').removeClass('d-none');
+								}
+
+								cargarImagenPreexistente('../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>');
+
+								$('#rotate-left').click(function(){
+									$croppie.rotate(90);
+								})
+
+								$('#rotate-right').click(function(){
+									$croppie.rotate(-90);
+
+								})
+
+								$('#upload-btn').click(function(){
+									$croppie.result({
+										type:'base64',
+										format: 'png'
+									}).then((imgBase64)=>{
+									$.ajax({
+										url:'../compartido/do-crop.php',
+										method:'POST',
+										data: { 'img' : imgBase64, 'fname' : img_name },
+										dataType: 'json',
+										error: err => {
+											console.error(err)
+										},
+										success: function(response){
+											if(response.status == 'success'){
+                    							window.location.href = '<?=$url?>';
+											}else{
+												console.error(response)
+											}
+										}
+									})
+									})
+								})
+							})
+						</script>
