@@ -757,7 +757,12 @@ $frases[372][$l] = 'Institución';
 $frases[373][$l] = 'Año';
 
 $frases[374][$l] = 'Unidades Tematicas';
+
 $frases[375][$l] = 'Editar';
+
+$frases[376][$l] = 'Escoge la carga y el periodo desde donde quieres importar la información.';
+
+$frases[377][$l] = 'Ahora puedes especificar la información que quieres importar.';
 
 
 
@@ -1505,4 +1510,9 @@ $frases[372][$l] = 'Institution';
 $frases[373][$l] = 'Year';
 
 $frases[374][$l] = 'Thematic Units';
+
 $frases[375][$l] = 'Edit';
+
+$frases[376][$l] = 'Choose the load and the period from which you want to import the data.';
+
+$frases[377][$l] = 'Now you can specify the data you want to import.';
