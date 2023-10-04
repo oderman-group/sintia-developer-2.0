@@ -37,6 +37,10 @@ define('TIPO_ACUDIENTE', 3);
 define('TIPO_ESTUDIANTE', 4);
 define('TIPO_DIRECTIVO', 5);
 
+/* CLIENTES CON CAMBIOS PARTICULARES*/
+define('ICOLVEN', 1);
+define('DEVELOPER', 22);
+
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
