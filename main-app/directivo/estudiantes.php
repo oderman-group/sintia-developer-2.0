@@ -225,7 +225,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																		?>
 																		<li><a href="estudiantes-retirar.php?id=<?=base64_encode($resultado["mat_id"]);?>" target="_blank"><?=$retirarRestaurar?></a></li>
 																		<li><a href="javascript:void(0);"
-																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')" 
+																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
 																		>Reservar cupo</a></li>
 																		 <li><a href="javascript:void(0);" 
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
