@@ -19,9 +19,9 @@
 			
 			<!-- start page content -->
             <div class="page-content-wrapper">
-                <?php include("../compartido/texto-manual-ayuda.php");?>
                 <div class="page-content" style="background-color: #41c4c4;">
                     <div class="row">
+                        <?php include("../compartido/texto-manual-ayuda.php");?>
                         <div class="card2 chat-app">
                             <div id="plist" class="people-list">
                                 <div class="input-group">
@@ -200,7 +200,7 @@
                                                 if (item.datosUsuarios.uss_estado == 1) {
                                                     var estado = 'online';
                                                 }
-                                                var html = '<li class="clearfix" id="'+item.datosUsuarios.uss_id+'">' +
+                                                var html = '<li class="clearfix" onclick="mostrarChat(this)" id="'+item.datosUsuarios.uss_id+'">' +
                                                     '<img src="'+item.fotoPerfil+'" alt="avatar">' +
                                                     '<div class="about">' +
                                                     '<div class="name">'+item.nombre+'</div>' +
