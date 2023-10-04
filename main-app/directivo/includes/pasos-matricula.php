@@ -1,4 +1,4 @@
-<?php if($config['conf_id_institucion']==1){ ?>
+<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 												<hr>
 												<hr>
 												<h2><b>Proceso de matrícula</b></h2>

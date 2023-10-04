@@ -93,7 +93,7 @@
 														<option value="0">Seleccione una opción</option>
 														<option value="1"<?php if ($datosEstudianteActual['mat_estado_agno']==1){echo "selected";}?>>Ganado</option>
 														<option value="2"<?php if ($datosEstudianteActual['mat_estado_agno']==2){echo "selected";}?>>Perdido</option>
-														<option value="3"<?php if ($datosEstudianteActual['mat_estado_agno']=='0'){echo "selected";}?>>En curso</option>
+														<option value="3"<?php if ($datosEstudianteActual['mat_estado_agno']==3){echo "selected";}?>>En curso</option>
 													</select>
 												</div>
 											</div>

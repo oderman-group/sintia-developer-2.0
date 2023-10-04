@@ -27,7 +27,7 @@ if($validacionEstudiante > 0){
 $estado='';
 $mensaje='';
 $pasosMatricula='';
-if($config['conf_id_institucion']==1){
+if($config['conf_id_institucion'] == ICOLVEN){
 	$pasosMatricula="
 		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
 		mat_actualizar_datos='".$_POST["actualizarDatos"]."',
@@ -78,49 +78,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	}
 }
 
-try{
-	mysqli_query($conexion, "UPDATE academico_matriculas SET 
-	mat_tipo_documento='".$_POST["tipoD"]."', 
-	mat_documento='".$_POST["nDoc"]."', 
-	mat_religion='".$_POST["religion"]."', 
-	mat_email='".strtolower($_POST["email"])."', 
-	mat_direccion='".$_POST["direccion"]."', 
-	mat_barrio='".$_POST["barrio"]."', 
-	mat_telefono='".$_POST["telefono"]."', 
-	mat_celular='".$_POST["celular"]."', 
-	mat_estrato='".$_POST["estrato"]."', 
-	mat_genero='".$_POST["genero"]."',
-	$fechaNacimiento
-	mat_primer_apellido='".$_POST["apellido1"]."', 
-	mat_segundo_apellido='".$_POST["apellido2"]."', 
-	mat_nombres='".$_POST["nombres"]."', 
-	mat_grado='".$_POST["grado"]."', 
-	mat_grupo='".$_POST["grupo"]."', 
-	mat_tipo='".$_POST["tipoEst"]."',
-	mat_lugar_expedicion='".$_POST["lugarD"]."',
-	mat_lugar_nacimiento='".$procedencia."',
-	mat_estado_matricula=".$_POST["matestM"].", 
-	mat_matricula='".$_POST["matricula"]."', 
-	mat_folio='".$_POST["folio"]."', 
-	mat_codigo_tesoreria='".$_POST["codTesoreria"]."', 
-	mat_valor_matricula='".$_POST["va_matricula"]."', 
-	mat_inclusion='".$_POST["inclusion"]."', 
-	mat_extranjero='".$_POST["extran"]."', 
-	mat_fecha=now(), 
-	mat_numero_matricula='".$_POST["NumMatricula"]."', 
-	$pasosMatricula
-	mat_estado_agno='".$_POST["estadoAgno"]."',
-	mat_tipo_sangre='".$_POST["tipoSangre"]."', 
-	mat_eps='".$_POST["eps"]."', 
-	mat_celular2='".$_POST["celular2"]."', 
-	mat_ciudad_residencia='".$_POST["ciudadR"]."', 
-	mat_nombre2='".$_POST["nombre2"]."'
-
-	WHERE mat_id=".$_POST["id"].";");
-
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}	
+Estudiantes::actualizarEstudiantes($conexionPDO, $_POST, $fechaNacimiento, $procedencia, $pasosMatricula);
 
 try {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
