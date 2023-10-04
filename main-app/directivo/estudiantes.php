@@ -9,6 +9,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+$jQueryTable = '';
+if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER) {
+	$jQueryTable = 'id="example1"';
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -100,8 +104,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												</div>
 											</div>
 											
-                                        <div >
-                                    		<table id="example1" class="display" style="width:100%;">
+                                        <div>
+											
+                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
