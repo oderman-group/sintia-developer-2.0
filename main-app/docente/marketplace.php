@@ -3,7 +3,8 @@ include("session.php");
 $idPaginaInterna = 'DC0078';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-include("verificar-carga.php");
+
+$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
 ?>
 </head>
 <!-- END HEAD -->
