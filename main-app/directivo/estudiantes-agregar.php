@@ -99,7 +99,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 <div class="page-title">Crear matrículas</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Crear matrículas</li>
                             </ol>
                         </div>
@@ -190,7 +190,7 @@ if(!Modulos::validarPermisoEdicion()){
 												</div>
 											</div>
 											
-											<?php if($config['conf_id_institucion']==1){ ?>
+											<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
@@ -295,7 +295,7 @@ if(!Modulos::validarPermisoEdicion()){
 												</div>
 											</div>
 
-											<?php if($config['conf_id_institucion']==1){ ?>
+											<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo Sanguineo</label>
 												<div class="col-sm-2">
@@ -390,7 +390,7 @@ if(!Modulos::validarPermisoEdicion()){
 													</select>
 												</div>
 											</div>
-											<?php if($config['conf_id_institucion']==1){ ?>	
+											<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>	
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Estrato</label>
 												<div class="col-sm-2">
@@ -587,7 +587,7 @@ if(!Modulos::validarPermisoEdicion()){
 													</select>
 												</div>
 
-												<?php if($config['conf_id_institucion']==1){ ?>
+												<?php if($config['conf_id_institucion'] ==  ICOLVEN){ ?>
 												<label class="col-sm-2 control-label">Ocupaci&oacute;n</label>
 												<div class="col-sm-3">
 													<input type="text" name="ocupacionA" class="form-control" autocomplete="off" value="<?=$datosMatricula['ocupacionA'];?>" <?=$disabledPermiso;?>>
@@ -620,7 +620,7 @@ if(!Modulos::validarPermisoEdicion()){
 												</div>
 											</div>	
 												
-											<?php if($config['conf_id_institucion']==1){ ?>
+											<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Fecha de nacimiento</label>
 												<div class="col-sm-3">
