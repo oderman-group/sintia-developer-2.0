@@ -19,6 +19,11 @@ if(!empty($_GET["id"])){
 	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idUsuario);
 }
 
+if( empty($datosEstudianteActual) ){
+	echo '<script type="text/javascript">window.location.href="estudiantes.php?error=ER_DT_16";</script>';
+	exit();
+}
+
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
@@ -113,7 +118,7 @@ if(!Modulos::validarPermisoEdicion()){
                     	<div class="col-sm-12">
 							<?php include("../../config-general/mensajes-informativos.php"); ?>
 							<?php
-							if($config['conf_id_institucion']==1){
+							if($config['conf_id_institucion'] == ICOLVEN){
 								if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
 									$aler='alert-success';
 									$mensajeSion=base64_decode($_GET['msgsion']);
