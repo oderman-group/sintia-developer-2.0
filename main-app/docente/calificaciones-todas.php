@@ -54,6 +54,16 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 }
 </script>
 
+<script>
+	// Deshabilitar los campos de entrada al cargar la página
+	document.addEventListener("DOMContentLoaded", function() {
+		var campos = document.querySelectorAll("input");
+		for (var i = 0; i < campos.length; i++) {
+			campos[i].disabled = false;
+		}
+	});
+</script>
+
 
 </head>
 <!-- END HEAD -->
@@ -170,7 +180,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 														'.$rA[1].'<br>
 														('.$rA[3].'%)</a><br>
 														<a href="#" name="guardar.php?get='.base64_encode(12).'&idR='.base64_encode($rA[0]).'&idIndicador='.base64_encode($rA['act_id_tipo']).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'" onClick="deseaEliminar(this)" '.$deleteOculto.'><i class="fa fa-times"></i></a><br>
-														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" name="'.$rA[0].'" onChange="notas(this)" '.$habilitado.'>
+														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" name="'.$rA[0].'" onChange="notas(this)" '.$habilitado.' disabled>
 														</th>';
 													 }
 													?>
@@ -218,12 +228,12 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
 															?>
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?> disabled>
 																
 															<?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21)?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
 																<?php if($notasResultado[3]<$config[5]){?>
-																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
+																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?> disabled>
 																<?php }?>
 																
 															<?php }?>
