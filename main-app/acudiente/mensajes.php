@@ -17,7 +17,7 @@
                 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
-                            <div class="page-title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></div>
+                            <div class="page-title"><?=$frases[38][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                         </div>     
                     </div>

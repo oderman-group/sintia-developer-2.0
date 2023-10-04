@@ -584,7 +584,8 @@ if (base64_decode($_GET["get"]) == 68) {
 	}
 	//El sistema reparte los porcentajes automáticamente y equitativamente.
 	else {
-		$valorIgualIndicador = ($porcentajePermitido / ($sumaIndicadores[2]));
+		$valorIgualIndicador = 0;
+		if(!empty($sumaIndicadores[2])){ $valorIgualIndicador = ($porcentajePermitido / ($sumaIndicadores[2])); }
 		//Actualiza todos valores de la misma carga y periodo.
 		try{
 			mysqli_query($conexion, "UPDATE academico_indicadores_carga SET ipc_valor='" . $valorIgualIndicador . "' 

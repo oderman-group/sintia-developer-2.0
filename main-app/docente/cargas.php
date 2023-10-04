@@ -7,6 +7,8 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
 
+$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
+
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
 ?>

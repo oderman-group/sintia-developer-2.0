@@ -1934,15 +1934,15 @@ if(!empty($_GET["get"])){
 		$registro = mysqli_fetch_array($consultaRegistro, MYSQLI_BOTH);
 
 		$ruta = '../files/clases';
-		if(file_exists($ruta."/".$registro['cls_archivo'])){
+		if(!empty($registro['cls_archivo']) && file_exists($ruta."/".$registro['cls_archivo'])){
 			unlink($ruta."/".$registro['cls_archivo']);	
 		}
 
-		if(file_exists($ruta."/".$registro['cls_archivo2'])){
+		if(!empty($registro['cls_archivo2']) && file_exists($ruta."/".$registro['cls_archivo2'])){
 			unlink($ruta."/".$registro['cls_archivo2']);	
 		}
 
-		if(file_exists($ruta."/".$registro['cls_archivo3'])){
+		if(!empty($registro['cls_archivo3']) && file_exists($ruta."/".$registro['cls_archivo3'])){
 			unlink($ruta."/".$registro['cls_archivo3']);	
 		}
 

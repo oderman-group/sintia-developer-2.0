@@ -34,7 +34,6 @@ function notas(enviada){
   var codEst = idSplit[0];
   var nombreEst = idSplit[1];
   var operacion = enviada.title;
-console.log(nombreEst);
 $('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
 	datos = "nota="+(nota)+
 			"&operacion="+(operacion)+
