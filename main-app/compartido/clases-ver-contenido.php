@@ -26,7 +26,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 								<div class="panel">
 											<header class="panel-heading panel-heading-purple">Clases
-											<a href="clases-agregar.php" class="btn float-right btn-primary"><i class="fa fa-plus"></i></a>
+												<?php if( $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE ) {?>
+													<a href="clases-agregar.php" class="btn float-right btn-primary"><i class="fa fa-plus"></i></a>
+												<?php }?>
 											</header>
 
 											<div class="panel-body">
