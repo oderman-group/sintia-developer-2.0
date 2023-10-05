@@ -32,7 +32,7 @@ if (!Modulos::validarPermisoEdicion()) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" style="width: 100%" name="docente" required  multiple   <?= $disabledPermiso; ?>>
+                    <select class="form-control  select2" style="width: 100%" name="docente" required     <?= $disabledPermiso; ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
@@ -114,7 +114,7 @@ if (!Modulos::validarPermisoEdicion()) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Periodo <span style="color: red;">(*)</span></label>
                 <div class="col-sm-4">
-                    <select class="form-control  select2" style="width: 100%" multiple   name="periodo" required <?= $disabledPermiso; ?>>
+                    <select class="form-control  select2" style="width: 100%"   name="periodo" required <?= $disabledPermiso; ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
                         $p = 1;
