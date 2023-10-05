@@ -26,7 +26,7 @@ if($_SESSION["inst"]==""){
 
 	$bdActual = $_SESSION["inst"]."_".$agnoBD;
 	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);
-	require_once "../class/Conexion.php";
+	require_once ROOT_PATH."/main-app/class/Conexion.php";
 	try{
 
 	//Conexion con el Servidor
