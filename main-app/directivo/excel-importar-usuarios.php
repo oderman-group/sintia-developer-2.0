@@ -128,7 +128,7 @@ if($extension == 'xlsx'){
 							//Actualizamos el acudiente y los datos del formulario
 							try{
 								mysqli_query($conexion, "UPDATE usuarios SET uss_tipo=uss_tipo $camposActualizar
-								WHERE mat_id='".$datosUsuariosExistente['mat_id']."'");
+								WHERE uss_id='".$datosUsuariosExistente['uss_id']."'");
 							} catch (Exception $e) {
 								include("../compartido/error-catch-to-report.php");
 							}
@@ -142,7 +142,7 @@ if($extension == 'xlsx'){
 
 					} else {
 
-						$sql .= "('".$arrayIndividual['uss_documento']."', '".$clavePorDefectoUsuarios."', '".$arrayIndividual['uss_tipo']."', '".$arrayIndividual['uss_nombre']."', 0, '".$arrayIndividual['uss_email']."', '".$arrayIndividual['uss_celular']."', '".$genero."', 'default.png', 'default.png', 1, 'green', 1, 0, now(), '".$_SESSION["id"]."', 0, 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', '".$tipoDocumento."', '".$arrayIndividual['uss_apellido1']."', '".$arrayIndividual['uss_apellido2']."', '".$arrayIndividual['uss_nombre2']."', '".$arrayIndividual['uss_documento']."'),";
+						$sql .= "('".$arrayIndividual['uss_documento']."', '".$clavePorDefectoUsuarios."', '".$tipoUsuario."', '".$arrayIndividual['uss_nombre']."', 0, '".$arrayIndividual['uss_email']."', '".$arrayIndividual['uss_celular']."', '".$genero."', 'default.png', 'default.png', 1, 'green', 1, 0, now(), '".$_SESSION["id"]."', 0, 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', '".$tipoDocumento."', '".$arrayIndividual['uss_apellido1']."', '".$arrayIndividual['uss_apellido2']."', '".$arrayIndividual['uss_nombre2']."', '".$arrayIndividual['uss_documento']."'),";
 
 						$usuariosCreados["FILA_".$f] = $arrayIndividual['uss_documento'];
 
