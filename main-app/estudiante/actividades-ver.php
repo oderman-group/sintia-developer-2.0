@@ -141,7 +141,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 							                                        </div>
 							                                        <div class="col-md-3 col-6"> <strong>Impedir restrasos?</strong>
 							                                            <br>
-							                                            <p class="text-muted"><?=$actividad['tar_impedir_retrasos'];?></p>
+							                                            <p class="text-muted"><?=$opcionSINO[$actividad['tar_impedir_retrasos']];?></p>
 							                                        </div>
 							                                    </div>
 
