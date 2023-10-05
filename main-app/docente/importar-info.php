@@ -117,7 +117,7 @@
 												</label>
 											</div>
 										</div>
-										<p><mark>Al importar las calificaciones también se importarán los indicadores automáticamente.</mark></p>
+										<p><mark><?=$frases[378][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></label>
 											<div class="input-group spinner col-sm-10">
@@ -171,7 +171,7 @@
 										-->
 										
 
-										<p><mark>Verifica que hayas seleccionado todo correctamente para esta importación. Una vez hecha no hay vuelta atrás.</mark></p>
+										<p><mark><?=$frases[379][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										
 										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual[8]];?>">&nbsp;
 										

@@ -764,6 +764,9 @@ $frases[376][$l] = 'Escoge la carga y el periodo desde donde quieres importar la
 
 $frases[377][$l] = 'Ahora puedes especificar la información que quieres importar.';
 
+$frases[378][$l] = 'Al importar las calificaciones también se importarán los indicadores automáticamente.';
+
+$frases[379][$l] = 'Verifica que hayas seleccionado todo correctamente para esta importación. Una vez hecha no hay vuelta atrás.';
 
 
 //ENGLISH
@@ -1516,3 +1519,7 @@ $frases[375][$l] = 'Edit';
 $frases[376][$l] = 'Choose the load and the period from which you want to import the data.';
 
 $frases[377][$l] = 'Now you can specify the data you want to import.';
+
+$frases[378][$l] = 'When importing the grades, the indicators will also be imported automatically.';
+
+$frases[379][$l] = 'Verify that you have selected everything correctly for this import. Once it is done there is no turning back.';
