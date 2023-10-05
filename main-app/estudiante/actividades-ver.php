@@ -110,7 +110,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
                             <!-- BEGIN PROFILE CONTENT -->
                             <div class="profile-content">
                                 <div class="row">
-                                     <div class="card">
+                                     <div class="card w-100">
                                          <div class="card-topline-aqua">
                                              <header></header>
                                          </div>
