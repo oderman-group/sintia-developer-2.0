@@ -2,6 +2,7 @@
 <?php include("verificar-usuario.php");?>
 <?php $idPaginaInterna = 'ES0018';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
+<?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 </head>
 <!-- END HEAD -->
@@ -23,6 +24,22 @@ if($fechas[0]<0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
 }
+
+$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
+
+include '../class/Tables/BDT_academico_actividad_tareas_entregas.php';
+$predicado = [
+	'ent_id_actividad' => $idR
+];
+
+$numEntregas = BDT_AcademicoActividadTareasEntregas::numRows($predicado);
+
+$porcentajeEnviadas = ($numEntregas / $cantEstudiantes) * 100;
+$porcentajeRestante = 100 - $porcentajeEnviadas;
+$porcentajeEnviadas = round($porcentajeEnviadas,2);
+$porcentajeRestante = round($porcentajeRestante,2);
 ?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
@@ -60,12 +77,12 @@ if($fechas[0]<0){
                                             <div class="states">
                                                 <div class="info">
                                                     <div class="desc pull-left">Enviadas </div>
-                                                    <div class="percent pull-right">30%</div>
+                                                    <div class="percent pull-right"><?=$porcentajeEnviadas;?>%</div>
                                                 </div>
 												
                                                 <div class="progress progress-xs">
-                                                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                                                        <span class="sr-only">90% </span>
+                                                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeEnviadas;?>%">
+                                                        <span class="sr-only"><?=$porcentajeEnviadas;?>% </span>
                                                     </div>
                                                 </div>
 												
@@ -74,11 +91,11 @@ if($fechas[0]<0){
                                             <div class="states">
                                                 <div class="info">
                                                     <div class="desc pull-left">faltantes</div>
-                                                    <div class="percent pull-right">70%</div>
+                                                    <div class="percent pull-right"><?=$porcentajeRestante;?>%</div>
                                                 </div>
                                                 <div class="progress progress-xs">
-                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                                        <span class="sr-only">85% </span>
+                                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeRestante;?>%">
+                                                        <span class="sr-only"><?=$porcentajeRestante;?>% </span>
                                                     </div>
                                                 </div>
                                             </div>
