@@ -554,12 +554,6 @@
 	                        </li>
 							<?php }?>
 							
-							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
-	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart fa-spin"></i>
-	                                <span class="title">Marketplace</span> 
-	                            </a>
-	                        </li>
-							
 							<li class="nav-item">
 	                            <a href="cargas-carpetas.php" class="nav-link nav-toggle"> <i class="fa fa-folder"></i>
 	                                <span class="title"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></span> 
@@ -598,6 +592,12 @@
 							<li class="nav-item">
 	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="material-icons">group</i>
 	                                <span class="title"><?=$frases[74][$datosUsuarioActual['uss_idioma']];?></span> 
+	                            </a>
+	                        </li>
+
+							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
+	                            <a href="marketplace.php" class="nav-link nav-toggle bg-warning text-dark"> <i class="fa fa-shopping-cart text-dark"></i>
+	                                <span class="title">Marketplace</span> 
 	                            </a>
 	                        </li>
 
