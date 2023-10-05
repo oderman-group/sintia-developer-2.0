@@ -171,14 +171,12 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																			<input type="hidden" name="id" value="10">
 																			<input type="hidden" name="idR" value="<?=$idR;?>">
 		                                                                    
-																			<p><textarea class="form-control p-text-area" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
+																			<p><textarea class="form-control border border-primary" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
 																			
-																			<h4>Puedes subir hasta 3 archivos si es necesario.</h4>
+																			<h4><mark>Puedes subir hasta 3 archivos si es necesario.</mark></h4>
 																			<p>
 																				Archivo 1:<br>
-																				<input type="file" name="file" class="default" onChange="archivoPeso(this)"><br><br>
-																				Nombre de Archivo 1:<br>
-																				<input type="text" name="archivo1" class="default">
+																				<input type="file" name="file" class="default" onChange="archivoPeso(this)">
 																			</p>
 																			
 																			
