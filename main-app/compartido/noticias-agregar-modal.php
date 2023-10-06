@@ -1,26 +1,10 @@
 <!--select2-->
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-<!-- END HEAD -->
-<?php include("../compartido/body.php"); ?>
-<?php include("../compartido/noticias-agregar-contenido.php"); ?>
-
-<!--select2-->
-<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
-<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
-<!-- end js include path -->
-</body>
-<!--select2-->
-<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 <!--tagsinput-->
 <link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
 
-<!-- END HEAD -->
-
-<div class="row">
-    <div class="col-sm-12">
+<div class="col-sm-12">
         <div class="card card-box">
             <div class="card-head">
                 <header><?= $frases[212][$datosUsuarioActual[8]]; ?></header>
@@ -136,11 +120,6 @@
         </div>
     </div>
 
-    <div class="col-sm-3">
-        <?php include("../compartido/publicidad-lateral.php"); ?>
-    </div>
-
-</div>
 <script src="../ckeditor/ckeditor.js"></script>
 
 <script>

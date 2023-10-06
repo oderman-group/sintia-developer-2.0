@@ -6,19 +6,9 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
     exit();
 }
 ?>
-<!--select2-->
-<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-<style>
-    .select2 {
-        width: 100% !important;
-    }
-</style>
 
 
-<div class="col-sm-12">
-
-    <?php
+<?php
     $ext = '';
     if ($config['conf_certificado'] == 2) {
         $ext = '-2';
@@ -153,7 +143,3 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             </form>
         </div>
     </div>
-</div>
-<!--select2-->
-<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
-<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>

@@ -7,10 +7,6 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 }
 require_once("../class/Estudiantes.php");
 ?>
-
-<!--select2-->
-<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 <style>
 	.select2 {
         width: 100% !important;
@@ -18,9 +14,7 @@ require_once("../class/Estudiantes.php");
 </style>
 
 <!-- END HEAD -->
-<div class="col-sm-12">
-    <?php include("../../config-general/mensajes-informativos.php"); ?>
-    <div class="panel">
+<div class="panel">
         <header class="panel-heading panel-heading-purple">POR CURSO </header>
         <div class="panel-body">
             <form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
@@ -194,7 +188,5 @@ require_once("../class/Estudiantes.php");
             </form>
         </div>
     </div>
-</div>
-
 
 
