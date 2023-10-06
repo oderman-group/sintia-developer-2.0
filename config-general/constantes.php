@@ -41,6 +41,8 @@ define('TIPO_DIRECTIVO', 5);
 define('ICOLVEN', 1);
 define('DEVELOPER', 22);
 
+define('PORCENTAJE_MINIMO_GENERAR_INFORME', 99);
+
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");

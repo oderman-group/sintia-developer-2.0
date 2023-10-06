@@ -493,7 +493,7 @@ function mensajeGenerarInforme(datos){
     if(opcion==2){   
         var id = datos.id;
         var contenedorMensaje = document.getElementById('mensajeI'+id);
-        var nuevoContenido = '<div class="alert alert-success" role="alert" style="margin-right: 20px;">La petición de generación de informe se envió correctamente.</div>';
+        var nuevoContenido = '<div class="alert alert-success mt-2" role="alert" style="margin-right: 20px;">El informe ya se está generando.</div>';
     }
 
     var mensajeSinNotas='';
@@ -511,7 +511,7 @@ function mensajeGenerarInforme(datos){
         
                     $.toast({
                         heading: 'Acción realizada',
-                        text: 'La petición de generación de informe se envió correctamente.',
+                        text: 'El informe ya se está generando.',
                         position: 'botom-left',
                         loaderBg: '#26c281',
                         icon: 'success',
@@ -551,7 +551,7 @@ function mensajeGenerarInforme(datos){
                 
                             $.toast({
                                 heading: 'Acción realizada',
-                                text: 'La petición de generación de informe se envió correctamente.',
+                                text: 'El informe ya se está generando.',
                                 position: 'botom-left',
                                 loaderBg: '#26c281',
                                 icon: 'success',

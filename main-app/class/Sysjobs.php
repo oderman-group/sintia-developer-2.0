@@ -23,7 +23,7 @@ class SysJobs {
         $buscarJobs=self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
         if($cantidad<1){
-            $msj=" La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; correctamente.";
+            $msj=" El informe ya se est&aacute; generando.";
             $idRegistro =self::crear($tipo,$prioridad,$parametros,$msj);
             $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
         }else{
@@ -34,7 +34,7 @@ class SysJobs {
                     "estado" =>JOBS_ESTADO_PENDIENTE,
                     "intentos" =>'0',
                     "id" => $jobsEncontrado['job_id'],
-                    "mensaje" => 'La petici&oacute;n de generaci&oacute;n de informe se actualiz&oacute; correctamente.'
+                    "mensaje" => 'La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; nuevamente.'
                 );
                 self::actualizar($datos);
                 $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
@@ -180,7 +180,7 @@ class SysJobs {
      */
     public static function listar(array $parametrosBusqueda = []) {
         global $conexion, $baseDatosServicios;
-        $resultado = [];
+        $resultado = null;
         $andEstado=empty($parametrosBusqueda["estado"])?JOBS_ESTADO_PENDIENTE:$parametrosBusqueda["estado"];
         $andTipo=empty($parametrosBusqueda["tipo"])?" ":"AND job_tipo='".$parametrosBusqueda["tipo"]."' ";
         $andResponsable=empty($parametrosBusqueda["responsable"])?" ":"AND job_responsable='".$parametrosBusqueda["responsable"]."' ";
@@ -225,7 +225,7 @@ class SysJobs {
         self::actualizar($datos);
     }
     /**
-     * Esta funci&oacute;n  envia mensajes al usuario responsable del crobjobs notificando el estado
+     * Esta función  envia mensajes al usuario responsable del cron jobs, notificando el estado
      * 
      * @param String $destinatario
      * @param array $contenido 
@@ -238,11 +238,25 @@ class SysJobs {
         global $conexion,$baseDatosServicios,$config;       
         
         $para=$destinatario;
+        $asunto = '';
+
+        switch($estado) {
+            case JOBS_ESTADO_FINALIZADO:
+            $asunto = 'El informe fue generado correctamente.';
+            break;
+
+            case JOBS_ESTADO_ERROR:
+            $asunto = 'El informe present&oacute; un error.';
+            break;
+
+            default:
+            $asunto = 'Asunto inesperado!';
+            break;
+        }   
         try{
-            $asunto="La petici&oacute;n de env&iacute;o para generar informe finaliz&oacute; en estado: ".$estado;
 			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
 			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
-            $contenido="<br>Hola Sr(a) ".$destinatario["uss_nombre"]."<br> 
+            $contenido="<br>Hola, Sr(a) ".$destinatario["uss_nombre"]."<br> 
             ".$asunto."<br> <p>".$contenido."</p>";
 			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)
 				VALUES('" . $remitente["uss_id"] . "', '" . $para . "', '" . mysqli_real_escape_string($conexion,$asunto) . "', '" . mysqli_real_escape_string($conexion,$contenido) . "', now(), 0, 0, 0,'" . $config['conf_id_institucion'] . "','" . $config["conf_agno"] . "')");
