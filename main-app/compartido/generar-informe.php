@@ -42,7 +42,7 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
 	if($config['conf_porcentaje_completo_generar_informe']==2){
 		//Verificamos que el estudiante tenga sus notas al 100%
-		if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
+		if($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME && empty($boletinDatos['bol_nota'])){
 			continue;
 		}
 	}
@@ -53,7 +53,7 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	//Si ya existe un registro previo de definitiva TIPO 1
 	 if(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==1){
 		 
-		if($boletinDatos['bol_nota']!=$definitiva){
+		if($boletinDatos['bol_nota']!=$definitiva || $boletinDatos['bol_porcentaje']!=$porcentajeActual){
 			$caso = 2;//Se cambia la definitiva que tenía por la que viene. Sea menor o mayor.
 		}else{
 			$caso = 3;//No se hacen cambios. Todo sigue igual
