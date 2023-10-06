@@ -70,19 +70,20 @@ switch($_GET["idmsg"]){
 	break;
 		
 	case 109:
-		$color = 'green';
+		$color = 'blue';
 		$titulo = 'INFORME GENERADO';
 		if($config['conf_porcentaje_completo_generar_informe']==1){
-			$texto = 'El informe fue generado correctamente. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+			$texto = 'El informe fue generado correctamente. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
 		}
 		if($config['conf_porcentaje_completo_generar_informe']==2){
-			$texto = 'El informe fue generado correctamente omitiendo los estudiantes que no tenian el 100% de sus notas registradas para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+			$texto = 'El informe fue generado correctamente, omitiendo los estudiantes que no tenian el 100% de sus notas registradas para esta carga. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
 		}
 		if($config['conf_porcentaje_completo_generar_informe']==3){
-			$texto = 'El informe fue generado correctamente registrando la definitiva segun el porcentaje actual de los estudiantes para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+			$texto = 'El informe fue generado correctamente, registrando la definitiva según el porcentaje actual de los estudiantes para esta carga. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
 		}
 		$url1 = 'cargas.php';
 		$boton1 = 'IR A CARGAS';
+		$lottie = 'https://lottie.host/127f030a-84e3-49fc-a1ad-4bc806e0292d/fXHrvhswC1.json';
 	break;
 		
 	case 110:
