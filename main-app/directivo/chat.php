@@ -53,7 +53,7 @@
                                     <li class="clearfix" onclick="mostrarChat(this)" id="<?=$datosUsuriosOnline['uss_id']?>">
                                         <img src="<?=$fotoPerfilUsrOnline?>" alt="avatar">
                                         <div class="about">
-                                            <div class="name" id="nombre_<?=$datosUsuriosOnline['uss_id']?>" ><?=$datosUsuriosOnline['uss_nombre'].' '.$datosUsuriosOnline['uss_apellido1']?></div>
+                                            <div class="name"  id="nombre_<?=$datosUsuriosOnline['uss_id']?>"><?=$datosUsuriosOnline['uss_nombre'].' '.$datosUsuriosOnline['uss_apellido1']?></div>
                                             
                                             <div class="status" > <i class="fa fa-circle online"></i> online <span id="notificacion_<?=$datosUsuriosOnline['uss_id']?>" > </div>
                                         </div>
@@ -72,7 +72,7 @@
                                     <li class="clearfix" onclick="mostrarChat(this)" id="<?=$datosUsuriosOffline['uss_id']?>">
                                         <img src="<?=$fotoPerfilUsrOffline?>" alt="avatar">
                                         <div class="about">
-                                            <div class="name" id="nombre_<?=$datosUsuriosOnline['uss_id']?>"><?=$datosUsuriosOffline['uss_nombre'].' '.$datosUsuriosOffline['uss_apellido1']?></div>
+                                            <div class="name" id="nombre_<?=$datosUsuriosOffline['uss_id']?>" ><?=$datosUsuriosOffline['uss_nombre'].' '.$datosUsuriosOffline['uss_apellido1']?></div>
                                             <div class="status"> <i class="fa fa-circle offline"></i> offline <span id="notificacion_<?=$datosUsuriosOnline['uss_id']?>" > </div>
                                         </div>
                                     </li>
@@ -101,25 +101,47 @@
                 var socket = io(urlApi, { transports: ['websocket', 'polling', 'flashsocket'] });
                 var chat_remite_usuario= <?php echo $idSession ?>;
                 var chat_destino_usuario= "";
-                var foto_url_uss_destino= "";
+                var foto_url_uss= "<?php echo $datosUsuarioActual["uss_foto"] ?>"; 
+                var nombre_uss="<?php echo $datosUsuarioActual["uss_nombre"]." ".$datosUsuarioActual["uss_apellido1"] ?>";                             
+                  
                 socket.emit('join', "sala_" + chat_remite_usuario);
 
                 socket.on("notificacion_chat", (data) => {
+                    console.log(data);
                     uss_id = data["chat_remite_usuario"];
-                    divNombre = document.getElementById("nombre_"+uss_id );
+                    nombre_uss_notifica =data["nombre_uss"];
+                    foto_url_uss_notifica="../files/fotos/"+data["foto_url_uss"];
+                    
+
+                    listaUsuarios = document.getElementById('contenedorOriginial');
+                    liUsuario = document.getElementById(uss_id );                    
+                    divNombre = document.getElementById("nombre_"+uss_id );                    
+                    
+                     // si existe se elimina de la lista
+                    if (liUsuario !== null) {                   
+                        listaUsuarios.removeChild(liUsuario);
+                    }                    
+                   // Crea un nuevo elemento li
+                   const elementoHTML = notificacionUsuario(uss_id,nombre_uss_notifica,foto_url_uss_notifica,'online');
+                   const nuevoElemento = document.createElement('li');
+                   nuevoElemento.innerHTML =elementoHTML ;
+
+
+
+                    // Agrega el nuevo elemento li al principio de la lista
+                    listaUsuarios.insertBefore(nuevoElemento, listaUsuarios.firstChild);
                     spanNotificacion = document.getElementById("notificacion_"+uss_id );
-                    divNombre.style.fontWeight =700;
                     spanNotificacion.className = "badge headerBadgeColor2";
-                    spanNotificacion.innerHTML +="Nuevo";
-                     console.log(data);
+                    spanNotificacion.innerHTML ="Nuevo";
+
                 });
 
-               
 
                 function mostrarChat(datos){
-                    console.log("sala_chat_"+ chat_remite_usuario + "_" + chat_destino_usuario);
+                    console.log("entre a la sala_chat_"+ chat_remite_usuario + "_" + chat_destino_usuario);
                     socket.emit("leave","sala_chat_"+ chat_remite_usuario + "_" + chat_destino_usuario);                   
                     var id= datos.id;
+                    console.log("id--->"+id);
                     $("#contenedorChat").empty().hide();
                     if (id !== '') {
                         $.ajax({
@@ -175,28 +197,26 @@
                                     divNombre = document.getElementById("nombre_"+chat_destino_usuario );
                                     spanNotificacion = document.getElementById("notificacion_"+chat_destino_usuario );
                                     foto_url_uss_destino=item.fotoPerfil;
-                                    divNombre.style.fontWeight =400;
+                                    divNombre.style.fontWeight ="400";
                                     spanNotificacion.className = "";
                                     spanNotificacion.innerHTML ="";
-                                    // socket.on("sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario, (data) => {
-                                    //     chatElement = document.getElementById("chatHistory");
-                                    //     console.log(data);
-                                    //     mensaje = data["body"]["chat_mensaje"]
-                                    //     console.log(mensaje);
-                                    //     contenido_chat.innerHTML += htmlDestino(mensaje);
-                                    //     chatElement.scrollTop = chatElement.scrollHeight;
-                                    // });          
-
-                                    
-                                    
                                 });
                             }
                         });
                     }
                 }
-
-                function htmlEmisor(mensaje, hora = "10:12 AM, Today") {
-                    console.log(hora);
+                function notificacionUsuario(id, nombreCompleto,fotoPerfil,estado) {
+                    Html="";
+                    Html='<li class="clearfix" onclick="mostrarChat(this)"  id="'+id+'"   >' +
+                        '<img src="'+fotoPerfil+'" alt="avatar" />' +
+                            '<div class="about">' +
+                                '<div class="name" id="nombre_'+id+'" style="font-weight: bold;" >'+nombreCompleto+'</div>' +
+                                '<div class="status" > <i class="fa fa-circle online"></i> '+estado+' <span  id="notificacion_'+id+'"> </div>' +
+                            '</div>'+
+                    '</li>';
+                    return Html;     
+                };
+                function htmlEmisor(mensaje, hora ) {
                     return '<li class="clearfix">' +
                         '<div class="message-data">' +
                         '<span class="message-data-time">' + hora + '</span>' +
@@ -204,7 +224,7 @@
                         '<div class="message my-message">' + mensaje + '</div>' +
                         '</li>';
                 };
-                function htmlDestino(mensaje, hora = "10:12 AM, Today",imagenUrl="https://bootdey.com/img/Content/avatar/avatar7.png") {
+                function htmlDestino(mensaje, hora,imagenUrl) {
                     return '<li class="clearfix">' +
                         '<div class="message-data text-right">' +
                         '<span class="message-data-time">' + hora + '</span>' +
@@ -214,7 +234,6 @@
                         '</li>';
                 };
                 function listarChat(uss_remite,uss_detino) {
-                    console.log("esta listando");
                     const url = urlApi+'/chat/find/' + uss_remite + "/" +uss_detino;
                     chatElement = document.getElementById("chatHistory");
                     console.log("esta listando en url " + url);
@@ -232,11 +251,9 @@
                             data.forEach(elemento => {
                                 console.log(chat_remite_usuario +"-"+elemento.chat_remite_usuario +" = "+elemento.chat_mensaje);
                                 if(chat_remite_usuario == elemento.chat_remite_usuario ){
-                                    console.log(chat_remite_usuario+" = "+elemento.chat_mensaje);
                                     fechaCompleta=verificarFecha(elemento.chat_fecha_registro);
                                     contenido_chat.innerHTML += htmlEmisor(elemento.chat_mensaje,fechaCompleta);
                                 }else{
-                                    console.log(chat_destino_usuario +" = "+elemento.chat_mensaje);
                                     fechaCompleta=verificarFecha(elemento.chat_fecha_registro);
                                     contenido_chat.innerHTML += htmlDestino(elemento.chat_mensaje,fechaCompleta,foto_url_uss_destino);
                                 }
@@ -250,8 +267,11 @@
                 function enviarMensaje() {
                     mensaje = document.getElementById("mensaje").value;
                     chatElement = document.getElementById("chatHistory");
+                    
                     console.log(mensaje);
                     socket.emit("enviar_mensaje_chat", {
+                        foto_url_uss:foto_url_uss,
+                        nombre_uss:nombre_uss,
                         chat_fecha_registro:new Date(),
                         chat_remite_usuario:chat_remite_usuario,
                         chat_destino_usuario:chat_destino_usuario,
