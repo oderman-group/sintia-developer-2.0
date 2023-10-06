@@ -4,10 +4,13 @@
 <?php include("../compartido/head.php");?>
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 <link href="../../config-general/assets/css/chat.css" rel="stylesheet">
+
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+   
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
@@ -50,8 +53,9 @@
                                     <li class="clearfix" onclick="mostrarChat(this)" id="<?=$datosUsuriosOnline['uss_id']?>">
                                         <img src="<?=$fotoPerfilUsrOnline?>" alt="avatar">
                                         <div class="about">
-                                            <div class="name"><?=$datosUsuriosOnline['uss_nombre'].' '.$datosUsuriosOnline['uss_apellido1']?></div>
-                                            <div class="status"> <i class="fa fa-circle online"></i> online </div>
+                                            <div class="name" id="nombre_<?=$datosUsuriosOnline['uss_id']?>" ><?=$datosUsuriosOnline['uss_nombre'].' '.$datosUsuriosOnline['uss_apellido1']?></div>
+                                            
+                                            <div class="status" > <i class="fa fa-circle online"></i> online <span id="notificacion_<?=$datosUsuriosOnline['uss_id']?>" > </div>
                                         </div>
                                     </li>
                                     <?php
@@ -68,8 +72,8 @@
                                     <li class="clearfix" onclick="mostrarChat(this)" id="<?=$datosUsuriosOffline['uss_id']?>">
                                         <img src="<?=$fotoPerfilUsrOffline?>" alt="avatar">
                                         <div class="about">
-                                            <div class="name"><?=$datosUsuriosOffline['uss_nombre'].' '.$datosUsuriosOffline['uss_apellido1']?></div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> offline </div>
+                                            <div class="name" id="nombre_<?=$datosUsuriosOnline['uss_id']?>"><?=$datosUsuriosOffline['uss_nombre'].' '.$datosUsuriosOffline['uss_apellido1']?></div>
+                                            <div class="status"> <i class="fa fa-circle offline"></i> offline <span id="notificacion_<?=$datosUsuriosOnline['uss_id']?>" > </div>
                                         </div>
                                     </li>
                                     <?php
@@ -93,10 +97,30 @@
                 </div>
             </div>
             <script>
+                var urlApi= 'http://localhost:3000';
+                var socket = io(urlApi, { transports: ['websocket', 'polling', 'flashsocket'] });
+                var chat_remite_usuario= <?php echo $idSession ?>;
+                var chat_destino_usuario= "";
+                var foto_url_uss_destino= "";
+                socket.emit('join', "sala_" + chat_remite_usuario);
+
+                socket.on("notificacion_chat", (data) => {
+                    uss_id = data["chat_remite_usuario"];
+                    divNombre = document.getElementById("nombre_"+uss_id );
+                    spanNotificacion = document.getElementById("notificacion_"+uss_id );
+                    divNombre.style.fontWeight =700;
+                    spanNotificacion.className = "badge headerBadgeColor2";
+                    spanNotificacion.innerHTML +="Nuevo";
+                     console.log(data);
+                });
+
+               
+
                 function mostrarChat(datos){
+                    console.log("sala_chat_"+ chat_remite_usuario + "_" + chat_destino_usuario);
+                    socket.emit("leave","sala_chat_"+ chat_remite_usuario + "_" + chat_destino_usuario);                   
                     var id= datos.id;
                     $("#contenedorChat").empty().hide();
-
                     if (id !== '') {
                         $.ajax({
                             type: "POST",
@@ -115,64 +139,130 @@
                                                             '</a>'+
                                                             '<div class="chat-about">'+
                                                                 '<h6 class="m-b-0">'+item.nombre+'</h6>'+
-                                                                '<small>Last seen: 2 hours ago</small>'+
                                                             '</div>'+
                                                         '</div>'+
                                                     '</div>'+
                                                 '</div>'+
                                                 '<div class="chat-history" id="chatHistory">'+
-                                                    '<ul class="m-b-0">'+
-                                                        '<li class="clearfix">'+
-                                                            '<div class="message-data text-right">'+
-                                                                '<span class="message-data-time">10:10 AM, Today</span>'+
-                                                                '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'+
-                                                            '</div>'+
-                                                            '<div class="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>'+
-                                                        '</li>'+
-                                                        '<li class="clearfix">'+
-                                                            '<div class="message-data">'+
-                                                                '<span class="message-data-time">10:12 AM, Today</span>'+
-                                                            '</div>'+
-                                                            '<div class="message my-message">Are we meeting today?</div>'+
-                                                        '</li>'+
-                                                        '<li class="clearfix">'+
-                                                            '<div class="message-data">'+
-                                                                '<span class="message-data-time">10:15 AM, Today</span>'+
-                                                            '</div>'+
-                                                            '<div class="message my-message">Project has been already finished and I have results to show you.</div>'+
-                                                        '</li>'+
-                                                        '<li class="clearfix">'+
-                                                            '<div class="message-data text-right">'+
-                                                                '<span class="message-data-time">10:10 AM, Today</span>'+
-                                                                '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'+
-                                                            '</div>'+
-                                                            '<div class="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>'+
-                                                        '</li>'+
-                                                        '<li class="clearfix">'+
-                                                            '<div class="message-data">'+
-                                                                '<span class="message-data-time">10:15 AM, Today</span>'+
-                                                            '</div>'+
-                                                            '<div class="message my-message">Project has been already finished and I have results to show you.</div>'+
-                                                        '</li>'+
+                                                    '<ul class="m-b-0" id="contenido_chat">'+
+                                                       
                                                     '</ul>'+
                                                 '</div>'+
                                                 '<div class="chat-message clearfix">'+
                                                     '<div class="input-group mb-0">'+
                                                         '<div class="input-group-prepend">'+
-                                                            '<span class="input-group-text"><i class="fa fa-send"></i></span>'+
+                                                            '<span class="input-group-text" onClick="enviarMensaje()"><i class="fa fa-send"></i></span>'+
                                                         '</div>'+
-                                                        '<input type="text" class="form-control" placeholder="Enter text here...">'+
+                                                        '<input type="text" id="mensaje"  class="form-control" placeholder="Escriba su mensaje aqui...">'+
                                                     '</div>'+
                                                 '</div>';
                                     $("#contenedorChat").append(html);
                                     var chatElement = document.getElementById("chatHistory");
-                                    chatElement.scrollTop = chatElement.scrollHeight;
+                                    var contenido_chat = document.getElementById("contenido_chat");
+                                    chat_remite_usuario= <?php echo $idSession ?>;
+                                    chat_destino_usuario= item.datosUsuarios["uss_id"];
+                                    listarChat(chat_remite_usuario,chat_destino_usuario); 
+                                    socket.emit('join', "sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario);                                    
+                                    socket.on("nuevo_mensaje_chat", (data) => {
+                                        chatElement = document.getElementById("chatHistory");
+                                        console.log(data);
+                                        mensaje = data["body"]["chat_mensaje"];
+                                        fecha = data["body"]["chat_fecha_registro"];
+                                        fechaCompleta=verificarFecha(fecha);
+                                        contenido_chat.innerHTML += htmlDestino(mensaje,fechaCompleta,foto_url_uss_destino);
+                                        chatElement.scrollTop = chatElement.scrollHeight;
+                                    });
+                                    divNombre = document.getElementById("nombre_"+chat_destino_usuario );
+                                    spanNotificacion = document.getElementById("notificacion_"+chat_destino_usuario );
+                                    foto_url_uss_destino=item.fotoPerfil;
+                                    divNombre.style.fontWeight =400;
+                                    spanNotificacion.className = "";
+                                    spanNotificacion.innerHTML ="";
+                                    // socket.on("sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario, (data) => {
+                                    //     chatElement = document.getElementById("chatHistory");
+                                    //     console.log(data);
+                                    //     mensaje = data["body"]["chat_mensaje"]
+                                    //     console.log(mensaje);
+                                    //     contenido_chat.innerHTML += htmlDestino(mensaje);
+                                    //     chatElement.scrollTop = chatElement.scrollHeight;
+                                    // });          
+
+                                    
+                                    
                                 });
                             }
                         });
                     }
                 }
 
+                function htmlEmisor(mensaje, hora = "10:12 AM, Today") {
+                    console.log(hora);
+                    return '<li class="clearfix">' +
+                        '<div class="message-data">' +
+                        '<span class="message-data-time">' + hora + '</span>' +
+                        '</div>' +
+                        '<div class="message my-message">' + mensaje + '</div>' +
+                        '</li>';
+                };
+                function htmlDestino(mensaje, hora = "10:12 AM, Today",imagenUrl="https://bootdey.com/img/Content/avatar/avatar7.png") {
+                    return '<li class="clearfix">' +
+                        '<div class="message-data text-right">' +
+                        '<span class="message-data-time">' + hora + '</span>' +
+                        '<img src="'+ imagenUrl +'" alt="avatar">' +
+                        '</div>' +
+                        '<div class="message other-message float-right"> ' + mensaje + ' </div>' +
+                        '</li>';
+                };
+                function listarChat(uss_remite,uss_detino) {
+                    console.log("esta listando");
+                    const url = urlApi+'/chat/find/' + uss_remite + "/" +uss_detino;
+                    chatElement = document.getElementById("chatHistory");
+                    console.log("esta listando en url " + url);
+                    const opciones = {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json' // Indica que esperas una respuesta en formato JSON
+                        }
+                    };
+                    // Realizar la solicitud GET
+                    fetch(url, opciones)
+                        .then(response => response.json()) // Analiza la respuesta como JSON
+                        .then(data => {
+                            console.log('Respuesta del servidor:', data);
+                            data.forEach(elemento => {
+                                console.log(chat_remite_usuario +"-"+elemento.chat_remite_usuario +" = "+elemento.chat_mensaje);
+                                if(chat_remite_usuario == elemento.chat_remite_usuario ){
+                                    console.log(chat_remite_usuario+" = "+elemento.chat_mensaje);
+                                    fechaCompleta=verificarFecha(elemento.chat_fecha_registro);
+                                    contenido_chat.innerHTML += htmlEmisor(elemento.chat_mensaje,fechaCompleta);
+                                }else{
+                                    console.log(chat_destino_usuario +" = "+elemento.chat_mensaje);
+                                    fechaCompleta=verificarFecha(elemento.chat_fecha_registro);
+                                    contenido_chat.innerHTML += htmlDestino(elemento.chat_mensaje,fechaCompleta,foto_url_uss_destino);
+                                }
+                                chatElement.scrollTop = chatElement.scrollHeight;                                 
+                            });
+                        })
+                        .catch(error => {
+                            alert('Error al realizar la solicitud:'+error);
+                        });
+                };
+                function enviarMensaje() {
+                    mensaje = document.getElementById("mensaje").value;
+                    chatElement = document.getElementById("chatHistory");
+                    console.log(mensaje);
+                    socket.emit("enviar_mensaje_chat", {
+                        chat_fecha_registro:new Date(),
+                        chat_remite_usuario:chat_remite_usuario,
+                        chat_destino_usuario:chat_destino_usuario,
+                        sala: "sala_" + chat_destino_usuario,
+                        salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,
+                        chat_mensaje: mensaje
+                    });
+                    contenido_chat.innerHTML += htmlEmisor(mensaje,verificarFecha(new Date()));
+                    document.getElementById("mensaje").value = "";
+                    chatElement.scrollTop = chatElement.scrollHeight;
+                } ;                
                 $(document).ready(function() {
                     $('#search').on('input', function() {
                         var search = $(this).val();
@@ -224,6 +314,56 @@
                         }
                     });
                 });
+                function obtenerDiaDeLaSemana(fecha) {
+                    const diasDeLaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+                    const fechaIngresada = new Date(fecha);
+                    const numeroDeDia = fechaIngresada.getDay();
+                    const nombreDelDia = diasDeLaSemana[numeroDeDia];
+                    return nombreDelDia;
+                }
+                function validarFachasIguales(fechaInicial,fechaFinal){
+                    if (
+                        fechaInicial.getDate() === fechaFinal.getDate() &&
+                        fechaInicial.getMonth() === fechaFinal.getMonth() &&
+                        fechaInicial.getFullYear() === fechaFinal.getFullYear()
+                    ) {
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                function verificarFecha(fecha) {
+                     fechaActual = new Date(); // Obtener la fecha actual
+                     fechaIngresada = new Date(fecha); // Convertir la fecha ingresada en un objeto Date
+                     fechahora= fechaIngresada.toLocaleTimeString('en-US');
+                     const [month, day, year] = [
+                        fechaIngresada.getMonth(),
+                        fechaIngresada.getDate(),
+                        fechaIngresada.getFullYear(),
+                    ];
+
+                    // Verificar si es hoy
+                    if (validarFachasIguales(fechaIngresada,fechaActual)) {
+                        return fechahora;
+                    }
+
+                    // Calcular la fecha de ayer
+                    const ayer = new Date(fechaActual);
+                    ayer.setDate(ayer.getDate() - 1);
+                     // Verificar si es ayer
+                    if (validarFachasIguales(fechaIngresada,ayer)) {
+                        return fechahora+',Ayer';
+                    }
+                     // Calcular la fecha de la semana pasada
+                    const semanaPasada = new Date(fechaActual);
+                    semanaPasada.setDate(semanaPasada.getDate() - 7);
+                    // Verificar si es la semana pasada
+                    if (fechaIngresada > semanaPasada && fechaIngresada < ayer) {
+                        return fechahora+' ,'+obtenerDiaDeLaSemana(fecha);
+                    }
+
+                    return "("+day+"/"+month+"/"+year+")";
+                    }
             </script>
             <!-- end page content -->
             <?php // include("../compartido/panel-configuracion.php");?>
