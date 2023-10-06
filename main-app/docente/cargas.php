@@ -123,7 +123,7 @@ $_SESSION["configuracion"] = $config;
 												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
 
 												$btnGenerarInforme='
-                                                                <div class="btn-group">
+                                                                <div class="btn-group mt-2">
                                                                     <button type="button" class="btn red">Generar Informe</button>
                                                                     <button type="button" class="btn red dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
@@ -136,7 +136,7 @@ $_SESSION["configuracion"] = $config;
 															';
 
 												$alertaNotasFaltantes='
-															<div class="alert alert-danger" role="alert" style="margin-right: 20px;">
+															<div class="alert alert-danger mt-2" role="alert" style="margin-right: 20px;">
 																<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
 															</div>
 															';
@@ -150,16 +150,22 @@ $_SESSION["configuracion"] = $config;
 													$intento = intval($jobsEncontrado["job_intentos"]);
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
-															$mensajeI = $btnGenerarInforme
-																	.'<div class="alert alert-danger" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															if($configGenerarJobs == 1) {
+																$mensajeI = '<div class="alert alert-danger mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+															} else {
+																$mensajeI = $btnGenerarInforme
+																	.'<div class="alert alert-info mt-2" role="alert" style="margin-right: 20px;">Por favor, vuelva a intentarlo!</div>';
+															}
+															
+
 																	break;
 														case JOBS_ESTADO_PENDIENTE:
 															if($intento==0){
-																$mensajeI ='<div class="alert alert-success" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+																$mensajeI ='<div class="alert alert-success mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															}elseif($intento>0 && $seleccionado){
-																$mensajeI ='<div class="alert alert-warning" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+																$mensajeI ='<div class="alert alert-warning-select mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}elseif($intento>0){
-																$mensajeI ='<div class="alert alert-warning-select" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+																$mensajeI ='<div class="alert alert-warning mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}
 															break;
 

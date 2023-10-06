@@ -73,7 +73,7 @@ class Estudiantes {
             LEFT JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga=car_id and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
             WHERE mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grado=car_curso AND mat_grupo=car_grupo
             GROUP BY mat_id
-            HAVING acumulado<100 OR acumulado IS NULL
+            HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres";
             $resultado = mysqli_query($conexion,$sqlString);
         } catch (Exception $e) {

@@ -51,9 +51,9 @@ $mensaje="";
 			$contador=0;
 			while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
 			$contador++;
-			$listadoEstudiantesError=$listadoEstudiantesError."<br>".$contador."): ".$estudianteResultadoError['mat_nombres']
+			$listadoEstudiantesError=$listadoEstudiantesError."<br><br>".$contador."): ".$estudianteResultadoError['mat_nombres']
 			." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
-			." no tiene notas completas  id: ".$estudianteResultadoError['mat_id']." Valor Actual: ".$estudianteResultadoError['acumulado']."%";
+			." no tiene notas completas.  ID: <b>".$estudianteResultadoError['mat_id']."</b> Valor Actual: <b>".$estudianteResultadoError['acumulado']."% </b>";
 			}
 			$finalizado = false;
 		}
@@ -71,10 +71,10 @@ $mensaje="";
 			$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
 
 			if($config['conf_porcentaje_completo_generar_informe']==2){
-				//Verificamos que el estudiante tenga sus notas al 100%
-				if($porcentajeActual<96 and empty($boletinDatos['bol_nota'])){
+				//Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
+				if($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME and empty($boletinDatos['bol_nota'])){
 					$erroresNumero++;
-					$mensaje=$mensaje."<br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas  id: ".$estudianteResultado['mat_id']." Valor Actual:".$porcentajeActual;
+					$mensaje=$mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.  ID: <b>".$estudianteResultado['mat_id']."</b> Valor Actual: <b>".$porcentajeActual."% </b>";
 					$finalizado = false;
 					continue;
 				}
@@ -83,8 +83,8 @@ $mensaje="";
 			//Si ya existe un registro previo de definitiva TIPO 1
 			if(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==1){
 				
-				if($boletinDatos['bol_nota']!=$definitiva){
-					$caso = 2;//Se cambia la definitiva que tenía por la que viene. Sea menor o mayor.
+				if($boletinDatos['bol_nota']!=$definitiva || $boletinDatos['bol_porcentaje']!=$porcentajeActual){
+					$caso = 2;//Se cambia la definitiva que tenía por la que viene. Sea menor o mayor, o igual solo si cambia el porcentaje.
 				}else{
 					$caso = 3;//No se hacen cambios. Todo sigue igual
 					continue;
@@ -171,19 +171,22 @@ $mensaje="";
 		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_cargas ac
 		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
 		WHERE  car_id='".$carga."'"));
-		$respuesta ="<br>Resumen del proceso:<br>
+		$respuesta ="
+		<h4>Resumen del proceso:</h4>
 		- Total estudiantes calificados: {$num}<br><br>
-		Datos registrados para<br>
-		- Carga : {$carga}<br>
+		Datos releacionados:<br>
+		- Cod. Carga : {$carga}<br>
 		- Asignatura :{$consulta_mat_area_est["mat_nombre"]}<br>
 		- Grado : {$grado}<br>
 		- Grupo : {$grupo}<br>
-		- Periodo : {$periodo}<br>	
-		<br>";
+		- Periodo : {$periodo}<br><br>
+		";
 		// fecha2 en este caso es la fecha actual
 		$fechaFinal = new DateTime();
 		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal);
-		$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
+		$mensaje="La generaci&oacute;n de informe concluy&oacute; exitosamente.<br>
+		".$tiempoTrasncurrido."<br>
+		".$respuesta;
 		$datos = array(
 			"id" 	  => $resultadoJobs['job_id'],
 			"mensaje" => $mensaje,
@@ -219,7 +222,7 @@ function minutosTranscurridos($fecha_i,$fecha_f)
 	$intervalo = $fecha_i->diff($fecha_f);
 	$minutos = $intervalo->i;
 	$segundos = $intervalo->s;
-	return " Finalizó en: $minutos Min y $segundos Seg.";
+	return " Finaliz&oacute; en: <i> {$minutos} min y {$segundos} seg.</i>";
 }
 
 exit()
