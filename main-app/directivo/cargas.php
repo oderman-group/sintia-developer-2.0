@@ -111,8 +111,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													}
     												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
-																										
-														$estadosMatriculas = array("","Matriculado","Asistente","Cancelado","No Matriculado");
+
 														try{
 															$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
 														} catch (Exception $e) {
