@@ -89,6 +89,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 												<thead>
 													<tr>
                                                         <th>ID</th>
+                                                        <th>#Solicitud</th>
                                                         <th>Fecha</th>
                                                         <th>Documento</th>
                                                         <th>Aspirante</th>
@@ -138,6 +139,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?= $resultado["mat_id"]; ?></td>
+                                                    <td><?= $resultado["asp_id"]; ?></td>
                                                     <td><?= $resultado["asp_fecha"]; ?></td>
                                                     <td><?= $resultado["mat_documento"]; ?></td>
                                                     <td><?= strtoupper($resultado["mat_nombres"] . " " . $resultado["mat_primer_apellido"]); ?></td>
