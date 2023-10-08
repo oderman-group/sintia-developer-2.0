@@ -36,7 +36,7 @@ $consulta = Estudiantes::listarEstudiantes(0, '', '');
             <th scope="col" align="center">Estado</th>
             <th scope="col" align="center">Fecha Nacimiento</th>
             <th scope="col" align="center">Lugar Nacimiento</th>
-            <th scope="col" align="center">Tipo de Documento</th>
+            <th scope="col" align="center">Género</th>
             <th scope="col" align="center">Documento</th>            
         	<th scope="col" align="center">Lugar Expedicion</th>
             <th scope="col" align="center">Direccion</th>
@@ -63,27 +63,8 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
     WHERE uss_id='".$resultado['mat_acudiente']."'");
 
 	$datosA = mysqli_fetch_array($consultaDatosA, MYSQLI_BOTH);
-	switch($resultado['mat_estado_matricula']){
-		case 1:
-		$estadoM='Matriculado';
-		break;
-		
-		case 2:
-		$estadoM='Asistente';
-		break;
-		
-		case 3:
-		$estadoM='Cancelado';
-		break;
-		
-		case 4:
-		$estadoM='No Matriculado';
-		break;
-		
-		case 5:
-		$estadoM='En inscripción';
-		break;
-	}	
+
+        $estadoM = $estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];
 ?>    
     	<tr>	
             <td align="center"><?=$conta;?></td>
