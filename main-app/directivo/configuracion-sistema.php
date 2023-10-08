@@ -339,6 +339,18 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Permitir a docentes ver puestos en el informe de sábanas?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite o no a los docentes ver el listado de los puestos de los estudiantes, por periodo, en el informe de sábanas."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="permisoDocentesPuestosSabanas" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_ver_promedios_sabanas_docentes']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_ver_promedios_sabanas_docentes']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         
 										<p class="h3">Otras</p>
 

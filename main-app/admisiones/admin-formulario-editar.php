@@ -99,6 +99,7 @@ $datosAsp = $asp->fetch();
             <input type="hidden" name="solicitud" value="<?= $id; ?>">
             <input type="hidden" name="emailAcudiente" value="<?= $datos['uss_email']; ?>">
             <input type="hidden" name="nombreAcudiente" value="<?= $datosAsp['asp_nombre_acudiente']; ?>">
+            <input type="hidden" name="documentoAspirante" value="<?= $datosAsp['asp_documento']; ?>">
             <input type="hidden" name="idPadre" value="<?= $datos['mat_padre']; ?>">
             <input type="hidden" name="idMadre" value="<?= $datos['mat_madre']; ?>">
             <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">

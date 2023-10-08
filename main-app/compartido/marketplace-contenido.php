@@ -21,7 +21,9 @@
 			$serviciosConsulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos
 			INNER JOIN " . $baseDatosMarketPlace . ".categorias_productos ON catp_id=prod_categoria
 			INNER JOIN " . $baseDatosMarketPlace . ".empresas ON emp_id=prod_empresa
-			WHERE prod_estado!=1 AND prod_activo=1 $filtro ");
+			WHERE prod_estado!=1 AND prod_activo=1 $filtro 
+			ORDER BY prod_destacado DESC
+			");
 			$numProductos = mysqli_num_rows($serviciosConsulta);
 			if ($numProductos == 0) {
 				echo '
@@ -44,18 +46,34 @@
 				$arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
 				$arrayDatos = json_encode($arrayEnviar);
 				$objetoEnviar = htmlentities($arrayDatos);
+
+				$fondoSinStock = '';
+				if( $datosConsulta['prod_existencias'] <= 0 ) {
+					$fondoSinStock = 'background-color:#9e9e9e33;';
+				}
+
+				$bordeDestacado = 'border-light';
+				if( $datosConsulta['prod_destacado'] >= 1 ) {
+					$bordeDestacado = 'border-info rounded-top';
+				}
 			?>
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">
-				<div class="blogThumb" style="height: 100%;">
+				<div class="blogThumb border <?=$bordeDestacado;?>" style="height: 100%;  <?=$fondoSinStock;?>">
 					<div class="thumb-center" style="height: 55%;">
 						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
-						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a></h5>
-						<div class="text-muted">
-							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['catp_nombre']; ?></span>
+						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a> <?php if($datosConsulta['prod_destacado'] >= 1) {?>
+							<span class="badge badge-info">Destacado</span>
+							<?php }?></h5>
+						<div class="text-muted" style="overflow: hidden;">
+							<span class="m-r-10" style="font-size: 10px; white-space: nowrap;"> <?= $datosConsulta['catp_nombre']; ?></span><br>
+							<?php if(!empty($datosConsulta['prod_keywords'])) {?><span class="m-r-10" style="font-size: 9px;"> <kbd><?= $datosConsulta['prod_keywords']; ?></kbd></span> <?php }?>
 						</div>
-						<p><span style="font-weight: bold;"> $<?=number_format($precio, 0, ",", ".")?></span></p>
+						<p>
+							<span style="font-weight: bold;"> $<?=number_format($precio, 0, ",", ".")?></span><br>
+							<span class="m-r-10" style="font-size: 10px;"> <?= $datosConsulta['prod_existencias']; ?> disponibles</span>
+						</p>
 						<p>
 						<?php
 						if (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] == $datosConsulta['emp_id']) {
@@ -66,12 +84,14 @@
 							} else {
 								if ($precio >= 1) {
 						?>
-									<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-success"><i class="fa fa-money"></i> Comprar</a>
+									<a href="productos-comprar.php?id=<?= base64_encode($datosConsulta['prod_id']); ?>" class="btn btn-warning"><i class="fa fa-money"></i> Comprar</a>
 						<?php
 								}
 						?>
 								<a href="#" class="btn btn-info" name="<?= $datosConsulta['emp_usuario']; ?>" title="<?= $datosConsulta['prod_nombre']; ?>" onClick="msjMarketplace(this)"><i class="fa fa-envelope"></i></a>
 						<?php } ?>
+
+							
 						</p>
 					</div>
 				</div>

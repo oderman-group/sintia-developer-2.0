@@ -21,7 +21,7 @@ $Plataforma = new Plataforma;
 				Cordial saludo <?=$data['usuario_nombre']?>, a su solicitud <b>#<?=$data['solicitud_id'];?></b> se la ha añadido la siguiente observación:<br><br>
 				<b><?=$data['observaciones'];?></b><br><br>
 				Puede consultar el estado de su solicitud en el siguiente enlace:<br>
-				<a href="<?=REDIRECT_ROUTE;?>/admisiones/consultar-estado.php?idInst=<?=$_REQUEST['idInst']?>">CONSULTAR ESTADO DE SOLICITUD</a>
+				<a href="<?=REDIRECT_ROUTE;?>/admisiones/consultar-estado.php?idInst=<?=$_REQUEST['idInst']?>&solicitud=<?=base64_encode($data['solicitud_id']);?>&documento=<?=base64_encode($data['id_aspirante']);?>">CONSULTAR ESTADO DE SOLICITUD</a>
 				<p style="text-align:center;">
 					Gracias por preferirnos, que tenga un feliz día.
 				</p>

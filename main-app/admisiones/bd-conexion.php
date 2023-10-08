@@ -17,6 +17,7 @@ if(!empty($_REQUEST['idInst'])){
 
 	//configuración
 	$configConsulta = "SELECT * FROM configuracion
+	INNER JOIN {$baseDatosAdmisiones}.config_instituciones ON cfgi_id_institucion=conf_id_institucion AND cfgi_inscripciones_activas=1
 	WHERE conf_id_institucion = ".$idInsti." AND conf_agno = ".date("Y");
 	$config = $pdoAdmin->prepare($configConsulta);
 	$config->execute();
