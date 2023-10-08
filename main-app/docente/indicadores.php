@@ -95,6 +95,13 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 																<?php if($datosCargaActual['car_maximos_indicadores']<=$sumaIndicadores[2]){?>
 																	<p style="color: tomato;"> Has alcanzado el número máximo de indicadores permitidos. </p>
 																<?php }?>
+
+																<div class="btn-group" id="agregarNuevo">
+					                                                <a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($datosCargaActual['car_curso']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" class="btn btn-secondary" target="_blank">
+					                                                    Ver indicadores perdidos<i class="fa fa-file-text-o"></i>
+					                                                </a>
+					                                            </div>
+
 					                                        </div>
 					                                        
 					                                    </div>	

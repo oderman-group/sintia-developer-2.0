@@ -129,8 +129,8 @@ CASE mat_estado_matricula
 	WHEN 1 THEN 'Matriculado' 
 	WHEN 2 THEN 'Asistente' 
 	WHEN 3 THEN 'Cancelado' 
-	WHEN 4 
-	THEN 'No matriculado' 
+	WHEN 4 THEN 'No matriculado'
+	WHEN 5 THEN 'En inscripción' 
 END AS estado
 FROM academico_matriculas am 
 INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id

@@ -116,32 +116,36 @@ ORDER BY prom DESC
 ");
 ?>
 
-  <p>&nbsp;</p>
-    <table width="100%" border="1" rules="all" align="center">
-  	 <tr style="font-weight:bold; font-size:12px; height:30px;">
-        <td colspan="3" align="center">PUESTOS</td>
-    </tr> 
-    
-    <tr style="font-weight:bold; font-size:14px; height:40px;">
-        <td align="center">Puesto</b></td>
-        <td align="center">Estudiante</td>
-        <td align="center">Promedio</td>
-    </tr> 
-  <?php
-	$j=1;
-  	while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
-	?>	
-    <tr style="font-weight:bold; font-size:12px;">
-        <td align="center"><?=$j;?></td>
-        <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
-        <td align="center"><?=$ptos[0];?></td>
-    </tr>
-	<?php	
-		$j++;
-	}
-  ?>
-    
-  </table>  
+<?php if ( ($config['conf_ver_promedios_sabanas_docentes'] == 1 && $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE) || 
+           ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) ) {?>
+    <p>&nbsp;</p>
+      <table width="100%" border="1" rules="all" align="center">
+      <tr style="font-weight:bold; font-size:12px; height:30px;">
+          <td colspan="3" align="center">PUESTOS</td>
+      </tr> 
+      
+      <tr style="font-weight:bold; font-size:14px; height:40px;">
+          <td align="center">Puesto</b></td>
+          <td align="center">Estudiante</td>
+          <td align="center">Promedio</td>
+      </tr> 
+    <?php
+    $j=1;
+      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
+    ?>	
+      <tr style="font-weight:bold; font-size:12px;">
+          <td align="center"><?=$j;?></td>
+          <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
+          <td align="center"><?=$ptos[0];?></td>
+      </tr>
+    <?php	
+      $j++;
+    }
+    ?>
+      
+    </table>  
+  <?php }?>
+
 </div>
 
 </body>

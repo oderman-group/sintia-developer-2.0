@@ -84,7 +84,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                             </div>
                                         </div>
 
-                                        <div class="table-scrollable">
+                                        <div class="table">
                                     		<table class="display" style="width:100%;">
 												<thead>
 													<tr>
