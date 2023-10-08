@@ -17,6 +17,7 @@ $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
+$seAdjuntoArchivo = 0;
 if (!empty($_FILES['archivo1']['name'])) {
 	$destino = "files/adjuntos";
     $explode = explode(".", $_FILES['archivo1']['name']);
@@ -25,6 +26,7 @@ if (!empty($_FILES['archivo1']['name'])) {
 	@unlink($destino . "/" . $archivo1);
     move_uploaded_file($_FILES['archivo1']['tmp_name'], $destino . "/" . $archivo1);
     $adjunto1 = '<p><a href="https://plataformasintia.com/admisiones/files/adjuntos/'.$archivo1.'">Descargar archivo 1</a></p>';
+    $seAdjuntoArchivo ++;
 } else {
     $archivo1 = $_POST['archivo1A'];
     $adjunto1 = '';
@@ -38,6 +40,7 @@ if (!empty($_FILES['archivo2']['name'])) {
 	@unlink($destino . "/" . $archivo2);
     move_uploaded_file($_FILES['archivo2']['tmp_name'], $destino . "/" . $archivo2);
     $adjunto2 = '<p><a href="https://plataformasintia.com/admisiones/files/adjuntos/'.$archivo2.'">Descargar archivo 2</a></p>';
+    $seAdjuntoArchivo++;
 } else {
     $archivo2 = $_POST['archivo2A'];
     $adjunto2 = '';
@@ -54,6 +57,24 @@ $asp->bindParam(':sesion', $_SESSION["id"] , PDO::PARAM_INT);
 $asp->bindParam(':archivo1', $archivo1, PDO::PARAM_STR);
 $asp->bindParam(':archivo2', $archivo2, PDO::PARAM_STR);
 $asp->execute();
+
+//INSERTAR EN EL HISTORIAL DE OBSERVACIONES
+$sql = "INSERT INTO historial_observaciones(hiso_id_institucion, hiso_year, hiso_id_solicitud, hiso_estado, hiso_envio_correo, hiso_observacion, hiso_adjuntos, hiso_resposable)VALUES(:institucion, :agno, :solicitud, :estado, :envio_correo, :observacion, :adjuntos, :responsable)";
+$stmt = $pdo->prepare($sql);
+
+$agno = date("Y");
+$idInstitucion = base64_decode($_POST['idInst']);
+
+$stmt->bindParam(':institucion', $idInstitucion, PDO::PARAM_INT);
+$stmt->bindParam(':agno', $agno, PDO::PARAM_INT);
+$stmt->bindParam(':solicitud', $_POST['solicitud'], PDO::PARAM_INT);
+$stmt->bindParam(':estado', $_POST['estadoSolicitud'], PDO::PARAM_INT);
+$stmt->bindParam(':envio_correo', $_POST['enviarCorreo'], PDO::PARAM_INT);
+$stmt->bindParam(':observacion', $_POST['observacion'], PDO::PARAM_STR);
+$stmt->bindParam(':adjuntos', $seAdjuntoArchivo, PDO::PARAM_INT);
+$stmt->bindParam(':responsable', $_SESSION["id"], PDO::PARAM_INT);
+
+$stmt->execute();
 
 if($_POST['enviarCorreo'] == 1){
 
@@ -72,7 +93,8 @@ if($_POST['enviarCorreo'] == 1){
         'usuario2_nombre'   => $nombreUss,
         'solicitud_id'      => $_POST["solicitud"],
         'observaciones'     => $_POST['observacion'],
-        'institucion_id'    => $datosInfo['info_institucion']
+        'institucion_id'    => $datosInfo['info_institucion'],
+        'id_aspirante'      => $_POST['documentoAspirante']
     ];
     $asunto = 'Actualización de solicitud de admisión '.$_POST["solicitud"];
 	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-formulario-inscripcion.php';
