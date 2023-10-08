@@ -98,11 +98,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="estadoR">
                                                 <option value=""></option>
-                                                <option value="1">Matriculado</option>
-                                                <option value="2">Asistente</option>
-                                                <option value="3">Cancelado</option>
-                                                <option value="4">No matriculado</option>
-                                                <option value="5">En inscripción</option>
+                                                <?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+                                                    <option value="<?=$clave;?>"><?=$valor;?></option>
+                                                <?php } ?>
                                                 </select>
                                             </div>
                                         </div>

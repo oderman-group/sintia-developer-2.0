@@ -466,14 +466,6 @@
 	                            </a>
 	                        </li>
 							
-							<?php if($datosUsuarioActual['uss_version1_menu']==1){?>
-							<li class="nav-item">
-	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-undo"></i>
-	                                <span class="title">VERSIÓN ANTERIOR</span> 
-	                            </a>
-	                        </li>
-							<?php }?>
-							
 							
 							
 							

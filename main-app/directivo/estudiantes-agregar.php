@@ -519,10 +519,9 @@ if(!Modulos::validarPermisoEdicion()){
 												<div class="col-sm-4">
 													<select class="form-control" name="matestM" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
-														<option value="1"  <?php if(1==$datosMatricula["matestM"]) echo 'selected'?>>Matriculado</option>
-														<option value="2"  <?php if(2==$datosMatricula["matestM"]) echo 'selected'?>>Asistente </option>
-														<option value="3"  <?php if(3==$datosMatricula["matestM"]) echo 'selected'?>>Cancelado </option>
-														<option value="4"  <?php if(4==$datosMatricula["matestM"]) echo 'selected'?>>No matriculado </option>
+														<?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+															<option value="<?=$clave;?>"><?=$valor;?></option>
+														<?php } ?>
 													</select>
 												</div>
 											</div>
