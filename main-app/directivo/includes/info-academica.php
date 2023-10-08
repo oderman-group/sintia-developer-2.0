@@ -70,11 +70,9 @@
 												<div class="col-sm-4">
 													<select class="form-control" name="matestM" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
-														<option value="1"  <?php if(1==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Matriculado</option>
-														<option value="2"  <?php if(2==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Asistente </option>
-														<option value="3"  <?php if(3==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>Cancelado </option>
-														<option value="4"  <?php if(4==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>No matriculado </option>
-														<option value="5"  <?php if(5==$datosEstudianteActual["mat_estado_matricula"]) echo 'selected'?>>En inscripción</option>
+														<?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+															<option value="<?=$clave;?>"  <?php if( $datosEstudianteActual["mat_estado_matricula"] == $clave) echo 'selected';?>><?=$valor;?></option>
+														<?php }?>
 													</select>
 												</div>
 											</div>

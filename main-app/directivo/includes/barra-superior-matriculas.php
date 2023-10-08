@@ -114,12 +114,10 @@
         Filtrar por estados
 		  <span class="fa fa-angle-down"></span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(1)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==1) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(2)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==2) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(3)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==3) echo 'style="color: '.$Plataforma->colorUno.';"';?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(4)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==4) echo 'style="color: '.$Plataforma->colorUno.';"';?>>No Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode(5)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==5) echo 'style="color: '.$Plataforma->colorUno.';"';?>>En Inscripción</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode($clave)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==$clave) echo 'style="color: '.$Plataforma->colorUno.';"';?>><?=$valor;?></a>
+        <?php }?>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
