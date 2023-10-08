@@ -12,20 +12,10 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }?>
-    <!-- Material Design Lite CSS -->
-	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
-	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
+    
 	<!-- steps -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/steps/steps.css"> 
-	<!-- Theme Styles -->
-    <link href="../../config-general/assets/css/theme/light/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
-    <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
-	<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-	<link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
-	<!-- favicon -->
-    <link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
+	
 
 	<!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />

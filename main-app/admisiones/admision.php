@@ -16,6 +16,8 @@ $num = $grados->rowCount();
     <title>Admisiones | Plataforma sintia</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="../sintia-icono.png" />
 </head>
 
 <body>
@@ -49,14 +51,12 @@ $num = $grados->rowCount();
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <hr class="my-4">
-                    <p>
-                        NOTA: Recuerde tener todos los documentos escaneados antes de comenzar a diligenciar el formulario.
-                    </p>
+                    <p><?=$datosConfig['cfgi_texto_inicial'];?></p>
                 </div>
                 <hr class="my-4">
                 <?php include("alertas.php"); ?>
                 <h3 style="text-align: center;">REGISTRO INICIAL</h3>
-                <form action="index-guardar.php" method="post">
+                <form action="index-guardar.php" method="post" class="border border-secondary rounded-top p-2">
                     <input type="hidden" name="iditoken" value="<?= md5($_REQUEST['idInst']); ?>">
                     <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
                     <p class="lead text-danger">
@@ -132,11 +132,11 @@ $num = $grados->rowCount();
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <div class="text-right">
-                        <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-credit-card" aria-hidden="true"></i> Enviar solicitud</button>
+                        <button type="submit" class="btn btn-lg" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;"><i class="fa fa-credit-card" aria-hidden="true"></i> Enviar solicitud</button>
                     </div>
                 </form>
                 <hr class="my-4">
-                <div class="jumbotron mt-4 bg-info text-light" style="text-align: center;">
+                <div class="jumbotron mt-4" style="text-align: center; background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;">
                     <p style="font-size: 20px;">Si usted ya hizo este registro por favor consulte el estado de su solicitud para validar el paso a seguir.</p>
                     <a class="btn btn-primary btn-lg" href="consultar-estado.php?idInst=<?= $_REQUEST['idInst'] ?>" role="button">Consultar estado de solicitud</a>
                 </div>

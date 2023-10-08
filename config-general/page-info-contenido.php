@@ -272,6 +272,15 @@ switch($_GET["idmsg"]){
 		$url1 = 'estudiantes.php';
 		$boton1 = 'IR A ESTUDIANTES';
 	break;
+
+	case 221:
+		$color = 'red';
+		$titulo = 'USUARIO BLOQUEADO';
+		$texto = 'Tu usuario se encuentra bloqueado por lo tanto no es posible acceder a ninguna opción de la plataforma. Si tienes alguna inquietud al respecto puedes ponerte en contacto con la Institución.';
+		$url1 = '../controlador/salir.php';
+		$boton1 = 'CERRAR SESIÓN';
+		$lottie = 'https://lottie.host/b4de488e-1144-4216-965f-cc2a3d4296c3/EKGn9IPCsv.json';
+	break;
 		
 	
 	
