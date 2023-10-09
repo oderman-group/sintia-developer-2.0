@@ -100,6 +100,7 @@ try{
 										<div class="panel-body">
                                             <?php
                                                 $num = 1;
+                                                $bdInstituciones = array();
                                                 while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH)){
                                                     
                                                     if(empty($datosInstitucion['ins_years']) || empty($datosInstitucion['ins_bd'])) {
@@ -127,7 +128,8 @@ try{
                                                                 } else {
                                                                     echo $num." <span style='color:black; background-color:yellow;'>No aparecen columnas afectadas, pero es muy probable que si haya aplicado los cambios para ".$CURRENTDB."</span><br>";
                                                                 }
-                                                                
+
+                                                                $bdInstituciones[$datosInstitucion['ins_id']][] = ["BD"=> $CURRENTDB];
 
                                                             } else {
                                                                 echo $num." <span style='color:red; font-weight:bold;'>La base de datos no existe: ".$CURRENTDB."</span><br>";
@@ -145,6 +147,12 @@ try{
                                                             $yearStart ++;
                                                         }
                                                     }
+                                                }
+
+                                                try{
+                                                    mysqli_query($conexion,"INSERT INTO ".$baseDatosServicios.".ejecucion_scripts(spt_fecha_registro,spt_responsable,spt_script,spt_ambiente,spt_bds) VALUES (now(),".$_SESSION['id'].",'".$sql."','".$_POST['enviroment']."','".json_encode($bdInstituciones)."')");
+                                                }catch(Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
                                                 }
                                             ?>
                                             <a href="dev-ejecutar-scripts.php" class="btn btn-round btn-primary">EJECUTAR OTRO SCRIPT</a>
