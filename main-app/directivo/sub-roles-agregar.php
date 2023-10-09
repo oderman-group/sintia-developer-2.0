@@ -77,7 +77,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                         <option value="">Seleccione una opción</option>
                                         <?php 
                                             try{
-                                                $consultaDirectivos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                $consultaDirectivos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
