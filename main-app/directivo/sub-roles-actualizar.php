@@ -25,7 +25,8 @@ if (empty($_POST["paginas"])) {
 $datos = array(
 	"id" =>$_POST["subr_id"],
     "nombre" =>$_POST["nombre"],
-    "paginas" => $_POST["paginas"]
+    "paginas" => $_POST["paginas"],
+    "usuarios" => $_POST["directivos"]
 	
 );
 
