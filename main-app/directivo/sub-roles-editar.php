@@ -28,6 +28,9 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
 <link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<!--select2-->
+<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
+<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -59,31 +62,6 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                         <form action="sub-roles-actualizar.php" method="post" enctype="multipart/form-data">
                             <i class="bi bi-eye-slash"></i>
                             <div class="form-group row">
-                                <label class="col-sm-2 ">Institución:</label>
-
-                                <div class="col-sm-4">
-                                    <input type="text" name="ins_id" class="form-control" value="<?= $rolActual['ins_id']; ?>" readonly hidden>
-                                    <input type="text" class="form-control" value="<?= $rolActual['ins_contacto_principal']; ?>" readonly>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fa fa-mobile-phone"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" value="<?= $rolActual['ins_celular_contacto']; ?>" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="material-icons">email</i></span>
-                                        </div>
-                                        <input type="text" class="form-control" value="<?= $rolActual['ins_email_contacto']; ?>" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-sm-2 "><?= $frases[187][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol:</label>
                                 <div class="col-sm-1">
                                     <input type="text" name="subr_id" class="form-control" value="<?= $rolActual['subr_id']; ?>" readonly>
@@ -95,11 +73,35 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                         </div>
                                         <input type="text" class="form-control" name="nombre" value="<?= $rolActual['subr_nombre']; ?>">
                                     </div>
-
                                 </div>
-                                <div class="col-sm-3">
+                            </div>
 
-                                    <button type="submit" class="btn btn-warning"><?= $frases[331][$datosUsuarioActual['uss_idioma']]; ?> </button>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Usuarios:</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control select2" name="directivos[]" multiple>
+                                        <option value="">Seleccione una opción</option>
+                                        <?php 
+                                            try{
+                                                $consultaDirectivos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                            } catch (Exception $e) {
+                                                include("../compartido/error-catch-to-report.php");
+                                            }
+                                            while($directivos=mysqli_fetch_array($consultaDirectivos, MYSQLI_BOTH)){
+                                                $selected="";
+                                                if(SubRoles::validarExistenciaUsuarioRol($directivos["uss_id"],$id)>0){
+                                                    $selected="selected";
+                                                }
+                                        ?>
+                                            <option value="<?=$directivos["uss_id"];?>" <?=$selected?>><?=UsuariosPadre::nombreCompletoDelUsuario($directivos);?></option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success"><?=$frases[331][$datosUsuarioActual['uss_idioma']];?> </button>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -269,6 +271,9 @@ function mostrarActivas(check,idSubrol) {
 <script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js"></script>
 <!-- Material -->
 <script src="../../config-general/assets/plugins/material/material.min.js"></script>
+<!--select2-->
+<script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
+<script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
 <!-- end js include path -->
 
 </body>
