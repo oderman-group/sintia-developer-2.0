@@ -465,5 +465,31 @@ class SubRoles {
             }
         }
     }
+    /**
+    * Esta función asigna los usuarios al rol de forma masiva
+    *
+    * @param array $idUsuario
+    * @param int $subRoles
+    *
+    * @return int // se retorna el id del registro ingresado    */
+    public static function crearRolesUsuarioMasivos(array $usuarios=[],$subRol){
+        global $conexion, $baseDatosServicios,$config;
+
+        $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_usuarios(spu_id_sub_rol, spu_id_usuario, spu_institucion, spu_year) VALUES";
+
+        foreach ($usuarios as $idUsuario ) {
+            $sqlinsert.="('".$subRol."', '".$idUsuario."', '".$config['conf_id_institucion']."', '".$config['conf_agno']."'),"; 
+        }
+        $sqlinsert = substr($sqlinsert, 0, -1);
+
+        try {
+                mysqli_query($conexion,$sqlinsert);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            exit();
+        }
+        $idRegistro = mysqli_insert_id($conexion);
+        return $idRegistro;
+    }
 
 }
