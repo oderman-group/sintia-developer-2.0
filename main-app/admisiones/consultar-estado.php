@@ -47,7 +47,7 @@ include("bd-conexion.php");
                 ?>
 
                 <form action="consultar-estado.php" method="post">
-                    <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
+                    <input type="hidden" name="idInst" value="<?php if(!empty($_REQUEST['idInst'])) echo $_REQUEST['idInst']; ?>">
 
                     <div class="form-group">
                         <label for="solicitud">Número de solicitud</label>
