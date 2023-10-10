@@ -9,11 +9,17 @@ function hayInternet() {
 		if(localStorage.getItem("internet") == 0){
 			document.getElementById("siInternet").style.display="block";
 
-            Swal.fire(
-                'AVISPATE que la conexión ha vuelto!', 
-                'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
-                'success'
-                );
+            Swal.fire({
+                title: 'AVISPATE que la conexión ha vuelto!', 
+                text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
+                icon: 'success',
+                backdrop: `
+                    rgba(55,55,55,0.4)
+                    url("https://media.giphy.com/media/IwTWTsUzmIicM/giphy.gif")
+                    left top
+                    no-repeat
+                `
+            });
 
 		}
 
@@ -27,11 +33,17 @@ function hayInternet() {
 	} else {
 
 		if(localStorage.getItem("internet") == 1 || localStorage.getItem("internet") == null) {
-            Swal.fire(
-                'AVISPATE que se ha perdido la conexión!', 
-                'Se ha perdido tu conexión a internet. Por favor verifica antes de continuar trabajando en la plataforma.', 
-                'error'
-                );
+            Swal.fire({
+                title: 'AVISPATE que se ha perdido la conexión!', 
+                text: 'Se ha perdido tu conexión a internet. Por favor verifica antes de continuar trabajando en la plataforma.', 
+                icon: 'error',
+                backdrop: `
+                    rgba(55,55,55)
+                    url("../files/noInternet.webp")
+                    left top
+                    no-repeat
+                `
+            });
         }
         
 
@@ -197,7 +209,13 @@ function deseaEliminar(dato) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si, deseo eliminar!',
-        cancelButtonText: 'No'
+        cancelButtonText: 'No',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://media.giphy.com/media/du9tUy0lntYsqGF2Ye/giphy.gif")
+            left top
+            no-repeat
+        `
     }).then((result) => {
         if (result.isConfirmed) {
             if (typeof id !== "undefined" && id !== "") {
