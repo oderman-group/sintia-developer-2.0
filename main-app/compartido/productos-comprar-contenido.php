@@ -191,7 +191,15 @@ WHERE prod_id='".$id."'
 
                             var valorMinimo = 10000;
                             if( parseInt(calculo) > 0 && parseInt(calculo) < parseInt(valorMinimo) ) {
-                                Swal.fire('El valor minimo para comprar debe ser de $10.000 COP.');
+                                Swal.fire({
+                                    title: 'El valor minimo para comprar debe ser de $10.000 COP.',
+                                    backdrop: `
+                                        rgba(220,173,2,0.4)
+                                        url("https://media.giphy.com/media/LdOyjZ7io5Msw/giphy.gif")
+                                        left top
+                                        no-repeat
+                                    `
+                                });
                                 continuarPago.disabled = true;
                                 return false;
                             }
