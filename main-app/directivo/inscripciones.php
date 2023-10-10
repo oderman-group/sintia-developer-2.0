@@ -74,7 +74,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                         <div class="alert alert-block alert-warning">
                                             <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
                                             <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
-                                                <b>En cada aspirante: Ve a la opción Acciones->Borrar documentación.</b></p>
+                                                <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
                                         </div>
 											
                                         <div class="alert alert-block alert-success">
@@ -103,7 +103,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 <tbody>
                                                 <?php
 												include("includes/consulta-paginacion-inscripciones.php");	
-                                                $estadosSolicitud = array(
+                                                $estadosSolicitud = [
                                                 1 => 'VERIFICACIÓN DE PAGO',
                                                 2 => 'PAGO RECHAZADO',
                                                 3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
@@ -113,18 +113,18 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 7 => 'NO APROBADO',
                                                 8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
                                                 9 => 'MOVIDO AL AÑO SIGUIENTE'
-                                                );
-                                                $fondoSolicitud = array(
-                                                1 => 'yellow',
-                                                2 => 'tomato',
-                                                3 => 'orange',
+                                                ];
+                                                $fondoSolicitud = [
+                                                1 => 'cadetblue',
+                                                2 => '#DB6503',
+                                                3 => 'cadetblue',
                                                 4 => '#AFB372',
-                                                5 => 'aquamarine',
+                                                5 => '#AFB372',
                                                 6 => 'green',
                                                 7 => 'red',
-                                                8 => 'yellow',
-                                                9 => '#00FAB5'
-                                                );
+                                                8 => '#DA9E00',
+                                                9 => '#009B7A'
+                                                ];
                                                 try{
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                                                     INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
