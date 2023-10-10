@@ -213,7 +213,15 @@ function deseaEliminar(dato) {
                     if (typeof varObjet !== "undefined") {
                         // handle success
                         if (varObjet.tipo === 1) {
-                            registro.style.display = "none";
+
+                            async function miFuncionConDelay() {
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+                                registro.style.display = "none";
+                            }
+
+                            miFuncionConDelay();
+
+                            registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
                         }
 
                         if (varObjet.tipo === 2 || varObjet.tipo === 5) {
@@ -226,7 +234,16 @@ function deseaEliminar(dato) {
                         }
 
                         if (varObjet.tipo === 4) {
-                            publicacion.style.display = "none";
+
+                            async function miFuncionConDelay() {
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+                                publicacion.style.display = "none";
+                            }
+
+                            miFuncionConDelay();
+
+                            publicacion.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
+                            
                         }
                     }
 
@@ -340,7 +357,7 @@ function crearNoticia() {
 
     // Establece el contenido HTML en el nuevo div
         nuevoDiv.innerHTML = `
-            <div class="col-sm-12">
+            <div class="col-sm-12 animate__animated animate__rubberBand animate__delay-1s animate__slow">
                 <div id="PANEL${idRegistroEncriptado}" class="panel">
                     <div class="card-head">
                         <header></header>
