@@ -73,6 +73,7 @@ include("../compartido/head.php");
 													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['uss_foto']);
 														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'");
 														 $genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
 														//DEFINITIVAS
@@ -93,7 +94,7 @@ include("../compartido/head.php");
 															
 														</td>
 														<td style="color: <?=$colorEstudiante;?>">
-															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
+															<img src="<?=$fotoEstudiante;?>" width="50">
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td><?=$genero[1];?></td>

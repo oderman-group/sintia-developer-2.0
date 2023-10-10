@@ -218,6 +218,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case base64_encode('SC_DT_13'):
+                $tipo = 'success';
+                $mensaje = 'Las cargas fueron transferidas exitosamente.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

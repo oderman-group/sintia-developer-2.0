@@ -7,10 +7,6 @@
 <?php
 require_once("../class/Estudiantes.php");
 ?>
-<?php
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
-$calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
-?>
 
 <!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -31,13 +27,13 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
+  const idSplit = enviada.id.split('-');
   var carga = <?=$cargaConsultaActual;?>;
   var periodo = <?=$periodoConsultaActual;?>; 
   var nota = enviada.value;
-  var codEst = enviada.id;
-  var nombreEst = enviada.alt;
+  var codEst = idSplit[0];
+  var nombreEst = idSplit[1];
   var operacion = enviada.title;
-	  
 $('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
 	datos = "nota="+(nota)+
 			"&operacion="+(operacion)+
@@ -131,12 +127,6 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado[0]." AND bol_periodo='".$periodoConsultaActual."' AND bol_carga='".$cargaConsultaActual."'");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-														 
-														//DEFINITIVAS
-														/*$carga = $cargaConsultaActual;
-														$periodo = $periodoConsultaActual;
-														$estudiante = $resultado[0];
-                                                        include("../definitivas.php");*/
                                                         $definitiva = isset($notas['bol_nota']) ? $notas['bol_nota'] : null;
 														if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';} 
 														
@@ -154,7 +144,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														
 														<td width="25%">
 															
-															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="8" onChange="notas(this)"><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
+															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'].'-'.$resultado['mat_nombres'];?>" title="8" onChange="notas(this)"><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
 														</td>
                                                     </tr>
 													<?php 
