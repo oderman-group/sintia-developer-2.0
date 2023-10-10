@@ -135,8 +135,8 @@ include("bd-conexion.php");
                             </form>
                         <?php } ?>
 
-                        <?php if ($datos['asp_estado_solicitud'] == 6) { ?>
-                            <a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;" target="_blank">Pagar prematricula</a>
+                        <?php if ($datos['asp_estado_solicitud'] == 6 && $datosConfig['cfgi_activar_boton_pagar_prematricula'] == 1) { ?>
+                            <a href="<?=$datosConfig['cfgi_link_boton_pagar_prematricula'];?>" class="btn" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;" target="_blank">Pagar prematricula</a>
                         <?php } ?>
 
                     <?php
