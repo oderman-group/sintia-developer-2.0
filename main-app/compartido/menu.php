@@ -94,21 +94,13 @@
 								if(array_key_exists(1, $arregloModulos)){
 									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
 							?>
-							<li <?php agregarClass(MENU_PADRE,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
+							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
-									<?php
-										if(array_key_exists(8, $arregloModulos)){
-											if(Modulos::validarSubRol(['DT0102'])){
-									?>
-										<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Inscripciones</span></a></li>
 									<?php 
-											}
-										}
-									
 										if(Modulos::validarSubRol(['DT0001'])){
 									?>
 	                                	<li <?php agregarClass(MENU,["DT0001"]) ?>><a href="estudiantes.php" class="nav-link "> <span class="title"><?=$frases[209][$datosUsuarioActual[8]];?></span></a></li>
@@ -153,6 +145,31 @@
 									
 	                            </ul>
 	                        </li>
+							<?php }}?>
+
+							<?php 
+							//MÓDULO INSCRIPCIONES Y ADMISIONES
+							if(array_key_exists(8, $arregloModulos)){
+								if(Modulos::validarSubRol(["DT0102"])){
+							?>
+								<li <?php agregarClass(MENU_PADRE,["DT0102", "DT0014"]) ?>>
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-address-book"></i>
+										<span class="title">Inscripciones</span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102", "DT0014"]) ?>>
+										<?php
+											if(Modulos::validarSubRol(["DT0102"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Listado de inscripciones</span></a></li>
+										<?php }?>
+
+										<?php
+											if(Modulos::validarSubRol(["DT0014"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0014"]) ?>><a href="configuracion-admisiones.php" class="nav-link "> <span class="title">Configuración</span></a></li>
+										<?php }?>
+									</ul>
+								</li>
 							<?php }}?>
 							
 							<?php 
