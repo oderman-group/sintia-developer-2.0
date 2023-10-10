@@ -82,6 +82,12 @@ require_once("../class/Grupos.php");
 	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
 	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="./../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
+
+	<!-- libreria de animate.style -->
+	<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+	/>
 	
 	<?php 
 	//SE INCLUYE PARA EL FORMULARIO QUE SOLICITA LOS DATOS
