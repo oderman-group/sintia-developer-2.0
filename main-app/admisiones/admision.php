@@ -26,18 +26,19 @@ $num = $grados->rowCount();
         <div class="row justify-content-md-center">
             <div class="col col-lg-12">
                 <!-- Button trigger modal -->
+                
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Tutorial proceso de admisión</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Políticas</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <iframe width="100%" height="315" src="https://www.youtube.com/embed/ln-hLu0cBJc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <?=$datosConfig['cfgi_politicas_texto'];?>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -46,13 +47,23 @@ $num = $grados->rowCount();
                     </div>
                 </div>
                 <div class="jumbotron">
-                    <h1 class="display-5">Hola, bienvenido!</h1>
+                    <h1 class="display-5" data-target="#exampleModal">Hola, bienvenido!</h1>
                     <p class="lead">
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <hr class="my-4">
                     <p><?=$datosConfig['cfgi_texto_inicial'];?></p>
                 </div>
+
+                <?php
+                if(!empty($datosConfig['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'])){?>
+                    <div class="row mb-1 mt-1">
+                        <div class="col-sm-12">
+                            <img class="img-responsive" src="<?='../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'];?>" width="100%">
+                        </div>
+                    </div>
+                <?php }?>
+
                 <hr class="my-4">
                 <?php include("alertas.php"); ?>
                 <h3 style="text-align: center;">REGISTRO INICIAL</h3>
@@ -124,7 +135,11 @@ $num = $grados->rowCount();
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gridCheck" required>
                             <label class="form-check-label" for="gridCheck">
-                                Autorizo al tratamiento de datos personales. <a href="politica_datos.pdf" style="text-decoration: underline;" target="_blank">Leer política de tratamiento</a>
+                                Autorizo al tratamiento de datos personales. 
+                                <?php
+                                if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'])){?>
+                                    <a href="../files/imagenes-generales/<?=$datosConfig['cfgi_politicas_adjunto'];?>" style="text-decoration: underline;" target="_blank">Leer política de tratamiento</a>
+                                <?php }?>
                             </label>
                         </div>
                     </div>
