@@ -47,7 +47,7 @@ $num = $grados->rowCount();
                     </div>
                 </div>
                 <div class="jumbotron">
-                    <h1 class="display-5" data-target="#exampleModal">Hola, bienvenido!</h1>
+                    <h1 class="display-5">Hola, bienvenido!</h1>
                     <p class="lead">
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
