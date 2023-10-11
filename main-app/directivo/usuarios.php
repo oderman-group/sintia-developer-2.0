@@ -139,6 +139,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													$contReg = 1;
 													$bloqueado = array("NO","SI");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														if($resultado['uss_tipo']== TIPO_DEV && $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO){
+															continue;
+														}
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
 														$objetoEnviar = htmlentities($arrayDatos);
@@ -205,11 +208,11 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
+																		
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
-																		<?php }?>	
+																			
 
-																		<?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
+																		<?php if($resultado['uss_tipo'] != TIPO_DEV and $resultado['uss_tipo'] != TIPO_DIRECTIVO){?>
 																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
 																		<?php }?>
 																		
