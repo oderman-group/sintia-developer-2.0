@@ -139,7 +139,7 @@
             <script
                 src="https://checkout.epayco.co/checkout.js"
                 class="epayco-button"
-                data-epayco-test="true"
+                data-epayco-test="<?=EPAYCO_TEST;?>"
                 data-epayco-external="true"
                 data-epayco-autoclick="true"
                 data-epayco-button="<?=REDIRECT_ROUTE?>/sintia-logo-2023.png"

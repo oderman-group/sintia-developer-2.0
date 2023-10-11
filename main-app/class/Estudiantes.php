@@ -214,8 +214,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este estudiante no existe: ".$estudianteIdUsuario;
-                exit();
+                return $resultado;
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {

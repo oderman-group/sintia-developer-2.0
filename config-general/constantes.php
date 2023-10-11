@@ -47,16 +47,19 @@ switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
         define('BD_PREFIX', 'odermangroup_');
+        define('EPAYCO_TEST', 'TRUE');
 	break;
 
 	case 'TEST':
 	include(ROOT_PATH."/conexion-datos-developer.php");
         define('BD_PREFIX', 'mobiliar_');
+        define('EPAYCO_TEST', 'FALSE');
 	break;
 
         case 'PROD':
         include(ROOT_PATH."/conexion-datos-production.php");
         define('BD_PREFIX', 'mobiliar_');
+        define('EPAYCO_TEST', 'FALSE');
         break;
 
         default:
