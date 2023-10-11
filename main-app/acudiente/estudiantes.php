@@ -118,6 +118,7 @@ require_once("../class/Estudiantes.php");
                                                     <tr>
                                                         <th>#</th>
                                                         <th><?=$frases[186][$datosUsuarioActual[8]];?></th>
+														<th>ID Mat.</th>
 														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
 														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
@@ -139,14 +140,10 @@ require_once("../class/Estudiantes.php");
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-                                                        <td>
-                                                        	<?php 
-                                                        	echo $resultado['uss_usuario'];
-                                                        	?>
-                                                        	
-                                                        </td>
+                                                        <td><?php echo $resultado['uss_usuario'];?></td>
+														<td><?php echo $resultado['mat_id'];?></td>
 														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
-														<td><?=$genero[1];?></td>
+														<td><?php if(!empty($genero[1])) echo $genero[1];?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td>
 															<?php 
@@ -166,19 +163,22 @@ require_once("../class/Estudiantes.php");
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
 																		  
-																	  		<?php if($config['conf_calificaciones_acudientes']==1){?>
-																				<?php if($config['conf_sin_nota_numerica']!=1){?>
-																						<li><a href="periodos-resumen.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																	  		<?php 
+																			if(!empty($resultado['mat_id_usuario'])) {
+																				if( $config['conf_calificaciones_acudientes']==1 ){?>
+																					<?php if($config['conf_sin_nota_numerica']!=1){?>
+																							<li><a href="periodos-resumen.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																					<?php }?>
+																					<li><a href="notas-actuales.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
 																				<?php }?>
-																				<li><a href="notas-actuales.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
-																			<?php }?>
 
-																		  <li><a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[105][$datosUsuarioActual[8]];?></a></li>
-																		  <li><a href="aspectos.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($config[2]);?>"><?=$frases[264][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[105][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="aspectos.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($config[2]);?>"><?=$frases[264][$datosUsuarioActual[8]];?></a></li>
+																		  <?php }?>
 																		  
 																		<?php 
 																			if($config['conf_permiso_descargar_boletin'] == 1){
-																				if($aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
+																				if(!empty($aspectos1["dn_aprobado"]) && !empty($aspectos["dn_aprobado"]) && $aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																		?>
 																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank" ><?=$frases[267][$datosUsuarioActual[8]];?></a></li>
 
@@ -190,11 +190,11 @@ require_once("../class/Estudiantes.php");
 																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>&acu=1" target="_blank" ><?=$frases[265][$datosUsuarioActual[8]];?></a></li>
 																		  <?php }
 
-																		  if($config['conf_ficha_estudiantil']==1){?>
+																		  if( $config['conf_ficha_estudiantil']==1 && !empty($resultado['mat_id_usuario']) ){?>
 																		  	<li><a href="ficha-estudiantil.php?idR=<?=base64_encode($resultado["mat_id_usuario"]);?>"><?=$frases[266][$datosUsuarioActual[8]];?></a></li>
 																		  <?php }?>
 
-																		  <?php if(!isset($_SESSION['admin'])){?>
+																		  <?php if( !isset($_SESSION['admin']) && !empty($resultado['mat_id_usuario']) ){?>
 																		  	<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>">Autologin</a></li>
 																		  <?php }?>
 
