@@ -78,6 +78,10 @@ class Modulos {
     public static function validarSubRol($paginas){
         global $conexion, $baseDatosServicios, $datosUsuarioActual, $config;
 
+        if ($datosUsuarioActual['uss_tipo'] == TIPO_DEV) { 
+            return true;
+        }
+
         try{
             $consultaSubRoles = mysqli_query($conexion, "SELECT spu_id_sub_rol FROM ".$baseDatosServicios.".sub_roles_usuarios 
             WHERE spu_id_usuario='".$datosUsuarioActual['uss_id']."' AND spu_institucion='".$config['conf_id_institucion']."'");
