@@ -62,19 +62,18 @@ if(!Modulos::validarPermisoEdicion()){
 						
                         <div class="col-sm-12">
                                 
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
+                                <div class="panel-body">
 
-                                   
 									<form name="formularioGuardar" action="configuracion-admisiones-guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="<?=$cfg['cfgi_id'];?>">
-                                    <input type="hidden" name="cfgi_politicas_adjunto" value="<?=$cfg['cfgi_politicas_adjunto'];?>">
-                                    <input type="hidden" name="cfgi_banner_inicial" value="<?=$cfg['cfgi_banner_inicial'];?>">
+                                        <input type="hidden" name="id" value="<?=$cfg['cfgi_id'];?>">
+                                        <input type="hidden" name="cfgi_politicas_adjunto" value="<?=$cfg['cfgi_politicas_adjunto'];?>">
+                                        <input type="hidden" name="cfgi_banner_inicial" value="<?=$cfg['cfgi_banner_inicial'];?>">
 
-                                    <p class="h3">General</p>
-										
-									<div class="form-group row">
+                                        <p class="h3">General</p>
+
+                                        <div class="form-group row">
 											<label class="col-sm-2 control-label">Año Actual</label>
 											<div class="col-sm-8">
 												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg['cfgi_year'];?>" readonly <?=$disabledPermiso;?>>
@@ -87,9 +86,7 @@ if(!Modulos::validarPermisoEdicion()){
 												<input type="number" name="valorInscripcion" class="form-control col-sm-2" value="<?=$cfg['cfgi_valor_inscripcion'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
-										
 
-										
                                         <p class="h3">Estilos y apariencia</p>
 
 										<div class="form-group row">
@@ -105,7 +102,7 @@ if(!Modulos::validarPermisoEdicion()){
 												<input type="color" style="margin-top: 20px;" name="colorTexto" class="col-sm-1" value="<?=$cfg['cfgi_color_texto'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
-										
+
                                         <p class="h3">Otras</p>
 
 										<div class="form-group row">
@@ -152,15 +149,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 <input type="checkbox" name="mostrarBanner" <?=$check?>>
                                                                 <span class="slider red round"></span>
                                                             </label>
-														    <label class="col-sm-2 control-label">Mostrar Banner?</label>
+                                                            <label class="col-sm-2 control-label">Mostrar Banner?</label>
                                                         </div>
                                                     </div>
                                                 <?php }?>
 											</div>
 										</div>
 
-                                        
-										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Texto informativo inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es un texto informativo que verán los usuarios al momento de hacer la inscripción."><i class="fa fa-question"></i></button></label>
 											<div class="col-sm-10">
@@ -181,8 +176,6 @@ if(!Modulos::validarPermisoEdicion()){
 											</div>
 										</div>
 
-                                        
-
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Texto sobre las Políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto lo podrán leer los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-question"></i></button></label>
 											<div class="col-sm-10">
@@ -190,21 +183,25 @@ if(!Modulos::validarPermisoEdicion()){
 											</div>
 										</div>
 
-                                        
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Que mostrar en politicas?<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoge si deseas mostrar el documento adjunto o el texto."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-2">
+                                                <select class="form-control  select2" name="mostrarPoliticas" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['cfgi_mostrar_politicas']==1){ echo "selected";} ?>>Archivo sobre politicas</option>
+                                                    <option value="2" <?php if($cfg['cfgi_mostrar_politicas']==2){ echo "selected";} ?>>Texto sobre politicas</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                         <?php }?>
                                     </form>
                                 </div>
                             </div>
                         </div>
-						
                     </div>
-
                 </div>
-                <!-- end page content -->
-             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
