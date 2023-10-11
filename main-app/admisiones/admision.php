@@ -56,7 +56,7 @@ $num = $grados->rowCount();
                 </div>
 
                 <?php
-                if(!empty($datosConfig['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'])){?>
+                if($datosConfig['cfgi_mostrar_banner']==1 && !empty($datosConfig['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'])){?>
                     <div class="row mb-1 mt-1">
                         <div class="col-sm-12">
                             <img class="img-responsive" src="<?='../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'];?>" width="100%">
