@@ -346,6 +346,20 @@ if (!empty($_POST["id"])) {
 			}
 		}
 
+		if (!empty($_FILES['firmaDigital']['name'])) {
+			$archivoSubido->validarArchivo($_FILES['firmaDigital']['size'], $_FILES['firmaDigital']['name']);
+			$explode=explode(".", $_FILES['firmaDigital']['name']);
+			$extension = end($explode);
+			$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_firma_') . "." . $extension;
+			$destino = "../files/fotos";
+			move_uploaded_file($_FILES['firmaDigital']['tmp_name'], $destino . "/" . $archivo);
+			try{
+				mysqli_query($conexion, "UPDATE usuarios SET uss_firma='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+			} catch (Exception $e) {
+				include("../compartido/error-catch-to-report.php");
+			}
+		}
+
 		if (!empty($_FILES['fotoPerfil']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['fotoPerfil']['size'], $_FILES['fotoPerfil']['name']);
 			$explode=explode(".", $_FILES['fotoPerfil']['name']);
@@ -373,20 +387,6 @@ if (!empty($_POST["id"])) {
 				include("../compartido/guardar-historial-acciones.php");
 				echo '<script type="text/javascript">window.location.href="' .$destinos. 'perfil-recortar-foto.php?ancho=' . base64_encode($ancho) . '&alto=' . base64_encode($alto) . '&ext=' . base64_encode($extension) . '";</script>';
 				exit();
-			}
-		}
-
-		if (!empty($_FILES['firmaDigital']['name'])) {
-			$archivoSubido->validarArchivo($_FILES['firmaDigital']['size'], $_FILES['firmaDigital']['name']);
-			$explode=explode(".", $_FILES['firmaDigital']['name']);
-			$extension = end($explode);
-			$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_firma_') . "." . $extension;
-			$destino = "../files/fotos";
-			move_uploaded_file($_FILES['firmaDigital']['tmp_name'], $destino . "/" . $archivo);
-			try{
-				mysqli_query($conexion, "UPDATE usuarios SET uss_firma='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
 			}
 		}
 
