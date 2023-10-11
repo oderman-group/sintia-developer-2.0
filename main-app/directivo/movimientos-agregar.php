@@ -82,7 +82,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="text" name="valor" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
+														<input type="number" name="valor" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
 													</div>
 											</div>
 										
