@@ -15,6 +15,9 @@ $archivoSubido = new Archivos;
 
 if(empty($_POST["valorInscripcion"])) {$_POST["valorInscripcion"] = 0;}
 
+$mostrarBanner=0;
+if(!empty($_POST["mostrarBanner"])) {$mostrarBanner=1;}
+
 $archivo = $_POST["cfgi_politicas_adjunto"];
 if (!empty($_FILES['politicasArchivo']['name'])) {
 	$archivoSubido->validarArchivo($_FILES['politicasArchivo']['size'], $_FILES['politicasArchivo']['name']);
@@ -46,7 +49,8 @@ try {
 	cfgi_politicas_adjunto='" . $archivo . "',
 	cfgi_banner_inicial='" . $bannerInicio . "',
 	cfgi_activar_boton_pagar_prematricula='" . $_POST["habilitarPagoPrematricula"] . "',
-	cfgi_link_boton_pagar_prematricula='" . $_POST["linkPagoPrematricula"] . "'
+	cfgi_link_boton_pagar_prematricula='" . $_POST["linkPagoPrematricula"] . "',
+	cfgi_mostrar_banner='" . $mostrarBanner . "'
 	WHERE cfgi_id='".$_POST["id"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
