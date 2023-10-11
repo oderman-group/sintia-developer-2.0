@@ -98,7 +98,7 @@ if($resultado['fcu_anulado'] == 1) {
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
+														<input type="number" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
 													</div>
 											</div>
 										
