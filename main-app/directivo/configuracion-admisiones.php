@@ -173,7 +173,10 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="col-sm-8">
 												<input type="file" name="politicasArchivo" class="form-control col-sm-6" <?=$disabledPermiso;?>>
                                                 <?php if(!empty($cfg['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$cfg['cfgi_politicas_adjunto'])){?>
-                                                    <div style="padding:10px;"><a href="../files/imagenes-generales/<?=$cfg['cfgi_politicas_adjunto'];?>" target="_blank"><?=$cfg['cfgi_politicas_adjunto'];?></a></div>
+                                                    <div style="padding:10px;">
+                                                        <a href="../files/imagenes-generales/<?=$cfg['cfgi_politicas_adjunto'];?>" target="_blank"><?=$cfg['cfgi_politicas_adjunto'];?></a>
+                                                        <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Va a eliminar este archivo. Esta acción es irreversible. Desea continuar?','question','configuracion-eliminar-politicas.php?id=<?=base64_encode($cfg['cfgi_id']);?>&archivo=<?=base64_encode($cfg['cfgi_politicas_adjunto']);?>')" style="margin-left:20px;" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="right" title="Eliminar archivo de politicas.">X</a>
+                                                    </div>
                                                 <?php }?>
 											</div>
 										</div>
