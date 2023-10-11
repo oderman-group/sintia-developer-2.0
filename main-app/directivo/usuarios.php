@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0126';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once '../class/Estudiantes.php';
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -142,6 +143,29 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														if($resultado['uss_tipo']== TIPO_DEV && $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO){
 															continue;
 														}
+
+														$mostrarNumAcudidos = '';
+														if( $resultado['uss_tipo'] == TIPO_ACUDIENTE ) {
+															try{
+																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes
+																INNER JOIN academico_matriculas ON mat_id=upe_id_estudiante
+																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+															$num = mysqli_num_rows($consultaUsuarioAcudiente);
+															
+															$mostrarNumAcudidos = '<br><span style="font-size:9px; color:darkblue">('.$num.' Acudidos)</span>';
+														}
+
+														$backGroundMatricula = '';
+														if($resultado['uss_tipo']== TIPO_ESTUDIANTE) {
+															$tieneMatricula = Estudiantes::obtenerDatosEstudiantePorIdUsuario($resultado['uss_id']);
+															if(empty($tieneMatricula)) {
+																$backGroundMatricula = 'style="background-color:gold;" class="animate__animated animate__pulse animate__delay-2s" data-toggle="tooltip" data-placement="right" title="Este supuesto estudiante no cuenta con un registro en las matrículas."';
+															}
+														}
+
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
 														$objetoEnviar = htmlentities($arrayDatos);
@@ -209,18 +233,23 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
 																		
+																		<?php
+																		if(($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula)) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
+																		?>
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
 																			
 
-																		<?php if($resultado['uss_tipo'] != TIPO_DEV and $resultado['uss_tipo'] != TIPO_DIRECTIVO){?>
-																		<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
+																		<?php if($resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO){
+																				if($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
+																		?>
+																					<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
 																		<?php }?>
 																		
 																		<?php if($resultado['uss_tipo']==3){?>
 																			<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
 																		<?php }?>
 
-																		<?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
+																		<?php if( (!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) ){?>
 																			<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
 																		<?php }?>
 																	<?php }?>
