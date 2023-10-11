@@ -30,6 +30,13 @@ define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');
 define('SOLICITUD_CANCELACION_APROBADO', 'Aprobado');
 define('SOLICITUD_CANCELACION_CANCELADO', 'Cancelado');
 
+
+define('CHAT_TIPO_MENSAJE', 1);
+define('CHAT_TIPO_IMAGEN', 2);
+define('CHAT_TIPO_DOCUMENTO', 3);
+define('CHAT_TIPO_AUDIO', 4);
+
+
 /* TIPOS DE USUARIO DE LA PLATAFORMA */
 define('TIPO_DEV', 1);
 define('TIPO_DOCENTE', 2);
