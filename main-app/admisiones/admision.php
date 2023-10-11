@@ -137,8 +137,22 @@ $num = $grados->rowCount();
                             <label class="form-check-label" for="gridCheck">
                                 Autorizo al tratamiento de datos personales. 
                                 <?php
-                                if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'])){?>
-                                    <a href="../files/imagenes-generales/<?=$datosConfig['cfgi_politicas_adjunto'];?>" style="text-decoration: underline;" target="_blank">Leer política de tratamiento</a>
+                                    if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'])){
+                                        switch($datosConfig['cfgi_mostrar_politicas']){
+                                            case 1:
+                                                $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                            break;
+
+                                            case 2:
+                                                $enlace='href="javascript:void(0);" onClick="mostrarPoliticas()"';
+                                            break;
+
+                                            default:
+                                            $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                            break;
+                                        }
+                                ?>
+                                    <a <?=$enlace?> style="text-decoration: underline;">Leer política de tratamiento</a>
                                 <?php }?>
                             </label>
                         </div>
@@ -158,6 +172,11 @@ $num = $grados->rowCount();
             </div>
         </div>
     </div>
+    <script>
+        function mostrarPoliticas(){
+            $("#exampleModal").modal("show");
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
