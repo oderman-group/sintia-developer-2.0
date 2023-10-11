@@ -33,11 +33,11 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
     <b>Rama GIT:</b>&nbsp;<?php echo $ramaActual;?>&nbsp;|&nbsp;
     <b>ID Inst:</b>&nbsp;<?php echo $config['conf_id_institucion'];?>&nbsp;|&nbsp;
     <b>Id pagina:</b>&nbsp;<?php echo $idPaginaInterna;?>&nbsp;|&nbsp;
-    <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
+    <!-- <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp; -->
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
 		<b>V PHP:&nbsp;</b> <?=phpversion(); ?>&nbsp;|&nbsp; 
 		<b>Host:&nbsp;</b> <?=$_SERVER['HTTP_HOST']." (".http_response_code().")"; ?>&nbsp;|&nbsp;
-    <b>Peso página:&nbsp;</b> <?php echo number_format(filesize($nombre_fichero)) . ' bytes'; ?>&nbsp;|&nbsp;
+    <!-- <b>Peso página:&nbsp;</b> <?php echo number_format(filesize($nombre_fichero)) . ' bytes'; ?>&nbsp;|&nbsp; -->
     <b>ENV:&nbsp;</b> <?=ENVIROMENT;?>&nbsp;|&nbsp;
 
     <?php if( isset($_SESSION['admin']) ){?>

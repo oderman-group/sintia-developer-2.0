@@ -6,7 +6,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
-<?php Modulos::verificarPermisoDirectivoEspecial(); ?>
 <?php include("../compartido/head.php"); ?>
 
 <!--bootstrap -->
