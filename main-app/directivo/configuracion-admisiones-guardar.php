@@ -50,7 +50,8 @@ try {
 	cfgi_banner_inicial='" . $bannerInicio . "',
 	cfgi_activar_boton_pagar_prematricula='" . $_POST["habilitarPagoPrematricula"] . "',
 	cfgi_link_boton_pagar_prematricula='" . $_POST["linkPagoPrematricula"] . "',
-	cfgi_mostrar_banner='" . $mostrarBanner . "'
+	cfgi_mostrar_banner='" . $mostrarBanner . "',
+	cfgi_mostrar_politicas='" . $_POST["mostrarPoliticas"] . "'
 	WHERE cfgi_id='".$_POST["id"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
