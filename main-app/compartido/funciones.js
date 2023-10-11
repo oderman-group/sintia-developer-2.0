@@ -7,26 +7,32 @@ function hayInternet() {
     if(navigator.onLine) {
 
 		if(localStorage.getItem("internet") == 0){
-			document.getElementById("siInternet").style.display="block";
+            if ( document.getElementById( "siInternet" )) {
+                document.getElementById("siInternet").style.display="block";
 
-            Swal.fire({
-                title: 'AVISPATE que la conexión ha vuelto!', 
-                text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
-                icon: 'success',
-                backdrop: `
-                    rgba(55,55,55,0.4)
-                    url("https://media.giphy.com/media/IwTWTsUzmIicM/giphy.gif")
-                    left top
-                    no-repeat
-                `
-            });
+                Swal.fire({
+                    title: 'AVISPATE que la conexión ha vuelto!', 
+                    text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
+                    icon: 'success',
+                    backdrop: `
+                        rgba(55,55,55,0.4)
+                        url("https://media.giphy.com/media/IwTWTsUzmIicM/giphy.gif")
+                        left top
+                        no-repeat
+                    `
+                });
+            }
 
 		}
 
 		localStorage.setItem("internet", 1);
-		document.getElementById("noInternet").style.display="none";
+        if ( document.getElementById( "noInternet" )) {
+            document.getElementById("noInternet").style.display="none";
+         };
         setTimeout(function() {
+            if ( document.getElementById( "siInternet" )) {
             document.getElementById("siInternet").style.display="none";
+             };
         }, 10000);
         
 
