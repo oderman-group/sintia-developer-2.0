@@ -176,14 +176,16 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$cheked = '';
 														if($resultado['uss_bloqueado']==1){$cheked = 'checked';}
 
-														try{
-															$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$numCarga = mysqli_num_rows($consultaNumCarga);
+														
 														$mostrarNumCargas = '';
-														if( $resultado['uss_tipo']==2 ) {
+														if( $resultado['uss_tipo'] == TIPO_DOCENTE ) {
+															try{
+																$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+															$numCarga = mysqli_num_rows($consultaNumCarga);
+															
 															$mostrarNumCargas = '<br><span style="font-size:9px; color:darkblue">('.$numCarga.' Cargas)</span>';
 														}
 
@@ -218,7 +220,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=$resultado['pes_nombre']."".$mostrarNumCargas;?></td>
+														<td <?=$backGroundMatricula;?>><?=$resultado['pes_nombre']."".$mostrarNumCargas."".$mostrarNumAcudidos;?></td>
 														<td>
 															<?=$resultado['uss_estado'];?><br>
 															<span style="font-size: 11px;"><?=$resultado['uss_ultimo_ingreso'];?></span>
@@ -237,15 +239,19 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		if(($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula)) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
 																		?>
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
+																		<?php }?>
 																			
 
 																		<?php if($resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO){
 																				if($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
 																		?>
 																					<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
-																		<?php }?>
+																		<?php 
+																				} 
+																		}
+																		?>
 																		
-																		<?php if($resultado['uss_tipo']==3){?>
+																		<?php if($resultado['uss_tipo'] == TIPO_ACUDIENTE){?>
 																			<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
 																		<?php }?>
 
@@ -254,7 +260,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 																	<?php }?>
 																	  
-																	<?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
+																	<?php if($resultado['uss_tipo'] == TIPO_DOCENTE && $numCarga > 0){?>
 																		<li><a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($resultado['uss_id']);?>" target="_blank">Planillas de las cargas</a></li>
 																	<?php }?>
 
