@@ -139,8 +139,22 @@ if(!Modulos::validarPermisoEdicion()){
 											<label class="col-sm-2 control-label">Banner inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si usted desea, puede subir un banner resaltando o mostrando alguna aviso que quiere que vean los usuarios cuando vayan a hacer el proceso de inscripción."><i class="fa fa-question"></i></button></label>
 											<div class="col-sm-8">
 												<input type="file" name="bannerInicio" class="form-control col-sm-6" <?=$disabledPermiso;?>>
-                                                <?php if(!empty($cfg['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$cfg['cfgi_banner_inicial'])){?>
-                                                    <div style="padding:10px;"><img src="../files/imagenes-generales/<?=$cfg['cfgi_banner_inicial'];?>" width="300" /></div>
+                                                <?php
+                                                    if(!empty($cfg['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$cfg['cfgi_banner_inicial'])){
+                                                        $activa=empty($cfg['cfgi_mostrar_banner']) ?"0":"1"; $check=($activa=="0")?"":"checked";
+                                                ?>
+                                                    <div class="input-group col-sm-6">
+                                                        <div style="padding:10px; width: 70%">
+                                                            <img src="../files/imagenes-generales/<?=$cfg['cfgi_banner_inicial'];?>" width="100%" />
+                                                        </div>
+                                                        <div class="input-group spinner" style="width: 30%; align-items: center;">
+                                                            <label class="switchToggle">
+                                                                <input type="checkbox" name="mostrarBanner" <?=$check?>>
+                                                                <span class="slider red round"></span>
+                                                            </label>
+														    <label class="col-sm-2 control-label">Mostrar Banner?</label>
+                                                        </div>
+                                                    </div>
                                                 <?php }?>
 											</div>
 										</div>
