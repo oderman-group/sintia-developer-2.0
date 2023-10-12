@@ -44,6 +44,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 
                                 <?php
                                     $filtro="";
+                                    include("../../config-general/config-admisiones.php");
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
@@ -102,29 +103,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 												</thead>
                                                 <tbody>
                                                 <?php
-												include("includes/consulta-paginacion-inscripciones.php");	
-                                                $estadosSolicitud = [
-                                                1 => 'VERIFICACIÓN DE PAGO',
-                                                2 => 'PAGO RECHAZADO',
-                                                3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-                                                4 => 'EN PROCESO',
-                                                5 => 'EXAMEN Y ENTREVISTA',
-                                                6 => 'APROBADO',
-                                                7 => 'NO APROBADO',
-                                                8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-                                                9 => 'MOVIDO AL AÑO SIGUIENTE'
-                                                ];
-                                                $fondoSolicitud = [
-                                                1 => 'cadetblue',
-                                                2 => '#DB6503',
-                                                3 => 'cadetblue',
-                                                4 => '#AFB372',
-                                                5 => '#AFB372',
-                                                6 => 'green',
-                                                7 => 'red',
-                                                8 => '#DA9E00',
-                                                9 => '#009B7A'
-                                                ];
+												include("includes/consulta-paginacion-inscripciones.php");
                                                 try{
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                                                     INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
