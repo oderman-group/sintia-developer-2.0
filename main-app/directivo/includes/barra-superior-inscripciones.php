@@ -35,6 +35,11 @@ if (!empty($_GET['curso'])) {
   $curso = base64_decode($_GET['curso']);
   $filtro .= " AND asp_grado='".$curso."'";
 }
+$estado = '';
+if (!empty($_GET['estado'])) {
+  $estado = base64_decode($_GET['estado']);
+  $filtro .= " AND asp_estado_solicitud='".$estado."'";
+}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +48,6 @@ if (!empty($_GET['curso'])) {
 
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
@@ -57,7 +61,24 @@ if (!empty($_GET['curso'])) {
             $estiloResaltado = '';
             if ($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=<?= base64_encode($estado); ?>&curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+          <?php } ?>
+          <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+          Filtrar por estado
+          <span class="fa fa-angle-down"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <?php
+            foreach($ordenReal as $clave) {
+            $estiloResaltado = '';
+            if ($clave == $estado) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+          ?>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=<?= base64_encode($clave); ?>&curso=<?= base64_encode($curso); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?=$estadosSolicitud[$clave]?></a>
           <?php } ?>
           <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
