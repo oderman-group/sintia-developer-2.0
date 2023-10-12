@@ -28,7 +28,11 @@ if (empty($_POST["nombre"])) {
 	exit();
 }
 
-$idRegistro=SubRoles::crear($_POST["nombre"],$_POST["paginas"]);	
+$idRegistro=SubRoles::crear($_POST["nombre"],$_POST["paginas"]);
+
+if(!empty($_POST['directivos'])){
+	SubRoles::crearRolesUsuarioMasivos($_POST['directivos'],$idRegistro);
+}
 
 include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="sub-roles.php?success=SC_DT_2&id=' . base64_encode($idRegistro) . '";</script>';
