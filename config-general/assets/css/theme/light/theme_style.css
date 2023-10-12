@@ -1910,7 +1910,7 @@ form.search-form-opened .btn.submit {
     margin: 0;
     padding: 17px 15px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 300
 }
 .sidemenu-container .sidemenu>li>a>i,
@@ -1956,7 +1956,7 @@ form.search-form-opened .btn.submit {
 }
 .sidemenu-container .sidemenu>li.open>a,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.open>a {
-    font-size: 14px
+    font-size: 12px
 }
 .sidemenu-container .sidemenu>li.active>a,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li.active>a {
@@ -2047,13 +2047,13 @@ form.search-form-opened .btn.submit {
     margin: 0;
     padding: 8px 15px 8px 43px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 300;
     background: 0 0
 }
 .sidemenu-container .sidemenu .sub-menu li>a>i,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu .sub-menu li>a>i {
-    font-size: 14px
+    font-size: 12px
 }
 .sidemenu-container .sidemenu .sub-menu li>.sub-menu,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu .sub-menu li>.sub-menu {
@@ -2190,7 +2190,7 @@ form.search-form-opened .btn.submit {
 .sidemenu-container .sidebar-search .input-group .form-control,
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidebar-search .input-group .form-control {
     border: 0;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0;
     height: auto;
     line-height: normal;
