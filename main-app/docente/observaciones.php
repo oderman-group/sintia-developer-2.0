@@ -140,7 +140,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														
-														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?php if(isset($notas)) echo $notas['bol_observaciones'];?></span></td>
+														<td><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?php if(isset($notas)) echo $notas['bol_observaciones'];?></span></td>
 														
 														<td width="25%">
 															

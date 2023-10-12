@@ -55,6 +55,14 @@
 				$bordeDestacado = 'border-light';
 				if( $datosConsulta['prod_destacado'] >= 1 ) {
 					$bordeDestacado = 'border-info rounded-top';
+					
+					if($datosConsulta['prod_destacado'] == 2) {
+						$bordeDestacado .= ' animate__animated animate__flash animate__delay-1s';
+					}
+
+					if($datosConsulta['prod_destacado'] == 3) {
+						$bordeDestacado .= ' animate__animated animate__pulse animate__delay-1s animate__repeat-3';
+					}
 				}
 			?>
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">

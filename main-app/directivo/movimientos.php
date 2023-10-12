@@ -123,7 +123,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td>$<?=number_format($resultado['fcu_valor'],0,",",".");?></td>
+														<td>$<?php if(!empty($resultado['fcu_valor']) && is_numeric($resultado['fcu_valor'])) echo number_format($resultado['fcu_valor'],0,",",".");?></td>
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>

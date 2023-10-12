@@ -10,7 +10,7 @@ function hayInternet() {
 			document.getElementById("siInternet").style.display="block";
 
             Swal.fire({
-                title: 'AVISPATE que la conexión ha vuelto!', 
+                title: 'La conexión ha vuelto!', 
                 text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
                 icon: 'success',
                 backdrop: `
@@ -212,10 +212,8 @@ function deseaEliminar(dato) {
         cancelButtonText: 'No',
         backdrop: `
             rgba(0,0,123,0.4)
-            url("https://media.giphy.com/media/du9tUy0lntYsqGF2Ye/giphy.gif")
-            left top
             no-repeat
-        `
+        `,
     }).then((result) => {
         if (result.isConfirmed) {
             if (typeof id !== "undefined" && id !== "") {
