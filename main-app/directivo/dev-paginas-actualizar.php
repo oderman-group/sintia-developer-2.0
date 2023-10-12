@@ -34,5 +34,5 @@
 	}
     
     include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="dev-paginas.php?success=SC_DT_2&id='.$_POST["codigoPagina"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="dev-paginas.php?success=SC_DT_2&id='.base64_encode($_POST["codigoPagina"]).'";</script>';
     exit();
