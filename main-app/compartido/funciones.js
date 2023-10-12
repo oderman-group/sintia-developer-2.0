@@ -212,10 +212,8 @@ function deseaEliminar(dato) {
         cancelButtonText: 'No',
         backdrop: `
             rgba(0,0,123,0.4)
-            url("https://media.giphy.com/media/du9tUy0lntYsqGF2Ye/giphy.gif")
-            left top
             no-repeat
-        `
+        `,
     }).then((result) => {
         if (result.isConfirmed) {
             if (typeof id !== "undefined" && id !== "") {
