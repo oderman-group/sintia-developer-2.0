@@ -118,6 +118,7 @@ class SubRoles {
         SET subr_nombre='".$setNombre."'
         WHERE subr_id='".$datos["id"]."'";  
         mysqli_query($conexion,$sqlUpdate);
+
         if(!empty($datos["paginas"])){
             try{
                 $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol = '".$datos["id"]."'");
@@ -147,6 +148,42 @@ class SubRoles {
         }else{
             $sqlDelete="DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
             WHERE spp_id_rol='".$datos["id"]."'";
+            try{
+                mysqli_query($conexion,$sqlDelete);
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }
+
+        if(!empty($datos["usuarios"])){
+            try{
+                $consultaUsuariosSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_usuarios WHERE spu_id_sub_rol = '".$datos["id"]."'");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+            $subRolesUsuarios = mysqli_fetch_all($consultaUsuariosSubRoles, MYSQLI_ASSOC);
+            $valoresUsuarios = array_column($subRolesUsuarios, 'spu_id_usuario');
+
+            $resultadoAgregarUsuario= array_diff($datos["usuarios"],$valoresUsuarios);
+            if(!empty($resultadoAgregarUsuario)){
+                try{
+                    self::crearRolesUsuarioMasivos($resultadoAgregarUsuario,$datos["id"]);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }
+
+            $resultadoEliminarUsuario= array_diff($valoresUsuarios,$datos["usuarios"]);
+            if(!empty($resultadoEliminarUsuario)){
+                try{
+                    self::eliminarRolesUsuarioMasivos($datos["id"],$resultadoEliminarUsuario);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }
+        }else{
+            $sqlDelete="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
+            WHERE spu_id_sub_rol='".$datos["id"]."'";
             try{
                 mysqli_query($conexion,$sqlDelete);
             } catch (Exception $e) {
@@ -464,6 +501,80 @@ class SubRoles {
                 }          
             }
         }
+    }
+    /**
+    * Esta función asigna los usuarios al rol de forma masiva
+    *
+    * @param array $idUsuario
+    * @param int $subRoles
+    *
+    * @return int // se retorna el id del registro ingresado    */
+    public static function crearRolesUsuarioMasivos(array $usuarios=[],$subRol){
+        global $conexion, $baseDatosServicios,$config;
+
+        $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_usuarios(spu_id_sub_rol, spu_id_usuario, spu_institucion, spu_year) VALUES";
+
+        foreach ($usuarios as $idUsuario ) {
+            $sqlinsert.="('".$subRol."', '".$idUsuario."', '".$config['conf_id_institucion']."', '".$config['conf_agno']."'),"; 
+        }
+        $sqlinsert = substr($sqlinsert, 0, -1);
+
+        try {
+                mysqli_query($conexion,$sqlinsert);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            exit();
+        }
+        $idRegistro = mysqli_insert_id($conexion);
+        return $idRegistro;
+    }
+
+    /**
+     * Esta función  elimina los registro en la tabla sub_roles_usuarios
+     *
+     * @param int $idSubRol
+     * @param array $usuarios
+     *
+     * @return void
+    **/
+    public static function eliminarRolesUsuarioMasivos($idSubRol,array $usuarios= []){
+        global $conexion, $baseDatosServicios;
+        try {
+            foreach ($usuarios as $idUsuario ) {
+                try{
+                    mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
+                    WHERE spu_id_sub_rol='".$idSubRol."' AND spu_id_usuario='".$idUsuario."'");
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }    
+        }catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+    * Esta función nos valida si ya existe una relación entre el rol y el usuarios
+    *
+    * @param int $idUsuario
+    * @param int $subRoles
+    *
+    */
+    public static function validarExistenciaUsuarioRol($idUsuario,$subRol){
+        global $conexion, $baseDatosServicios,$config;
+
+        try {
+                $existencia=mysqli_query($conexion, "SELECT spu_id FROM ".$baseDatosServicios.".sub_roles_usuarios WHERE spu_id_sub_rol='".$subRol."' AND spu_id_usuario='".$idUsuario."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            exit();
+        }
+
+        $numExistencias = mysqli_num_rows($existencia);
+        if($numExistencias>0){
+            return true;
+        }
+        return false;
     }
 
 }
