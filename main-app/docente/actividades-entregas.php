@@ -78,12 +78,13 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas
-											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$idR."' AND tar_estado=1
+											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$idR."' 
+											AND tar_estado=1
 											ORDER BY tar_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="actividades-entregas.php?idR=<?=$evaComun['tar_id'];?>"><?=$evaComun['tar_nombre'];?></a></p>
+												<p><a href="actividades-entregas.php?idR=<?=base64_encode($evaComun['tar_id']);?>"><?=$evaComun['tar_titulo'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
