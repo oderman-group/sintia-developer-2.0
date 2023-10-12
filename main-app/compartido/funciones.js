@@ -10,7 +10,7 @@ function hayInternet() {
 			document.getElementById("siInternet").style.display="block";
 
             Swal.fire({
-                title: 'AVISPATE que la conexión ha vuelto!', 
+                title: 'La conexión ha vuelto!', 
                 text: 'La conexión a internet ha vuelto. Puedes continuar trabajando en la plataforma.', 
                 icon: 'success',
                 backdrop: `
