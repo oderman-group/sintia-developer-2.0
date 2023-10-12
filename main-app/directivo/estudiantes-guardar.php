@@ -50,7 +50,7 @@ if(empty($_POST["inclusion"]))    $_POST["inclusion"]    = 0;
 //Api solo para Icolven
 $estado='';
 $mensaje='';
-if($config['conf_id_institucion']==1){
+if($config['conf_id_institucion'] == ICOLVEN){
 	require_once("apis-sion-create-student.php");
 }
 $procedencia=$_POST["lNacM"];
@@ -198,38 +198,7 @@ try{
 }
 
 //Insertamos la matrícula
-try{
-	mysqli_query($conexion, "INSERT INTO academico_matriculas(
-		mat_matricula, mat_fecha, mat_tipo_documento, 
-		mat_documento, mat_religion, mat_email, 
-		mat_direccion, mat_barrio, mat_telefono, 
-		mat_celular, mat_estrato, mat_genero, 
-		mat_fecha_nacimiento, mat_primer_apellido, mat_segundo_apellido, 
-		mat_nombres, mat_grado, mat_grupo, 
-		mat_tipo, mat_lugar_nacimiento, mat_lugar_expedicion, 
-		mat_acudiente, mat_estado_matricula, mat_id_usuario, 
-		mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
-		mat_inclusion, mat_extranjero, mat_tipo_sangre, 
-		mat_eps, mat_celular2, mat_ciudad_residencia, 
-		mat_nombre2, mat_estado_agno)
-		VALUES(
-		".$result_numMat.", now(), ".$_POST["tipoD"].",
-		".$_POST["nDoc"].", ".$_POST["religion"].", '".strtolower($_POST["email"])."',
-		'".$_POST["direccion"]."', '".$_POST["barrio"]."', '".$_POST["telefono"]."',
-		'".$_POST["celular"]."', ".$_POST["estrato"].", ".$_POST["genero"].", 
-		'".$_POST["fNac"]."', '".strtoupper($_POST["apellido1"])."', '".strtoupper($_POST["apellido2"])."', 
-		'".strtoupper($_POST["nombres"])."', '".$_POST["grado"]."', '".$_POST["grupo"]."',
-		'".$_POST["tipoEst"]."', '".$procedencia."', '".$_POST["lugarD"]."',
-		".$idAcudiente.", '".$_POST["matestM"]."', '".$idEstudianteU."', 
-		'".$_POST["folio"]."', '".$_POST["codTesoreria"]."', '".$_POST["va_matricula"]."', 
-		'".$_POST["inclusion"]."', '".$_POST["extran"]."', '".$_POST["tipoSangre"]."', 
-		'".$_POST["eps"]."', '".$_POST["celular2"]."', '".$_POST["ciudadR"]."', 
-		'".strtoupper($_POST["nombre2"])."', 3
-		)");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-$idEstudiante = mysqli_insert_id($conexion);
+$idEstudiante = Estudiantes::insertarEstudiantes($conexionPDO, $_POST, $result_numMat, $procedencia, $idAcudiente, $idEstudianteU);
 
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");

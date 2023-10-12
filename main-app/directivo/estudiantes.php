@@ -49,7 +49,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 								<?php include("includes/barra-superior-matriculas.php"); ?>
 
 									<?php
-									if($config['conf_id_institucion']==1){
+									if($config['conf_id_institucion'] == ICOLVEN){
 										if(isset($_GET['msgsion'])){
 											$aler='alert-danger';
 											$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
@@ -199,7 +199,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																	<?php if(Modulos::validarPermisoEdicion()){?>
 																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> matrícula</a></li>
 																		
-																		<?php if($config['conf_id_institucion']==1){ ?>
+																		<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 																			<li><a href="javascript:void(0);" 
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
@@ -250,7 +250,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
 																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	
-																	<?php if($config['conf_id_institucion']==1){ ?>	
+																	<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
 
