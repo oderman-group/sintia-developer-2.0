@@ -61,7 +61,7 @@ require_once("../class/Estudiantes.php");
 
 
 
-								<div class="col-md-6 col-lg-4">
+								<div class="col-md-6 col-lg-3">
 
 								<?php include("info-carga-actual.php"); ?>
 
@@ -75,7 +75,7 @@ require_once("../class/Estudiantes.php");
 
 
 
-							<div class="col-md-12 col-lg-8">
+							<div class="col-md-12 col-lg-9">
 
 								<div class="card card-topline-purple">
 
