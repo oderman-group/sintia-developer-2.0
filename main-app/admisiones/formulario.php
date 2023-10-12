@@ -945,7 +945,7 @@ $datosMadre = $madre->fetch();
 
                     <label class="form-check-label" for="gridCheck">
 
-                        Estoy suficientemente informado del Manual de Convivencia y del Sistema Institucional de Evaluación que rigen en el Instituto Colombo Venezolano, según aparecen en la página web y en caso de ser aceptado me comprometo a acatarlos y cumplirlos fiel y cabalmente.
+                        Estoy suficientemente informado del Manual de Convivencia y del Sistema Institucional de Evaluación que rigen en el <b><?=strtoupper($datosInfo['info_nombre'])?></b>, según aparecen en la página web y en caso de ser aceptado me comprometo a acatarlos y cumplirlos fiel y cabalmente.
 
                     </label>
 
