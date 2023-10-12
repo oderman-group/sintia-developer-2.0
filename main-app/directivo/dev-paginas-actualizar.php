@@ -27,8 +27,10 @@
         exit();
     }
 
+    $paginaDependencia=!empty($_POST["paginaDependencia"])?implode(',',$_POST["paginaDependencia"]):NULL;
+
     try{
-        mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".paginas_publicidad SET pagp_pagina='".$_POST["nombrePagina"]."', pagp_tipo_usuario='".$_POST["tipoUsuario"]."', pagp_modulo='".$_POST["modulo"]."', pagp_ruta='".$_POST["rutaPagina"]."', pagp_palabras_claves='".$_POST["palabrasClaves"]."', pagp_navegable='".$_POST["navegable"]."', pagp_crud='".$_POST["crud"]."', pagp_pagina_padre='".$_POST["paginaPadre"]."', pagp_url_youtube='".$_POST["urlYoutube"]."', pagp_descripcion='".$_POST["descripcion"]."' WHERE pagp_id='".$_POST["codigoPagina"]."'");
+        mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".paginas_publicidad SET pagp_pagina='".$_POST["nombrePagina"]."', pagp_tipo_usuario='".$_POST["tipoUsuario"]."', pagp_modulo='".$_POST["modulo"]."', pagp_ruta='".$_POST["rutaPagina"]."', pagp_palabras_claves='".$_POST["palabrasClaves"]."', pagp_navegable='".$_POST["navegable"]."', pagp_crud='".$_POST["crud"]."', pagp_pagina_padre='".$_POST["paginaPadre"]."', pagp_url_youtube='".$_POST["urlYoutube"]."', pagp_descripcion='".$_POST["descripcion"]."', pagp_paginas_dependencia='".$paginaDependencia."' WHERE pagp_id='".$_POST["codigoPagina"]."'");
     } catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
