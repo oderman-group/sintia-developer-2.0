@@ -348,7 +348,6 @@ function ocultarNoticia(datos) {
 
 /**
  * Esta función crea una publicación rápida
- * @param {Array} datos 
  */
 function crearNoticia() {
 
@@ -360,6 +359,18 @@ function crearNoticia() {
     var idUsuario      = arrayInfo[0];
     var fotoUsuario    = arrayInfo[1]; 
     var nombreUsuario  = arrayInfo[2]; 
+
+    if( campoContenido.value.trim() === '' ) {
+        campoContenido.classList.remove('animate__animated', 'animate__shakeY', 'animate__delay-0.5s');
+        void campoContenido.offsetWidth; // Truco para forzar una reflow (actualización del estilo)
+        campoContenido.classList.add('animate__animated', 'animate__shakeY', 'animate__delay-0.5s');
+        campoContenido.value = '';
+        campoContenido.style.borderColor = "tomato";
+        campoContenido.placeholder = "Escribe algo antes de publicar...";
+        campoContenido.focus();
+
+        return false;
+    }
 
     const url = "../compartido/noticia-rapida-guardar.php?contenido="+campoContenido.value;
 

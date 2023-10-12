@@ -81,16 +81,14 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="offset-md-3 col-md-9">
+                                <div class="offset-md-5 col-md-7">
                                     <button 
                                         type="button"
-                                        class="btn btn-info"
+                                        class="btn deepPink-bgcolor"
                                         onClick="crearNoticia()"
                                     >
                                         <?=$frases[170][$datosUsuarioActual[8]];?>
                                     </button>
-                                    <button type="reset"
-                                        class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
                                 </div>
                             </div>
                         </form>
