@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/SubRoles.php");
+require_once("../class/Paginas.php");
 
 $idPaginaInterna = 'DV0017';
 
@@ -181,6 +182,22 @@ include("../compartido/head.php");
                                                     while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
                                                         echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
                                                     }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Paginas de Dependencia</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control  select2" multiple name="paginaDependencia[]" id="paginaDependencia">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                        $filtro="AND pagp_tipo_usuario=5";
+                                                        $consultaPaginas = Paginas::listarPaginas($filtro);
+                                                        while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                            echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                        }
                                                     ?>
                                                 </select>
                                             </div>
