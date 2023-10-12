@@ -43,32 +43,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 								<div class="col-md-12">
 
                                 <?php
-                                    $estadosSolicitud = [
-                                    1 => 'VERIFICACIÓN DE PAGO',
-                                    2 => 'PAGO RECHAZADO',
-                                    3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-                                    4 => 'EN PROCESO',
-                                    5 => 'EXAMEN Y ENTREVISTA',
-                                    6 => 'APROBADO',
-                                    7 => 'NO APROBADO',
-                                    8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-                                    9 => 'MOVIDO AL AÑO SIGUIENTE'
-                                    ];
-
-                                    $ordenReal = [8, 4, 3, 5, 1, 2, 6, 7, 9];
-                                    
-                                    $fondoSolicitud = [
-                                    1 => 'cadetblue',
-                                    2 => '#DB6503',
-                                    3 => 'cadetblue',
-                                    4 => '#AFB372',
-                                    5 => '#AFB372',
-                                    6 => 'green',
-                                    7 => 'red',
-                                    8 => '#DA9E00',
-                                    9 => '#009B7A'
-                                    ];
                                     $filtro="";
+                                    include("../../config-general/config-admisiones.php");
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
