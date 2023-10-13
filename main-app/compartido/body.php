@@ -10,7 +10,15 @@ $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md <?=$datosUsuarioActual['uss_tema_header'];?> <?=$datosUsuarioActual['uss_tema_sidebar'];?> 
 			 <?=$datosUsuarioActual['uss_tema_logo'];?>"> <!-- chat-sidebar-open-->
 	
-	
+  <script>
+		var urlApi = 'http://localhost:3000';
+		var socket = io(urlApi, {
+			transports: ['websocket', 'polling', 'flashsocket']
+		});
+		var chat_remite_usuario = <?php echo $idSession ?>;
+		socket.emit('join', "sala_" + chat_remite_usuario);
+		
+	</script>
 <div class="loader"></div>
 
 <div id="overlay">
