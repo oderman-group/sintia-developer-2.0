@@ -132,7 +132,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox" class="check" onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>">
+                                                                            <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>">
                                                                             <span class="slider red round"></span>
                                                                         </label>
                                                                     </div>
@@ -233,6 +233,29 @@ $listaPaginas = SubRoles::listarPaginas();
         var cantidadSeleccionadas = select.selectedOptions.length;
         labelCant.textContent =cantidadSeleccionadas;
     }  
+
+    function validarPaginasDependencia(datosPagina) {
+        var id = datosPagina.value;
+        var dependencias = datosPagina.id;
+        if(dependencias.length>0 && datosPagina.checked){
+            Swal.fire({
+                title: 'Desea continuar?',
+                text: "Esta pagina tiene otras paginas de dependencia que se añadirán automáticamente a este rol.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, deseo continuar!',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    seleccionarPagina(datosPagina);
+                }else{
+                    datosPagina.checked=false;
+                }
+            });
+        }else{
+            seleccionarPagina(datosPagina);
+        }
+    }
 </script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
