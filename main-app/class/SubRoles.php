@@ -46,17 +46,21 @@ class SubRoles {
         $idRegistro = -1;        
         try {
             foreach ($paginas as $page ) {
-                $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
-                    spp_id_rol, 
-                    spp_id_pagina
-                 )
-                VALUES(
-                    '".$idSubRol."',
-                    '".$page."'                        
-                )";
-                mysqli_query($conexion,$sqlinsert);
-                $idRegistro = mysqli_insert_id($conexion);
-                self::guardarPaginasHijasSubRol($idSubRol,$page);                   
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page);
+                if($paginaSubrol){
+                    $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
+                        spp_id_rol, 
+                        spp_id_pagina
+                    )
+                    VALUES(
+                        '".$idSubRol."',
+                        '".$page."'                        
+                    )";
+                    mysqli_query($conexion,$sqlinsert);
+                    $idRegistro = mysqli_insert_id($conexion);
+                    self::guardarPaginasHijasSubRol($idSubRol,$page);
+                    self::guardarPaginasDependecias($idSubRol,$page);
+                }
             }                  
             
         } catch (Exception $e) {
@@ -435,16 +439,22 @@ class SubRoles {
             )
             VALUES";
             foreach ($arrayPaginasHijas as $page ) {
-                $sqlinsert.="(
-                    '".$idSubRol."',
-                    '".$page."'                        
-                ),";             
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page);
+                if($paginaSubrol){
+                    $sqlinsert.="(
+                        '".$idSubRol."',
+                        '".$page."'                        
+                    ),";    
+                }
             }
-            $sqlinsert = substr($sqlinsert, 0, -1);
-            try{
-                mysqli_query($conexion,$sqlinsert);
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
+            $sqlCompleta=explode('VALUES',$sqlinsert);
+            if(!empty($sqlCompleta[1])){
+                $sqlinsert = substr($sqlinsert, 0, -1);
+                try{
+                    mysqli_query($conexion,$sqlinsert);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
             }
         }
     }
