@@ -11,7 +11,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.academico_grados(gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado)SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM $bdAnterior.academico_grados");
+			mysqli_query($conexion, "INSERT INTO $bd.academico_grados SELECT * FROM $bdAnterior.academico_grados");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -23,7 +23,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.academico_areas(ar_id, ar_nombre, ar_posicion)SELECT ar_id, ar_nombre, ar_posicion FROM $bdAnterior.academico_areas");
+			mysqli_query($conexion, "INSERT INTO $bd.academico_areas SELECT * FROM $bdAnterior.academico_areas");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -35,7 +35,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.academico_materias(mat_id, mat_codigo, mat_nombre, mat_siglas, mat_area)SELECT mat_id, mat_codigo, mat_nombre, mat_siglas, mat_area FROM $bdAnterior.academico_materias");
+			mysqli_query($conexion, "INSERT INTO $bd.academico_materias SELECT * FROM $bdAnterior.academico_materias");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -47,7 +47,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, uss_fecha_registro, uss_responsable_registro) SELECT uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, uss_fecha_registro, uss_responsable_registro FROM $bdAnterior.usuarios WHERE uss_id !=1");
+			mysqli_query($conexion, "INSERT INTO $bd.usuarios SELECT * FROM $bdAnterior.usuarios WHERE uss_id !=1");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -59,7 +59,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.academico_matriculas(mat_id, mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, mat_genero, mat_fecha_nacimiento, mat_lugar_nacimiento, mat_tipo_documento, mat_documento, mat_lugar_expedicion, mat_religion, mat_direccion, mat_barrio, mat_telefono, mat_celular, mat_estrato, mat_foto, mat_tipo, mat_estado_matricula, mat_id_usuario, mat_eliminado, mat_email, mat_acudiente, mat_privilegio1, mat_privilegio2, mat_privilegio3, mat_uso_sintia, mat_inicio, mat_meses, mat_fin, mat_folio, mat_codigo_tesoreria) SELECT mat_id, mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, mat_genero, mat_fecha_nacimiento, mat_lugar_nacimiento, mat_tipo_documento, mat_documento, mat_lugar_expedicion, mat_religion, mat_direccion, mat_barrio, mat_telefono, mat_celular, mat_estrato, mat_foto, mat_tipo, mat_estado_matricula, mat_id_usuario, mat_eliminado, mat_email, mat_acudiente, mat_privilegio1, mat_privilegio2, mat_privilegio3, mat_uso_sintia, mat_inicio, mat_meses, mat_fin, mat_folio, mat_codigo_tesoreria FROM $bdAnterior.academico_matriculas");
+			mysqli_query($conexion, "INSERT INTO $bd.academico_matriculas SELECT * FROM $bdAnterior.academico_matriculas");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -71,7 +71,7 @@ try {
 		
 		//TODOS LOS USUARIOS POR ESTUDIANTES
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante) SELECT upe_id, upe_id_usuario, upe_id_estudiante FROM $bdAnterior.usuarios_por_estudiantes");
+			mysqli_query($conexion, "INSERT INTO $bd.usuarios_por_estudiantes SELECT * FROM $bdAnterior.usuarios_por_estudiantes");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -83,7 +83,7 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO $bd.academico_cargas(car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable)SELECT car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable FROM $bdAnterior.academico_cargas");
+			mysqli_query($conexion, "INSERT INTO $bd.academico_cargas SELECT * FROM $bdAnterior.academico_cargas");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -103,7 +103,7 @@ try {
 
 		//CREAMOS LA NUEVA CONFIGURACIÓN DE LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado) VALUES ('".$year."',1,'".$datosConfAnterior['conf_nota_desde']."','".$datosConfAnterior['conf_nota_hasta']."','".$datosConfAnterior['conf_nota_minima_aprobar']."','#e10000','#0000d5','".$datosConfAnterior['conf_saldo_pendiente']."','".$datosConfAnterior['conf_num_restaurar']."','".$datosConfAnterior['conf_restaurar_cantidad']."','#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,'".$datosConfAnterior['conf_num_indicadores']."','".$datosConfAnterior['conf_valor_indicadores']."','".$datosConfAnterior['conf_notas_categoria']."','".$idInsti."','".$siglasBD."',NULL,'".$datosConfAnterior['conf_num_registros']."',NULL,NULL,NULL,'200','150',1,'".$datosConfAnterior['conf_deuda']."','".$datosConfAnterior['conf_permiso_eliminar_cargas']."',NULL,NULL,NULL,'".$datosConfAnterior['conf_decimales_notas']."','".$datosConfAnterior['conf_activar_encuesta']."','".$datosConfAnterior['conf_sin_nota_numerica']."','".$datosConfAnterior['conf_numero_factura']."','".$datosConfAnterior['conf_max_peso_archivos']."','".$datosConfAnterior['conf_informe_parcial']."','".$datosConfAnterior['conf_ver_observador']."','".$datosConfAnterior['conf_ficha_estudiantil']."','".$datosConfAnterior['conf_orden_nombre_estudiantes']."','".$datosConfAnterior['conf_editar_definitivas_consolidado']."')");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_observaciones_multiples_comportamiento,conf_cambiar_nombre_usuario,conf_cambiar_clave_estudiantes,conf_permiso_descargar_boletin,conf_certificado,conf_firma_estudiante_informe_asistencia,conf_permiso_edicion_years_anteriores,conf_porcentaje_completo_generar_informe,conf_ver_promedios_sabanas_docentes) VALUES ('".$year."',1,'".$datosConfAnterior['conf_nota_desde']."','".$datosConfAnterior['conf_nota_hasta']."','".$datosConfAnterior['conf_nota_minima_aprobar']."','#e10000','#0000d5','".$datosConfAnterior['conf_saldo_pendiente']."','".$datosConfAnterior['conf_num_restaurar']."','".$datosConfAnterior['conf_restaurar_cantidad']."','#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,'".$datosConfAnterior['conf_num_indicadores']."','".$datosConfAnterior['conf_valor_indicadores']."','".$datosConfAnterior['conf_notas_categoria']."','".$idInsti."','".$siglasBD."',NULL,'".$datosConfAnterior['conf_num_registros']."',NULL,NULL,NULL,'200','150',1,'".$datosConfAnterior['conf_deuda']."','".$datosConfAnterior['conf_permiso_eliminar_cargas']."',NULL,NULL,NULL,'".$datosConfAnterior['conf_decimales_notas']."','".$datosConfAnterior['conf_activar_encuesta']."','".$datosConfAnterior['conf_sin_nota_numerica']."','".$datosConfAnterior['conf_numero_factura']."','".$datosConfAnterior['conf_max_peso_archivos']."','".$datosConfAnterior['conf_informe_parcial']."','".$datosConfAnterior['conf_ver_observador']."','".$datosConfAnterior['conf_ficha_estudiantil']."','".$datosConfAnterior['conf_orden_nombre_estudiantes']."','".$datosConfAnterior['conf_editar_definitivas_consolidado']."','".$datosConfAnterior['conf_solicitar_acudiente_2']."','".$datosConfAnterior['conf_mostrar_campos']."','".$datosConfAnterior['conf_calificaciones_acudientes']."','".$datosConfAnterior['conf_mostrar_calificaciones_estudiantes']."','".$datosConfAnterior['conf_observaciones_multiples_comportamiento']."','".$datosConfAnterior['conf_cambiar_nombre_usuario']."','".$datosConfAnterior['conf_cambiar_clave_estudiantes']."','".$datosConfAnterior['conf_permiso_descargar_boletin']."','".$datosConfAnterior['conf_certificado']."','".$datosConfAnterior['conf_firma_estudiante_informe_asistencia']."','".$datosConfAnterior['conf_permiso_edicion_years_anteriores']."','".$datosConfAnterior['conf_porcentaje_completo_generar_informe']."','".$datosConfAnterior['conf_ver_promedios_sabanas_docentes']."')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -159,7 +159,7 @@ try {
 
 		//CREAMOS CONFIGURACIÓN DE LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado) VALUES ('".$year."',1,1,5,3,'#e10000','#0000d5',NULL,NULL,NULL,'#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,NULL,NULL,NULL,'".$idInsti."','".$bdInstitucion."',NULL,20,'NO',NULL,NULL,'200','150',1,NULL,'NO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'5',0,0,0,'NO',1,1,1,1,0)");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado,conf_observaciones_multiples_comportamiento,conf_cambiar_nombre_usuario,conf_cambiar_clave_estudiantes,conf_permiso_descargar_boletin,conf_certificado,conf_firma_estudiante_informe_asistencia,conf_permiso_edicion_years_anteriores,conf_porcentaje_completo_generar_informe,conf_ver_promedios_sabanas_docentes) VALUES ('".$year."',1,1,5,3,'#e10000','#0000d5',NULL,NULL,NULL,'#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,NULL,NULL,NULL,'".$idInsti."','".$bdInstitucion."',NULL,20,'NO',NULL,NULL,'200','150',1,NULL,'NO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'5',0,0,0,'NO',1,1,1,1,0,0,'SI','SI',1,1,1,1,3,1)");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
