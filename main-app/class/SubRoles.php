@@ -107,7 +107,8 @@ class SubRoles {
      * ($datos["nombre"],$datos["id"],$datos["paginas"])
      * @param array $datos
      *
-     * @return void //   */
+     * @return void 
+     */
     public static function actualizar(array $datos = []){
         global $conexion, $baseDatosServicios;
         
@@ -121,7 +122,9 @@ class SubRoles {
 
         if(!empty($datos["paginas"])){
             try{
-                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol = '".$datos["id"]."'");
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT spp_id_pagina FROM ".$baseDatosServicios.".sub_roles_paginas 
+                INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=spp_id_pagina AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL)
+                WHERE spp_id_rol = '".$datos["id"]."'");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
