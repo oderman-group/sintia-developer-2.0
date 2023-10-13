@@ -118,7 +118,8 @@ include("bd-conexion.php");
                             <h3>Adjuntar comprobante</h3>
 
                             <p class="h6 text-info">
-                                El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion,0,".","."); ?>, el cual debe ser pagado a la cuenta corriente de <b>Banclombia #00411865393</b> y debe ser adjuntado el soporte para que les habiliten el formulario.
+                                El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion,0,".","."); ?>.<br>
+                                <?=$datosConfig['cfgi_texto_info_cuenta'];?>
                             </p>
 
                             <form action="enviar-comprobante.php" method="post" enctype="multipart/form-data">
