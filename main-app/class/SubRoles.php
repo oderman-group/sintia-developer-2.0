@@ -459,6 +459,7 @@ class SubRoles {
         try {
             foreach ($paginas as $page ) {
                 self::eliminarPaginasHijasSubRol($idSubRol,$page);
+                self::eliminarPaginasDependencia($idSubRol,$page);
                 try{
                     mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
                     WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
