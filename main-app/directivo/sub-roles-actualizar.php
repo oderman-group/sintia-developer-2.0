@@ -21,7 +21,7 @@ if (empty($_POST["paginas"])) {
 	exit();
 }
 
-$directivos=!empty($_POST["directivos"])?$_POST["directivos"]:"";
+$directivos= !empty($_POST["directivos"]) ? $_POST["directivos"] : "";
 
 $datos = array(
 	"id" =>$_POST["subr_id"],
