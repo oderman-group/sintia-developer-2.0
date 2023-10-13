@@ -4,7 +4,7 @@ include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
 
 $idInst="";
-if(!empty($_GET["idInst"])){ $idInst=base64_decode($_GET["idInst"]);}
+if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
 
 
 $year=(date('Y')+1);

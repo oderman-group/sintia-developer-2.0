@@ -28,5 +28,5 @@ $ruta = 'files/adjuntos';
 if(file_exists($ruta."/".base64_decode($_GET["file"]))){	unlink($ruta."/".base64_decode($_GET["file"]));	}
 
 
- echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($solicitud).'&id='.$_GET["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+ echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'?msg='.base64_encode(3).'&token='.md5($solicitud).'&id='.$_GET["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
 

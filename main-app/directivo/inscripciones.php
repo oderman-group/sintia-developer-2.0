@@ -133,8 +133,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Editar</a></li>
+                                                                <li><a href="inscripciones-formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="inscripciones-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Editar</a></li>
                                                                 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 6) { ?>
                                                                     

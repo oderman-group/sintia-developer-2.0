@@ -38,6 +38,8 @@ if (!empty($_FILES['bannerInicio']['name'])) {
 	move_uploaded_file($_FILES['bannerInicio']['tmp_name'], $destino . "/" . $bannerInicio);
 }
 
+$datosCuenta=!empty($_POST["datosCuenta"])? str_replace(["<p>", "</p>"], "",$_POST["datosCuenta"]):"";
+
 try {
 	mysqli_query($conexion, "UPDATE ".$baseDatosAdmisiones.".config_instituciones SET 
 	cfgi_valor_inscripcion='" . $_POST["valorInscripcion"] . "', 
@@ -51,7 +53,8 @@ try {
 	cfgi_activar_boton_pagar_prematricula='" . $_POST["habilitarPagoPrematricula"] . "',
 	cfgi_link_boton_pagar_prematricula='" . $_POST["linkPagoPrematricula"] . "',
 	cfgi_mostrar_banner='" . $mostrarBanner . "',
-	cfgi_mostrar_politicas='" . $_POST["mostrarPoliticas"] . "'
+	cfgi_mostrar_politicas='" . $_POST["mostrarPoliticas"] . "',
+	cfgi_texto_info_cuenta='" . $datosCuenta . "'
 	WHERE cfgi_id='".$_POST["id"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
