@@ -81,7 +81,7 @@ require_once("../class/Grupos.php");
 	<!-- Jquery Toast css -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
 	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="./../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
+    <link rel="stylesheet" href="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
 
 	<!-- libreria de animate.style -->
 	<link
@@ -105,6 +105,8 @@ require_once("../class/Grupos.php");
 		<!--select2-->
 		<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 		<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+   
 	<?php }?>
 	
 	<!-- Para la vista guiada -->

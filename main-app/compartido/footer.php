@@ -32,7 +32,12 @@ LIMIT ".$empezar.",1
 <?php }*/?>
 
 <?php include("../compartido/guardar-historial-acciones.php");?>
-
+<script>
+	// socket en la espera de una notificacion general
+	socket.on("notificacion_chat_general", (data) => {
+		console.log(data);
+	});
+</script>
 <!-- start footer -->
 <div class="page-footer">
 
