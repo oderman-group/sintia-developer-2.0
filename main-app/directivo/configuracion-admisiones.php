@@ -164,6 +164,13 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Texto para datos de cuenta <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title='Un texto con nombre del banco y numero de cuenta, este texto lo vera el usuario al consultar el estado y estar el proceso en "VERIFICACIÓN DE PAGO".'><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-10">
+                                                <textarea cols="80" id="editor3" name="datosCuenta" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_texto_info_cuenta'];?></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
 											<label class="col-sm-2 control-label">Archivo sobre las políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este archivo lo podrán descargar los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-question"></i></button></label>
 											<div class="col-sm-8">
 												<input type="file" name="politicasArchivo" class="form-control col-sm-6" <?=$disabledPermiso;?>>
@@ -244,6 +251,7 @@ if(!Modulos::validarPermisoEdicion()){
         // instance, using default configuration.
         CKEDITOR.replace( 'editor1' );
         CKEDITOR.replace( 'editor2' );
+        CKEDITOR.replace( 'editor3' );
     </script>
 </body>
 
