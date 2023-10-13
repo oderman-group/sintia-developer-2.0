@@ -7,7 +7,7 @@ function mostrarChat(datos) {
 	var liId = datos.id;
 	var splitid = liId.split("_");
 	var id = splitid[0];
-	console.log("id--->" + id);
+	// console.log("id--->" + id);
 	$("#contenedorChat").empty().hide();
 	if (id !== '') {
 		$.ajax({
@@ -106,17 +106,25 @@ function mostrarChat(datos) {
 					// a la espera de un nuevo mensaje del chat avierto
 					// socket.on("nuevo_mensaje_chat", (data) => {
 					socket.on("sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario, (data) => {
-						console.log(data);
+						// console.log(data);
 						actualizarChat(false, data["body"]);
 						chatElement = document.getElementById("chatHistory");
+						// console.log(chatElement.scrollTop);
+						bajar = false;
+						if (chatElement.scrollTop + chatElement.clientHeight >= chatElement.scrollHeight) {
+							bajar = true;
+						}
 						mensaje = data["body"]["chat_mensaje"];
 						fecha = data["body"]["chat_fecha_registro"];
 						tipo = data["body"]["chat_tipo"];
 						url = data["body"]["chat_url_file"];
 						fechaCompleta = verificarFecha(fecha);
-						contenido_chat.innerHTML += htmlDestino(data["body"]["chat_id"],mensaje, fechaCompleta, destino_foto_url_uss, tipo + '', url);						
-						chatElement.scrollTop = chatElement.scrollHeight;
-						socket.emit("ver_mensaje", { chat_id: data["body"]["chat_id"] });
+						contenido_chat.innerHTML += htmlDestino(data["body"]["chat_id"], mensaje, fechaCompleta, destino_foto_url_uss, tipo + '', url);
+						if (bajar) {
+							chatElement.scrollTop = chatElement.scrollHeight;
+						}
+
+						// socket.emit("ver_mensaje", { chat_id: data["body"]["chat_id"] });
 					});
 
 					divNombre = document.getElementById("nombre_" + chat_destino_usuario);
@@ -133,7 +141,7 @@ function mostrarChat(datos) {
 // metodo para escuchar actualicaciones de mis chat 
 // socket.on("mi_notificacion_chat", (data) => {
 socket.on("sala_" + chat_remite_usuario, (data) => {
-	console.log(data);
+	// console.log(data);
 	miUsuario = (data["chat_remite_usuario"] == chat_remite_usuario);
 	actualizarChat(miUsuario, data);
 	if (!miUsuario) {
@@ -146,7 +154,7 @@ socket.on("sala_" + chat_remite_usuario, (data) => {
 		}
 	} else {
 		if (chat_destino_usuario == data["chat_destino_usuario"]) {
-			contenido_chat.innerHTML += htmlEmisor(data["chat_id"],data["chat_mensaje"], verificarFecha(Date.parse(data["chat_fecha_registro"])), data["chat_tipo"], data["chat_url_file"]);
+			contenido_chat.innerHTML += htmlEmisor(data["chat_id"], data["chat_mensaje"], verificarFecha(Date.parse(data["chat_fecha_registro"])), data["chat_tipo"], data["chat_url_file"]);
 			limpiar();
 			chatElement.scrollTop = chatElement.scrollHeight;
 			imputMensaje.focus();
@@ -196,7 +204,7 @@ function pintarUsuarios(response) {
 	$("#listaUsuario").empty();
 	listaUsuarios = document.getElementById('listaUsuario');
 	response.forEach(elemento => {
-		console.log(elemento);
+		// console.log(elemento);
 		uss_id = elemento["datosUsuarios"]["uss_id"];
 		uss_estado = elemento["datosUsuarios"]["uss_estado"] == "1" ? "online" : "offline";
 		nombre = elemento["nombre"];
@@ -367,7 +375,7 @@ function enviarMensaje() {
 
 			break;
 
-	}	
+	}
 
 };
 
@@ -395,7 +403,7 @@ function enviarArchivo(tipo, idImput) {
 			contentType: false,
 			processData: false,
 			success: function (data) {
-				console.log(data);
+				// console.log(data);
 				try {
 					JSON.parse(data);
 					jsonValido = true; // La cadena es un JSON válido
@@ -422,9 +430,7 @@ function enviarArchivo(tipo, idImput) {
 							salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,// sala chat si esta abierta
 							chat_mensaje: mensaje													 // mensaje a enviar
 						});
-						// contenido_chat.innerHTML += htmlEmisor(mensaje, verificarFecha(new Date()), tipoMensaje, nombreFile);
-						// limpiar();
-						// chatElement.scrollTop = chatElement.scrollHeight;
+
 					} else {
 						limpiar();
 						Swal.fire({
@@ -459,9 +465,7 @@ function enviarArchivo(tipo, idImput) {
 			chat_mensaje: mensaje
 		});
 
-		// contenido_chat.innerHTML += htmlEmisor(mensaje, verificarFecha(new Date()));
-		// limpiar();
-		// chatElement.scrollTop = chatElement.scrollHeight;
+
 	}
 
 };
@@ -634,7 +638,7 @@ function extraerCaracteres(cadena, inicio, longitud) {
 }
 
 function buscarUsuario(valor) {
-	console.log(valor.length);
+	// console.log(valor.length);
 	if (valor.length > 3) {
 		mostrarListarUsuarios(2);
 		$.ajax({
