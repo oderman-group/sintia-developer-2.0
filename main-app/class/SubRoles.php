@@ -46,7 +46,7 @@ class SubRoles {
         $idRegistro = -1;        
         try {
             foreach ($paginas as $page ) {
-                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page);
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
                 if($paginaSubrol){
                     $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
                         spp_id_rol, 
@@ -59,7 +59,7 @@ class SubRoles {
                     mysqli_query($conexion,$sqlinsert);
                     $idRegistro = mysqli_insert_id($conexion);
                     self::guardarPaginasHijasSubRol($idSubRol,$page);
-                    self::guardarPaginasDependecias($idSubRol,$page);
+                    self::guardarPaginasDependecias($idSubRol,$page,$conexion,$baseDatosServicios);
                 }
             }                  
             
@@ -439,7 +439,7 @@ class SubRoles {
             )
             VALUES";
             foreach ($arrayPaginasHijas as $page ) {
-                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page);
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
                 if($paginaSubrol){
                     $sqlinsert.="(
                         '".$idSubRol."',
@@ -472,7 +472,7 @@ class SubRoles {
         try {
             foreach ($paginas as $page ) {
                 self::eliminarPaginasHijasSubRol($idSubRol,$page);
-                self::eliminarPaginasDependencia($idSubRol,$page);
+                self::eliminarPaginasDependencia($idSubRol,$page,$conexion,$baseDatosServicios);
                 try{
                     mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
                     WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
@@ -596,13 +596,14 @@ class SubRoles {
      * 
      * @param int       $idSubRol
      * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
      * 
      * @return void
     **/
-    public static function guardarPaginasDependecias($idSubRol,$idPagina){
-        global $conexion, $baseDatosServicios;
+    public static function guardarPaginasDependecias($idSubRol,$idPagina,$conexion,$baseDatosServicios){
 
-        $datosPaginasDependencias=self::paginasDependencia($idPagina);
+        $datosPaginasDependencias=self::paginasDependencia($idPagina,$conexion,$baseDatosServicios);
         $paginasDependencias=!empty($datosPaginasDependencias)?explode(',',$datosPaginasDependencias['pagp_paginas_dependencia']):"";
         if ($paginasDependencias!='') {
             $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
@@ -611,7 +612,7 @@ class SubRoles {
             )
             VALUES";
             foreach ($paginasDependencias as $page ) {
-                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page);
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
                 if($paginaSubrol){
                     $sqlinsert.="(
                         '".$idSubRol."',
@@ -636,12 +637,12 @@ class SubRoles {
      * 
      * @param int       $idSubRol
      * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
      * 
-     * @return void
+     * @return bool
     **/
-    public static function validarPaginasSubRol($idSubRol,$idPagina){
-        global $conexion, $baseDatosServicios;
-        $resultado = [];
+    public static function validarPaginasSubRol($idSubRol,$idPagina,$conexion,$baseDatosServicios){
 
         try{
             $consultaPaginasHijas=mysqli_query($conexion, "SELECT spp_id FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$idPagina."'");
@@ -659,10 +660,12 @@ class SubRoles {
      * Este metodo me trae las paginas de dependencia
      * 
      * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
      * 
+     * @return array
     **/
-    public static function paginasDependencia($idPagina){
-        global $conexion, $baseDatosServicios;
+    public static function paginasDependencia($idPagina,$conexion,$baseDatosServicios){
         $resultado = [];
 
         try{
@@ -682,13 +685,14 @@ class SubRoles {
      * 
      * @param int       $idSubRol
      * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
      * 
      * @return void
     **/
-    public static function eliminarPaginasDependencia($idSubRol,$idPagina){
-        global $conexion, $baseDatosServicios;
+    public static function eliminarPaginasDependencia($idSubRol,$idPagina,$conexion,$baseDatosServicios){
 
-        $datosPaginasDependencias=self::paginasDependencia($idPagina);
+        $datosPaginasDependencias=self::paginasDependencia($idPagina,$conexion,$baseDatosServicios);
         $paginasDependencias=!empty($datosPaginasDependencias)?explode(',',$datosPaginasDependencias['pagp_paginas_dependencia']):"";
         if ($paginasDependencias!='') {
             foreach ($paginasDependencias as $page ) {
