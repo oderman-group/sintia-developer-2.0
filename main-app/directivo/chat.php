@@ -100,7 +100,8 @@
             </div>
         </div>
         <script>
-            var urlApi = 'http://localhost:3000';
+            // var urlApi = 'http://localhost:3000';
+            var urlApi = 'http://plataformasintia.com:3000';
             var socket = io(urlApi, {
                 transports: ['websocket', 'polling', 'flashsocket']
             });
@@ -259,6 +260,13 @@
                                     '<input type="file" id="cargarAudio"    name="audio"    style="display: none;"   accept="audio/*">   ' +
                                     '</div>';
                                 $("#contenedorChat").append(html);
+                                const listaItems = document.querySelectorAll("#plist li");
+                                listaItems.forEach((li) => {
+                                    if (li.classList.contains("active")) {
+                                        li.classList.remove("active");
+                                    }
+                                });
+                                document.getElementById(item.datosUsuarios["uss_id"]).classList.add("active");
                                 var chatElement = document.getElementById("chatHistory");
                                 var contenido_chat = document.getElementById("contenido_chat");
                                 audioReprodutor = document.getElementById('audioReprodutor');
@@ -335,9 +343,9 @@
                         mensaje = '<div class="cols-12">' + mensaje + '</div>';
                         break;
                     case _chatTipoDocumento:
-                        imageHtml = '<a href="../files/chat/documento/' + url + '" download="' + url + '">'+
-                                       '<img src="../files/iconos/file.png" >'+
-                                    ' descargar documento</a>'
+                        imageHtml = '<a href="../files/chat/documento/' + url + '" download="' + url + '">' +
+                            '<img src="../files/iconos/file.png" >' +
+                            ' descargar documento</a>'
                         mensaje = '<div class="cols-12">' + mensaje + '</div>';
                         break;
                     case _chatTipoAudio:
@@ -369,9 +377,9 @@
                         mensaje = '<div class="cols-12">' + mensaje + '</div>';
                         break;
                     case _chatTipoDocumento:
-                        imageHtml = '<a href="../files/chat/documento/' + url + '" download="' + url + '">'+
-                                       '<img src="../files/iconos/file.png" >'+
-                                    ' descargar documento</a>'
+                        imageHtml = '<a href="../files/chat/documento/' + url + '" download="' + url + '">' +
+                            '<img src="../files/iconos/file.png" >' +
+                            ' descargar documento</a>'
                         mensaje = '<div class="cols-12">' + mensaje + '</div>';
                         break;
                     case _chatTipoAudio:
@@ -427,7 +435,7 @@
                         } else {
                             enviarArchivo(tipoMensaje, "");
                         };
-                        
+
                         break;
 
                 }

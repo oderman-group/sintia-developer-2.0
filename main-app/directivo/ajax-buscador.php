@@ -15,10 +15,10 @@ $filtro = " AND (
     OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_nombre2), ' ', TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
     OR CONCAT(TRIM(uss_apellido1), ' ', TRIM(uss_apellido2), ' ', TRIM(uss_nombre), ' ', TRIM(uss_nombre2)) LIKE '%".$busqueda."%'
     OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
-    OR CONCAT(TRIM(uss_apellido1), ' ', TRIM(uss_nombre)) LIKE '%".$busqueda."%'
+    OR CONCAT(TRIM(uss_apellido1), ' ', TRIM(uss_nombre)) LIKE '%".$busqueda."%' 
 )";
 
-$consultaUsuarios = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios WHERE uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' $filtro");
+$consultaUsuarios = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios WHERE uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' $filtro LIMIT 20");
 
 $resultados = array();
 
