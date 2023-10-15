@@ -33,3 +33,15 @@ PES-390 - Funcionalidad avanzada
 [PES-222 - Diferentes niveles de permisos para los directivos]
 PES-427 - Agregar usuarios a los subroles.
 PES-426 - Poder asignar todas las paginas a un subrol de una vez.
+
+[PES-428 - Paginas de dependendecia en los subroles]
+PES-430 - Agregar campo en DEV-ADMIN al momento de agregar y editar una pagina que gestione estas paginas de dependencia
+PES-431 - Al adicionar una pagina a los permisos de los subroles se añadan automaticamente las paginas de dependencia
+
+[PES-450 - Actualizar el SQL que se ejecuta automático al crear nuevas BDs para las instituciones]
+PES-454 - Insertar registro cada que se ejecute un script
+
+[PES-77] - Mejoras del sistema en general
+PES-395 - Actualizar libreria de excel al importar usuarios
+PES-423 - Correción y mejoras después de sprint 12
+PES-478 - Recorte de foto al editar perfil
