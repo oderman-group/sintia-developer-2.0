@@ -11,7 +11,7 @@ $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 			 <?=$datosUsuarioActual['uss_tema_logo'];?>"> <!-- chat-sidebar-open-->
 	
   <script>
-		var urlApi = 'https://plataformasintia.com:3500';
+		var urlApi = 'http://plataformasintia.com:3500';
 		var socket = io(urlApi, {
 			transports: ['websocket', 'polling', 'flashsocket']
 		});
