@@ -55,7 +55,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 </script>
 <?php
 	$deleteOculto = 'style="display:none;"';
-	if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){
+	if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {
 		$deleteOculto = 'style="display:block;"';
 ?>
 <script>
@@ -118,13 +118,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 													
 													
 											<?php
-																						if(
-												($datosCargaActual['car_configuracion']==0 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] 
-												 and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-																	
-												or($datosCargaActual['car_configuracion']==1 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-												)
-											{
+											if( CargaAcademica::validarAccionAgregarCalificaciones($datosCargaActual, $valores, $periodoConsultaActual, $porcentajeRestante) ) {
 											?>
 											
 													<div class="btn-group">
@@ -145,12 +139,14 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 											<?php if($datosCargaActual['car_maximas_calificaciones']<=$valores[1]){?>
 												<p style="color: tomato;"> Has alcanzado el número máximo de calificaciones permitidas. </p>
 											<?php }?>
-													
+											
+											<?php if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {?>
 													<div class="btn-group">
 														<a href="calificaciones-todas-rapido.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" class="btn bg-purple">
 															LLenar más rápido las calificaciones
 														</a>
 													</div>
+											<?php }?>
 											
 												</div>
 											</div>
