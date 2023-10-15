@@ -131,6 +131,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'No se encontró ninguna coincidencia o usted no tiene permisos para ver este registro.';
             break;
 
+            case 'ER_DT_17':
+                $tipo = 'danger';
+                $mensaje = "Este archivo pesa <b>{$_GET['pesoMB']}MB</b>. 
+                Lo ideal es que pese menos de {$config['conf_max_peso_archivos']}MB. 
+                Intente comprimirlo o busque reducir su peso.";
+            break;
+
 
             default:
                 $tipo = 'secondary';
@@ -140,7 +147,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }    
     
     /* MENSAJES DE EXITO */
-    if(isset($_GET['success'])){
+    else if(isset($_GET['success'])){
         switch($_GET['success']){
             case 'SC_DT_1':
                 $tipo = 'success';

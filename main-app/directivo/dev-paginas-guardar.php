@@ -27,12 +27,14 @@
         exit();
     }
 
+    $paginaDependencia=!empty($_POST["paginaDependencia"])?implode(',',$_POST["paginaDependencia"]):NULL;
+
     try{
-        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".paginas_publicidad(pagp_id, pagp_pagina, pagp_tipo_usuario, pagp_modulo, pagp_ruta, pagp_palabras_claves, pagp_navegable, pagp_crud, pagp_pagina_padre) VALUES ('".$_POST["codigoPagina"]."', '".$_POST["nombrePagina"]."', '".$_POST["tipoUsuario"]."', '".$_POST["modulo"]."', '".$_POST["rutaPagina"]."', '".$_POST["palabrasClaves"]."', '".$_POST["navegable"]."', '".$_POST["crud"]."', '".$_POST["paginaPadre"]."')");
+        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".paginas_publicidad(pagp_id, pagp_pagina, pagp_tipo_usuario, pagp_modulo, pagp_ruta, pagp_palabras_claves, pagp_navegable, pagp_crud, pagp_pagina_padre, pagp_paginas_dependencia) VALUES ('".$_POST["codigoPagina"]."', '".$_POST["nombrePagina"]."', '".$_POST["tipoUsuario"]."', '".$_POST["modulo"]."', '".$_POST["rutaPagina"]."', '".$_POST["palabrasClaves"]."', '".$_POST["navegable"]."', '".$_POST["crud"]."', '".$_POST["paginaPadre"]."', '".$paginaDependencia."')");
     } catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
     
     include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="dev-paginas.php?success=SC_DT_1&id='.$_POST["codigoPagina"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="dev-paginas.php?success=SC_DT_1&id='.base64_encode($_POST["codigoPagina"]).'";</script>';
     exit();

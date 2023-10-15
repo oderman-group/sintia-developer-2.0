@@ -46,6 +46,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
             <div class="page-content">
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
+                        <?php include("../compartido/texto-manual-ayuda.php");?>
                         <div class=" pull-left">
                             <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol</div>
                         </div>
@@ -73,7 +74,6 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                         </div>
                                         <input type="text" class="form-control" name="nombre" value="<?= $rolActual['subr_nombre']; ?>">
                                     </div>
-
                                 </div>
                             </div>
 
@@ -111,27 +111,26 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                         <div class="card-head">
                                             <header><?= $frases[370][$datosUsuarioActual['uss_idioma']]; ?> ( <label style="font-weight: bold;" id="cantSeleccionadas"></label>/<?= mysqli_num_rows($listaPaginas) ?> )
                                                 <label class="switchToggle">
-
-                                                    <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,<?= $id; ?>)">
+                                                    <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,'<?= $_GET['id']; ?>')">
                                                     <span class="slider red round"></span>
                                                 </label>
                                             </header>
                                             Mostrar solo activas
-
-
-
-
                                         </div>
                                         <div class="card-body">
-                                            
                                             <div>
-                                            
-
                                                 <table id="example3" class="display" name="tabla1" style="width:100%;">
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Activa</th>
+                                                            <th>
+                                                                <div class="input-group spinner col-sm-10">
+                                                                    <label class="switchToggle">
+                                                                        <input type="checkbox" id="all">
+                                                                        <span class="slider red round"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </th>
                                                             <th>Id</th>
                                                             <th><?= $frases[115][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                             <th>Modulo</th>
@@ -154,13 +153,12 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                                             <tr>
                                                                 <td><?= $contReg; ?></td>
                                                                 <td>
-
-
-                                                                    <label class="switchToggle">
-                                                                        <input type="checkbox" onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>" <?= $cheked; ?>>
-                                                                        <span class="slider red round"></span>
-                                                                    </label>
-
+                                                                    <div class="input-group spinner col-sm-10">
+                                                                        <label class="switchToggle">
+                                                                            <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>" <?= $cheked; ?>>
+                                                                            <span class="slider red round"></span>
+                                                                        </label>
+                                                                    </div>
                                                                 </td>
                                                                 <td><?= $pagina['pagp_id']; ?></td>
                                                                 <td><?= $pagina['pagp_pagina']; ?></td>
@@ -188,18 +186,10 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                     </div>
                     <div class="form-group">
                         <div class="col-md-9">
-
                             <button type="submit" class="btn btn-warning"><?= $frases[331][$datosUsuarioActual['uss_idioma']]; ?></button>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
                 </form>
             </div>
         </div>
@@ -208,49 +198,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
 </div>
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
-<script type="text/javascript">
-    
-function mostrarActivas(check,idSubrol) {
-    var nuevaURL = "sub-roles-editar.php?id="+idSubrol+"&activas="+(check?1:0);            
-    window.location.href = nuevaURL;
-    onclick="redireccionar()"
-}
-
-    var select = document.getElementById('paginasSeleccionadas');
-    contarPaginasSeleccionadas();
-
-    function seleccionarPagina(datos) {
-        var page = datos.value;
-        if (datos.checked) {
-            agregarPagina(page);
-        } else {
-            eliminarPagina(page);
-        }
-    }
-
-    function agregarPagina(page) {
-        var nuevaOpcion = document.createElement('option');
-        nuevaOpcion.value = page;
-        nuevaOpcion.textContent = page;
-        nuevaOpcion.selected = true;
-        select.appendChild(nuevaOpcion);
-        contarPaginasSeleccionadas();
-    }
-
-    function eliminarPagina(page) {
-        var opcionAEliminar = select.querySelector('option[value=' + page + ']');
-        if (opcionAEliminar) {
-            select.removeChild(opcionAEliminar);
-        }
-        contarPaginasSeleccionadas();
-    }
-
-    function contarPaginasSeleccionadas() {
-        var labelCant = document.getElementById('cantSeleccionadas');
-        var cantidadSeleccionadas = select.selectedOptions.length;
-        labelCant.textContent = cantidadSeleccionadas;
-    }
-</script>
+<script src="../js/Subroles.js" ></script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>

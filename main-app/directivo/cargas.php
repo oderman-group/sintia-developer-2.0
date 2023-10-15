@@ -70,11 +70,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
-															<a href="cargas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-																Agregar nuevo <i class="fa fa-plus"></i>
-															</a>
-														<?php }?>
+														<?php if (Modulos::validarPermisoEdicion()) { ?>
+                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaCargModal" class="btn deepPink-bgcolor">
+														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
+                                                        </a>
+                                                        <?php
+                                                        $idModal = "nuevaCargModal";
+                                                        $contenido = "../directivo/cargas-agregar-modal.php";
+                                                        include("../compartido/contenido-modal.php");
+                                                        } ?>
 													</div>
 												</div>
 											</div>
@@ -148,7 +152,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																				</li>
 																			<?php }?>
 																	  		<li>
-																			    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>')">Ver como docente</a>
+																			    <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>')">Ver como docente</a>
 																			<?php }?>
 																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado[0]);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
 																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado[0]);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>

@@ -34,10 +34,8 @@ include("../compartido/head.php");
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 						<div class="row">
 							<div class="col-md-4 col-lg-3">
-								<?php if ($periodoConsultaActual != $datosCargaActual['car_periodo'] and $datosCargaActual['car_permiso2'] != 1) { ?>
-									<p style="color: tomato;"> Podrás consultar la información de otros periodos diferentes al actual, pero no se podrán hacer modificaciones. </p>
-								<?php 
-									} 
+
+								<?php  
 									include("info-carga-actual.php");
 									include("filtros-cargas.php");
 									include("../compartido/publicidad-lateral.php");
@@ -52,11 +50,15 @@ include("../compartido/head.php");
 									<div class="card-body">
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-6">
-												<div class="btn-group" id="agregarNuevo">
-													<a href="unidades-agregar.php?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" id="addRow" class="btn deepPink-bgcolor">
-														Agregar nuevo<i class="fa fa-plus"></i>
-													</a>
-												</div>
+												<?php
+												if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {
+												?>
+													<div class="btn-group" id="agregarNuevo">
+														<a href="unidades-agregar.php?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" id="addRow" class="btn deepPink-bgcolor">
+															Agregar nuevo<i class="fa fa-plus"></i>
+														</a>
+													</div>
+												<?php }?>
 											</div>
 										</div>
 										<div class="table-scrollable">

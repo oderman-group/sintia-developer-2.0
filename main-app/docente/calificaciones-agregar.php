@@ -15,10 +15,12 @@ $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
 
 if(
-	($datosCargaActual['car_configuracion']==0 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] 
-	and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
+	(
+	( $datosCargaActual['car_configuracion'] == CONFIG_AUTOMATICO_CALIFICACIONES && $valores[1] < $datosCargaActual['car_maximas_calificaciones'] ) 
 													
-	or($datosCargaActual['car_configuracion']==1 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
+	or($datosCargaActual['car_configuracion'] == CONFIG_MANUAL_CALIFICACIONES && $valores[1]<$datosCargaActual['car_maximas_calificaciones'] && $periodoConsultaActual <= $datosCargaActual['gra_periodos'] && $porcentajeRestante > 0)
+	)
+	&& CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual)
 )
 {
 	

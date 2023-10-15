@@ -46,17 +46,21 @@ class SubRoles {
         $idRegistro = -1;        
         try {
             foreach ($paginas as $page ) {
-                $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
-                    spp_id_rol, 
-                    spp_id_pagina
-                 )
-                VALUES(
-                    '".$idSubRol."',
-                    '".$page."'                        
-                )";
-                mysqli_query($conexion,$sqlinsert);
-                $idRegistro = mysqli_insert_id($conexion);
-                self::guardarPaginasHijasSubRol($idSubRol,$page);                   
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
+                if($paginaSubrol){
+                    $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
+                        spp_id_rol, 
+                        spp_id_pagina
+                    )
+                    VALUES(
+                        '".$idSubRol."',
+                        '".$page."'                        
+                    )";
+                    mysqli_query($conexion,$sqlinsert);
+                    $idRegistro = mysqli_insert_id($conexion);
+                    self::guardarPaginasHijasSubRol($idSubRol,$page);
+                    self::guardarPaginasDependecias($idSubRol,$page,$conexion,$baseDatosServicios);
+                }
             }                  
             
         } catch (Exception $e) {
@@ -107,7 +111,8 @@ class SubRoles {
      * ($datos["nombre"],$datos["id"],$datos["paginas"])
      * @param array $datos
      *
-     * @return void //   */
+     * @return void 
+     */
     public static function actualizar(array $datos = []){
         global $conexion, $baseDatosServicios;
         
@@ -121,7 +126,9 @@ class SubRoles {
 
         if(!empty($datos["paginas"])){
             try{
-                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol = '".$datos["id"]."'");
+                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT spp_id_pagina FROM ".$baseDatosServicios.".sub_roles_paginas 
+                INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=spp_id_pagina AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL)
+                WHERE spp_id_rol = '".$datos["id"]."'");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
@@ -432,16 +439,22 @@ class SubRoles {
             )
             VALUES";
             foreach ($arrayPaginasHijas as $page ) {
-                $sqlinsert.="(
-                    '".$idSubRol."',
-                    '".$page."'                        
-                ),";             
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
+                if($paginaSubrol){
+                    $sqlinsert.="(
+                        '".$idSubRol."',
+                        '".$page."'                        
+                    ),";    
+                }
             }
-            $sqlinsert = substr($sqlinsert, 0, -1);
-            try{
-                mysqli_query($conexion,$sqlinsert);
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
+            $sqlCompleta=explode('VALUES',$sqlinsert);
+            if(!empty($sqlCompleta[1])){
+                $sqlinsert = substr($sqlinsert, 0, -1);
+                try{
+                    mysqli_query($conexion,$sqlinsert);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
             }
         }
     }
@@ -459,6 +472,7 @@ class SubRoles {
         try {
             foreach ($paginas as $page ) {
                 self::eliminarPaginasHijasSubRol($idSubRol,$page);
+                self::eliminarPaginasDependencia($idSubRol,$page,$conexion,$baseDatosServicios);
                 try{
                     mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
                     WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
@@ -577,4 +591,119 @@ class SubRoles {
         return false;
     }
 
+    /** 
+     * Este metodo sirve para guardar las paginas dependencias
+     * 
+     * @param int       $idSubRol
+     * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
+     * 
+     * @return void
+    **/
+    public static function guardarPaginasDependecias($idSubRol,$idPagina,$conexion,$baseDatosServicios){
+
+        $datosPaginasDependencias=self::paginasDependencia($idPagina,$conexion,$baseDatosServicios);
+        $paginasDependencias=!empty($datosPaginasDependencias)?explode(',',$datosPaginasDependencias['pagp_paginas_dependencia']):"";
+        if ($paginasDependencias!='') {
+            $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_paginas(
+                spp_id_rol, 
+                spp_id_pagina
+            )
+            VALUES";
+            foreach ($paginasDependencias as $page ) {
+                $paginaSubrol=self::validarPaginasSubRol($idSubRol,$page,$conexion,$baseDatosServicios);
+                if($paginaSubrol){
+                    $sqlinsert.="(
+                        '".$idSubRol."',
+                        '".$page."'                        
+                    ),";   
+                }       
+            }
+            $sqlCompleta=explode('VALUES',$sqlinsert);
+            if(!empty($sqlCompleta[1])){
+                $sqlinsert = substr($sqlinsert, 0, -1);
+                try{
+                    mysqli_query($conexion,$sqlinsert);
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }
+            }
+        }
+    }
+
+    /** 
+     * Este metodo valida si ya existe la pagina para ese rol
+     * 
+     * @param int       $idSubRol
+     * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
+     * 
+     * @return bool
+    **/
+    public static function validarPaginasSubRol($idSubRol,$idPagina,$conexion,$baseDatosServicios){
+
+        try{
+            $consultaPaginasHijas=mysqli_query($conexion, "SELECT spp_id FROM ".$baseDatosServicios.".sub_roles_paginas WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$idPagina."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numPaginasDependencias = mysqli_num_rows($consultaPaginasHijas);
+        if ($numPaginasDependencias>0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Este metodo me trae las paginas de dependencia
+     * 
+     * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
+     * 
+     * @return array
+    **/
+    public static function paginasDependencia($idPagina,$conexion,$baseDatosServicios){
+        $resultado = [];
+
+        try{
+            $consultaPaginasHijas=mysqli_query($conexion, "SELECT pagp_paginas_dependencia FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$idPagina."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $datosPaginasDependencias = mysqli_fetch_array($consultaPaginasHijas, MYSQLI_BOTH);
+        if (!empty($datosPaginasDependencias['pagp_paginas_dependencia'])) {
+            $resultado = $datosPaginasDependencias;
+        }
+        return $resultado;
+    }
+
+    /**
+     * Este metodo sirve para eliminar las paginas dependencia
+     * 
+     * @param int       $idSubRol
+     * @param string    $idPagina
+     * @param mysqli    $conexion
+     * @param string    $baseDatosServicios
+     * 
+     * @return void
+    **/
+    public static function eliminarPaginasDependencia($idSubRol,$idPagina,$conexion,$baseDatosServicios){
+
+        $datosPaginasDependencias=self::paginasDependencia($idPagina,$conexion,$baseDatosServicios);
+        $paginasDependencias=!empty($datosPaginasDependencias)?explode(',',$datosPaginasDependencias['pagp_paginas_dependencia']):"";
+        if ($paginasDependencias!='') {
+            foreach ($paginasDependencias as $page ) {
+                self::eliminarPaginasHijasSubRol($idSubRol,$page);
+                try{
+                    mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
+                    WHERE spp_id_rol='".$idSubRol."' AND spp_id_pagina='".$page."'");
+                } catch (Exception $e) {
+                    include("../compartido/error-catch-to-report.php");
+                }          
+            }
+        }
+    }
 }

@@ -60,10 +60,6 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                 
 								<div class="col-md-3 col-lg-3">
 									
-									<?php if($periodoConsultaActual!=$datosCargaActual['car_periodo'] and $datosCargaActual['car_permiso2']!=1){?>
-										<p style="color: tomato;"> Podrás consultar la información de otros periodos diferentes al actual, pero no se podrán hacer modificaciones. </p>
-									<?php }?>
-									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple">PLAN DE CLASES</header>
 										
@@ -121,12 +117,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 												<div class="col-sm-12">
 													
 											<?php
-											if(
-												($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-																	
-												or($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and !empty($porcentajeRestante) and $porcentajeRestante>0)
-												)
-											{
+											if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {
 											?>
 											
 													<div class="btn-group">

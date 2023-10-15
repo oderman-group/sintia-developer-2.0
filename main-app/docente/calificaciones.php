@@ -41,10 +41,6 @@ $porcentajeRestante = 100 - $valores[0];
                                 
 								<div class="col-md-4 col-lg-3">
 									
-									<?php if($periodoConsultaActual!=$datosCargaActual['car_periodo'] and $datosCargaActual['car_permiso2']!=1){?>
-										<p style="color: tomato;"> Podrás consultar la información de otros periodos diferentes al actual, pero no se podrán hacer modificaciones. </p>
-									<?php }?>
-									
 									<?php include("info-carga-actual.php");?>
 									
 									<?php include("filtros-cargas.php");?>
@@ -70,13 +66,7 @@ $porcentajeRestante = 100 - $valores[0];
 												<div class="col-sm-12">
 													
 											<?php
-											if(
-												($datosCargaActual['car_configuracion']==0 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] 
-												 and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-																	
-												or($datosCargaActual['car_configuracion']==1 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-												)
-											{
+											if( CargaAcademica::validarAccionAgregarCalificaciones($datosCargaActual, $valores, $periodoConsultaActual, $porcentajeRestante) ) {
 											?>
 											
 													<div class="btn-group">
@@ -97,12 +87,14 @@ $porcentajeRestante = 100 - $valores[0];
 											<?php if($datosCargaActual['car_maximas_calificaciones']<=$valores[1]){?>
 												<p style="color: tomato;"> Has alcanzado el número máximo de calificaciones permitidas. </p>
 											<?php }?>
-													
+											
+											<?php if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {?>
 													<div class="btn-group">
 														<a href="calificaciones-todas-rapido.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" class="btn bg-purple">
 															LLenar más rápido las calificaciones
 														</a>
 													</div>
+											<?php }?>
 											
 												</div>
 											</div>

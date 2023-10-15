@@ -39,20 +39,19 @@ $listaPaginas = SubRoles::listarPaginas();
         <!-- start page content -->
         <div class="page-content-wrapper">
             <div class="page-content">
-                
-               
                 <div class="page-bar">
-                        <div class="page-title-breadcrumb">
-                            <div class=" pull-left">
-                                <div class="page-title"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
-                            </div>
-							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="sub-roles.php" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?>  Sub Rol</li>
-                            </ol>
+                    <?php include("../compartido/texto-manual-ayuda.php");?>
+                    <div class="page-title-breadcrumb">
+                        <div class=" pull-left">
+                            <div class="page-title"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?> Sub Rol</div>
                         </div>
+                        <ol class="breadcrumb page-breadcrumb pull-right">
+                            <li><a class="parent-item" href="javascript:void(0);" name="sub-roles.php" onClick="deseaRegresar(this)">Sub Roles</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li class="active"><?=$frases[369][$datosUsuarioActual['uss_idioma']];?>  Sub Rol</li>
+                        </ol>
                     </div>
-                    <?php include("../../config-general/mensajes-informativos.php"); ?>
+                </div>
+                <?php include("../../config-general/mensajes-informativos.php"); ?>
                 <div class="panel">
                     <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></header>
                     <div class="panel-body">
@@ -93,8 +92,6 @@ $listaPaginas = SubRoles::listarPaginas();
                                 
                                 <div class="col-sm-3">
                                     <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?> </button>
-                                    
-
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -110,14 +107,21 @@ $listaPaginas = SubRoles::listarPaginas();
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Activa</th>
+                                                            <th>
+                                                                <div class="input-group spinner col-sm-10">
+                                                                    <label class="switchToggle">
+                                                                        <input type="checkbox" id="all">
+                                                                        <span class="slider red round"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </th>
                                                             <th>Id</th>
                                                             <th><?=$frases[115][$datosUsuarioActual['uss_idioma']];?></th>
                                                             <th>Modulo</th>
                                                             <th><?=$frases[228][$datosUsuarioActual['uss_idioma']];?></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="tbody">
                                                         <?php
                                                         $contReg = 1;
                                                         while ($pagina = mysqli_fetch_array($listaPaginas, MYSQLI_BOTH)) {
@@ -128,7 +132,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox"  onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>">
+                                                                            <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>">
                                                                             <span class="slider red round"></span>
                                                                         </label>
                                                                     </div>
@@ -146,7 +150,6 @@ $listaPaginas = SubRoles::listarPaginas();
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                     </div>
@@ -155,14 +158,7 @@ $listaPaginas = SubRoles::listarPaginas();
                             <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
                         </div>
                     </div>
-
-
                     <select  id="paginasSeleccionadas"  style="width: 100% !important" name="paginas[]" multiple hidden/>
-                             						
-
-
-
-
                     </form>
                 </div>
             </div>
@@ -171,39 +167,7 @@ $listaPaginas = SubRoles::listarPaginas();
 </div>
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
-<script type="text/javascript">
-    var select = document.getElementById('paginasSeleccionadas');
-    contarPaginasSeleccionadas();
-
-    function seleccionarPagina(datos) {         
-        var page = datos.value;  
-        if(datos.checked) {
-            agregarPagina(page);
-        }else{
-            eliminarPagina(page);
-        }
-    }
-    function agregarPagina(page) {       
-        var nuevaOpcion = document.createElement('option');
-        nuevaOpcion.value = page;
-        nuevaOpcion.textContent = page;
-        nuevaOpcion.selected=true;      
-        select.appendChild(nuevaOpcion);
-        contarPaginasSeleccionadas();
-    }
-    function eliminarPagina(page) {          
-      var opcionAEliminar = select.querySelector('option[value='+page+']');      
-      if (opcionAEliminar) {
-        select.removeChild(opcionAEliminar);
-      }
-      contarPaginasSeleccionadas();
-    }
-    function contarPaginasSeleccionadas(){
-        var labelCant = document.getElementById('cantSeleccionadas');
-        var cantidadSeleccionadas = select.selectedOptions.length;
-        labelCant.textContent =cantidadSeleccionadas;
-    }  
-</script>
+<script src="../js/Subroles.js" ></script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>
