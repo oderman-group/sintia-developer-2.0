@@ -126,4 +126,36 @@ class CargaAcademica {
 
     }
 
+    /**
+     * Obtiene datos relacionados con una carga académica a partir de su ID.
+     *
+     * Esta función realiza una consulta a la base de datos para obtener información relacionada con una carga académica, como el grado, grupo, materia y docente asociados.
+     *
+     * @param int $idCarga - El ID de la carga académica que se desea consultar.
+     *
+     * @return array - Un array asociativo con los datos relacionados o un array vacío si no se encuentran datos.
+     */
+    public static function datosRelacionadosCarga($idCarga)
+    {
+
+        global $conexion;
+        $result = [];
+
+        try {
+            $consulta = mysqli_query($conexion,"SELECT * FROM academico_cargas
+            LEFT JOIN academico_grados ON gra_id=car_curso
+            LEFT JOIN academico_grupos ON gru_id=car_grupo
+            LEFT JOIN academico_materias ON mat_id=car_materia
+            LEFT JOIN usuarios ON uss_id=car_docente
+            WHERE car_id={$idCarga}");
+            $result = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $result;
+
+    }
+
 }
