@@ -218,6 +218,28 @@ if (!empty($datosPaginaActual)) {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
+
+/* Estilos para el esqueleto */
+.skeleton {
+	background: #f0f0f0; /* Color de fondo del esqueleto */
+	border-radius: 4px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.skeleton-header {
+	height: 20px; /* Altura del encabezado del esqueleto */
+	width: 80%; /* Anchura del encabezado del esqueleto */
+	background: #e0e0e0; /* Color de fondo del encabezado */
+	margin-bottom: 10px;
+}
+
+.skeleton-content {
+	height: 10px; /* Altura del contenido del esqueleto */
+	width: 100%; /* Anchura del contenido del esqueleto */
+	background: #e0e0e0; /* Color de fondo del contenido */
+	margin-bottom: 5px;
+}
 </style>
 
 	<script type="text/javascript">
