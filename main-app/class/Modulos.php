@@ -162,8 +162,11 @@ class Modulos {
         AND ipmod_institucion='".$config['conf_id_institucion']."'
         WHERE pagp_id='".$idPaginaInterna."'");
         $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
-        if ($paginaActualUsuario[0]=="") { 
-            return [];
+        if ( empty($paginaActualUsuario) ) { 
+            return [
+                'pagp_id'     => 'GN0003',
+                'pagp_pagina' => 'DESCONOCIDA'
+            ];
         }
         return $paginaActualUsuario;
     }
