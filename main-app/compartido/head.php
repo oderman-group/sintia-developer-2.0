@@ -34,6 +34,11 @@ require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");
 require_once("../class/CargaAcademica.php");
 require_once("../class/Grupos.php");
+
+$tituloDePagina = $frases[102][$datosUsuarioActual['uss_idioma']];
+if (!empty($datosPaginaActual)) {
+	$tituloDePagina .= " | ".$datosPaginaActual['pagp_pagina'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +53,7 @@ require_once("../class/Grupos.php");
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta name="description" content="Plataforma Educativa SINTIA | Para Colegios y Universidades" />
     <meta name="author" content="ODERMAN" />
-    <title><?=$frases[102][$datosUsuarioActual['uss_idioma']];?></title>
+    <title><?=$tituloDePagina;?></title>
      <!-- Estilos de LiveView  -->
 	<link rel="stylesheet" type="text/css" href="../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
     <!-- google font -->
