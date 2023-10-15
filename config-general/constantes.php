@@ -50,6 +50,13 @@ define('DEVELOPER', 22);
 
 define('PORCENTAJE_MINIMO_GENERAR_INFORME', 99);
 
+/* CONSTANTES ACADEMICAS */
+define('CONFIG_MANUAL_INDICADOR', 1);
+define('CONFIG_AUTOMATICO_INDICADOR', 0);
+define('CONFIG_MANUAL_CALIFICACIONES', 1);
+define('CONFIG_AUTOMATICO_CALIFICACIONES', 0);
+define('PERMISO_EDICION_PERIODOS_DIFERENTES', true); //Diferentes al actual
+
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
