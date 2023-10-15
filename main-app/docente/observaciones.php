@@ -6,6 +6,10 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+$disabled = '';
+if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) { 
+    $disabled = 'disabled';
+}
 ?>
 
 <!--bootstrap -->
@@ -144,7 +148,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														
 														<td width="25%">
 															
-															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'].'-'.$resultado['mat_nombres'];?>" title="8" onChange="notas(this)"><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
+															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'].'-'.$resultado['mat_nombres'];?>" title="8" onChange="notas(this)" <?=$disabled;?>><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
 														</td>
                                                     </tr>
 													<?php 
