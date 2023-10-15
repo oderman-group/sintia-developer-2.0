@@ -137,7 +137,7 @@ $num = $grados->rowCount();
                             <label class="form-check-label" for="gridCheck">
                                 Autorizo al tratamiento de datos personales. 
                                 <?php
-                                    if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'])){
+                                    if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto']) || $datosConfig['cfgi_mostrar_politicas'] == 2){
                                         switch($datosConfig['cfgi_mostrar_politicas']){
                                             case 1:
                                                 $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
