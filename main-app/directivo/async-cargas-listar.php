@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-$idPaginaInterna = '9';
+$idPaginaInterna = 'CM0009';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/CargaAcademica.php");
