@@ -91,14 +91,14 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?> <mark>(Cuadrada)</mark></label>
                                             <div class="col-sm-4">
-                                                <input type="file" name="fotoPerfil" class="form-control">
+                                                <input type="file" name="fotoPerfil" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg" class="form-control">
                                             </div>
                                         </div>
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Firma digital</label>
                                             <div class="col-sm-4">
-                                                <input type="file" name="firmaDigital" class="form-control">
+                                                <input type="file" name="firmaDigital" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg" class="form-control">
                                             </div>
                                         </div>
 										
