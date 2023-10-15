@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/SubRoles.php");
+require_once("../class/Paginas.php");
 
 $idPaginaInterna = 'DV0020';
 
@@ -209,6 +210,24 @@ if(!Modulos::validarPaginasHijasSubRol($_GET["idP"])){
                                                         }
                                                         echo'<option value="'.$pagina["pagp_id"].'" '.$selected.'>'.$pagina["pagp_pagina"].'</option>';
                                                     }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Paginas de Dependencia</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control  select2" multiple name="paginaDependencia[]" id="paginaDependencia">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                        $paginasBD=!empty($datosPaginas['pagp_paginas_dependencia'])?explode(',',$datosPaginas['pagp_paginas_dependencia']):"";
+                                                        $filtro="AND pagp_tipo_usuario=5 AND pagp_id!='".$datosPaginas['pagp_id']."'";
+                                                        $consultaPaginas = Paginas::listarPaginas($filtro);
+                                                        while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                            $selected=($paginasBD!="" && in_array($pagina["pagp_id"], $paginasBD))?"selected":"";
+                                                            echo'<option value="'.$pagina["pagp_id"].'" '.$selected.'>['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                        }
                                                     ?>
                                                 </select>
                                             </div>
