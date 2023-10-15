@@ -147,4 +147,29 @@ class Modulos {
         }
         return true;
     }
+
+    /**
+     * Obtener Datos de la Página Actual por su Identificador Interno
+     *
+     * Esta función se utiliza para recuperar datos de una página actual en función de su identificador interno.
+     *
+     * @param int $idPaginaInterna El identificador interno de la página que se desea obtener.
+     *
+     * @return array Un array asociativo que contiene los datos de la página actual, o un array vacío si no se encuentra la página.
+     */
+    public static function datosPaginaActual($idPaginaInterna): array
+    {
+        global $conexion, $baseDatosServicios, $config;
+
+        $consultaPaginaActualUsuarios = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
+        INNER JOIN ".$baseDatosServicios.".instituciones_modulos 
+        ON ipmod_modulo=pagp_modulo 
+        AND ipmod_institucion='".$config['conf_id_institucion']."'
+        WHERE pagp_id='".$idPaginaInterna."'");
+        $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
+        if ($paginaActualUsuario[0]=="") { 
+            return [];
+        }
+        return $paginaActualUsuario;
+    }
 }
