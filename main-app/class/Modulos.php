@@ -77,6 +77,10 @@ class Modulos {
             return true;
         }
 
+        if ($datosUsuarioActual['uss_tipo'] != TIPO_DIRECTIVO) { 
+            return false;
+        }
+
         try{
             $consultaSubRoles = mysqli_query($conexion, "SELECT spu_id_sub_rol FROM ".$baseDatosServicios.".sub_roles_usuarios 
             WHERE spu_id_usuario='".$datosUsuarioActual['uss_id']."' AND spu_institucion='".$config['conf_id_institucion']."'");
@@ -162,11 +166,8 @@ class Modulos {
         AND ipmod_institucion='".$config['conf_id_institucion']."'
         WHERE pagp_id='".$idPaginaInterna."'");
         $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
-        if ( empty($paginaActualUsuario) ) { 
-            return [
-                'pagp_id'     => 'GN0003',
-                'pagp_pagina' => 'DESCONOCIDA'
-            ];
+        if ($paginaActualUsuario[0]=="") { 
+            return [];
         }
         return $paginaActualUsuario;
     }
