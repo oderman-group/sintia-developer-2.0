@@ -2,7 +2,13 @@
 <?php $idPaginaInterna = 'DC0046';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+$disabled = '';
+if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) { 
+    $disabled = 'disabled';
+}
+?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 <!--tagsinput-->
@@ -32,6 +38,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 }
 </script>
 
+<!-- full calendar -->
+<link href="../../config-general/assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -53,178 +62,77 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-3 col-lg-3">
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">PLAN DE CLASES</header>
-										
-										<div class="panel-body">
-											<p>Puedes reemplazar el plan actual si ya tienes uno montado.</p>
-											<form action="guardar.php" method="post" enctype="multipart/form-data">
-												<input type="hidden" name="id" value="16">
-												<div class="form-group row">
-													<div class="col-sm-12">
-														<input type="file" name="file" class="form-control">
-													</div>
-												</div>
-												<input type="submit" class="btn btn-primary" value="Guardar cambios">
-											</form>
-											<?php
-											$consultaPclase=mysqli_query($conexion, "SELECT * FROM academico_pclase 
-											WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."'");
-											$pclase = mysqli_fetch_array($consultaPclase, MYSQLI_BOTH);
-											if(isset($pclase) && $pclase['pc_plan']!=""){
-											?>
-											<hr>
-											<a href="../files/pclase/<?=$pclase['pc_plan'];?>" target="_blank"><i class="fa fa-download"></i> <?=$pclase['pc_plan'];?></a>
+								<div class="col-md-12">
+									<nav>
+										<div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+											<a class="nav-item nav-link" id="nav-clases-tab" data-toggle="tab" href="#nav-clases" role="tab" aria-controls="nav-clases" aria-selected="true" onClick="listarInformacion('lista-clases.php', 'nav-clases')">Clases</a>
+
+											<a class="nav-item nav-link" id="nav-unidades-tab" data-toggle="tab" href="#nav-unidades" role="tab" aria-controls="nav-unidades" aria-selected="true" onClick="listarInformacion('lista-unidades-tematicas.php', 'nav-unidades')">Unidades temáticas</a>
+
+											<a class="nav-item nav-link" id="nav-plan-clase-tab" data-toggle="tab" href="#nav-plan-clase" role="tab" aria-controls="plan-clase" aria-selected="false">Plan de clase</a>
+
+											<?php if(isset($datosCargaActual) && $datosCargaActual['car_tematica'] == 1){?>
+												<a class="nav-item nav-link" id="nav-tematica-tab" data-toggle="tab" href="#nav-tematica" role="tab" aria-controls="plan-tematica" aria-selected="false" onClick="listarInformacion('lista-tematica.php', 'nav-tematica')">Temática del periodo</a>
 											<?php }?>
+
 										</div>
+									</nav>
+
+									<div class="tab-content" id="nav-tabContent">
+										
+										<div class="tab-pane fade" id="nav-clases" role="tabpanel" aria-labelledby="nav-clases-tab"></div>
+
+										<div class="tab-pane fade" id="nav-unidades" role="tabpanel" aria-labelledby="nav-unidades-tab"></div>
+
+										<div class="tab-pane fade" id="nav-plan-clase" role="tabpanel" aria-labelledby="plan-clase-tab">
+											<?php include "includes/plan-clases.php"; ?>
+										</div>
+
+										<div class="tab-pane fade" id="nav-tematica" role="tabpanel" aria-labelledby="nav-tematica-tab"></div>
+
 									</div>
 
-									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-									
-								</div>
-								
-								
-								
-								<div class="col-md-9 col-lg-9">
-                                    <div class="card card-topline-purple">
-                                        <div class="card-head">
-                                            <header><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></header>
-                                            <div class="tools">
-                                                <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-			                                    <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										
-										
-									
-										
-                                        <div class="card-body">
+									<script>
+										document.addEventListener('DOMContentLoaded', function() {
 											
-											<div class="row" style="margin-bottom: 10px;">
-												<div class="col-sm-12">
-													
-											<?php
-											if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {
-											?>
-											
-													<div class="btn-group">
-														<a href="clases-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nueva clase <i class="fa fa-plus"></i>
-														</a>
-													</div>
-													
-													
-											<?php
-											}
-											?>
-													
-											
-												</div>
-											</div>
-											
-											
-										<span id="respuestaGuardar"></span>	
-                                        <div class="table-responsive">
-                                            <table class="table table-striped custom-table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
-														<th>Disponible</th>
-														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
-														<th>Fecha</th>
-														<th>#EC/#ET</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-													<?php
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-														LEFT JOIN academico_unidades ON uni_id=cls_unidad AND uni_eliminado!=1
-														WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
-														$contReg = 1;
-														$unidadAnterior=0;
-														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-															if(!empty($resultado['cls_unidad']) && $resultado['cls_unidad']!=$unidadAnterior){
-																$unidadAnterior=$resultado['cls_unidad'];
-													?>
-													<tr style="background-color: antiquewhite; font-weight: bold;">
-														<td colspan="7"><?=$resultado['uni_nombre'];?>.</td>
-													</tr>
-													<?php
-															}
-															$bg = '';
-															$consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-															(SELECT count(*) FROM academico_ausencias 
-															INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-															WHERE aus_id_clase='".$resultado[0]."'),
-															(SELECT count(*) FROM academico_matriculas 
-															WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)");
-															$numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-															if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
-															
-															$cheked = '';
-															if($resultado['cls_disponible']==1){$cheked = 'checked';}
+											// Obtén la cadena de búsqueda de la URL
+											var queryString = window.location.search;
 
-															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-															$arrayDatos = json_encode($arrayEnviar);
-															$objetoEnviar = htmlentities($arrayDatos);
-													?>
-													<tr id="reg<?=$resultado['cls_id'];?>">
-                                                        <td><?=$contReg;?></td>
-														<td><?=$resultado['cls_id'];?></td>
-														<td>
-															<div class="input-group spinner col-sm-10">
-																<label class="switchToggle">
-																	<input type="checkbox" id="<?=$resultado['cls_id'];?>" name="disponible" value="1" onChange="guardarAjax(this)" <?=$cheked;?>>
-																	<span class="slider yellow round"></span>
-																</label>
-															</div>
-														</td>
-														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado['cls_tema'];?></a></td>
-														<td><?=$resultado['cls_fecha'];?></td>
-														<td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></td>
-														<td>
-															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
-															
-															<div class="btn-group">
-																<button class="btn btn-xs btn-info dropdown-toggle center no-margin" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
-																	<i class="fa fa-angle-down"></i>
-																</button>
-																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
-																		<li><a href="clases-registrar.php?idR=<?=base64_encode($resultado['cls_id']);?>">Inasistencias</a></li>
-																	  <li><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>">Acceder</a></li>
-																	  <li><a href="clases-editar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
-																	  
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
-																</ul>
-															</div>
-															<?php } ?>
-														</td>
-                                                    </tr>
-													<?php 
-														$contReg++;
-													}
-													?>
-                                                </tbody>
-                                            </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+											// Crea un objeto URLSearchParams a partir de la cadena de búsqueda
+											var params = new URLSearchParams(queryString);
+											var tab = params.get('tab');
+											
+											if ( tab == 2 ) {
+												listarInformacion('lista-unidades-tematicas.php', 'nav-unidades');
+												document.getElementById('nav-unidades-tab').classList.add('active');
+												document.getElementById('nav-unidades').classList.add('show', 'active');
+											}
+											else if ( tab == 3 ) {
+												document.getElementById('nav-plan-clase-tab').classList.add('active');
+												document.getElementById('nav-plan-clase').classList.add('show', 'active');
+											}
+											else if ( tab == 4 ) {
+												listarInformacion('lista-tematica.php', 'nav-tematica');
+												document.getElementById('nav-tematica-tab').classList.add('active');
+												document.getElementById('nav-tematica').classList.add('show', 'active');
+											}
+											else {
+												listarInformacion('lista-clases.php', 'nav-clases');
+												document.getElementById('nav-clases-tab').classList.add('active');
+												document.getElementById('nav-clases').classList.add('show', 'active');
+											}
+
+											
+										});
+									</script>
+									
+
+								</div>
 								
 							
                             </div>
@@ -256,6 +164,12 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+	<!-- calendar -->
+<script src="../../config-general/assets/plugins/moment/moment.min.js" ></script>
+<script src="../../config-general/assets/plugins/fullcalendar/fullcalendar.min.js" ></script>
+
+<?php include("calendario-js.php");?>
 </body>
 
 </html>

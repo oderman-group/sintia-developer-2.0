@@ -26,23 +26,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
                                 
-								<div class="col-md-4 col-lg-3">	
-									<p align="center"><a href="cronograma-calendario.php" class="btn btn-danger"><i class="fa fa-calendar"></i> VER EN CALENDARIO</a></p>
-									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								
-								</div>
-									
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></header>
@@ -72,7 +61,7 @@
 											<?php
 											}
 											?>
-													
+													<a href="cronograma-calendario.php" class="btn btn-danger"><i class="fa fa-calendar"></i> VER EN CALENDARIO</a>
 											
 												</div>
 											</div>

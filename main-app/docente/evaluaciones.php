@@ -24,20 +24,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-							
-									<?php include("filtros-cargas.php");?>
-									
-								</div>
-									
-								<div class="col-md-4 col-lg-6">
+								<div class="col-md-12">
 									<div class="card card-box">
 										<div class="card-head">
 											<header><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></header>

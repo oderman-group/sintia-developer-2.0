@@ -747,7 +747,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="clases.php";</script>';
+		echo '<script type="text/javascript">window.location.href="clases.php?tab=3";</script>';
 		exit();
 	}
 
@@ -1361,7 +1361,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="tematica.php";</script>';
+		echo '<script type="text/javascript">window.location.href="clases.php?tab=4";</script>';
 		exit();
 	}
 
@@ -1633,7 +1633,7 @@ if(!empty($_POST["id"])){
 					include("../compartido/error-catch-to-report.php");
 				}
 			}
-			$ULR = 'cronograma.php';
+			$ULR = 'cronograma-calendario.php';
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
@@ -2005,7 +2005,7 @@ if(!empty($_GET["get"])){
 		}
 		
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
+		echo '<script type="text/javascript">window.location.href="calificaciones.php?tab=2";</script>';
 		exit();
 	}
 

@@ -88,55 +88,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									<div class="panel">
-										<header class="panel-heading panel-heading-purple">TABLA DE VALORES</header>
-
-										<div class="panel-body">
-											  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
-												<!-- BEGIN -->
-												<thead>
-												  <tr>
-													<th>Desde</th>
-													<th>Hasta</th>
-													<th>Resultado</th>
-												  </tr>
-												</thead>
-												<tbody>
-												 <?php
-												 $TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
-												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
-												 ?>
-												  <tr id="data1" class="odd grade">
-
-													<td><?=$tabla["notip_desde"];?></td>
-													<td><?=$tabla["notip_hasta"];?></td>
-													<td><?=$tabla["notip_nombre"];?></td>
-												  </tr>
-												  <?php }?>
-												</tbody>
-											  </table>
-										</div>
-										
-                                    </div>
-									
-									
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-									
-								</div>
-									
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></header>

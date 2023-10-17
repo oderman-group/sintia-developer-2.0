@@ -34,182 +34,78 @@ $porcentajeRestante = 100 - $valores[0];
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
                                 
-								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-								</div>
-									
-								<div class="col-md-8 col-lg-9">
-                                    <div class="card card-topline-purple">
-                                        <div class="card-head">
-                                            <header><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></header>
-                                            <div class="tools">
-                                                <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-			                                    <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-                                            </div>
-                                        </div>
-										
-										
-									
-										
-                                        <div class="card-body">
-											<div class="row" style="margin-bottom: 10px;">
-												<div class="col-sm-12">
-													
-											<?php
-											if( CargaAcademica::validarAccionAgregarCalificaciones($datosCargaActual, $valores, $periodoConsultaActual, $porcentajeRestante) ) {
-											?>
-											
-													<div class="btn-group">
-														<a href="calificaciones-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
-													</div>
-													
-													
-											<?php
-											}
-											?>
-													
-											<?php if($datosCargaActual['car_configuracion']==1 and $porcentajeRestante<=0){?>
-												<p style="color: tomato;"> Has alcanzado el 100% de valor para las calificaciones. </p>
-											<?php }?>
-														
-											<?php if($datosCargaActual['car_maximas_calificaciones']<=$valores[1]){?>
-												<p style="color: tomato;"> Has alcanzado el número máximo de calificaciones permitidas. </p>
-											<?php }?>
-											
-											<?php if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {?>
-													<div class="btn-group">
-														<a href="calificaciones-todas-rapido.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" class="btn bg-purple">
-															LLenar más rápido las calificaciones
-														</a>
-													</div>
-											<?php }?>
-											
-												</div>
-											</div>
-											
-											
-											
-                                        <div class="table-responsive">
-                                            <table class="table table-striped custom-table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
-														
-														<?php if($datosCargaActual['car_indicador_automatico']==0 or $datosCargaActual['car_indicador_automatico']==null){?>
-															<th><?=$frases[68][$datosUsuarioActual['uss_idioma']];?></th>
-														<?php }?>
-														
-														<?php if($datosCargaActual['car_evidencia']==1){?>
-															<th>Evidencia</th>
-														<?php }?>
-														
-														<th>#EC/#ET</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-													 INNER JOIN academico_indicadores ON ind_id=act_id_tipo
-													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
-													 ");
-													 $contReg = 1;
-													 $porcentajeActual = 0;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$bg = '';
-														$consultaNumEstudiante=mysqli_query($conexion, "SELECT
-														(SELECT count(*) FROM academico_calificaciones 
-														INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
-														WHERE cal_id_actividad='".$resultado[0]."'),
-														(SELECT count(*) FROM academico_matriculas
-														INNER JOIN usuarios ON uss_id=mat_id_usuario
-														WHERE mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido)
-														");
-														$numerosEstudiantes = mysqli_fetch_array($consultaNumEstudiante, MYSQLI_BOTH);
-														if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
-														 
-														 $porcentajeActual +=$resultado['act_valor'];
-														 
-														 if($datosCargaActual['car_evidencia']==1){
-															$consultaEvidencia=mysqli_query($conexion, "SELECT * FROM academico_evidencias WHERE evid_id='".$resultado['act_id_evidencia']."'");
-														 	$evidencia = mysqli_fetch_array($consultaEvidencia, MYSQLI_BOTH);
-														 }
-													 ?>
-                                                    
-													<tr id="reg<?=$resultado['act_id'];?>">
-                                                        <td><?=$contReg;?></td>
-														<td><?=$resultado['act_id'];?></td>
-														<td><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>" style="text-decoration: underline;" title="Calificar"><?=$resultado['act_descripcion'];?></a></td>
-														<td><?=$resultado['act_fecha'];?></td>
-														<td><?=$resultado['act_valor'];?></td>
-														
-														<?php if($datosCargaActual['car_indicador_automatico']==0 or $datosCargaActual['car_indicador_automatico']==null){?>
-															<td style="font-size: 10px;"><?=$resultado['ind_nombre'];?></td>
-														<?php }?>
-														
-														<?php if($datosCargaActual['car_evidencia']==1){?>
-															<td><?=$evidencia['evid_nombre']." (".$evidencia['evid_valor']."%)";?></td>
-														<?php }?>
-														
-														<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=base64_encode($resultado['act_id']);?>&grado=<?=base64_encode($datosCargaActual[2]);?>&grupo=<?=base64_encode($datosCargaActual[3]);?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$numerosEstudiantes[1];?></a></td>
-														<td>
-															
-															<?php
-																$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-																$arrayDatos = json_encode($arrayEnviar);
-														 		$objetoEnviar = htmlentities($arrayDatos);
-																?>
-															
-															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
-															
-															<div class="btn-group">
-																<button class="btn btn-xs btn-info dropdown-toggle center no-margin" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
-																	<i class="fa fa-angle-down"></i>
-																</button>
-																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
-																	<li><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>">Calificar</a></li>
-																	<li><a href="calificaciones-editar.php?idR=<?=base64_encode($resultado['act_id']);?>">Editar</a></li>
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="guardar.php?get=<?=base64_encode(12);?>&idR=<?=base64_encode($resultado['act_id']);?>&idIndicador=<?=base64_encode($resultado['act_id_tipo']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
-																</ul>
-															</div>
-															
-															<?php } ?>
-														</td>
-                                                    </tr>
-													<?php 
-														 $contReg++;
-													  }
+								<div class="col-md-12">
 
-													  ?>
-                                                </tbody>
-												<tfoot>
-													<tr style="font-weight:bold;">
-														<td colspan="4"><?=strtoupper($frases[107][$datosUsuarioActual['uss_idioma']]);?></td>
-														<td><?=$porcentajeActual;?>%</td>
-														<td colspan="3"></td>
-													 </tr>
-												</tfoot>
-                                            </table>
-                                            </div>
-                                        </div>
-                                    </div>
+									<nav>
+										<div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+											<a class="nav-item nav-link" id="nav-calificaciones-tab" data-toggle="tab" href="#nav-calificaciones" role="tab" aria-controls="nav-calificaciones" aria-selected="true" onClick="listarInformacion('listar-calificaciones.php', 'nav-calificaciones')">Calificaciones</a>
+
+											<a class="nav-item nav-link" id="nav-calificaciones-todas-tab" data-toggle="tab" href="#nav-calificaciones-todas" role="tab" aria-controls="nav-calificaciones-todas" aria-selected="true" onClick="listarInformacion('listar-calificaciones-todas.php', 'nav-calificaciones-todas')">Resumen de notas</a>
+											
+											<?php if(isset($datosCargaActual) && $datosCargaActual['car_observaciones_boletin']==1){?>
+												<a class="nav-item nav-link" id="nav-observaciones-tab" data-toggle="tab" href="#nav-observaciones" role="tab" aria-controls="nav-observaciones" aria-selected="true" onClick="listarInformacion('listar-observaciones.php', 'nav-observaciones')">Observaciones</a>
+											<?php }?>
+
+											<a class="nav-item nav-link" id="nav-periodos-resumen-tab" data-toggle="tab" href="#nav-periodos-resumen" role="tab" aria-controls="nav-periodos-resumen" aria-selected="true" onClick="listarInformacion('listar-periodos-resumen.php', 'nav-periodos-resumen')">Resumen por periodos</a>
+
+										</div>
+									</nav>
+
+									<div class="tab-content" id="nav-tabContent">
+										
+										<div class="tab-pane fade" id="nav-calificaciones" role="tabpanel" aria-labelledby="nav-calificaciones-tab"></div>
+
+										<div class="tab-pane fade" id="nav-calificaciones-todas" role="tabpanel" aria-labelledby="nav-calificaciones-todas-tab"></div>
+
+										<div class="tab-pane fade" id="nav-observaciones" role="tabpanel" aria-labelledby="nav-observaciones-tab"></div>
+
+										<div class="tab-pane fade" id="nav-periodos-resumen" role="tabpanel" aria-labelledby="nav-periodos-resumen-tab"></div>
+
+									</div>
+
                                 </div>
+
+								<script>
+										document.addEventListener('DOMContentLoaded', function() {
+											
+											// Obtén la cadena de búsqueda de la URL
+											var queryString = window.location.search;
+
+											// Crea un objeto URLSearchParams a partir de la cadena de búsqueda
+											var params = new URLSearchParams(queryString);
+											var tab = params.get('tab');
+											
+											if ( tab == 2 ) {
+												listarInformacion('listar-calificaciones-todas.php', 'nav-calificaciones-todas');
+												document.getElementById('nav-calificaciones-todas-tab').classList.add('active');
+												document.getElementById('nav-calificaciones-todas').classList.add('show', 'active');
+											}
+											else if ( tab == 3 ) {
+												listarInformacion('listar-observaciones.php', 'nav-observaciones');
+												document.getElementById('nav-observaciones-tab').classList.add('active');
+												document.getElementById('nav-observaciones').classList.add('show', 'active');
+											}
+											else if ( tab == 4 ) {
+												listarInformacion('listar-periodos-resumen.php', 'nav-periodos-resumen');
+												document.getElementById('nav-periodos-resumen-tab').classList.add('active');
+												document.getElementById('nav-periodos-resumen').classList.add('show', 'active');
+											}
+											else {
+												listarInformacion('listar-calificaciones.php', 'nav-calificaciones');
+												document.getElementById('nav-calificaciones-tab').classList.add('active');
+												document.getElementById('nav-calificaciones').classList.add('show', 'active');
+											}
+
+											
+										});
+									</script>
 								
 							
                             </div>
