@@ -46,7 +46,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 							<?php include("../compartido/texto-manual-ayuda.php"); ?>
 						</div>
 						<ol class="breadcrumb page-breadcrumb pull-right">
-							<li><a class="parent-item" href="#" name="unidades.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual[8]]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+							<li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual[8]]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 							<li class="active"><?= $frases[165][$datosUsuarioActual[8]]; ?> <?= $frases[374][$datosUsuarioActual[8]]; ?></li>
 						</ol>
 					</div>
@@ -89,7 +89,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 									</div>
 									<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 
-									<a href="#" name="unidades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+									<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 								</form>
 							</div>
 						</div>

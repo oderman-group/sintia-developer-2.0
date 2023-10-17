@@ -23,11 +23,11 @@
 
 								//DOCENTES
 
-								if($datosUsuarioActual[3]==2){?>
+								if($datosUsuarioActual[3] == TIPO_DOCENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="periodos-resumen.php"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
