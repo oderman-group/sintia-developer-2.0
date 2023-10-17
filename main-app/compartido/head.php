@@ -142,6 +142,7 @@ if (!empty($datosPaginaActual)) {
 	<script src="../js/Utilidades.js" ></script>
 	<script src="../js/Estudiantes.js" ></script>
 	<script src="../js/Docentes.js" ></script>
+	<script src="../js/Calificaciones.js" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
