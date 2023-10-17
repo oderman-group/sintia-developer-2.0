@@ -112,10 +112,10 @@
 											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
-											INNER JOIN usuarios ON uss_id=not_usuario
+											LEFT JOIN usuarios ON uss_id=not_usuario
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
 											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
-											AND not_year='" . $_SESSION["bd"] . "' AND not_institucion='".$config['conf_id_institucion']."'
+											AND not_year='" . $_SESSION["bd"] . "' AND (not_institucion='".$config['conf_id_institucion']."' OR not_global = 'SI')
 											$filtro
 											ORDER BY not_id DESC
 											");
@@ -150,12 +150,18 @@
 												
 												
 												$fotoUsr = $usuariosClase->verificarFoto($resultado['uss_foto']);
+
+                                                $clasesNoticiaGlobal = '';
+                                                if( $resultado['not_global'] == 'SI' ) {
+                                                    $clasesNoticiaGlobal = ' border border-info animate__animated animate__pulse animate__delay-1s animate__repeat-2 mt-5 mb-5';
+                                                    $colorFondo = 'style="background: #FFFBE4;"';
+                                                }
 												
 												
 											?>
                 <div id="PUB<?=base64_encode($resultado['not_id']);?>" class="row">
                     <div class="col-sm-12">
-                        <div id="PANEL<?=base64_encode($resultado['not_id']);?>" class="panel" <?=$colorFondo;?>>
+                        <div id="PANEL<?=base64_encode($resultado['not_id']);?>" class="panel <?=$clasesNoticiaGlobal;?>" <?=$colorFondo;?>>
 
                             <div class="card-head">
                                 <header><?=$resultado['not_titulo'];?></header>
