@@ -88,7 +88,7 @@ function mostrarChat(datos) {
 					socket.on("listar_chat_" + chat_remite_usuario + "_" + chat_destino_usuario, (response) => {
 						data = response["data"];
 						data.forEach(elemento => {
-							// console.log(chat_remite_usuario + "-" + elemento.chat_remite_usuario + " = " + elemento.chat_mensaje);
+							//  console.log(chat_remite_usuario + "-" + elemento.chat_remite_usuario + " = " + elemento.chat_mensaje);
 							if (chat_remite_usuario == elemento.chat_remite_usuario) {
 								fechaCompleta = verificarFecha(elemento.chat_fecha_registro);
 								contenido_chat.innerHTML += htmlEmisor(elemento.chat_id, elemento.chat_mensaje, fechaCompleta, elemento.chat_tipo + '', elemento.chat_url_file);
@@ -102,7 +102,6 @@ function mostrarChat(datos) {
 							chatElement.scrollTop = chatElement.scrollHeight;
 
 						});
-						console.log("actualizando notifiaciones");
 						socket.emit("actualizar_notificaciones", {
 							miSala: "sala_" + chat_remite_usuario, 
 							chat_destino_usuario:chat_remite_usuario});
@@ -127,8 +126,12 @@ function mostrarChat(datos) {
 						if (bajar) {
 							chatElement.scrollTop = chatElement.scrollHeight;
 						}
-
-						// socket.emit("ver_mensaje", { chat_id: data["body"]["chat_id"] });
+                        //  console.log(data);
+						 remite = data["body"]["chat_remite_usuario"];
+						 if(remite==chat_destino_usuario){
+							// console.log("debe ver el mensaje del usaurio "+remite);
+							socket.emit("ver_mensaje", { chat_id: data["body"]["chat_id"] });
+						 };
 					});
 
 					divNombre = document.getElementById("nombre_" + chat_destino_usuario);
