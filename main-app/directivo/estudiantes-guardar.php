@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/Estudiantes.php");
+require_once "../class/Modulos.php";
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0192';
@@ -198,7 +199,7 @@ try{
 }
 
 //Insertamos la matrícula
-$idEstudiante = Estudiantes::insertarEstudiantes($conexionPDO, $_POST, $result_numMat, $procedencia, $idAcudiente, $idEstudianteU);
+$idEstudiante = Estudiantes::insertarEstudiantes($conexionPDO, $_POST, $idEstudianteU, $result_numMat, $procedencia, $idAcudiente);
 
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
