@@ -45,7 +45,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cronograma.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -105,7 +105,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										
-										<a href="#" name="cronograma.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="#" name="cronograma-calendario.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>
