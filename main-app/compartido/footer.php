@@ -29,24 +29,93 @@ LIMIT ".$empezar.",1
 			<p>&nbsp;</p>
 		<?php }?>
 	</div>
-<?php }*/?>
+<?php }*/ ?>
 
-<?php include("../compartido/guardar-historial-acciones.php");?>
+<?php include("../compartido/guardar-historial-acciones.php"); ?>
+<style>
+	.float {
+		position: fixed;
+		width: 60px;
+		height: 60px;
+		bottom: 40px;
+		right: 40px;
+		border-radius: 50px;
+		text-align: center;
+		font-size: 30px;
+		box-shadow: 2px 2px 3px #999;
+		z-index: 100;
+	}
+
+	.my-float {
+		margin-top: 16px;
+	}
+
+	.my-notificacion {
+		position: fixed;
+		margin-top: 0px;
+		background-color: red;
+		border-radius: 50px;
+		font-size: 12px;
+		border-radius: 50px;
+		padding: 7px;
+		bottom: 80px;
+		right: 40px;
+	}
+</style>
 <script>
 	// socket en la espera de una notificacion general
-	socket.on("notificacion_chat_general", (data) => {
+	var id_usuario = <?php echo $idSession ?>;
+	socket.on("notificacion_sala_" + id_usuario, (data) => {
+		let div_notificacion = document.getElementById('div_notificacion');
+		let boton_notificacion = document.getElementById('boton_notificacion');
+		
 		console.log(data);
+		if(div_notificacion!=null){
+			if (data> 0) {
+			div_notificacion.innerHTML=data;
+			div_notificacion.classList.add("fa-beat-fade");
+			};
+		}else{
+			console.log("no se enceontro notificacion");
+			const div_notificacion_new = document.createElement('div');
+			div_notificacion_new.classList.add("my-notificacion","fa-beat-fade");
+			div_notificacion_new.id="div_notificacion";
+			div_notificacion_new.innerHTML=data;
+			if (data> 0) {
+			boton_notificacion.appendChild(div_notificacion_new);
+			};
+		}
+
 	});
 </script>
+<!-- boton de chat -->
+<a id="boton_notificacion" style="text-shadow: none;color: #fefefe;font-family:arial; background:<?= $Plataforma->colorUno; ?>;" href="../directivo/chat2.php" class="float"> <!-- "fa-beat-fade" se agregará una clase cuando hay una nueva notificacion  -->
+	<i class="fas fa-comments my-float"></i>
+	<?php
+
+	$consultaNotificaicones = mysqli_query(
+		$conexion,
+		"SELECT COUNT(chat_visto) as cantidad
+	FROM $baseDatosSocial.chat 
+	WHERE chat_destino_usuario = '" . $_SESSION['id'] . "'  AND chat_visto=1"
+	);
+
+	while ($resultNotificacion = mysqli_fetch_array($consultaNotificaicones, MYSQLI_BOTH)) {
+		if ($resultNotificacion['cantidad'] > 0) {
+	?>			<div id="div_notificacion" class="my-notificacion"><?= $resultNotificacion['cantidad'] ?></div>
+	<?php 	}
+	} ?>
+</a>
+
+
 <!-- start footer -->
 <div class="page-footer">
+	<div class="page-footer-inner"> 2018 &copy; Plataforma SINTIA By
+		<a href="#" target="_top" class="makerCss">ODERMAN</a>
+	</div>
 
-    <div class="page-footer-inner"> 2018 &copy; Plataforma SINTIA By
-    	<a href="#" target="_top" class="makerCss">ODERMAN</a>
-    </div>
-	
-    <div class="scroll-to-top">
-    	<i class="icon-arrow-up"></i>
-    </div>
+	<div class="scroll-to-top">
+		<i class="icon-arrow-up"></i>
+	</div>
 </div>
 <!-- end footer -->

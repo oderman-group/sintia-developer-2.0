@@ -61,7 +61,7 @@ function mostrarChat(datos) {
 						'                     </div>' +
 						'                 </div>' +
 						'                 <div class="col-9">' +
-						'                     <textarea id="imputMensaje" class="form-control" placeholder="Escriba su mensaje aqui..." rows="2"></textarea>' +
+						'                     <textarea id="imputMensaje" class="form-control"  onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2"></textarea>' +
 						'                 </div>' +
 						'                 <div class="col-1">' +
 						'                     <button class="btn btn-primary " type="button" onClick="enviarMensaje()">' +
@@ -102,6 +102,10 @@ function mostrarChat(datos) {
 							chatElement.scrollTop = chatElement.scrollHeight;
 
 						});
+						console.log("actualizando notifiaciones");
+						socket.emit("actualizar_notificaciones", {
+							miSala: "sala_" + chat_remite_usuario, 
+							chat_destino_usuario:chat_remite_usuario});
 					});
 					// a la espera de un nuevo mensaje del chat avierto
 					// socket.on("nuevo_mensaje_chat", (data) => {

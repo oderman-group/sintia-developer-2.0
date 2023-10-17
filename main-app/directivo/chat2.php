@@ -168,7 +168,7 @@
                             <div class="table-cell__container">
                                 <span class="table-cell__content">
                                     <div class="div-center image">
-                                        <img src="<?=$fotoPerfilUsr;?>" class="img-circle user-img-circle" alt="User Image">
+                                        <img src="<?=$fotoPerfilUsr;?>"  height="400px" class="img-circle user-img-circle" alt="User Image">
                                         <h1>
                                             <span style='font-family:Arial; font-weight:bold;'>Te damos la bienvenida, <?= $datosUsuarioActual['uss_nombre'] ?></samp>
                                         </h1>
