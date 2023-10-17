@@ -179,7 +179,7 @@ if(
 										
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
-										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "";}else{?>
+										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "No hay indicador definitivo configurado";}else{?>
 											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										<?php }?>
 										
