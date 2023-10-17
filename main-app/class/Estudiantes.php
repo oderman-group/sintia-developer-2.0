@@ -398,7 +398,7 @@ class Estudiantes {
      * @param $procedencia String
      * @param $pasosMatricula String
      */
-    public static function insertarEstudiantes($conexionPDO, $POST, $result_numMat = '', $procedencia = '', $idAcudiente = '', $idEstudianteU)
+    public static function insertarEstudiantes($conexionPDO, $POST, $idEstudianteU, $result_numMat = '', $procedencia = '', $idAcudiente = '')
     {
         $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
         $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
