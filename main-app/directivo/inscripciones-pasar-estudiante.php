@@ -1,8 +1,21 @@
 <?php
 include("session.php");
+require_once("../class/Estudiantes.php");
+
+if (($agnoBD+1)!=$yearEnd) {
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_18&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	exit;
+}
 
 $matricula="";
 if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
+
+$existe=Estudiantes::validarExistenciaEstudiante($matricula,$bdApasar);
+
+if ($existe>0) {
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_19&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	exit;
+}
 
 	//SE CREA MATRICULA EN AÑO SIGUIENTE
 	try{
@@ -67,5 +80,5 @@ if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
 		include("../compartido/error-catch-to-report.php");
 	}
 
-	echo '<script type="text/javascript">window.location.href="inscripciones.php";</script>';
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?success=SC_DT_14&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
 	exit();

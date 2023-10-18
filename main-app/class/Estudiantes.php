@@ -226,14 +226,14 @@ class Estudiantes {
 
     }
 
-    public static function validarExistenciaEstudiante($estudiante = 0)
+    public static function validarExistenciaEstudiante($estudiante = 0,$BD    = '')
     {
 
         global $conexion;
         $num = 0;
 
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas
             WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
             ");
             $num = mysqli_num_rows($consulta);

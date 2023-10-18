@@ -12,7 +12,7 @@ include("../compartido/historial-acciones-guardar.php");
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombreC"]) == "" or trim($_POST["formatoB"]) == "" or trim($_POST["valorM"]) == "" or trim($_POST["valorP"]) == "") {
-		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4";</script>';
+		echo '<script type="text/javascript">window.location.href="cursos-editar.php?error=ER_DT_4&id='.base64_encode($_POST["id_curso"]).'";</script>';
 		exit();
 	}
 
