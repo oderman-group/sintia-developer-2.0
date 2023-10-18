@@ -78,7 +78,6 @@ LIMIT ".$empezar.",1
 				boton_notificacion.removeChild(div_notificacion);
 			}
 		}else{
-			console.log("no se enceontro notificacion");
 			const div_notificacion_new = document.createElement('div');
 			div_notificacion_new.classList.add("my-notificacion","fa-beat-fade");
 			div_notificacion_new.id="div_notificacion";
