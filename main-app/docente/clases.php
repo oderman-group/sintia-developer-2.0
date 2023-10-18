@@ -14,33 +14,6 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 <!--tagsinput-->
     <link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
 
-<script type="text/javascript">
-function guardarAjax(datos){ 
-  var idR = datos.id;
-  var valor = 0;
-	if(document.getElementById(idR).checked){
-		valor = 1;
-	}
-  var operacion = 3;	
-
-$('#respuestaGuardar').empty().hide().html("").show(1);
-	datos = "idR="+(idR)+
-			"&valor="+(valor)+
-			"&operacion="+(operacion);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-guardar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respuestaGuardar').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
-
-<!-- full calendar -->
-<link href="../../config-general/assets/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
-
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
