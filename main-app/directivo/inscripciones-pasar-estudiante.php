@@ -10,6 +10,13 @@ if (($agnoBD+1)!=$yearEnd) {
 $matricula="";
 if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
 
+$existe=Estudiantes::validarExistenciaEstudiante($matricula,$bdApasar);
+
+if ($existe>0) {
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_19&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	exit;
+}
+
 	//SE CREA MATRICULA EN AÑO SIGUIENTE
 	try{
 		mysqli_query($conexion, "INSERT INTO ".$bdApasar.".academico_matriculas SELECT * FROM ".$bdActual.".academico_matriculas WHERE mat_id='".$matricula."' ");
