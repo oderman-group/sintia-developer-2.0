@@ -59,7 +59,7 @@ if($num>0)
 		break;
 		
 		case 2:
-		  $url = '../docente/cargas.php';
+		  $url = '../docente/noticias.php';
 		break;
 		
 		case 3:
