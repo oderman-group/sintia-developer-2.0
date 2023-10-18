@@ -20,7 +20,7 @@ function mostrarChat(datos) {
 				$("#contenedorChat").show();
 
 				$.each(response, function (index, item) {
-
+					estado = item.datosUsuarios['uss_estado'] == "1" ? "online" : "offline";
 					var html =
 						'<div class="chat-header clearfix">' +
 						'<div class="row">' +
@@ -30,7 +30,7 @@ function mostrarChat(datos) {
 						'</a>' +
 						'<div class="chat-about">' +
 						'<h6 class="m-b-0">' + item.nombre + '</h6>' +
-						'<div class="status"> <i class="fa fa-circle online"></i> online </div>' +
+						'<div class="status"> <i class="fa fa-circle '+estado+'"></i> '+estado+' </div>' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
