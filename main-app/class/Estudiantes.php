@@ -655,4 +655,18 @@ class Estudiantes {
 
     }
 
+    /**
+     * Cuenta el número de estudiantes disponibles para un grupo de docentes, opcionalmente aplicando un filtro.
+     *
+     * @param string $filtroDocentes (Opcional) - Un filtro para limitar la cuenta de estudiantes a un grupo específico de docentes.
+     *
+     * @return int - El número de estudiantes disponibles para los docentes después de aplicar el filtro (o el número total de estudiantes si no se proporciona un filtro).
+     */
+    public static function contarEstudiantesParaDocentes(string $filtroDocentes = '')
+    {
+        $consulta = self::listarEstudiantesParaDocentes($filtroDocentes);
+        $num = mysqli_num_rows($consulta);
+        return $num;
+    }
+
 }
