@@ -138,6 +138,15 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 Intente comprimirlo o busque reducir su peso.";
             break;
 
+            case 'ER_DT_18':
+                $tipo = 'danger';
+                $mensaje = 'Lo sentimos, todavía no se ha activado el año <b>'.base64_decode($_GET['yearPasar']).'</b> para su institución, por favor, ponte en contacto con la administración de la plataforma SINTIA.';
+            break;
+
+            case 'ER_DT_19':
+                $tipo = 'danger';
+                $mensaje = 'Este estudiante ya existe en el año <b>'.base64_decode($_GET['yearPasar']).'</b>.';
+            break;
 
             default:
                 $tipo = 'secondary';

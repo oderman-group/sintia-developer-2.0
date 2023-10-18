@@ -44,7 +44,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 
                                 <?php
                                     $filtro="";
-                                    include("../../config-general/config-admisiones.php");
+                                    include(ROOT_PATH."/config-general/config-admisiones.php");
+                                    include(ROOT_PATH."/config-general/mensajes-informativos.php");
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
