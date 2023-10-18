@@ -239,6 +239,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Las cargas fueron transferidas exitosamente.';
             break;
 
+            case 'SC_DT_14':
+                $tipo = 'success';
+                $mensaje = 'El estudiante fue movido al año <b>'.base64_decode($_GET['yearPasar']).'</b> exitosamente.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

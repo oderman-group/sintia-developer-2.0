@@ -80,5 +80,5 @@ if ($existe>0) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
-	echo '<script type="text/javascript">window.location.href="inscripciones.php";</script>';
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?success=SC_DT_14&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
 	exit();
