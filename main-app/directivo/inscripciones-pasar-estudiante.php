@@ -1,5 +1,11 @@
 <?php
 include("session.php");
+require_once("../class/Estudiantes.php");
+
+if (($agnoBD+1)!=$yearEnd) {
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_18&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	exit;
+}
 
 $matricula="";
 if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
