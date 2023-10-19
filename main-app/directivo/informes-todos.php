@@ -62,7 +62,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<div class="panel-body">
 											<p><a href="../compartido/informes-generales-docentes-cargas.php" target="_blank">1. Docentes y cargas académicas</a></p>
 											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont2">2. Informe de sábanas</a></p>
-											<p><a href="javascript:void(0);" href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
+											<p><a href="../compartido/informe-cargas-duplicadas.php" target="_blank">3. Informe de cargas duplicadas</a></p>
 											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont4" >4. Planilla de asistencia</a></p>
 											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont5" >5. Planilla docentes con notas</a></p>
 											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont6" >6. Notas declaradas y registradas</a></p>
