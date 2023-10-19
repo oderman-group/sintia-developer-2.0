@@ -1,8 +1,12 @@
 						
 <?php
 $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'"), MYSQLI_BOTH);
+$classDiv="col-sm-12";
+if($config['conf_id_institucion'] == ICOLVEN){
+	$classDiv="col-sm-9";
+}
 ?>
-						<div class="col-sm-9">
+						<div class="<?=$classDiv?>">
 						    <div class="card card-box">
 						        <div class="card-head">
 						            <header><?= $frases[60][$datosUsuarioActual[8]]; ?></header>
@@ -208,11 +212,8 @@ $acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios 
 						    </div>
 						</div>
 
-						<div class="col-sm-3">
-
-                            <?php include("../compartido/matricula-pasos.php"); ?>
-
-						    <?php include("../compartido/modulo-frases-lateral.php"); ?>
-
-						    <?php //include("../compartido/publicidad-lateral.php"); ?>
-						</div>
+						<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
+							<div class="col-sm-3">
+								<?php include("../compartido/matricula-pasos.php"); ?>
+							</div>
+						<?php } ?>

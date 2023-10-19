@@ -116,7 +116,8 @@
                     <td align="center" rowspan="2" width="25%">
                         <h3 style="font-weight:bold; color: #00adefad; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></h3><br>
                         <?=$informacion_inst["info_direccion"]?><br>
-                        Informes: <?=$informacion_inst["info_telefono"]?>
+                        Informes: <?=$informacion_inst["info_telefono"]?><br><br>
+                        AÑO LECTIVO: <?=$year?>
                     </td>
                     <td>Documento:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_documento"],0,",",".");?></b></td>
                     <td>Nombre:<br> <b style="color: #00adefad;"><?=$nombreEstudainte?></b></td>

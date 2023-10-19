@@ -1,20 +1,16 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0014';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0014';
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+include(ROOT_PATH."/main-app/compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-try{
-    $consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosAdmisiones.".config_instituciones 
-    WHERE cfgi_id_institucion='".$config['conf_id_institucion']."' AND cfgi_year='".$_SESSION["bd"]."'");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$cfg = mysqli_fetch_array($consultaCfg, MYSQLI_BOTH);
+
+$cfg=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
@@ -79,6 +75,13 @@ if(!Modulos::validarPermisoEdicion()){
 												<input type="text" name="agno" class="form-control col-sm-2" value="<?=$cfg['cfgi_year'];?>" readonly <?=$disabledPermiso;?>>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Año Para Inscripciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el año lectivo en el que quedaran inscritos los nuevos estudiantes."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-8">
+                                                <input type="number" name="yearInscripcion" class="form-control col-sm-2" value="<?=$cfg['cfgi_year_inscripcion'];?>" <?=$disabledPermiso;?>>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Valor de la inscripción</label>

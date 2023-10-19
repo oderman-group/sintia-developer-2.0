@@ -8,7 +8,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+
+$configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
 $db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
@@ -160,11 +163,11 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 onClick="sweetConfirmacion('Alerta!','Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-documentacion.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Borrar documentación</a></li>
 
-                                                                <?php if (($agnoBD+1)==$yearEnd) { ?>
+                                                                <?php if (!empty($configAdmisiones["cfgi_year_inscripcion"]) && $configAdmisiones["cfgi_year_inscripcion"]==$yearEnd && $configAdmisiones["cfgi_year_inscripcion"]!=$agnoBD) { ?>
 
                                                                 <li><a href="javascript:void(0);" 
-                                                                onClick="sweetConfirmacion('Alerta!','Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?','question','inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
-                                                                >Pasar a <?=($agnoBD+1); ?></a></li>
+                                                                onClick="sweetConfirmacion('Alerta!','Va a pasar este estudiante al <?=$configAdmisiones["cfgi_year_inscripcion"]; ?>. Desea continuar?','question','inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
+                                                                >Pasar a <?=$configAdmisiones["cfgi_year_inscripcion"]; ?></a></li>
 
                                                                 <?php }} ?>
 
