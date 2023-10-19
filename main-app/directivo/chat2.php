@@ -1,5 +1,5 @@
 <?php include("session.php"); ?>
-<?php $idPaginaInterna = 'DT0004'; ?>
+<?php $idPaginaInterna = 'DT0209'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php include("../compartido/head.php"); ?>
 
@@ -57,6 +57,7 @@
                                     <div id="chat-list" class="people-list scrollable-div">
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaChat">
                                             <?php
+                                            $chats = [];
                                             $consultaUsuariosOffline = mysqli_query(
                                                 $conexion,
                                                 "SELECT 
@@ -67,55 +68,79 @@
                                                 uss_estado,
                                                 chat_remite_usuario,
                                                 chat_visto,
-                                                mobiliar_sintia_social.fechaUltimoMensaje(chat_remite_usuario,chat_destino_usuario)as fecha_ulitmo_msj,
-                                                mobiliar_sintia_social.ultimoMensaje(chat_remite_usuario,chat_destino_usuario)as ulitmo_msj,
-                                                mobiliar_sintia_social.cantNoLeidos(chat_remite_usuario,chat_destino_usuario)as cantidad
+                                                $baseDatosSocial.fechaUltimoMensaje(chat_remite_usuario,chat_destino_usuario)as fecha_ulitmo_msj,
+                                                $baseDatosSocial.ultimoMensaje(chat_remite_usuario,chat_destino_usuario)as ulitmo_msj,
+                                                $baseDatosSocial.cantNoLeidos(chat_remite_usuario,chat_destino_usuario)as cantidad
                                                 
-                                                FROM mobiliar_sintia_social.chat  
+                                                FROM $baseDatosSocial.chat  
                                                 
-                                                INNER JOIN mobiliar_dev_2023.usuarios 
+                                                INNER JOIN usuarios 
                                                 ON(uss_id=chat_destino_usuario)
 
                                                 WHERE (chat_remite_usuario = '" . $_SESSION['id'] . "'  OR  chat_destino_usuario = '" . $_SESSION['id'] . "' ) 
-                                                AND uss_id!='" . $_SESSION['id'] . "'  
+
                                                 GROUP BY chat_remite_usuario,chat_destino_usuario
                                                 ORDER BY fecha_ulitmo_msj DESC"
                                             );
                                             if (mysqli_num_rows($consultaUsuariosOffline) > 0) {
                                                 while ($datosUsuriosOffline = mysqli_fetch_array($consultaUsuariosOffline, MYSQLI_BOTH)) {
-                                                    $fotoPerfilUsrOffline = $usuariosClase->verificarFoto($datosUsuriosOffline['uss_foto']);
-                                                    if(strlen($datosUsuriosOffline['ulitmo_msj'])>20){
-                                                        $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20)."..."; 
-                                                    }else{
+
+                                                    $fotoPerfil = $usuariosClase->verificarFoto($datosUsuriosOffline['uss_foto']);
+                                                    $ussId = $datosUsuriosOffline['uss_id'];
+                                                    $nombre = $datosUsuriosOffline['uss_nombre'] . ' ' . $datosUsuriosOffline['uss_apellido1'];
+                                                    $cantidad = $datosUsuriosOffline['cantidad'];
+                                                    $estado = $datosUsuriosOffline['uss_estado'] == "1" ? "online" : "offline";
+                                                    if ($ussId == $_SESSION['id']) {
+                                                        $miId=$_SESSION['id'];
+                                                        $ussId = $datosUsuriosOffline['chat_remite_usuario'];
+                                                        $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$ussId)as cantidad FROM usuarios WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id ='" . $ussId . "' ");
+                                                        while ($datosUsuarios = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH)) {
+                                                            $fotoPerfil = $usuariosClase->verificarFoto($datosUsuarios['uss_foto']);
+                                                            $nombre = $datosUsuarios['uss_nombre'];
+                                                            if ($datosUsuarios['uss_apellido1'] != "" || $datosUsuarios['uss_apellido1'] != NULL) {
+                                                                $nombre .= " " . $datosUsuarios['uss_apellido1'];
+                                                            }
+                                                            $cantidad=$datosUsuarios['cantidad'];
+                                                        }
+                                                    }
+                                                    
+                                                    if (!in_array($ussId, $chats)) {
+                                                        $chats[]=$ussId;
+                                                    if (strlen($datosUsuriosOffline['ulitmo_msj']) > 20) {
+                                                        $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20) . "...";
+                                                    } else {
                                                         $mensaje = $datosUsuriosOffline['ulitmo_msj'];
                                                     }
-                                                    $cantidad = $datosUsuriosOffline['cantidad'];
-                                                    $estado = $datosUsuriosOffline['uss_estado']=="1"?"online":"offline";
-                                                    if($cantidad!="0"){
-                                                        $styleName="font-weight: 700;";
-                                                        $className="badge headerBadgeColor2";
-                                                    }else{
-                                                        $cantidad=""; 
-                                                        $styleName="";
-                                                        $className="";
+                                                    
+                                                    if ($cantidad != "0") {
+                                                        $styleName = "font-weight: 700;";
+                                                        $className = "badge headerBadgeColor2";
+                                                    } else {
+                                                        $cantidad = "";
+                                                        $styleName = "";
+                                                        $className = "";
                                                     }
-                                                   
+
                                             ?>
-                                                    <li class="clearfix" onclick="mostrarChat(this)" id="<?= $datosUsuriosOffline['uss_id'] ?>">
-                                                        <img src="<?= $fotoPerfilUsrOffline ?>" alt="avatar">
+                                                    <li class="clearfix" onclick="mostrarChat(this)" id="<?= $ussId ?>">
+                                                        <img src="<?= $fotoPerfil ?>" alt="avatar">
                                                         <div class="about">
-                                                            <div class="name" Style="<?=$styleName?>" id="nombre_<?= $datosUsuriosOffline['uss_id'] ?>"><?= $datosUsuriosOffline['uss_nombre'] . ' ' . $datosUsuriosOffline['uss_apellido1'] ?></div>
-                                                            <div class="status"> <i class="fa fa-circle <?=$estado ?>"></i> <?=$mensaje ?> <span class="<?=$className?>" id="notificacion_<?= $datosUsuriosOffline['uss_id']?>"> <?=$cantidad?></div>
+                                                            <div class="name" Style="<?= $styleName ?>" id="nombre_<?= $ussId ?>"><?= $nombre ?></div>
+                                                            <div class="status"> <i class="fa fa-circle <?= $estado ?>"></i> <?= $mensaje ?> <span class="<?= $className ?>" id="notificacion_<?= $ussId ?>"> <?= $cantidad ?></div>
+
                                                         </div>
                                                     </li>
                                             <?php
+                                                    }
                                                 }
                                             }
                                             ?>
                                         </ul>
                                     </div>
                                     <div id="plist" style="display: none" class="people-list scrollable-div">
-                                        <ul class="list-unstyled chat-list mt-2 mb-0" id="listaUsuario" >
+
+                                        <ul class="list-unstyled chat-list mt-2 mb-0" id="listaUsuario">
+
                                             <?php
                                             $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
                                                 WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' 
@@ -163,12 +188,12 @@
                         </div>
                     </div>
                     <div class="col-9" style="padding-left: 0px;padding-right: 0px;">
-                        <div class="chat-height" id="contenedorChat">
-
+                        <div class="contenedor" id="contenedorChat">
                             <div class="table-cell__container">
                                 <span class="table-cell__content">
                                     <div class="div-center image">
-                                        <img src="<?=$fotoPerfilUsr;?>" class="img-circle user-img-circle" alt="User Image">
+                                        <img src="<?= $fotoPerfilUsr; ?>" height="200px" class="img-circle user-img-circle" alt="User Image">
+
                                         <h1>
                                             <span style='font-family:Arial; font-weight:bold;'>Te damos la bienvenida, <?= $datosUsuarioActual['uss_nombre'] ?></samp>
                                         </h1>
@@ -177,7 +202,6 @@
 
                                 </span>
                             </div>
-
                         </div>
                     </div>
                     <div id="modalImagen" class="modal">
@@ -191,12 +215,12 @@
                 </div>
             </div>
         </div>
-        <script>            
+        <script>
             // Datos del usuario  remitente
-            var chat_remite_usuario = <?php echo $idSession ?>;            
+            var chat_remite_usuario = <?php echo $idSession ?>;
             var remite_foto_url_uss = "<?php echo $fotoPerfilUsr ?>";
             var remite_nombre_uss = "<?php echo $datosUsuarioActual["uss_nombre"] . " " . $datosUsuarioActual["uss_apellido1"] ?>";
-             // Datos del usuario  destinatario
+            // Datos del usuario  destinatario
             var chat_destino_usuario = "";
             let destino_foto_url_uss = "";
             var destino_nombre_uss = "";
@@ -221,6 +245,7 @@
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
+            let salasCreadas = []; //llevamos un registro de las salas abiertas
 
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(function(stream) {
