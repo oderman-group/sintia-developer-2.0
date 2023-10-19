@@ -121,10 +121,12 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<th>Usuario (REP)</th>
 														<th>Nombre</th>
 														<th>Tipo</th>
-														<th>Sesión</th>
+														<th>Último ingreso</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
+
+												
 												
 												<?php
 													include("includes/consulta-paginacion-usuarios.php");	
@@ -201,6 +203,22 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$usuarioRepetido = mysqli_fetch_array($consultaUsuariosRepetidos, MYSQLI_BOTH);
 														$avisoRepetido = null;
 														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';
+														
+														$fotoUsuario = $usuariosClase->verificarFoto($resultado['uss_foto']);
+
+														$infoTooltip = "
+														<p>
+															<img src='{$fotoUsuario}' class='img-thumbnail' width='120px;' height='120px;'>
+														</p>
+														<b>Sesión:</b><br>
+														{$opcionEstado[$resultado['uss_estado']]}<br>
+														<b>Último ingreso:</b><br>
+														{$resultado['uss_ultimo_ingreso']}<br><br>
+														<b>Email:</b><br>
+														{$resultado['uss_email']}<br>
+														<b>Fecha de nacimiento:</b><br>
+														{$resultado['uss_fecha_nacimiento']}
+														";
 													 ?>
 													<tr id="reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -219,10 +237,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															<?=$resultado['uss_usuario'];?>
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
-														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
+														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?>" data-content="<?=$infoTooltip;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a></td>
 														<td <?=$backGroundMatricula;?>><?=$resultado['pes_nombre']."".$mostrarNumCargas."".$mostrarNumAcudidos;?></td>
 														<td>
-															<?=$resultado['uss_estado'];?><br>
 															<span style="font-size: 11px;"><?=$resultado['uss_ultimo_ingreso'];?></span>
 														</td>
 
@@ -318,6 +335,14 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>
