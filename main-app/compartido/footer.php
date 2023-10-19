@@ -68,25 +68,25 @@ LIMIT ".$empezar.",1
 	socket.on("notificacion_sala_" + id_usuario, (data) => {
 		let div_notificacion = document.getElementById('div_notificacion');
 		let boton_notificacion = document.getElementById('boton_notificacion');
-		
-		console.log(data);
-		if(div_notificacion!=null){
-			if (data> 0) {
-			div_notificacion.innerHTML=data;
-			div_notificacion.classList.add("fa-beat-fade");
-			}else if(data==0){
-				boton_notificacion.removeChild(div_notificacion);
+		if(boton_notificacion){
+			console.log(data);
+			if(div_notificacion!=null){
+				if (data> 0) {
+				div_notificacion.innerHTML=data;
+				div_notificacion.classList.add("fa-beat-fade");
+				}else if(data==0){
+					boton_notificacion.removeChild(div_notificacion);
+				}
+			}else{
+				const div_notificacion_new = document.createElement('div');
+				div_notificacion_new.classList.add("my-notificacion","fa-beat-fade");
+				div_notificacion_new.id="div_notificacion";
+				div_notificacion_new.innerHTML=data;
+				if (data> 0) {
+				boton_notificacion.appendChild(div_notificacion_new);
+				};
 			}
-		}else{
-			const div_notificacion_new = document.createElement('div');
-			div_notificacion_new.classList.add("my-notificacion","fa-beat-fade");
-			div_notificacion_new.id="div_notificacion";
-			div_notificacion_new.innerHTML=data;
-			if (data> 0) {
-			boton_notificacion.appendChild(div_notificacion_new);
-			};
 		}
-
 	});
 </script>
 <!-- boton de chat -->

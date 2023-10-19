@@ -57,6 +57,7 @@
                                     <div id="chat-list" class="people-list scrollable-div">
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaChat">
                                             <?php
+                                            $chats = [];
                                             $consultaUsuariosOffline = mysqli_query(
                                                 $conexion,
                                                 "SELECT 
@@ -102,6 +103,9 @@
                                                             $cantidad=$datosUsuarios['cantidad'];
                                                         }
                                                     }
+                                                    
+                                                    if (!in_array($ussId, $chats)) {
+                                                        $chats[]=$ussId;
                                                     if (strlen($datosUsuriosOffline['ulitmo_msj']) > 20) {
                                                         $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20) . "...";
                                                     } else {
@@ -127,6 +131,7 @@
                                                         </div>
                                                     </li>
                                             <?php
+                                                    }
                                                 }
                                             }
                                             ?>
