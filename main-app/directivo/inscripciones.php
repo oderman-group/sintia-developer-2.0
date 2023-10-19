@@ -43,6 +43,23 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 								
 								<div class="col-md-12">
 
+                                <div class="card-body">
+
+                                           
+                                <div class="alert alert-block alert-warning">
+                                        <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
+                                        <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
+                                            <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
+                                    </div>
+
+                                    <div class="alert alert-block alert-success">
+                                        <h4 class="alert-heading">Enlace para inscripción:</h4>
+                                        <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
+                                        <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
+                                    </div>
+                                    </div> 
+                                    
+
                                 <?php
                                     $filtro="";
                                     include(ROOT_PATH."/config-general/config-admisiones.php");
@@ -72,21 +89,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 			                                    <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
                                             </div>
                                         </div>
-                                        <div class="card-body">
-											
-                                        <div class="alert alert-block alert-warning">
-                                            <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
-                                            <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
-                                                <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
-                                        </div>
-											
-                                        <div class="alert alert-block alert-success">
-                                            <h4 class="alert-heading">Enlace para inscripción:</h4>
-                                            <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
-                                            <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
-                                            </div>
-                                        </div>
-
+                                        
                                         <div class="table">
                                     		<table class="display" style="width:100%;">
 												<thead>
