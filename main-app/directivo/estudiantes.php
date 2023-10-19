@@ -153,6 +153,24 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 															'id_usuario'       => $resultado['uss_id'],
 														];
 														$dataParaJavascript = json_encode($miArray);
+
+														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['mat_foto']);
+
+														$infoTooltipEstudiante = "
+														<p>
+															<img src='{$fotoEstudiante}' class='img-thumbnail' width='120px;' height='120px;'>
+														</p>
+														<b>Fecha de matrícula:</b><br>
+														{$resultado['mat_fecha']}<br>
+														<b>Teléfono:</b><br>
+														{$resultado['mat_telefono']}<br>
+														<b>Documento:</b><br>
+														{$resultado['mat_documento']}<br>
+														<b>Email:</b><br>
+														{$resultado['mat_email']}<br>
+														<b>Fecha de nacimiento:</b><br>
+														{$resultado['mat_fecha_nacimiento']}
+														";
 													?>
 													<tr id="EST<?=$resultado['mat_id'];?>" style="background-color:<?=$bgColor;?>;">
 														<td>
@@ -180,7 +198,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<td style="color:<?=$color;?>;"><?=$nombre;?></td>
+														<td style="color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
@@ -320,6 +338,13 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>
