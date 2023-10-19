@@ -2,8 +2,16 @@
 
 class Inscripciones {
 
-    public static function configuracionAdmisiones($conexion,$baseDatosAdmisiones,$idInsti,$year)
-    {
+    /**
+     * Este metodo me busca la configuración de la institución para admisiones
+     * @param mysqli $conexion
+     * @param string $baseDatosAdmisiones
+     * @param int $idInsti
+     * @param int $year
+     * 
+     * @return array $resultado
+    **/
+    public static function configuracionAdmisiones($conexion,$baseDatosAdmisiones,$idInsti,$year){
         $resultado = [];
 
         try {
