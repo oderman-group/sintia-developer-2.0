@@ -28,6 +28,11 @@ $grupo =$parametros["grupo"];
 $carga = $parametros["carga"];
 $periodo = $parametros["periodo"];
 
+$informacionAdicional = [
+	'carga'   => $carga,
+	'periodo' => $periodo
+];
+
 mysqli_select_db($conexion,$institucionBdAnio);
 
 if(empty($config)){
@@ -38,7 +43,7 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-$num=0;
+$numEstudiantes=0;
 $finalizado = true;
 $erroresNumero=0;
 $listadoEstudiantesError="";
@@ -51,9 +56,12 @@ $mensaje="";
 			$contador=0;
 			while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
 			$contador++;
+			$porcentajeAcumulado = $estudianteResultadoError['acumulado'] > 0 ? $estudianteResultadoError['acumulado'] : 0;
 			$listadoEstudiantesError=$listadoEstudiantesError."<br><br>".$contador."): ".$estudianteResultadoError['mat_nombres']
 			." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
-			." no tiene notas completas.  ID: <b>".$estudianteResultadoError['mat_id']."</b> Valor Actual: <b>".$estudianteResultadoError['acumulado']."% </b>";
+			." no tiene notas completas.<br>
+			ID: <b>".$estudianteResultadoError['mat_id']."</b><br>
+			Valor Actual: <b>".$porcentajeAcumulado."% </b>";
 			}
 			$finalizado = false;
 		}
@@ -61,7 +69,7 @@ $mensaje="";
 
 	if($finalizado){
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
-			$num++;
+			$numEstudiantes++;
 			$estudiante = $estudianteResultado["mat_id"];
 			include(ROOT_PATH."/main-app/definitivas.php");
 
@@ -74,7 +82,9 @@ $mensaje="";
 				//Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
 				if($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME and empty($boletinDatos['bol_nota'])){
 					$erroresNumero++;
-					$mensaje=$mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.  ID: <b>".$estudianteResultado['mat_id']."</b> Valor Actual: <b>".$porcentajeActual."% </b>";
+					$mensaje=$mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.<br>
+					ID: <b>".$estudianteResultado['mat_id']."</b><br>
+					Valor Actual: <b>".$porcentajeActual."% </b>";
 					$finalizado = false;
 					continue;
 				}
@@ -173,7 +183,7 @@ $mensaje="";
 		WHERE  car_id='".$carga."'"));
 		$respuesta ="
 		<h4>Resumen del proceso:</h4>
-		- Total estudiantes calificados: {$num}<br><br>
+		- Total estudiantes calificados: {$numEstudiantes}<br><br>
 		Datos releacionados:<br>
 		- Cod. Carga : {$carga}<br>
 		- Asignatura :{$consulta_mat_area_est["mat_nombre"]}<br>
@@ -193,13 +203,13 @@ $mensaje="";
 			"estado"  => JOBS_ESTADO_FINALIZADO,
 		);
 		SysJobs::actualizar($datos);
-		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO);
+		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO, $informacionAdicional);
 	}else{
 		
 		if($intento>=3){				
 		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
 		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_FINALIZADO);
-		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje.$listadoEstudiantesError,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR);
+		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje.$listadoEstudiantesError,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR, $informacionAdicional);
 		}else{
 			$texto="";
 			if($erroresNumero>1){
