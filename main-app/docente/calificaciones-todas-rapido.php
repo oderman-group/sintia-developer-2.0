@@ -95,7 +95,7 @@ th {
                                             <span id="respRCT"></span>
 		
 											<p>
-												<a href="calificaciones-todas.php" type="button" class="btn btn-primary">Regresar</a>
+												<a href="calificaciones.php?tab=2" type="button" class="btn btn-primary">Regresar</a>
 												<!--
 												<a href="calificaciones-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" type="button" class="btn btn-danger">Agregar nuevo</a>
 												-->

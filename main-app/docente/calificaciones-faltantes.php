@@ -99,7 +99,7 @@ include("../compartido/sintia-funciones-js.php");
 	<span id="respRCT"></span>
 
 	<p>
-		<a href="calificaciones-todas.php" type="button" class="btn btn-primary">Regresar</a>
+		<a href="calificaciones.php?tab=2" type="button" class="btn btn-primary">Regresar</a>
 	</p>
 
 	<?php

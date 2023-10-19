@@ -131,31 +131,44 @@
 														</td>
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<td>
+															<?php if(Modulos::validarSubRol(['DT0025', 'DT0056', 'DT0055', 'DT0054', 'DT0026'])) {?>
 																<?php
 																	$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 																	$arrayDatos = json_encode($arrayEnviar);
 																	$objetoEnviar = htmlentities($arrayDatos);
 																	?>
 																
-																<div class="btn-group">
-																	<button type="button" class="btn btn-primary">Acciones</button>
-																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																		<i class="fa fa-angle-down"></i>
-																	</button>
-																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(20);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
-																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(21);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
-																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(22);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
-																		<li><a href="../compartido/guardar.php?get=<?=base64_encode(23);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
-																		
-																		<?php if($datosUsuarioActual['uss_tipo'] == 5){?>
-
-																			<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(19);?>&idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
-																			
+																	<div class="btn-group">
+																		<button type="button" class="btn btn-primary">Acciones</button>
+																		<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																			<i class="fa fa-angle-down"></i>
+																		</button>
+																		<ul class="dropdown-menu" role="menu">
+																		<?php if( Modulos::validarSubRol(['DT0025']) ){?>
+																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(20);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
 																		<?php }?>
 
-																	</ul>
-																</div>
+																		<?php if( Modulos::validarSubRol(['DT0056']) ){?>
+																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(21);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
+																		<?php }?>
+
+																		<?php if( Modulos::validarSubRol(['DT0055']) ){?>
+																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(22);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
+																		<?php }?>
+
+																		<?php if( Modulos::validarSubRol(['DT0054']) ){?>
+																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(23);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
+																		<?php }?>
+																			
+																			<?php if( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && Modulos::validarSubRol(['DT0026'])){?>
+
+																				<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(19);?>&idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																				
+																			<?php }?>
+
+																		</ul>
+																	</div>
+																<?php }?>
 															</td>
 														<?php }?>
                                                     </tr>

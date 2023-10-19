@@ -1,3 +1,18 @@
+<?php if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) {?>
+	<p style="color: tomato;"> Podrás consultar la información de otros periodos diferentes al actual, pero no se podrán hacer modificaciones. </p>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var miEnlace = document.getElementById("configurarCargaHref");
+
+			// Agrega un manejador de eventos para prevenir la acción predeterminada del enlace
+			miEnlace.addEventListener("click", function(event) {
+			event.preventDefault();
+			Swal.fire("No es posible hacer ediciones en periodos anteriores."); 
+			});
+		});
+	</script>
+<?php }?>
+
 										<div class="panel">
 											<header class="panel-heading panel-heading-yellow"><?=$frases[207][$datosUsuarioActual[8]];?></header>
 
@@ -55,5 +70,5 @@
 												
 
 											</div>
-											<p align="center"><a href="cargas-configurar.php" class="btn yellow"><?=$frases[14][$datosUsuarioActual[8]];?></a></p>
+											<p align="center"><a href="cargas-configurar.php" class="btn yellow" id="configurarCargaHref"><?=$frases[14][$datosUsuarioActual[8]];?></a></p>
 										</div>

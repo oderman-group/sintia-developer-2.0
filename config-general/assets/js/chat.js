@@ -31,16 +31,19 @@ function mostrarChat(datos) {
 						'<div class="chat-about">' +
 						'<h6 class="m-b-0">' + item.nombre + '</h6>' +
 						'<div class="status"> <i class="fa fa-circle ' + estado + '"></i> ' + estado + ' </div>' +
+
 						'</div>' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
 						'<div class="chat-history div-medio scrollable" id="chatHistory">' +
+
 						'<ul class="m-b-0" id="contenido_chat">' +
 
 						'</ul>' +
 						'</div>' +
 						'		<div id="div-flotante" class="div-flotante">' +
+
 						'             <div id="contenedorImagen"></div>' +
 						'             <audio controls id="audioReprodutor" style="display: none;"></audio>' +
 						'             <button type="button" class="btn btn-outline-secondary" onclick="limpiar()">' +
@@ -63,6 +66,7 @@ function mostrarChat(datos) {
 						'						</div>' +
 						'					</div>' +
 						'					<div class="col-12">' +
+
 						'                     <div class="btn-group me-2" role="group" aria-label="First group">' +
 						'                         <button type="button" onclick="cargarFile(&apos;' + _chatTipoImagen + '&apos;,cargarImagen)" class="btn btn-sm  btn-outline-secondary"><i class="fa fa-image"></i></button>' +
 						'                         <button type="button" onclick="cargarFile(&apos;' + _chatTipoDocumento + '&apos;,cargarArchivo)" class="btn btn-outline-secondary"><i class="fa-solid fa-paperclip"></i></button>' +
@@ -70,13 +74,11 @@ function mostrarChat(datos) {
 						'                         <button type="button" onclick="detenerGrabacion()" class="btn btn-outline-secondary" id="btnDetener" style="display: none;"><i class="fa-solid fa-stop"></i></button>' +
 						'                     </div>' +
 						'					</div>' +
-
 						'             </div>' +
 						'          </div>' +
 						'             <input type="file" id="cargarImagen" name="imagen" style="display: none;" accept="image/*">' +
 						'             <input type="file" id="cargarArchivo" name="archivo" style="display: none;">' +
 						'             <input type="file" id="cargarAudio" name="audio" style="display: none;" accept="audio/*"></input>';
-
 
 					$("#contenedorChat").append(html);
 					var chatElement = document.getElementById("chatHistory");
@@ -88,13 +90,9 @@ function mostrarChat(datos) {
 					chat_destino_usuario = item.datosUsuarios["uss_id"];
 					destino_foto_url_uss = item.fotoPerfil;
 					destino_nombre_uss = item.nombre;
-
 					listarChat(chat_remite_usuario, chat_destino_usuario);
-
-
 					divNombre = document.getElementById("nombre_" + chat_destino_usuario);
 					spanNotificacion = document.getElementById("notificacion_" + chat_destino_usuario);
-
 					divNombre.style.fontWeight = "400";
 					spanNotificacion.className = "";
 					spanNotificacion.innerHTML = "";
@@ -103,7 +101,7 @@ function mostrarChat(datos) {
 		});
 	}
 };
-
+// metodo para escuchar actualicaciones de mis chat 
 socket.on("sala_" + chat_remite_usuario, (data) => {
 	// console.log(data);
 	miUsuario = (data["chat_remite_usuario"] == chat_remite_usuario);
@@ -243,6 +241,7 @@ function htmlEmisor(id, mensaje, hora, tipo = "1", url = "", visto = 1) {
 	if (visto == 0) {
 		vistoHtml = '<img src="../files/iconos/check1.png">'
 	}
+
 	switch (tipo) {
 		case _chatTipoImagen:
 			imageHtml = '<img class="cursor-mano" src="../files/chat/imagen/' + url + '" onclick="mostarModal(this.src)" alt="avatar" style="height: 400px;"  data-toggle="modal" data-target="#modalImagen">';
@@ -261,6 +260,7 @@ function htmlEmisor(id, mensaje, hora, tipo = "1", url = "", visto = 1) {
 		case _chatTipoMensaje:
 			break;
 	}
+
 	liHtml = '<li class="clearfix" >' +
 		'<div class="message-data text-right">' +
 		'<span class="message-data-time">' + hora + '</span>' +
@@ -312,6 +312,7 @@ function htmlDestino(id, mensaje, hora, imagenUrl, tipo = "1", url = "") {
 
 function listarChat(uss_remite, uss_detino) {
 	chatElement = document.getElementById("chatHistory");
+
 	var formData = new FormData();
 	formData.append("chat_remite_usuario", uss_remite);
 	formData.append("chat_destino_usuario", uss_detino);
@@ -385,6 +386,7 @@ function listarChat(uss_remite, uss_detino) {
 		}
 	});
 
+
 };
 
 function enviarMensaje() {
@@ -424,7 +426,7 @@ function cargarFile(tipo, idImput) {
 	inputImagen.click();
 	inputImagen.addEventListener('change', mostrarImagen);
 	mostrarImagen(tipo);
-	// imputMensaje.focus();
+	imputMensaje.focus();
 };
 
 function enviarArchivo(tipo, idImput) {
@@ -528,6 +530,7 @@ function mostrarImagen(tipo) {
 	const x = rect.left + window.scrollX; // Posición X absoluta
 	const y = rect.top + window.scrollY; // Posición Y absoluta
 	console.log(`Posición X: ${x}, Posición Y: ${y}`);
+
 	if (imagenSeleccionada) {
 		const imagenURL = URL.createObjectURL(imagenSeleccionada);
 		// Crear un elemento de imagen y asignar la URL
@@ -540,6 +543,7 @@ function mostrarImagen(tipo) {
 		contenedorImagen.appendChild(imagen);
 		divFlotante.style.top = (y-340)+"px";
 		divFlotante.style.lef = x+"px";
+
 		divFlotante.style.display = "block";
 
 	} else if (archivoSeleccionado) {
@@ -584,7 +588,7 @@ function detenerGrabacion() {
 	console.log('Grabación detenida.');
 	iconGrabar.classList.remove("fa-record-vinyl", "fa-beat-fade");
 	iconGrabar.classList.add("fa-microphone");
-	// imputMensaje.focus();
+	imputMensaje.focus();
 };
 
 function limpiar() {

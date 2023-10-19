@@ -22,5 +22,5 @@
 	}
 	
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="unidades.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
+	echo '<script type="text/javascript">window.location.href="clases.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'&tab=2";</script>';
 	exit();

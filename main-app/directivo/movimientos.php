@@ -82,7 +82,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											</div>
 											
                                         <div class="table-scrollable">
-                                    		<table id="example1" class="display" style="width:100%;">
+                                    		<table class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -114,7 +114,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $bgColor = '';
-														 if($resultado['fcu_anulado']==1) $bgColor = 'sandybrown';
+														 if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 													 ?>
 													<tr style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>

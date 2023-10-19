@@ -77,12 +77,13 @@
                                                 ON(uss_id=chat_destino_usuario)
 
                                                 WHERE (chat_remite_usuario = '" . $_SESSION['id'] . "'  OR  chat_destino_usuario = '" . $_SESSION['id'] . "' ) 
-                                               
+
                                                 GROUP BY chat_remite_usuario,chat_destino_usuario
                                                 ORDER BY fecha_ulitmo_msj DESC"
                                             );
                                             if (mysqli_num_rows($consultaUsuariosOffline) > 0) {
                                                 while ($datosUsuriosOffline = mysqli_fetch_array($consultaUsuariosOffline, MYSQLI_BOTH)) {
+
                                                     $fotoPerfil = $usuariosClase->verificarFoto($datosUsuriosOffline['uss_foto']);
                                                     $ussId = $datosUsuriosOffline['uss_id'];
                                                     $nombre = $datosUsuriosOffline['uss_nombre'] . ' ' . $datosUsuriosOffline['uss_apellido1'];
@@ -122,6 +123,7 @@
                                                         <div class="about">
                                                             <div class="name" Style="<?= $styleName ?>" id="nombre_<?= $ussId ?>"><?= $nombre ?></div>
                                                             <div class="status"> <i class="fa fa-circle <?= $estado ?>"></i> <?= $mensaje ?> <span class="<?= $className ?>" id="notificacion_<?= $ussId ?>"> <?= $cantidad ?></div>
+
                                                         </div>
                                                     </li>
                                             <?php
@@ -131,7 +133,9 @@
                                         </ul>
                                     </div>
                                     <div id="plist" style="display: none" class="people-list scrollable-div">
+
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaUsuario">
+
                                             <?php
                                             $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
                                                 WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' 
@@ -184,6 +188,7 @@
                                 <span class="table-cell__content">
                                     <div class="div-center image">
                                         <img src="<?= $fotoPerfilUsr; ?>" height="200px" class="img-circle user-img-circle" alt="User Image">
+
                                         <h1>
                                             <span style='font-family:Arial; font-weight:bold;'>Te damos la bienvenida, <?= $datosUsuarioActual['uss_nombre'] ?></samp>
                                         </h1>

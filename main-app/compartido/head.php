@@ -34,6 +34,11 @@ require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");
 require_once("../class/CargaAcademica.php");
 require_once("../class/Grupos.php");
+
+$tituloDePagina = $frases[102][$datosUsuarioActual['uss_idioma']];
+if (!empty($datosPaginaActual)) {
+	$tituloDePagina .= " | ".$datosPaginaActual['pagp_pagina'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +53,7 @@ require_once("../class/Grupos.php");
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta name="description" content="Plataforma Educativa SINTIA | Para Colegios y Universidades" />
     <meta name="author" content="ODERMAN" />
-    <title><?=$frases[102][$datosUsuarioActual['uss_idioma']];?></title>
+    <title><?=$tituloDePagina;?></title>
      <!-- Estilos de LiveView  -->
 	<link rel="stylesheet" type="text/css" href="../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
     <!-- google font -->
@@ -137,6 +142,7 @@ require_once("../class/Grupos.php");
 	<script src="../js/Utilidades.js" ></script>
 	<script src="../js/Estudiantes.js" ></script>
 	<script src="../js/Docentes.js" ></script>
+	<script src="../js/Calificaciones.js" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
@@ -212,6 +218,28 @@ require_once("../class/Grupos.php");
 @keyframes spin {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
+}
+
+/* Estilos para el esqueleto */
+.skeleton {
+	background: #f0f0f0; /* Color de fondo del esqueleto */
+	border-radius: 4px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.skeleton-header {
+	height: 20px; /* Altura del encabezado del esqueleto */
+	width: 80%; /* Anchura del encabezado del esqueleto */
+	background: #e0e0e0; /* Color de fondo del encabezado */
+	margin-bottom: 10px;
+}
+
+.skeleton-content {
+	height: 10px; /* Altura del contenido del esqueleto */
+	width: 100%; /* Anchura del contenido del esqueleto */
+	background: #e0e0e0; /* Color de fondo del contenido */
+	margin-bottom: 5px;
 }
 </style>
 

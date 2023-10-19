@@ -80,7 +80,7 @@
 						        </div>
 						      
 					
-								<div class="col-xl-3 col-md-6 col-12" onClick="url('calificaciones-todas.php')" style="cursor: pointer;">
+								<div class="col-xl-3 col-md-6 col-12" onClick="url('calificaciones.php?tab=2')" style="cursor: pointer;">
 						          <div class="info-box bg-b-blue">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-check-square"></i></span>
 						            <div class="info-box-content">
@@ -149,7 +149,7 @@
 						        </div>
 					
 					
-								<div class="col-xl-3 col-md-6 col-12" onClick="url('periodos-resumen.php')" style="cursor: pointer;">
+								<div class="col-xl-3 col-md-6 col-12" onClick="url('calificaciones.php?tab=4')" style="cursor: pointer;">
 						          <div class="info-box bg-blue">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-bar-chart-o"></i></span>
 						            <div class="info-box-content">
@@ -192,7 +192,7 @@
 						        </div>
 						      
 					
-								<div class="col-xl-3 col-md-6 col-12" onClick="url('cronograma.php')" style="cursor: pointer;">
+								<div class="col-xl-3 col-md-6 col-12" onClick="url('cronograma-calendario.php')" style="cursor: pointer;">
 						          <div class="info-box bg-warning">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-calendar"></i></span>
 						            <div class="info-box-content">

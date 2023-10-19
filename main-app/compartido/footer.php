@@ -111,6 +111,7 @@ LIMIT ".$empezar.",1
 <?php 	
 	} ?>
 
+
 <!-- start footer -->
 <div class="page-footer">
 	<div class="page-footer-inner"> 2018 &copy; Plataforma SINTIA By

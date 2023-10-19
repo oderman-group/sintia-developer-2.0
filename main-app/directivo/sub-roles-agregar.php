@@ -132,7 +132,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox" class="check" onchange="seleccionarPagina(this)" value="<?= $pagina['pagp_id']; ?>">
+                                                                            <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>">
                                                                             <span class="slider red round"></span>
                                                                         </label>
                                                                     </div>
@@ -167,73 +167,7 @@ $listaPaginas = SubRoles::listarPaginas();
 </div>
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
-<script type="text/javascript">
-    var select = document.getElementById('paginasSeleccionadas');
-    var checkboxes = document.querySelectorAll('.check');
-    contarPaginasSeleccionadas();
-
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('all').addEventListener('change', function(e) {
-            var isChecked = this.checked;
-            checkboxes.forEach(function(checkElement) {
-                var page = checkElement.value;  
-                if (isChecked) {
-                    if(checkElement.checked){
-                        checkElement.checked = false;
-                        eliminarPagina(page);
-                    }
-                    checkElement.checked = true;
-                    agregarPagina(page);
-                } else {
-                    checkElement.checked = false;
-                    eliminarPagina(page);
-                }
-            });
-        });
-    });
-
-    function seleccionarPagina(datos) {         
-        var page = datos.value;        
-        var all = document.getElementById('all');  
-        if(datos.checked) {
-            var cont=0;
-            checkboxes.forEach(function(checkElement) {
-                if(checkElement.checked){
-                    cont=cont+1;
-                }
-            });
-            if(cont==checkboxes.length){
-                all.checked=true;
-            }
-            agregarPagina(page);
-        }else{
-            if(all.checked){
-                all.checked=false;
-            }
-            eliminarPagina(page);
-        }
-    }
-    function agregarPagina(page) {       
-        var nuevaOpcion = document.createElement('option');
-        nuevaOpcion.value = page;
-        nuevaOpcion.textContent = page;
-        nuevaOpcion.selected=true;      
-        select.appendChild(nuevaOpcion);
-        contarPaginasSeleccionadas();
-    }
-    function eliminarPagina(page) {          
-      var opcionAEliminar = select.querySelector('option[value='+page+']');      
-      if (opcionAEliminar) {
-        select.removeChild(opcionAEliminar);
-      }
-      contarPaginasSeleccionadas();
-    }
-    function contarPaginasSeleccionadas(){
-        var labelCant = document.getElementById('cantSeleccionadas');
-        var cantidadSeleccionadas = select.selectedOptions.length;
-        labelCant.textContent =cantidadSeleccionadas;
-    }  
-</script>
+<script src="../js/Subroles.js" ></script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>

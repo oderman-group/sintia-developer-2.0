@@ -399,7 +399,17 @@ setTimeout ("notifica()", 100);
 
 
 <?php 
-if($_POST["operacion"]==3 or $_POST["operacion"]==7){
+if($_POST["operacion"]==3){
+?>
+	<script type="text/javascript">
+	setTimeout(function() {
+    	listarInformacion('listar-calificaciones-todas.php', 'nav-calificaciones-todas');
+  	}, 3000);
+	</script>
+<?php
+}
+
+if($_POST["operacion"]==7){
 ?>
 	<script type="text/javascript">
 	setTimeout('document.location.reload()',5000);
