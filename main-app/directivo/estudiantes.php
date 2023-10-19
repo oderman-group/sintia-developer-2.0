@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 $jQueryTable = '';
-if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER) {
+if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
 	$jQueryTable = 'id="example1"';
 }
 ?>

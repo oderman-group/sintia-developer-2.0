@@ -8,6 +8,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require_once("../class/Estudiantes.php");
 
 $db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
@@ -116,13 +117,26 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
+
+                                                    $infoTooltipEstudiante = "
+                                                    <b>Nombre acudiente:</b><br>
+                                                    {$resultado['asp_nombre_acudiente']}<br>
+                                                    <b>Celular:</b><br>
+                                                    {$resultado['asp_celular_acudiente']}<br>
+                                                    <b>Documento:</b><br>
+                                                    {$resultado['asp_documento_acudiente']}<br>
+                                                    <b>Email:</b><br>
+                                                    {$resultado['asp_email_acudiente']}<br><br>
+                                                    <b>Observación:</b><br>
+                                                    <span style='color:darkblue; font-size:11px; font-style:italic;'>{$resultado['asp_observacion']}</span>
+                                                    ";
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?= $resultado["mat_id"]; ?></td>
                                                     <td><?= $resultado["asp_id"]; ?></td>
                                                     <td><?= $resultado["asp_fecha"]; ?></td>
                                                     <td><?= $resultado["mat_documento"]; ?></td>
-                                                    <td><?= strtoupper($resultado["mat_nombres"] . " " . $resultado["mat_primer_apellido"]); ?></td>
+                                                    <td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></a></td>
                                                     <td><?= $resultado["asp_agno"]; ?></td>
                                                     <td><span style="background-color: <?= $fondoSolicitud[$resultado["asp_estado_solicitud"]]; ?>; padding: 5px;"><?= $estadosSolicitud[$resultado["asp_estado_solicitud"]]; ?></span></td>
                                                     <td><a href="../admisiones/files/comprobantes/<?= $resultado["asp_comprobante"]; ?>" target="_blank" style="text-decoration: underline;"><?= $resultado["asp_comprobante"]; ?></a></td>
@@ -201,6 +215,14 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+    <script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>
