@@ -69,7 +69,6 @@ $mensaje="";
 
 	if($finalizado){
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
-			$numEstudiantes++;
 			$estudiante = $estudianteResultado["mat_id"];
 			include(ROOT_PATH."/main-app/definitivas.php");
 
@@ -172,7 +171,9 @@ $mensaje="";
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
 				mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje)VALUES('".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."')");	
 					
-			}		
+			}
+			
+			$numEstudiantes++;
 
 		}
     
