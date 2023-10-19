@@ -8,6 +8,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+require_once("../class/Estudiantes.php");
+$jQueryTable = '';
+if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
+	$jQueryTable = 'id="example1"';
+}
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -84,7 +89,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											</div>
 											
                                         <div>
-                                    		<table id="example1" class="display" style="width:100%;">
+                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -116,19 +121,32 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
     												$contReg = 1;
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 
-														try{
-															$consultaCargaAcademica=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$resultado[0]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$cargaAcademica = mysqli_fetch_array($consultaCargaAcademica, MYSQLI_BOTH);
+														//Para calcular el porcentaje de actividades en las cargas
 														$cargaSP = $resultado[0];
 														$periodoSP = $resultado['car_periodo'];
 														include("../suma-porcentajes.php");
-														?>
+
+														$filtroDocentesParaListarEstudiantes = " AND mat_grado='".$resultado['car_curso']."' AND mat_grupo='".$resultado['car_grupo']."'";
+														$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+
+														$infoTooltipCargas = "
+														<b>COD:</b> 
+														{$resultado['car_id']}<br>
+														<b>Director de grupo:</b> 
+														{$opcionSINO[$resultado['car_director_grupo']]}<br>
+														<b>I.H:</b> 
+														{$resultado['car_ih']}<br>
+														<b>Puede editar en otros periodos?:</b> 
+														{$opcionSINO[$resultado['car_permiso2']]}<br>
+														<b>Indicadores automáticos?:</b> 
+														{$opcionSINO[$resultado['car_indicador_automatico']]}<br>
+														<b>Nro. Estudiantes:</b> 
+														{$cantidadEstudiantes}
+														";
+													?>
 													<tr>
                           								<td><?=$contReg;?></td>
-														<td><?=$resultado['car_id'];?></td>
+														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Información adicional" data-content="<?=$infoTooltipCargas;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$resultado['car_id'];?></a></td>
 														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
 														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
@@ -204,6 +222,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>
