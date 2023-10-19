@@ -481,6 +481,10 @@ const estudiantesPorEstadosBloqueo = {};
 
 function cambiarBloqueo(data) {
 
+    if(data.bloqueado == null || data.bloqueado == '') {
+        data.bloqueado = 0;
+    }
+
     let tr   = document.getElementById("EST"+data.id_estudiante);
     
     if (!estudiantesPorEstadosBloqueo.hasOwnProperty(data.id_estudiante)) {
