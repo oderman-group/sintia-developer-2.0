@@ -57,7 +57,7 @@ function mostrarChat(datos) {
 						'             <div class="row">' +
 						'					<div class="col-12">' +
 						'						<div class="input-group">' +
-						'							<textarea class="form-control" id="imputMensaje" style="height: 50px;"  onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2" aria-label="With textarea"></textarea>' +
+						'							<textarea class="form-control" id="imputMensaje" style="resize: none;"  onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2" aria-label="With textarea"></textarea>' +
 						'							<div class="input-group-prepend">' +
 						'								<button class="input-group-text btn btn-primary " type="button" onClick="enviarMensaje()">' +
 						'									<i class="fa fa-send"></i>' +
