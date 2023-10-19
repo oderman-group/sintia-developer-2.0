@@ -3,16 +3,6 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
-<?php
-$consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
-");
-$valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
-$porcentajeRestante = 100 - $valores[0];
-?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>

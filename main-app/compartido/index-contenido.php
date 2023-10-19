@@ -90,7 +90,7 @@
                      
 			        <div class="row">
 						
-						<div class="col-sm-4">				
+						<div class="col-sm-5">				
 							
 							<?php include("../compartido/encuestas.php");?>
 							
@@ -169,7 +169,7 @@
 						</div>	
 						
 						<!-- Activity feed start -->
-						<div class="col-sm-8" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
+						<div class="col-sm-7" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
 							<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>

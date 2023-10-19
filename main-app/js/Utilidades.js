@@ -118,3 +118,25 @@ function validarPesoArchivo(archivoInput) {
         }
     }
 }
+
+function guardarAjaxGeneral(datos){ 
+    var idR = datos.id;
+    var valor = 0;
+    if(document.getElementById(idR).checked){
+        valor = 1;
+    }
+    var operacion = 3;	
+
+$('#respuestaGuardar').empty().hide().html("").show(1);
+    datos = "idR="+(idR)+
+            "&valor="+(valor)+
+            "&operacion="+(operacion);
+            $.ajax({
+                type: "POST",
+                url: "ajax-guardar.php",
+                data: datos,
+                success: function(data){
+                    $('#respuestaGuardar').empty().hide().html(data).show(1);
+                }
+        });
+}

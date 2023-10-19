@@ -8,6 +8,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require_once("../class/Estudiantes.php");
 
 $db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
@@ -42,9 +43,27 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 								
 								<div class="col-md-12">
 
+                                <div class="card-body">
+
+                                           
+                                <div class="alert alert-block alert-warning">
+                                        <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
+                                        <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
+                                            <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
+                                    </div>
+
+                                    <div class="alert alert-block alert-success">
+                                        <h4 class="alert-heading">Enlace para inscripción:</h4>
+                                        <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
+                                        <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
+                                    </div>
+                                    </div> 
+                                    
+
                                 <?php
                                     $filtro="";
-                                    include("../../config-general/config-admisiones.php");
+                                    include(ROOT_PATH."/config-general/config-admisiones.php");
+                                    include(ROOT_PATH."/config-general/mensajes-informativos.php");
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
@@ -70,21 +89,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 			                                    <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
                                             </div>
                                         </div>
-                                        <div class="card-body">
-											
-                                        <div class="alert alert-block alert-warning">
-                                            <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
-                                            <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
-                                                <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
-                                        </div>
-											
-                                        <div class="alert alert-block alert-success">
-                                            <h4 class="alert-heading">Enlace para inscripción:</h4>
-                                            <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
-                                            <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
-                                            </div>
-                                        </div>
-
+                                        
                                         <div class="table">
                                     		<table class="display" style="width:100%;">
 												<thead>
@@ -115,13 +120,26 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
+
+                                                    $infoTooltipEstudiante = "
+                                                    <b>Nombre acudiente:</b><br>
+                                                    {$resultado['asp_nombre_acudiente']}<br>
+                                                    <b>Celular:</b><br>
+                                                    {$resultado['asp_celular_acudiente']}<br>
+                                                    <b>Documento:</b><br>
+                                                    {$resultado['asp_documento_acudiente']}<br>
+                                                    <b>Email:</b><br>
+                                                    {$resultado['asp_email_acudiente']}<br><br>
+                                                    <b>Observación:</b><br>
+                                                    <span style='color:darkblue; font-size:11px; font-style:italic;'>{$resultado['asp_observacion']}</span>
+                                                    ";
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?= $resultado["mat_id"]; ?></td>
                                                     <td><?= $resultado["asp_id"]; ?></td>
                                                     <td><?= $resultado["asp_fecha"]; ?></td>
                                                     <td><?= $resultado["mat_documento"]; ?></td>
-                                                    <td><?= strtoupper($resultado["mat_nombres"] . " " . $resultado["mat_primer_apellido"]); ?></td>
+                                                    <td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></a></td>
                                                     <td><?= $resultado["asp_agno"]; ?></td>
                                                     <td><span style="background-color: <?= $fondoSolicitud[$resultado["asp_estado_solicitud"]]; ?>; padding: 5px;"><?= $estadosSolicitud[$resultado["asp_estado_solicitud"]]; ?></span></td>
                                                     <td><a href="../admisiones/files/comprobantes/<?= $resultado["asp_comprobante"]; ?>" target="_blank" style="text-decoration: underline;"><?= $resultado["asp_comprobante"]; ?></a></td>
@@ -142,11 +160,13 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 onClick="sweetConfirmacion('Alerta!','Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-documentacion.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Borrar documentación</a></li>
 
+                                                                <?php if (($agnoBD+1)==$yearEnd) { ?>
+
                                                                 <li><a href="javascript:void(0);" 
                                                                 onClick="sweetConfirmacion('Alerta!','Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?','question','inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
                                                                 >Pasar a <?=($agnoBD+1); ?></a></li>
 
-                                                                <?php } ?>
+                                                                <?php }} ?>
 
                                                                 <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
                                                                 <li><a href="javascript:void(0);" 
@@ -198,6 +218,14 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+    <script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

@@ -209,42 +209,44 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 									</div>
 
-									<div class="card card-box">
-										<div class="card-head">
-											<header>FEEDBACK</header>
-										</div>
-										
-										<div class="card-body">
+									<?php if( $datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE ) {?>
+										<div class="card card-box">
+											<div class="card-head">
+												<header>FEEDBACK</header>
+											</div>
+											
+											<div class="card-body">
 
-										<div class="alert alert-info" role="alert">
-											<h4 class="alert-heading">Ayuda a mejorar!</h4>
-											<p>Queremos saber cómo te fue en esta clase. Dejanos un comentario y una valoración. </p>
-											<hr>
-											<p class="mb-0">Recuerda que si ya has dejado una valoración previa, esta se actualizará si envias otra.</p>
-										</div>
-										
-										<div id="feedbackPanel">
-											<div class="form-group row">
-												<div class="col-sm-12">
-													<textarea id="feedbackContent" name="feedbackContent" class="form-control" rows="3" placeholder="Dejanos tu opinión sobre este tema" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+											<div class="alert alert-info" role="alert">
+												<h4 class="alert-heading">Ayuda a mejorar!</h4>
+												<p>Queremos saber cómo te fue en esta clase. Dejanos un comentario y una valoración. </p>
+												<hr>
+												<p class="mb-0">Recuerda que si ya has dejado una valoración previa, esta se actualizará si envias otra.</p>
+											</div>
+											
+											<div id="feedbackPanel">
+												<div class="form-group row">
+													<div class="col-sm-12">
+														<textarea id="feedbackContent" name="feedbackContent" class="form-control" rows="3" placeholder="Dejanos tu opinión sobre este tema" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+													</div>
+												</div>
+
+												<div class="d-flex justify-content-center">
+													<span class="rating"> 
+														<span class="star" id="star-5" onClick="feedbackSend(this)"></span> 
+														<span class="star" id="star-4" onClick="feedbackSend(this)"></span> 
+														<span class="star" id="star-3" onClick="feedbackSend(this)"></span> 
+														<span class="star" id="star-2" onClick="feedbackSend(this)"></span> 
+														<span class="star" id="star-1" onClick="feedbackSend(this)"></span>
+													</span>
 												</div>
 											</div>
+												
 
-											<div class="d-flex justify-content-center">
-												<span class="rating"> 
-													<span class="star" id="star-5" onClick="feedbackSend(this)"></span> 
-													<span class="star" id="star-4" onClick="feedbackSend(this)"></span> 
-													<span class="star" id="star-3" onClick="feedbackSend(this)"></span> 
-													<span class="star" id="star-2" onClick="feedbackSend(this)"></span> 
-													<span class="star" id="star-1" onClick="feedbackSend(this)"></span>
-												</span>
 											</div>
-										</div>
-											
 
 										</div>
-
-									</div>
+									<?php }?>
 									
 									
                                 </div>

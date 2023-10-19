@@ -226,14 +226,14 @@ class Estudiantes {
 
     }
 
-    public static function validarExistenciaEstudiante($estudiante = 0)
+    public static function validarExistenciaEstudiante($estudiante = 0,$BD    = '')
     {
 
         global $conexion;
         $num = 0;
 
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas
             WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
             ");
             $num = mysqli_num_rows($consulta);
@@ -653,6 +653,20 @@ class Estudiantes {
             include("../compartido/error-catch-to-report.php");
         }	
 
+    }
+
+    /**
+     * Cuenta el número de estudiantes disponibles para un grupo de docentes, opcionalmente aplicando un filtro.
+     *
+     * @param string $filtroDocentes (Opcional) - Un filtro para limitar la cuenta de estudiantes a un grupo específico de docentes.
+     *
+     * @return int - El número de estudiantes disponibles para los docentes después de aplicar el filtro (o el número total de estudiantes si no se proporciona un filtro).
+     */
+    public static function contarEstudiantesParaDocentes(string $filtroDocentes = '')
+    {
+        $consulta = self::listarEstudiantesParaDocentes($filtroDocentes);
+        $num = mysqli_num_rows($consulta);
+        return $num;
     }
 
 }
