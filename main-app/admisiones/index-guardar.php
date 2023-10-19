@@ -7,7 +7,7 @@ $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
 
 
-$year=(date('Y')+1);
+$year=$datosConfig["cfgi_year_inscripcion"];
 
 //DATOS SECRETARIA(O)
 $ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
@@ -36,7 +36,7 @@ if (md5($_POST['idInst']) != $_POST['iditoken']) {
 }
 
 $nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
-$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".(date('Y')+1)."', 8, :documentoAcudiente, :grado)";
+$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".$year."', 8, :documentoAcudiente, :grado)";
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindParam(':institucion', $idInst, PDO::PARAM_INT);
