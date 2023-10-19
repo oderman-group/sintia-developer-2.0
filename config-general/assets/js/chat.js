@@ -57,7 +57,7 @@ function mostrarChat(datos) {
 						'             <div class="row">' +
 						'					<div class="col-12">' +
 						'						<div class="input-group">' +
-						'							<textarea class="form-control" id="imputMensaje" class="form-control" onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2" aria-label="With textarea"></textarea>' +
+						'							<textarea class="form-control" id="imputMensaje" style="height: 50px;"  onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2" aria-label="With textarea"></textarea>' +
 						'							<div class="input-group-prepend">' +
 						'								<button class="input-group-text btn btn-primary " type="button" onClick="enviarMensaje()">' +
 						'									<i class="fa fa-send"></i>' +
@@ -96,6 +96,7 @@ function mostrarChat(datos) {
 					divNombre.style.fontWeight = "400";
 					spanNotificacion.className = "";
 					spanNotificacion.innerHTML = "";
+					imputMensaje.focus();
 				});
 			}
 		});
@@ -118,8 +119,7 @@ socket.on("sala_" + chat_remite_usuario, (data) => {
 		if (chat_destino_usuario == data["chat_destino_usuario"]) {
 			contenido_chat.innerHTML += htmlEmisor(data["chat_id"], data["chat_mensaje"], verificarFecha(Date.parse(data["chat_fecha_registro"])), data["chat_tipo"], data["chat_url_file"]);
 			limpiar();
-			chatElement.scrollTop = chatElement.scrollHeight;
-			// imputMensaje.focus();
+			chatElement.scrollTop = chatElement.scrollHeight;			
 		}
 	}
 
