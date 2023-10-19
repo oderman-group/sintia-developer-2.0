@@ -6,6 +6,28 @@
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 <link href="../../config-general/assets/css/chat2.css" rel="stylesheet">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<style>
+    .contenedor2 {
+
+        position: relative;
+        padding: 10px;
+    }
+
+    .div-interior2 {
+        position: absolute;
+        bottom: -40px;
+        left: 40px;
+        /* Establece el color del elemento i interior */
+    }
+
+    .esquina-superior {
+        position: absolute;
+        top: 15px;
+        left: 10px;
+        transform: translateX(-50%);
+        /* Establece el color del span en la esquina superior izquierda */
+    }
+</style>
 
 </head>
 <!-- END HEAD -->
@@ -54,6 +76,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     </br>
+
                                     <div id="chat-list" class="people-list scrollable-div">
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaChat">
                                             <?php
@@ -68,6 +91,8 @@
                                                 uss_estado,
                                                 chat_remite_usuario,
                                                 chat_visto,
+                                                chat_tipo,
+                                                $baseDatosSocial.ultimoTipo(chat_remite_usuario,chat_destino_usuario)as ulitmo_tipo,
                                                 $baseDatosSocial.fechaUltimoMensaje(chat_remite_usuario,chat_destino_usuario)as fecha_ulitmo_msj,
                                                 $baseDatosSocial.ultimoMensaje(chat_remite_usuario,chat_destino_usuario)as ulitmo_msj,
                                                 $baseDatosSocial.cantNoLeidos(chat_remite_usuario,chat_destino_usuario)as cantidad
@@ -90,8 +115,9 @@
                                                     $nombre = $datosUsuriosOffline['uss_nombre'] . ' ' . $datosUsuriosOffline['uss_apellido1'];
                                                     $cantidad = $datosUsuriosOffline['cantidad'];
                                                     $estado = $datosUsuriosOffline['uss_estado'] == "1" ? "online" : "offline";
+                                                    $chatTipo = $datosUsuriosOffline['ulitmo_tipo'];
                                                     if ($ussId == $_SESSION['id']) {
-                                                        $miId=$_SESSION['id'];
+                                                        $miId = $_SESSION['id'];
                                                         $ussId = $datosUsuriosOffline['chat_remite_usuario'];
                                                         $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$ussId)as cantidad FROM usuarios WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id ='" . $ussId . "' ");
                                                         while ($datosUsuarios = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH)) {
@@ -100,36 +126,71 @@
                                                             if ($datosUsuarios['uss_apellido1'] != "" || $datosUsuarios['uss_apellido1'] != NULL) {
                                                                 $nombre .= " " . $datosUsuarios['uss_apellido1'];
                                                             }
-                                                            $cantidad=$datosUsuarios['cantidad'];
+                                                            $cantidad = $datosUsuarios['cantidad'];
                                                         }
                                                     }
-                                                    
+
                                                     if (!in_array($ussId, $chats)) {
-                                                        $chats[]=$ussId;
-                                                    if (strlen($datosUsuriosOffline['ulitmo_msj']) > 20) {
-                                                        $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20) . "...";
-                                                    } else {
-                                                        $mensaje = $datosUsuriosOffline['ulitmo_msj'];
-                                                    }
-                                                    
-                                                    if ($cantidad != "0") {
-                                                        $styleName = "font-weight: 700;";
-                                                        $className = "badge headerBadgeColor2";
-                                                    } else {
-                                                        $cantidad = "";
-                                                        $styleName = "";
-                                                        $className = "";
-                                                    }
+                                                        $chats[] = $ussId;
+                                                        if (strlen($datosUsuriosOffline['ulitmo_msj']) > 20) {
+                                                            $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20) . "...";
+                                                        } else {
+                                                            $mensaje = $datosUsuriosOffline['ulitmo_msj'];
+                                                        }
+                                                        $iconAdjunto = "";
+                                                        $imagen = false;
+                                                        switch ($chatTipo) {
+                                                            case 1:
+                                                                $iconAdjunto = "";
+                                                                $imagen = false;
+                                                                break;
+                                                            case 2:
+                                                                $chatTipo = "Foto";
+                                                                $iconAdjunto = "../files/iconos/imagen16.png";
+                                                                $imagen = true;
+                                                                break;
+                                                            case 3:
+                                                                $chatTipo = "Archivo";
+                                                                $iconAdjunto = "../files/iconos/file16.png";
+                                                                $imagen = true;
+                                                                break;
+                                                            case 4:
+                                                                $chatTipo = "Audio";
+                                                                $iconAdjunto = "../files/iconos/audio.png";
+                                                                $imagen = true;
+                                                                break;
+                                                        }
+
+                                                        if ($cantidad != "0") {
+                                                            $styleName = "font-weight: 700;";
+                                                            $className = "badge headerBadgeColor2";
+                                                        } else {
+                                                            $cantidad = "";
+                                                            $styleName = "";
+                                                            $className = "";
+                                                        }
 
                                             ?>
-                                                    <li class="clearfix" onclick="mostrarChat(this)" id="<?= $ussId ?>">
-                                                        <img src="<?= $fotoPerfil ?>" alt="avatar">
-                                                        <div class="about">
-                                                            <div class="name" Style="<?= $styleName ?>" id="nombre_<?= $ussId ?>"><?= $nombre ?></div>
-                                                            <div class="status"> <i class="fa fa-circle <?= $estado ?>"></i> <?= $mensaje ?> <span class="<?= $className ?>" id="notificacion_<?= $ussId ?>"> <?= $cantidad ?></div>
 
-                                                        </div>
-                                                    </li>
+                                                        <li class="clearfix" onclick="mostrarChat(this)" id="<?= $ussId ?>">
+                                                            <div class="contenedor2">
+                                                                <span class="<?= $className ?> esquina-superior" id="notificacion_<?= $ussId ?>">
+                                                                    <?= $cantidad ?>
+                                                                </span>
+                                                                <img src="<?= $fotoPerfil ?>" alt="avatar">
+                                                                <i class="fa fa-circle <?= $estado ?> div-interior2"></i>
+                                                            </div>
+
+                                                            <div class="about">
+                                                                <div class="name" Style="<?= $styleName ?>" id="nombre_<?= $ussId ?>"><?= $nombre ?></div>
+                                                                <div class="status">
+                                                                    <?php if ($imagen) { ?>
+                                                                        <img src="<?= $iconAdjunto ?>" style="height: 16px;width:16px;"><?= $chatTipo ?> </img>
+                                                                    <?php } ?>
+                                                                    <?= $mensaje ?>
+                                                                </div>
+                                                            </div>
+                                                        </li>
                                             <?php
                                                     }
                                                 }

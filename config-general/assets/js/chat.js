@@ -101,7 +101,7 @@ function mostrarChat(datos) {
 		});
 	}
 };
-// metodo para escuchar actualicaciones de mis chat 
+// metodo para escuchar actualicaciones de mis chats 
 socket.on("sala_" + chat_remite_usuario, (data) => {
 	// console.log(data);
 	miUsuario = (data["chat_remite_usuario"] == chat_remite_usuario);
@@ -111,7 +111,7 @@ socket.on("sala_" + chat_remite_usuario, (data) => {
 			divNombre = document.getElementById("nombre_" + uss_id);
 			divNombre.style.fontWeight = "700";
 			spanNotificacion = document.getElementById("notificacion_" + uss_id);
-			spanNotificacion.className = "badge headerBadgeColor2";
+			spanNotificacion.className = "badge headerBadgeColor2 esquina-superior";
 			spanNotificacion.innerHTML = data["cantidad"];
 		}
 	} else {
@@ -119,7 +119,7 @@ socket.on("sala_" + chat_remite_usuario, (data) => {
 			contenido_chat.innerHTML += htmlEmisor(data["chat_id"], data["chat_mensaje"], verificarFecha(Date.parse(data["chat_fecha_registro"])), data["chat_tipo"], data["chat_url_file"]);
 			limpiar();
 			chatElement.scrollTop = chatElement.scrollHeight;
-			imputMensaje.focus();
+			// imputMensaje.focus();
 		}
 	}
 
@@ -136,6 +136,7 @@ function actualizarChat(miUsuario, data) {
 		nombre_uss_notifica = data["remite_nombre_uss"];
 		foto_url_uss_notifica = data["remite_foto_uss"];
 	}
+	tipo = data["chat_tipo"];
 	listaUsuarios = document.getElementById('listaChat');
 	liUsuario = document.getElementById(uss_id);
 	// si existe se elimina de la lista
@@ -147,9 +148,32 @@ function actualizarChat(miUsuario, data) {
 	} else {
 		mensaje = data["chat_mensaje"];
 	}
+	urlimage="";
+	imagen=false;                                                    
+	switch (tipo) {
+		case "1":
+			urlimage="";
+			imagen=false;
+			break;
+		case "2":
+			tipo="Foto";
+			urlimage="../files/iconos/imagen16.png";
+			imagen=true;
+			break;
+		case "3":
+			tipo="Archivo";
+			urlimage="../files/iconos/file16.png";
+			imagen=true;
+			break;
+		 case "4":
+			tipo="Audio";
+			urlimage="../files/iconos/audio.png";
+			imagen=true;
+				break;
+	}
 
 	// Crea un nuevo elemento li
-	const elementoHTML = notificacionUsuario(uss_id, nombre_uss_notifica, foto_url_uss_notifica, mensaje);
+	const elementoHTML = notificacionUsuario(uss_id, nombre_uss_notifica, foto_url_uss_notifica, mensaje,'online',imagen,tipo,urlimage);
 	const nuevoElemento = document.createElement('li');
 	nuevoElemento.id = uss_id;
 	nuevoElemento.className = "clearfix";
@@ -213,14 +237,26 @@ function ejecutarEnter(event) {
 	}
 };
 
-function notificacionUsuario(id, nombreCompleto, fotoPerfil, estado) {
+function notificacionUsuario(id, nombreCompleto, fotoPerfil,mensaje,estado="online",imagen=false,tipo="1",urlimage) {
+	imageHtml = "";
+	if(imagen){
+		imageHtml = '<img src="'+urlimage+'" style="height: 16px;width:16px;" >'+tipo+'</img>';
+	}	
 	Html = "";
-	// '<li class="clearfix" onclick="mostrarChat(this)" id="'+id+'"   >' +
-	Html = '<img src="' + fotoPerfil + '" alt="avatar" />' +
-		'<div class="about">' +
-		'<div class="name" id="nombre_' + id + '"  >' + nombreCompleto + '</div>' +
-		'<div class="status" > <i class="fa fa-circle online"></i> ' + estado + ' <span id="notificacion_' + id + '"> </div>' +
-		'</div>';
+	Html = 
+		   '<div class="contenedor2">'+
+		   '   <span id="notificacion_' + id + '"></span>'+
+		   '   <img src="' + fotoPerfil + '" alt="avatar" />' +
+		   '   <i class="fa fa-circle  ' + estado + ' div-interior2"></i> ' +
+		   '</div>' +
+		   '<div class="about">' +
+		   '	<div class="name" id="nombre_' + id + '"  >' + nombreCompleto + '</div>' +
+		   '    	<div class="status" > '+		  
+		     			imageHtml+
+						mensaje +		  
+		   '        </div>' +
+		   '	</div>'+
+		   '</div>';
 	return Html;
 };
 function pintarUsuario(id, nombreCompleto, fotoPerfil, estado) {
@@ -244,7 +280,7 @@ function htmlEmisor(id, mensaje, hora, tipo = "1", url = "", visto = 1) {
 
 	switch (tipo) {
 		case _chatTipoImagen:
-			imageHtml = '<img class="cursor-mano" src="../files/chat/imagen/' + url + '" onclick="mostarModal(this.src)" alt="avatar" style="height: 400px;"  data-toggle="modal" data-target="#modalImagen">';
+			imageHtml = '<img class="cursor-mano" src="../files/chat/imagen/' + url + '" onclick="mostarModal(this.src)" alt="avatar" style="height: 400px;width: 400px;"  data-toggle="modal" data-target="#modalImagen">';
 			mensaje = '<div class="cols-12">' + mensaje + '</div>';
 			break;
 		case _chatTipoDocumento:
@@ -266,10 +302,10 @@ function htmlEmisor(id, mensaje, hora, tipo = "1", url = "", visto = 1) {
 		'<span class="message-data-time">' + hora + '</span>' +
 		'</div>' +
 		'<div class="message my-message float-right" id="div_visto_' + id + '">' +
-		imageHtml +
-		vistoHtml +
-		'<img src="../files/iconos/check1.png">' +
+		imageHtml +	
 		mensaje +
+		'<img src="../files/iconos/check1.png">' +
+		vistoHtml +
 		'</div>' +
 		'</li>';
 
@@ -281,7 +317,7 @@ function htmlDestino(id, mensaje, hora, imagenUrl, tipo = "1", url = "") {
 	imageHtml = "";
 	switch (tipo) {
 		case _chatTipoImagen:
-			imageHtml = '<img class="cursor-mano" src="../files/chat/imagen/' + url + '" alt="avatar" onclick="mostarModal(this.src)" style="height: 400px;"  data-toggle="modal" data-target="#modalImagen" >';
+			imageHtml = '<img class="cursor-mano" src="../files/chat/imagen/' + url + '" alt="avatar" onclick="mostarModal(this.src)" style="height: 400px;width: 400px;"  data-toggle="modal" data-target="#modalImagen" >';
 			mensaje = '<div class="cols-12">' + mensaje + '</div>';
 			break;
 		case _chatTipoDocumento:
@@ -426,7 +462,7 @@ function cargarFile(tipo, idImput) {
 	inputImagen.click();
 	inputImagen.addEventListener('change', mostrarImagen);
 	mostrarImagen(tipo);
-	imputMensaje.focus();
+	// imputMensaje.focus();
 };
 
 function enviarArchivo(tipo, idImput) {
@@ -588,7 +624,7 @@ function detenerGrabacion() {
 	console.log('Grabación detenida.');
 	iconGrabar.classList.remove("fa-record-vinyl", "fa-beat-fade");
 	iconGrabar.classList.add("fa-microphone");
-	imputMensaje.focus();
+	// imputMensaje.focus();
 };
 
 function limpiar() {
