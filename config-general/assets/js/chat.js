@@ -22,25 +22,25 @@ function mostrarChat(datos) {
 				$.each(response, function (index, item) {
 					estado = item.datosUsuarios['uss_estado'] == "1" ? "online" : "offline";
 					var html =
-						'<div class="chat-header clearfix">' +
+						'<div class="div-superior">' +
 						'<div class="row">' +
 						'<div class="col-lg-6">' +
 						'<a href="javascript:void(0);" data-toggle="modal" >' +
-						'<img src="' + item.fotoPerfil + '" alt="avatar">' +
+						'<img src="' + item.fotoPerfil + '" height="70px" alt="avatar">' +
 						'</a>' +
 						'<div class="chat-about">' +
 						'<h6 class="m-b-0">' + item.nombre + '</h6>' +
-						'<div class="status"> <i class="fa fa-circle '+estado+'"></i> '+estado+' </div>' +
+						'<div class="status"> <i class="fa fa-circle ' + estado + '"></i> ' + estado + ' </div>' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
 						'</div>' +
-						'<div class="chat-history" id="chatHistory">' +
+						'<div class="chat-history div-medio scrollable" id="chatHistory">' +
 						'<ul class="m-b-0" id="contenido_chat">' +
 
 						'</ul>' +
 						'</div>' +
-						'<div id="div-flotante" class="div-flotante">' +
+						'		<div id="div-flotante" class="div-flotante">' +
 						'             <div id="contenedorImagen"></div>' +
 						'             <audio controls id="audioReprodutor" style="display: none;"></audio>' +
 						'             <button type="button" class="btn btn-outline-secondary" onclick="limpiar()">' +
@@ -50,28 +50,34 @@ function mostrarChat(datos) {
 						'                 <i class="fa fa-send"></i>' +
 						'             </button>' +
 						'         </div>' +
-						'         <div class="chat-message">' +
+						'         <div class="div-inferior">' +
 						'             <div class="row">' +
-						'                 <div class="col-2">' +
+						'					<div class="col-12">' +
+						'						<div class="input-group">' +
+						'							<textarea class="form-control" id="imputMensaje" class="form-control" onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2" aria-label="With textarea"></textarea>' +
+						'							<div class="input-group-prepend">' +
+						'								<button class="input-group-text btn btn-primary " type="button" onClick="enviarMensaje()">' +
+						'									<i class="fa fa-send"></i>' +
+						'								</button>' +
+						'							</div>' +
+						'						</div>' +
+						'					</div>' +
+						'					<div class="col-12">' +
 						'                     <div class="btn-group me-2" role="group" aria-label="First group">' +
 						'                         <button type="button" onclick="cargarFile(&apos;' + _chatTipoImagen + '&apos;,cargarImagen)" class="btn btn-sm  btn-outline-secondary"><i class="fa fa-image"></i></button>' +
 						'                         <button type="button" onclick="cargarFile(&apos;' + _chatTipoDocumento + '&apos;,cargarArchivo)" class="btn btn-outline-secondary"><i class="fa-solid fa-paperclip"></i></button>' +
 						'                         <button type="button" onclick="iniciarGrabacion()" class="btn btn-outline-secondary"><i id="iconGrabar" class="fa-solid fa-microphone"></i></button>' +
 						'                         <button type="button" onclick="detenerGrabacion()" class="btn btn-outline-secondary" id="btnDetener" style="display: none;"><i class="fa-solid fa-stop"></i></button>' +
 						'                     </div>' +
-						'                 </div>' +
-						'                 <div class="col-9">' +
-						'                     <textarea id="imputMensaje" class="form-control"  onkeydown="ejecutarEnter(event)" placeholder="Escriba su mensaje aqui..." rows="2"></textarea>' +
-						'                 </div>' +
-						'                 <div class="col-1">' +
-						'                     <button class="btn btn-primary " type="button" onClick="enviarMensaje()">' +
-						'                         <i class="fa fa-send"></i>' +
-						'                     </button>' +
-						'                 </div>' +
+						'					</div>' +
+
 						'             </div>' +
+						'          </div>' +
 						'             <input type="file" id="cargarImagen" name="imagen" style="display: none;" accept="image/*">' +
 						'             <input type="file" id="cargarArchivo" name="archivo" style="display: none;">' +
 						'             <input type="file" id="cargarAudio" name="audio" style="display: none;" accept="audio/*"></input>';
+
+
 					$("#contenedorChat").append(html);
 					var chatElement = document.getElementById("chatHistory");
 					var contenido_chat = document.getElementById("contenido_chat");
@@ -84,7 +90,7 @@ function mostrarChat(datos) {
 					destino_nombre_uss = item.nombre;
 
 					listarChat(chat_remite_usuario, chat_destino_usuario);
-					
+
 
 					divNombre = document.getElementById("nombre_" + chat_destino_usuario);
 					spanNotificacion = document.getElementById("notificacion_" + chat_destino_usuario);
@@ -418,7 +424,7 @@ function cargarFile(tipo, idImput) {
 	inputImagen.click();
 	inputImagen.addEventListener('change', mostrarImagen);
 	mostrarImagen(tipo);
-	imputMensaje.focus();
+	// imputMensaje.focus();
 };
 
 function enviarArchivo(tipo, idImput) {
@@ -517,7 +523,11 @@ function mostrarImagen(tipo) {
 	}
 
 	contenedorImagen.innerHTML = "";
-
+	const elemento = document.getElementById('imputMensaje'); 
+	const rect = elemento.getBoundingClientRect();
+	const x = rect.left + window.scrollX; // Posición X absoluta
+	const y = rect.top + window.scrollY; // Posición Y absoluta
+	console.log(`Posición X: ${x}, Posición Y: ${y}`);
 	if (imagenSeleccionada) {
 		const imagenURL = URL.createObjectURL(imagenSeleccionada);
 		// Crear un elemento de imagen y asignar la URL
@@ -528,7 +538,8 @@ function mostrarImagen(tipo) {
 		// Agregar la imagen al contenedor
 		contenedorImagen.innerHTML = '';
 		contenedorImagen.appendChild(imagen);
-		divFlotante.style.top = "50vh";
+		divFlotante.style.top = (y-340)+"px";
+		divFlotante.style.lef = x+"px";
 		divFlotante.style.display = "block";
 
 	} else if (archivoSeleccionado) {
@@ -573,7 +584,7 @@ function detenerGrabacion() {
 	console.log('Grabación detenida.');
 	iconGrabar.classList.remove("fa-record-vinyl", "fa-beat-fade");
 	iconGrabar.classList.add("fa-microphone");
-	imputMensaje.focus();
+	// imputMensaje.focus();
 };
 
 function limpiar() {
