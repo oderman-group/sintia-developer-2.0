@@ -234,7 +234,7 @@ class SysJobs {
      * 
      * @return void 
      */
-    public static  function enviarMensaje($destinatario,$contenido,$idJob,$tipo,$estado){
+    public static  function enviarMensaje($destinatario, $contenido, $idJob, $tipo, $estado, $informacionAdicional = ''){
         global $conexion,$baseDatosServicios,$config;       
         
         $para=$destinatario;
@@ -242,11 +242,21 @@ class SysJobs {
 
         switch($estado) {
             case JOBS_ESTADO_FINALIZADO:
-            $asunto = 'El informe fue generado correctamente.';
+
+                if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
+                    $asunto = "El informe fue generado correctamente | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']} ";
+                } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
+                    $asunto = "La importaci&oacute; de estudiantes fue completada correctamente ";
+                }
+                
             break;
 
             case JOBS_ESTADO_ERROR:
-            $asunto = 'El informe present&oacute; un error.';
+                if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
+                    $asunto = "El informe present&oacute; un error | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']}";
+                } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
+                    $asunto = "La importaci&oacute; de estudiantes present&oacute; un problema. ";
+                }
             break;
 
             default:
