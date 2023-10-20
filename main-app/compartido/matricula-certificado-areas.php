@@ -242,6 +242,106 @@ include("../compartido/head-informes.php") ?>
 
 				}
 
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+
+				//SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
+				$cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area, ar_nombre, ar_id FROM academico_cargas 
+
+                                            INNER JOIN academico_materias ON mat_id=car_materia
+
+                                            INNER JOIN academico_areas ON ar_id=mat_area
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' GROUP BY mat_area");
+
+
+				$materiasPerdidas = 0;
+
+				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+					//CONSULTAMOS LAS MATERIAS DEL AREA
+
+					$materias = mysqli_query($conexion, "SELECT car_id FROM academico_materias, academico_cargas WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "'");
+
+					$numMat = mysqli_num_rows($materias);
+
+					//REPETIMOS LAS CARGAS DONDE HAYA MATERIAS DE LA MISMA AREA Y LAS METEMOS EN UNA SOLA VARIABLE
+
+					$mate = "";
+
+					$j = 1;
+
+					while ($mat = mysqli_fetch_array($materias, MYSQLI_BOTH)) {
+						if ($j < $numMat) $mate .= $mat[0] . ",";
+						else $mate .= $mat[0];
+						$j++;
+					}
+
+					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
+
+					$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga IN(" . $mate . ")");
+					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+					$nota = round($boletin[0], 1);
+					for ($n = 0; $n <= 5; $n++) {
+						if ($nota == $n) $nota = $nota . ".0";
+					}
+					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "'");
+					$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+
+				?>
+
+					<tr style="font-size:11px; font-weight:bold;">
+
+						<td><?= strtoupper($cargas["ar_nombre"]); ?></td>
+
+						<td><?= $nota; ?> (<?= strtoupper($desempenoA[1]); ?>)</td>
+
+						<td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
+
+					</tr>
+
+					<?php
+					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
+
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+
+					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
+						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
+						$notaDefMateria = mysqli_fetch_array($consultaNotaDefMateria, MYSQLI_BOTH);
+						$notaDefMateria = round($notaDefMateria[0], 1);
+						for ($n = 0; $n <= 5; $n++) {
+							if ($notaDefMateria == $n) $notaDefMateria = $notaDefMateria . ".0";
+						}
+						if ($notaDefMateria < $config[5]) {
+							$materiasPerdidas++;
+						}
+						$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "'");
+						$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+						//PARA PREESCOLARES
+						if ($matricula["gra_id"] >= 12 and $matricula["gra_id"] <= 15) {
+							$nota = ceil($nota);
+							if ($notaDefMateria == 1) $notaDefMateria = 'DEFICIENTE';
+							if ($notaDefMateria == 2) $notaDefMateria = 'INSUFICIENTE';
+							if ($notaDefMateria == 3) $notaDefMateria = 'ACEPTABLE';
+							if ($notaDefMateria == 4) $notaDefMateria = 'SOBRESALIENTE';
+							if ($notaDefMateria == 5) $notaDefMateria = 'EXCELENTE';
+						}
+					?>
+						<tr style="font-size:11px;">
+							<td><?= $mda["mat_nombre"]; ?></td>
+							<td><?= $notaDefMateria; ?> <?php if ($matricula["gra_id"] < 12) { ?> (<?= strtoupper($desempeno[1]); ?>) <?php } ?></td>
+							<td><?= $mda["ipc_intensidad"] . " (" . $horas[$mda["ipc_intensidad"]] . ")"; ?></td>
+						</tr>
+					<?php } ?>
+
+				<?php
+
+				}}}}
+
 				?>
 
 
@@ -415,6 +515,71 @@ include("../compartido/head-informes.php") ?>
 				<?php
 
 				}
+
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+
+				//SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
+				$cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+
+                                            INNER JOIN academico_materias ON mat_id=car_materia
+
+                                            INNER JOIN academico_areas ON ar_id=mat_area
+
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
+
+
+				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
+
+					$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+					$nota = round($boletin[0], 1);
+
+					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+
+				?>
+
+					<tr style="text-align:center;">
+
+						<td style="text-align:left;"><?= strtoupper($cargas["mat_nombre"]); ?></td>
+
+						<td><?= $cargas["car_ih"]; ?></td>
+
+						<?php
+
+						$p = 1;
+
+						//PERIODOS
+
+						while ($p <= $config[19]) {
+
+							$consultaNotasPeriodo = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+							$notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
+
+							echo '<td>' . $notasPeriodo[0] . '</td>';
+
+							$p++;
+						}
+
+						?>
+
+						<td><?= $nota; ?></td>
+
+						<td><?= $desempeno[1]; ?></td>
+
+					</tr>
+
+				<?php
+
+				}}}}
 
 				?>
 

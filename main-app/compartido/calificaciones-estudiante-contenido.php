@@ -162,6 +162,8 @@
 												if(!empty($notapp[0]) and $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
+												$usrEstud="";
+												if(!empty($_GET["usrEstud"])){ $usrEstud=$_GET["usrEstud"];}
 
 											?>
 

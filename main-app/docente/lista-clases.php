@@ -78,10 +78,16 @@ require_once("../class/Estudiantes.php");
                 <?php
                         }
                         $bg = '';
-                        $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-                        (SELECT count(*) FROM academico_ausencias 
-                        INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-                        WHERE aus_id_clase='".$resultado[0]."')");
+                        if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+                            INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_id_matricula=aus_id_estudiante
+                            INNER JOIN academico_matriculas ON (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=matcur_id_matricula
+                            WHERE aus_id_clase='".$resultado[0]."'");
+                        }else{
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+                            INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+                            WHERE aus_id_clase='".$resultado[0]."'");
+                        }
                         $numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
                         if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
                         

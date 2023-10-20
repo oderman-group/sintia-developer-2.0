@@ -2,6 +2,7 @@
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
+<?php require_once("../class/Estudiantes.php");?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -36,7 +37,7 @@
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
 														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
+														<div class="profile-desc-item pull-right"><?=Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);?></div>
 													</li>
 													
 												</ul>
@@ -75,8 +76,14 @@
                                                 <tbody>
 													<?php
 													$contReg = 1; 
+													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+													$filtroOr='';
+													foreach ($listaCursosMediaTecnica as $dato) {
+														$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-													WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);

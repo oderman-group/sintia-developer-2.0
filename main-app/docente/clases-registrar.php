@@ -113,15 +113,6 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 									
 										
                                         <div class="card-body">
-											<!--
-											<div class="row" style="margin-bottom: 10px;">
-												<div class="col-sm-12" align="center">
-													<p style="color: darkblue;">Utilice esta casilla para colocar la misma inasistencia a todos los estudiantes. Esta opción <mark>reemplazará las inasistencias existentes</mark> en esta actividad.</p>
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" onChange="notas(this)">
-												</div>
-											</div>
-											-->
-											
 											
 										<span style="color: blue; font-size: 15px;" id="respRA"></span>
 											
@@ -137,13 +128,13 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
+													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$idR."'");
+															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado['mat_id']." AND aus_id_clase='".$idR."'");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														 }
 													 ?>

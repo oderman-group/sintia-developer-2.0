@@ -374,7 +374,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 <tbody>
 
 													<?php
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+														$consulta = Estudiantes::listarEstudiantesParaDocentesMT($datosCargaActual);
+													} else {
+														$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													}
+													
 													$contReg = 1;
 													$colorNota = "black";
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){

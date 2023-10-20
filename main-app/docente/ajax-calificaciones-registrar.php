@@ -60,8 +60,7 @@ if($_POST["operacion"]==2){
 
 //Para la misma nota para todos los estudiantes
 if($_POST["operacion"]==3){
-	$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-	$consultaE =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+	$consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 	
 	
 	$accionBD = 0;

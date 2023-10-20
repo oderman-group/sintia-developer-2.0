@@ -161,14 +161,18 @@ if(!Modulos::validarPermisoEdicion()){
 												</thead>
                                                 <tbody>
 												<?php
-												$filtroAdicional= "AND mat_grado='".$_REQUEST['curso']."' AND mat_grupo='".$_REQUEST['grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+									 			$filtroAdicional = "";
+												if(!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])){
+													$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+												}
+												$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 												$defPorEstudiante = 0;
 												?>
 												<tr id="data1" class="odd gradeX">
-													<td style="font-size:9px;"><?=$resultado[1];?></td>
+													<td style="font-size:9px;"><?=$resultado['mat_matricula'];?></td>
 													<td style="font-size:9px;"><?=$nombre?></td>
 													<?php
 													try{
@@ -187,11 +191,7 @@ if(!Modulos::validarPermisoEdicion()){
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
 														while($p<=$config[19]){
-															try{
-																$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
-															} catch (Exception $e) {
-																include("../compartido/error-catch-to-report.php");
-															}
+															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 															if(!empty($boletin[4])){
 																if($boletin[4]<$config[5])$color = $config[6]; elseif($boletin[4]>=$config[5]) $color = $config[7];
@@ -201,11 +201,7 @@ if(!Modulos::validarPermisoEdicion()){
 														}
 														$defPorMateria = round($defPorMateria/$config[19],2);
 														//CONSULTAR NIVELACIONES
-														try{
-															$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga[0]."'");
 														$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 														if(!empty($cNiv[3]) && $cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														//DEFINITIVA DE CADA MATERIA

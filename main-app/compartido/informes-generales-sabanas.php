@@ -16,10 +16,14 @@ if(!empty($_GET["per"])) {
   $per = base64_decode($_GET["per"]);
 }
 
+require_once("../class/servicios/GradoServicios.php");
 $filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");	
+$cursoActual=GradoServicios::consultarCurso($curso);
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);	
+
 $num_asg=mysqli_num_rows($asig);
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$curso."' AND gru_id='".$grupo."'");
+
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 <head>
@@ -50,7 +54,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."' AND car_activa=1");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
 			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
@@ -67,21 +71,22 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);	  
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$per." GROUP BY bol_carga");
-		$numero=mysqli_num_rows($cuentaest);
-		$def='0.0';
+  	// $cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila['mat_id']." AND bol_periodo=".$_GET["per"]." GROUP BY bol_carga");
+		// $numero=mysqli_num_rows($cuentaest);
 		
   ?>
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
-      <td align="center"> <?php echo $fila[1];?></td>
+      <td align="center"> <?php echo $fila['mat_id'];?></td>
       <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."' AND car_activa=1");
+		$numero=mysqli_num_rows($materias1);
+		$def='0.0';
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila['mat_id']." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
       $defini = 0;
       if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
@@ -96,7 +101,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
-		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
+		$grupo1[$cont] = $nombre;
 		?>
       <td align="center" style="font-weight:bold; color:<?=$color;?>;"><?=$def;?></td>  
 </tr>
@@ -107,12 +112,12 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   </table>
   
 <?php
-$puestos = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS prom, mat_primer_apellido, mat_segundo_apellido, mat_nombres FROM academico_boletin
+$puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM academico_boletin
 INNER JOIN academico_matriculas ON mat_id=bol_estudiante
 INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."'
 WHERE bol_periodo='".$per."'
 GROUP BY bol_estudiante
-ORDER BY prom DESC
+ORDER BY suma DESC
 ");
 ?>
 
@@ -131,12 +136,13 @@ ORDER BY prom DESC
       </tr> 
     <?php
     $j=1;
-      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
+      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){	
+        $prom=round(($ptos['suma']/$numero),2);	
     ?>	
       <tr style="font-weight:bold; font-size:12px;">
           <td align="center"><?=$j;?></td>
-          <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
-          <td align="center"><?=$ptos[0];?></td>
+          <td><?=Estudiantes::NombreCompletoDelEstudiante($ptos);?></td>
+          <td align="center"><?=$prom;?></td>
       </tr>
     <?php	
       $j++;

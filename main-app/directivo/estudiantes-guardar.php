@@ -2,6 +2,7 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 require_once "../class/Modulos.php";
+require_once("../class/servicios/MediaTecnicaServicios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0192';
@@ -34,18 +35,22 @@ if($valiEstudiante > 0){
 
 $result_numMat = strtotime("now");
 
-//Establecer valores por defecto cuando los campos vengan vacíos
-if(empty($_POST["va_matricula"])) $_POST["va_matricula"] = 0;
-if(empty($_POST["grupo"]))        $_POST["grupo"]        = 4;
-if(empty($_POST["tipoEst"]))      $_POST["tipoEst"]      = 128;
-if(empty($_POST["fNac"]))         $_POST["fNac"]         = '2000-01-01';
-if(empty($_POST["tipoD"]))        $_POST["tipoD"]        = 107;
-if(empty($_POST["genero"]))       $_POST["genero"]       = 126;
 
-if(empty($_POST["religion"]))     $_POST["religion"]     = 112;
-if(empty($_POST["estrato"]))      $_POST["estrato"]      = 116;
-if(empty($_POST["extran"]))       $_POST["extran"]       = 0;
-if(empty($_POST["inclusion"]))    $_POST["inclusion"]    = 0;
+if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
+
+//Establecer valores por defecto cuando los campos vengan vacíos
+if(empty($_POST["va_matricula"]))  $_POST["va_matricula"]  = 0;
+if(empty($_POST["grupo"]))         $_POST["grupo"]         = 4;
+if(empty($_POST["tipoEst"]))       $_POST["tipoEst"]       = 128;
+if(empty($_POST["fNac"]))          $_POST["fNac"]          = '2000-01-01';
+if(empty($_POST["tipoD"]))         $_POST["tipoD"]         = 107;
+if(empty($_POST["genero"]))        $_POST["genero"]        = 126;
+
+if(empty($_POST["religion"]))      $_POST["religion"]      = 112;
+if(empty($_POST["estrato"]))       $_POST["estrato"]       = 116;
+if(empty($_POST["extran"]))        $_POST["extran"]        = 0;
+if(empty($_POST["inclusion"]))     $_POST["inclusion"]     = 0;
+if(empty($_POST["tipoMatricula"])) $_POST["tipoMatricula"] = GRADO_GRUPAL;
 
 
 //Api solo para Icolven
@@ -201,12 +206,25 @@ try{
 //Insertamos la matrícula
 $idEstudiante = Estudiantes::insertarEstudiantes($conexionPDO, $_POST, $idEstudianteU, $result_numMat, $procedencia, $idAcudiente);
 
+//Insertamos las matrículas Adicionales
+if ($_POST["tipoMatricula"]==GRADO_INDIVIDUAL && !empty($_POST["cursosAdicionales"])) { 
+	try{
+		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config,$_POST["grupoMT"]);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+}
 try{
 	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
+
+if(!isset($estado) AND !isset($mensaje)){
+	$estado="";
+	$mensaje="";
+}
 $idUsr = mysqli_insert_id($conexion);
 $estadoSintia=false;
 $mensajeSintia='El estudiante no pudo ser creado correctamente en SINTIA.';

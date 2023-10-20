@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -16,11 +17,12 @@ include("../compartido/head-informes.php") ?>
 
 
 <?php
-$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1)";
-$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$_REQUEST["grupo"]);
 
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
-	$nombre = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);	  
+	$nombre = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
 ?>
 <div align="center" style="margin-bottom:20px;">
     ESTUDIANTE: <?=$nombre;?></br>
@@ -46,7 +48,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 									INNER JOIN academico_materias ON mat_id=car_materia
 									INNER JOIN academico_grados ON gra_id=car_curso
 									INNER JOIN usuarios ON uss_id=car_docente
-									WHERE car_curso='".$matriculadosDatos[6]."' AND car_grupo='".$matriculadosDatos[7]."'");
+									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' OR car_curso='".$matriculadosDatos['matcur_id_curso']."') AND (car_grupo='".$matriculadosDatos['mat_grupo']."' OR car_grupo='".$matriculadosDatos['matcur_id_grupo']."')");
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
@@ -54,7 +56,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 										//DEFINITIVAS
 										$carga = $rCargas[0];
 										$periodo = $config[2];
-										$estudiante = $matriculadosDatos[0];
+										$estudiante = $matriculadosDatos['mat_id'];
 										include("../definitivas.php");
 										if($definitiva>=$config[5] or $porcentajeActual==0) continue;
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
@@ -62,7 +64,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas[0];?></td>
-                                        <td><?=$rCargas['uss_nombre'];?></td>
+                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></td>
                                         <td><?=$rCargas['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
                                         <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
