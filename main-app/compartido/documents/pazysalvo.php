@@ -1,7 +1,8 @@
 <?php
-include("../directivo/session.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/UsuariosPadre.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/compartido/session-compartida.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -9,7 +10,7 @@ if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 <head>
 	<title>SINTIA | Saldos</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../sintia-icono.png">
+    <link rel="shortcut icon" href="../../sintia-icono.png">
     <style type="text/css">
 	.pieP{
 		margin-top:100px;
@@ -27,7 +28,7 @@ if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 <body style="font-family:Arial;">
 <div class="headerP">
     <div align="center" style="margin: 10px auto;">
-        <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
+        <img src="../../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
         <?=$informacion_inst["info_nombre"]?><br>
         <h4 style="margin-top: 50px;">A QUIEN PUEDA INTERESAR</h4>
     </div>
@@ -76,7 +77,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($usuario);
         </div>
     </div>
 	<div align="center" style="font-size:10px; margin-top:20px;">
-      <img src="../sintia-logo-2023.png" height="50" width="100"><br>
+      <img src="../../sintia-logo-2023.png" height="50" width="100"><br>
       SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
      </div>
      <script type="text/javascript">print();</script>

@@ -1,5 +1,6 @@
 <?php
-require_once("../class/servicios/GradoServicios.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 class Grados {
 
     public static function listarGrados($estado = 1,$tipo =null){
