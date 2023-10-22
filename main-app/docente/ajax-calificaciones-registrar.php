@@ -2,6 +2,20 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 include("verificar-carga.php");
+require_once("../class/CargaAcademica.php");
+
+$operacionesPermitidas = [9, 10];
+
+if(!in_array($_POST["operacion"], $operacionesPermitidas)) {
+	$infoCargaActual = CargaAcademica::cargasDatosEnSesion($cargaConsultaActual, $_SESSION["id"]);
+	$_SESSION["infoCargaActual"] = $infoCargaActual;
+	$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
+
+	if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) { 
+		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
+		exit();
+	}
+}
 
 if(!empty($_POST["codNota"]) && !empty($_POST["codEst"])) {
 	$consultaNum = mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
