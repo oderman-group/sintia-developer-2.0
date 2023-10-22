@@ -2,10 +2,10 @@
 /*session_start();
 $_SESSION["bd"] = date("Y");*/
 include("../modelo/conexion.php");
-$rst_usr = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["usuario"]."'");
-$num = mysqli_num_rows($rst_usr);
-$fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
-if($num>0)
+include("../class/UsuariosPadre.php");
+
+$fila = UsuariosPadre::sesionUsuario($_GET["usuario"]);
+if(!empty($fila))
 {
 	//session_destroy();
 	session_start();

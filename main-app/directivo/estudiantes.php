@@ -130,13 +130,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														try{
-															$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
-															WHERE uss_id='".$resultado["mat_acudiente"]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
+														$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
 

@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -66,8 +67,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($usuario);
     </div>
     
     <?php
-        $consultaTesorero=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$informacion_inst["info_tesorero"]."'");
-        $tesorero = mysqli_fetch_array($consultaTesorero, MYSQLI_BOTH);
+        $tesorero = UsuariosPadre::sesionUsuario($informacion_inst["info_tesorero"]);
     ?>
     <div class="pieP">
     	<div>

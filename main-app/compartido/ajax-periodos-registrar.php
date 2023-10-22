@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php.php");
 $consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
@@ -38,8 +39,8 @@ if($num==0){
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, academico_materias WHERE car_id='".$datosCargaActual[0]."' AND mat_id=car_materia");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
-		$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$usuarioResponsable[1]."'");
-		$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+
+		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable[1]);
 		//include("../compartido/email-alertas.php");
 		$fin =  '<html><body>';
 						$fin .= '

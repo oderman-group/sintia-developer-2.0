@@ -49,8 +49,7 @@ include("../compartido/head-informes.php") ?>
   $consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,"",$idGrupo);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
-  $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'");
-	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+	$acudiente = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
   ?>
   <tr style="border-color:<?=$Plataforma->colorDos;?>;">
       <td style="text-align:center"><?=$cont;?></td>  

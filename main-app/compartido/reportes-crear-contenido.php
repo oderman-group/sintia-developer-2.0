@@ -60,10 +60,8 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-10">
 													<?php
-													$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													WHERE (uss_tipo=2 OR uss_tipo=5)
-													ORDER BY uss_tipo, uss_nombre
-													");
+													$datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo= ".TIPO_DIRECTIVO.")
+													ORDER BY uss_tipo, uss_nombre");
 													?>
 													<select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>

@@ -8,13 +8,8 @@ try{
 }
 
 	while ($est = mysqli_fetch_array($estud, MYSQLI_BOTH)) {
-		try{
-			$consultaUsComp=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $est["mat_id_usuario"] . "'");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$usComp = mysqli_num_rows($consultaUsComp);
-		if ($usComp == 0) {
+		$usComp = UsuariosPadre::sesionUsuario($est["mat_id_usuario"]);
+		if ( empty($usComp) ) {
 			try{
 				mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_usuario='" . $est[12] . "'");
 			} catch (Exception $e) {

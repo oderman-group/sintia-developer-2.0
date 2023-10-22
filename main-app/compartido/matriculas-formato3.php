@@ -12,10 +12,8 @@ include("head.php");
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
   $resultado = Estudiantes::obtenerDatosEstudiante(base64_decode($_GET["ref"]));
-  $consultaAcudiente1=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'");
-  $acudiente1 = mysqli_fetch_array($consultaAcudiente1, MYSQLI_BOTH);
-  $consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente2']."'");
-  $acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+  $acudiente1 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
+  $acudiente2 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente2']);
   $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>

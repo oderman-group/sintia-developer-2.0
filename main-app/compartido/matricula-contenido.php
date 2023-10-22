@@ -1,6 +1,7 @@
 						
 <?php
-$acudiente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'"), MYSQLI_BOTH);
+$acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
+
 $classDiv="col-sm-12";
 if($config['conf_id_institucion'] == ICOLVEN){
 	$classDiv="col-sm-9";

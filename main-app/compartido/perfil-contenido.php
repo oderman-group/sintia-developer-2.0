@@ -1,7 +1,5 @@
 						<?php
-                        $usuarioPerfilConsulta = mysqli_query($conexion, "SELECT * FROM usuarios 
-                        WHERE uss_id='".$_SESSION["id"]."'");
-                        $usuarioPerfil = mysqli_fetch_array($usuarioPerfilConsulta, MYSQLI_BOTH);
+                        $usuarioPerfil = UsuariosPadre::sesionUsuario($_SESSION["id"]);
                         ?>
                         <div class="col-sm-3">
 							<div class="panel">

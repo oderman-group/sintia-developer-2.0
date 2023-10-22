@@ -20,8 +20,7 @@ if( !empty($_GET["modal"]) && $_GET["modal"] == 1 ) {
 												</p>
 												
 												<?php
-												$docentesProgreso = mysqli_query($conexion, "SELECT * FROM usuarios 
-												WHERE uss_tipo=2 AND uss_bloqueado='0'
+												$docentesProgreso = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DOCENTE." AND uss_bloqueado='0'
 												ORDER BY uss_nombre");
 												$profes = array();
 												$profesNombre = array();

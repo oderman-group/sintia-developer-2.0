@@ -1,4 +1,5 @@
 <?php
+require_once 'UsuariosPadre.php';
 class SysJobs {
      /**
      * Esta funci&oacute;n  crea &oacute; actualiza si ya existe un registro, llamando las funcions de crear o  atualizar 
@@ -264,8 +265,9 @@ class SysJobs {
             break;
         }   
         try{
-			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
-			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
+            $remitenteConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1");
+			$remitente = mysqli_fetch_array($remitenteConsulta); 
+			$destinatario = UsuariosPadre::sesionUsuario($destinatario);
             $contenido="<br>Hola, Sr(a) ".$destinatario["uss_nombre"]."<br> 
             ".$asunto."<br> <p>".$contenido."</p>";
 			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)

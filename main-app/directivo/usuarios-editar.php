@@ -13,18 +13,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 
-try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$id."' AND uss_id!={$_SESSION["id"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$datosEditar = UsuariosPadre::sesionUsuario($id, " AND uss_id!={$_SESSION["id"]}");
 
-if( mysqli_num_rows($consultaDatos) == 0 ){
+if( empty($datosEditar) ){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_16";</script>';
 	exit();
 }
 
-$datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+
 if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
 	exit();
