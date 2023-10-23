@@ -12,7 +12,7 @@ $(function () {
  */
 function fetchGeneral(url, title, method='POST', paramsJSON=null) {
 
-    document.getElementById("overlay").style.display = "block";
+    document.getElementById("overlay").style.display = "flex";
     
     const formData = new FormData();
 
