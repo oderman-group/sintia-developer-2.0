@@ -140,3 +140,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                 }
         });
 }
+
+function verCuentaBancaria() {
+    document.getElementById("cuentaBancaria").innerHTML = `
+    Cuenta de ahorros Bancolombia número <b>431-565882-54</b>
+    `;
+}

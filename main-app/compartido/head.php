@@ -28,12 +28,13 @@ if(isset($idPaginaInterna)){
 /*
 * Incluir clases que se usarán en varias paginas de todos los usuarios
 */
-require_once("../class/UsuariosPadre.php");
-require_once("../class/Grados.php");
-require_once("../class/Plataforma.php");
-require_once("../class/TipoUsuario.php");
-require_once("../class/CargaAcademica.php");
-require_once("../class/Grupos.php");
+
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+require_once(ROOT_PATH."/main-app/class/TipoUsuario.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 
 $tituloDePagina = $frases[102][$datosUsuarioActual['uss_idioma']];
 if (!empty($datosPaginaActual)) {
@@ -55,38 +56,38 @@ if (!empty($datosPaginaActual)) {
     <meta name="author" content="ODERMAN" />
     <title><?=$tituloDePagina;?></title>
      <!-- Estilos de LiveView  -->
-	<link rel="stylesheet" type="text/css" href="../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
+	<link rel="stylesheet" type="text/css" href="./../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
 	<!-- icons -->
-    <link href="../../config-general/fonts/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-	<link href="../../config-general/fonts/material-design-icons/material-icon.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/fonts/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+	<link href="./../../config-general/fonts/material-design-icons/material-icon.css" rel="stylesheet" type="text/css" />
 	<!--bootstrap -->
-	<link href="../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<link href="../../config-general/assets/plugins/summernote/summernote.css" rel="stylesheet">
+	<link href="./../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="./../../config-general/assets/plugins/summernote/summernote.css" rel="stylesheet">
 	<!-- morris chart -->
-    <link href="../../config-general/assets/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
     <!-- Material Design Lite CSS -->
-	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
-	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
+	<link rel="stylesheet" href="./../../config-general/assets/plugins/material/material.min.css">
+	<link rel="stylesheet" href="./../../config-general/assets/css/material_style.css">
 	<!-- inbox style -->
-    <link href="../../config-general/assets/css/pages/inbox.min.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/css/pages/inbox.min.css" rel="stylesheet" type="text/css" />
 	<!-- Theme Styles -->
-    <link href="../../config-general/assets/css/theme/light/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
-    <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/css/theme/light/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
+    <link href="./../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="./../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
 	<!-- Owl Carousel Assets -->
-    <link href="../../config-general/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
-    <link href="../../config-general/assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
+    <link href="./../../config-general/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="./../../config-general/assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
 	<!-- favicon -->
     <link rel="shortcut icon" href="../sintia-icono.png" />
 	<!-- Jquery Toast css -->
-	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
-	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
+	<link rel="stylesheet" href="./../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
+	<script src="./../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="./../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
 
 	<!-- libreria de animate.style -->
 	<link
@@ -99,29 +100,29 @@ if (!empty($datosPaginaActual)) {
 	if($datosUsuarioActual['uss_solicitar_datos']==1){
 	?>
 		<!--bootstrap -->
-		<link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-		<link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
+		<link href="./../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<link href="./../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
 		<!-- Theme Styles -->
-		<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
+		<link href="./../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 		<!-- dropzone -->
-		<link href="../../config-general/assets/plugins/dropzone/dropzone.css" rel="stylesheet" media="screen">
+		<link href="./../../config-general/assets/plugins/dropzone/dropzone.css" rel="stylesheet" media="screen">
 		<!--tagsinput-->
-		<link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
+		<link href="./../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
 		<!--select2-->
-		<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-		<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="./../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
+		<link href="./../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
    
 	<?php }?>
 	
 	<!-- Para la vista guiada -->
-    <link href="../../librerias/vista-tour/introjs.css" rel="stylesheet">
-	<script type="text/javascript" src="../../librerias/vista-tour/intro.js"></script>
+    <link href="./../../librerias/vista-tour/introjs.css" rel="stylesheet">
+	<script type="text/javascript" src="./../../librerias/vista-tour/intro.js"></script>
 	<script src="https://kit.fontawesome.com/e84fa1cf78.js" crossorigin="anonymous"></script>
 	
 	
 	
-	<script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
+	<script src="./../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
 	
 	
 	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first --

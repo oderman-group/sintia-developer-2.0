@@ -18,7 +18,8 @@ if(!empty($_GET["per"])) {
   $per = base64_decode($_GET["per"]);
 }
 
-$asig = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='" . $curso . "' AND mat_grupo='" . $grupo . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+
+$asig = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_grado='" . $curso . "' AND mat_grupo='" . $grupo . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
 $num_asg = mysqli_num_rows($asig);
 
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='" . $curso . "' AND gru_id='" . $grupo . "'");

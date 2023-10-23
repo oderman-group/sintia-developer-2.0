@@ -2,12 +2,7 @@
 	<hr>
 	<hr>
 <?php
-try{
-	$consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente2"]."'");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-	$acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+$acudiente2 = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente2"]);
 ?>  
 <h2><b>ACUDIENTE 2</b></h2>
 <input type="hidden" name="idAcudiente2" value="<?php if(!empty($datosEstudianteActual["mat_acudiente2"])){ echo $datosEstudianteActual["mat_acudiente2"];}?>">

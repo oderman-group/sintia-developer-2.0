@@ -126,8 +126,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
   $consulta = mysqli_query($conexion, "SELECT * FROM negocios_pedidos WHERE ped_id='".$_GET["ref"]."'");
   $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
   //DATOS DEL USUARIO
-  $consulta2 = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[2]."'");
-  $resultado2 = mysqli_fetch_array($consulta2, MYSQLI_BOTH);
+  $resultado2 = UsuariosPadre::sesionUsuario($resultado[2]);
   if($resultado2[15]=='F') $g = 'a'; else $g = 'o';
   //DATOS DEL USUARIO
   $consulta3 = mysqli_query($conexion, "SELECT * FROM negocios_items_pedidos WHERE item_codigo_pedido='".$resultado[0]."'");

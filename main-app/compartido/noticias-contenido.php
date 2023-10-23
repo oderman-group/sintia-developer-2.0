@@ -9,7 +9,7 @@
 
                 <?php
                     include("../compartido/datos-fechas.php");
-                    if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){
+                    if((($datosUsuarioActual['uss_tipo'] == TIPO_DEV) || ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){
                         $monto=0;
                         $descripcion='Pago de';
                         if($datosUnicosInstitucion['ins_deuda']==1 && !empty($datosUnicosInstitucion['ins_valor_deuda'])){
@@ -28,12 +28,20 @@
                             $descripcion.=' renovación de la plataforma';
                         }
                 ?>
-                <div class="panel">
+                <div class="panel animate__animated animate__heartBeat animate__delay-1s animate__repeat-2">
                     <header class="panel-heading panel-heading-red">Pagos</header>
                     <div class="panel-body">
-                        <p><b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, le recordamos que tiene un
-                            pago pendiente con la plataforma SINTIA.<br><br>
-                            Puede hacer el pago en el siguiente botón.</p>
+                        <p style="text-align: justify;">
+                            Estimado <b><?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual)?></b>, le recordamos que,
+                            su Institución, <b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, tiene un
+                            saldo pendiente con nuestra compañía.<br>
+                            A continuación los detalles y las opciónes de pago:<br>
+                            <b>Saldo pendiente:</b> <?php if(is_numeric($monto) && $monto > 0) echo "$".number_format($monto,0,".",".");?>.<br>
+                            <b>Descripción:</b> <?=$datosUnicosInstitucion['ins_concepto_deuda'];?>.<br>
+                            <hr>
+                            Puede hacer una transferencia bancaria a la cuenta siguiente cuenta:<br>
+                            <a href="javascript:void(0);" onclick="verCuentaBancaria()" id="cuentaBancaria" style="text-decoration: underline;">Ver número de cuenta</a>,<br> o tambien puede hacer el pago en linea, de forma segura, en el siguiente botón.
+                        </p>
                         <div class="col-sm-4">
                             <form action="../pagos-online/index.php" method="post" target="_target">
                                 <input type="hidden" class="form-control" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
@@ -45,7 +53,7 @@
                                 <input type="hidden" class="form-control" name="monto" value="<?=$monto;?>">
                                 <input type="hidden" class="form-control" name="nombre" value="<?=$descripcion;?>">
 
-                                <button type="submit" class="btn btn-danger"><i class="fa fa-credit-card" aria-hidden="true"></i>PAGA AQUÍ</button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i>PAGA EN LINEA AQUÍ</button>
                             </form>
                         </div>
                     </div>

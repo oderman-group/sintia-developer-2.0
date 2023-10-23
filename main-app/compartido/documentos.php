@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
+require_once("../class/UsuariosPadre.php.php");
 switch($_POST["documento"]){
 	case 1: $titulo = "CONTRATO DE PRESTACIÓN DE SERVICIO EDUCATIVO"; break;
 	case 2: $titulo = "COLEGIO CELCO DEL MPIO DE PAZ DE ARIPORO"; break;
@@ -19,8 +20,7 @@ INNER JOIN usuarios ON uss_id=car_docente
 WHERE car_curso='".$datos['mat_grado']."' AND car_grupo='".$datos['mat_grupo']."' AND car_director_grupo=1");
 $dg = mysqli_fetch_array($consultaDg, MYSQLI_BOTH);
 
-$consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datos["mat_acudiente2"]."'");
-$acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+$acudiente2 = UsuariosPadre::sesionUsuario($datos["mat_acudiente2"]);
 
 $meses=array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 ?>

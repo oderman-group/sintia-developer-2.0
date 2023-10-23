@@ -12,11 +12,8 @@ include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
 
-try{
-    $consultaUsuarioA = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='" . $_POST["usuario"] . "'");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
+$consultaUsuarioA = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario = '" . $_POST["usuario"] . "'");
+
 $numUsuarioA = mysqli_num_rows($consultaUsuarioA);
 $datosUsuarioA = mysqli_fetch_array($consultaUsuarioA, MYSQLI_BOTH);
 if ($numUsuarioA > 0) {

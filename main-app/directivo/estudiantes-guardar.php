@@ -64,11 +64,8 @@ if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
 }
 
-try{
-	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$acudienteConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".$_POST["documentoA"]."'");
+
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 //PREGUNTAMOS SI EL ACUDIENTE EXISTE

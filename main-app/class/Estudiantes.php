@@ -1,5 +1,6 @@
 <?php
-require_once("../class/servicios/MediaTecnicaServicios.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/servicios/MediaTecnicaServicios.php");
 
 class Estudiantes {
 
@@ -812,6 +813,31 @@ class Estudiantes {
         $consulta = self::listarEstudiantesParaDocentes($filtroDocentes);
         $num = mysqli_num_rows($consulta);
         return $num;
+    }
+
+    /**
+     * Obtiene un listado de estudiantes matriculados en base a un predicado opcional.
+     *
+     * Esta función realiza una consulta a la base de datos para obtener un listado de estudiantes matriculados.
+     *
+     * @param string $predicado (Opcional) Una cadena que puede contener condiciones SQL adicionales para filtrar los resultados. Por ejemplo, "AND estado = 'activo'".
+     *
+     * @return mysqli_result|false Devuelve un objeto `mysqli_result` que contiene el resultado de la consulta si la consulta se realiza con éxito. Devuelve `false` si se produce un error.
+     */
+    public static function obtenerListadoDeEstudiantes($predicado="")
+    {
+
+        global $conexion;
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id=mat_id $predicado");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+
     }
 
 }

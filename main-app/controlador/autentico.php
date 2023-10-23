@@ -22,6 +22,7 @@ if(isset($yearEnd) and is_numeric($yearEnd)){
 
 include("../modelo/conexion.php");
 require_once("../class/Plataforma.php");
+require_once("../class/UsuariosPadre.php");
 
 
 $rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
@@ -39,8 +40,7 @@ if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"])
 	exit();
 }
 
-$rst_usr = mysqli_query($conexion, "SELECT * FROM usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
+$rst_usr = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
 
 $num = mysqli_num_rows($rst_usr);
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
@@ -107,12 +107,97 @@ if($num>0)
 	$_SESSION["datosUsuario"] = $fila;
 
 	include("navegador.php");
-	include("ip.php");
+
+	$urlActual = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+
 	mysqli_query($conexion, "UPDATE usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila[0]."'");
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Autenticando | Plataforma sintia</title>
 
-	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial_acciones(hil_usuario, hil_url, hil_titulo, hil_fecha, hil_so, hil_pagina_anterior)VALUES('".$fila[0]."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$idPaginaInterna."', now(),'".php_uname()."','".$_SERVER['HTTP_REFERER']."')");
+        <!-- favicon -->
+        <link rel="shortcut icon" href="../sintia-icono.png" />
+    
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
 
-	echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
+		fetch("https://ipinfo.io/json?token=<?=TOKEN_IP_INFO;?>")
+			.then((response) => response.json())
+			.then((jsonResponse) => {
+				var countryCity = jsonResponse.city + ' | ' + jsonResponse.country + ' | ' + jsonResponse.region + ' | ' + jsonResponse.postal;
+				var usuario=<?=$fila[0];?>;
+				var urlActual = "<?=$urlActual;?>";
+				var idPaginaInterna = "<?=$idPaginaInterna;?>";
+				var institucion = <?=$institucion['ins_id'];?>;
+
+				var urlRedireccion = "<?=$url;?>";
+
+				// Enviar los datos a PHP usando otra solicitud fetch
+				fetch("ip.php?countryCity=" + countryCity + 
+							"&usuario=" + usuario +
+							"&urlActual=" + urlActual +
+							"&idPaginaInterna=" + idPaginaInterna +
+							"&institucion=" + institucion
+							, {
+					method: "GET"
+				})
+				.then(response => response.text())
+				.then(data => {
+					window.location.href = urlRedireccion;
+				}).catch(error => {
+					// Manejar errores
+					console.error('Error:', error);
+				})
+				;
+
+				
+			});
+	});
+	</script>
+	<style>
+		body {
+		background-image: url('./../../config-general/assets-login-2023/img/bg-login.png');
+		display: grid;
+		grid-template-columns: 100%;
+		height: 100vh;
+		width: 100vw;
+	}
+	/* Estilo del contenedor del mensaje */
+	.espera-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+	}
+
+	/* Estilo del mensaje */
+	.espera-mensaje {
+		font-size: 24px;
+		font-weight: bold;
+		text-align: center;
+		padding: 20px;
+		background-color: #5846d2;
+		color:#fff;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	}
+	</style>
+</head>
+<body>
+	
+	<div class="espera-container">
+		<div class="espera-mensaje">
+		Estoy verificando tus datos, dame un momento...
+		</div>
+	</div>
+	</body>
+</html>
+<?php
 	exit();
 }else{
 	mysqli_query($conexion, "UPDATE usuarios SET uss_intentos_fallidos=uss_intentos_fallidos+1 WHERE uss_id='".$usrE['uss_id']."'");
