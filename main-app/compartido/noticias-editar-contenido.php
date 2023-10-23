@@ -112,6 +112,27 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 												<p>&nbsp;</p>
 											<?php }?>
                                         </div>
+
+                                        <?php if($datosUsuarioActual['uss_tipo']==TIPO_DEV){ ?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">URL Otro Video</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="video2" class="form-control" value="<?=$datosConsulta['not_enlace_video2'];?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Noticia Global?</label>
+                                                <div class="col-sm-10">
+                                                    <select class="form-control  select2" style="width: 100%" name="global">
+                                                        <option value="">Seleccione una opción</option>
+                                                        <option value="SI"<?php if($datosConsulta['not_global']=="SI")echo "selected";?>>SI</option>
+                                                        <option value="NO"<?php if($datosConsulta['not_global']=="NO")echo "selected";?>>NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
 										<h4 align="center" style="font-weight: bold;">FILTROS</h4>
 										
 										<div class="form-group row">

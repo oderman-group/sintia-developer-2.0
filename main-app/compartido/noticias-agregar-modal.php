@@ -86,6 +86,26 @@
                         </div>
                     </div>
 
+                    <?php if($datosUsuarioActual['uss_tipo']==TIPO_DEV){ ?>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">URL Otro Video</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="video2" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">Noticia Global</label>
+                            <div class="col-sm-10">
+                                <select class="form-control  select2" style="width: 100%" name="global">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                    <?php } ?>
+
                     <h4 align="center" style="font-weight: bold;"><?= $frases[205][$datosUsuarioActual[8]]; ?></h4>
 
                     <div class="form-group row">
