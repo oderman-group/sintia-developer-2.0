@@ -116,7 +116,7 @@ $porcentajeRestante = 100 - $valores[0];
 						");
 					}
 					$numerosEstudiantes = mysqli_fetch_array($consultaNumEstudiante, MYSQLI_BOTH);
-					if($numerosEstudiantes[0]<$cantidadEstudiantes) $bg = '#FCC';
+					if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';
 						
 						$porcentajeActual +=$resultado['act_valor'];
 						
@@ -141,7 +141,7 @@ $porcentajeRestante = 100 - $valores[0];
 						<td><?=$evidencia['evid_nombre']." (".$evidencia['evid_valor']."%)";?></td>
 					<?php }?>
 					
-					<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=base64_encode($resultado['act_id']);?>&grado=<?=base64_encode($datosCargaActual[2]);?>&grupo=<?=base64_encode($datosCargaActual[3]);?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantes;?></a></td>
+					<td style="background-color:<?=$bg;?>"><a href="../compartido/reporte-calificaciones.php?idActividad=<?=base64_encode($resultado['act_id']);?>&grado=<?=base64_encode($datosCargaActual[2]);?>&grupo=<?=base64_encode($datosCargaActual[3]);?>" target="_blank" style="text-decoration: underline;"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantesParaDocentes;?></a></td>
 					<td>
 						
 						<?php
