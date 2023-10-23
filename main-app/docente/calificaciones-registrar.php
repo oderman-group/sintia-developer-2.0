@@ -76,6 +76,8 @@ function notas(enviada){
 
 if(operacion == 1 || operacion == 3){
 
+	var flag = enviada.alt;
+
 	if (alertValidarNota(nota)) {
 		return false;
 	}
@@ -95,6 +97,8 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 			"&operacion="+(operacion)+
 
 			"&nombreEst="+(nombreEst)+
+
+			"&flag="+(flag)+
 
 			"&codEst="+(codEst);
 
@@ -332,7 +336,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 													<p style="color: darkblue;">Utilice esta casilla para colocar la misma nota a todos los estudiantes. Esta opción <mark>reemplazará las notas existentes</mark> en esta actividad.</p>
 
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" onChange="notas(this)">
+													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" alt="1" onChange="notas(this)">
 
 												</div>
 
