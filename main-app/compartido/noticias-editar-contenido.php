@@ -36,6 +36,15 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Descripción Pie 
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado al final de la noticia, despues de la imagen o video (si las haz incluido en la noticia)."><i class="fa fa-question"></i></button>
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <textarea name="contenidoPie" id="editor2" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['not_descripcion_pie'];?></textarea>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[211][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
@@ -192,4 +201,5 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
     // Replace the <textarea id="editor1"> with a CKEditor 4
     // instance, using default configuration.
     CKEDITOR.replace( 'editor1' );
+    CKEDITOR.replace( 'editor2' );
 </script>
