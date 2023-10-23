@@ -283,9 +283,13 @@
                                 <?php }?>
 
                                 <?php if($resultado['not_archivo']!="" and file_exists('../files/publicaciones/'.$resultado['not_archivo'])){?>
-                                <div align="right"><a href="../files/publicaciones/<?=$resultado['not_archivo'];?>"
-                                        target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a></div>
+                                    <div align="right">
+                                        <a href="../files/publicaciones/<?=$resultado['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
+                                    </div>
+                                    <p>&nbsp;</p>
                                 <?php }?>
+                                
+                                <?php if(!empty($resultado['not_descripcion_pie'])){ echo $resultado['not_descripcion_pie']; }?>
 
                         </div>
 
