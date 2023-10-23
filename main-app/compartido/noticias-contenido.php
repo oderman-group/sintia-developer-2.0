@@ -265,17 +265,31 @@
                                 <p>&nbsp;</p>
                                 <?php }?>
 
-                                <?php if($resultado['not_video']!=""){?>
-                                <div><iframe width="450" height="400"
+                                <?php if(!empty($resultado['not_video'])){?>
+                                    <div>
+                                        <iframe width="450" height="400"
                                         src="https://www.youtube.com/embed/<?=$resultado['not_video'];?>?rel=0&amp;"
                                         frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
-                                        volume="0"></iframe></div>
+                                        volume="0"></iframe>
+                                    </div>
+                                    <p>&nbsp;</p>
+                                <?php }?>
+
+                                <?php if(!empty($resultado['not_enlace_video2'])){?>
+                                    <div>
+                                        <iframe src="<?=$resultado['not_enlace_video2'];?>" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="450" height="400"></iframe>
+                                    </div>
+                                    <p>&nbsp;</p>
                                 <?php }?>
 
                                 <?php if($resultado['not_archivo']!="" and file_exists('../files/publicaciones/'.$resultado['not_archivo'])){?>
-                                <div align="right"><a href="../files/publicaciones/<?=$resultado['not_archivo'];?>"
-                                        target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a></div>
+                                    <div align="right">
+                                        <a href="../files/publicaciones/<?=$resultado['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
+                                    </div>
+                                    <p>&nbsp;</p>
                                 <?php }?>
+                                
+                                <?php if(!empty($resultado['not_descripcion_pie'])){ echo $resultado['not_descripcion_pie']; }?>
 
                         </div>
 

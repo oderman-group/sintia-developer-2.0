@@ -31,6 +31,15 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-2 control-label">Descripción Pie 
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado al final de la noticia, despues de la imagen o video (si las haz incluido en la noticia)."><i class="fa fa-question"></i></button>
+                        </label>
+                        <div class="col-sm-10">
+                            <textarea name="contenidoPie" id="editor2" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[211][$datosUsuarioActual[8]]; ?></label>
                         <div class="col-sm-6">
                             <input type="file" name="imagen" class="form-control">
@@ -50,7 +59,6 @@
                             <input type="text" name="video" class="form-control">
                         </div>
                     </div>
-
 
                     <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[224][$datosUsuarioActual[8]]; ?></label>
@@ -86,16 +94,44 @@
                         </div>
                     </div>
 
+                    <?php if($datosUsuarioActual['uss_tipo']==TIPO_DEV){ ?>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">URL Otro Video</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="video2" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">Noticia Global</label>
+                            <div class="col-sm-10">
+                                <select class="form-control  select2" style="width: 100%" name="global">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                    <?php } ?>
+
                     <h4 align="center" style="font-weight: bold;"><?= $frases[205][$datosUsuarioActual[8]]; ?></h4>
 
                     <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[75][$datosUsuarioActual[8]]; ?></label>
                         <div class="col-sm-10">
-                            <select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple>
-                                <option value="5">Directivos</option>
-                                <option value="2">Docentes</option>
-                                <option value="3">Acudientes</option>
-                                <option value="4">Estudiantes</option>
+                            <select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple name="destinatarios[]">
+                                <option value="">Seleccione una opción</option>
+                                <?php
+                                    try{
+                                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
+                                    while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                        if($opcionesDatos[0] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
+                                ?>
+                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['pes_nombre'];?></option>
+                                <?php }?>
                             </select>
                         </div>
                     </div>
@@ -113,8 +149,6 @@
                             </select>
                         </div>
                     </div>
-
-
 
                     <input type="submit" class="btn btn-primary" value="<?= $frases[41][$datosUsuarioActual[8]]; ?>">&nbsp;
 
@@ -134,6 +168,7 @@
     // Replace the <textarea id="editor1"> with a CKEditor 4
     // instance, using default configuration.
     CKEDITOR.replace('editor1');
+    CKEDITOR.replace('editor2');
 </script>
 <script src="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.js"></script>
 <script src="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input-init.js"></script>
