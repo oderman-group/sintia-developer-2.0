@@ -68,7 +68,7 @@
                     <tbody>
                         <?php
                         $contReg = 1; 
-                        $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+                        $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                             $colorEstudiante = '#000;';
                             if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
