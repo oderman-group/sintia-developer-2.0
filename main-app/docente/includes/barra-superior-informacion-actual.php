@@ -34,13 +34,18 @@
 												WHERE gvp_grado='" . $datosCargaActual['car_curso'] . "' AND gvp_periodo='" . $i . "'
 												");
             $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+            $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+            $porcentaje=25;
+            if($numPeriodosCursos>0){
+              $porcentaje=$periodosCursos['gvp_valor'];
+            }
 
             if ($i == $datosCargaActual['car_periodo']) $msjPeriodoActual = '- ACTUAL';
             else $msjPeriodoActual = '';
             if ($i == $periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"';
             else $estiloResaltadoP = '';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>&get=<?= base64_encode(100); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%) <?= $msjPeriodoActual; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>&get=<?= base64_encode(100); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentaje; ?>%) <?= $msjPeriodoActual; ?></a>
           <?php } ?>
 
         </div>

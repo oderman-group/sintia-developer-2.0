@@ -52,7 +52,12 @@
                                     WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'
                                     ");
                                     $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-                                    echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+                                    $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+                                    $porcentaje=25;
+                                    if($numPeriodosCursos>0){
+                                      $porcentaje=$periodosCursos['gvp_valor'];
+                                    }
+                                    echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
                                     $p++;
                                 }
                             ?> 
@@ -84,7 +89,12 @@
                                 WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'
                                 ");
                                 $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-                                    $decimal = $periodosCursos['gvp_valor']/100;
+                                $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+                                $porcentaje=25;
+                                if($numPeriodosCursos>0){
+                                  $porcentaje=$periodosCursos['gvp_valor'];
+                                }
+                                    $decimal = $porcentaje/100;
                                     
                                 //LAS CALIFICACIONES
                                 $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
