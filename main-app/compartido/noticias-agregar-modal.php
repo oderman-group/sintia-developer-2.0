@@ -91,11 +91,19 @@
                     <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[75][$datosUsuarioActual[8]]; ?></label>
                         <div class="col-sm-10">
-                            <select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple>
-                                <option value="5">Directivos</option>
-                                <option value="2">Docentes</option>
-                                <option value="3">Acudientes</option>
-                                <option value="4">Estudiantes</option>
+                            <select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple name="destinatarios[]">
+                                <option value="">Seleccione una opción</option>
+                                <?php
+                                    try{
+                                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+                                    } catch (Exception $e) {
+                                        include("../compartido/error-catch-to-report.php");
+                                    }
+                                    while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                        if($opcionesDatos[0] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
+                                ?>
+                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['pes_nombre'];?></option>
+                                <?php }?>
                             </select>
                         </div>
                     </div>
