@@ -30,6 +30,7 @@ function notas(enviada){
   var notaAnterior = enviada.step;
  
 if(operacion == 1 || operacion == 3){
+	var flag = enviada.alt;
 	if (alertValidarNota(nota)) {
 		return false;
 	}
@@ -46,6 +47,7 @@ $('#respRCT').empty().hide().html("Guardando información, espere por favor...")
 			"&operacion="+(operacion)+
 			"&nombreEst="+(nombreEst)+
 			"&notaAnterior="+(notaAnterior)+
+			"&flag="+(flag)+
 			"&codEst="+(codEst);
 		   $.ajax({
 			   type: "POST",
@@ -123,7 +125,7 @@ th {
 														'.$rA[1].'<br>
 														('.$rA[3].'%)</a><br>
 														<a href="#" name="guardar.php?get='.base64_encode(12).'&idR='.base64_encode($rA[0]).'&idIndicador='.base64_encode($rA['act_id_tipo']).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'" onClick="deseaEliminar(this)" '.$deleteOculto.'><i class="fa fa-times"></i></a><br>
-														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" name="'.$rA[0].'" onChange="notas(this)" '.$habilitado.'>
+														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" name="'.$rA[0].'" alt="1" onChange="notas(this)" '.$habilitado.'>
 														</th>';
 													 }
 													?>
