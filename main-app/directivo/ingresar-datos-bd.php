@@ -140,11 +140,53 @@ try {
 			include("../compartido/error-catch-to-report.php");
 		}
 
-	}else{//SI ES 1 LA INSTITUCION ES NUEVA Y SE EJECUTA EL SIGUIENTE SCRIPT
+	} else {
+		
+		//SI ES 1 LA INSTITUCION ES NUEVA Y SE EJECUTA EL SIGUIENTE SCRIPT
 
 		//CREAMOS LA INSTITUCIÓN
-		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".instituciones (ins_nombre,ins_fecha_inicio,ins_telefono_principal,ins_contacto_principal,ins_cargo_contacto,ins_celular_contacto,ins_email_contacto,ins_email_institucion,ins_ciudad,ins_enviroment,ins_nit,ins_medio_info,ins_estado,ins_url_acceso,ins_bd,ins_deuda,ins_valor_deuda,ins_concepto_deuda,ins_bloqueada,ins_years,ins_notificaciones_acudientes,ins_siglas,ins_fecha_renovacion,ins_id_plan) VALUES ('".$nombreInsti."','".$fechaCompleta."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'".$bdInstitucion."',NULL,NULL,NULL,0,'".$year.",".$year."',0,'".$siglasInst."','".$fechaCompleta."',1)");
+		try{			
+			// Definir un array asociativo con los campos y valores a insertar
+			$dataToInsert = array(
+				'ins_nombre' => $nombreInsti,
+				'ins_fecha_inicio' => $fechaCompleta,
+				'ins_telefono_principal' => NULL,
+				'ins_contacto_principal' => NULL,
+				'ins_cargo_contacto' => NULL,
+				'ins_celular_contacto' => NULL,
+				'ins_email_contacto' => NULL,
+				'ins_email_institucion' => NULL,
+				'ins_ciudad' => NULL,
+				'ins_enviroment' => ENVIROMENT,
+				'ins_nit' => NULL,
+				'ins_medio_info' => NULL,
+				'ins_estado' => 1,
+				'ins_url_acceso' => NULL,
+				'ins_bd' => $bdInstitucion,
+				'ins_deuda' => NULL,
+				'ins_valor_deuda' => NULL,
+				'ins_concepto_deuda' => NULL,
+				'ins_bloqueada' => 0,
+				'ins_years' => $year . "," . $year,
+				'ins_notificaciones_acudientes' => 0,
+				'ins_siglas' => $siglasInst,
+				'ins_fecha_renovacion' => $fechaCompleta,
+				'ins_id_plan' => 1
+			);
+
+			// Crear la consulta SQL
+			$query = "INSERT INTO ".$baseDatosServicios.".instituciones (";
+			$columns = array_keys($dataToInsert);
+			$values = array_values($dataToInsert);
+
+			$query .= implode(', ', $columns);
+			$query .= ") VALUES (";
+			$query .= "'" . implode("', '", $values) . "'";
+			$query .= ")";
+
+			// Ejecutar la consulta SQL
+			mysqli_query($conexion, $query);
+
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -159,7 +201,7 @@ try {
 
 		//CREAMOS CONFIGURACIÓN DE LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado,conf_observaciones_multiples_comportamiento,conf_cambiar_nombre_usuario,conf_cambiar_clave_estudiantes,conf_permiso_descargar_boletin,conf_certificado,conf_firma_estudiante_informe_asistencia,conf_permiso_edicion_years_anteriores,conf_porcentaje_completo_generar_informe,conf_ver_promedios_sabanas_docentes) VALUES ('".$year."',1,1,5,3,'#e10000','#0000d5',NULL,NULL,NULL,'#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,NULL,NULL,NULL,'".$idInsti."','".$bdInstitucion."',NULL,20,'NO',NULL,NULL,'200','150',1,NULL,'NO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'5',0,0,0,'NO',1,1,1,1,0,0,'SI','SI',1,1,1,1,3,1)");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".configuracion (conf_agno,conf_periodo,conf_nota_desde,conf_nota_hasta,conf_nota_minima_aprobar,conf_color_perdida,conf_color_ganada,conf_saldo_pendiente,conf_num_restaurar,conf_restaurar_cantidad,conf_color_borde,conf_color_encabezado,conf_tam_borde,conf_num_materias_perder_agno,conf_inicio_matrucula,conf_fin_matricula,conf_apertura_academica,conf_clausura_academica,conf_periodos_maximos,conf_num_indicadores,conf_valor_indicadores,conf_notas_categoria,conf_id_institucion,conf_base_datos,conf_servidor,conf_num_registros,conf_agregar_porcentaje_asignaturas,conf_fecha_parcial,conf_descripcion_parcial,conf_ancho_imagen,conf_alto_imagen,conf_mostrar_nombre,conf_deuda,conf_permiso_eliminar_cargas,conf_concepto,conf_inicio_recibos_ingreso,conf_inicio_recibos_egreso,conf_decimales_notas,conf_activar_encuesta,conf_sin_nota_numerica,conf_numero_factura,conf_max_peso_archivos,conf_informe_parcial,conf_ver_observador,conf_ficha_estudiantil,conf_solicitar_acudiente_2,conf_mostrar_campos,conf_calificaciones_acudientes,conf_mostrar_calificaciones_estudiantes,conf_orden_nombre_estudiantes,conf_editar_definitivas_consolidado,conf_observaciones_multiples_comportamiento,conf_cambiar_nombre_usuario,conf_cambiar_clave_estudiantes,conf_permiso_descargar_boletin,conf_certificado,conf_firma_estudiante_informe_asistencia,conf_permiso_edicion_years_anteriores,conf_porcentaje_completo_generar_informe,conf_ver_promedios_sabanas_docentes) VALUES ('".$year."',1,1,5,3,'#e10000','#0000d5',NULL,NULL,NULL,'#000000','#ff0080',1,3,'".$fecha."','".$fecha."','".$fecha."','".$fecha."',4,NULL,NULL,NULL,'".$idInsti."','".$bdInstitucion."',NULL,20,'NO',NULL,NULL,'200','150',1,NULL,'NO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'5',0,0,0,'NO',1,1,1,1,0,0,'SI','SI',1,1,1,1,1,1)");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
