@@ -26,6 +26,10 @@ function notas(enviada){
     if(operacion == 1) {
         aplicarColorNota(nota, enviada.id);
     }
+
+    if(operacion == 3) {
+        var recargarPanel=1;
+    }
         
     $(idResponse).empty().hide().html("Guardando información, espere por favor...").show(1);
     datos = "nota="+(nota)+
@@ -35,6 +39,7 @@ function notas(enviada){
             "&carga="+(carga)+
 			"&periodo="+(periodo)+
             "&notaAnterior="+(notaAnterior)+
+            "&recargarPanel="+(recargarPanel)+
             "&codEst="+(codEst);
             $.ajax({
                 type: "POST",
