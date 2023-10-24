@@ -564,7 +564,7 @@ include("../compartido/head-informes.php") ?>
 							$consultaNotasPeriodo = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
 							$notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
 
-							echo '<td>' . $notasPeriodo[0] . '</td>';
+                            if(!empty($notasPeriodo[0])){ echo '<td>' . $notasPeriodo[0] . '</td>';} else { echo '<td></td>';}
 
 							$p++;
 						}
@@ -638,7 +638,7 @@ include("../compartido/head-informes.php") ?>
 		</tr>
 
 	</table>
-	<?php include("../compartido/footer_informes.php") ?>;
+	<?php include("footer-informes.php") ?>;
 
 
 </body>
