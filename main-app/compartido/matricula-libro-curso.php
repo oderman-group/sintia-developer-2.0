@@ -50,14 +50,6 @@ $contadorIndicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD);
-$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
-$idGrado=$datosUsr["mat_grado"];
-$idGrupo=$datosUsr["mat_grupo"];
-if($cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
-	$idGrado=$matriculadosDatos["matcur_id_curso"];
-	$idGrupo=$matriculadosDatos["matcur_id_grupo"];
-}
-$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 $numUsr=mysqli_num_rows($usr);
 if($numUsr==0)
 {
@@ -68,6 +60,14 @@ if($numUsr==0)
 <?php
 	exit();
 }
+$datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
+$idGrado=$datosUsr["mat_grado"];
+$idGrupo=$datosUsr["mat_grupo"];
+if($cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+	$idGrado=$matriculadosDatos["matcur_id_curso"];
+	$idGrupo=$matriculadosDatos["matcur_id_grupo"];
+}
+$nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
 $contadorPeriodos=0;
 ?>
