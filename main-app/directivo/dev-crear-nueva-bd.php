@@ -77,13 +77,35 @@ try{
         function institucion(enviada){
             var insti = enviada.value;
 
+            var divNueva = document.getElementById('nueva');
+            var inputElementsNueva = divNueva.querySelectorAll('input');
+
+            var divAntigua = document.getElementById('antigua');
+            var inputElementsAntigua = divAntigua.querySelectorAll('input, select');
+
             if(insti==1){
                 document.getElementById('nueva').style.display='block';
                 document.getElementById('antigua').style.display='none';
+                
+                inputElementsNueva.forEach((input) => {
+                    input.required = true;
+                });
+
+                inputElementsAntigua.forEach((input) => {
+                    input.required = false;
+                });
             }
             if(insti==0){
                 document.getElementById('nueva').style.display='none';
                 document.getElementById('antigua').style.display='block';
+                
+                inputElementsNueva.forEach((input) => {
+                    input.required = false;
+                });
+
+                inputElementsAntigua.forEach((input) => {
+                    input.required = true;
+                });
             }
         }
     </script>
@@ -112,8 +134,18 @@ try{
                         </div>
                     </div>
                     <div class="row">
+
+                        <div class="col-sm-3">
+                            <div class="panel animate__animated animate__pulse animate__delay-1s animate__repeat-2">
+                                <header class="panel-heading panel-heading-purple">Información importante</header>
+                                <div class="panel-body">
+                                    <b>Paso 1:</b> Ir al <a href="https://sintia.co:2083/" target="_blank">cPanel</a> y crear la BD nueva que usará en esta implementación.<br>
+                                    <b>Paso 2:</b> Asignar la BD al usuario para este ambiente. (Recuerda asignar todos los privilegios).<br>
+                                </div>
+                            </div>
+                        </div>
 						
-                        <div class="col-sm-12">
+                        <div class="col-sm-9">
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
                                 <header class="panel-heading panel-heading-purple">Crear BD</header>
@@ -124,7 +156,7 @@ try{
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Tipo Institución</label>
 											<div class="col-sm-3">
-                                                <select class="form-control  select2" name="tipoInsti" onchange="institucion(this)">
+                                                <select class="form-control  select2" name="tipoInsti" required onchange="institucion(this)">
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1"<?php if($datosNuevaBD['tipoInsti']==1){echo "selected";}?>>Nueva</option>
                                                     <option value="0"<?php if($datosNuevaBD['tipoInsti']==0){echo "selected";}?>>Antigua</option>
@@ -191,7 +223,9 @@ try{
 
                                         </div>
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <button type="submit" class="btn  deepPink-bgcolor">Continuar 
+                                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                        </button>
                                     </form>
                                 </div>
                             </div>
