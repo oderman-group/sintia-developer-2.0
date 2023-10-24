@@ -112,7 +112,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                             <header><?= $frases[370][$datosUsuarioActual['uss_idioma']]; ?> ( <label style="font-weight: bold;" id="cantSeleccionadas"></label>/<?= mysqli_num_rows($listaPaginas) ?> )
                                                 <label class="switchToggle">
                                                     <input type="checkbox" <?= $checkActivas; ?> onchange="mostrarActivas(this.checked,'<?= $_GET['id']; ?>')">
-                                                    <span class="slider red round"></span>
+                                                    <span class="slider green round"></span>
                                                 </label>
                                             </header>
                                             Mostrar solo activas
@@ -127,7 +127,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                                                 <div class="input-group spinner col-sm-10">
                                                                     <label class="switchToggle">
                                                                         <input type="checkbox" id="all">
-                                                                        <span class="slider red round"></span>
+                                                                        <span class="slider green round"></span>
                                                                     </label>
                                                                 </div>
                                                             </th>
@@ -156,7 +156,7 @@ $listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
                                                                             <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>" <?= $cheked; ?>>
-                                                                            <span class="slider red round"></span>
+                                                                            <span class="slider green round"></span>
                                                                         </label>
                                                                     </div>
                                                                 </td>
