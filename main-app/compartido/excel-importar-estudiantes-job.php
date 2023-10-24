@@ -320,7 +320,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			// fecha2 en este caso es la fecha actual
 			$fechaFinal = new DateTime();
 			$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal); 
-			$mensaje="Cron job ejecutado Exitosamente, ".$tiempoTrasncurrido."!".$respuesta;
+			$mensaje=$tiempoTrasncurrido."!".$respuesta;
 			$datos = array(
 				"id" => $resultadoJobs['job_id'],
 				"mensaje" => $mensaje,

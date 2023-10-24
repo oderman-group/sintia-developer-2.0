@@ -36,6 +36,15 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Descripción Final 
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se verá reflejado al final de la publicación, después de la imagen o video (si has incluido uno de estos elementos en la publicación)."><i class="fa fa-question"></i></button>
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <textarea name="contenidoPie" id="editor2" class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 70px; resize: none;"><?=$datosConsulta['not_descripcion_pie'];?></textarea>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[211][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
@@ -112,16 +121,46 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 												<p>&nbsp;</p>
 											<?php }?>
                                         </div>
+
+                                        <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DEV){ ?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">ID Video Loom</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="video2" class="form-control" value="<?=$datosConsulta['not_enlace_video2'];?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Noticia Global?</label>
+                                                <div class="col-sm-10">
+                                                    <select class="form-control  select2" style="width: 100%" name="global">
+                                                        <option value="">Seleccione una opción</option>
+                                                        <option value="SI"<?php if($datosConsulta['not_global']=="SI")echo "selected";?>>SI</option>
+                                                        <option value="NO"<?php if($datosConsulta['not_global']=="NO")echo "selected";?>>NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
 										<h4 align="center" style="font-weight: bold;">FILTROS</h4>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <select id="multiple" class="form-control select2-multiple" multiple>
-                                                  <option value="5">Directivos</option>
-                                                  <option value="2">Docentes</option>
-												  <option value="3">Acudientes</option>
-												  <option value="4">Estudiantes</option>	
+                                                <select id="multiple" class="form-control select2-multiple" multiple name="destinatarios[]">
+                                                    <?php
+                                                        $destinatarios=(!empty($datosConsulta['not_para']) && $datosConsulta['not_para']!="1,2,3,4,5") ? explode(',',$datosConsulta['not_para']) : "";
+                                                        try{
+                                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
+                                                        while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                            if($opcionesDatos[0] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
+                                                            $selected=($destinatarios!="" && in_array($opcionesDatos[0], $destinatarios)) ? "selected" : "";
+                                                    ?>
+                                                        <option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['pes_nombre'];?></option>
+                                                    <?php }?>	
                                                 </select>
                                             </div>
                                         </div>
@@ -162,4 +201,5 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
     // Replace the <textarea id="editor1"> with a CKEditor 4
     // instance, using default configuration.
     CKEDITOR.replace( 'editor1' );
+    CKEDITOR.replace( 'editor2' );
 </script>
