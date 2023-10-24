@@ -36,11 +36,11 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Descripción Pie 
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado al final de la noticia, despues de la imagen o video (si las haz incluido en la noticia)."><i class="fa fa-question"></i></button>
+                                            <label class="col-sm-2 control-label">Descripción Final 
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se verá reflejado al final de la publicación, después de la imagen o video (si has incluido uno de estos elementos en la publicación)."><i class="fa fa-question"></i></button>
                                             </label>
                                             <div class="col-sm-10">
-                                                <textarea name="contenidoPie" id="editor2" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['not_descripcion_pie'];?></textarea>
+                                                <textarea name="contenidoPie" id="editor2" class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 70px; resize: none;"><?=$datosConsulta['not_descripcion_pie'];?></textarea>
                                             </div>
                                         </div>
 										
@@ -122,9 +122,9 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 											<?php }?>
                                         </div>
 
-                                        <?php if($datosUsuarioActual['uss_tipo']==TIPO_DEV){ ?>
+                                        <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DEV){ ?>
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">URL Otro Video</label>
+                                                <label class="col-sm-2 control-label">ID Video Loom</label>
                                                 <div class="col-sm-10">
                                                     <input type="text" name="video2" class="form-control" value="<?=$datosConsulta['not_enlace_video2'];?>">
                                                 </div>
