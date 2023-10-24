@@ -53,7 +53,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                         ";
                                         if($nueva==0){
                                             $msgConfirmacion="
-                                                Usted esta renovando una institución para el año <b>$year</b> con los siguientes datos:<br><br>
+                                                Usted está renovando una institución para el año <b>$year</b> con los siguientes datos:<br><br>
                                                 Tipo De Institución:      <b>Antigua</b>.<br>
                                                 ID:                       <b>$idInsti</b>.<br>
                                                 Nombre De La Institución: <b>".$datosInsti['ins_nombre']."</b>.<br>
@@ -73,7 +73,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                             <form class="form-horizontal" action="crear-bd.php" method="post">
                                                 <input type="hidden" name="tipoInsti" value="<?=$_POST['tipoInsti'];?>">
                                                 <input type="hidden" name="idInsti" value="<?=$_POST['idInsti'];?>">
-                                                <input type="hidden" name="ins_bd" value="<?=$_POST['ins_bd'];?>">
+                                                <input type="hidden" name="ins_bd" value="<?php if(!empty($_POST['ins_bd'])) echo $_POST['ins_bd'];?>">
                                                 <input type="hidden" name="yearA" value="<?=$_POST['yearA'];?>">
                                                 <input type="hidden" name="siglasBD" value="<?=$_POST['siglasBD'];?>">
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
@@ -81,17 +81,23 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
                                                 <input type="hidden" name="confirmacion" value="1">
 
-                                                <input type="submit" class="btn  deepPink-bgcolor" value="Confirmar">
-                                                <a href="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-round btn-primary">Regresar</a>
+                                                <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>
+                                                <button type="submit" class="btn  deepPink-bgcolor">Continuar 
+                                                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                                </button>
                                             </form>
 										</div>
                                     </div>
                                 </div>
                                 <?php
                                     }else{
-                                        $boton='<input type="submit" class="btn  deepPink-bgcolor" value="Continuar">';
+                                        $boton='
+                                        <button type="submit" class="btn  deepPink-bgcolor">Crear y finalizar 
+                                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                                        </button>
+                                        ';
                                         $texto="
-                                            La BD <b>$bd</b> esta disponible.<br><br>
+                                            La BD <b>$bd</b> está disponible.<br><br>
                                             Desea continuar?
                                         ";
                                         if($numInstituciones>0){
@@ -118,8 +124,8 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
                                                 <input type="hidden" name="continue" value="1">
 
+                                                <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>
                                                 <?=$boton?>
-                                                <a href="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-round btn-primary">Regresar</a>
                                             </form>
                                         </div>
                                     </div>

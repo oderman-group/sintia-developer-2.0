@@ -319,6 +319,8 @@ CREATE TABLE `academico_boletin` (
   `bol_ultima_actualizacion` datetime DEFAULT NULL,
   `bol_nota_anterior` double(5,2) DEFAULT NULL COMMENT 'Cuando es recuperacion de periodos',
   `bol_nota_indicadores` double(5,2) DEFAULT NULL,
+  `bol_porcentaje` char(10) DEFAULT NULL COMMENT 'Saber con qué porcentaje fue la definitiva',
+  `bol_historial_actualizacion` longtext DEFAULT NULL,
   PRIMARY KEY (`bol_id`),
   KEY `Index_ordinarios_2` (`bol_carga`,`bol_estudiante`,`bol_periodo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -510,6 +512,8 @@ CREATE TABLE `academico_clases` (
   `cls_peso1` varchar(45) DEFAULT NULL,
   `cls_peso2` varchar(45) DEFAULT NULL,
   `cls_peso3` varchar(45) DEFAULT NULL,
+  `cls_hipervinculo` longtext DEFAULT NULL,
+  `cls_unidad` int(11) DEFAULT NULL,
   PRIMARY KEY (`cls_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -602,6 +606,7 @@ CREATE TABLE `academico_grados` (
   `gra_grado_anterior` int(10) unsigned DEFAULT NULL,
   `gra_periodos` int(10) unsigned DEFAULT NULL COMMENT 'periodos que maneja este grado',
   `gra_nota_minima` double(5,2) DEFAULT NULL,
+  `gra_tipo` varchar(45) NOT NULL DEFAULT 'grupal',
   PRIMARY KEY (`gra_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -612,7 +617,22 @@ CREATE TABLE `academico_grados` (
 
 LOCK TABLES `academico_grados` WRITE;
 /*!40000 ALTER TABLE `academico_grados` DISABLE KEYS */;
-INSERT INTO `academico_grados` VALUES (1,'0','PRIMERO',8,0,0,1,2,NULL,NULL,15,4,NULL),(2,'0','SEGUNDO',8,0,0,1,3,NULL,NULL,1,4,NULL),(3,'0','TERCERO',8,0,0,1,4,NULL,NULL,2,4,NULL),(4,'0','CUARTO',8,0,0,1,5,NULL,NULL,3,4,NULL),(5,'0','QUINTO',8,0,0,1,6,NULL,NULL,4,4,NULL),(6,'0','SEXTO',8,0,0,1,7,NULL,NULL,5,4,NULL),(7,'0','SEPTIMO',8,0,0,1,8,NULL,NULL,6,4,NULL),(8,'0','OCTAVO',8,0,0,1,9,NULL,NULL,7,4,NULL),(9,'0','NOVENO',8,0,0,1,10,NULL,NULL,8,4,NULL),(10,'0','DECIMO',8,0,0,1,11,NULL,NULL,9,4,NULL),(11,'0','UNDECIMO',8,0,0,1,0,NULL,NULL,10,4,NULL),(12,'0','PARVULOS',8,0,0,1,13,NULL,NULL,0,4,NULL),(13,'0','PREJARDIN',8,0,0,1,14,NULL,NULL,12,4,NULL),(14,'0','JARDIN',8,0,0,1,15,NULL,NULL,13,4,NULL),(15,'0','TRANSICION',8,0,0,1,1,NULL,NULL,14,4,NULL);
+INSERT INTO `academico_grados` VALUES 
+(1,'0','PRIMERO',8,0,0,1,2,NULL,NULL,15,4,NULL,'grupal'),
+(2,'0','SEGUNDO',8,0,0,1,3,NULL,NULL,1,4,NULL,'grupal'),
+(3,'0','TERCERO',8,0,0,1,4,NULL,NULL,2,4,NULL,'grupal'),
+(4,'0','CUARTO',8,0,0,1,5,NULL,NULL,3,4,NULL,'grupal'),
+(5,'0','QUINTO',8,0,0,1,6,NULL,NULL,4,4,NULL,'grupal'),
+(6,'0','SEXTO',8,0,0,1,7,NULL,NULL,5,4,NULL,'grupal'),
+(7,'0','SEPTIMO',8,0,0,1,8,NULL,NULL,6,4,NULL,'grupal'),
+(8,'0','OCTAVO',8,0,0,1,9,NULL,NULL,7,4,NULL,'grupal'),
+(9,'0','NOVENO',8,0,0,1,10,NULL,NULL,8,4,NULL,'grupal'),
+(10,'0','DECIMO',8,0,0,1,11,NULL,NULL,9,4,NULL,'grupal'),
+(11,'0','UNDECIMO',8,0,0,1,0,NULL,NULL,10,4,NULL,'grupal'),
+(12,'0','PARVULOS',8,0,0,1,13,NULL,NULL,0,4,NULL,'grupal'),
+(13,'0','PREJARDIN',8,0,0,1,14,NULL,NULL,12,4,NULL,'grupal'),
+(14,'0','JARDIN',8,0,0,1,15,NULL,NULL,13,4,NULL,'grupal'),
+(15,'0','TRANSICION',8,0,0,1,1,NULL,NULL,14,4,NULL,'grupal');
 /*!40000 ALTER TABLE `academico_grados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -909,6 +929,7 @@ CREATE TABLE `academico_matriculas` (
   `mat_ciudad_residencia` varchar(10) DEFAULT NULL,
   `mat_nombre2` varchar(45) DEFAULT NULL,
   `mat_ciudad_recidencia` varchar(100) DEFAULT NULL,
+  `mat_tipo_matricula` varchar(45) NOT NULL DEFAULT 'grupal' COMMENT 'Se requiere para definir si el estudiante podrÃ¡ estar en varios cursos a la vez',
   PRIMARY KEY (`mat_id`),
   KEY `Index_ordinarios_1` (`mat_grado`,`mat_grupo`,`mat_estado_matricula`,`mat_id_usuario`,`mat_eliminado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -920,10 +941,27 @@ CREATE TABLE `academico_matriculas` (
 
 LOCK TABLES `academico_matriculas` WRITE;
 /*!40000 ALTER TABLE `academico_matriculas` DISABLE KEYS */;
-INSERT INTO `academico_matriculas` VALUES (1,'00001','0000-00-00 00:00:00','PRUEBA','DE','ESTUDIANTE',1,1,126,'1993-10-21','1',108,'0000000000','1',111,'Cra 00 #00-00','B. Prueba',NULL,NULL,116,NULL,129,1,5,0,'notiene@notiene.com',4,0,'0',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `academico_matriculas` VALUES (1,'00001','0000-00-00 00:00:00','PRUEBA','DE','ESTUDIANTE',1,1,126,'1993-10-21','1',108,'0000000000','1',111,'Cra 00 #00-00','B. Prueba',NULL,NULL,116,NULL,129,1,5,0,'notiene@notiene.com',4,0,'0',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'grupal');
 /*!40000 ALTER TABLE `academico_matriculas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
+-- Table structure for table `academico_matriculas_cursos`
+--
+
+DROP TABLE IF EXISTS `academico_matriculas_cursos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `academico_matriculas_cursos` (
+  `matcur_id` varchar(45) NOT NULL,
+  `matcur_id_matricula` int(10) unsigned NOT NULL,
+  `matcur_id_curso` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`matcur_id`),
+  KEY `academico_matriculas_cursos_FK` (`matcur_id_curso`),
+  CONSTRAINT `academico_matriculas_cursos_FK` FOREIGN KEY (`matcur_id_curso`) REFERENCES `academico_grados` (`gra_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='GuardarÃ¡ los cursos adicionales de cada estudiante.';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `academico_matriculas_documentos`
@@ -1384,7 +1422,12 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN PLATAFORMA SINTIA',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,NULL,NULL,'','calle 44 # 77 71',156,0,NULL,21,165,151,'111',NULL,0,150,'https://plataformasintia.com',169,117,177,182,'white-sidebar-color','header-white','logo-indigo',NULL,0,0,'2022-12-17 21:02:42',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'pruebaDT','pruebaDT',5,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'DIRECTIVO',NULL,'DE PRUEBA',NULL),(3,'pruebaDC','pruebaDC',2,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'DOCENTES',NULL,'DE PRUEBA',NULL),(4,'pruebaAC','pruebaAC',3,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'ACUDIENTES',NULL,'DE PRUEBA',NULL),(5,'pruebaES','pruebaES',4,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'ESTUDIANTES',NULL,'DE PRUEBA',NULL);
+INSERT INTO `usuarios` VALUES 
+(1,'sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN PLATAFORMA SINTIA',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,NULL,NULL,'','calle 44 # 77 71',156,0,NULL,21,165,151,'111',NULL,0,150,'https://plataformasintia.com',169,117,177,182,'white-sidebar-color','header-white','logo-indigo',NULL,0,0,'2022-12-17 21:02:42',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(2,'pruebaDT',SHA1('pruebaDT'),5,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'DIRECTIVO',NULL,'DE PRUEBA',NULL),
+(3,'pruebaDC',SHA1('pruebaDC'),2,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'DOCENTES',NULL,'DE PRUEBA',NULL),
+(4,'pruebaAC',SHA1('pruebaAC'),3,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'ACUDIENTES',NULL,'DE PRUEBA',NULL),
+(5,'pruebaES',SHA1('pruebaES'),4,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,156,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'ESTUDIANTES',NULL,'DE PRUEBA',NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
