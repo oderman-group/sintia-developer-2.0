@@ -65,7 +65,8 @@ LIMIT ".$empezar.",1
 <script>
 	// socket en la espera de una notificacion general
 	var id_usuario = <?php echo $idSession ?>;
-	socket.on("notificacion_sala_" + id_usuario, (data) => {
+	var institucion_actual = <?php echo $institucion["ins_id"] ?>;
+	socket.on("notificacion_sala_" + id_usuario+"_inst_"+institucion_actual, (data) => {
 		let div_notificacion = document.getElementById('div_notificacion');
 		let boton_notificacion = document.getElementById('boton_notificacion');
 		if(boton_notificacion){
@@ -99,7 +100,7 @@ LIMIT ".$empezar.",1
 		$conexion,
 		"SELECT COUNT(chat_visto) as cantidad
 	FROM $baseDatosSocial.chat 
-	WHERE chat_destino_usuario = '" . $_SESSION['id'] . "'  AND chat_visto=1"
+	WHERE chat_destino_usuario = '" . $_SESSION['id'] . "' AND  chat_destino_institucion = '" . $institucion["ins_id"] . "'  AND chat_visto=1"
 	);
 
 	while ($resultNotificacion = mysqli_fetch_array($consultaNotificaicones, MYSQLI_BOTH)) {
