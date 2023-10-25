@@ -252,7 +252,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }
 ?>
     
-    <div class="alert alert-block alert-<?=$tipo;?>">
+    <div class="alert alert-block alert-<?=$tipo;?> animate__animated animate__flash animate__delay-1s animate__repeat-2">
         <p><?=$mensaje;?></p>
     </div>
 

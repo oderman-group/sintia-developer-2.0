@@ -1,6 +1,12 @@
 <?php
 include("session.php");
 
+$idPaginaInterna = 'DV0067';
+
+include("../compartido/historial-acciones-guardar.php");
+
+Modulos::verificarPermisoDev();
+
 date_default_timezone_set("America/New_York");//Zona horaria
 
 //Variables necesarias
@@ -60,7 +66,12 @@ try {
 
 //Creamos y seleccionamos BD
 // mysqli_query($conexion, "CREATE DATABASE /*!32312 IF NOT EXISTS*/ $bd");
+try {
 mysqli_select_db($conexion, $bd) or die('Error al selccionar la bd');
+} catch (Exception $e) {
+	echo $e->getMessage();
+    exit();
+}
 
 $fichero = 'crear-bd-nueva.sql';  // Ruta al fichero que vas a cargar.
 

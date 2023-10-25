@@ -29,7 +29,10 @@ if (!empty($_POST["id"])) {
 			$estado = 0;
 		}
 
-		$destinatarios = "1,2,3,4,5";
+		$destinatarios=!empty($_POST["destinatarios"]) ? implode(',',$_POST["destinatarios"]) : "1,2,3,4,5";
+
+		$global=!empty($_POST["global"]) ? $_POST["global"] : "NO";
+		$video2=!empty($_POST["video2"]) ? $_POST["video2"] : "";
 
 		$imagen = '';
 		if (!empty($_FILES['imagen']['name'])) {
@@ -54,8 +57,8 @@ if (!empty($_POST["id"])) {
 		$pos = strpos($_POST["video"], $findme) + 3;
 		$video = substr($_POST["video"], $pos, 11);
 		try{
-			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_titulo, not_descripcion, not_usuario, not_fecha, not_estado, not_para, not_imagen, not_archivo, not_keywords, not_url_imagen, not_video, not_id_categoria_general, not_video_url, not_institucion, not_year)
-			VALUES('" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', '" . $_SESSION["id"] . "',now(), '" . $estado . "', '" . $destinatarios . "', '" . $imagen . "', '" . $archivo . "', '" . $_POST["keyw"] . "', '" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', '" . $video . "', '" . $_POST["categoriaGeneral"] . "', '" . mysqli_real_escape_string($conexion,$_POST["video"]) . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_noticias(not_titulo, not_descripcion, not_usuario, not_fecha, not_estado, not_para, not_imagen, not_archivo, not_keywords, not_url_imagen, not_video, not_id_categoria_general, not_video_url, not_institucion, not_year, not_global, not_enlace_video2, not_descripcion_pie)
+			VALUES('" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', '" . $_SESSION["id"] . "',now(), '" . $estado . "', '" . $destinatarios . "', '" . $imagen . "', '" . $archivo . "', '" . $_POST["keyw"] . "', '" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', '" . $video . "', '" . $_POST["categoriaGeneral"] . "', '" . mysqli_real_escape_string($conexion,$_POST["video"]) . "','" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "','" . $global . "', '" . $video2 . "', '" . mysqli_real_escape_string($conexion,$_POST["contenidoPie"]) . "')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -130,7 +133,12 @@ if (!empty($_POST["id"])) {
 	}
 	//EDITAR NOTICIA
 	if ($_POST["id"] == 4) {
-		$destinatarios = "1,2,3,4,5"; 
+
+		$destinatarios=!empty($_POST["destinatarios"]) ? implode(',',$_POST["destinatarios"]) : "1,2,3,4,5";
+
+		$global=!empty($_POST["global"]) ? $_POST["global"] : "NO";
+		$video2=!empty($_POST["video2"]) ? $_POST["video2"] : "";
+
 		if (!empty($_FILES['imagen']['name'])) {
 			$archivoSubido->validarArchivo($_FILES['imagen']['size'], $_FILES['imagen']['name']);
 			$explode=explode(".", $_FILES['imagen']['name']);
@@ -163,7 +171,7 @@ if (!empty($_POST["id"])) {
 		$video = substr($_POST["video"], $pos, 11);
 
 		try{
-			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_titulo='" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', not_descripcion='" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',  not_keywords='" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', not_url_imagen='" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', not_video='" . $video . "', not_id_categoria_general='" . $_POST["categoriaGeneral"] . "', not_video_url='" . $_POST["video"] . "' WHERE not_id='" . $_POST["idR"] . "'");
+			mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_titulo='" . mysqli_real_escape_string($conexion,$_POST["titulo"]) . "', not_descripcion='" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "',  not_keywords='" . mysqli_real_escape_string($conexion,$_POST["keyw"]) . "', not_url_imagen='" . mysqli_real_escape_string($conexion,$_POST["urlImagen"]) . "', not_video='" . $video . "', not_id_categoria_general='" . $_POST["categoriaGeneral"] . "', not_video_url='" . $_POST["video"] . "', not_para='" . $destinatarios . "', not_global='" . $global . "', not_enlace_video2='" . $video2 . "', not_descripcion_pie='" . mysqli_real_escape_string($conexion,$_POST["contenidoPie"]) . "' WHERE not_id='" . $_POST["idR"] . "'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
