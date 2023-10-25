@@ -91,23 +91,23 @@
                                                 switch ($resultado['uss_tipo']){
                                                     case 1:
                                                         $usuarioTipo="DEV";
-                                                        $ruta="usuarios-editar.php?id=".$resultado['uss_id'];
+                                                        $ruta="usuarios-editar.php?id=".base64_encode($resultado['uss_id']);
                                                     break;
                                                     case 2:
                                                         $usuarioTipo="Docente";
-                                                        $ruta="usuarios-editar.php?id=".$resultado['uss_id'];
+                                                        $ruta="usuarios-editar.php?id=".base64_encode($resultado['uss_id']);
                                                     break;
                                                     case 3:
                                                         $usuarioTipo="Acudiente";
-                                                        $ruta="usuarios-editar.php?id=".$resultado['uss_id'];
+                                                        $ruta="usuarios-editar.php?id=".base64_encode($resultado['uss_id']);
                                                     break;
                                                     case 4:
                                                         $usuarioTipo="Estudiante";
-                                                        $ruta="estudiantes-editar.php?id=".$resultado['uss_usuario'];
+                                                        $ruta="estudiantes-editar.php?id=".base64_encode($resultado['uss_usuario']);
                                                     break;
                                                     case 5:
                                                         $usuarioTipo="Directivo";
-                                                        $ruta="usuarios-editar.php?id=".$resultado['uss_id'];
+                                                        $ruta="usuarios-editar.php?id=".base64_encode($resultado['uss_id']);
                                                     break;
 
                                                 }
@@ -119,14 +119,14 @@
                                             case 3:
                                                 $nombre=$resultado['mat_nombre'];
                                                 $descripcion="";
-                                                $ruta="asignaturas-editar.php?id=".$resultado['mat_id'];
+                                                $ruta="asignaturas-editar.php?id=".base64_encode($resultado['mat_id']);
                                                 $nombreRuta="";
                                                 break;
 
                                             case 4:
                                                 $nombre=$resultado['gra_nombre'];
                                                 $descripcion="";
-                                                $ruta="cursos-editar.php?id=".$resultado['gra_id'];
+                                                $ruta="cursos-editar.php?id=".base64_encode($resultado['gra_id']);
                                                 $nombreRuta="";
                                                 break;
 
