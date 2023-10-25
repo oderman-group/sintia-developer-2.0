@@ -79,7 +79,7 @@ class Servicios
     {
         $contador=0;//contará cuantos parametros validos existen
         foreach($parametrosValidos as $clave => $parametro){
-            $valor=$parametrosArray[$parametro];
+            $valor=!empty($parametrosArray[$parametro]) ? $parametrosArray[$parametro] : NULL;
             if(!is_null($valor)){
                $contador++;
                if(is_numeric($valor)) 
