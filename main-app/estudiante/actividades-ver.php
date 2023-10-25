@@ -25,8 +25,9 @@ if($fechas[0]<0){
 	exit();
 }
 
-$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
-$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+require_once("../class/CargaAcademica.php");
+$infoCargaActual = CargaAcademica::cargasDatosEnSesion($cargaConsultaActual, $datosCargaActual['car_docente']);
+$cantEstudiantesConsulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($infoCargaActual['datosCargaActual']);
 $cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
 
 include '../class/Tables/BDT_academico_actividad_tareas_entregas.php';
