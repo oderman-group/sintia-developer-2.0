@@ -41,6 +41,10 @@
 											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+													$porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
@@ -54,7 +58,7 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
 												<?php if (!empty($notapp[0]) and $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">
