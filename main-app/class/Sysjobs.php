@@ -29,11 +29,11 @@ class SysJobs {
                 break;
 
                 case JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL:
-                    $msj = 'Los estudiantes ya se están subiendo a la plataforma.';
+                    $msj = ' Los estudiantes ya se est&acute;n subiendo a la plataforma.';
                 break;
 
                 default:
-                    $msj = 'No se identific&oacute; el tipo de proceso.';
+                    $msj = ' No se identific&oacute; el tipo de proceso.';
                 break;
             }
             
