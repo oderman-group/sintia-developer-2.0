@@ -54,11 +54,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue">Paso a paso</header>
 									<div class="panel-body">
-                                        <p><b>1.</b> Solicite la plantilla de excel (Google Sheet) a la administración de la Plataforma SINTIA.</p>
+                                        <p><b>1.</b> Descargue la plantilla de excel (Google Sheet) en este enlace. <a href="https://docs.google.com/spreadsheets/d/1-wXDDDzMJAYt_ppWnJ79cyCqcn_TSf_T/edit#gid=845392206" target="_blank" class="btn btn-xs btn-secondary">DESCARGAR PLANTILLA</a></p>
                                         <p><b>2.</b> Llene los campos de los estudiantes y acudientes en el orden que la plantilla los solicita.</p>
-                                        <p><b>3.</b> Finalmente descargue la plantilla ya completada, cargue la plantilla en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar matrículas.</p>
+                                        <p><b>3.</b> Finalmente guarde la plantilla ya completada, carguela en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar matrículas.</p>
+                                        <p><b>4.</b> Si desea puede ver el video de ayuda que hemos preparada para usted. <a href="https://www.loom.com/share/40b97dc0aa4040f18c183d4f366921cc" target="_blank" class="btn btn-xs btn-secondary">VER VIDEO DE AYUDA</a></p>
 									</div>
+							 </div>
 
+                             <div class="panel">
                                     <header class="panel-heading panel-heading-blue">Consideraciones</header>
 									<div class="panel-body">
                                         <p><b>-></b> Tenga en cuenta, para importar los estudiantes, los campos del Nro. de documento, Primer Nombre, Primer Apellido y grado, son obligatorios.</p>
@@ -80,7 +83,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <div class="form-group row">
                                                 <label class="col-sm-3 control-label">Subir la planilla lista</label>
                                                 <div class="col-sm-6">
-                                                    <input type="file" class="form-control" name="planilla" required>
+                                                    <input type="file" class="form-control" name="planilla" accept=".xlsx" required>
                                                 </div>
                                             </div>
 
@@ -106,10 +109,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     </select>
                                                 </div>
                                             </div>
-
-                                            <input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
                                             
                                             <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+                                            <button type="submit" class="btn  deepPink-bgcolor">
+                                                Importar matrículas <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -149,14 +154,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                             <td><?= $resultado['job_id']; ?></td>
                                                                             <td><?= $resultado['job_fecha_creacion']; ?></td>
                                                                             <td><?= $resultado['job_mensaje']; ?></td> 
-                                                                            <td>
-                                                                                <div class="btn-group">
-                                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-                                                                                         <?= $resultado['job_estado']; ?>
-                                                                                    </button>
-                                                                                   
-                                                                                </div>
-                                                                            </td>
+                                                                            <td> <?= $resultado['job_estado']; ?></td>
                                                                         </tr>
                                                                     <?php $contReg++;
                                                                     } ?>
