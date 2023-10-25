@@ -246,7 +246,7 @@ class SysJobs {
                 if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
                     $asunto = "El informe fue generado correctamente | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']} ";
                 } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
-                    $asunto = "La importaci&oacute; de estudiantes fue completada correctamente ";
+                    $asunto = "La importaci&oacute;n de estudiantes fue completada correctamente ";
                 }
                 
             break;
@@ -255,7 +255,7 @@ class SysJobs {
                 if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
                     $asunto = "El informe present&oacute; un error | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']}";
                 } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
-                    $asunto = "La importaci&oacute; de estudiantes present&oacute; un problema. ";
+                    $asunto = "La importaci&oacute;n de estudiantes present&oacute; un problema. ";
                 }
             break;
 

@@ -399,7 +399,7 @@ setTimeout ("notifica()", 100);
 
 
 <?php 
-if($_POST["operacion"]==3){
+if($_POST["operacion"]==3 && !empty($_POST["recargarPanel"]) && $_POST["recargarPanel"]==1){
 ?>
 	<script type="text/javascript">
 	setTimeout(function() {
@@ -409,7 +409,7 @@ if($_POST["operacion"]==3){
 <?php
 }
 
-if($_POST["operacion"]==7){
+if($_POST["operacion"]==7 || ($_POST["operacion"]==3 && empty($_POST["recargarPanel"]))){
 ?>
 	<script type="text/javascript">
 	setTimeout('document.location.reload()',5000);

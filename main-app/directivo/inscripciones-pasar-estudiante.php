@@ -1,9 +1,12 @@
 <?php
 include("session.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
-if (($agnoBD+1)!=$yearEnd) {
-	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_18&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+$configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
+
+if (!empty($configAdmisiones["cfgi_year_inscripcion"]) && $configAdmisiones["cfgi_year_inscripcion"]==$yearEnd) {
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_18&yearPasar='.base64_encode($configAdmisiones["cfgi_year_inscripcion"]).'";</script>';
 	exit;
 }
 
@@ -13,7 +16,7 @@ if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
 $existe=Estudiantes::validarExistenciaEstudiante($matricula,$bdApasar);
 
 if ($existe>0) {
-	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_19&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_19&yearPasar='.base64_encode($configAdmisiones["cfgi_year_inscripcion"]).'";</script>';
 	exit;
 }
 
@@ -80,5 +83,5 @@ if ($existe>0) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
-	echo '<script type="text/javascript">window.location.href="inscripciones.php?success=SC_DT_14&yearPasar='.base64_encode(($agnoBD+1)).'";</script>';
+	echo '<script type="text/javascript">window.location.href="inscripciones.php?success=SC_DT_14&yearPasar='.base64_encode($configAdmisiones["cfgi_year_inscripcion"]).'";</script>';
 	exit();
