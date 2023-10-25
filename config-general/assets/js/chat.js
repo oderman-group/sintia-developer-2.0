@@ -407,7 +407,18 @@ function listarChat(uss_remite, uss_detino, uss_remite_institucion, uss_detino_i
 				});
 				socket.on("poner_visto_" + sala_chat, (data) => {
 					divVisto = document.getElementById("div_visto_" + data);
-					if (divVisto.children.length <= 1) {
+					esVisto=0
+					for (var i = 0; i < divVisto.children.length; i++) {
+						var elementoHijo = divVisto.children[i];
+						// Comprueba si el elemento hijo es una etiqueta 'img'
+						if (elementoHijo.tagName.toLowerCase() === "img") {
+							esVisto ++;							
+						}else{
+						 esVisto=0
+						}
+					}
+					console.log(esVisto);
+					if (esVisto <= 1) {
 						const nuevocheck = document.createElement('img');
 						nuevocheck.src = "../files/iconos/check1.png";
 						divVisto.insertBefore(nuevocheck, divVisto.lastChild);
