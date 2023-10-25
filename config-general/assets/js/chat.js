@@ -2,8 +2,6 @@
 // funcion para mostrar las conversacion
 function mostrarChat(datos) {
 	// cerrmaos la sala que este abierta
-	// socket.emit("leave", "sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario);
-	// socket.emit("leave", "listar_chat_" + chat_remite_usuario + "_" + chat_destino_usuario);
 	var liId = datos.id;
 	var splitid = liId.split("_");
 	var id = splitid[0];
@@ -88,9 +86,10 @@ function mostrarChat(datos) {
 					iconGrabar = document.getElementById('iconGrabar');
 					imputmensaje = document.getElementById("imputMensaje");
 					chat_destino_usuario = item.datosUsuarios["uss_id"];
+					chat_destino_institucion = institucion_actual;
 					destino_foto_url_uss = item.fotoPerfil;
 					destino_nombre_uss = item.nombre;
-					listarChat(chat_remite_usuario, chat_destino_usuario);
+					listarChat(chat_remite_usuario, chat_destino_usuario, chat_remite_institucion, chat_destino_institucion);
 					divNombre = document.getElementById("nombre_" + chat_destino_usuario);
 					spanNotificacion = document.getElementById("notificacion_" + chat_destino_usuario);
 					divNombre.style.fontWeight = "400";
@@ -103,7 +102,7 @@ function mostrarChat(datos) {
 	}
 };
 // metodo para escuchar actualicaciones de mis chats 
-socket.on("sala_" + chat_remite_usuario, (data) => {
+socket.on("sala_" + chat_remite_usuario + "_inst_" + institucion_actual, (data) => {
 	// console.log(data);
 	miUsuario = (data["chat_remite_usuario"] == chat_remite_usuario);
 	actualizarChat(miUsuario, data);
@@ -119,7 +118,7 @@ socket.on("sala_" + chat_remite_usuario, (data) => {
 		if (chat_destino_usuario == data["chat_destino_usuario"]) {
 			contenido_chat.innerHTML += htmlEmisor(data["chat_id"], data["chat_mensaje"], verificarFecha(Date.parse(data["chat_fecha_registro"])), data["chat_tipo"], data["chat_url_file"]);
 			limpiar();
-			chatElement.scrollTop = chatElement.scrollHeight;			
+			chatElement.scrollTop = chatElement.scrollHeight;
 		}
 	}
 
@@ -346,18 +345,18 @@ function htmlDestino(id, mensaje, hora, imagenUrl, tipo = "1", url = "") {
 	return imageHtml;
 };
 
-function listarChat(uss_remite, uss_detino) {
+function listarChat(uss_remite, uss_detino, uss_remite_institucion, uss_detino_institucion) {
 	chatElement = document.getElementById("chatHistory");
 
-	var formData = new FormData();
-	formData.append("chat_remite_usuario", uss_remite);
-	formData.append("chat_destino_usuario", uss_detino);
+
 	$.ajax({
 		type: "GET",
 		url: "ajax-chat-lista.php",
 		data: {
 			chat_remite_usuario: uss_remite,
-			chat_destino_usuario: uss_detino
+			chat_destino_usuario: uss_detino,
+			chat_remite_institucion: uss_remite_institucion,
+			chat_destino_institucion: uss_detino_institucion
 		},
 		success: function (response) {
 			dato = response[0]["data"];
@@ -370,18 +369,18 @@ function listarChat(uss_remite, uss_detino) {
 					contenido_chat.innerHTML += htmlDestino(elemento.chat_id, elemento.chat_mensaje, fechaCompleta, destino_foto_url_uss, elemento.chat_tipo + '', elemento.chat_url_file);
 					if (elemento.chat_visto == 1) {
 						socket.emit("ver_mensaje", {
-							salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,
+							salaChat: "sala_chat_" + chat_destino_usuario + "_inst_" + chat_destino_institucion + "-" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala chat si esta abierta
 							chat_id: elemento.chat_id
 						});
 					}
 				}
 				chatElement.scrollTop = chatElement.scrollHeight;
 			});
-			var sala_chat = "sala_chat_" + chat_remite_usuario + "_" + chat_destino_usuario;
+			var sala_chat = "sala_chat_" + chat_remite_usuario + "_inst_" + chat_remite_institucion + "-" + chat_destino_usuario + "_inst_" + chat_destino_institucion; 
 			console.log(salasCreadas);
 			if (salasCreadas.indexOf(sala_chat) === -1) {
 				salasCreadas.push(sala_chat);
-				console.log("-----" + sala_chat);
+				console.log("Agregando---->" + sala_chat);
 				socket.on(sala_chat, (data) => {
 					actualizarChat(false, data["body"]);
 					remite = data["body"]["chat_remite_usuario"];
@@ -401,22 +400,24 @@ function listarChat(uss_remite, uss_detino) {
 							chatElement.scrollTop = chatElement.scrollHeight;
 						}
 						socket.emit("ver_mensaje", {
-							salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,
+							salaChat: "sala_chat_" + chat_destino_usuario + "_inst_" + chat_destino_institucion + "-" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala chat si esta abierta
 							chat_id: data["body"]["chat_id"]
 						});
 					};
 				});
 				socket.on("poner_visto_" + sala_chat, (data) => {
 					divVisto = document.getElementById("div_visto_" + data);
-					const nuevocheck = document.createElement('img');
-					nuevocheck.src = "../files/iconos/check1.png";
-					divVisto.insertBefore(nuevocheck, divVisto.lastChild);
+					if (divVisto.children.length <= 1) {
+						const nuevocheck = document.createElement('img');
+						nuevocheck.src = "../files/iconos/check1.png";
+						divVisto.insertBefore(nuevocheck, divVisto.lastChild);
+					}
+
 				});
 
 			}
-			console.log("Emite actualizar_notificaciones");
 			socket.emit("actualizar_notificaciones", {
-				miSala: "sala_" + chat_remite_usuario,
+				miSala: "sala_" + chat_remite_usuario+"_inst_"+chat_remite_institucion,
 				chat_destino_usuario: chat_remite_usuario
 			});
 		}
@@ -492,19 +493,21 @@ function enviarArchivo(tipo, idImput) {
 					if (estado === "OK") {
 						nombreFile = datos["nombre"];
 						socket.emit("enviar_mensaje_chat", {
-							remite_nombre_uss: remite_nombre_uss,       // nombre de quien remite
-							remite_foto_uss: remite_foto_url_uss,       // foto de quien remite 
-							miSala: "sala_" + chat_remite_usuario,  // sala origen
-							chat_tipo: tipoMensaje,					// tipo del mensaje enviad 1): texto 2): imagen 3): documento 4): audio
-							chat_url_file: nombreFile,				// nombre del archivo que se envia 
-							destino_foto_uss: destino_foto_url_uss,				// foto aquien se le envia el mensaje
-							destino_nombre_uss: destino_nombre_uss,					// nombre a quien se envia el mensaje
-							chat_fecha_registro: new Date(),
-							chat_remite_usuario: chat_remite_usuario,
-							chat_destino_usuario: chat_destino_usuario,
-							sala: "sala_" + chat_destino_usuario,									   // sala destino
-							salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,// sala chat si esta abierta
-							chat_mensaje: mensaje													 // mensaje a enviar
+							remite_nombre_uss: remite_nombre_uss,       						   	// nombre de quien remite
+							remite_foto_uss: remite_foto_url_uss,       							// foto de quien remite 
+							miSala: "sala_" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala origen
+							chat_remite_institucion: chat_remite_institucion,						//institucion remitente
+							chat_tipo: tipoMensaje,													// tipo del mensaje enviad 1): texto 2): imagen 3): documento 4): audio
+							chat_url_file: nombreFile,												// nombre del archivo que se envia 
+							destino_foto_uss: destino_foto_url_uss,									// foto aquien se le envia el mensaje
+							destino_nombre_uss: destino_nombre_uss,								    // nombre a quien se envia el mensaje
+							chat_destino_institucion: chat_destino_institucion, 						// institucion destino
+							chat_fecha_registro: new Date(),										// fecha mensaje
+							chat_remite_usuario: chat_remite_usuario,								// usuario remitente
+							chat_destino_usuario: chat_destino_usuario,							    // usuario destino
+							sala: "sala_" + chat_destino_usuario + "_inst_" + chat_destino_institucion,	// sala destino
+							salaChat: "sala_chat_" + chat_destino_usuario + "_inst_" + chat_destino_institucion + "-" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala chat si esta abierta
+							chat_mensaje: mensaje	 // mensaje a enviar
 						});
 
 					} else {
@@ -527,18 +530,20 @@ function enviarArchivo(tipo, idImput) {
 		});
 	} else {
 		socket.emit("enviar_mensaje_chat", {
-			remite_nombre_uss: remite_nombre_uss,       								// nombre de quien remite
-			remite_foto_uss: remite_foto_url_uss,       								// foto de quien remite 
-			miSala: "sala_" + chat_remite_usuario,  									// sala origen
-			chat_tipo: tipoMensaje,														// tipo del mensaje enviad 1):texto 2):imagen 3):documento 4): audio
-			destino_foto_uss: destino_foto_url_uss,											// foto aquien se le envia el mensaje
-			destino_nombre_uss: destino_nombre_uss,	 									// nombre a quien se envia el mensaje
-			chat_fecha_registro: new Date(),
-			chat_remite_usuario: chat_remite_usuario,
-			chat_destino_usuario: chat_destino_usuario,
-			sala: "sala_" + chat_destino_usuario,									   // sala destino
-			salaChat: "sala_chat_" + chat_destino_usuario + "_" + chat_remite_usuario,// sala chat si esta abierta
-			chat_mensaje: mensaje
+			remite_nombre_uss: remite_nombre_uss,       						   	// nombre de quien remite
+			remite_foto_uss: remite_foto_url_uss,       							// foto de quien remite 
+			miSala: "sala_" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala origen
+			chat_remite_institucion: chat_remite_institucion,						//institucion remitente
+			chat_tipo: tipoMensaje,													// tipo del mensaje enviad 1): texto 2): imagen 3): documento 4): audio
+			destino_foto_uss: destino_foto_url_uss,									// foto aquien se le envia el mensaje
+			destino_nombre_uss: destino_nombre_uss,								    // nombre a quien se envia el mensaje
+			chat_destino_institucion: chat_destino_institucion, 						// institucion destino
+			chat_fecha_registro: new Date(),										// fecha mensaje
+			chat_remite_usuario: chat_remite_usuario,								// usuario remitente
+			chat_destino_usuario: chat_destino_usuario,							    // usuario destino
+			sala: "sala_" + chat_destino_usuario + "_inst_" + chat_destino_institucion,	// sala destino
+			salaChat: "sala_chat_" + chat_destino_usuario + "_inst_" + chat_destino_institucion + "-" + chat_remite_usuario + "_inst_" + chat_remite_institucion, // sala chat si esta abierta
+			chat_mensaje: mensaje	 // mensaje a enviar
 		});
 
 
@@ -561,11 +566,14 @@ function mostrarImagen(tipo) {
 	}
 
 	contenedorImagen.innerHTML = "";
-	const elemento = document.getElementById('imputMensaje'); 
+	const elemento = document.getElementById('imputMensaje');
 	const rect = elemento.getBoundingClientRect();
 	const x = rect.left + window.scrollX; // Posición X absoluta
 	const y = rect.top + window.scrollY; // Posición Y absoluta
-	console.log(`Posición X: ${x}, Posición Y: ${y}`);
+	const left = rect.left // Posición X absoluta
+	const top = rect.top // Posición Y absoluta
+	const butom = rect.bottom // Posición Y absoluta
+	const right = rect.right // Posición Y absoluta
 
 	if (imagenSeleccionada) {
 		const imagenURL = URL.createObjectURL(imagenSeleccionada);
@@ -577,11 +585,9 @@ function mostrarImagen(tipo) {
 		// Agregar la imagen al contenedor
 		contenedorImagen.innerHTML = '';
 		contenedorImagen.appendChild(imagen);
-		divFlotante.style.top = (y-340)+"px";
-		divFlotante.style.lef = x+"px";
-
+		divFlotante.style.top = (top - 340) + "px";
+		divFlotante.style.left = left + "px";
 		divFlotante.style.display = "block";
-
 	} else if (archivoSeleccionado) {
 		// Crear un elemento de imagen y asignar la URL
 

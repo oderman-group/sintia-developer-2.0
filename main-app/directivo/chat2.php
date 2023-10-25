@@ -81,7 +81,7 @@
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaChat">
                                             <?php
                                             $chats = [];
-                                            $consultaUsuariosOffline = mysqli_query(
+                                            $consultaUsuariosChat = mysqli_query(
                                                 $conexion,
                                                 "SELECT 
                                                 uss_id,
@@ -90,36 +90,42 @@
                                                 uss_apellido1,
                                                 uss_estado,
                                                 chat_remite_usuario,
+                                                chat_remite_institucion,
                                                 chat_visto,
                                                 chat_tipo,
-                                                $baseDatosSocial.ultimoTipo(chat_remite_usuario,chat_destino_usuario)as ulitmo_tipo,
-                                                $baseDatosSocial.fechaUltimoMensaje(chat_remite_usuario,chat_destino_usuario)as fecha_ulitmo_msj,
-                                                $baseDatosSocial.ultimoMensaje(chat_remite_usuario,chat_destino_usuario)as ulitmo_msj,
-                                                $baseDatosSocial.cantNoLeidos(chat_remite_usuario,chat_destino_usuario)as cantidad
+                                                chat_destino_usuario,                                                
+                                                chat_destino_institucion,
+                                                $baseDatosSocial.ultimoTipo(chat_remite_usuario,chat_remite_institucion,chat_destino_usuario,chat_destino_institucion)as ulitmo_tipo,
+                                                $baseDatosSocial.fechaUltimoMensaje(chat_remite_usuario,chat_remite_institucion,chat_destino_usuario,chat_destino_institucion)as fecha_ulitmo_msj,
+                                                $baseDatosSocial.ultimoMensaje(chat_remite_usuario,chat_remite_institucion,chat_destino_usuario,chat_destino_institucion)as ulitmo_msj,
+                                                $baseDatosSocial.cantNoLeidos(chat_remite_usuario,chat_remite_institucion,chat_destino_usuario,chat_destino_institucion)as cantidad
                                                 
                                                 FROM $baseDatosSocial.chat  
                                                 
                                                 INNER JOIN usuarios 
                                                 ON(uss_id=chat_destino_usuario)
 
-                                                WHERE (chat_remite_usuario = '" . $_SESSION['id'] . "'  OR  chat_destino_usuario = '" . $_SESSION['id'] . "' ) 
+                                                WHERE ( (chat_remite_usuario = '" . $_SESSION['id'] . "' and chat_remite_institucion= '" . $institucion["ins_id"] . "')
+                                                         OR  (chat_destino_usuario = '" . $_SESSION['id'] . "' and chat_destino_institucion= '" . $institucion["ins_id"] . "') ) 
 
                                                 GROUP BY chat_remite_usuario,chat_destino_usuario
                                                 ORDER BY fecha_ulitmo_msj DESC"
                                             );
-                                            if (mysqli_num_rows($consultaUsuariosOffline) > 0) {
-                                                while ($datosUsuriosOffline = mysqli_fetch_array($consultaUsuariosOffline, MYSQLI_BOTH)) {
+                                            if (mysqli_num_rows($consultaUsuariosChat) > 0) {
+                                                while ($datosUsurios = mysqli_fetch_array($consultaUsuariosChat, MYSQLI_BOTH)) {
 
-                                                    $fotoPerfil = $usuariosClase->verificarFoto($datosUsuriosOffline['uss_foto']);
-                                                    $ussId = $datosUsuriosOffline['uss_id'];
-                                                    $nombre = $datosUsuriosOffline['uss_nombre'] . ' ' . $datosUsuriosOffline['uss_apellido1'];
-                                                    $cantidad = $datosUsuriosOffline['cantidad'];
-                                                    $estado = $datosUsuriosOffline['uss_estado'] == "1" ? "online" : "offline";
-                                                    $chatTipo = $datosUsuriosOffline['ulitmo_tipo'];
-                                                    if ($ussId == $_SESSION['id']) {
-                                                        $miId = $_SESSION['id'];
-                                                        $ussId = $datosUsuriosOffline['chat_remite_usuario'];
-                                                        $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$ussId)as cantidad FROM usuarios WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id ='" . $ussId . "' ");
+                                                    $fotoPerfil = $usuariosClase->verificarFoto($datosUsurios['uss_foto']);
+                                                    $isntitucion_remite = $datosUsurios['chat_remite_institucion'];                                                    
+                                                    $ussId = $datosUsurios['uss_id'];
+                                                    $nombre = $datosUsurios['uss_nombre'] . ' ' . $datosUsurios['uss_apellido1'];
+                                                    $cantidad = $datosUsurios['cantidad'];
+                                                    $estado = $datosUsurios['uss_estado'] == "1" ? "online" : "offline";
+                                                    $chatTipo = $datosUsurios['ulitmo_tipo'];
+                                                    if ($ussId == $_SESSION['id'] ) { //&& $institucion["ins_id"]==$isntitucion_remite <--- para validar conversaciones con otas instituciones
+                                                        $miId = $_SESSION['id'];                                                       
+                                                        $ussId = $datosUsurios['chat_remite_usuario'];
+                                                        $isntitucion_destino = $datosUsurios['chat_destino_institucion'];
+                                                        $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$isntitucion_remite,$ussId,$isntitucion_destino)as cantidad FROM usuarios WHERE  uss_bloqueado=0 AND uss_id ='" . $ussId . "' ");
                                                         while ($datosUsuarios = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH)) {
                                                             $fotoPerfil = $usuariosClase->verificarFoto($datosUsuarios['uss_foto']);
                                                             $nombre = $datosUsuarios['uss_nombre'];
@@ -129,13 +135,13 @@
                                                             $cantidad = $datosUsuarios['cantidad'];
                                                         }
                                                     }
-
-                                                    if (!in_array($ussId, $chats)) {
-                                                        $chats[] = $ussId;
-                                                        if (strlen($datosUsuriosOffline['ulitmo_msj']) > 20) {
-                                                            $mensaje = substr($datosUsuriosOffline['ulitmo_msj'], 0, 20) . "...";
+                                                    $idChat= $ussId;//."-".$isntitucion_remite;
+                                                    if (!in_array($idChat, $chats)) {
+                                                        $chats[] =$idChat;
+                                                        if (strlen($datosUsurios['ulitmo_msj']) > 20) {
+                                                            $mensaje = substr($datosUsurios['ulitmo_msj'], 0, 20) . "...";
                                                         } else {
-                                                            $mensaje = $datosUsuriosOffline['ulitmo_msj'];
+                                                            $mensaje = $datosUsurios['ulitmo_msj'];
                                                         }
                                                         $iconAdjunto = "";
                                                         $imagen = false;
@@ -280,7 +286,9 @@
             // Datos del usuario  remitente
             var chat_remite_usuario = <?php echo $idSession ?>;
             var remite_foto_url_uss = "<?php echo $fotoPerfilUsr ?>";
-            var remite_nombre_uss = "<?php echo $datosUsuarioActual["uss_nombre"] . " " . $datosUsuarioActual["uss_apellido1"] ?>";
+            var remite_nombre_uss = "<?php echo $datosUsuarioActual["uss_nombre"] . " " . $datosUsuarioActual["uss_apellido1"] ?>";           
+            var institucion_actual = <?php echo $institucion["ins_id"] ?>;
+            var chat_remite_institucion =institucion_actual;
             // Datos del usuario  destinatario
             var chat_destino_usuario = "";
             let destino_foto_url_uss = "";
