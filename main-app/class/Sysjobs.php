@@ -10,7 +10,7 @@ class SysJobs {
      * 
      * @return String // se retorna el mensaje de la operacion registrada sys_jobs
      */
-    public static function registrar($tipo,$prioridad,array $parametros = [],$msj ='')
+    public static function registrar($tipo, $prioridad, array $parametros = [], $msj ='')
     {
         global $config;
         $parametrosBuscar = array(
@@ -23,7 +23,21 @@ class SysJobs {
         $buscarJobs=self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
         if($cantidad<1){
-            $msj=" El informe ya se est&aacute; generando.";
+            switch($tipo) {
+                case JOBS_TIPO_GENERAR_INFORMES:
+                    $msj=" El informe ya se est&aacute; generando.";
+                break;
+
+                case JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL:
+                    $msj = ' Los estudiantes ya se est&acute;n subiendo a la plataforma.';
+                break;
+
+                default:
+                    $msj = ' No se identific&oacute; el tipo de proceso.';
+                break;
+            }
+            
+
             $idRegistro =self::crear($tipo,$prioridad,$parametros,$msj);
             $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
         }else{
