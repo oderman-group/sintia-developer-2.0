@@ -58,6 +58,31 @@ define('CONFIG_MANUAL_CALIFICACIONES', 1);
 define('CONFIG_AUTOMATICO_CALIFICACIONES', 0);
 define('PERMISO_EDICION_PERIODOS_DIFERENTES', true); //Diferentes al actual
 
+switch($_SERVER['HTTP_HOST']){
+	case 'localhost':
+        define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
+        define('ENVIROMENT', 'TEST');
+        break;
+
+	case 'developer.plataformasintia.com':
+        define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
+        define('ENVIROMENT', 'TEST');
+        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+
+	case 'main.plataformasintia.com':
+        define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+        define('ENVIROMENT', 'PROD');
+        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+
+        default:
+        define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
+        define('ENVIROMENT', 'TEST');
+        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+}
+
 switch (ENVIROMENT) {
         case 'LOCAL':
 	include(ROOT_PATH."/conexion-datos.php");
@@ -80,26 +105,5 @@ switch (ENVIROMENT) {
         default:
         include(ROOT_PATH."/conexion-datos.php");
         define('BD_PREFIX', 'odermangroup_');
-        break;
-}
-
-switch($_SERVER['HTTP_HOST']){
-	case 'localhost':
-        define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-        break;
-
-	case 'developer.plataformasintia.com':
-        define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
-
-	case 'main.plataformasintia.com':
-        define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
-
-        default:
-        define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 }
