@@ -23,7 +23,11 @@
 										</div>
                                     </div>
 									<?php if (array_key_exists(10, $arregloModulos)) { 
-										$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+										$parametros = [
+											'matcur_id_matricula' 	=> $datosEstudianteActual["mat_id"],
+											'matcur_id_institucion' => $config['conf_id_institucion'],
+											'matcur_years' 			=> $config['conf_agno']
+										];
 										$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 										foreach ($listaCursosMediaTecnica as $dato) {
 											$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]);
@@ -35,7 +39,9 @@
 											<div class="panel-body">
 												<?php $parametros = [
 													'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
-													'matcur_id_curso'     => $dato["matcur_id_curso"]
+													'matcur_id_curso'     => $dato["matcur_id_curso"],
+													'matcur_id_institucion' => $config['conf_id_institucion'],
+													'matcur_years' 			=> $config['conf_agno']
 													];
 												$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
 												if ($listacargaMediaTecnica != null) { 

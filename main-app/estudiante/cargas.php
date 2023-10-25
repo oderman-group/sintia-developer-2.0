@@ -167,17 +167,17 @@ if($config['conf_activar_encuesta']==1){
 							if ($listacargaMediaTecnica != null) { 
 								foreach ($listacargaMediaTecnica as $cargaMediaTecnica) {
 									$fondoCargaActual = '#FFF';
-									if($cargaMediaTecnica["car_id"]==$_COOKIE["cargaE"]){
+									if(!empty($_COOKIE["cargaE"]) && $cargaMediaTecnica["car_id"]==$_COOKIE["cargaE"]){
 										$fondoCargaActual = 'cornsilk';
 									}
 								?>
 								<div class="col-lg-3 col-md-6 col-6 col-sm-6">
 									<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
 										<div class="thumb-center">
-											<a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+											<a href="cargas.php?carga=<?= base64_encode($cargaMediaTecnica["car_id"]); ?>&periodo=<?= base64_encode($cargaMediaTecnica["car_periodo"]); ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
 										</div>
 										<div class="course-box">
-											<h4><a href="cargas.php?carga=<?= $cargaMediaTecnica["car_id"]; ?>&periodo=<?= $cargaMediaTecnica["car_periodo"]; ?>" style="text-decoration: underline;"><?= strtoupper($cargaMediaTecnica['mat_nombre']); ?></a></h4>
+											<h4><a href="cargas.php?carga=<?= base64_encode($cargaMediaTecnica["car_id"]); ?>&periodo=<?= base64_encode($cargaMediaTecnica["car_periodo"]); ?>" style="text-decoration: underline;"><?= strtoupper($cargaMediaTecnica['mat_nombre']); ?></a></h4>
 											<div class="text-muted">
 												<span class="m-r-10" style="font-size: 10px;"><?= $ultimoAcceso; ?></span>
 
