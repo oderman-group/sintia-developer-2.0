@@ -77,7 +77,6 @@ class UsuariosPadre {
         $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios WHERE uss_usuario='".$usuario."' limit 1");
         $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
         return $datosUsuarioAuto;
-    }
 
         $get=$_GET["get"];
         $campoGet=null;
