@@ -150,7 +150,9 @@
                         </div>
                     </div>
 
-                    <input type="submit" class="btn btn-primary" value="<?= $frases[41][$datosUsuarioActual[8]]; ?>">&nbsp;
+                    <button type="submit" class="btn  btn-info">
+                        <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                    </button>
 
                 </form>
             </div>
