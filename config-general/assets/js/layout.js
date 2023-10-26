@@ -320,6 +320,7 @@ var Layout = function () {
         $('body').on('click', '.sidebar-toggler', function (e) {
             var sidebar = $('.sidemenu-container');
             var sidebarMenu = $('.sidemenu');
+            var tipoMenu = '';
             $(".sidebar-search", sidebar).removeClass("open");
 
             if (body.hasClass("sidemenu-closed")) {
@@ -331,6 +332,7 @@ var Layout = function () {
             } else {
                 body.addClass("sidemenu-closed");
                 sidebarMenu.addClass("sidemenu-closed");
+                tipoMenu = 'sidemenu-closed';
                 if (body.hasClass("sidemenu-container-fixed")) {
                     sidebarMenu.trigger("mouseleave");
                 }
@@ -338,6 +340,28 @@ var Layout = function () {
                     $.cookie('sidebar_closed', '1');
                 }
             }
+
+            fetch('../compartido/guardar.php?get=28&tipoMenu='+tipoMenu, {
+                method: 'GET'
+            })
+            .then(response => response.text()) // Convertir la respuesta a texto
+            .then(data => {
+                $.toast({
+
+                    heading: 'Proceso completado', 
+                    text: 'Hemos actualizado tu preferencia para la barra lateral.', 
+                    position: 'top-left',
+                    loaderBg:'#26c281', 
+                    icon: 'success', 
+                    hideAfter: 3000, 
+                    stack: 6
+        
+                });
+            })
+            .catch(error => {
+                // Manejar errores
+                console.error('Error:', error);
+            });
 
             $(window).trigger('resize');
         });
