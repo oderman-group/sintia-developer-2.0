@@ -89,7 +89,7 @@
 			$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
 			
 			$listaIndividuales = GradoServicios::listarCursos($parametros);
-			$parametros = ['matcur_id_matricula' => $_GET["id"]];
+			$parametros = ['matcur_id_matricula' => $id];
 			$listaMediaTenicaActual=MediaTecnicaServicios::listar($parametros);
 			$listaMediaActual=array();		
 			if(!is_null($listaMediaTenicaActual) && count($listaMediaTenicaActual)>0){
