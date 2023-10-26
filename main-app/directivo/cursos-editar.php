@@ -255,7 +255,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <div class="col-sm-8">
                                                         <?php
                                                         $parametros = [
-                                                            'matcur_id_curso'=>$_GET['id'],
+                                                            'matcur_id_curso'=>base64_decode($_GET["id"]),
                                                             'matcur_id_institucion'=>$config['conf_id_institucion'],
                                                             'arreglo'=>false
                                                         ];
