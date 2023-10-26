@@ -4,11 +4,8 @@
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													try{
-														$cv = mysqli_query($conexion, "SELECT * FROM academico_grados");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$cv = mysqli_query($conexion, "SELECT * FROM academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
 													?>
 													<select class="form-control" name="grado" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
@@ -26,11 +23,7 @@
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													try{
-														$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
 													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 													<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
@@ -47,11 +40,7 @@
 												<label class="col-sm-2 control-label">Tipo estudiante</label>
 												<div class="col-sm-4">
 													<?php
-													try{
-														$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=5");
 													?>
 													<select class="form-control" name="tipoEst" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
@@ -95,5 +84,101 @@
 													</select>
 												</div>
 											</div>
-											
-										</fieldset>
+	<?php if (array_key_exists(10, $arregloModulos)) { 
+			require_once("../class/servicios/MediaTecnicaServicios.php");
+			$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+			
+			$listaIndividuales = GradoServicios::listarCursos($parametros);
+			$parametros = ['matcur_id_matricula' => $_GET["id"]];
+			$listaMediaTenicaActual=MediaTecnicaServicios::listar($parametros);
+			$listaMediaActual=array();		
+			if(!is_null($listaMediaTenicaActual) && count($listaMediaTenicaActual)>0){
+				foreach($listaMediaTenicaActual as $llave=> $valor){
+					$listaMediaActual[$valor["matcur_id_curso"]]='id_curso';
+					$listaMediaActual[$valor["matcur_id_grupo"]]='id_grupo';
+					
+				}
+				
+			}
+			?>
+		<div class="form-group row">
+			<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
+			<div class="col-sm-2">
+				<select class="form-control  select2" name="tipoMatricula" id="tipoMatricula" onchange="mostrarCursosAdicionales(this)">
+					<option value="<?=GRADO_GRUPAL;?>" 
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_GRUPAL) {echo 'selected';} ?>
+					>NO</option>
+					<option value="<?=GRADO_INDIVIDUAL;?>"
+					<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {echo 'selected';} ?>
+					>SI</option>
+				</select>
+			</div>
+		</div>
+		<script type="application/javascript">
+			$(document).ready(mostrarCursosAdicionales(document.getElementById("tipoMatricula")))
+			function mostrarCursosAdicionales(enviada) {
+				var valor = enviada.value;
+				if (valor == '<?=GRADO_INDIVIDUAL;?>') {
+					document.getElementById("divCursosAdicionales").style.display='block';
+				} else {
+					document.getElementById("divCursosAdicionales").style.display='none';
+				}
+			}
+		</script>
+		
+		<div id="divCursosAdicionales" style="display: none;">
+			<div class="form-group row" >
+				<label class="col-sm-2 control-label">Cursos adicionales</label>
+				<div class="col-sm-4">
+					<select id="cursosAdicionales" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" onchange="mostrarGrupoCursosAdicionales(this)" multiple>
+						<option value="">Seleccione una opción</option>
+						<?php
+						foreach ($listaIndividuales as $dato) {
+							$disabled = '';
+							$selected = '';
+							if (array_key_exists($dato["gra_id"], $listaMediaActual)){
+								$selected = 'selected';
+							}
+							if ($dato['gra_estado'] == '0') {
+								$disabled = 'disabled';
+							};
+							echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . ' ' . $selected . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+						}
+						?>
+					</select>
+				</div>
+			</div>
+			
+			<script type="application/javascript">
+				$(document).ready(mostrarGrupoCursosAdicionales(document.getElementById("cursosAdicionales")))
+				function mostrarGrupoCursosAdicionales(enviada) {
+					var valor = enviada.value;
+					if (valor != '') {
+						document.getElementById("divGradoMT").style.display='block';
+					} else {
+						document.getElementById("divGradoMT").style.display='none';
+					}
+				}
+			</script>
+			<div id="divGradoMT" style="display: none;">
+				<div class="form-group row" >
+					<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
+					<div class="col-sm-4">
+						<?php
+						$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+						?>
+						<select class="form-control" name="grupoMT">
+						<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+							if (array_key_exists($rv[0], $listaMediaActual)){
+								echo '<option value="'.$rv[0].'" selected>'.$rv[1].'</option>';
+							}else{
+								echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';
+							}	
+						}?>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+</fieldset>

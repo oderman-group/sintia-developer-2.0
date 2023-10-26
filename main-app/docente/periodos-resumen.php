@@ -1,10 +1,12 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0039';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
 require_once("../class/Estudiantes.php");
+
+$idPaginaInterna = 'DC0039';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
 ?>
 
 </head>

@@ -11,26 +11,26 @@ require_once("../class/Estudiantes.php");
 <?php
   $year=$agnoBD;
   $BD=$_SESSION["inst"]."_".$agnoBD;
-  if(isset($_POST["agno"])){
-    $year=$_POST["agno"];
-    $BD=$_SESSION["inst"]."_".$_POST["agno"];
+  $bdConsulta='';
+  if(isset($_REQUEST["agno"])){
+    $year=$_REQUEST["agno"];
+    $BD=$_SESSION["inst"]."_".$_REQUEST["agno"];
+    $bdConsulta=$BD.'.';
 	}
-	if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+	if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
-		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
-	}elseif(is_numeric($_REQUEST["grado"])){
+	}elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])){
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."'");
-		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	}else{
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos");
-		$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	}
+  $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 <?php
 $subNombre="";
- if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+ if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
 $subNombre=$grados["gra_nombre"]." ".$grados["gru_nombre"]."<br>".$year;
-}elseif(is_numeric($_REQUEST["grado"])) {
+}elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) {
   $subNombre=$grados["gra_nombre"]."<br>".$year;
 }
 $nombreInforme =  "PLANILLA DE ESTUDIANTES ".$subNombre;
@@ -54,16 +54,18 @@ include("../compartido/head-informes.php") ?>
   </tr>
 
   <?php
-  if(is_numeric($_REQUEST["grado"]) and is_numeric($_REQUEST["grupo"])){
+  $grupo='';
+  if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
+    $grupo=$_REQUEST["grupo"];
 		$adicional = "AND mat_grado='".$_REQUEST["grado"]."' AND mat_grupo='".$_REQUEST["grupo"]."'";
-  }elseif(is_numeric($_REQUEST["grado"])) {
+  }elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) {
 		$adicional = "AND mat_grado='".$_REQUEST["grado"]."'";
 	}else{
 		$adicional = "";
 	}
   $cont=1;
   $filtroAdicional= $adicional." AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-  $consulta =Estudiantes::listarEstudiantesParaPlanillas(0,$filtroAdicional,$BD);
+  $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$grados,$bdConsulta,$grupo);
   $numE=mysqli_num_rows($consulta);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
@@ -71,7 +73,7 @@ include("../compartido/head-informes.php") ?>
   <tr style="
   border-color:#41c4c4;
   ">
-      <td><?=$resultado[12];?></td>
+      <td><?=$resultado['mat_documento'];?></td>
       <td><?=$nombre?></td>
       <td><?=$resultado["gra_nombre"];?></td>
       <td><?=$resultado["gru_nombre"];?></td>

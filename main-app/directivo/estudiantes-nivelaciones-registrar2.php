@@ -8,6 +8,8 @@ $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
 	$disabledPermiso = "disabled";
 }
+$consultaCurso = Grados::obtenerDatosGrados($_REQUEST["curso"]);
+$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 ?>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -223,7 +225,7 @@ if (!Modulos::validarPermisoEdicion()) {
 								<tbody>
 									<?php
 									$filtroAdicional = "AND mat_grado='" . $_REQUEST['curso'] . "' AND mat_grupo='" . $_REQUEST['grupo'] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta = Estudiantes::listarEstudiantesEnGrados($filtroAdicional, "");
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$curso,"",$_REQUEST["grupo"]);
 									while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 										$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
 										$defPorEstudiante = 0;
@@ -249,7 +251,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												//PERIODOS DE CADA MATERIA
 												while ($p <= $config[19]) {
 													try {
-														$consultaBoletin = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='" . $carga[0] . "' AND bol_estudiante='" . $resultado[0] . "' AND bol_periodo='" . $p . "'");
+														$consultaBoletin = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='" . $carga[0] . "' AND bol_estudiante='" . $resultado['mat_id'] . "' AND bol_periodo='" . $p . "'");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
@@ -264,7 +266,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												$defPorMateria = round($defPorMateria / $config[19], 2);
 												//CONSULTAR NIVELACIONES
 												try {
-													$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado[0] . "' AND niv_id_asg='" . $carga[0] . "'");
+													$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga[0] . "'");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -280,7 +282,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												if ($defPorMateria < $config[5] and $defPorMateria != "") $color = $config[6];
 												elseif ($defPorMateria >= $config[5]) $color = $config[7];
 											?>
-												<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?= $color; ?>" value="<?= $defPorMateria; ?>" id="<?= $resultado[0]; ?>" name="<?= $carga[0]; ?>" alt="1" onChange="niv(this)" <?= $disabledPermiso; ?>><br>
+												<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?= $color; ?>" value="<?= $defPorMateria; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="1" onChange="niv(this)" <?= $disabledPermiso; ?>><br>
 													<?php if (!empty($cNiv[0])) { ?>
 														<span style="font-size:10px; color:rgb(255,0,0);"><?= $msj; ?></span><br>
 														<a href="javascript:void(0);" 
@@ -288,8 +290,8 @@ if (!Modulos::validarPermisoEdicion()) {
 														><img src="../files/iconos/1363803022_001_052.png"></a>
 													<?php } ?>
 												</td>
-												<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if (!empty($cNiv[5])) echo $cNiv[5]; ?>" id="<?= $resultado[0]; ?>" name="<?= $carga[0]; ?>" alt="2" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
-												<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if (!empty($cNiv[6])) echo $cNiv[6]; ?>" id="<?= $resultado[0]; ?>" name="<?= $carga[0]; ?>" alt="3" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
+												<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if (!empty($cNiv[5])) echo $cNiv[5]; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="2" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
+												<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if (!empty($cNiv[6])) echo $cNiv[6]; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="3" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
 											<?php
 												//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 												$defPorEstudiante += $defPorMateria;

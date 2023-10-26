@@ -192,8 +192,7 @@ $_SESSION["configuracion"] = $config;
 											$induccionSabanas = 'data-hint="Puedes ver las sábanas de cada uno de los periodos pasados."';
 										}
 
-										$filtro = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
-										$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+										$cantEstudiantesConsulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($rCargas);
 										$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
 									?>
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 

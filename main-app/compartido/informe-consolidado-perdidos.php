@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Grados.php");
 ?>
 
 <head>
@@ -29,6 +30,10 @@ include("../compartido/head-informes.php") ?>
             <?php
 			if(isset($_GET["curso"])){$curso=$_GET["curso"]; $grupo=$_GET["grupo"];}
 			if(isset($_POST["grado"])){$curso=$_POST["grado"]; $grupo=$_POST["grupo"];}
+
+			$consultaCurso = Grados::obtenerDatosGrados($curso);
+			$datosCurso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+
 			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1");
 			//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 			$numCargasPorCurso = mysqli_num_rows($cargas); 
@@ -45,7 +50,7 @@ include("../compartido/head-informes.php") ?>
         </tr>
         <?php
 		$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$datosCurso,"",$grupo);
 		while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 		$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 		$defPorEstudiante = 0;
@@ -65,7 +70,7 @@ include("../compartido/head-informes.php") ?>
 				$defPorMateria = 0;
 				//PERIODOS DE CADA MATERIA
 				while($p<=$config[19]){
-					$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+					$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 					if(!empty($boletin[4]) && $boletin[4]<$config[5]){$color = $config[6];} elseif(!empty($boletin[4]) && $boletin[4]>=$config[5]) {$color = $config[7];}
 					//$defPorMateria += $boletin[4];

@@ -4,11 +4,13 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php"); 
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
 $jQueryTable = '';
 if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
 	$jQueryTable = 'id="example1"';
@@ -123,18 +125,12 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														try{
-															$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
-															WHERE uss_id='".$resultado["mat_acudiente"]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
+														$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
 

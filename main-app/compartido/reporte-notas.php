@@ -17,6 +17,7 @@ if(!empty($_POST['carga'])){
 	$grupo=$_POST['grupo'];
 	$periodo=$_POST['per'];
 }
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>Notas</title>
@@ -40,7 +41,8 @@ include("../compartido/head-informes.php") ?>
   <?php
   //ESTUDIANTES ACTUALES
   $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+  $cursoActual=GradoServicios::consultarCurso($grado);
+  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$grupo);
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
   $cont=1;
   $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$carga."' AND act_estado=1 AND act_periodo='".$periodo."'");

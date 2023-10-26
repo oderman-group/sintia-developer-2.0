@@ -25,12 +25,7 @@ if (!Modulos::validarPermisoEdicion()) {
                 <label class="col-sm-2 control-label">Docente <span style="color: red;">(*)</span></label>
                 <div class="col-sm-8">
                     <?php
-                    try {
-                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-                                                    WHERE uss_tipo=2 ORDER BY uss_nombre");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
+                    $opcionesConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo = ".TIPO_DOCENTE." ORDER BY uss_nombre");
                     ?>
                     <select class="form-control  select2" style="width: 100%" name="docente" required     <?= $disabledPermiso; ?>>
                         <option value="">Seleccione una opción</option>

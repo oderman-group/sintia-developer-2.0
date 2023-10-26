@@ -1,7 +1,8 @@
 <?php
-include("../directivo/session.php");
-require_once("../class/Estudiantes.php");
-include("../compartido/head.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/directivo/session.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/compartido/head.php");
 
 $consulta = mysqli_query($conexion, "SELECT 
 GROUP_CONCAT( mat_id SEPARATOR ', ') as mat_id, 
@@ -22,12 +23,12 @@ ORDER BY mat_id ASC");
 <head></head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Informes SINTIA</title>
-<link rel="shortcut icon" href="../files/images/ico.png">
+<link rel="shortcut icon" href="../../files/images/ico.png">
 </head>
 
 <body style="font-family:Arial; font-size: 13px;">
   <div align="center" style="margin-bottom:20px; margin-top: 20px;">
-    <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="200"><br>
+    <img src="../../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="200"><br>
     <div>&nbsp;</div>
     <?= $informacion_inst["info_nombre"] ?><br>
     <b>MATRICULAS REPETIDAS</b>

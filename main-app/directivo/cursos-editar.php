@@ -3,6 +3,10 @@ include("session.php");
 $idPaginaInterna = 'DT0064';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/CargaServicios.php");
+require_once("../class/servicios/MatriculaServicios.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -10,11 +14,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 try{
-    $consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=".base64_decode($_GET["id"]));
+    $resultadoCurso=GradoServicios::consultarCurso(base64_decode($_GET["id"]));
+    $resultadoCargaCurso=CargaServicios::cantidadCursos(base64_decode($_GET["id"]));
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
-$resultadoCurso=mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
@@ -79,7 +83,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre Curso</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreC" class="form-control" require value="<?=$resultadoCurso["gra_nombre"]; ?>" <?=$disabledPermiso;?>>
+                                                <input type="text" name="nombreC" class="form-control" required value="<?=$resultadoCurso["gra_nombre"]; ?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -153,7 +157,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso Siguiente</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-8">
                                                 <?php
                                                 $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
@@ -172,7 +176,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso Anterior</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-8">
                                                 <?php
                                                 $opcionesConsulta = Grados::listarGrados(1);
                                                 ?>
@@ -212,7 +216,181 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
-                                        <?php }?>
+                                        <?php 
+                                        }
+                                        if(array_key_exists(10,$arregloModulos)){
+                                        ?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Tipo de grado</label>
+                                                <div class="col-sm-2">
+                                                    <?php
+                                                    if($resultadoCargaCurso["cargas_curso"]<1){
+                                                    ?>
+                                                        <select class="form-control  select2" name="tipoG" id="tipoG" onchange="mostrarEstudiantes(this)">
+                                                            <option value="">Seleccione una opción</option>
+                                                            <option value=<?=GRADO_GRUPAL;?> <?php if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){ echo 'selected'; } ?>>Grupal</option>
+                                                            <option value=<?=GRADO_INDIVIDUAL;?> <?php if($resultadoCurso['gra_tipo']==GRADO_INDIVIDUAL){ echo 'selected'; } ?>>Individual</option>
+                                                        </select>
+                                                    <?php 
+                                                        }else{
+                                                    ?>
+                                                        <select class="form-control  select2"  name="tipoG" id="tipoG" disabled>
+                                                            <?php 
+                                                                if($resultadoCurso['gra_tipo']==GRADO_GRUPAL){
+                                                                    echo '<option value="'.GRADO_GRUPAL.'" selected>Grupal</option>';
+                                                                }elseif($resultadoCurso['gra_tipo']==GRADO_INDIVIDUAL){
+                                                                    echo '<option value="'.GRADO_INDIVIDUAL.'" selected>Individual</option>';
+                                                                }else{
+                                                                    echo ' ';
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    <?php }?>
+                                                </div>
+                                            </div>
+
+                                            <div id="escogerEstudiantes">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 control-label">Estudiantes:</label>
+                                                    <div class="col-sm-8">
+                                                        <?php
+                                                        $parametros = [
+                                                            'matcur_id_curso'=>$_GET['id'],
+                                                            'matcur_id_institucion'=>$config['conf_id_institucion'],
+                                                            'arreglo'=>false
+                                                        ];
+                                                        $consulta = MediaTecnicaServicios::listarEstudiantes($parametros);
+                                                        ?>
+                                                        <select id="select_estudiante" class="form-control select2-multiple" style="width: 100% !important" name="estudiantesMT[]" multiple onchange="mostrarSelects(this)">
+                                                            <option value="">Seleccione una opción</option>
+                                                            <?php
+                                                            foreach($consulta as $idEstudiante){
+                                                                $matricualaEstudiante=MatriculaServicios::consultar($idEstudiante["matcur_id_matricula"]);
+                                                                if(!is_null($matricualaEstudiante)){
+                                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($matricualaEstudiante);
+                                                            ?>
+                                                                <option value="<?= $matricualaEstudiante['mat_id']; ?>" title="<?= $matricualaEstudiante['mat_nombres'].' '.$matricualaEstudiante['mat_primer_apellido']; ?>" id="<?=$idEstudiante["matcur_id_grupo"]?>" selected><?= $nombre; ?></option>
+                                                            <?php }} ?>
+                                                        
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div id="selectsContainer" style="display: none;">
+                                                </div>
+                                            </div>
+                                        <?php 
+                                        }
+                                        ?>
+                                        <script type="text/javascript">
+                                            $(document).ready(function() {mostrarEstudiantes(document.getElementById("tipoG"))});
+                                            function mostrarEstudiantes(data) {
+                                                if(data.value == "<?=GRADO_INDIVIDUAL?>"){
+                                                    document.getElementById("escogerEstudiantes").style.display = "block";
+                                                }else{
+                                                    document.getElementById("escogerEstudiantes").style.display = "none";
+                                                    document.getElementById("escogerEstudiantes").value = '';
+                                                }
+                                            }
+                                            $(document).ready(function() {
+                                                $('#select_estudiante').select2({
+                                                placeholder: 'Seleccione los estudiantes...',
+                                                theme: "bootstrap",
+                                                multiple: true,
+                                                    ajax: {
+                                                        type: 'GET',
+                                                        url: 'ajax-listar-estudiantes.php',
+                                                        processResults: function(data) {
+                                                            data = JSON.parse(data);
+                                                            return {
+                                                                results: $.map(data, function(item) {                                  
+                                                                    return {
+                                                                        id: item.value,
+                                                                        text: item.label,
+                                                                        title: item.title
+                                                                    }
+                                                                })
+                                                            };
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                            $(document).ready(function() {mostrarSelects(document.getElementById("select_estudiante"))});
+                                            function mostrarSelects(selectElement) {
+                                                // Obtener el div contenedor donde se mostrarán los selects adicionales
+                                                var selectsContainer = document.getElementById('selectsContainer');
+
+                                                // Limpiar los selects existentes en el contenedor
+                                                selectsContainer.innerHTML = '';
+
+                                                // Obtener las opciones seleccionadas del select múltiple
+                                                var opcionesSeleccionadas = selectElement.selectedOptions;
+                                                
+                                                if(opcionesSeleccionadas.length>0){
+                                                    selectsContainer.style.display = "block";
+                                                    // Mostrar un select por cada opción seleccionada
+                                                    for (var i = 0; i < opcionesSeleccionadas.length; i++) {
+                                                        var opcion = opcionesSeleccionadas[i].value;
+                                                        var nameEstu = opcionesSeleccionadas[i].title;
+                                                        var grupoEstu = opcionesSeleccionadas[i].id;
+
+                                                        // Creamos div form-group y añadimos sus clases css
+                                                        var divFormGroup = document.createElement('div');
+                                                        divFormGroup.classList.add('form-group','row');
+                                                        selectsContainer.appendChild(divFormGroup);
+
+                                                        // Creamos label y añadimos sus clases css
+                                                        var label = document.createElement('label');
+                                                        label.textContent = 'Escoge el grupo para '+nameEstu+':';
+                                                        label.classList.add('col-sm-2','control-label');
+                                                        divFormGroup.appendChild(label);
+
+                                                        // Creamos div-col y añadimos sus clases css
+                                                        var divCol = document.createElement('div');
+                                                        divCol.classList.add('col-sm-3');
+                                                        divFormGroup.appendChild(divCol);
+
+                                                        // Crear y agregar el select al contenedor
+                                                        var select = document.createElement('select');
+                                                        select.name = 'grupo' + opcion; // Asignar un nombre único al select
+
+                                                        // Agregar clases al select
+                                                        select.classList.add('form-control','select2');
+
+                                                        // Agregar opciones al select
+                                                        var option = document.createElement('option');
+                                                        option.value = '';
+                                                        option.textContent = 'Seleccione el grupo...';
+                                                        // Agregar las opciones al select
+                                                        select.appendChild(option);
+
+                                                        <?php
+                                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                            $cont=1;
+                                                            while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+                                                        ?>
+                                                                // Agregar opciones al select
+                                                                var option<?=$cont?> = document.createElement('option');
+                                                                option<?=$cont?>.value = '<?=$rv[0]?>';
+                                                                option<?=$cont?>.textContent = '<?=$rv['gru_nombre']?>';
+
+                                                                // Agregar las opciones al select
+                                                                select.appendChild(option<?=$cont?>);
+
+                                                                // Establecer la opción que estará seleccionada por defecto (por ejemplo, Opción 2)
+                                                                if (grupoEstu == <?=$rv[0]?>) {
+                                                                    option<?=$cont?>.selected = true;
+                                                                }
+                                                        <?php
+                                                                $cont++;
+                                                            }
+                                                        ?>
+
+                                                        divCol.appendChild(select);
+                                                    }
+                                                }
+                                            }
+                                        </script>
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>

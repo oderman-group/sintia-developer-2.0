@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 ?>
 <head>
 	<title>Estudiantes</title>
@@ -35,8 +36,7 @@ require_once("../class/Estudiantes.php");
   $cont=1;
   $consulta = Estudiantes::listarEstudiantes(0, $adicional, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-  $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
-	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+	$acudiente = UsuariosPadre::sesionUsuario($resultado[26]);
   $consultaGrado=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$resultado[6]."' AND gru_id='".$resultado[7]."'");
 	$grados = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);	
   ?>

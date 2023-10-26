@@ -1,14 +1,6 @@
 											<?php 
 											if(!empty($datosEstudianteActual["mat_acudiente"])){
-
-												try{
-													$consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios 
-													WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
-												
+												$acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
 											}
 											?>
                                             

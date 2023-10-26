@@ -236,7 +236,7 @@ if (!Modulos::validarPermisoEdicion()) {
 								<tbody>
 									<?php
 									$filtro = " AND mat_grado='" . $_POST["curso"] . "' AND mat_grupo='" . $_POST["grupo"] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$curso,"",$_POST["grupo"]);
 									//PRIMER PUESTO
 									$primerPuestoNota = 0;
 									$primerPuestoNombre = '';
@@ -263,7 +263,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
 												while ($p <= $config[19]) {
-													$consultaBoletin = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='" . $carga[0] . "' AND bol_estudiante='" . $resultado[0] . "' AND bol_periodo='" . $p . "'");
+													$consultaBoletin = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='" . $carga[0] . "' AND bol_estudiante='" . $resultado['mat_id'] . "' AND bol_periodo='" . $p . "'");
 													$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 													if (isset($boletin[4]) and $boletin[4] < $config[5] and $boletin[4] != "") $color = $config[6];
 													elseif (isset($boletin[4]) and $boletin[4] >= $config[5]) $color = $config[7];
@@ -287,7 +287,7 @@ if (!Modulos::validarPermisoEdicion()) {
 														<input style="text-align:center; width:30px; 
 																color:<?= $color; ?>" 
 																value="<?php if (isset($boletin[4])) {echo $boletin[4];} ?>" 
-																name="<?= $carga[0]; ?>" id="<?= $resultado[0]; ?>" 
+																name="<?= $carga[0]; ?>" id="<?= $resultado['mat_id']; ?>" 
 																onChange="def(this)" 
 																alt="<?= $p; ?>" 
 																title="Materia: <?= $materia[2]; ?> - Periodo: <?= $p; ?>" 
@@ -304,7 +304,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												if ($defPorMateria < $config[5] and $defPorMateria != "") $color = $config[6];
 												elseif ($defPorMateria >= $config[5]) $color = $config[7];
 												//CONSULTAR NIVELACIONES
-												$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado[0] . "' AND niv_id_asg='" . $carga[0] . "'");
+												$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga[0] . "'");
 
 												$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 												if (isset($cNiv[3]) and $cNiv[3] > $defPorMateria) {

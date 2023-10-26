@@ -1,5 +1,5 @@
 <?php
-    include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+    require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
     $cantidad = 1;
     if( !empty($_POST['cantidad']) && $_POST['cantidad'] > 0 ) {
         $cantidad = $_POST['cantidad']; 
@@ -164,7 +164,7 @@
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"
-                data-epayco-confirmation="<?=REDIRECT_ROUTE?>/pagos-online/confirmacion.php">
+                data-epayco-confirmation="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php">
             </script>
         </form>
         <p>Redireccionando.</p>

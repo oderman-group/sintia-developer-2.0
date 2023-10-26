@@ -64,6 +64,7 @@ require_once("../class/Estudiantes.php");
 												<?php
                                                 try{
                                                     $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'
                                                     ORDER BY gra_vocal");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
@@ -158,20 +159,20 @@ require_once("../class/Estudiantes.php");
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $grados = mysqli_query($conexion, "SELECT * FROM academico_grados 
-                                                        WHERE gra_estado=1
-                                                        ORDER BY gra_vocal
-                                                        ");
+                                                        $grados = mysqli_query($conexion, "SELECT * FROM academico_grados
+                                                        WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' ORDER BY gra_vocal");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
                                                     while($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)){
+                                                        $filtro = ' AND mat_grado='.$grado['gra_id'];
+                                                        $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
+                                                        $numEstudiantes=mysqli_num_rows($opcionesConsulta);
+                                                        if($numEstudiantes>0){
                                                     ?>
 
                                                     <optgroup label="<?=$grado['gra_nombre'];?>">
                                                         <?php
-                                                        $filtro = ' AND mat_grado='.$grado['gra_id'];
-                                                        $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                                         while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                         ?>
                                                         
@@ -183,7 +184,7 @@ require_once("../class/Estudiantes.php");
                                                         <?php }?>
 
                                                     </optgroup>    
-                                                    <?php }?>
+                                                    <?php }}?>
 
                                                 </select>
                                             </div>

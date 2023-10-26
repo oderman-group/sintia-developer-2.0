@@ -409,7 +409,7 @@ if (!empty($_POST["id"])) {
 	//ENVIAR MENSAJE
 	if ($_POST["id"] == 7) {
 		try{
-			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'"), MYSQLI_BOTH);
+			$remitente = UsuariosPadre::sesionUsuario($_SESSION["id"]);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -419,7 +419,8 @@ if (!empty($_POST["id"])) {
 		while ($i < $cont) {
 
 			try{
-				$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"][$i] . "'"), MYSQLI_BOTH);
+				$destinatario = UsuariosPadre::sesionUsuario($_POST["para"][$i]);
+				
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
@@ -624,8 +625,7 @@ if (!empty($_POST["id"])) {
 		}
 
 		try{
-			$consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'");
-			$datosUsuario = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH);
+			$datosUsuario = UsuariosPadre::sesionUsuario($_SESSION["id"]);
 			$_SESSION["datosUsuario"] = $datosUsuario;
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
@@ -711,8 +711,8 @@ if (!empty($_POST["id"])) {
 	//ENVIAR MENSAJE A VENDEDOR DE MARKETPLACE
 	if ($_POST["id"] == 18) {
 		try{
-			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_SESSION["id"] . "'"), MYSQLI_BOTH);
-			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $_POST["para"] . "'"), MYSQLI_BOTH);
+			$remitente = UsuariosPadre::sesionUsuario($_SESSION["id"]);
+			$destinatario = UsuariosPadre::sesionUsuario($_POST["para"]);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

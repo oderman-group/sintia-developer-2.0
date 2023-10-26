@@ -1,5 +1,5 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 //include(ROOT_PATH."/conexion-datos.php");
 
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");

@@ -155,7 +155,12 @@ function niv(enviada){
 																	include("../compartido/error-catch-to-report.php");
 																}
 																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+																$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+																$porcentaje=25;
+																if($numPeriodosCursos>0){
+																	$porcentaje=$periodosCursos['gvp_valor'];
+																}
+																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
 																$p++;
 															}
 														?> 
@@ -167,7 +172,7 @@ function niv(enviada){
 													<?php
 													$contReg = 1;
 													$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>
                                                     
@@ -187,11 +192,16 @@ function niv(enviada){
 																include("../compartido/error-catch-to-report.php");
 															}
 															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-															 $decimal = $periodosCursos['gvp_valor']/100;
+															$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+															$porcentaje=25;
+															if($numPeriodosCursos>0){
+																$porcentaje=$periodosCursos['gvp_valor'];
+															}
+															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
 															try{
-																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -223,7 +233,7 @@ function niv(enviada){
 														<?php		
 														 }
 														try{
-															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
+															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg=".$cargaConsultaActual);
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}

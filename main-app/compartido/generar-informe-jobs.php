@@ -1,10 +1,11 @@
 <?php
 $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
-include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
 	"estado" =>JOBS_ESTADO_PENDIENTE
@@ -42,7 +43,8 @@ if(empty($config)){
 
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-$consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+$cursoActual=GradoServicios::consultarCurso($grado);
+$consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$grupo);
 $numEstudiantes=0;
 $finalizado = true;
 $erroresNumero=0;

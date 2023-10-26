@@ -20,10 +20,11 @@ include("../compartido/historial-acciones-guardar.php");
 	if(empty($_POST["valorM"])) {$_POST["valorM"] = '0';}
 	if(empty($_POST["valorP"])) {$_POST["valorP"] = '0';}
 	if(empty($_POST["graSiguiente"])) {$_POST["graSiguiente"] = 1;}
+	if(empty($_POST["tipoG"])){ $_POST["tipoG"]=GRADO_GRUPAL;}
 	$codigoCurso = "GRA".strtotime("now");
 	
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_grados (gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos)VALUES('".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."')");
+		mysqli_query($conexion, "INSERT INTO academico_grados (gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos, gra_tipo)VALUES('".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."', '".$_POST["tipoG"]."')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

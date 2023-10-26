@@ -22,9 +22,10 @@ if($config['conf_porcentaje_completo_generar_informe']==1){
 		exit();
 	}
 }
+include("../docente/verificar-carga.php");
+
 //Consultamos los estudiantes del grado y grupo
-$filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 
 
  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -32,12 +33,12 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	//DEFINITIVAS
 	$carga = $carga;
 	$periodo = $periodo;
-	$estudiante = $resultado[0];
+	$estudiante = $resultado['mat_id'];
 	include("../definitivas.php");
 	 
 	//Consultamos si tiene registros en el boletín
 	$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM academico_boletin 
-	WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado[0]."'");
+	WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."'");
 	$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
 
 	if($config['conf_porcentaje_completo_generar_informe']==2){
@@ -83,12 +84,12 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 	$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM academico_calificaciones
 	INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_registrada=1 AND act_periodo='".$periodo."' AND act_id_carga='".$carga."'
 	INNER JOIN academico_indicadores_carga ON ipc_indicador=act_id_tipo AND ipc_carga='".$carga."' AND ipc_periodo='".$periodo."'
-	WHERE cal_id_estudiante='".$resultado[0]."'
+	WHERE cal_id_estudiante='".$resultado['mat_id']."'
 	GROUP BY act_id_tipo");
 	$sumaNotaIndicador = 0; 
 	while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){
 		$consultaNum=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion 
-		WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado[0]."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
+		WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
 		$num = mysqli_num_rows($consultaNum);
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
@@ -96,15 +97,15 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 		$sumaNotaIndicador  += $notInd[0];
 		
 		if($num==0){
-			mysqli_query($conexion, "DELETE FROM academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado[0]."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
+			mysqli_query($conexion, "DELETE FROM academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 			
-			mysqli_query($conexion, "INSERT INTO academico_indicadores_recuperacion(rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_original, rind_nota_actual, rind_valor_indicador_registro)VALUES(now(), '".$resultado[0]."', '".$carga."', '".$notInd[0]."', '".$notInd[1]."', '".$periodo."', 0, '".$notInd[0]."', '".$notInd[0]."', '".$notInd[2]."')");
+			mysqli_query($conexion, "INSERT INTO academico_indicadores_recuperacion(rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_original, rind_nota_actual, rind_valor_indicador_registro)VALUES(now(), '".$resultado['mat_id']."', '".$carga."', '".$notInd[0]."', '".$notInd[1]."', '".$periodo."', 0, '".$notInd[0]."', '".$notInd[0]."', '".$notInd[2]."')");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 		}else{
-			mysqli_query($conexion, "UPDATE academico_indicadores_recuperacion SET rind_nota_anterior=rind_nota, rind_nota='".$notInd[0]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$notInd[0]."', rind_tipo_ultima_actualizacion=1, rind_valor_indicador_actualizacion='".$notInd[2]."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado[0]."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
+			mysqli_query($conexion, "UPDATE academico_indicadores_recuperacion SET rind_nota_anterior=rind_nota, rind_nota='".$notInd[0]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$notInd[0]."', rind_tipo_ultima_actualizacion=1, rind_valor_indicador_actualizacion='".$notInd[2]."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."'");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 		}
@@ -132,18 +133,18 @@ $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
 
-		mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado[0]."'");
+		mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");	
 	}elseif($caso == 1){
 		//Eliminamos por si acaso hay algún registro
 		mysqli_query($conexion, "DELETE FROM academico_boletin 
-		WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado[0]."'");
+		WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."'");
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 			
 		//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-		mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje)VALUES('".$carga."', '".$resultado[0]."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."')");	
+		mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje)VALUES('".$carga."', '".$resultado['mat_id']."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."')");	
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");		
 	}

@@ -108,12 +108,12 @@ $porcentajeRestante = 100 - $valores[0];
             <tbody>
                 <?php
                 $contReg = 1; 
-                $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+                $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
                 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                     //DEFINITIVAS
                     $carga = $cargaConsultaActual;
                     $periodo = $periodoConsultaActual;
-                    $estudiante = $resultado[0];
+                    $estudiante = $resultado['mat_id'];
                     include("../definitivas.php");
                     
                     $colorEstudiante = '#000;';
@@ -131,7 +131,7 @@ $porcentajeRestante = 100 - $valores[0];
                         $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
                         while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
                         //LAS CALIFICACIONES
-                        $consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$rA[0]);
+                        $consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad=".$rA[0]);
                         $notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
                     ?>
                         <td style="text-align:center;">
@@ -140,17 +140,17 @@ $porcentajeRestante = 100 - $valores[0];
                         $arrayEnviar = [
                             "tipo"=>5, 
                             "descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
-                            "idInput"=>$resultado[0]."-".$rA[0]
+                            "idInput"=>$resultado['mat_id']."-".$rA[0]
                         ];
                         $arrayDatos = json_encode($arrayEnviar);
                         $objetoEnviar = htmlentities($arrayDatos);
                         ?>
-                        <input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$disabledNotas;?>>
+                        <input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado['mat_id']."-".$rA[0];?>" value="<?php if(isset($notasResultado)) echo $notasResultado[3];?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$disabledNotas;?>>
                             
                         <?php if(isset($notasResultado) && $notasResultado[3]!=""){?>
                             <a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21)?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
                             <?php if($notasResultado[3]<$config[5]){?>
-                                <br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$disabledNotas;?>>
+                                <br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado['mat_id'];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$disabledNotas;?>>
                             <?php }?>
                             
                         <?php }?>
