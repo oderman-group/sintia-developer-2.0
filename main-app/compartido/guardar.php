@@ -1301,6 +1301,18 @@ if (!empty($_GET["get"])) {
 			exit();
 		}
 	}
+
+	if ($_GET["get"] == 29) {
+		try{
+			mysqli_query($conexion, "UPDATE academico_cargas SET car_posicion_docente='" . $_GET["posicionNueva"] . "' 
+			WHERE car_id='" . $_GET["idCarga"] . "'");
+			//$_SESSION["datosUsuario"]["uss_tipo_menu"] = $_GET["tipoMenu"];
+			exit();
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+			exit();
+		}
+	}
 }
 
 $_GET["get"] == 0;
