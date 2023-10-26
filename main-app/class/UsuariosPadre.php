@@ -64,7 +64,7 @@ class UsuariosPadre {
 
    public static function actualizarUsuariosAnios()
    {
-        $get=base64_decode($_GET["get"]);
+        $get=$_GET["get"];
         $campoGet=null;
         $campoTabla=null;
         global $yearStart;
@@ -94,25 +94,40 @@ class UsuariosPadre {
         }
         if($campoGet){
                 while($yearStart <= $yearEnd){	
-                    if($_SESSION["bd"]==$yearStart){			
-                        if($get == 5)
-                        mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . base64_decode($_GET["temaHeader"]) . "', uss_tema_sidebar='" . base64_decode($_GET["temaSidebar"]) . "', uss_tema_logo='" . base64_decode($_GET["temaLogo"]) . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-                        else
-                        mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . base64_decode($_GET[$campoGet]) . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-                    }else{
-                        $usuarioSession=$_SESSION["datosUsuario"];
-                        $instYear =$_SESSION["inst"] ."_". $yearStart;
-                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'],$instYear);
-                        if($usauriosOtrosAnios){
-                            if($get == 5)
-                            mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET uss_tema_header='" . base64_decode($_GET["temaHeader"]) . "', uss_tema_sidebar='" . base64_decode($_GET["temaSidebar"]) . "', uss_tema_logo='" . base64_decode($_GET["temaLogo"]) . "' WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
-                            else
-                            mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . base64_decode($_GET[$campoGet]) . "' WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'");
+                    if ($_SESSION["bd"] == $yearStart) {			
+                        if($get == 5) {
+                            mysqli_query($conexion, "UPDATE usuarios SET 
+                            uss_tema_header='" . $_GET["temaHeader"] . "', 
+                            uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
+                            uss_tema_logo='" . $_GET["temaLogo"] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                        }
+                        else {
+                            mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                        }
+                    } else {
+                        $usuarioSession = $_SESSION["datosUsuario"];
+                        $instYear = $_SESSION["inst"] ."_". $yearStart;
+                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $instYear);
+                        if($usauriosOtrosAnios) {
+                            if($get == 5) {
+                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET 
+                                uss_tema_header='" . $_GET["temaHeader"] . "', 
+                                uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
+                                uss_tema_logo='" . $_GET["temaLogo"] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
+                            }
+                            else {
+                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'"); 
+                            }
                         }
                         
                     }
                     $yearStart++;
-                }		
+                }
+            $_SESSION["datosUsuario"][$campoTabla] = $_GET[$campoGet];		
         }        	
     }
 
