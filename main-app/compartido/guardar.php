@@ -957,15 +957,14 @@ if (!empty($_POST["id"])) {
 ##############################################
 if (!empty($_GET["get"])) {
 	//CAMBIAR IDIOMA y TEMA
-	if (base64_decode($_GET["get"]) >= 1 && base64_decode($_GET["get"])<=5) {	
+	if ($_GET["get"] >= 1 && $_GET["get"]<=5) {	
 		try{
 			UsuariosPadre::actualizarUsuariosAnios();	
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		$_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
+		//echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 		exit();
 	}
 	//ELIMINAR/MOSTRAR/OCULTAR UNA NOTICIA
@@ -1290,6 +1289,17 @@ if (!empty($_GET["get"])) {
 		include("../compartido/guardar-historial-acciones.php");
 		echo '<script type="text/javascript">window.location.href="' . $_SERVER["HTTP_REFERER"] . '";</script>';
 		exit();
+	}
+
+	if ($_GET["get"] == 28) {
+		try{
+			mysqli_query($conexion, "UPDATE usuarios SET uss_tipo_menu='" . $_GET["tipoMenu"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+			$_SESSION["datosUsuario"]["uss_tipo_menu"] = $_GET["tipoMenu"];
+			exit();
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+			exit();
+		}
 	}
 }
 
