@@ -50,7 +50,6 @@ if(!empty($_GET["busqueda"])){
         <th>Fecha firmado</th>
       </tr>
       <?php
-      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
       $cont = 1;
       $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
       if (!empty($_GET["orden"])) {
@@ -70,10 +69,10 @@ if(!empty($_GET["busqueda"])){
           <td><?= $resultado[12]; ?></td>
           <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
           <td><?= $resultado["gra_nombre"]; ?></td>
-          <td align="center"><?= $resultado["dn_periodo"]; ?></td>
-          <td align="center"><?= $resultado["dn_ultima_lectura"]; ?></td>
-          <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $resultado["dn_aprobado"]; ?></td>
-          <td align="center"><?= $resultado["dn_fecha_aprobado"]; ?></td>
+          <td style="text-align:center;"><?php if(!empty($resultado["dn_periodo"])) echo $resultado["dn_periodo"]; ?></td>
+          <td align="center"><?php if(!empty($resultado["dn_ultima_lectura"])) echo $resultado["dn_ultima_lectura"]; ?></td>
+          <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?php  if(!empty($resultado["dn_aprobado"])) echo $resultado["dn_aprobado"]; ?></td>
+          <td align="center"><?php  if(!empty($resultado["dn_fecha_aprobado"])) echo $resultado["dn_fecha_aprobado"]; ?></td>
         </tr>
       <?php
         $cont++;
