@@ -7,8 +7,12 @@ $resumenEC = mysqli_fetch_array($consultaFinanzas, MYSQLI_BOTH);
 $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 ?>
 <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
-<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md <?=$datosUsuarioActual['uss_tema_header'];?> <?=$datosUsuarioActual['uss_tema_sidebar'];?> 
-			 <?=$datosUsuarioActual['uss_tema_logo'];?>"> <!-- chat-sidebar-open-->
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md 
+<?=$datosUsuarioActual['uss_tema_header'];?>  
+<?=$datosUsuarioActual['uss_tema_sidebar'];?>  
+<?=$datosUsuarioActual['uss_tema_logo'];?> 
+<?=$datosUsuarioActual['uss_tipo_menu'];?> 
+"> <!-- chat-sidebar-open-->
 	
   <script>
 		var urlApi = 'wss://plataformasintia.com:3600';
