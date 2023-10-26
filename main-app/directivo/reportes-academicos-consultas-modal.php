@@ -207,7 +207,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                     </div>
                 </div>
 
-                <input type="submit" class="btn btn-success" value="Consultar Informe" name="consultas">
+                <input type="submit" class="btn btn-info" value="Consultar Informe" name="consultas">
             </form>
         </div>
     </div>
