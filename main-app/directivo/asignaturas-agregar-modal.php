@@ -24,7 +24,7 @@ if (!Modulos::validarPermisoEdicion()) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Nombre de la Asignatura <span style="color: red;">(*)</span></label>
                 <div class="col-sm-8">
-                    <input type="text" name="nombreM" class="form-control" onchange="generarSiglas(this)" <?= $disabledPermiso; ?>>
+                    <input type="text" name="nombreM" required class="form-control" onchange="generarSiglas(this)" <?= $disabledPermiso; ?>>
                 </div>
             </div>
 
@@ -37,9 +37,9 @@ if (!Modulos::validarPermisoEdicion()) {
             </script>
 
             <div class="form-group row">
-                <label class="col-sm-2 control-label">Nombre corto, Abreviatura o Siglas de la asignatura</label>
+                <label class="col-sm-2 control-label">Nombre corto, Abreviatura o Siglas de la asignatura <span style="color: red;">(*)</span></label>
                 <div class="col-sm-4">
-                    <input type="text" name="siglasM" id="siglasM" class="form-control" <?= $disabledPermiso; ?>>
+                    <input type="text" name="siglasM" id="siglasM" required class="form-control" <?= $disabledPermiso; ?>>
                     <span style="color: #6017dc;">Este valor se usa para mostrar de forma abreviada el nombre de la asignatura en algunos informes.</span>
                 </div>
             </div>
@@ -74,7 +74,9 @@ if (!Modulos::validarPermisoEdicion()) {
 
 
             <?php if (Modulos::validarPermisoEdicion()) { ?>
-                <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                <button type="submit" class="btn  btn-info">
+                    <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                </button>
             <?php } ?>
         </form>
     </div>

@@ -142,6 +142,11 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 															$idAcudiente = $acudiente['uss_id'];
 														}
 
+														$marcaMediaTecnica = '';
+														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true"></i> ';
+														} 
+
 														$miArray = [
 															'id_estudiante'    => $resultado['mat_id'], 
 															'estado_matricula' => $resultado['mat_estado_matricula'],
@@ -194,7 +199,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<td style="color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
+														<td style="color:<?=$color;?>;"><?=$marcaMediaTecnica;?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
