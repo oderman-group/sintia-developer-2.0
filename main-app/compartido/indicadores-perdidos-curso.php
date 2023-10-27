@@ -35,10 +35,9 @@ if ($periodoActual == 4) $periodoActuales = "Cuarto";
 
 <?php
 
-$filtro = " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$filtroAdicional = " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 if (!empty($_REQUEST["id"])) {
-
-    $filtro .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
+    $filtroAdicional .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
 }
 if (!empty($_REQUEST["curso"])) {
     $filtroAdicional .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
