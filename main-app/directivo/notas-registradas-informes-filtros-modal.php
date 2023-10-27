@@ -12,6 +12,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <div class="panel">
     <header class="panel-heading panel-heading-purple">POR CURSO </header>
     <div class="panel-body">
+    <form name="formularioGuardar" action="../compartido/reporte-notas.php" method="post" target="_blank">
 
         <div class="form-group row">
             <label class="col-sm-2 control-label">Curso</label>
@@ -132,6 +133,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 
 
         <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
+    </form>
 
     </div>
 </div>
