@@ -5,14 +5,13 @@
 <?php
 require_once("../class/Estudiantes.php");
 
-
-$filtro = '';
-if (isset($_GET["curso"]) AND is_numeric($_GET["curso"])) {
-	$filtro .= " AND mat_grado='".$_GET["curso"]."'";
-	$fcurso = $_GET["curso"];
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
 }
-if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
-	$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";
+$jQueryTable = '';
+if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
+	$jQueryTable = 'id="example1"';
 }
 ?>
 	<!-- data tables -->
@@ -50,14 +49,14 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 								<?php include("includes/barra-superior-matriculas.php"); ?>
 
 									<?php
-									if($config['conf_id_institucion']==1){
+									if($config['conf_id_institucion'] == ICOLVEN){
 										if(isset($_GET['msgsion'])){
 											$aler='alert-danger';
 											$mensajeSion='Por favor, verifique todos los datos del estudiante y llene los campos vacios.';
 											if($_GET['msgsion']!=''){
 												$aler='alert-success';
-												$mensajeSion=$_GET['msgsion'];
-												if($_GET['stadsion']!=true){
+												$mensajeSion=base64_decode($_GET['msgsion']);
+												if(base64_decode($_GET['stadsion'])!=true){
 													$aler='alert-danger';
 												}
 											}
@@ -96,15 +95,18 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
 											
-                                        <div >
-                                    		<table id="example1" class="display" style="width:100%;">
+                                        <div>
+											
+                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
@@ -118,39 +120,6 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-													<script type="text/javascript">
-														const estudiantesPorEstados = {};
-
-														function cambiarEstadoMatricula(data) {
-															let idHref = 'estadoMatricula'+data.id_estudiante;
-															let href   = document.getElementById(idHref);
-															
-															if (!estudiantesPorEstados.hasOwnProperty(data.id_estudiante)) {
-																estudiantesPorEstados[data.id_estudiante] = data.estado_matricula;
-															}
-
-															if(estudiantesPorEstados[data.id_estudiante] == 1) {
-																href.innerHTML = `<span class="text-warning">No Matriculado</span>`;
-																estudiantesPorEstados[data.id_estudiante] = 4;
-															} else {
-																href.innerHTML = `<span class="text-success">Matriculado</span>`;
-																estudiantesPorEstados[data.id_estudiante] = 1;
-															}
-
-															let datos = "nuevoEstado="+estudiantesPorEstados[data.id_estudiante]+
-																		"&idEstudiante="+data.id_estudiante;
-
-															$.ajax({
-																type: "POST",
-																url: "ajax-cambiar-estado-matricula.php",
-																data: datos,
-																success: function(data){
-																	$('#respuestaCambiarEstado').empty().hide().html(data).show(1);
-																}
-
-															});
-														}
-													</script>
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
@@ -179,16 +148,40 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 
 														$miArray = [
 															'id_estudiante'    => $resultado['mat_id'], 
-															'estado_matricula' => $resultado['mat_estado_matricula']
+															'estado_matricula' => $resultado['mat_estado_matricula'],
+															'bloqueado' 	   => $resultado['uss_bloqueado'],
+															'id_usuario'       => $resultado['uss_id'],
 														];
 														$dataParaJavascript = json_encode($miArray);
+
+														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['mat_foto']);
+
+														$infoTooltipEstudiante = "
+														<p>
+															<img src='{$fotoEstudiante}' class='img-thumbnail' width='120px;' height='120px;'>
+														</p>
+														<b>Fecha de matrícula:</b><br>
+														{$resultado['mat_fecha']}<br>
+														<b>Teléfono:</b><br>
+														{$resultado['mat_telefono']}<br>
+														<b>Documento:</b><br>
+														{$resultado['mat_documento']}<br>
+														<b>Email:</b><br>
+														{$resultado['mat_email']}<br>
+														<b>Fecha de nacimiento:</b><br>
+														{$resultado['mat_fecha_nacimiento']}
+														";
 													?>
-													<tr style="background-color:<?=$bgColor;?>;">
+													<tr id="EST<?=$resultado['mat_id'];?>" style="background-color:<?=$bgColor;?>;">
 														<td>
 															<?php if($resultado["mat_compromiso"]==1){?>
-																<a href="estudiantes-activar.php?id=<?=$resultado["mat_id"];?>" title="Activar para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
+																<a href="javascript:void(0);" title="Activar para la matricula"
+																 onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-activar.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
+																 ><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
 															<?php }else{?>
-																<a href="estudiantes-bloquear.php?id=<?=$resultado["mat_id"];?>" title="Bloquear para la matricula" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}"><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
+																<a href="javascript:void(0);" title="Bloquear para la matricula" 
+																onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-bloquear.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
+																><img src="../files/iconos/msn_blocked.png" height="20" width="20"></a>
 															<?php }?>
 															<?=$resultado["mat_id"];?>
 														</td>
@@ -205,12 +198,12 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<td style="color:<?=$color;?>;"><?=$nombre;?></td>
+														<td style="color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
-														<td><a href="usuarios-editar.php?id=<?=$idAcudiente;?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
+														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
 														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
-															<br><a href="mensajes-redactar.php?destino=<?=$acudiente[0];?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
+															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente[0]);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
 
@@ -221,40 +214,84 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
-																	<li><a href="estudiantes-editar.php?id=<?=$resultado['mat_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	<?php if($config['conf_id_institucion']==1){ ?>
-																		<li><a href="estudiantes-crear-sion.php?id=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea transferir este estudiante a SION?')){return false;}">Transferir a SION</a></li>
-																	<?php } ?>
+																	<?php if(Modulos::validarPermisoEdicion()){?>
+																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> matrícula</a></li>
+																		
+																		<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
+																			<li><a href="javascript:void(0);" 
+																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
+																			>Transferir a SION</a></li>
+																		<?php } ?>
+																		
+																		<?php if(!empty($resultado['uss_usuario'])) {?>
+																			<li><a 
+																			href="javascript:void(0);"
+																			onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
+																			>Bloquear/Desbloquear</a></li>
+																		<?php }?>
 
+																		<?php if(!empty($resultado['uss_id'])) {?>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> usuario</a></li>
+																		<?php }?>
+
+																		
+																		<?php if(!empty($resultado['gra_nombre'])){ ?>
+																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#cambiarGrupoModal<?=$resultado['mat_id'];?>" >Cambiar de grupo</a></li>
+																		<?php } ?>
+																		<?php 
+																		$retirarRestaurar='Retirar';
+																		if($resultado['mat_estado_matricula']==3){
+																				$retirarRestaurar='Restaurar';
+																		}
+																		?>
+																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#retirarModal<?=$resultado['mat_id'];?>"><?=$retirarRestaurar?></a></li>
+																		<li><a href="javascript:void(0);"
+																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
+																		>Reservar cupo</a></li>
+																		 <li><a href="javascript:void(0);" 
+																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
+																		>Eliminar</a></li>
+																		
+																		<li><a href="javascript:void(0);"  
+																		onClick="sweetConfirmacion('Alerta!','Está seguro de ejecutar esta acción?','question','estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
+																		>Generar usuario</a></li>
+
+																		<?php if(!empty($resultado['uss_usuario'])) {?>
+																			<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>
+																		<?php }?>
+
+																	<?php }?>
+
+																	<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
+																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
+																	<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
+																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
+																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	
-																	<li><a href="guardar.php?get=17&idR=<?=$resultado['mat_id_usuario'];?>&lock=<?=$resultado['uss_bloqueado'];?>">Bloquear/Desbloquear</a></li>
-																	<li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
-																	<li><a href="estudiantes-cambiar-grupo.php?id=<?=$resultado["mat_id"];?>" target="_blank">Cambiar de grupo</a></li>
-																	<?php 
-																	$retirarRestaurar='Retirar';
-																	  if($resultado['mat_estado_matricula']==3){
-																		    $retirarRestaurar='Restaurar';
-																	}
-																	?>
-																	<li><a href="estudiantes-retirar.php?id=<?=$resultado["mat_id"];?>" target="_blank"><?=$retirarRestaurar?></a></li>
-																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Boletín</a></li>
-																	<li><a href="../compartido/matricula-libro.php?id=<?=$resultado["mat_id"];?>&periodo=<?=$config[2];?>" target="_blank">Libro Final</a></li>
-																	<li><a href="estudiantes-reservar-cupo.php?idEstudiante=<?=$resultado["mat_id"];?>" onClick="if(!confirm('Esta seguro que desea reservar el cupo para este estudiante?')){return false;}">Reservar cupo</a></li>
-																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=$resultado["mat_matricula"];?>" target="_blank">Hoja de matrícula</a></li>
-																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=$resultado["mat_id"];?>" target="_blank">Informe parcial</a></li>
-																	<?php if($config['conf_id_institucion']==1){ ?>	
+																	<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
-																	<li><a href="finanzas-cuentas.php?id=<?=$resultado["mat_id_usuario"];?>" target="_blank">Estado de cuenta</a></li>
-																	<li><a href="reportes-lista.php?est=<?=$resultado["mat_id_usuario"];?>" target="_blank">Disciplina</a></li>
-																	<li><a href="estudiantes-eliminar.php?idE=<?=$resultado["mat_id"];?>&idU=<?=$resultado["mat_id_usuario"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Eliminar</a></li>
-																	<li><a href="estudiantes-crear-usuario-estudiante.php?id=<?=$resultado["mat_id"];?>" target="_blank" onClick="if(!confirm('Esta seguro de ejecutar esta acción?')){return false;}">Generar usuario</a></li>
-																	<li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>&tipe=4">Autologin</a></li>
+
+																	<?php if(!empty($resultado['uss_usuario'])) {?>
+																		<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
+																		<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
+																	<?php }?>
 																</ul>
 															</div>
 														</td>
                                                     </tr>
 													<?php 
+														  $_GET["id"]=base64_encode($resultado['mat_id']); 
+													      if(!empty($resultado['gra_nombre'])){
+															$idModal="cambiarGrupoModal".$resultado['mat_id'];															
+															$contenido="../directivo/estudiantes-cambiar-grupo-modal.php"; 
+															include("../compartido/contenido-modal.php");
+														  }
+														 
+															$idModal="retirarModal".$resultado['mat_id'];															
+															$contenido="../directivo/estudiantes-retirar-modal.php"; 
+															include("../compartido/contenido-modal.php");
+													     
 														 $contReg++;
 													  }
 													  ?>
@@ -273,6 +310,9 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
+		
+		
+		<?php $idModal="ModalSintia1"; $_GET["id"]=base64_encode(2803); $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
@@ -298,6 +338,13 @@ if(isset($_GET["estadoM"]) AND is_numeric($_GET["estadoM"])){
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

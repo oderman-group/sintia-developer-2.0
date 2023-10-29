@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0048';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +45,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-estilo-notas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-estilo-notas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Categoria de Notas</li>
                             </ol>
                         </div>
@@ -55,12 +65,14 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombre" class="form-control" value="">
+                                                <input type="text" name="nombre" class="form-control" value="" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>

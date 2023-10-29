@@ -1,11 +1,15 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0029';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaCalificacion=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+include("session.php");
+$idPaginaInterna = 'DC0029';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaCalificacion=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$idR."' AND act_estado=1");
 $calificacion = mysqli_fetch_array($consultaCalificacion, MYSQLI_BOTH);
 
 $consultaValor=mysqli_query($conexion, "SELECT
@@ -67,11 +71,11 @@ $porcentajeRestante = 100 - $valores[0];
 								<div class="panel-body">
 										<?php
 										$enComun = mysqli_query($conexion, "SELECT * FROM academico_actividades
-										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$_GET["idR"]."' AND act_estado=1
+										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$idR."' AND act_estado=1
 										");
 										while($regComun = mysqli_fetch_array($enComun, MYSQLI_BOTH)){
 										?>
-										<p><a href="calificaciones-editar.php?idR=<?=$regComun['act_id'];?>"><?=$regComun['act_descripcion'];?></a></p>
+										<p><a href="calificaciones-editar.php?idR=<?=base64_encode($regComun['act_id']);?>"><?=$regComun['act_descripcion'];?></a></p>
 										<?php }?>
 									</div>
 							 </div>	
@@ -86,7 +90,7 @@ $porcentajeRestante = 100 - $valores[0];
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="12" name="id">
 										<input type="hidden" value="<?=$calificacion['act_id'];?>" name="idR">
 										<input type="hidden" value="<?=$calificacion['act_valor'];?>" name="valorCalificacion">

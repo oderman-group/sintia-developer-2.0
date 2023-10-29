@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0041';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -24,7 +29,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Horarios</li>
                             </ol>
                         </div>
@@ -50,9 +55,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
@@ -65,13 +72,15 @@
 														<th>Día</th>
 														<th>Desde</th>
 														<th>Hasta</th>
-														<th>Acciones</th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th>Acciones</th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".$_GET["id"]." AND hor_estado=1;");
+														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".base64_decode($_GET["id"])." AND hor_estado=1;");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
@@ -99,18 +108,20 @@
 														<td><?=$dia;?></td>
 														<td><?=$resultado[3];?></td>
 														<td><?=$resultado[4];?></td>
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-horarios-editar.php?id=<?=$resultado[0];?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
-																	  <li><a href="cargas-horarios-eliminar.php?idH=<?=$resultado[0];?>&idC=<?=$resultado[1];?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
-																  </ul>
-															</div>
-														</td>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado[0]);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado[0]);?>&idC=<?=base64_encode($resultado[1]);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
                                       				<?php }?>
                                                 </tbody>

@@ -3,15 +3,20 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0159';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-mysqli_query($conexion, "DELETE FROM disciplina_faltas WHERE dfal_id_categoria='".$_GET["id"]."'");
+mysqli_query($conexion, "DELETE FROM disciplina_faltas WHERE dfal_id_categoria='".base64_decode($_GET["id"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-mysqli_query($conexion, "DELETE FROM disciplina_categorias WHERE dcat_id='".$_GET["id"]."'");
+mysqli_query($conexion, "DELETE FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["id"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

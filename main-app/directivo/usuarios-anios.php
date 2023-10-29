@@ -2,13 +2,21 @@
 <?php $idPaginaInterna = 'DT0201';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/UsuariosPadre.php");?>
+<?php require_once("../class/UsuariosPadre.php");
 
-
-<?php
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 $Plataforma = new Plataforma;
-$busqueda = $_GET['busqueda'];
-$msj = $_GET['msj'];
+$busqueda = '';
+if(!empty($_GET['busqueda'])){
+	$busqueda = $_GET['busqueda'];
+}
+$msj = '';
+if(!empty($_GET['msj'])){
+	$msj = $_GET['msj'];
+}
 ?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
@@ -46,8 +54,6 @@ $msj = $_GET['msj'];
                         <div class="col-md-12">
                             <div class="row">
 								
-							
-								
 								<div class="col-md-12">
 								
 								<div id="not_msj" class="alert alert-block alert-danger" style="display:none">
@@ -77,19 +83,20 @@ $msj = $_GET['msj'];
 														<th>Año</th>
                                                     </tr>
                                                 </thead>
-												<?php												
+												<?php
+													$listaUsuarios = '';
 												if($busqueda && strlen($busqueda)>= 4){
 													$listaUsuarios = UsuariosPadre::listarUsuariosAnio($busqueda);														
 												}else{
-													if(!$msj &&  !is_null($busqueda)){
-														 if(strlen($busqueda)< 4){
+													if(!empty($msj) &&  !empty($busqueda)){
+														if(strlen($busqueda)< 4){
 															$msj="El campo de busqueda debe tener más de 4 caracteres";
 														}else if(!$listaUsuarios){
 															$msj="No se encontraron resultados";
 														}
 													}
 												}
-												if(!$listaUsuarios && !$msj && !is_null($busqueda)){
+												if(!empty($listaUsuarios) && !empty($msj) && !empty($busqueda)){
 													$msj="No se encontraron resultados";													
 												}
 
@@ -100,9 +107,10 @@ $msj = $_GET['msj'];
 														divNotificacion.style.display="revert";
 														</script>';
 												}
-																							
+
 												?>	
-												<?php $contReg=1; 												
+												<?php $contReg=1;
+												if(!empty($listaUsuarios)){
 												foreach ($listaUsuarios as $usuario) {?>
 													<tr >
 														<td><?=$contReg;?></td>
@@ -112,7 +120,7 @@ $msj = $_GET['msj'];
 														<td><?=$usuario["pes_nombre"];?></td>
 														<td><?=$usuario["anio"];?></td>
 													</tr>												
-												<?php $contReg++; }?>												
+												<?php $contReg++; }}?>												
 											</table>
 											
 												

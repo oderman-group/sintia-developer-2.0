@@ -12,10 +12,18 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div class="btn-group">
-                    <a href="grupos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-                        Agregar nuevo <i class="fa fa-plus"></i>
-                    </a>
+                    <?php if (Modulos::validarPermisoEdicion()) { ?>
+                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevoGrupoModal" class="btn deepPink-bgcolor">
+                            Agregar nuevo <i class="fa fa-plus"></i>
+                        </a>
+                    <?php
+                        $idModal = "nuevoGrupoModal";
+                        $contenido = "../directivo/grupos-agregar-modal.php";
+                        include("../compartido/contenido-modal.php");
+                    } ?>
+
                 </div>
+
             </div>
         </div>
 
@@ -27,7 +35,9 @@
                         <th>ID</th>
                         <th>Codigo</th>
                         <th><?= $frases[254][$datosUsuarioActual[8]]; ?></th>
-                        <th style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                        <?php if (Modulos::validarPermisoEdicion()) { ?>
+                            <th style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,17 +51,19 @@
                             <td><?= $resultado["gru_id"]; ?></td>
                             <td><?= $resultado["gru_codigo"]; ?></td>
                             <td><?= $resultado['gru_nombre']; ?></td>
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
-                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="grupos-editar.php?id=<?=$resultado["gru_id"];?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
-                                     </ul>
-                                </div>
-                            </td>
+                            <?php if (Modulos::validarPermisoEdicion()) { ?>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                            <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="grupos-editar.php?id=<?= base64_encode($resultado["gru_id"]); ?>"><?= $frases[165][$datosUsuarioActual[8]]; ?></a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php
                         $contReg++;

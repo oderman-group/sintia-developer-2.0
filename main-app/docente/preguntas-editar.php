@@ -1,11 +1,18 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0030';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaPregunta=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$_GET["idR"]."'");
+include("session.php");
+$idPaginaInterna = 'DC0030';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$idE="";
+if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+
+$consultaPregunta=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$idR."'");
 $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 ?>
 
@@ -63,9 +70,9 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="8" name="id">
-										<input type="hidden" value="<?=$_GET["idE"];?>" name="idE">
+										<input type="hidden" value="<?=$idE;?>" name="idE">
 										<input type="hidden" value="<?=$pregunta['preg_id'];?>" name="idR">
 
 											<div class="form-group row">
@@ -79,7 +86,7 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">Puntos</label>
 													<div class="col-sm-2">
-														<input type="text" name="valor" value="<?=$pregunta['preg_valor'];?>" class="form-control" autocomplete="off" required>
+														<input type="number" name="valor" value="<?=$pregunta['preg_valor'];?>" class="form-control" autocomplete="off" required>
 													</div>
 												</div>
 										
@@ -89,7 +96,7 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 													<input type="file" name="file" class="form-control" autocomplete="off">
 												</div>
 												<div class="col-sm-2">
-													<?php if($pregunta['preg_archivo']!=""){?><a href="../files/evaluaciones/<?=$pregunta['preg_archivo'];?>" target="_blank"><?=$pregunta['preg_archivo'];?></a><?php }?>
+													<?php if(!empty($pregunta['preg_archivo'])){?><a href="../files/evaluaciones/<?=$pregunta['preg_archivo'];?>" target="_blank"><?=$pregunta['preg_archivo'];?></a><?php }?>
 												</div>
 											</div>
 										

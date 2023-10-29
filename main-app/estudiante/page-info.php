@@ -34,6 +34,12 @@
 										<div class="panel-body">
 											<p><?=$texto;?></p>
 											<p><a href="<?=$url1;?>" class="btn btn-round btn-primary"><?=$boton1;?></a></p>
+                                            <?php if(!empty($lottie)) {?>
+                                            <p>
+                                                <lottie-player src="<?=$lottie;?>" background="transparent"
+                                                speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
+                                            </p>
+                                            <?php }?>
 										</div>
                                     </div>
                                 </div>
@@ -72,6 +78,9 @@
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+    <!-- Core theme JS-->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </body>
 
 </html>

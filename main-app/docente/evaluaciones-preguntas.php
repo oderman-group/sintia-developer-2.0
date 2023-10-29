@@ -1,9 +1,14 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0017';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0017';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idE="";
+if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 
 <script type="text/javascript">
@@ -35,7 +40,7 @@ function mostrarNuevaRespuesta(datos){
 	
 
   function realizando(){
-  	var eva = <?=$_GET["idE"];?>;
+  	var eva = <?=$idE;?>;
 	var consulta = 1;
 	  $('#resp').empty().hide().html("...").show(1);
 		datos = "eva="+(eva)+
@@ -53,7 +58,7 @@ function mostrarNuevaRespuesta(datos){
 	setInterval('realizando()',5000);
 	
 	function finalizado(){
-  	var eva = <?=$_GET["idE"];?>;	
+  	var eva = <?=$idE;?>;	
 	var consulta = 2;
 	  $('#fin').empty().hide().html("...").show(1);
 		datos = "eva="+(eva)+
@@ -80,14 +85,14 @@ function mostrarNuevaRespuesta(datos){
 	
 	<?php
 	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	WHERE eva_id='".$idE."' AND eva_estado=1");
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 	
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
+	WHERE evp_id_evaluacion='".$idE."'
 	ORDER BY preg_id DESC
 	");
 	
@@ -136,7 +141,7 @@ function mostrarNuevaRespuesta(datos){
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -157,7 +162,7 @@ function mostrarNuevaRespuesta(datos){
 										<a href="evaluaciones.php" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										
 										<div class="btn-group">
-											<a href="preguntas-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&idE=<?=$_GET["idE"];?>" id="addRow" class="btn deepPink-bgcolor"><i class="fa fa-plus"></i> Agregar pregunta </a>
+											<a href="preguntas-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&idE=<?=$_GET["idE"];?>" id="addRow" class="btn deepPink-bgcolor"><i class="fa fa-plus"></i> Agregar pregunta </a>
 										</div>
 									</div>
 								</div>
@@ -172,7 +177,7 @@ function mostrarNuevaRespuesta(datos){
 								
 									<form action="#" method="post">
 										<input type="hidden" name="id" value="9">
-										<input type="hidden" name="idE" value="<?=$_GET["idE"];?>">
+										<input type="hidden" name="idE" value="<?=$idE;?>">
 										<input type="hidden" name="cantPreguntas" value="<?=$cantPreguntas;?>">
 											<?php
 											$puntosSumados = 0;
@@ -202,9 +207,9 @@ function mostrarNuevaRespuesta(datos){
 																		   	<li class = "mdl-menu__item"><a href="#" id="<?=$preguntas['preg_id'];?>" onClick="mostrarNuevaRespuesta(this)"><i class="fa fa-plus-circle"></i> Agregar respuesta</a></li>
 																			<?php }?>
 																			
-																		   <li class = "mdl-menu__item"><a href="preguntas-editar.php?idR=<?=$preguntas['preg_id'];?>&idE=<?=$_GET["idE"];?>"><i class="fa fa-edit"></i> Editar pregunta</a></li>
+																		   <li class = "mdl-menu__item"><a href="preguntas-editar.php?idR=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>"><i class="fa fa-edit"></i> Editar pregunta</a></li>
 																		   
-																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="guardar.php?get=27&idP=<?=$preguntas['preg_id'];?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
+																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="guardar.php?get=<?=base64_encode(27);?>&idP=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
 																		</ul>
 													</div>
 													
@@ -212,7 +217,7 @@ function mostrarNuevaRespuesta(datos){
 													<div class="panel-body">
 														
 													<?php 
-													if($preguntas['preg_archivo']!="" and file_exists('../files/evaluaciones/'.$preguntas['preg_archivo'])){
+													if(!empty($preguntas['preg_archivo']) and file_exists('../files/evaluaciones/'.$preguntas['preg_archivo'])){
 														$extension = new SplFileInfo($preguntas['preg_archivo']);
 														$ext = $extension->getExtension();
 														if($ext == 'jpg' or $ext == 'jpeg' or $ext == 'png' or $ext == 'gif'){
@@ -243,16 +248,16 @@ function mostrarNuevaRespuesta(datos){
 												$contRespuestas = 1;
 												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green';} else {$colorRespuesta = 'red';}
-													if($respuestas['resp_correcta']==1 and $compararRespuestas[0]!=""){
+													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas[0])){
 														$puntosSumados += $preguntas['preg_valor'];
 													}
 											?>
 												
 														
 												<p id="reg<?=$respuestas['resp_id'];?>">	
-													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="guardar.php?get=9&idR=<?=$respuestas['resp_id'];?>&estado=<?=$respuestas['resp_correcta'];?>&preg=<?=$preguntas['preg_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
+													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="guardar.php?get=<?=base64_encode(9);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
 													
-													<a href="guardar.php?get=8&idR=<?=$respuestas['resp_id'];?>&estado=<?=$respuestas['resp_correcta'];?>&preg=<?=$preguntas['preg_id'];?>">
+													<a href="guardar.php?get=<?=base64_encode(8);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>">
 														<i class="fa fa-exchange"></i>
 													</a>
 													

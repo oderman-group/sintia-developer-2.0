@@ -1,4 +1,5 @@
 <?php
+  $filtro = '';
   $busqueda='';
   if (!empty($_GET['busqueda'])) {
       $busqueda = $_GET['busqueda'];
@@ -14,16 +15,28 @@
       OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_segundo_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
       OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
       OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombres), '', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_primer_apellido), '', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+      OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
       )";
       
   }
   $curso = '';
   if (!empty($_GET['curso'])) {
-      $curso = $_GET['curso'];
+      $curso = base64_decode($_GET['curso']);
+      $filtro .= " AND mat_grado='".$curso."'";
   }
   $estadoM = '';
   if (!empty($_GET['estadoM'])) {
-      $estadoM = $_GET['estadoM'];
+      $estadoM = base64_decode($_GET['estadoM']);
+      $filtro .= " AND mat_estado_matricula='".$estadoM."'";
   }
 ?>
 
@@ -38,7 +51,7 @@
       <li class="nav-item"> <a class="nav-link" href="estudiantes-promedios.php" style="color:<?=$Plataforma->colorUno;?>;">Promedios estudiantiles</a></li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Menú matrículas
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -50,27 +63,36 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Más opciones
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="estudiantes-matricular-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Matricular a todos</a>
-        <a class="dropdown-item" href="estudiantes-matriculas-cancelar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Cancelar a todos</a>
-        <a class="dropdown-item" href="estudiantes-grupoa-todos.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Asignar a todos al grupo A</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="estudiantes-documento-usuario-actualizar.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Colocar documento como usuario de acceso</a>
-        <a class="dropdown-item" href="estudiantes-crear-usuarios.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Verificar y generar credenciales a estudiantes</a>
+        <?php if(Modulos::validarPermisoEdicion()){?>
+          <a class="dropdown-item" href="javascript:void(0);"
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matricular-todos.php')">Matricular a todos</a>
+          <a class="dropdown-item" href="javascript:void(0);"
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matriculas-cancelar.php')">Cancelar a todos</a>
+          <a class="dropdown-item" href="javascript:void(0);" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-grupoa-todos.php')">Asignar a todos al grupo A</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0);" 
+          onClick="sweetConfirmacion('Alerta!','Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?','question','estudiantes-inactivos-remover.php')"
+          >Remover estudiantes Inactivos este año</a></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0);" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-documento-usuario-actualizar.php')">Colocar documento como usuario de acceso</a>
+          <a class="dropdown-item" href="javascript:void(0);" 
+          onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-crear-usuarios.php')">Verificar y generar credenciales a estudiantes</a>
+        <?php }?>
         <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="estudiantes-inactivos-remover.php" onClick="if(!confirm('Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?')){return false;}">Remover estudiantes Inactivos este año</a></a>
         </div>
       </li>
 
-      <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
+      <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
             Filtrar por curso
 		  <span class="fa fa-angle-down"></span>
         </a>
@@ -81,33 +103,36 @@
             $estiloResaltado = '';
             if($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=$estadoM;?>&curso=<?=$grado['gra_id'];?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode($estadoM);?>&curso=<?=base64_encode($grado['gra_id']);?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>><?=$grado['gra_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
         Filtrar por estados
 		  <span class="fa fa-angle-down"></span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=1&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=2&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Asistentes</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=3&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>Cancelados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=4&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>No Matriculados</a>
-        <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=5&curso=<?=$curso;?>&busqueda=<?=$busqueda;?>" <?=$estiloResaltado;?>>En Inscripción</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoM=<?=base64_encode($clave)?>&curso=<?=base64_encode($curso);?>&busqueda=<?=$busqueda;?>" <?php if($estadoM==$clave) echo 'style="color: '.$Plataforma->colorUno.';"';?>><?=$valor;?></a>
+        <?php }?>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
+      <?php if (!empty($filtro)) { ?>
+          <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+
+          <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+      <?php } ?>
 
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
-        <input type="hidden" name="curso" value="<?=$curso;?>"/>
-        <input type="hidden" name="estadoM" value="<?=$estadoM;?>"/>
+        <input type="hidden" name="curso" value="<?=base64_encode($curso);?>"/>
+        <input type="hidden" name="estadoM" value="<?=base64_encode($estadoM);?>"/>
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>

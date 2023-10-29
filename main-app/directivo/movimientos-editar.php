@@ -3,12 +3,30 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".$_GET['idU']."'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
+
+if($resultado['fcu_anulado'] == 1) {
+    $disabledPermiso = "disabled";
+    echo '<script>
+    var idBtn = "btnEditarMovimientos";
+    ejecutarOtrasFunciones(idBtn);
+    </script>';
+}
 ?>
 
 	<!--bootstrap -->
@@ -43,7 +61,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Movimientos</li>
                             </ol>
                         </div>
@@ -64,14 +82,14 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Fecha</label>
 													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>">
+														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>" <?=$disabledPermiso;?>>
 													</div>
 											</div>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Detalle</label>
 												<div class="col-sm-10">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required>
+													<input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
@@ -80,7 +98,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required>
+														<input type="number" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
 													</div>
 											</div>
 										
@@ -88,7 +106,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="tipo" required>
+                                                <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
 													<option value="2" <?php if($resultado['fcu_tipo']==2){ echo "selected";}?>>Egreso</option>
@@ -102,7 +120,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Anulado</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="anulado" required>
+                                                <select class="form-control  select2" name="anulado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
 													<option value="1" <?php if($resultado['fcu_anulado']==1){ echo "selected";}?>>Si</option>
@@ -114,7 +132,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="estado" required>
+                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
 													<option value="1" <?php if($resultado['fcu_cerrado']==1){ echo "selected";}?>>Cerrado</option>
@@ -125,7 +143,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="forma" required>
+                                                <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_forma_pago']==1){ echo "selected";}?>>Efectivo</option>
 													<option value="2" <?php if($resultado['fcu_forma_pago']==2){ echo "selected";}?>>Cheque</option>
@@ -143,27 +161,48 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 												<?php
                                                 try{
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo");
+                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+                                                    WHERE uss_id='".$resultado['fcu_usuario']."'");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
+                                                $resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH);
 												?>
-                                                <select class="form-control  select2" name="usuario" required>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$resultadosDatos[0];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos[0]){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
-													<?php }?>
+                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
+                                                    <option value="<?=$resultadosDatos[0];?>" selected><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#select_usuario').select2({
+                                                placeholder: 'Seleccione el usuario...',
+                                                theme: "bootstrap",
+                                                multiple: false,
+                                                    ajax: {
+                                                        type: 'GET',
+                                                        url: '../compartido/ajax-listar-usuarios.php',
+                                                        processResults: function(data) {
+                                                            data = JSON.parse(data);
+                                                            return {
+                                                                results: $.map(data, function(item) {
+                                                                    return {
+                                                                        id: item.value,
+                                                                        text: item.label
+                                                                    }
+                                                                })
+                                                            };
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        </script>
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Notificar al usuario</label>
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked>
+														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
 														<span class="slider red round"></span>
 													</label>
 												</div>
@@ -172,15 +211,17 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
 												<div class="col-sm-10">
-                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required><?=$resultado['fcu_observaciones'];?></textarea>
+                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
 												</div>
 											</div>
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios" id="btnEditarMovimientos">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

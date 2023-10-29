@@ -77,10 +77,10 @@ $institucionNombre = $institucion['ins_siglas'];
 							
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=2" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(2)?>" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                                 <li>
-                                    <a href="../compartido/guardar.php?get=1&idioma=1" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(1)?>" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                             </ul>
                         </li>
@@ -117,6 +117,9 @@ $institucionNombre = $institucion['ins_siglas'];
 								
                                 <li class="divider"> </li>
 								<li><a href="https://forms.gle/1NpXSwyqoomKdch76" target="_blank"><i class="icon-question"></i><?=$frases[16][$datosUsuarioActual['uss_idioma']];?>/<?=$frases[257][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                <?php if(Modulos::validarSubRol(["DT0202"])){?>
+                                    <li><a href="../directivo/solicitud-cancelacion.php"><i class="fa fa-cut"></i><?=$frases[367][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                <?php }?>
                                 <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i><?=$frases[15][$datosUsuarioActual['uss_idioma']];?></a></li>
                             </ul>
                         </li>

@@ -1,14 +1,16 @@
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 require_once("../class/Estudiantes.php");
-$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["idR"]);
+$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idR);
 
 
 $usuarioEstudiante = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios
-WHERE uss_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
+WHERE uss_id='".$idR."'"), MYSQLI_BOTH);
 
 
 $agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
-WHERE mat_id_usuario='".$_GET["idR"]."'"), MYSQLI_BOTH);
+WHERE mat_id_usuario='".$idR."'"), MYSQLI_BOTH);
 
 
 $edad = date("Y") - $agnoNacimiento[0];
@@ -31,13 +33,13 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                         <div class="col-sm-12">
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
-                                <a href="reportes-lista.php?est=<?=$_GET['idR'];?>&fest=1" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
+                                <a href="reportes-lista.php?est=<?=$_GET["idR"];?>&fest=<?=base64_encode(1);?>" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual[8]]);?></a>
                             <?php }?>
                             
 
                             <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
 
-                                <a href="estudiantes-editar.php?idR=<?=$_GET['idR'];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
+                                <a href="estudiantes-editar.php?idR=<?=$_GET["idR"];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual[8]]);?></a>
 
                             <?php }?>
 
@@ -273,8 +275,9 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                                 <td><?php if(!empty($aspectos['dn_aspecto_academico'])){ echo $aspectos['dn_aspecto_academico'];}?></td>
                                                 <td><?php if(!empty($aspectos['dn_aspecto_convivencial'])){ echo $aspectos['dn_aspecto_convivencial'];}?></td>
                                                 <td>
-                                                    <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
-                                                        <a href="../compartido/guardar.php?get=27&idR=<?=$aspectos['dn_id'];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}" class="btn btn-danger">X</a>
+                                                    <?php if($datosUsuarioActual['uss_tipo'] == 5 && !empty($aspectos)){
+                                                        $href='../compartido/guardar.php?get=27&idR='.$aspectos['dn_id'];?>
+                                                        <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>
                                                     <?php }?>
 
                                                 </td>
@@ -342,15 +345,17 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                     <td>
                                                             <?php if($aspectos['mata_aprobacion_acudiente']==0 and $datosUsuarioActual['uss_tipo'] == 3){?> 
-                                                                <a href="#reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$resultado['dr_id'];?>">Firmar</a>
+                                                                <a href="#reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$aspectos['dr_id'];?>">Firmar</a>
                                                             <?php } else{?>
-                                                                <i class="fa fa-check-circle" title="<?=$resultado['mata_aprobacion_acudiente_fecha'];?>"></i>
+                                                                <i class="fa fa-check-circle" title="<?=$aspectos['mata_aprobacion_acudiente_fecha'];?>"></i>
                                                             <?php }?>
                                     </td>
 
                                     <td>
-                                        <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
-                                            <a href="../compartido/guardar.php?get=26&idR=<?=$aspectos['mata_id'];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}" class="btn btn-danger">X</a>
+                                        <?php if($datosUsuarioActual['uss_tipo'] == 5){
+                                            $href='../compartido/guardar.php?get=26&idR='.$aspectos['mata_id'];
+                                            ?>
+                                            <a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>
                                         <?php }?>
 
                                     </td>

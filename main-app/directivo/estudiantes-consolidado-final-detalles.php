@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once("../class/Estudiantes.php");
 ?>
 <?php
@@ -11,6 +16,11 @@ require_once("../class/Estudiantes.php");
   
   $consultaGrupo = Grupos::obtenerDatosGrupos($_POST["grupo"]);
 	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
   ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -20,7 +30,9 @@ require_once("../class/Estudiantes.php");
     var codEst = enviada.id;
     var carga = enviada.name;
     var per = enviada.alt;
-    if (nota><?=$config[4];?> || isNaN(nota) || nota< <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+	if (alertValidarNota(nota)) {
+		return false;
+	}	
         $('#resp').empty().hide().html("Esperando...").show(1);
             datos = "nota="+(nota)+
                     "&carga="+(carga)+
@@ -211,7 +223,7 @@ require_once("../class/Estudiantes.php");
 															}
 														?>	
 															<td style="text-align:center;">
-																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?>><br><?=$tipo;?>
+																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
 															</td>
 														<?php
 															$p++;

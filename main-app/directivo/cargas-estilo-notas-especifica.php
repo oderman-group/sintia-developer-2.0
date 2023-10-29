@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0045';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -24,7 +29,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Notas especifica</li>
                             </ol>
                         </div>
@@ -48,9 +53,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -64,13 +71,15 @@
                                                         <th>Nombre</th>
                                                         <th>Nota desde</th>
                                                         <th>Nota hasta</th>
-														<th>Acciones</th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th>Acciones</th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria='".$_GET["id"]."'");
+                                                        $consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria='".base64_decode($_GET["id"])."'");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -82,19 +91,23 @@
                                                         <td><?=$resultado["notip_id"];?></td>
                                                         <td><?=$resultado["notip_nombre"];?></td>
                                                         <td><?=$resultado["notip_desde"];?></td>
-                                                        <td><?=$resultado["notip_hasta"];?></td>														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=$resultado["notip_id"];?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        								<?php if($numMaterias[0]==0){?><li><a href="cargas-estilo-notas-especifica-eliminar.php?idN=<?=$resultado["notip_id"];?>&idNC=<?=$_GET["id"]?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li><?php }?>
-																  </ul>
-															  </div>
-														</td>
+                                                        <td><?=$resultado["notip_hasta"];?></td>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>														
+                                                            <td>
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                        <li>
+                                                                        <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>')">Eliminar</a>    
+                                                                       </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

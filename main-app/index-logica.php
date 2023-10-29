@@ -1,15 +1,15 @@
 <?php
 session_start();
-include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 
-  $pagina = 'index.php';
+	$pagina = 'index.php';
 
-  if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
-      $pagina = $_GET["urlDefault"];
+	if (isset($_GET["urlDefault"]) and $_GET["urlDefault"] != "") {
+		$pagina = $_GET["urlDefault"];
 	}
 
-    include("modelo/conexion.php");
+    require_once(ROOT_PATH."/main-app/modelo/conexion.php");
     $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios 
     WHERE uss_id='" . $_SESSION["id"] . "'");
 		$sesionAbierta = mysqli_fetch_array($consultaSesion, MYSQLI_BOTH);
@@ -39,7 +39,32 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 		exit();
 }
 
-//include(ROOT_PATH."/conexion-datos.php");
-$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
-$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+
+try {
+	$conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+	$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+	WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+} catch(Exception $e){
+
+	switch($e->getCode()){
+		case 1044:
+			$exception = "error=7";
+		break;
+
+		case 2002:
+			$exception = "error=8&nodb=1";
+		break;
+
+		default:
+			$exception = "nodb=1&error=".$e->getMessage()."&code=".$e->getCode();
+		break;	
+	}
+
+	session_destroy();
+	header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
+	exit();
+}
+
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+
+$datosContactoSintia = Plataforma::infoContactoSintia();

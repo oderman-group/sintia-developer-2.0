@@ -80,7 +80,7 @@ if($datosHistorial['hil_usuario_autologin']!=0){
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="dev-historial-acciones.php" onClick="deseaRegresar(this)">Historial de acciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="dev-historial-acciones.php" onClick="deseaRegresar(this)">Historial de acciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Historial de Acciones Detalles</li>
                         </ol>
                     </div>
@@ -169,7 +169,7 @@ if($datosHistorial['hil_usuario_autologin']!=0){
                                         </div>
                                     </div>
 
-                                    <a href="#" name="dev-historial-acciones.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
+                                    <a href="javascript:void(0);" name="dev-historial-acciones.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
                                 </form>
                             </div>
                         </div>

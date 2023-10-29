@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0080';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -36,7 +41,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Estudiantes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Estudiantes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Consolidado Final</li>
                             </ol>
                         </div>
@@ -46,7 +51,7 @@
 									<header class="panel-heading panel-heading-purple">Datos</header>
                                 	<div class="panel-body">
                  
-									<form name="formularioGuardar" action="estudiantes-consolidado-final-detalles.php" method="post" enctype="multipart/form-data">
+									<form name="formularioGuardar" action="estudiantes-consolidado-final-detalles2.php" method="post" target="_blank">
                                         <input type="hidden" name="id" value="37">
 										
 										

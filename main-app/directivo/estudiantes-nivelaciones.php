@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0075';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -49,7 +54,7 @@
                                 	<div class="panel-body">
 
                                    
-                                    <form action="estudiantes-nivelaciones-registrar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                    <form action="estudiantes-nivelaciones-registrar2.php" method="post" target="_blank" class="form-horizontal">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso</label>

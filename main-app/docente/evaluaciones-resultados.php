@@ -1,10 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0016';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0016';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
@@ -12,18 +12,21 @@ require_once("../class/Estudiantes.php");
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php");?>
-	
-	<?php
+<?php
+	include("../compartido/body.php");
+
+	$idE="";
+	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+
 	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$_GET["idE"]."' AND eva_estado=1");
+	WHERE eva_id='".$idE."' AND eva_estado=1");
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 	
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
 	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_GET["idE"]."'
+	WHERE evp_id_evaluacion='".$idE."'
 	ORDER BY preg_id DESC
 	");
 	
@@ -31,7 +34,7 @@ require_once("../class/Estudiantes.php");
 
 	?>
 
-	<input type="hidden" id="idE" name="idE" value="<?=$_GET["idE"];?>">
+	<input type="hidden" id="idE" name="idE" value="<?=$idE;?>">
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
@@ -105,7 +108,7 @@ require_once("../class/Estudiantes.php");
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idE"]."' AND eva_estado=1
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -208,18 +211,18 @@ require_once("../class/Estudiantes.php");
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $consultaDatos1=mysqli_query($conexion, "SELECT epe_inicio, epe_fin, MOD(TIMESTAMPDIFF(MINUTE, epe_inicio, epe_fin),60), MOD(TIMESTAMPDIFF(SECOND, epe_inicio, epe_fin),60) FROM academico_actividad_evaluaciones_estudiantes 
-														 WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$_GET["idE"]."'");
+														 WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$idE."'");
 														 $datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
 														 $consultaDatos2=mysqli_query($conexion, "SELECT
 														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluacion_preguntas ON evp_id_pregunta=preg_id AND evp_id_evaluacion='".$_GET["idE"]."'),
+														 INNER JOIN academico_actividad_evaluacion_preguntas ON evp_id_pregunta=preg_id AND evp_id_evaluacion='".$idE."'),
  
 														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$resultado['mat_id']."'
+														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
 														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1),
 														 
 														 (SELECT count(preg_id) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$_GET["idE"]."' AND res_id_estudiante='".$resultado['mat_id']."'
+														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
 														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1)
 														 ");
 														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
@@ -233,7 +236,7 @@ require_once("../class/Estudiantes.php");
 														 if($nota<$config[5])$color = $config[6]; elseif($nota>=$config[5]) $color = $config[7];
 														 
 														 //Exportar las notas
-														 if($_POST["exportar"]==1 and $nota!=""){
+														 if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and !empty($nota)){
 															 
 															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
 															
@@ -254,21 +257,21 @@ require_once("../class/Estudiantes.php");
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
 														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
-														<td><?=$datos1['epe_inicio'];?></td>
-														<td><?=$datos1['epe_fin'];?></td>
-														<td><?php if($datos1[2]>0){echo $datos1[2]." Min. y ";} if($datos1[3]>0){echo $datos1[3]." Seg.";}?></td>
-														<td><?php if($datos2[1]!=""){echo $datos2[2]."/".$cantPreguntas;}?></td>
-														<td align="center"><?php if($datos2[1]!=""){echo $datos2[1]."/".$datos2[0];}?></td>
-														<td align="center"><?php if($datos2[1]!=""){echo $porcentaje."%";}?></td>
-														<td style="color: <?=$color;?>;" align="center"><?php if($datos2[1]!=""){echo $nota;}?></td>
+														<td><?php if(!empty($datos1['epe_inicio'])){ echo $datos1['epe_inicio'];}?></td>
+														<td><?php if(!empty($datos1['epe_fin'])){ echo $datos1['epe_fin'];}?></td>
+														<td><?php if(!empty($datos2[2]) && $datos1[2]>0){echo $datos1[2]." Min. y ";} if(!empty($datos2[3]) && $datos1[3]>0){echo $datos1[3]." Seg.";}?></td>
+														<td><?php if(!empty($datos2[1])){echo $datos2[2]."/".$cantPreguntas;}?></td>
+														<td align="center"><?php if(!empty($datos2[1])){echo $datos2[1]."/".$datos2[0];}?></td>
+														<td align="center"><?php if(!empty($datos2[1])){echo $porcentaje."%";}?></td>
+														<td style="color: <?=$color;?>;" align="center"><?php if(!empty($datos2[1])){echo $nota;}?></td>
 														<td align="center">
-														<?php if($datos2[1]!="" or $datos1['epe_inicio']!=""){?>
+														<?php if(!empty($datos2[1]) or !empty($datos1['epe_inicio'])){?>
 															
-															<a href="evaluaciones-ver.php?idE=<?=$_GET["idE"];?>&usrEstud=<?=$resultado['mat_id_usuario'];?>" title="Ver resultados."><i class="fa fa-search-plus"></i></a>
+															<a href="evaluaciones-ver.php?idE=<?=$_GET["idE"];?>&usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>" title="Ver resultados."><i class="fa fa-search-plus"></i></a>
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
-																	<a href="#" name="guardar.php?get=28&idE=<?=$_GET["idE"];?>&idEstudiante=<?=$resultado['mat_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
+																	<a href="#" name="guardar.php?get=<?=base64_encode(28);?>&idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
 															<?php }?>
 															
 															
@@ -278,7 +281,7 @@ require_once("../class/Estudiantes.php");
 													<?php 
 														 $contReg++;
 													  }
-														if($_POST["exportar"]==1 and $registroNotas>=1){
+														if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and $registroNotas>=1){
 														?>
 														<script>
 															function enviarRespuesta(){

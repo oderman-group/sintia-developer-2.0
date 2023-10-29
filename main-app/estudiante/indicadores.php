@@ -44,16 +44,19 @@
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
-											$porcentaje = ($notapp[0] / $config['conf_nota_hasta']) * 100;
-											if ($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger';
+											$porcentaje =0;
+											if (!empty($notapp[0])){
+												$porcentaje = ($notapp[0] / $config['conf_nota_hasta']) * 100;
+											}
+											if (!empty($notapp[0]) and $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger';
 											else $colorGrafico = 'info';
 											if ($i == $periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"';
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= $cargaConsultaActual; ?>&periodo=<?= $i; ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
 
-												<?php if ($notapp[0] != "" and $config['conf_sin_nota_numerica'] != 1) { ?>
+												<?php if (!empty($notapp[0]) and $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">
 														<div class="states">
 															<div class="info">
@@ -139,7 +142,7 @@
 														WHERE cal_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";
-														if($notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){
+														if(!empty($notas['rind_nota']) and $notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){
 															$notaRecuperacion = $notas['rind_nota'];
 															
 															//Color nota

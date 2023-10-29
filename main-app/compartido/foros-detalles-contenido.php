@@ -1,6 +1,10 @@
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+$usuario="";
+if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$idR."'"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -39,13 +43,16 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 														SELECT hil_id, hil_usuario, hil_url, hil_titulo, hil_fecha 
 														FROM ".$baseDatosServicios.".seguridad_historial_acciones 
 														WHERE hil_url LIKE '%".$urlRecurso."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
-														$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+														$numIngreso=mysqli_num_rows($consultaIngresoClase);
+														if($numIngreso>0){
+															$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
+
 													?>
 													<li class="list-group-item">
-														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=$resultados['mat_id_usuario'];?>"><?=$nombreCompleto?></a> 
+														<a href="foros-detalles.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
 														<div class="profile-desc-item pull-right"><?=$ingresoClase['hil_fecha'];?></div>
 													</li>
-													<?php }?>
+													<?php }}?>
 												</ul>
 												
 												<p align="center"><a href="foros-detalles.php?idR=<?=$_GET["idR"];?>">VER TODOS</a></p>
@@ -73,7 +80,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<div class="card-body " id="bar-parent1">
 										<form class="form-horizontal" action="../compartido/guardar.php" method="post">
 											<input type="hidden" name="id" value="8">
-											<input type="hidden" name="foro" value="<?=$_GET["idR"];?>">
+											<input type="hidden" name="foro" value="<?=$idR;?>">
 											
 											<div class="form-group row">
 												<div class="col-sm-12">
@@ -96,12 +103,11 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 
 											<?php 
 											$filtro = '';
-											if($_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
+											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
-											WHERE com_id_foro='".$_GET["idR"]."'
+											WHERE com_id_foro='".$idR."'
 											$filtro
 											ORDER BY com_id DESC
 											");
@@ -121,7 +127,9 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 															
 															<div class="card-head">
 																
-																	<?php if($_SESSION["id"]==$resultado['com_id_estudiante']){?>
+																	<?php if($_SESSION["id"]==$resultado['com_id_estudiante']){
+																		 $href='../compartido/guardar.php?get='.base64_encode(12).'&e='.base64_encode(2).'&idCom='.base64_encode($resultado['com_id']);
+																		?>
 																	<button id ="panel-<?=$resultado['com_id'];?>" 
 																	   class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
 																	   data-upgraded = ",MaterialButton">
@@ -129,7 +137,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																	</button>
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['com_id'];?>">
-																	   <li class = "mdl-menu__item"><a href="../compartido/guardar.php?get=12&e=2&idCom=<?=$resultado['com_id'];?>" onClick="if(!confirm('Deseas eliminar esta publicación?')){return false;}"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>
@@ -139,7 +147,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																		<img src="../files/fotos/<?=$resultado['uss_foto'];?>" class="img-circle user-img-circle" alt="User Image" height="50" width="50" />
 																	</div>
 																	<div class="pull-left info">
-																		<p><a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>"><?=$resultado['uss_nombre'];?></a><br><span style="font-size: 11px;"><?=$resultado['not_fecha'];?></span></p>
+																		<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['uss_id']);?>"><?=$resultado['uss_nombre'];?></a><br><span style="font-size: 11px;"><?=$resultado['com_fecha'];?></span></p>
 																	</div>
 															</div>
 
@@ -148,7 +156,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 															</div>
 
 															<div class="card-body">
-																<a class ="pull-right" onClick="mostrarDetalles(this)" id="<?=$resultado['com_id'];?>"><?=number_format($numReacciones,0,",",".");?> respuestas</a>
+																<a class ="pull-right" onClick="mostrarDetalles(this)" id="<?=base64_encode($resultado['com_id']);?>"><?=number_format($numReacciones,0,",",".");?> respuestas</a>
 															</div>
 															
 														</div>
@@ -162,10 +170,10 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																document.getElementById(id).style.display = "none";
 															}
 														</script>
-														<div class="panel" id="pub<?=$resultado['com_id'];?>" style="display: none;">
+														<div class="panel" id="pub<?=base64_encode($resultado['com_id']);?>" style="display: none;">
 															<header class="panel-heading panel-heading-purple">
 																Respuestas (<?=number_format($numReacciones,0,",",".");?>)
-																<a class="pull-right" onClick="ocultarDetalles(this)" name="<?=$resultado['com_id'];?>">Ocultar</a>
+																<a class="pull-right" onClick="ocultarDetalles(this)" name="<?=base64_encode($resultado['com_id']);?>">Ocultar</a>
 															</header>
 															<div class="panel-body">
 																<form class="form-horizontal" action="../compartido/guardar.php" method="post">
@@ -191,7 +199,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																?>
 																	<p>
 																		<?php if($_SESSION["id"]==$datoReacciones['fore_id_estudiante']){?>
-																			<a href="#" name="../compartido/guardar.php?get=13&idResp=<?=$datoReacciones['fore_id'];?>&idCom=<?=$resultado['com_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-times"></i></a>
+																			<a href="#" name="../compartido/guardar.php?get=<?=base64_encode(13);?>&idResp=<?=base64_encode($datoReacciones['fore_id']);?>&idCom=<?=base64_encode($resultado['com_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-times"></i></a>
 																		<?php }?>
 																		<a><?=$datoReacciones['uss_nombre'];?></a>: <?=$datoReacciones['fore_respuesta'];?></p>
 																<?php }?>
@@ -215,12 +223,12 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<div class="panel-body">
 											<?php
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
-											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$_GET["idR"]."'
+											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$idR."'
 											ORDER BY foro_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=$regComun['foro_id'];?>"><?=$regComun['foro_nombre'];?></a></p>
+												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['foro_id']);?>"><?=$regComun['foro_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>

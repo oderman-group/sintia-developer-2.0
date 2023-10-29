@@ -2,54 +2,10 @@
 <div class="row">
 
     <div class="col-md-12">
+        <?php include("../compartido/barra-superior-noticias.php");?>
         <div class="row">
 
             <div class="col-md-4 col-lg-3">
-
-                <div class="panel">
-                    <header class="panel-heading panel-heading-blue"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></header>
-                    
-
-                    <div class="panel-body">
-                        <form action="<?=$_SERVER['PHP_SELF'];?>" method="get">
-                            <div class="form-group row">
-                                <div class="col-sm-8"
-                                    data-hint="Aquí podrás buscar noticias específicas, dentro de todas las publicadas, usando palabras que claves que se encuentren en su titulo, descripción, etc.">
-                                    <input type="text" name="busqueda" class="form-control"
-                                        value="<?php if(isset($_GET['busqueda'])) echo $_GET["busqueda"];?>"
-                                        placeholder="<?=$frases[235][$datosUsuarioActual[8]];?>...">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="submit" class="btn btn-primary"
-                                        value="<?=$frases[8][$datosUsuarioActual[8]];?>">
-                                </div>
-                            </div>
-                        </form>
-                        <?php if(isset($_GET["busqueda"])){?><div align="center"><a
-                                href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual['uss_idioma']];?></a>
-                        </div><?php }?>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <header class="panel-heading panel-heading-purple">
-                        <?=$frases[132][$datosUsuarioActual['uss_idioma']];?></header>
-                    <div class="panel-body">
-                        <p data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)."><a
-                                href="noticias-agregar.php"><i class="fa fa-plus-circle"></i>
-                                <?=$frases[134][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se mostrarán todas tus publicaciones que estén ocultas."><a
-                                href="../compartido/guardar.php?get=7&e=1"><i class="fa fa-eye"></i>
-                                <?=$frases[135][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se ocultarán todas tus publicaciones que estén siendo mostradas."><a
-                                href="../compartido/guardar.php?get=7&e=0"><i class="fa fa-eye-slash"></i>
-                                <?=$frases[136][$datosUsuarioActual[8]];?></a></p>
-                        <p data-hint="Se eliminarán todas tus publicaciones realizadas."><a
-                                href="../compartido/guardar.php?get=7&e=2"
-                                onClick="if(!confirm('Deseas eliminar todas tus publicaciones?')){return false;}"><i
-                                    class="fa fa-trash"></i> <?=$frases[137][$datosUsuarioActual[8]];?></a></p>
-                    </div>
-                </div>
 
                 <?php
                     include("../compartido/datos-fechas.php");
@@ -108,13 +64,16 @@
                     <div class="card-head">
                         <header><?=$frases[168][$datosUsuarioActual[8]];?></header>
                     </div>
-
+                        <?php
+                        $fotoUsrActual = $usuariosClase->verificarFoto($datosUsuarioActual['uss_foto']);
+                        ?>
                     <div class="card-body " id="bar-parent1">
                         <form class="form-horizontal" action="../compartido/guardar.php" method="post">
                             <input type="hidden" name="id" value="1">
+                            <input type="hidden" id="infoGeneral" value="<?=base64_encode($datosUsuarioActual['uss_id']);?>|<?=$fotoUsrActual;?>|<?=$datosUsuarioActual['uss_nombre'];?>">
                             <div class="form-group row">
                                 <div class="col-sm-12" data-hint="Realiza una publicación rápida, con solo texto.">
-                                    <textarea name="contenido" class="form-control" rows="3"
+                                    <textarea id="contenido" name="contenido" class="form-control" rows="3"
                                         placeholder="<?=$frases[169][$datosUsuarioActual[8]];?>"
                                         style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"
                                         required></textarea>
@@ -122,21 +81,23 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="offset-md-3 col-md-9">
-                                    <button type="submit"
-                                        class="btn btn-info"><?=$frases[170][$datosUsuarioActual[8]];?></button>
-                                    <button type="reset"
-                                        class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+                                <div class="offset-md-5 col-md-7">
+                                    <button 
+                                        type="button"
+                                        class="btn deepPink-bgcolor"
+                                        onClick="crearNoticia()"
+                                    >
+                                        <?=$frases[170][$datosUsuarioActual[8]];?>
+                                    </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer" align="center">
-                        <a href="noticias-agregar.php" class="btn btn-danger"><?=$frases[263][$datosUsuarioActual[8]];?></a>
-                    </div>
                 </div>
 
                 <?php include("../compartido/encuestas.php");?>
+
+                <div id="nuevaPublicacion"></div>
 
                 <?php
 									$arrayEnviar = array("tipo"=>4, "descripcionTipo"=>"Para ocultar fila del registro.");
@@ -147,8 +108,8 @@
 
                 <?php 
 											$filtro = '';
-											if(isset($_GET["busqueda"]) and $_GET["busqueda"]!=""){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(isset($_GET["usuario"]) and is_numeric($_GET["usuario"])){$filtro .= " AND not_usuario='".$_GET["usuario"]."'";}
+											if(!empty($_GET["busqueda"])){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
+											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 											LEFT JOIN usuarios ON uss_id=not_usuario
@@ -198,41 +159,60 @@
 												
 												
 											?>
-                <div id="PUB<?=$resultado['not_id'];?>" class="row">
+                <div id="PUB<?=base64_encode($resultado['not_id']);?>" class="row">
                     <div class="col-sm-12">
                         <div id="PANEL<?=base64_encode($resultado['not_id']);?>" class="panel <?=$clasesNoticiaGlobal;?>" <?=$colorFondo;?>>
 
                             <div class="card-head">
                                 <header><?=$resultado['not_titulo'];?></header>
 
-                                <?php if($_SESSION["id"]==$resultado['not_usuario'] or $datosUsuarioActual[3]==5){?>
-                                <button id="panel-<?=$resultado['not_id'];?>"
-                                    class="mdl-button mdl-js-button mdl-button--icon pull-right"
-                                    data-upgraded=",MaterialButton">
-                                    <i class="material-icons">more_vert</i>
-                                </button>
-                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                                    data-mdl-for="panel-<?=$resultado['not_id'];?>">
-                                    <li class="mdl-menu__item"><a
-                                            href="noticias-editar.php?idR=<?=$resultado['not_id'];?>"><i
-                                                class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
-                                    </li>
-                                    <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=6&e=1&idR=<?=$resultado['not_id'];?>"><i
-                                                class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
-                                    </li>
-                                    <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=6&e=0&idR=<?=$resultado['not_id'];?>"><i
-                                                class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?></a>
-                                    </li>
+                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==5){?>
 
-                                    <li class="mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>"
-                                            id="<?=$resultado['not_id'];?>"
-                                            name="../compartido/guardar.php?get=6&e=2&idR=<?=$resultado['not_id'];?>"
-                                            onClick="deseaEliminar(this)"><i
-                                                class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
+                                    <button id="panel-<?=$resultado['not_id'];?>"
+                                        class="mdl-button mdl-js-button mdl-button--icon pull-right"
+                                        data-upgraded=",MaterialButton">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                
+                                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                        data-mdl-for="panel-<?=$resultado['not_id'];?>">
+
+                                    <li class="mdl-menu__item">
+                                        <a
+                                        href="javascript:void(0);"
+                                        id="<?=base64_encode($resultado['not_id']);?>|1"  
+                                        name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                        onClick="ocultarNoticia(this)"
+                                        >
+                                        <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
                                     </li>
-                                </ul>
+                                    <li class="mdl-menu__item">
+                                    <a
+                                    href="javascript:void(0);"
+                                    id="<?=base64_encode($resultado['not_id']);?>|2"  
+                                    name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                    onClick="ocultarNoticia(this)"
+                                    >
+                                        <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?>
+                                    </a>
+                                    </li>
+                                    
+                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1){?>
+                                        <li class="mdl-menu__item"><a
+                                                href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
+                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
+                                        </li>
+                                        
+                                        <li class="mdl-menu__item"><a href="javascript:void(0);" title="<?=$objetoEnviar;?>"
+                                                id="<?=base64_encode($resultado['not_id']);?>"
+                                                name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                                onClick="deseaEliminar(this)"><i
+                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
+                                        </li>
+                                    <?php }?>
+
+
+                                    </ul>
                                 <?php }?>
                             </div>
 
@@ -243,7 +223,7 @@
                                 </div>
                                 <div class="pull-left info">
                                     <p><a
-                                            href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>"><?=$resultado['uss_nombre'];?></a><br><span
+                                            href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>"><?=$resultado['uss_nombre'];?></a><br><span
                                             style="font-size: 11px;"><?=$resultado['not_fecha'];?></span></p>
                                 </div>
                             </div>
@@ -285,17 +265,31 @@
                                 <p>&nbsp;</p>
                                 <?php }?>
 
-                                <?php if($resultado['not_video']!=""){?>
-                                <div><iframe width="450" height="400"
+                                <?php if(!empty($resultado['not_video'])){?>
+                                    <div>
+                                        <iframe width="450" height="400"
                                         src="https://www.youtube.com/embed/<?=$resultado['not_video'];?>?rel=0&amp;"
                                         frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
-                                        volume="0"></iframe></div>
+                                        volume="0"></iframe>
+                                    </div>
+                                    <p>&nbsp;</p>
+                                <?php }?>
+
+                                <?php if(!empty($resultado['not_enlace_video2'])){?>
+                                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                                        <iframe src="https://www.loom.com/embed/<?=$resultado['not_enlace_video2'];?>" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+                                    </div>
+                                    <p>&nbsp;</p>
                                 <?php }?>
 
                                 <?php if($resultado['not_archivo']!="" and file_exists('../files/publicaciones/'.$resultado['not_archivo'])){?>
-                                <div align="right"><a href="../files/publicaciones/<?=$resultado['not_archivo'];?>"
-                                        target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a></div>
+                                    <div align="right">
+                                        <a href="../files/publicaciones/<?=$resultado['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
+                                    </div>
+                                    <p>&nbsp;</p>
                                 <?php }?>
+                                
+                                <?php if(!empty($resultado['not_descripcion_pie'])){ echo $resultado['not_descripcion_pie']; }?>
 
                         </div>
 
@@ -315,16 +309,16 @@
                                     <?php
 								  $i=1;
 								 while($i<=4){
-									if($i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
+									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=8&r=<?=$i;?>&idR=<?=$resultado['not_id'];?>&postname=<?=$resultado['not_titulo'];?>&usrname=<?=$datosUsuarioActual['uss_nombre'];?>&postowner=<?=$resultado['not_usuario'];?>"><i
+                                            href="../compartido/guardar.php?get=<?=base64_encode(8)?>&r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
                                                 class="fa <?=$rIcons[$i];?>"></i><?=$rName[$i];?></a></li>
                                     <?php $i++;}?>
                                 </ul>
                                 <?php if($numReacciones>0){?>
                                 <a class="pull-right" onClick="mostrarDetalles(this)"
-                                    id="<?=$resultado['not_id'];?>"><?=number_format($numReacciones,0,",",".");?>
+                                    id="<?=base64_encode($resultado['not_id']);?>"><?=number_format($numReacciones,0,",",".");?>
                                     reacciones</a>
                                 <?php }?>
                             </div>
@@ -341,11 +335,11 @@
                             document.getElementById(id).style.display = "none";
                         }
                         </script>
-                        <div class="panel" id="pub<?=$resultado['not_id'];?>" style="display: none;">
+                        <div class="panel" id="pub<?=base64_encode($resultado['not_id']);?>" style="display: none;">
                             <header class="panel-heading panel-heading-purple">
                                 Reacciones (<?=number_format($numReacciones,0,",",".");?>)
                                 <a class="pull-right" onClick="ocultarDetalles(this)"
-                                    name="<?=$resultado['not_id'];?>">Ocultar</a>
+                                    name="<?=base64_encode($resultado['not_id']);?>">Ocultar</a>
                             </header>
                             <div class="panel-body">
                                 <?php

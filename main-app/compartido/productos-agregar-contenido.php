@@ -18,7 +18,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción del producto (*)</label>
                                             <div class="col-sm-10">
-                                                <textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                                                <textarea name="descripcion" id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
                                             </div>
                                         </div>
 										
@@ -27,7 +27,15 @@
                                             <div class="col-sm-4">
                                                 <input type="number" name="precio" class="form-control" required placeholder="Ejemplo: 10000">
 												<span style="color: navy;">Solamente digite el número sin puntos ni simbolos.</span><br>
-												<span style="color: tomato;">Si desea recibir el pago en línea, el valor mínimo debe ser de $10.000 COP.</span>
+												<span style="color: tomato;">Para pagos en línea el valor mínimo a comprar por el cliente debe ser de $10.000 COP.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Stock (*)</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" name="stock" id="stock" class="form-control" value="1" required placeholder="Ejemplo: 9" onChange="minimoUno(this)">
+												<span style="color: navy;">Solamente digite el número sin puntos ni simbolos.</span><br>
                                             </div>
                                         </div>
 										
@@ -91,7 +99,7 @@
 								<header class="panel-heading panel-heading-yellow">¿REQUIERES AYUDA?</header>
 
 									<p><a href="https://youtu.be/cmsQDO9tIrQ?t=122" target="_blank">Ver tutorial de uso de MarketPlace</span></a></p>
-									<p><a href="mensajes-redactar.php?para=1&asunto=REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE">Solicitar asesoría</span></a></p>
+									<p><a href="mensajes-redactar.php?para=<?=base64_encode(1)?>&asunto=<?=base64_encode('REQUIERO ASESORÍA PARA USAR SINTIA MARKETPLACE')?>">Solicitar asesoría</span></a></p>
 
 									<p>
 										<b>AYUDA SINTIA MARKETPLACE</b><br>
@@ -104,3 +112,11 @@
                         </div>
 						
                     </div>
+                    
+<script src="../ckeditor/ckeditor.js"></script>
+
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor 4
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>

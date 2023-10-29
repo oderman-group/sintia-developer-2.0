@@ -1,5 +1,9 @@
 <?php
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$_GET["idR"]."'"), MYSQLI_BOTH);
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$idR."'"), MYSQLI_BOTH);
 ?>
 <div class="page-content">
                     <div class="page-bar">
@@ -24,11 +28,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
                     </div>
                     <div class="row">
 						
-						<div class="col-sm-3">
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-                        </div>
+						
 						
                         <div class="col-sm-9">
 
@@ -70,6 +70,12 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<?php }?>
                                 </div>
                             </div>
+                        </div>
+
+						<div class="col-sm-3">
+							
+						<?php include("../compartido/publicidad-lateral.php");?>	
+
                         </div>
 						
                     </div>

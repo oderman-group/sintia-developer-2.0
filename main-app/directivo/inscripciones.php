@@ -1,8 +1,17 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DT0102';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+
+$configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
 $db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
@@ -37,19 +46,38 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 								
 								<div class="col-md-12">
 
+                                <div class="card-body">
+
+                                           
+                                <div class="alert alert-block alert-warning">
+                                        <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
+                                        <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
+                                            <b>En cada aspirante en estado Aprobado: Ve al botón Acciones y luego Borrar documentación.</b></p>
+                                    </div>
+
+                                    <div class="alert alert-block alert-success">
+                                        <h4 class="alert-heading">Enlace para inscripción:</h4>
+                                        <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
+                                        <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
+                                    </div>
+                                    </div> 
+                                    
+
                                 <?php
                                     $filtro="";
+                                    include(ROOT_PATH."/config-general/config-admisiones.php");
+                                    include(ROOT_PATH."/config-general/mensajes-informativos.php");
                                     include("includes/barra-superior-inscripciones.php");
                                 ?>
 
-                                    <?php if (isset($_GET["msg"]) and $_GET["msg"] == 1) { ?>
+                                    <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 1) { ?>
                                     <div class="alert alert-block alert-success">
                                         <h4 class="alert-heading">Documentación eliminada!</h4>
                                         <p>La documentación del aspirante se ha borrado correctamente.</p>
                                     </div>
                                     <?php } ?>
 
-                                    <?php if (isset($_GET["msg"]) and $_GET["msg"] == 2) { ?>
+                                    <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 2) { ?>
                                     <div class="alert alert-block alert-success">
                                         <h4 class="alert-heading">Apisrante eliminado!</h4>
                                         <p>El aspirante se ha borrado correctamente.</p>
@@ -64,31 +92,13 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 			                                    <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
                                             </div>
                                         </div>
-                                        <div class="card-body">
-											
-                                        <div class="alert alert-block alert-warning">
-                                            <h4 class="alert-heading">Libera espacio para no llenar el disco!</h4>
-                                            <p>Recomendamos descargar la documentación y comprobante de pago de cada aspirante y luego borrar esa documentación del sistema para evitar que el disco se llene más rápido. <br>
-                                                <b>En cada aspirante: Ve a la opción Acciones->Borrar documentación.</b></p>
-                                        </div>
-											
-                                        <div class="alert alert-block alert-success">
-                                            <h4 class="alert-heading">Enlace para inscripción:</h4>
-                                            <p>Para ir al formulario de inscripción <a href="<?=$urlInscripcion?>" target="_blank"><b>CLICK AQUÍ</b></a> o copie el siguiente enlace para enviar al usuario</p>
-                                            <input type="text" name="enlace" class="form-control col-md-6" value="<?=$urlInscripcion?>" disabled>
-                                            </div>
-                                        </div>
-
-                                        <?php
-                                            if(!empty($_GET["curso"])){
-                                                $filtro .= " AND asp_grado='".$_GET["curso"]."'";
-                                            }
-                                        ?>
-                                        <div class="table-scrollable">
-                                    		<table id="example1" class="display" style="width:100%;">
+                                        
+                                        <div class="table">
+                                    		<table class="display" style="width:100%;">
 												<thead>
 													<tr>
                                                         <th>ID</th>
+                                                        <th>#Solicitud</th>
                                                         <th>Fecha</th>
                                                         <th>Documento</th>
                                                         <th>Aspirante</th>
@@ -101,29 +111,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 												</thead>
                                                 <tbody>
                                                 <?php
-												include("includes/consulta-paginacion-inscripciones.php");	
-                                                $estadosSolicitud = array(
-                                                1 => 'VERIFICACIÓN DE PAGO',
-                                                2 => 'PAGO RECHAZADO',
-                                                3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-                                                4 => 'EN PROCESO',
-                                                5 => 'EXAMEN Y ENTREVISTA',
-                                                6 => 'APROBADO',
-                                                7 => 'NO APROBADO',
-                                                8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-                                                9 => 'MOVIDO AL AÑO SIGUIENTE'
-                                                );
-                                                $fondoSolicitud = array(
-                                                1 => 'yellow',
-                                                2 => 'tomato',
-                                                3 => 'orange',
-                                                4 => '#AFB372',
-                                                5 => 'aquamarine',
-                                                6 => 'green',
-                                                7 => 'red',
-                                                8 => 'yellow',
-                                                9 => '#00FAB5'
-                                                );
+												include("includes/consulta-paginacion-inscripciones.php");
                                                 try{
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                                                     INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
@@ -135,12 +123,26 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
+
+                                                    $infoTooltipEstudiante = "
+                                                    <b>Nombre acudiente:</b><br>
+                                                    {$resultado['asp_nombre_acudiente']}<br>
+                                                    <b>Celular:</b><br>
+                                                    {$resultado['asp_celular_acudiente']}<br>
+                                                    <b>Documento:</b><br>
+                                                    {$resultado['asp_documento_acudiente']}<br>
+                                                    <b>Email:</b><br>
+                                                    {$resultado['asp_email_acudiente']}<br><br>
+                                                    <b>Observación:</b><br>
+                                                    <span style='color:darkblue; font-size:11px; font-style:italic;'>{$resultado['asp_observacion']}</span>
+                                                    ";
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?= $resultado["mat_id"]; ?></td>
+                                                    <td><?= $resultado["asp_id"]; ?></td>
                                                     <td><?= $resultado["asp_fecha"]; ?></td>
                                                     <td><?= $resultado["mat_documento"]; ?></td>
-                                                    <td><?= strtoupper($resultado["mat_nombres"] . " " . $resultado["mat_primer_apellido"]); ?></td>
+                                                    <td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></a></td>
                                                     <td><?= $resultado["asp_agno"]; ?></td>
                                                     <td><span style="background-color: <?= $fondoSolicitud[$resultado["asp_estado_solicitud"]]; ?>; padding: 5px;"><?= $estadosSolicitud[$resultado["asp_estado_solicitud"]]; ?></span></td>
                                                     <td><a href="../admisiones/files/comprobantes/<?= $resultado["asp_comprobante"]; ?>" target="_blank" style="text-decoration: underline;"><?= $resultado["asp_comprobante"]; ?></a></td>
@@ -152,19 +154,27 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu" role="menu">
-                                                                <li><a href="../admisiones/formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Ver información</a></li>
-                                                                <li><a href="../admisiones/admin-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= $resultado["asp_id"]; ?>&idInst=<?=$config["conf_id_institucion"]?>" target="_blank">Editar</a></li>
+                                                                <li><a href="inscripciones-formulario.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Ver información</a></li>
+                                                                <li><a href="inscripciones-formulario-editar.php?token=<?= md5($resultado["asp_id"]); ?>&id=<?= base64_encode($resultado["asp_id"]); ?>&idInst=<?=base64_encode($config["conf_id_institucion"])?>" target="_blank">Editar</a></li>
                                                                 
-                                                                <?php if ($resultado["asp_estado_solicitud"] == 6 or $resultado["asp_estado_solicitud"] == 7) { ?>
+                                                                <?php if ($resultado["asp_estado_solicitud"] == 6) { ?>
                                                                     
-                                                                <li><a href="inscripciones-eliminar-documentacion.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?')){return false;}">Borrar documentación</a></li>
+                                                                <li><a href="javascript:void(0);" 
+                                                                onClick="sweetConfirmacion('Alerta!','Va a eliminar la documentación de este aspirante. Recuerde descargarla primero. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-documentacion.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
+                                                                >Borrar documentación</a></li>
 
-                                                                <li><a href="inscripciones-pasar-estudiante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a pasar este estudiante al <?=($agnoBD+1); ?>. Desea continuar?')){return false;}">Pasar a <?=($agnoBD+1); ?></a></li>
+                                                                <?php if (!empty($configAdmisiones["cfgi_year_inscripcion"]) && $configAdmisiones["cfgi_year_inscripcion"]==$yearEnd && $configAdmisiones["cfgi_year_inscripcion"]!=$agnoBD) { ?>
 
-                                                                <?php } ?>
+                                                                <li><a href="javascript:void(0);" 
+                                                                onClick="sweetConfirmacion('Alerta!','Va a pasar este estudiante al <?=$configAdmisiones["cfgi_year_inscripcion"]; ?>. Desea continuar?','question','inscripciones-pasar-estudiante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
+                                                                >Pasar a <?=$configAdmisiones["cfgi_year_inscripcion"]; ?></a></li>
 
-                                                                <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2) { ?>
-                                                                <li><a href="inscripciones-eliminar-aspirante.php?matricula=<?= $resultado["mat_id"]; ?>" onclick="if(!confirm('Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?')){return false;}">Eliminar aspirante</a></li>
+                                                                <?php }} ?>
+
+                                                                <?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
+                                                                <li><a href="javascript:void(0);" 
+                                                                onClick="sweetConfirmacion('Alerta!','Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-aspirante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')"
+                                                                >Eliminar aspirante</a></li>
                                                                 <?php } ?>
                                                             </ul>
                                                         </div>
@@ -211,6 +221,14 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+    <script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

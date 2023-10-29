@@ -1,10 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0010';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DC0010';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
 require_once("../class/Estudiantes.php");
+include("../compartido/head.php");
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
@@ -73,6 +73,7 @@ require_once("../class/Estudiantes.php");
 													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['uss_foto']);
 														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'");
 														 $genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
 														//DEFINITIVAS
@@ -93,11 +94,11 @@ require_once("../class/Estudiantes.php");
 															
 														</td>
 														<td style="color: <?=$colorEstudiante;?>">
-															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
+															<img src="<?=$fotoEstudiante;?>" width="50">
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td><?=$genero[1];?></td>
-														<td><a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$periodoConsultaActual;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a></td>
+														<td><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a></td>
 														<td>
 														<?php if($datosCargaActual['car_director_grupo']==1 || empty($_SESSION['admin']) ){?>
 															<div class="btn-group">
@@ -107,12 +108,12 @@ require_once("../class/Estudiantes.php");
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
 																		<?php if(!isset($_SESSION['admin'])){?>
-																	  <li><a href="auto-login.php?user=<?=$resultado['mat_id_usuario'];?>">Autologin</a></li>
+																	  <li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>">Autologin</a></li>
 																	  <?php }?>
 
 															<?php if($datosCargaActual['car_director_grupo']==1){?>
-																		  <li><a href="reportes-lista.php?est=<?=$resultado['mat_id_usuario'];?>&filtros=1">R. Disciplina</a></li>
-																		  <li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
+																		  <li><a href="reportes-lista.php?est=<?=base64_encode($resultado['mat_id_usuario']);?>&filtros=<?=base64_encode(1);?>">R. Disciplina</a></li>
+																		  <li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
 															<?php }?>
 															</ul>
 															</div>

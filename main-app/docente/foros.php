@@ -26,22 +26,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-									
-								</div>
-									
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></header>
@@ -57,16 +47,12 @@
 												<div class="col-sm-12">
 													
 											<?php
-											if(
-												($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-																	
-												or($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-												)
+											if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) )
 											{
 											?>
 											
 													<div class="btn-group">
-														<a href="foros-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="foros-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -100,7 +86,7 @@
 													<tr id="reg<?=$resultado['foro_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
-														<td><a href="foros-detalles.php?idR=<?=$resultado['foro_id'];?>"><?=$resultado[1];?></a></td>
+														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>"><?=$resultado[1];?></a></td>
 														<td>
 															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 															
@@ -115,10 +101,10 @@
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="foros-detalles.php?idR=<?=$resultado['foro_id'];?>">Participación</a></li>
-																	  <li><a href="foros-editar.php?idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
+																	  <li><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>">Participación</a></li>
+																	  <li><a href="foros-editar.php?idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	  
-																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=16&idR=<?=$resultado['foro_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=<?=base64_encode(16);?>&idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>

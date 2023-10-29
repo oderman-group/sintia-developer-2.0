@@ -7,7 +7,17 @@ class UsuariosPadre {
         if (!is_array($usuario)) {
             return '--';
         }
-        return strtoupper($usuario['uss_nombre']." ".$usuario['uss_nombre2']." ".$usuario['uss_apellido1']." ".$usuario['uss_apellido2']);
+        $nombre=$usuario['uss_nombre'];
+        if(!empty($usuario['uss_nombre2'])){
+            $nombre.=" ".$usuario['uss_nombre2'];
+        }
+        if(!empty($usuario['uss_apellido1'])){
+            $nombre.=" ".$usuario['uss_apellido1'];
+        }
+        if(!empty($usuario['uss_apellido2'])){
+            $nombre.=" ".$usuario['uss_apellido2'];
+        }
+        return strtoupper($nombre);
     }
 
     public static function listarUsuariosAnio($usuario)
@@ -17,11 +27,12 @@ class UsuariosPadre {
         global $yearEnd;
         global $baseDatosServicios;
         global $filtro;
-        $index=0;        
+        $index=0;
+        $tableName = BDT_GeneralPerfiles::getTableName();        
         while($yearStart <= $yearEnd){
             $instYear =$_SESSION["inst"] ."_". $yearStart;            
             $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios 
-            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+            INNER JOIN ".$baseDatosServicios.".{$tableName} ON pes_id=uss_tipo
             WHERE uss_usuario LIKE '".$usuario."%'");
             if($consultaUsuarioAuto->num_rows>0){               
                 while($fila=$consultaUsuarioAuto->fetch_assoc()){
@@ -53,12 +64,13 @@ class UsuariosPadre {
 
    public static function actualizarUsuariosAnios()
    {
+        $get=$_GET["get"];
         $campoGet=null;
         $campoTabla=null;
         global $yearStart;
         global $yearEnd;
         global $conexion;
-        switch ($_GET["get"]) {
+        switch ($get) {
             case 1://CAMBIAR IDIOMA
                 $campoGet="idioma";
                 $campoTabla="uss_idioma";
@@ -82,26 +94,52 @@ class UsuariosPadre {
         }
         if($campoGet){
                 while($yearStart <= $yearEnd){	
-                    if($_SESSION["bd"]==$yearStart){			
-                        if($_GET["get"] == 5)
-                        mysqli_query($conexion, "UPDATE usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "', uss_tema_sidebar='" . $_GET["temaSidebar"] . "', uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-                        else
-                        mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . $_GET[$campoGet] . "' WHERE uss_id='" . $_SESSION["id"] . "'");
-                    }else{
-                        $usuarioSession=$_SESSION["datosUsuario"];
-                        $instYear =$_SESSION["inst"] ."_". $yearStart;
-                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'],$instYear);
-                        if($usauriosOtrosAnios){
-                            if($_GET["get"] == 5)
-                            mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET uss_tema_header='" . $_GET["temaHeader"] . "', uss_tema_sidebar='" . $_GET["temaSidebar"] . "', uss_tema_logo='" . $_GET["temaLogo"] . "' WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
-                            else
-                            mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'");
+                    if ($_SESSION["bd"] == $yearStart) {			
+                        if($get == 5) {
+                            mysqli_query($conexion, "UPDATE usuarios SET 
+                            uss_tema_header='" . $_GET["temaHeader"] . "', 
+                            uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
+                            uss_tema_logo='" . $_GET["temaLogo"] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                        }
+                        else {
+                            mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                        }
+                    } else {
+                        $usuarioSession = $_SESSION["datosUsuario"];
+                        $instYear = $_SESSION["inst"] ."_". $yearStart;
+                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $instYear);
+                        if($usauriosOtrosAnios) {
+                            if($get == 5) {
+                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET 
+                                uss_tema_header='" . $_GET["temaHeader"] . "', 
+                                uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
+                                uss_tema_logo='" . $_GET["temaLogo"] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
+                            }
+                            else {
+                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'"); 
+                            }
                         }
                         
                     }
                     $yearStart++;
-                }		
+                }
+            $_SESSION["datosUsuario"][$campoTabla] = $_GET[$campoGet];		
         }        	
+    }
+
+    public static function listarUsuariosCompartir($nombre='',$BD='')
+    {
+        global $conexion,$baseDatosServicios;
+
+        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".$BD.".usuarios 
+        INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
+         
+        return $consulta;         
     }
 
 }   

@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0104';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -31,12 +36,7 @@
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 								
 									<?php
-										$filtro = '';
 										include("includes/barra-superior-movimientos-financieros.php");
-										if(!empty($_GET["tipo"])){$filtro .= " AND fcu_tipo='".$_GET["tipo"]."'";}
-										if(!empty($_GET["usuario"])){$filtro .= " AND fcu_usuario='".$_GET["usuario"]."'";}
-										if(!empty($_GET["estadoM"])){$filtro .= " AND mat_estado_matricula='".$_GET["estadoM"]."'";}
-										if(!empty($_GET["fecha"])){$filtro .= " AND fcu_fecha='".$_GET["fecha"]."'";}
 
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
 										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
@@ -72,15 +72,17 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="movimientos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="movimientos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
 											
                                         <div class="table-scrollable">
-                                    		<table id="example1" class="display" style="width:100%;">
+                                    		<table class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -90,7 +92,9 @@
 														<th>Valor</th>
 														<th>Tipo</th>
 														<th>Usuario</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -110,37 +114,39 @@
 													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $bgColor = '';
-														 if($resultado['fcu_anulado']==1) $bgColor = 'sandybrown';
+														 if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 													 ?>
 													<tr style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario?>&fecha=<?=$resultado['fcu_fecha'];?>&tipo=<?=$tipo;?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td>$<?=number_format($resultado['fcu_valor'],0,",",".");?></td>
+														<td>$<?php if(!empty($resultado['fcu_valor']) && is_numeric($resultado['fcu_valor'])) echo number_format($resultado['fcu_valor'],0,",",".");?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$usuario;?>&tipo=<?=$resultado['fcu_tipo'];?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=$resultado['uss_id'];?>" style="text-decoration: underline;"><?=strtoupper($resultado['uss_nombre']);?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
 
-														<td>
-															<div class="btn-group">
-																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	<i class="fa fa-angle-down"></i>
-																</button>
-																<ul class="dropdown-menu" role="menu">
-																	<li><a href="movimientos-editar.php?idU=<?=$resultado['fcu_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																	<?php if($resultado['fcu_anulado']!=1){?>
-																		<li><a href="guardar.php?get=11&idR=<?=$resultado['fcu_id'];?>">Anular</a></li>
-																	<?php } ?>
-																</ul>
-															  </div>
-														</td>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu">
+																		<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php if($resultado['fcu_anulado']!=1){?>
+																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','guardar.php?get=<?=base64_encode(11)?>&idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
+																		<?php } ?>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

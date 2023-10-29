@@ -143,17 +143,14 @@ if($extension == 'xlsx'){
 				$numeroUsuariosBloqueados = count($usuariosBloqueados);
 			}
 
-			$respuesta = [
-				"summary" => "
+			$respuesta =  "
 					Resumen del proceso:<br>
 					- Total filas leidas: {$numFilas}<br><br>
 					- Movimientos creados nuevos: {$numeroMovimientosCreados}<br>
 					- Movimientos que les faltó algun campo obligatorio: {$numeroMovimientosNoCreados}<br><br>
 					- Usuarios bloqueados por deuda: {$numeroUsuariosBloqueados}
 				"
-			];
-
-			$summary = http_build_query($respuesta);
+			;
 
 			if(!empty($movimientosCreados) && count($movimientosCreados) > 0) {
 				$sql = substr($sql, 0, -1);
@@ -169,8 +166,13 @@ if($extension == 'xlsx'){
 			if(file_exists($nombreArchivo)){
 				unlink($nombreArchivo);
 			}
-			
-			echo '<script type="text/javascript">window.location.href="movimientos.php?success=SC_DT_4&'.$summary.'";</script>';
+?>	
+			<script type="text/javascript">
+				var mensajeEncriptado = "<?php echo base64_encode($respuesta); ?>";
+				var parametro = encodeURIComponent(mensajeEncriptado);
+				window.location.href="movimientos.php?success=SC_DT_4&summary="+parametro;
+			</script>		
+<?php			
 			exit();
 
 		}else{

@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0037';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +40,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-indicadores-obligatorios.php" onClick="deseaRegresar(this)">Indicadores Obligatorios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores-obligatorios.php" onClick="deseaRegresar(this)">Indicadores Obligatorios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Indicadores</li>
                             </ol>
                         </div>
@@ -50,7 +55,7 @@
                                 	<div class="panel-body">
                                     <?php 
                                     try{
-                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_GET["id"]."'");
+                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".base64_decode($_GET["id"])."'");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -59,7 +64,7 @@
 
                                    
 									<form name="formularioGuardar" action="cargas-indicadores-obligatorios-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idI">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idI">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>

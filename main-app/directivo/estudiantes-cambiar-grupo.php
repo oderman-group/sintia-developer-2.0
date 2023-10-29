@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once("../class/Estudiantes.php");
 ?>
 
@@ -48,7 +53,9 @@ require_once("../class/Estudiantes.php");
                         <div class="col-sm-12">
                         
                                 <?php
-                                    $e = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
+                                    $id="";
+                                    if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+                                    $e = Estudiantes::obtenerDatosEstudiante($id);
                                 ?>
 
 								<div class="panel">
@@ -111,7 +118,7 @@ require_once("../class/Estudiantes.php");
                                         </div>
 
                                         <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
-                                        <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

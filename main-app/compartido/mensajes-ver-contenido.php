@@ -1,18 +1,33 @@
 <?php
 $filtro="AND ema_para='".$_SESSION["id"]."'";
-if(isset($_GET["opt"]) AND $_GET["opt"]==2){
+if(isset($_GET["opt"]) AND base64_decode($_GET["opt"])==2){
 	$filtro='';
 }
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
 $datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 INNER JOIN usuarios ON uss_id=ema_de
-WHERE ema_id='".$_GET["idR"]."' $filtro"), MYSQLI_BOTH);
+WHERE ema_id='".$idR."' $filtro"), MYSQLI_BOTH);
 
 
 if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']=='0'){
-	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$_GET["idR"]."'");
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_emails SET ema_visto=1, ema_fecha_visto=now() WHERE ema_id='".$idR."'");
 	
 }
 ?>
+<div class="page-bar">
+	<div class="page-title-breadcrumb">
+		<div class=" pull-left">
+			<div class="page-title"><?php if(isset($datosConsulta['ema_asunto'])){ echo $datosConsulta['ema_asunto'];}?></div>
+		</div>
+		<ol class="breadcrumb page-breadcrumb pull-right">
+			<li><a class="parent-item" href="mensajes.php">Mensajes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+			<li class="active"><?php if(isset($datosConsulta['ema_asunto'])){ echo $datosConsulta['ema_asunto'];}?></li>
+		</ol>
+	</div>
+</div>
 <div class="inbox">
                     <div class="row">
                         <div class="col-md-12">
@@ -25,7 +40,7 @@ if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']==
 				                                        <i class="fa fa-edit"></i> Redactar </a>
 				                                    <ul class="inbox-nav inbox-divider">
 				                                        <li class="active"><a href="mensajes.php"><i class="fa fa-inbox"></i> Recibidos</a></li>
-				                                        <li><a href="mensajes.php?opt=2"><i class="fa fa-envelope"></i> Enviados</a></li>
+				                                        <li><a href="mensajes.php?opt=<?=base64_encode(2)?>"><i class="fa fa-envelope"></i> Enviados</a></li>
 				                                    </ul>
 				                                </div>
 				                            </div>
@@ -70,7 +85,7 @@ if($datosConsulta['ema_para']==$_SESSION["id"] and $datosConsulta['ema_visto']==
 			                                            </div>
 														
 			                                            <div class="compose-btn pull-left">
-			                                                <a href="mensajes-redactar.php?para=<?=$datosConsulta['ema_de'];?>&asunto=RE: <?=$datosConsulta['ema_asunto'];?>" class="btn btn-sm btn-primary"><i
+			                                                <a href="mensajes-redactar.php?para=<?=base64_encode($datosConsulta['ema_de']);?>&asunto=<?=base64_encode('RE: '.$datosConsulta['ema_asunto'])?>" class="btn btn-sm btn-primary"><i
 																class="fa fa-reply"></i> Responder</a>
 			                                                <button class="btn btn-sm btn-default">
 			                                                    <i class="fa fa-arrow-right"></i> Reenviar

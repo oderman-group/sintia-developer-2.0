@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0071';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 
 	<!--bootstrap -->
@@ -36,7 +46,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="disciplina-categorias.php" onClick="deseaRegresar(this)">Categorias</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-categorias.php" onClick="deseaRegresar(this)">Categorias</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Categoría</li>
                             </ol>
                         </div>
@@ -58,16 +68,18 @@
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>
 											<div class="col-sm-8">
-												<input type="text" name="categoria" class="form-control">
+												<input type="text" name="categoria" class="form-control" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

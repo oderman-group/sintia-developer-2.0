@@ -16,25 +16,29 @@ include("../../config-general/consulta-usuario-actual.php");
 
 
 <?php
-$estadosSolicitud = array(
+$estadosSolicitud = [
     1 => 'VERIFICACIÓN DE PAGO',
     2 => 'PAGO RECHAZADO',
     3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
     4 => 'EN PROCESO',
     5 => 'EXAMEN Y ENTREVISTA',
     6 => 'APROBADO',
-    7 => 'NO APROBADO'
-);
+    7 => 'NO APROBADO',
+    8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
+    9 => 'MOVIDO AL AÑO SIGUIENTE'
+];
 
-$fondoSolicitud = array(
+$fondoSolicitud = [
     1 => 'yellow',
     2 => 'tomato',
     3 => 'orange',
     4 => '#AFB372',
     5 => 'aquamarine',
     6 => 'green',
-    7 => 'red'
-);
+    7 => 'red',
+    8 => 'yellow',
+    9 => '#00FAB5'
+];
 
 $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
 INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion

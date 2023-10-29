@@ -57,6 +57,33 @@ class Estudiantes {
         return $resultado;
     }
 
+    public static function listarEstudiantesNotasFaltantes(
+        string $carga, 
+        string $periodo,
+    )
+    {
+        global $conexion;
+        $resultado = [];
+
+        try {
+            $sqlString= "SELECT *, sum(act_valor) as acumulado 
+            FROM academico_matriculas
+            LEFT JOIN academico_cargas on car_id='".$carga."'
+            LEFT JOIN academico_calificaciones on cal_id_estudiante=mat_id 
+            LEFT JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga=car_id and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
+            WHERE mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grado=car_curso AND mat_grupo=car_grupo
+            GROUP BY mat_id
+            HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
+            ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres";
+            $resultado = mysqli_query($conexion,$sqlString);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $resultado;
+    }
+
     public static function listarEstudiantesParaDocentes(string $filtroDocentes = '',string $filtroLimite = '')
     {
         global $conexion, $baseDatosServicios;
@@ -110,7 +137,18 @@ class Estudiantes {
     }
 
     public static function NombreCompletoDelEstudiante(array $estudiante){
-        return strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
+        
+        $nombre=$estudiante['mat_nombres'];
+        if(!empty($estudiante['mat_nombre2'])){
+            $nombre.=" ".$estudiante['mat_nombre2'];
+        }
+        if(!empty($estudiante['mat_segundo_apellido'])){
+            $nombre=$estudiante['mat_segundo_apellido']." ".$nombre;
+        }
+        if(!empty($estudiante['mat_primer_apellido'])){
+            $nombre=$estudiante['mat_primer_apellido']." ".$nombre;
+        }
+        return strtoupper($nombre);
     }
 
     public static function listarEstudiantesParaAcudientes($acudiente)
@@ -176,8 +214,7 @@ class Estudiantes {
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
-                echo "Este estudiante no existe: ".$estudianteIdUsuario;
-                exit();
+                return $resultado;
             }
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
@@ -189,14 +226,14 @@ class Estudiantes {
 
     }
 
-    public static function validarExistenciaEstudiante($estudiante = 0)
+    public static function validarExistenciaEstudiante($estudiante = 0,$BD    = '')
     {
 
         global $conexion;
         $num = 0;
 
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_matriculas
             WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0
             ");
             $num = mysqli_num_rows($consulta);
@@ -238,12 +275,30 @@ class Estudiantes {
 
     public static function NombreCompletoDelEstudianteParaInformes(array $estudiante, $orden){
         
-        $nombre=strtoupper($estudiante['mat_nombres']." ".$estudiante['mat_nombre2']." ".$estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']);
+        $nombre=$estudiante['mat_nombres'];
+        if(!empty($estudiante['mat_nombre2'])){
+            $nombre.=" ".$estudiante['mat_nombre2'];
+        }
+        if(!empty($estudiante['mat_primer_apellido'])){
+            $nombre.=" ".$estudiante['mat_primer_apellido'];
+        }
+        if(!empty($estudiante['mat_segundo_apellido'])){
+            $nombre.=" ".$estudiante['mat_segundo_apellido'];
+        }
         
         if($orden==2){
-            $nombre=strtoupper($estudiante['mat_primer_apellido']." ".$estudiante['mat_segundo_apellido']." ".$estudiante['mat_nombres']." ".$estudiante['mat_nombre2']);
+            $nombre=$estudiante['mat_nombres'];
+            if(!empty($estudiante['mat_nombre2'])){
+                $nombre.=" ".$estudiante['mat_nombre2'];
+            }
+            if(!empty($estudiante['mat_segundo_apellido'])){
+                $nombre=$estudiante['mat_segundo_apellido']." ".$nombre;
+            }
+            if(!empty($estudiante['mat_primer_apellido'])){
+                $nombre=$estudiante['mat_primer_apellido']." ".$nombre;
+            }
         }
-        return $nombre;
+        return strtoupper($nombre);
     }
 
     public static function ActualizarEstadoMatricula($idEstudiante, $estadoMatricula)
@@ -331,6 +386,287 @@ class Estudiantes {
 
         return $num;
 
+    }
+
+    /**
+     * Esta función permite insertar los datos de los estudiantes en
+     * las matrículas
+     * 
+     * @param $conexionPDO ConexionPDO
+     * @param $POST Array
+     * @param $fechaNacimiento String
+     * @param $procedencia String
+     * @param $pasosMatricula String
+     */
+    public static function insertarEstudiantes($conexionPDO, $POST, $idEstudianteU, $result_numMat = '', $procedencia = '', $idAcudiente = '')
+    {
+        $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
+        $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
+        $religion = isset($POST["religion"]) ? $POST["religion"] : "";
+        $email = isset($POST["email"]) ? strtolower($POST["email"]) : "";
+        $direccion = isset($POST["direccion"]) ? $POST["direccion"] : "";
+        $barrio = isset($POST["barrio"]) ? $POST["barrio"] : "";
+        $telefono = isset($POST["telefono"]) ? $POST["telefono"] : "";
+        $celular = isset($POST["celular"]) ? $POST["celular"] : "";
+        $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
+        $genero = isset($POST["genero"]) ? $POST["genero"] : "";
+        $apellido1 = isset($POST["apellido1"]) ? $POST["apellido1"] : "";
+        $apellido2 = isset($POST["apellido2"]) ? $POST["apellido2"] : "";
+        $nombres = isset($POST["nombres"]) ? $POST["nombres"] : "";
+        $grado = isset($POST["grado"]) ? $POST["grado"] : "";
+        $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
+        $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
+        $lugarD = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
+        $matestM = isset($POST["matestM"]) ? $POST["matestM"] : "";
+        $folio = isset($POST["folio"]) ? $POST["folio"] : "";
+        $codTesoreria = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
+        $va_matricula = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
+        $inclusion = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
+        $extran = isset($POST["extran"]) ? $POST["extran"] : "";
+        $tipoSangre = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
+        $eps = isset($POST["eps"]) ? $POST["eps"] : "";
+        $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
+        $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
+        $nombre2 = isset($POST["nombre2"]) ? $POST["nombre2"] : "";
+        $fNac = isset($POST["fNac"]) ? $POST["fNac"] : "";
+
+        try{
+
+            $consulta = "INSERT INTO academico_matriculas(
+                mat_matricula, mat_fecha, mat_tipo_documento, 
+                mat_documento, mat_religion, mat_email, 
+                mat_direccion, mat_barrio, mat_telefono, 
+                mat_celular, mat_estrato, mat_genero, 
+                mat_fecha_nacimiento, mat_primer_apellido, mat_segundo_apellido, 
+                mat_nombres, mat_grado, mat_grupo, 
+                mat_tipo, mat_lugar_nacimiento, mat_lugar_expedicion, 
+                mat_acudiente, mat_estado_matricula, mat_id_usuario, 
+                mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
+                mat_inclusion, mat_extranjero, mat_tipo_sangre, 
+                mat_eps, mat_celular2, mat_ciudad_residencia, 
+                mat_nombre2, mat_estado_agno)
+                VALUES(
+                ".$result_numMat.", now(), :tipoD,
+                :nDoc, :religion, :email,
+                :direccion, :barrio, :telefono,
+                :celular, :estrato, :genero, 
+                :fNac, :apellido1, :apellido2, 
+                :nombres, :grado, :grupo,
+                :tipoEst, '".$procedencia."', :lugarD,
+                ".$idAcudiente.", :matestM, '".$idEstudianteU."', 
+                :folio, :codTesoreria, :va_matricula, 
+                :inclusion, :extran, :tipoSangre, 
+                :eps, :celular2, :ciudadR, 
+                :nombre2, 3
+                )";
+
+            $stmt = $conexionPDO->prepare($consulta);
+
+             // Asociar los valores a los marcadores de posición
+            $stmt->bindParam(':tipoD', $tipoD, PDO::PARAM_INT);
+
+            $stmt->bindParam(':nDoc', $nDoc, PDO::PARAM_STR);
+            $stmt->bindParam(':religion', $religion);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+            $stmt->bindParam(':direccion', $direccion, PDO::PARAM_STR);
+            $stmt->bindParam(':barrio', $barrio, PDO::PARAM_STR);
+            $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+
+            $stmt->bindParam(':celular', $celular, PDO::PARAM_STR);
+            $stmt->bindParam(':estrato', $estrato);
+            $stmt->bindParam(':genero', $genero);
+
+            $stmt->bindParam(':fNac', $fNac, PDO::PARAM_STR);
+            $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR);
+            $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR);
+
+            $stmt->bindParam(':nombres', $nombres, PDO::PARAM_STR);
+            $stmt->bindParam(':grado', $grado, PDO::PARAM_STR);
+            $stmt->bindParam(':grupo', $grupo);
+
+            $stmt->bindParam(':tipoEst', $tipoEst);
+            $stmt->bindParam(':lugarD', $lugarD, PDO::PARAM_STR);
+
+            $stmt->bindParam(':matestM', $matestM);
+
+            $stmt->bindParam(':folio', $folio,PDO::PARAM_STR);
+            $stmt->bindParam(':codTesoreria', $codTesoreria, PDO::PARAM_STR);
+            $stmt->bindParam(':va_matricula', $va_matricula, PDO::PARAM_STR);
+
+            $stmt->bindParam(':inclusion', $inclusion);
+            $stmt->bindParam(':extran', $extran);
+            $stmt->bindParam(':tipoSangre', $tipoSangre, PDO::PARAM_STR);
+
+            $stmt->bindParam(':eps', $eps, PDO::PARAM_STR);
+            $stmt->bindParam(':celular2', $celular2, PDO::PARAM_STR);
+            $stmt->bindParam(':ciudadR', $ciudadR, PDO::PARAM_STR);
+
+            $stmt->bindParam(':nombre2', $nombre2, PDO::PARAM_STR);
+
+            if ($stmt) {
+                $stmt->execute();
+                $idEstudiante = $conexionPDO->lastInsertId();
+                return $idEstudiante;
+            } else {
+                throw new Exception("Error al preparar la consulta.");
+            }
+        
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }	
+
+    }
+
+
+    /**
+     * Esta función permite actualizar los datos de los estudiantes
+     * 
+     * @param $conexionPDO ConexionPDO
+     * @param $POST Array
+     * @param $fechaNacimiento String
+     * @param $procedencia String
+     * @param $pasosMatricula String
+     */
+    public static function actualizarEstudiantes($conexionPDO, $POST, $fechaNacimiento = '', $procedencia = '', $pasosMatricula = '')
+    {
+        $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
+        $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
+        $religion = isset($POST["religion"]) ? $POST["religion"] : "";
+        $email = isset($POST["email"]) ? strtolower($POST["email"]) : "";
+        $direccion = isset($POST["direccion"]) ? $POST["direccion"] : "";
+        $barrio = isset($POST["barrio"]) ? $POST["barrio"] : "";
+        $telefono = isset($POST["telefono"]) ? $POST["telefono"] : "";
+        $celular = isset($POST["celular"]) ? $POST["celular"] : "";
+        $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
+        $genero = isset($POST["genero"]) ? $POST["genero"] : "";
+        $apellido1 = isset($POST["apellido1"]) ? $POST["apellido1"] : "";
+        $apellido2 = isset($POST["apellido2"]) ? $POST["apellido2"] : "";
+        $nombres = isset($POST["nombres"]) ? $POST["nombres"] : "";
+        $grado = isset($POST["grado"]) ? $POST["grado"] : "";
+        $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
+        $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
+        $lugarD = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
+        $matestM = isset($POST["matestM"]) ? $POST["matestM"] : "";
+        $matricula = isset($POST["matricula"]) ? $POST["matricula"] : "";
+        $folio = isset($POST["folio"]) ? $POST["folio"] : "";
+        $codTesoreria = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
+        $va_matricula = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
+        $inclusion = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
+        $extran = isset($POST["extran"]) ? $POST["extran"] : "";
+        $NumMatricula = isset($POST["NumMatricula"]) ? $POST["NumMatricula"] : "";
+        $estadoAgno = isset($POST["estadoAgno"]) ? $POST["estadoAgno"] : "";
+        $tipoSangre = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
+        $eps = isset($POST["eps"]) ? $POST["eps"] : "";
+        $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
+        $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
+        $nombre2 = isset($POST["nombre2"]) ? $POST["nombre2"] : "";
+        $id = isset($POST["id"]) ? $POST["id"] : "";
+
+        try{
+            
+            $consulta = "UPDATE academico_matriculas SET 
+            mat_tipo_documento    = :tipoD, 
+            mat_documento         = :nDoc, 
+            mat_religion          = :religion, 
+            mat_email             = :email, 
+            mat_direccion         = :direccion, 
+            mat_barrio            = :barrio, 
+            mat_telefono          = :telefono, 
+            mat_celular           = :celular, 
+            mat_estrato           = :estrato, 
+            mat_genero            = :genero,
+            mat_primer_apellido   = :apellido1, 
+            mat_segundo_apellido  = :apellido2, 
+            mat_nombres           = :nombres, 
+            mat_grado             = :grado, 
+            mat_grupo             = :grupo, 
+            mat_tipo              = :tipoEst,
+            mat_lugar_expedicion  = :lugarD,
+            mat_estado_matricula  = :matestM, 
+            mat_matricula         = :matricula, 
+            mat_folio             = :folio, 
+            mat_codigo_tesoreria  = :codTesoreria, 
+            mat_valor_matricula   = :va_matricula, 
+            mat_inclusion         = :inclusion, 
+            mat_extranjero        = :extran, 
+            mat_fecha             = NOW(), 
+            mat_numero_matricula  = :NumMatricula, 
+            mat_estado_agno       = :estadoAgno,
+            mat_tipo_sangre       = :tipoSangre, 
+            mat_eps               = :eps, 
+            mat_celular2          = :celular2, 
+            mat_ciudad_residencia = :ciudadR,
+            mat_lugar_nacimiento  = :procedencia,
+            $pasosMatricula
+            $fechaNacimiento
+            mat_nombre2           = :nombre2
+
+            WHERE mat_id = :id";
+
+            $stmt = $conexionPDO->prepare($consulta);
+
+             // Asociar los valores a los marcadores de posición
+            $stmt->bindParam(':tipoD', $tipoD, PDO::PARAM_INT);
+            $stmt->bindParam(':nDoc', $nDoc, PDO::PARAM_STR);
+            $stmt->bindParam(':religion', $religion);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':direccion', $direccion, PDO::PARAM_STR);
+            $stmt->bindParam(':barrio', $barrio, PDO::PARAM_STR);
+            $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+            $stmt->bindParam(':celular', $celular, PDO::PARAM_STR);
+            $stmt->bindParam(':estrato', $estrato);
+            $stmt->bindParam(':genero', $genero);
+            $stmt->bindParam(':apellido1', $apellido1, PDO::PARAM_STR);
+            $stmt->bindParam(':apellido2', $apellido2, PDO::PARAM_STR);
+            $stmt->bindParam(':nombres', $nombres, PDO::PARAM_STR);
+            $stmt->bindParam(':grado', $grado, PDO::PARAM_STR);
+            $stmt->bindParam(':grupo', $grupo);
+            $stmt->bindParam(':tipoEst', $tipoEst);
+            $stmt->bindParam(':lugarD', $lugarD, PDO::PARAM_STR);
+            $stmt->bindParam(':matestM', $matestM);
+            $stmt->bindParam(':matricula', $matricula);
+            $stmt->bindParam(':folio', $folio,PDO::PARAM_STR);
+            $stmt->bindParam(':codTesoreria', $codTesoreria, PDO::PARAM_STR);
+            $stmt->bindParam(':va_matricula', $va_matricula, PDO::PARAM_STR);
+            $stmt->bindParam(':inclusion', $inclusion);
+            $stmt->bindParam(':extran', $extran);
+            $stmt->bindParam(':NumMatricula', $NumMatricula);
+            $stmt->bindParam(':estadoAgno', $estadoAgno, PDO::PARAM_INT);
+            $stmt->bindParam(':tipoSangre', $tipoSangre, PDO::PARAM_STR);
+            $stmt->bindParam(':eps', $eps, PDO::PARAM_STR);
+            $stmt->bindParam(':celular2', $celular2, PDO::PARAM_STR);
+            $stmt->bindParam(':ciudadR', $ciudadR, PDO::PARAM_STR);
+            $stmt->bindParam(':procedencia', $procedencia);
+            $stmt->bindParam(':nombre2', $nombre2, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            if ($stmt) {
+                $stmt->execute();
+
+                return $stmt;
+            } else {
+                throw new Exception("Error al preparar la consulta.");
+            }
+        
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }	
+
+    }
+
+    /**
+     * Cuenta el número de estudiantes disponibles para un grupo de docentes, opcionalmente aplicando un filtro.
+     *
+     * @param string $filtroDocentes (Opcional) - Un filtro para limitar la cuenta de estudiantes a un grupo específico de docentes.
+     *
+     * @return int - El número de estudiantes disponibles para los docentes después de aplicar el filtro (o el número total de estudiantes si no se proporciona un filtro).
+     */
+    public static function contarEstudiantesParaDocentes(string $filtroDocentes = '')
+    {
+        $consulta = self::listarEstudiantesParaDocentes($filtroDocentes);
+        $num = mysqli_num_rows($consulta);
+        return $num;
     }
 
 }

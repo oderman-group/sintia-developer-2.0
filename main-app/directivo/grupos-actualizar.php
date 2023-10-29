@@ -2,6 +2,11 @@
 include("session.php");
 $idPaginaInterna = 'DT0198';
 
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
@@ -28,5 +33,5 @@ try {
 
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_2&id=' . $idRegistro . '";</script>';
+echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_2&id=' . base64_encode($idRegistro) . '";</script>';
 exit();

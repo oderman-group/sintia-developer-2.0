@@ -38,21 +38,10 @@
                             </div>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-md-4 col-lg-3">
-
-
-						<?php include("info-carga-actual.php");?>
-							
-						<?php include("filtros-cargas.php");?>
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-
-                        </div>
-						
-                        <div class="col-md-8 col-lg-9">
+                        <div class="col-md-12">
 
 
 								<div class="panel">
@@ -60,10 +49,10 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="40" name="id">
 										
-										<p style="color: darkblue;">Escoge la carga y el periodo desde donde quieres importar la información.</p>	
+										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual[8]];?></p>	
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></label>
@@ -106,7 +95,7 @@
                                             </div>
                                         </div>
 										
-										<p style="color: darkblue;">Ahora puedes especificar la información que quieres importar.</p>	
+										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual[8]];?></p>	
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></label>
@@ -117,7 +106,7 @@
 												</label>
 											</div>
 										</div>
-										<p><mark>Al importar las calificaciones también se importarán los indicadores automáticamente.</mark></p>
+										<p><mark><?=$frases[378][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></label>
 											<div class="input-group spinner col-sm-10">
@@ -171,7 +160,7 @@
 										-->
 										
 
-										<p><mark>Verifica que hayas seleccionado todo correctamente para esta importación. Una vez hecha no hay vuelta atrás.</mark></p>
+										<p><mark><?=$frases[379][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										
 										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual[8]];?>">&nbsp;
 										

@@ -9,7 +9,10 @@ if ($_SESSION["id"] == "") {
 include("bd-conexion.php");
 include("php-funciones.php");
 
-if (md5($_GET['id']) != $_GET['token']) {
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
+if (md5($id) != $_GET['token']) {
     redireccionMal('respuestas-usuario.php', 4);
 }
 
@@ -17,7 +20,7 @@ $estQuery = "SELECT * FROM academico_matriculas
 LEFT JOIN usuarios ON uss_id=mat_acudiente
 WHERE mat_solicitud_inscripcion = :id";
 $est = $pdoI->prepare($estQuery);
-$est->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+$est->bindParam(':id', $id, PDO::PARAM_INT);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
@@ -46,7 +49,7 @@ $datosMadre = $madre->fetch();
 //Aspirantes
 $aspQuery = "SELECT * FROM aspirantes WHERE asp_id = :id";
 $asp = $pdo->prepare($aspQuery);
-$asp->bindParam(':id', $_GET["id"], PDO::PARAM_INT);
+$asp->bindParam(':id', $id, PDO::PARAM_INT);
 $asp->execute();
 $datosAsp = $asp->fetch();
 ?>
@@ -89,11 +92,14 @@ $datosAsp = $asp->fetch();
         <?php include("menu.php"); ?>
 
         <?php include("alertas.php"); ?>
+        <?php include("../../config-general/mensajes-informativos.php"); ?>
 
         <form action="admin-formulario-actualizar.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="idMatricula" value="<?= $datos['mat_id']; ?>">
-            <input type="hidden" name="solicitud" value="<?= $_GET["id"]; ?>">
+            <input type="hidden" name="solicitud" value="<?= $id; ?>">
             <input type="hidden" name="emailAcudiente" value="<?= $datos['uss_email']; ?>">
+            <input type="hidden" name="nombreAcudiente" value="<?= $datosAsp['asp_nombre_acudiente']; ?>">
+            <input type="hidden" name="documentoAspirante" value="<?= $datosAsp['asp_documento']; ?>">
             <input type="hidden" name="idPadre" value="<?= $datos['mat_padre']; ?>">
             <input type="hidden" name="idMadre" value="<?= $datos['mat_madre']; ?>">
             <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
@@ -303,7 +309,7 @@ $datosAsp = $asp->fetch();
                     <?php if ($datosAsp['asp_archivo1'] != "" and file_exists('files/adjuntos/' . $datosAsp['asp_archivo1'])) { ?>
                         <p><a href="files/adjuntos/<?= $datosAsp['asp_archivo1']; ?>" target="_blank" class="link"><?= $datosAsp['asp_archivo1']; ?></a></p>
 
-                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=1&file=<?= $datosAsp['asp_archivo1']; ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
+                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=<?=base64_encode(1)?>&file=<?= base64_encode($datosAsp['asp_archivo1']); ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
                     <?php } ?>
 
 
@@ -320,7 +326,7 @@ $datosAsp = $asp->fetch();
                     <?php if ($datosAsp['asp_archivo2'] != "" and file_exists('files/adjuntos/' . $datosAsp['asp_archivo2'])) { ?>
                         <p><a href="files/adjuntos/<?= $datosAsp['asp_archivo2']; ?>" target="_blank" class="link"><?= $datosAsp['asp_archivo2']; ?></a></p>
 
-                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=2&file=<?= $datosAsp['asp_archivo2']; ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
+                        <p><a href="admin-adjuntos-eliminar.php?solicitud=<?= $_GET["id"]; ?>&adj=<?=base64_encode(2)?>&file=<?= base64_encode($datosAsp['asp_archivo2']); ?>&idInst=<?=$_REQUEST['idInst']?>" onclick="if(!confirm('Desea eliminar este adjunto?')) {return false;}" style="text-decoration: underline; color:red;">Eliminar adjunto</a></p>
                     <?php } ?>
 
                 </div>

@@ -1,13 +1,14 @@
 <?php 
 include("session.php");
 require_once("../class/Estudiantes.php");
-?>
+include("verificar-carga.php");
 
-<?php include("verificar-carga.php");?>
-<?php
-$consultaNum = mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
-WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
-$num = mysqli_num_rows($consultaNum);
+if(!empty($_POST["codNota"]) && !empty($_POST["codEst"])) {
+	$consultaNum = mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
+	WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' 
+	AND academico_calificaciones.cal_id_estudiante='".$_POST["codEst"]."'");
+	$num = mysqli_num_rows($consultaNum);
+}
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
 
@@ -64,26 +65,32 @@ if($_POST["operacion"]==3){
 	
 	
 	$accionBD = 0;
+	$insertBD = 0;
+	$updateBD = 0;
 	$datosInsert = '';
 	$datosUpdate = '';
 	$datosDelete = '';
 	
 	while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
+		
 		$consultaNumE=mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones 
 		WHERE academico_calificaciones.cal_id_actividad='".$_POST["codNota"]."' AND academico_calificaciones.cal_id_estudiante='".$estudiantes['mat_id']."'");
 		$numE = mysqli_num_rows($consultaNumE);
 		
 		if($numE==0){
 			$accionBD = 1;
+			$insertBD = 1;
 			$datosDelete .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
 			$datosInsert .="('".$estudiantes['mat_id']."','".$_POST["nota"]."','".$_POST["codNota"]."', now(), 0),";
 		}else{
 			$accionBD = 2;
+			$updateBD = 1;
 			$datosUpdate .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
 		}
 	}
+	//exit();
 	
-	if($accionBD==1){
+	if($insertBD==1){
 		$datosInsert = substr($datosInsert,0,-1);
 		$datosDelete = substr($datosDelete,0,-4);
 		
@@ -97,7 +104,7 @@ if($_POST["operacion"]==3){
 		//echo "Este es:". $idNotify = mysqli_insert_id($conexion); exit();
 	}
 	
-	if($accionBD==2){
+	if($updateBD==1){
 		$datosUpdate = substr($datosUpdate,0,-4);
 		mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
 		WHERE cal_id_actividad='".$_POST["codNota"]."' AND (".$datosUpdate.")");
@@ -122,10 +129,12 @@ if($_POST["operacion"]==4){
 
 }
 
-//PARA NOTAS DE COMPORTAMIENTO
-$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
-WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
-$numD = mysqli_num_rows($consultaNumD);
+if(!empty($_POST["codEst"]) && !empty($_POST["periodo"])){
+	//PARA NOTAS DE COMPORTAMIENTO
+	$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
+	WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
+	$numD = mysqli_num_rows($consultaNumD);
+}
 
 
 //Para guardar notas de disciplina
@@ -330,10 +339,13 @@ setTimeout ("notifica()", 100);
 </div>
 <?php }
 
-//PARA ASPECTOS ESTUDIANTILES
-$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
-WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
-$numD = mysqli_num_rows($consultaNumD);
+if(!empty($_POST["codEst"]) && !empty($_POST["periodo"])){
+	//PARA ASPECTOS ESTUDIANTILES
+	$consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota
+	WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."'");
+	$numD = mysqli_num_rows($consultaNumD);
+	$datosEstudiante =Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
+}
 
 
 //Para guardar ASPECTOS ESTUDIANTILES
@@ -348,7 +360,7 @@ if($_POST["operacion"]==10){
 		mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_academico='".$_POST["nota"]."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."'  AND dn_periodo='".$_POST["periodo"]."';");
 		
 	}
-	$mensajeNot = 'El aspecto academico se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["codEst"]).'</b>';
+	$mensajeNot = 'El aspecto academico se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>';
 }
 
 if($_POST["operacion"]==11){
@@ -362,11 +374,9 @@ if($_POST["operacion"]==11){
 		mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_convivencial='".$_POST["nota"]."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_periodo='".$_POST["periodo"]."';");
 		
 	}
-	$mensajeNot = 'El aspecto convivencial se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
+	$mensajeNot = 'El aspecto convivencial se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>';
 }
-
-
-else{?>
+?>
 <script type="text/javascript">
 function notifica(){
 	$.toast({
@@ -387,11 +397,19 @@ setTimeout ("notifica()", 100);
 	<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> <?=$mensajeNot;?>
 </div>
 
-<?php }?>
-
 
 <?php 
-if($_POST["operacion"]==3 or $_POST["operacion"]==7){
+if($_POST["operacion"]==3 && !empty($_POST["recargarPanel"]) && $_POST["recargarPanel"]==1){
+?>
+	<script type="text/javascript">
+	setTimeout(function() {
+    	listarInformacion('listar-calificaciones-todas.php', 'nav-calificaciones-todas');
+  	}, 3000);
+	</script>
+<?php
+}
+
+if($_POST["operacion"]==7 || ($_POST["operacion"]==3 && empty($_POST["recargarPanel"]))){
 ?>
 	<script type="text/javascript">
 	setTimeout('document.location.reload()',5000);

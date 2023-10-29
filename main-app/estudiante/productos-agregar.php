@@ -34,6 +34,10 @@
                                 <div class="page-title">Registrar productos o servicios</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><a class="parent-item" href="javascript:void(0);" name="marketplace.php" onClick="deseaRegresar(this)">Listado de produtos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Agregar productos</li>
+                            </ol>
                         </div>
                     </div>
 					

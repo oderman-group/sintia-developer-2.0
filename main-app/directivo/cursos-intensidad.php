@@ -1,7 +1,18 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0063';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php 
+include("session.php");
+$idPaginaInterna = 'DT0063';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 
@@ -46,7 +57,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Intesidad por cursos</li>
                             </ol>
                         </div>
@@ -61,9 +72,13 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="cursos-actualizar-cargas.php" class="btn btn-danger" onClick="if(!confirm('A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?')){return false;}">
-															Actualizar con las cargas <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="javascript:void(0);" class="btn btn-danger" 
+															onClick="sweetConfirmacion('Alerta!','A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?','question','cursos-actualizar-cargas.php')"
+															>
+																Actualizar con las cargas <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>												
@@ -120,7 +135,7 @@
 															}
 															$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH); 
 														?>
-															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?=$ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>"></td>
+															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>" <?=$disabledPermiso;?>></td>
 														<?php
 														}
 														?>

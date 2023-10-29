@@ -24,20 +24,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-4 col-lg-3">
 									
-									<?php include("info-carga-actual.php");?>
-							
-									<?php include("filtros-cargas.php");?>
-									
-								</div>
-									
-								<div class="col-md-4 col-lg-6">
+								<div class="col-md-12">
 									<div class="card card-box">
 										<div class="card-head">
 											<header><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></header>
@@ -53,7 +45,7 @@
 												<div class="col-sm-12">
 													<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 														<div class="btn-group">
-															<a href="evaluaciones-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">Agregar nuevo <i class="fa fa-plus"></i></a>
+															<a href="evaluaciones-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">Agregar nuevo <i class="fa fa-plus"></i></a>
 														</div>
 													<?php }?>
 												</div>
@@ -97,12 +89,12 @@
 																?>
 															  
 															  <p> 
-																  <a class="btn" href="evaluaciones-resultados.php?idE=<?=$resultado['eva_id'];?>"><i class="fa fa-list"></i> Resultados</a>
+																  <a class="btn" href="evaluaciones-resultados.php?idE=<?=base64_encode($resultado['eva_id']);?>"><i class="fa fa-list"></i> Resultados</a>
 																  
 																  <?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
-																  <a class="btn green-color" href="evaluaciones-preguntas.php?idE=<?=$resultado['eva_id'];?>"><i class="fa fa-question"></i> Preguntas</a>
-																  <a class="btn blue" href="evaluaciones-editar.php?idR=<?=$resultado['eva_id'];?>"><i class="fa fa-edit"></i></a>
-																  <a class="btn red" href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['eva_id'];?>" name="guardar.php?get=18&idR=<?=$resultado['eva_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
+																  <a class="btn green-color" href="evaluaciones-preguntas.php?idE=<?=base64_encode($resultado['eva_id']);?>"><i class="fa fa-question"></i> Preguntas</a>
+																  <a class="btn blue" href="evaluaciones-editar.php?idR=<?=base64_encode($resultado['eva_id']);?>"><i class="fa fa-edit"></i></a>
+																  <a class="btn red" href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['eva_id'];?>" name="guardar.php?get=<?=base64_encode(18);?>&idR=<?=base64_encode($resultado['eva_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 																  <?php }?>
 															  </p>
 															  

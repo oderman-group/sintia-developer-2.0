@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once("../class/Estudiantes.php");
 ?>
 
@@ -38,7 +43,7 @@ require_once("../class/Estudiantes.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)"><?=$frases[252][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="informes-todos.php" onClick="deseaRegresar(this)"><?=$frases[252][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Informes Boletines</li>
                             </ol>
                         </div>
@@ -136,7 +141,7 @@ require_once("../class/Estudiantes.php");
 										
 										<input type="submit" class="btn btn-primary" value="Generar Boletin">&nbsp;
 										
-										<a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>
@@ -223,7 +228,7 @@ require_once("../class/Estudiantes.php");
 										
 										<input type="submit" class="btn btn-primary" value="Generar Boletin">&nbsp;
 										
-										<a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

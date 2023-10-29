@@ -1,7 +1,10 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0109';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+require_once("../class/SubRoles.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">

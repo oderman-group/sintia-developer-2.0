@@ -85,13 +85,13 @@
                                                         <td style="text-align:center;"><?=$contReg;?></td>
 														<td><?=strtoupper($resultado['mat_nombre']." (".$resultado['gra_nombre']." ".$resultado['gru_nombre'].") - ".$resultado['car_periodo']." Periodo ");?></td>
 											
-														<td align="center"><a href="indicadores.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[0];?></a></td>
-                                        				<td align="center"><a href="calificaciones.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[1];?></a></td>
-														<td align="center"><a href="evaluaciones.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[2];?></a></td>
-                                        				<td align="center"><a href="clases.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[3];?></a></td>
-                                        				<td align="center"><a href="cronograma.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[4];?></a></td>
-														<td align="center"><a href="foros.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[5];?></a></td>
-                                        				<td align="center"><a href="actividades.php?carga=<?=$resultado['car_id'];?>&periodo=<?=$resultado['car_periodo'];?>&get=100" style="text-decoration: underline;"><?=$numerosCargas[6];?></a></td>
+														<td align="center"><a href="indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[0];?></a></td>
+                                        				<td align="center"><a href="calificaciones.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[1];?></a></td>
+														<td align="center"><a href="evaluaciones.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[2];?></a></td>
+                                        				<td align="center"><a href="clases.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[3];?></a></td>
+                                        				<td align="center"><a href="cronograma-calendario.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[4];?></a></td>
+														<td align="center"><a href="foros.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[5];?></a></td>
+                                        				<td align="center"><a href="actividades.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[6];?></a></td>
                                                     </tr>
 													<?php
 														$contReg++;

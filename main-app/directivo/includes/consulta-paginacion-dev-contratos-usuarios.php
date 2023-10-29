@@ -1,6 +1,6 @@
 <?php
     $nombrePagina="dev-contrato-usuarios.php";
-    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = "1";}
+    if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".contratos_usuarios
         LEFT JOIN ".$baseDatosServicios.".contratos ON cont_id=cxu_id_contrato
@@ -12,7 +12,7 @@
     }
     $numRegistros=mysqli_num_rows($consulta);
     $registros= $config['conf_num_registros'];
-    $pagina=$_REQUEST["nume"];
+    $pagina=base64_decode($_REQUEST["nume"]);
     if (is_numeric($pagina)){
         $inicio= (($pagina-1)*$registros);
     }			     

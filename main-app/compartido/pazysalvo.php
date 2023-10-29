@@ -1,6 +1,9 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 ?>
 <head>
 	<title>SINTIA | Saldos</title>
@@ -31,7 +34,7 @@ require_once("../class/Estudiantes.php");
     <div>&nbsp;</div>
 </div>   
 <?php
-$usuario = Estudiantes::obtenerDatosEstudiantePorIdUsuario($_GET["id"]);
+$usuario = Estudiantes::obtenerDatosEstudiantePorIdUsuario($id);
 $nombre = Estudiantes::NombreCompletoDelEstudiante($usuario);
     switch($usuario['mat_tipo_documento']){
         case 105:

@@ -1,11 +1,15 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0076';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
 <?php
-$consultaEvaluaciones=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$_GET["idR"]."'");
+include("session.php");
+$idPaginaInterna = 'DC0076';
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("verificar-periodos-diferentes.php");
+include("../compartido/head.php");
+
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+
+$consultaEvaluaciones=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$idR."'");
 $evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
 ?>
 
@@ -57,7 +61,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
 										<div class="panel-body">
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$_GET["idR"]."' AND eva_estado=1
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idR."' AND eva_estado=1
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -77,9 +81,9 @@ $evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="24" name="id">
-										<input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 
 											<div class="form-group row">

@@ -1,11 +1,21 @@
 <?php
 include("../docente/session.php");
 require_once("../class/Estudiantes.php");
+$curso='';
+if(!empty($_GET["curso"])) {
+  $curso = base64_decode($_GET["curso"]);
+}
+$grupo='';
+if(!empty($_GET["grupo"])) {
+  $grupo = base64_decode($_GET["grupo"]);
+}
+$per='';
+if(!empty($_GET["per"])) {
+  $per = base64_decode($_GET["per"]);
+}
 
-$filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-// $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."'";
+$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-// $asig = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 
 $grados = mysqli_fetch_array($asig, MYSQLI_BOTH);		
 $num_asg=mysqli_num_rows($asig);
@@ -24,7 +34,9 @@ $num_asg=mysqli_num_rows($asig);
   var codEst = enviada.id;
   var carga = enviada.name;
   var per = enviada.alt;
- if (nota> <?=$config[4];?> || isNaN(nota) || nota< <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;} 
+  if (alertValidarNota(nota)) {
+		return false;
+	} 
     $('#resp').empty().hide().html("Esperando...").show(1);
     datos = "nota="+(nota)+
            "&carga="+(carga)+
@@ -51,12 +63,8 @@ $num_asg=mysqli_num_rows($asig);
 	
 <div align="center" style="margin-bottom:20px;">
     <?=$informacion_inst["info_nombre"]?><br>
-    PERIODO: <?=$_GET["per"];?></br>
+    PERIODO: <?=$per;?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
-
-    <!--
-    <p><a href="https://plataformasintia.com/icolven/compartido/reportes-sabanas-indicador.php?curso=<?=$_GET["curso"];?>&grupo=<?=$_GET["grupo"];?>&per=<?=$_GET["per"];?>" target="_blank">VER SABANAS CON INDICADORES</a></p>-->
-    
 </div>  
 <div style="margin: 10px;">
 
@@ -69,7 +77,7 @@ $num_asg=mysqli_num_rows($asig);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$_GET["curso"]." AND car_grupo='".$_GET["grupo"]."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
 			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
@@ -86,31 +94,31 @@ $num_asg=mysqli_num_rows($asig);
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$_GET["per"]." GROUP BY bol_carga");
+  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$per." GROUP BY bol_carga");
 		$numero=mysqli_num_rows($cuentaest);
 		$def='0.0';
 		
   ?>
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
-      <td align="center"> <?php echo $fila[1];?></td>
+      <td align="center"> <?php echo $fila[0];?></td>
       <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
 		$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-    WHERE car_curso=".$_GET["curso"]." AND car_grupo='".$_GET["grupo"]."'");
+    WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
 
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$_GET["per"]);
+			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
-			$defini = $nota[4];
+      $defini = 0;
+      if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
-			$suma=($suma+$defini);
 		?>
         	<td align="center" style="color:<?=$color;?>;">
            
-           <input style="text-align:center; width:40px; color:<?=$color;?>" value="<?=$nota[4];?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$_GET["per"];?>">
+           <input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
 
           </td>      
   		<?php
@@ -119,7 +127,7 @@ $num_asg=mysqli_num_rows($asig);
 			$def=round(($suma/$numero),2);
 		}
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
-		if($def<$cde[5]) $color='red'; else $color='blue'; 
+		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
 		?>

@@ -3,12 +3,22 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
-    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".$_GET["idR"]."'");
+    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -43,7 +53,7 @@ $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="disciplina-categorias.php" onClick="deseaRegresar(this)">Categorias</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-categorias.php" onClick="deseaRegresar(this)">Categorias</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> Categoría</li>
                             </ol>
                         </div>
@@ -51,6 +61,7 @@ $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
                     <div class="row">
 						
                         <div class="col-sm-12">
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
 								<div class="panel">
@@ -65,16 +76,18 @@ $datosEditar = mysqli_fetch_array($consultaDatosEditar, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>
 											<div class="col-sm-8">
-												<input type="text" name="categoria" class="form-control" value="<?=$datosEditar['dcat_nombre'];?>">
+												<input type="text" name="categoria" class="form-control" value="<?=$datosEditar['dcat_nombre'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

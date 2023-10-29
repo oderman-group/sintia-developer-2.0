@@ -2,6 +2,13 @@
 <?php $idPaginaInterna = 'DT0077';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php require_once("../class/Sysjobs.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
+
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,22 +42,26 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)"><?=$frases[78][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)"><?=$frases[78][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Importar estudiantes desde Excel</li>
                             </ol>
                         </div>
                     </div>
+                    
                     <div class="row">
 						
 						<div class="col-sm-3">
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue">Paso a paso</header>
 									<div class="panel-body">
-                                        <p><b>1.</b> Solicite la plantilla de excel (Google Sheet) a la administración de la Plataforma SINTIA.</p>
+                                        <p><b>1.</b> Descargue la plantilla de excel (Google Sheet) en este enlace. <a href="https://docs.google.com/spreadsheets/d/1-wXDDDzMJAYt_ppWnJ79cyCqcn_TSf_T/edit#gid=845392206" target="_blank" class="btn btn-xs btn-secondary">DESCARGAR PLANTILLA</a></p>
                                         <p><b>2.</b> Llene los campos de los estudiantes y acudientes en el orden que la plantilla los solicita.</p>
-                                        <p><b>3.</b> Finalmente descargue la plantilla ya completada, cargue la plantilla en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar matrículas.</p>
+                                        <p><b>3.</b> Finalmente guarde la plantilla ya completada, carguela en el campo que dice <mark>Subir la planilla lista</mark> y dele click al botón importar matrículas.</p>
+                                        <p><b>4.</b> Si desea puede ver el video de ayuda que hemos preparada para usted. <a href="https://www.loom.com/share/40b97dc0aa4040f18c183d4f366921cc" target="_blank" class="btn btn-xs btn-secondary">VER VIDEO DE AYUDA</a></p>
 									</div>
+							 </div>
 
+                             <div class="panel">
                                     <header class="panel-heading panel-heading-blue">Consideraciones</header>
 									<div class="panel-body">
                                         <p><b>-></b> Tenga en cuenta, para importar los estudiantes, los campos del Nro. de documento, Primer Nombre, Primer Apellido y grado, son obligatorios.</p>
@@ -59,54 +70,102 @@
 							 </div>
 
                         </div>
-						
-                        <div class="col-sm-9">
-								<?php include("../../config-general/mensajes-informativos.php"); ?>
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
+                        <div  class="col-sm-9" >
+                            <div class="col-sm-12">
+                                    <?php include("../../config-general/mensajes-informativos.php"); ?>
+                                    <div class="panel">
+                                        <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+                                        <div class="panel-body">
 
-                                   
-									<form name="formularioGuardar" action="excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
-										
-										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Subir la planilla lista</label>
-                                            <div class="col-sm-6">
-                                                <input type="file" class="form-control" name="planilla" required>
+                                    
+                                        <form name="formularioGuardar" action="job-excel-importar-estudiantes.php" method="post" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Subir la planilla lista</label>
+                                                <div class="col-sm-6">
+                                                    <input type="file" class="form-control" name="planilla" accept=".xlsx" required>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
-                                            <div class="col-sm-4">
-                                                <input type="number" class="form-control" name="filaFinal" value="200" required><br>
-                                                <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido</label>
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="filaFinal" value="200" required><br>
+                                                    <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los estudiantes y acudientes. Esto se usa para evitar que se lean filas que no tienen información.</span>
+                                                </div>
                                             </div>
-                                        </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-3 control-label">Campos a actualizar</label>
-                                            <div class="col-sm-9">
-                                                <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
-                                                    <option value="">Seleccione una opción</option>
-                                                    <option value="1">Grado</option>
-                                                    <option value="2">Grupo</option>
-                                                    <option value="3">Tipo de Documento</option>
-                                                    <option value="4">Acudiente</option>
-                                                    <option value="5">Segundo nombre del estudiante</option>
-                                                    <option value="6">Fecha de nacimiento</option>
-                                                </select>
+                                            
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 control-label">Campos a actualizar</label>
+                                                <div class="col-sm-9">
+                                                    <select id="multiple" class="form-control select2-multiple" name="actualizarCampo[]" multiple>
+                                                        <option value="">Seleccione una opción</option>
+                                                        <option value="1">Grado</option>
+                                                        <option value="2">Grupo</option>
+                                                        <option value="3">Tipo de Documento</option>
+                                                        <option value="4">Acudiente</option>
+                                                        <option value="5">Segundo nombre del estudiante</option>
+                                                        <option value="6">Fecha de nacimiento</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
+                                            
+                                            <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
-										<input type="submit" class="btn btn-primary" value="Importar matrículas">&nbsp;
-										
-										<a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                    </form>
+                                            <button type="submit" class="btn  deepPink-bgcolor">
+                                                Importar matrículas <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">                                   
+                                    <div class="panel">
+                                        <header class="panel-heading panel-heading-purple">Solicitudes de Importacion </header>
+                                        <?php
+												
+                                                $parametrosBuscar = array(
+                                                    "tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
+                                                    "responsable" => $_SESSION['id'],
+                                                    "agno"=>$config['conf_agno'],
+                                                    "estado" =>JOBS_ESTADO_PENDIENTE
+                                                );										
+                                                $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
+                                        ?>
+                                               
+                                        <div class="card-body">
+
+                                                        <div >
+                                                            <table id="example1"  style="width:100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Cod</th>
+                                                                        <th>Fecha</th>
+                                                                        <th>mensaje</th>
+                                                                        <th>Estado</th>
+                                                                    </tr>
+                                                                </thead>
+                                                        <tbody>
+                                                           <?php $contReg = 1;
+                                                                    while ($resultado = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {?>
+                                                                        <tr>
+                                                                            <td><?= $contReg; ?></td>
+                                                                            <td><?= $resultado['job_id']; ?></td>
+                                                                            <td><?= $resultado['job_fecha_creacion']; ?></td>
+                                                                            <td><?= $resultado['job_mensaje']; ?></td> 
+                                                                            <td> <?= $resultado['job_estado']; ?></td>
+                                                                        </tr>
+                                                                    <?php $contReg++;
+                                                                    } ?>
+                                                         </tbody>
+                                                     </table>
+                                                </div>
+                                            </div>
+                                         </div>
+                                     
+                            </div>
                         </div>
-						
                     </div>
 
                 </div>

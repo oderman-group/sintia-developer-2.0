@@ -3,15 +3,36 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once("../class/SubRoles.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$id="";
+if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
+
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$_GET["id"]."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$id."' AND uss_id!={$_SESSION["id"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
+
+if( mysqli_num_rows($consultaDatos) == 0 ){
+	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_16";</script>';
+	exit();
+}
+
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_2&usuario='.$_GET["id"].'";</script>';
 	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
 }
 ?>
 
@@ -47,301 +68,39 @@ if($datosEditar['uss_tipo'] == 1 and $datosUsuarioActual['uss_tipo']!=1){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=10" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar usuarios</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
+
+					
 						
 						
 						
                         <div class="col-sm-12">
+
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
-							<div class="panel">
-								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-								<div class="panel-body">
-									<form name="formularioGuardar" action="usuarios-update.php" method="post" enctype="multipart/form-data">
 
-										<input type="hidden" value="<?=$datosEditar['uss_id'];?>" name="idR">
-										
-										<div class="form-group row">
-                                            <div class="col-sm-4" style="margin: 0 auto 10px">
-												<div class="item">
-													<img src="../files/fotos/<?=$datosEditar['uss_foto'];?>" width="300" height="300" />
-												</div>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
-                                            <div class="col-sm-4">
-                                                <input type="file" name="fotoUss" class="form-control">
-                                                <span style="color: #6017dc;">La foto debe estar en formato JPG o PNG.</span>
-                                            </div>
-                                        </div>
-										<hr>
+						<nav>
+							<div class="nav nav-tabs" id="nav-tab" role="tablist">
+								<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Información básica</a>
 
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">ID</label>
-											<div class="col-sm-2">
-												<input type="text" name="idRegistro" class="form-control" value="<?=$datosEditar['uss_id'];?>" readonly>
-											</div>
-										</div>
+								<?php if($datosEditar['uss_tipo'] == TIPO_DOCENTE) {?>
+									<a class="nav-item nav-link" id="nav-cargas-tab" data-toggle="tab" href="#nav-cargas" role="tab" aria-controls="nav-cargas" aria-selected="false" onClick="listarInformacion('async-cargas-listar.php?docente=<?=$datosEditar['uss_id'];?>', 'nav-cargas')">Cargas académicas</a>
+								<?php }?>
+								
+							</div>
+						</nav>
 
-										<?php
-										$readonlyUsuario = 'readonly';
-										if($config['conf_cambiar_nombre_usuario'] == 'SI') {
-											$readonlyUsuario = '';
-										}
-										?>
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Usuario</label>
-											<div class="col-sm-4">
-												<input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?>>
-											</div>
-										</div>
+						<div class="tab-content" id="nav-tabContent">
+							<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+								<?php include 'includes/usuarios-editar-info-basica.php'; ?>
+							</div>
+							<div class="tab-pane fade" id="nav-cargas" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+						</div>
 
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Tipo de usuario</label>
-                                            <div class="col-sm-3">
-												<?php
-												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_perfiles");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
-                                                <select class="form-control  select2" name="tipoUsuario" required>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														if(
-														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 6) 
-														and $datosUsuarioActual['uss_tipo']==5){continue;}
-														$select = '';
-														if($opcionesDatos[0]==$datosEditar['uss_tipo']) $select = 'selected';
-													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> ><?=$opcionesDatos['pes_nombre'];?></option>
-													<?php }?>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										<script>
-										function habilitarClave() {
-											var cambiarClave = document.getElementById("cambiarClave");
-											var clave = document.getElementById("clave");
-											
-											if (cambiarClave.checked) {
-											clave.disabled = false;
-											clave.required = 'required';
-											} else {
-											clave.disabled = true;
-											clave.required = '';
-											clave.value = '';
-											}
-										}
-										</script>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Contraseña</label>
-											<div class="col-sm-4">
-												<input type="password" name="clave" id="clave" class="form-control" disabled>
-											</div>
-											<div class="col-sm-2">
-											<div class="input-group spinner col-sm-10">
-												<label class="switchToggle">
-													<input type="checkbox" name="cambiarClave" id="cambiarClave" value="1" onchange="habilitarClave()">
-													<span class="slider red round"></span>
-												</label>
-												<label class="col-sm-2 control-label">Cambiar Contraseña</label>
-												</div>
-											</div>
-										</div>
-										<hr>
-										
-										<?php
-										$readOnly = '';
-										$leyenda = '';
-										if($datosEditar['uss_tipo']==4){
-											$readOnly='readonly'; 
-											$leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idR='.$datosEditar['uss_id'].'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
-										}
-										?>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Nombre</label>
-											<div class="col-sm-4">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['uss_nombre'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
-											<span style="color: tomato;"><?=$leyenda;?></span>
-											</div>
-											
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Otro Nombre</label>
-											<div class="col-sm-4">
-												<input type="text" name="nombre2" class="form-control" value="<?=$datosEditar['uss_nombre2'];?>" <?=$readOnly;?>>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Primer Apellido</label>
-											<div class="col-sm-4">
-												<input type="text" name="apellido1" class="form-control" value="<?=$datosEditar['uss_apellido1'];?>" <?=$readOnly;?> pattern="^[A-Za-zñÑ]+$">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Segundo Apellido</label>
-											<div class="col-sm-4">
-												<input type="text" name="apellido2" class="form-control" value="<?=$datosEditar['uss_apellido2'];?>" <?=$readOnly;?>>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Tipo de documento</label>
-											<div class="col-sm-4">
-												<?php
-												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-													WHERE ogen_grupo=1");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
-												<select class="form-control  select2" name="tipoD">
-													<option value="">Seleccione una opción</option>
-													<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														if($o[0]==$datosEditar['uss_tipo_documento'])
-														echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
-													else
-														echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
-													}?>
-												</select>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Documento</label>
-											<div class="col-sm-4">
-												<input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?>>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Email</label>
-											<div class="col-sm-4">
-												<input type="email" name="email" class="form-control" value="<?=$datosEditar['uss_email'];?>">
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Celular</label>
-											<div class="col-sm-4">
-												<input type="text" name="celular" class="form-control" value="<?=$datosEditar['uss_celular'];?>">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Teléfono</label>
-											<div class="col-sm-4">
-												<input type="text" name="telefono" class="form-control" value="<?=$datosEditar['uss_telefono'];?>">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Dirección</label>
-											<div class="col-sm-4">
-												<input type="text" name="direccion" class="form-control" value="<?=$datosEditar['uss_direccion'];?>">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Ocupacion</label>
-											<div class="col-sm-4">
-												<input type="text" name="ocupacion" class="form-control" value="<?=$datosEditar['uss_ocupacion'];?>">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Lugar de expedición del documento</label>
-											<div class="col-sm-4">
-												<input type="text" name="lExpedicion" class="form-control" value="<?=$datosEditar['uss_lugar_expedicion'];?>">
-											</div>
-										</div>
-										
-										
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Género</label>
-                                            <div class="col-sm-3">
-												<?php
-												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
-                                                <select class="form-control  select2" name="genero" required>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														$select = '';
-														if($opcionesDatos[0]==$datosEditar['uss_genero']) $select = 'selected';
-													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> ><?=$opcionesDatos['ogen_nombre'];?></option>
-													<?php }?>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										
-										
-										<hr>
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Intentos de acceso fallidos</label>
-											<div class="col-sm-1">
-												<input type="number" name="intentosFallidos" class="form-control" value="<?=$datosEditar['uss_intentos_fallidos'];?>">
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Usuario bloqueado</label>
-											<div class="col-sm-1">
-												<input type="number" name="bloqueado" class="form-control" value="<?=$datosEditar['uss_bloqueado'];?>" readonly>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Última actualización</label>
-											<div class="col-sm-4">
-												<input type="text"  class="form-control" value="<?=$datosEditar['uss_ultima_actualizacion'];?>" readonly>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Último ingreso</label>
-											<div class="col-sm-4">
-												<input type="text"  class="form-control" value="<?=$datosEditar['uss_ultimo_ingreso'];?>" readonly>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Última salida</label>
-											<div class="col-sm-4">
-												<input type="text"  class="form-control" value="<?=$datosEditar['uss_ultima_salida'];?>" readonly>
-											</div>
-										</div>
-
-
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-										
-										<a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                    </form>
-								</div>
-                            </div>
                         </div>
 						
 						

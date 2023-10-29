@@ -3,10 +3,23 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
-$filtroAdicional= "AND mat_grado='".$_GET["curso"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$curso='';
+if(!empty($_GET["curso"])) {
+  $curso = base64_decode($_GET["curso"]);
+}
+$grupo='';
+if(!empty($_GET["grupo"])) {
+  $grupo = base64_decode($_GET["grupo"]);
+}
+$per='';
+if(!empty($_GET["per"])) {
+  $per = base64_decode($_GET["per"]);
+}
+
+$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");	
 $num_asg=mysqli_num_rows($asig);
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$_GET["curso"]."' AND gru_id='".$_GET["grupo"]."'");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$curso."' AND gru_id='".$grupo."'");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 <head>
@@ -22,7 +35,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	
 <div align="center" style="margin-bottom:20px;">
     <?=$informacion_inst["info_nombre"]?><br>
-    PERIODO: <?=$_GET["per"];?></br>
+    PERIODO: <?=$per;?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
 
     <?php if($informacion_inst["info_institucion"]==1){?>
@@ -37,7 +50,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$_GET["curso"]." AND car_grupo='".$_GET["grupo"]."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
 			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
@@ -54,7 +67,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);	  
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$_GET["per"]." GROUP BY bol_carga");
+  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$per." GROUP BY bol_carga");
 		$numero=mysqli_num_rows($cuentaest);
 		$def='0.0';
 		
@@ -66,22 +79,22 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$_GET["curso"]." AND car_grupo='".$_GET["grupo"]."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$_GET["per"]);
+			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
-			$defini = $nota[4];
+      $defini = 0;
+      if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
-			$suma=($suma+$defini);
 		?>
-        	<td align="center" style="color:<?=$color;?>;"><?php echo $nota[4];?></td>      
+        	<td align="center" style="color:<?=$color;?>;"><?php if(!empty($nota[4])){ echo $nota[4];}?></td>      
   		<?php
 		}
 		if($numero>0) {
 			$def=round(($suma/$numero),2);
 		}
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
-		if($def<$cde[5]) $color='red'; else $color='blue'; 
+		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
 		?>
@@ -96,39 +109,43 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 <?php
 $puestos = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS prom, mat_primer_apellido, mat_segundo_apellido, mat_nombres FROM academico_boletin
 INNER JOIN academico_matriculas ON mat_id=bol_estudiante
-INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$_GET["curso"]."' AND car_grupo='".$_GET["grupo"]."'
-WHERE bol_periodo='".$_GET["per"]."'
+INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."'
+WHERE bol_periodo='".$per."'
 GROUP BY bol_estudiante
 ORDER BY prom DESC
 ");
 ?>
 
-  <p>&nbsp;</p>
-    <table width="100%" border="1" rules="all" align="center">
-  	 <tr style="font-weight:bold; font-size:12px; height:30px;">
-        <td colspan="3" align="center">PUESTOS</td>
-    </tr> 
-    
-    <tr style="font-weight:bold; font-size:14px; height:40px;">
-        <td align="center">Puesto</b></td>
-        <td align="center">Estudiante</td>
-        <td align="center">Promedio</td>
-    </tr> 
-  <?php
-	$j=1;
-  	while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
-	?>	
-    <tr style="font-weight:bold; font-size:12px;">
-        <td align="center"><?=$j;?></td>
-        <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
-        <td align="center"><?=$ptos[0];?></td>
-    </tr>
-	<?php	
-		$j++;
-	}
-  ?>
-    
-  </table>  
+<?php if ( ($config['conf_ver_promedios_sabanas_docentes'] == 1 && $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE) || 
+           ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) ) {?>
+    <p>&nbsp;</p>
+      <table width="100%" border="1" rules="all" align="center">
+      <tr style="font-weight:bold; font-size:12px; height:30px;">
+          <td colspan="3" align="center">PUESTOS</td>
+      </tr> 
+      
+      <tr style="font-weight:bold; font-size:14px; height:40px;">
+          <td align="center">Puesto</b></td>
+          <td align="center">Estudiante</td>
+          <td align="center">Promedio</td>
+      </tr> 
+    <?php
+    $j=1;
+      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
+    ?>	
+      <tr style="font-weight:bold; font-size:12px;">
+          <td align="center"><?=$j;?></td>
+          <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
+          <td align="center"><?=$ptos[0];?></td>
+      </tr>
+    <?php	
+      $j++;
+    }
+    ?>
+      
+    </table>  
+  <?php }?>
+
 </div>
 
 </body>

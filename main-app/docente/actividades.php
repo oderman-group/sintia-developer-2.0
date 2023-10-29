@@ -54,22 +54,12 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                
-								<div class="col-md-4 col-lg-3">	
 									
-									<?php include("info-carga-actual.php");?>
-									
-									<?php include("filtros-cargas.php");?>
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-								
-								</div>
-									
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></header>
@@ -85,16 +75,12 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 												<div class="col-sm-12">
 													
 											<?php
-											if(
-												($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-																	
-												or($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-												)
+											if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) )
 											{
 											?>
 											
 													<div class="btn-group">
-														<a href="actividades-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor">
+														<a href="actividades-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -146,9 +132,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																</label>
 															</div>
 														</td>
-														<td><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>" style="text-decoration: underline;"><?=$resultado[1];?></a></td>
+														<td><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>" style="text-decoration: underline;"><?=$resultado[1];?></a></td>
 														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado[4];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado[5];?></td>
-														<td><?php if($resultado[6]!="" and file_exists('../files/tareas/'.$resultado[6])){?><a href="../files/tareas/<?=$resultado[6];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
+														<td><?php if(!empty($resultado[6]) and file_exists('../files/tareas/'.$resultado[6])){?><a href="../files/tareas/<?=$resultado[6];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
 															
 															<?php
@@ -165,10 +151,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																</button>
 																<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 																	
-																		<li><a href="actividades-entregas.php?idR=<?=$resultado['tar_id'];?>">Entregas</a></li>
-																	  	<li><a href="actividades-editar.php?idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>">Editar</a></li>
+																		<li><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>">Entregas</a></li>
+																	  	<li><a href="actividades-editar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	 	 
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="guardar.php?get=17&idR=<?=$resultado['tar_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="guardar.php?get=<?=base64_encode(17);?>&idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
  
 																</ul>
 															</div>

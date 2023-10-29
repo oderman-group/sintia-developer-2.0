@@ -3,6 +3,11 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0169';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
@@ -18,5 +23,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_POST["idC"] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . base64_encode($_POST["idC"]) . '";</script>';
 	exit();

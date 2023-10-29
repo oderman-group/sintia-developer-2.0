@@ -1,6 +1,7 @@
-
-
-
+<?php
+	$usrEstud="";
+	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
+?>
 
 <div class="page-content">
 
@@ -22,11 +23,11 @@
 
 								//DOCENTES
 
-								if($datosUsuarioActual[3]==2){?>
+								if($datosUsuarioActual[3] == TIPO_DOCENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="periodos-resumen.php"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -46,7 +47,7 @@
 
 										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
-										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=$_GET["usrEstud"];?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -112,7 +113,7 @@
 
 														<b><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?></b> 
 
-														<div class="profile-desc-item pull-right"><?=strtoupper($_GET["periodo"]);?></div>
+														<div class="profile-desc-item pull-right"><?=strtoupper($periodo);?></div>
 
 													</li>
 
@@ -166,7 +167,7 @@
 
 												<p>
 
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>&usrEstud=<?=$_GET["usrEstud"];?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 
 													
 
@@ -294,7 +295,7 @@
 
 													 $filtro = '';
 
-													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".$_GET["indicador"]."'";}
+													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".base64_decode($_GET["indicador"])."'";}
 
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
 
@@ -310,6 +311,7 @@
 
 													 $sumaNota = 0;
 
+													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
@@ -319,13 +321,21 @@
 
 														$acumulaValor = ($acumulaValor + $porNuevo);
 
-														$notaMultiplicada = ($nota[3] * $porNuevo);
+														$notaMultiplicada=0;
+														$nota3="";
+														$nota4="";
+														if(!empty($nota[3])){
+															$nota3=$nota[3];
+															$nota4=$nota[4];
+															$notaMultiplicada = ($nota[3] * $porNuevo);
+														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
+														$porcentajeActualActividad +=$resultado[3];
 
 														//COLOR DE CADA NOTA
 
-														if($nota[3]<$config[5]) $colorNota = $config[6];
+														if(!empty($nota[3]) && $nota[3]<$config[5]) $colorNota = $config[6];
 
 														else $colorNota = $config[7];
 
@@ -353,9 +363,9 @@
 
 														<td><?=$resultado[3];?>%</td>
 
-														<td style="color:<?=$colorNota;?>"><?=$nota[3];?></td>
+														<td style="color:<?=$colorNota;?>"><?=$nota3;?></td>
 
-														<td><?=$nota[4];?></td>
+														<td><?=$nota4;?></td>
 
                                                     </tr>
 
@@ -391,7 +401,7 @@
 
 														<td colspan="4"><?=strtoupper($frases[107][$datosUsuarioActual['uss_idioma']]);?></td>
 
-														<td><?=$porcentajeActual;?>%</td>
+														<td><?=$porcentajeActualActividad;?>%</td>
 
 														<td style="color:<?=$colorDefinitiva;?>"><?=$definitiva;?></td>
 

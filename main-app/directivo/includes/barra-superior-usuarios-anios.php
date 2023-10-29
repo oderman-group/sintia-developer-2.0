@@ -12,21 +12,6 @@ if (isset($_GET['busqueda'])) {
   <div class="navbar-collapse" id="navbarSupportedContent">
 
   <ul class="navbar-nav mr-auto">
-  <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
-            Más acciones
-		  <span class="fa fa-angle-down"></span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="guardar.php?get=69" onClick="if(!confirm('Desea Bloquear a todos los estudiantes?')){return false;}">Bloquear estudiantes</a>
-        <a class="dropdown-item" href="guardar.php?get=70" onClick="if(!confirm('Desea Desbloquear a todos los estudiantes?')){return false;}">Desbloquear estudiantes</a>
-        <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
-        <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
-        </div>
-      </li>
-
-      
-
   </ul> 
     <form class="form-inline my-2 my-lg-0" action="usuarios-anios.php" method="get">
         <?php

@@ -64,17 +64,26 @@ switch($_GET["idmsg"]){
 	case 108:
 		$color = 'yellow';
 		$titulo = 'NO SE PUDO GENERAR';
-		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades. Por favor revisa al estudiante <b>'.$_GET["est"].'</b>. Solo tiene registrado el <b>'.$_GET["valorActual"]."%</b> de las notas.";
-		$url1 = 'calificaciones-todas-rapido.php?idEst='.$_GET["idEst"].'#estudiante'.$_GET["idEst"];
-		$boton1 = 'IR A VISTA RÁPIDA DE CALIFICACIONES';
+		$texto = 'No se pudo generar el informe para esta carga porque faltan estudiantes por notas en algunas de las actividades.';
+		$url1 = 'calificaciones-faltantes.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"].'&get='.base64_encode(100);
+		$boton1 = 'VER ESTUDIANTES SIN NOTAS';
 	break;
 		
 	case 109:
-		$color = 'green';
+		$color = 'blue';
 		$titulo = 'INFORME GENERADO';
-		$texto = 'El informe fue generado correctamente para esta carga. Ahora estás en el siguiente periodo. Recuerda que también puedes programar la generación automática de estos informes en la configuración de la carga.';
+		if($config['conf_porcentaje_completo_generar_informe']==1){
+			$texto = 'El informe fue generado correctamente. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
+		}
+		if($config['conf_porcentaje_completo_generar_informe']==2){
+			$texto = 'El informe fue generado correctamente, omitiendo los estudiantes que no tenian el 100% de sus notas registradas para esta carga. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
+		}
+		if($config['conf_porcentaje_completo_generar_informe']==3){
+			$texto = 'El informe fue generado correctamente, registrando la definitiva según el porcentaje actual de los estudiantes para esta carga. Ahora estás en el siguiente periodo. <b>Recuerda que también puedes utilizar la generación automática de estos informes.</b>';
+		}
 		$url1 = 'cargas.php';
 		$boton1 = 'IR A CARGAS';
+		$lottie = 'https://lottie.host/127f030a-84e3-49fc-a1ad-4bc806e0292d/fXHrvhswC1.json';
 	break;
 		
 	case 110:
@@ -263,6 +272,15 @@ switch($_GET["idmsg"]){
 		$url1 = 'estudiantes.php';
 		$boton1 = 'IR A ESTUDIANTES';
 	break;
+
+	case 221:
+		$color = 'red';
+		$titulo = 'USUARIO BLOQUEADO';
+		$texto = 'Tu usuario se encuentra bloqueado por lo tanto no es posible acceder a ninguna opción de la plataforma. Si tienes alguna inquietud al respecto puedes ponerte en contacto con la Institución.';
+		$url1 = '../controlador/salir.php';
+		$boton1 = 'CERRAR SESIÓN';
+		$lottie = 'https://lottie.host/b4de488e-1144-4216-965f-cc2a3d4296c3/EKGn9IPCsv.json';
+	break;
 		
 	
 	
@@ -281,6 +299,7 @@ switch($_GET["idmsg"]){
 		$texto = 'Usted no tiene permisos para acceder a la página a la que intentó acceder.';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
+		$lottie = 'https://assets2.lottiefiles.com/packages/lf20_0emKnVT48m.json';
 	break;
 		
 	case 302:

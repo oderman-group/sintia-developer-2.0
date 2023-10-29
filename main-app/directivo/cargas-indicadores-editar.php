@@ -4,10 +4,15 @@
 <?php include("../compartido/head.php");?>
 <?php include("verificar-carga.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
     $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
     INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-    WHERE ipc_id='".$_GET["idR"]."'");
+    WHERE ipc_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -28,6 +33,11 @@ $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -62,7 +72,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -100,7 +110,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
 												<div class="col-sm-10">
-													<input type="text" name="contenido" class="form-control" value="<?=$indicador['ind_nombre'];?>" autocomplete="off" required>
+													<input type="text" name="contenido" class="form-control" value="<?=$indicador['ind_nombre'];?>" autocomplete="off" required <?=$disabledPermiso;?>>
 												</div>
 											</div>
 
@@ -109,14 +119,14 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 												<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor (%)</label>
 													<div class="col-sm-2">
-														<input type="text" name="valor" class="form-control" value="<?=$indicador['ipc_valor'];?>" autocomplete="off" required>
+														<input type="text" name="valor" class="form-control" value="<?=$indicador['ipc_valor'];?>" autocomplete="off" required <?=$disabledPermiso;?>>
 													</div>
 												</div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Creado por el docente</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="creado" required>
+                                                <select class="form-control  select2" name="creado" required <?=$disabledPermiso;?>>
                                                     <option value="0">Seleccione una opción</option>
 													<option value="1" <?php if($indicador['ipc_creado']==1) echo "selected";?>>SI</option>
 													<option value="0" <?php if($indicador['ipc_creado']=='0') echo "selected";?>>NO</option>
@@ -128,7 +138,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de evaluación</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="saberes" required>
+                                                <select class="form-control  select2" name="saberes" required <?=$disabledPermiso;?>>
                                                     <option value="0">Seleccione una opción</option>
 													<option value="1" <?php if($indicador['ipc_evaluacion']==1) echo "selected";?>>Saber saber (55%)</option>
 													<option value="2" <?php if($indicador['ipc_evaluacion']==2) echo "selected";?>>Saber hacer (35%)</option>
@@ -141,9 +151,11 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										<?php }?>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@ require_once("../class/UsuariosPadre.php");
 
 $year=$agnoBD;
 if(!empty($_GET["year"])){
-$year=$_GET["year"];
+$year=base64_decode($_GET["year"]);
 }
 $BD=$_SESSION["inst"]."_".$year;
 
@@ -15,7 +15,7 @@ $modulo = 1;
 if(empty($_GET["periodo"])){
 	$periodoActual = 1;
 }else{
-	$periodoActual = $_GET["periodo"];
+	$periodoActual = base64_decode($_GET["periodo"]);
 }
 
 if($periodoActual==1) $periodoActuales = "Primero";
@@ -24,9 +24,9 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";
 //CONSULTA ESTUDIANTES MATRICULADOS
 $filtro = '';
-if(!empty($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
-if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
-if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_GET["id"])){$filtro .= " AND mat_id='".base64_decode($_GET["id"])."'";}
+if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".base64_decode($_REQUEST["curso"])."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 $numMatriculados = mysqli_num_rows($matriculadosPorCurso);

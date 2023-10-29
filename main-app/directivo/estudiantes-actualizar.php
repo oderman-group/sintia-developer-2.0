@@ -5,21 +5,42 @@ require_once("../class/Usuarios.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0174';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])==""){
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_4";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&error=ER_DT_4";</script>';
 	exit();
 }
 $validacionEstudiante = Estudiantes::validarRepeticionDocumento($_POST["nDoc"], $_POST["id"]);
 
 if($validacionEstudiante > 0){
-	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&documento='.$_POST["nDoc"].'&error=ER_DT_11";</script>';
+	echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&documento='.base64_encode($_POST["nDoc"]).'&error=ER_DT_11";</script>';
 	exit();
 }
 
-if($config['conf_id_institucion']==1){
+$estado='';
+$mensaje='';
+$pasosMatricula='';
+if($config['conf_id_institucion'] == ICOLVEN){
+	$pasosMatricula="
+		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
+		mat_actualizar_datos='".$_POST["actualizarDatos"]."',
+		mat_pago_matricula='".$_POST["pagoMatricula"]."',
+		mat_contrato='".$_POST["contrato"]."',
+		mat_pagare='".$_POST["pagare"]."',
+		mat_compromiso_academico='".$_POST["compromisoA"]."',
+		mat_compromiso_convivencia='".$_POST["compromisoC"]."',
+		mat_manual='".$_POST["manual"]."',
+		mat_mayores14='".$_POST["contrato14"]."',
+		mat_compromiso_convivencia_opcion='".$_POST["compromisoOpcion"]."',
+		mat_hoja_firma='".$_POST["firmaHoja"]."',
+	";
 	require_once("apis-sion-modify-student.php");
 }
 $fechaNacimiento="";
@@ -38,7 +59,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
-		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&error=ER_DT_8";</script>';
+		echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&error=ER_DT_8";</script>';
 		exit();
 	}
 
@@ -57,59 +78,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	}
 }
 
-try{
-	mysqli_query($conexion, "UPDATE academico_matriculas SET 
-	mat_tipo_documento='".$_POST["tipoD"]."', 
-	mat_documento='".$_POST["nDoc"]."', 
-	mat_religion='".$_POST["religion"]."', 
-	mat_email='".strtolower($_POST["email"])."', 
-	mat_direccion='".$_POST["direccion"]."', 
-	mat_barrio='".$_POST["barrio"]."', 
-	mat_telefono='".$_POST["telefono"]."', 
-	mat_celular='".$_POST["celular"]."', 
-	mat_estrato='".$_POST["estrato"]."', 
-	mat_genero='".$_POST["genero"]."',
-	$fechaNacimiento
-	mat_primer_apellido='".$_POST["apellido1"]."', 
-	mat_segundo_apellido='".$_POST["apellido2"]."', 
-	mat_nombres='".$_POST["nombres"]."', 
-	mat_grado='".$_POST["grado"]."', 
-	mat_grupo='".$_POST["grupo"]."', 
-	mat_tipo='".$_POST["tipoEst"]."',
-	mat_lugar_expedicion='".$_POST["lugarD"]."',
-	mat_lugar_nacimiento='".$procedencia."',
-	mat_estado_matricula=".$_POST["matestM"].", 
-	mat_matricula='".$_POST["matricula"]."', 
-	mat_folio='".$_POST["folio"]."', 
-	mat_codigo_tesoreria='".$_POST["codTesoreria"]."', 
-	mat_valor_matricula='".$_POST["va_matricula"]."', 
-	mat_inclusion='".$_POST["inclusion"]."', 
-	mat_extranjero='".$_POST["extran"]."', 
-	mat_fecha=now(), 
-	mat_numero_matricula='".$_POST["NumMatricula"]."', 
-	mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
-	mat_actualizar_datos='".$_POST["actualizarDatos"]."',
-	mat_pago_matricula='".$_POST["pagoMatricula"]."',
-	mat_contrato='".$_POST["contrato"]."',
-	mat_pagare='".$_POST["pagare"]."',
-	mat_compromiso_academico='".$_POST["compromisoA"]."',
-	mat_compromiso_convivencia='".$_POST["compromisoC"]."',
-	mat_manual='".$_POST["manual"]."',
-	mat_mayores14='".$_POST["contrato14"]."',
-	mat_compromiso_convivencia_opcion='".$_POST["compromisoOpcion"]."',
-	mat_hoja_firma='".$_POST["firmaHoja"]."',
-	mat_estado_agno='".$_POST["estadoAgno"]."',
-	mat_tipo_sangre='".$_POST["tipoSangre"]."', 
-	mat_eps='".$_POST["eps"]."', 
-	mat_celular2='".$_POST["celular2"]."', 
-	mat_ciudad_residencia='".$_POST["ciudadR"]."', 
-	mat_nombre2='".$_POST["nombre2"]."'
-
-	WHERE mat_id=".$_POST["id"].";");
-
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}	
+Estudiantes::actualizarEstudiantes($conexionPDO, $_POST, $fechaNacimiento, $procedencia, $pasosMatricula);
 
 try {
 	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
@@ -212,7 +181,7 @@ if(!empty($_POST["idAcudiente2"])){
 	}	
 
 }else {
-	if($_POST["documentoA2"]!=""){
+	if(!empty($_POST["documentoA2"])){
 	
 		try {
 			$existeAcudiente2 = Usuarios::validarExistenciaUsuario($_POST["documentoA2"]);
@@ -268,5 +237,5 @@ include("../compartido/guardar-historial-acciones.php");
 $estadoSintia=true;
 $mensajeSintia='La información del estudiante se actualizó correctamente en SINTIA.';
 
-echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.$_POST["id"].'&stadsion='.$estado.'&msgsion='.$mensaje.'&stadsintia='.$estadoSintia.'&msgsintia='.$mensajeSintia.'";</script>';
+echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&stadsion='.base64_encode($estado).'&msgsion='.base64_encode($mensaje).'&stadsintia='.base64_encode($estadoSintia).'&msgsintia='.base64_encode($mensajeSintia).'";</script>';
 exit();

@@ -1,5 +1,6 @@
 <?php
-if (isset($_GET['busqueda'])) {
+$busqueda = '';
+if (!empty($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
         pagp_id LIKE '%" . $busqueda . "%' 
@@ -21,7 +22,7 @@ if (isset($_GET['busqueda'])) {
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
                     Filtrar Por Usuario
                     <span class="fa fa-angle-down"></span>
                 </a>
@@ -34,16 +35,16 @@ if (isset($_GET['busqueda'])) {
                     }
                     while ($datosFiltro = mysqli_fetch_array($consultaFiltro, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosFiltro['pes_id'] == $_GET["uss"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosFiltro['pes_id'] == $ussDev) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $datosFiltro['pes_id']; ?>&modulo=<?= $_GET["modulo"]; ?>&busqueda=<?= $_GET["busqueda"]; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['pes_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $datosFiltro['pes_id']; ?>&modulo=<?= $moduloDev; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['pes_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
                     Filtrar Por Modulo
                     <span class="fa fa-angle-down"></span>
                 </a>
@@ -56,9 +57,9 @@ if (isset($_GET['busqueda'])) {
                     }
                     while ($datosFiltro = mysqli_fetch_array($consultaFiltro, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosFiltro['mod_id'] == $_GET["modulo"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosFiltro['mod_id'] == $moduloDev) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $_GET['uss']; ?>&modulo=<?= $datosFiltro['mod_id']; ?>&busqueda=<?= $_GET["busqueda"]; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $ussDev; ?>&modulo=<?= $datosFiltro['mod_id']; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -68,18 +69,18 @@ if (isset($_GET['busqueda'])) {
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
             <?php
-                if (!empty($_GET['uss'])){
+                if (!empty($ussDev)){
             ?>
-                <input type="hidden" name="uss" value="<?= $_GET['uss']; ?>"/>
+                <input type="hidden" name="uss" value="<?= $ussDev; ?>"/>
             <?php
                 }
-                if (!empty($_GET['modulo'])){
+                if (!empty($moduloDev)){
             ?>
-                <input type="hidden" name="modulo" value="<?= $_GET['modulo']; ?>"/>
+                <input type="hidden" name="modulo" value="<?= $moduloDev; ?>"/>
             <?php
                 }
             ?>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>
 

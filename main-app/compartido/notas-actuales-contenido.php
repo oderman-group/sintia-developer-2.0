@@ -1,3 +1,7 @@
+<?php
+	$usrEstud="";
+	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
+?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -70,10 +74,6 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																"), MYSQLI_BOTH);
-													
 													$contReg = 1; 
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 													WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
@@ -97,11 +97,11 @@
 														
 														<?php if($config['conf_sin_nota_numerica']!=1){?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitiva;?></a>
+															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitiva;?></a>
 														</td>
 														<?php }else{?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>" style="text-decoration:underline;"><?=$frases[39][$datosUsuarioActual['uss_idioma']];?></a>
+															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="text-decoration:underline;"><?=$frases[39][$datosUsuarioActual['uss_idioma']];?></a>
 														</td>
 														<?php }?>
 														
@@ -112,7 +112,7 @@
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
-																		  <li><a href="cronograma-actividades.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>&usrEstud=<?=$_GET["usrEstud"];?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		  <li><a href="cronograma-actividades.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	  </ul>
 																  </div>
 														</td>

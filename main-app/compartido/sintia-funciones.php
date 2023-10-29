@@ -10,7 +10,8 @@ class Archivos {
 
 		$maxPeso = $config['conf_max_peso_archivos'];
 
-		$extension = end(explode(".", $archivoName));
+		$explode=explode(".", $archivoName);
+		$extension = end($explode);
 
 		if($extension == 'exe' or $extension == 'php' or $extension == 'js' or $extension == 'html' or $extension == 'htm'){
 
@@ -20,14 +21,19 @@ class Archivos {
 
 		}
 
-
-
 		$pesoMB = round($archivoSize/1048576,2);
+		$urlReferencia = parse_url($_SERVER['HTTP_REFERER']);
+    
+		$URLREGRESO = $_SERVER['HTTP_REFERER']."?error=ER_DT_17&pesoMB={$pesoMB}";
+		if (isset($urlReferencia['query']) && !empty($urlReferencia['query'])) {
+			
+			$URLREGRESO = $_SERVER['HTTP_REFERER']."&error=ER_DT_17&pesoMB={$pesoMB}";
+		}
+		
 
 		if($pesoMB>$maxPeso){
 
-			echo "Este archivo pesa <b>".$pesoMB."MB</b>. Lo ideal es que pese menos de ".$maxPeso."MB. Intente comprimirlo o busque reducir su peso.";
-
+			echo '<script type="text/javascript">window.location.href="'.$URLREGRESO.'";</script>';
 			exit();
 
 		}
@@ -64,7 +70,7 @@ class Usuarios{
 
 		
 
-		$fotoUsr = '../files/fotos//avatar/man1.png';
+		$fotoUsr = '../files/fotos/default.png';
 
 		
 
@@ -223,6 +229,10 @@ function validarUsuarioActual($datosUsuarioActual) {
 		case 1:
 			$destinos = "../directivo/";
 			break;	
+
+		default:
+			echo '<script type="text/javascript">window.location.href="../controlador/salir.php";</script>'; exit();
+			break;
 	}
 	return $destinos;
 }

@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0008';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -17,7 +22,7 @@
                 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
-                            <div class="page-title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></div>
+                            <div class="page-title"><?=$frases[38][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                         </div>     
                     </div>

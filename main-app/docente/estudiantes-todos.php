@@ -78,6 +78,7 @@ require_once("../class/Estudiantes.php");
 													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtro,$filtroLimite);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['uss_foto']);
 														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'");
 														 $genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
 														//DEFINITIVAS
@@ -98,7 +99,7 @@ require_once("../class/Estudiantes.php");
 															
 														</td>
 														<td style="color: <?=$colorEstudiante;?>">
-															<img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">
+															<img src="<?=$fotoEstudiante;?>" width="50">
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td><?=$genero[1];?></td>
@@ -111,7 +112,7 @@ require_once("../class/Estudiantes.php");
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
 																		  
-																		  <li><a href="aspectos-estudiantiles.php?idR=<?=$resultado['mat_id_usuario'];?>">Ficha estudiantil</a></li>
+																		  <li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
 																	  </ul>
 																  </div>
 															

@@ -3,6 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 $datosUsuario = [
 	'usuario'     => '',
 	'nombre'      => '',
@@ -47,6 +52,11 @@ if(isset($_GET['genero'])){
 }
 if(isset($_GET['tipoUsuario'])){
 	$datosUsuario['tipoUsuario'] = $_GET['tipoUsuario'];
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
 }
 ?>
 
@@ -152,7 +162,7 @@ $(document).ready(function() {
                             <?php include("../compartido/texto-manual-ayuda.php");?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10"
+                            <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=10"
                                     onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i>
                             </li>
                             <li class="active">Agregar usuarios</li>
@@ -186,7 +196,7 @@ $(document).ready(function() {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" name="tipoUsuario" required>
+                                            <select class="form-control  select2" name="tipoUsuario" required <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -209,7 +219,7 @@ $(document).ready(function() {
                                         <label id="" class="col-sm-2 control-label">Usuario de acceso <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                             <input type="text" name="usuario" id="usuario" autofocus
-                                                class="form-control" value="<?=$datosUsuario['usuario'];?>" required pattern="[A-Za-z0-9]+">
+                                                class="form-control" value="<?=$datosUsuario['usuario'];?>" required pattern="[A-Za-z0-9]+" <?=$disabledPermiso;?>>
                                                 <i class="fa fa-info"></i> <span style="color: #6017dc;">Puedes usar letras, números o combinarlos. Pero no se permiten caracteres especiales o espacios en blanco.</span>
                                         </div>
                                     </div>
@@ -217,7 +227,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Contraseña <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="clave" class="form-control" required>
+                                            <input type="text" name="clave" class="form-control" required <?=$disabledPermiso;?>>
                                             <i class="fa fa-info"></i> <span style="color: #6017dc;">La contraseña debe ser de 8 caracteres como mínimo y 20 como máximo.</span>
                                         </div>
                                     </div>
@@ -235,7 +245,7 @@ $(document).ready(function() {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" name="tipoD">
+                                            <select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                     if($o[0]==$datosUsuario['tipoD'])
@@ -250,7 +260,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Documento</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="documento" class="form-control" value="<?=$datosUsuario['documento'];?>">
+                                            <input type="text" name="documento" class="form-control" value="<?=$datosUsuario['documento'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
@@ -258,35 +268,35 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Nombre <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
                                             <input type="text" name="nombre" class="form-control"
-                                                value="<?=$datosUsuario['nombre'];?>" required pattern="^[A-Za-zñÑ]+$">
+                                                value="<?=$datosUsuario['nombre'];?>" required pattern="^[A-Za-zñÑ]+$" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Otro Nombre</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="nombre2" class="form-control" value="<?=$datosUsuario['nombre2'];?>">
+                                            <input type="text" name="nombre2" class="form-control" value="<?=$datosUsuario['nombre2'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Primer Apellido</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>" pattern="^[A-Za-zñÑ]+$">
+                                            <input type="text" name="apellido1" class="form-control" value="<?=$datosUsuario['apellido1'];?>" pattern="^[A-Za-zñÑ]+$" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Segundo Apellido</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="apellido2" class="form-control" value="<?=$datosUsuario['apellido2'];?>">
+                                            <input type="text" name="apellido2" class="form-control" value="<?=$datosUsuario['apellido2'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Email</label>
                                         <div class="col-sm-4">
-                                            <input type="email" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>">
+                                            <input type="email" name="email" id="email" autofocus class="form-control" value="<?=$datosUsuario['email'];?>" <?=$disabledPermiso;?>>
                                             
                                         </div>
                                     </div>
@@ -295,7 +305,7 @@ $(document).ready(function() {
                                         <label class="col-sm-2 control-label">Celular</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="celular" class="form-control"
-                                                value="<?=$datosUsuario['celular'];?>">
+                                                value="<?=$datosUsuario['celular'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
@@ -312,7 +322,7 @@ $(document).ready(function() {
                                             include("../compartido/error-catch-to-report.php");
                                         }
 										?>
-                                        <select class="form-control  select2" name="genero" required>
+                                        <select class="form-control  select2" name="genero" required <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -326,10 +336,11 @@ $(document).ready(function() {
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" id="btnEnviar"
-                                        value="Guardar cambios">&nbsp;
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                        <input type="submit" class="btn btn-primary" id="btnEnviar" value="Guardar cambios">&nbsp;
+                                    <?php }?>
 
-                                    <a href="#" name="usuarios.php?cantidad=10" class="btn btn-secondary"
+                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary"
                                         onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>

@@ -1,27 +1,37 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0078';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0078';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once("../class/Estudiantes.php");
+
+$id="";
+if(!empty($_GET["id"])){
+	$id=base64_decode($_GET["id"]);
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($id);
+} else if(!empty($_GET["idUsuario"])){ 
+	$idUsuario=base64_decode($_GET["idUsuario"]);
+	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idUsuario);
+}
+
+if( empty($datosEstudianteActual) ){
+	echo '<script type="text/javascript">window.location.href="estudiantes.php?error=ER_DT_16";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
-<?php
-$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
-?>
-    <!-- Material Design Lite CSS -->
-	<link rel="stylesheet" href="../../config-general/assets/plugins/material/material.min.css">
-	<link rel="stylesheet" href="../../config-general/assets/css/material_style.css">
+
 	<!-- steps -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/steps/steps.css"> 
-	<!-- Theme Styles -->
-    <link href="../../config-general/assets/css/theme/light/theme_style.css" rel="stylesheet" id="rt_style_components" type="text/css" />
-    <link href="../../config-general/assets/css/theme/light/style.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/plugins.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../config-general/assets/css/responsive.css" rel="stylesheet" type="text/css" />
-	<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-	<link href="../../config-general/assets/css/theme/light/theme-color.css" rel="stylesheet" type="text/css" />
-	<!-- favicon -->
-    <link rel="shortcut icon" href="http://radixtouch.in/templates/admin/smart/source/assets/img/favicon.ico" />
 
 	<!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
@@ -73,7 +83,7 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                                 <div class="page-title">Editar matrículas</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar matrículas</li>
                             </ol>
                         </div>
@@ -82,9 +92,11 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 					<div class="row mb-3">
                     	<div class="col-sm-12">
 							<div class="btn-group">
-								<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-									Agregar nuevo <i class="fa fa-plus"></i>
-								</a>
+								<?php if(Modulos::validarPermisoEdicion()){?>
+									<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+										Agregar nuevo <i class="fa fa-plus"></i>
+									</a>
+								<?php }?>
 							</div>
 						</div>
 					</div>
@@ -95,11 +107,11 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                     	<div class="col-sm-12">
 							<?php include("../../config-general/mensajes-informativos.php"); ?>
 							<?php
-							if($config['conf_id_institucion']==1){
+							if($config['conf_id_institucion'] == ICOLVEN){
 								if(isset($_GET['msgsion']) AND $_GET['msgsion']!=''){
 									$aler='alert-success';
-									$mensajeSion=$_GET['msgsion'];
-									if($_GET['stadsion']!=true){
+									$mensajeSion=base64_decode($_GET['msgsion']);
+									if(base64_decode($_GET['stadsion'])!=true){
 										$aler='alert-danger';
 									}
 								?>
@@ -113,14 +125,14 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
 							}
 							if(isset($_GET['msgsintia'])){
 								$aler='alert-success';
-								if($_GET['stadsintia']!=true){
+								if(base64_decode($_GET['stadsintia'])!=true){
 								$aler='alert-danger';
 								}
 							?>
 							<div class="alert alert-block <?=$aler;?>">
 								<button type="button" class="close" data-dismiss="alert">×</button>
 								<h4 class="alert-heading">SINTIA!</h4>
-								<p><?=$_GET['msgsintia'];?></p>
+								<p><?=base64_decode($_GET['msgsintia']);?></p>
 							</div>
 							<?php }?>
                              <div class="card-box">
@@ -129,7 +141,7 @@ $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["id"]);
                                  </div>
                                  <div class="card-body">
                                  	<form name="example_advanced_form" id="example-advanced-form" action="estudiantes-actualizar.php" method="post" enctype="multipart/form-data">
-									<input type="hidden" name="id" value="<?=$_GET["id"];?>">
+									<input type="hidden" name="id" value="<?=$id;?>">
 									<input type="hidden" name="idU" value="<?=$datosEstudianteActual["mat_id_usuario"];?>">
 									  
 										<h3>Información personal</h3>

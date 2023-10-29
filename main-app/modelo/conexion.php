@@ -26,9 +26,23 @@ if($_SESSION["inst"]==""){
 
 	$bdActual = $_SESSION["inst"]."_".$agnoBD;
 	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);
+	require_once ROOT_PATH."/main-app/class/Conexion.php";
 	try{
+
 	//Conexion con el Servidor
-	$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agnoBD);
+	$conexionInstancia = new Conexion;
+
+	$conexion = $conexionInstancia->conexion($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agnoBD);
+	
+	//Conexion con el Servidor PDO
+	$conexionPDO = $conexionInstancia->conexionPDO($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
+
+	// Crear una instancia de PDO
+    $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
+
+    // Establecer el modo de error PDO a excepciones
+    $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 	} catch(Exception $e){
 
 		switch($e->getCode()){

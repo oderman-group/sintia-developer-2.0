@@ -16,6 +16,8 @@ $num = $grados->rowCount();
     <title>Admisiones | Plataforma sintia</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="../sintia-icono.png" />
 </head>
 
 <body>
@@ -24,18 +26,19 @@ $num = $grados->rowCount();
         <div class="row justify-content-md-center">
             <div class="col col-lg-12">
                 <!-- Button trigger modal -->
+                
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Tutorial proceso de admisión</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Políticas</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <iframe width="100%" height="315" src="https://www.youtube.com/embed/ln-hLu0cBJc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <?=$datosConfig['cfgi_politicas_texto'];?>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -49,14 +52,22 @@ $num = $grados->rowCount();
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <hr class="my-4">
-                    <p>
-                        NOTA: Recuerde tener todos los documentos escaneados antes de comenzar a diligenciar el formulario.
-                    </p>
+                    <p><?=$datosConfig['cfgi_texto_inicial'];?></p>
                 </div>
+
+                <?php
+                if($datosConfig['cfgi_mostrar_banner']==1 && !empty($datosConfig['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'])){?>
+                    <div class="row mb-1 mt-1">
+                        <div class="col-sm-12">
+                            <img class="img-responsive" src="<?='../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'];?>" width="100%">
+                        </div>
+                    </div>
+                <?php }?>
+
                 <hr class="my-4">
                 <?php include("alertas.php"); ?>
                 <h3 style="text-align: center;">REGISTRO INICIAL</h3>
-                <form action="index-guardar.php" method="post">
+                <form action="index-guardar.php" method="post" class="border border-secondary rounded-top p-2">
                     <input type="hidden" name="iditoken" value="<?= md5($_REQUEST['idInst']); ?>">
                     <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
                     <p class="lead text-danger">
@@ -124,7 +135,25 @@ $num = $grados->rowCount();
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gridCheck" required>
                             <label class="form-check-label" for="gridCheck">
-                                Autorizo al tratamiento de datos personales. <a href="politica_datos.pdf" style="text-decoration: underline;" target="_blank">Leer política de tratamiento</a>
+                                Autorizo al tratamiento de datos personales. 
+                                <?php
+                                    if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto']) || $datosConfig['cfgi_mostrar_politicas'] == 2){
+                                        switch($datosConfig['cfgi_mostrar_politicas']){
+                                            case 1:
+                                                $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                            break;
+
+                                            case 2:
+                                                $enlace='href="javascript:void(0);" onClick="mostrarPoliticas()"';
+                                            break;
+
+                                            default:
+                                            $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                            break;
+                                        }
+                                ?>
+                                    <a <?=$enlace?> style="text-decoration: underline;">Leer política de tratamiento</a>
+                                <?php }?>
                             </label>
                         </div>
                     </div>
@@ -132,17 +161,22 @@ $num = $grados->rowCount();
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <div class="text-right">
-                        <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-credit-card" aria-hidden="true"></i> Enviar solicitud</button>
+                        <button type="submit" class="btn btn-lg" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;"><i class="fa fa-credit-card" aria-hidden="true"></i> Enviar solicitud</button>
                     </div>
                 </form>
                 <hr class="my-4">
-                <div class="jumbotron mt-4 bg-info text-light" style="text-align: center;">
+                <div class="jumbotron mt-4" style="text-align: center; background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;">
                     <p style="font-size: 20px;">Si usted ya hizo este registro por favor consulte el estado de su solicitud para validar el paso a seguir.</p>
                     <a class="btn btn-primary btn-lg" href="consultar-estado.php?idInst=<?= $_REQUEST['idInst'] ?>" role="button">Consultar estado de solicitud</a>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function mostrarPoliticas(){
+            $("#exampleModal").modal("show");
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

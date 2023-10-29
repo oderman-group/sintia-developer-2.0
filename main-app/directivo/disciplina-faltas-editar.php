@@ -3,12 +3,22 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
-    $consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".$_GET["idR"]."'");
+    $consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -43,7 +53,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> Faltas</li>
                             </ol>
                         </div>
@@ -51,6 +61,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                     <div class="row">
 						
                         <div class="col-sm-12">
+                                <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
 								<div class="panel">
@@ -66,14 +77,14 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Código</label>
 											<div class="col-sm-2">
-												<input type="text" name="codigo" class="form-control" value="<?=$datosEditar['dfal_codigo'];?>">
+												<input type="text" name="codigo" class="form-control" value="<?=$datosEditar['dfal_codigo'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-10">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['dfal_nombre'];?>">
+												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['dfal_nombre'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -88,7 +99,7 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select class="form-control  select2" name="categoria" required>
+                                                <select class="form-control  select2" name="categoria" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -105,9 +116,11 @@ $datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

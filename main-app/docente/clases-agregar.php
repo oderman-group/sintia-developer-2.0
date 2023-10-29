@@ -5,11 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-if(
-	($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-													
-	or($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-)
+if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) )
 {
 	
 }else{
@@ -82,7 +78,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
+									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="11" name="id">
 										<input type="hidden" value="<?=$config['conf_id_institucion']."".$cargaConsultaActual;?>" name="idMeeting">
 
@@ -90,7 +86,7 @@ if(
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Tema</label>
+												<label class="col-sm-2 control-label">Tema <span style="color: red;">(*)</span></label>
 												<div class="col-sm-10">
 													<input type="text" name="contenido" class="form-control" autocomplete="off" required>
 												</div>
@@ -99,26 +95,43 @@ if(
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
 												<div class="col-sm-10">
-													<textarea name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+													<textarea id="editor1" name="descripcion" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
-													</div>
+												<label class="col-sm-2 control-label">Fecha <span style="color: red;">(*)</span></label>
+												<div class="col-sm-4">
+													<input type="date" name="fecha" class="form-control" autocomplete="off" value="<?=date("Y-m-d");?>" required>
+												</div>
 											</div>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Disponible para estudiantes</label>
+												<label class="col-sm-2 control-label">Unidad</label>
+												<div class="col-sm-10">
+													<?php
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													?>
+													<select class="form-control  select2" name="unidad">
+														<option value="">Seleccione una opción</option>
+														<?php
+														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
+														?>
+															<option value="<?=$unidadDatos['uni_id'];?>"><?=$unidadDatos['uni_nombre']?></option>
+														<?php }?>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Disponible para estudiantes <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puede o no ser vista por los estudiantes."><i class="fa fa-question"></i></button></label>
 												<div class="input-group spinner col-sm-4">
 													<label class="switchToggle">
 														<input type="checkbox" name="disponible" value="1" checked>
 														<span class="slider yellow round"></span>
 													</label>
 												</div>
-												<span class="col-sm-6 control-label" style="color: tomato;">Puede o no ser vista por los estudiantes.</span>
 											 </div>
 											
 											<div class="form-group row">
@@ -135,7 +148,14 @@ if(
 											
 											<p class="text-warning">Opcional.</p>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Video de youtube</label>
+												<label class="col-sm-2 control-label">Hipervinculo <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Un link que quiere que los estudiantes tengan de referencia para esta clase en particular."><i class="fa fa-question"></i></button></label>
+												<div class="col-sm-10">
+													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com">
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Video de youtube <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Pegue la URL del video"><i class="fa fa-question"></i></button></label>
 												<div class="col-sm-10">
 													<input type="text" name="video" class="form-control" autocomplete="off">
 												</div>
@@ -179,7 +199,7 @@ if(
 												</div>	
 											</div>
 
-											
+											<!--
 											<p class="text-info">Para clases en vivo.</p>
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Clave para moderadores</label>
@@ -194,6 +214,7 @@ if(
 													<input type="text" name="claveEstudiante" class="form-control" autocomplete="off">
 												</div>
 											</div>
+											-->
 											
 											
 										</div>
@@ -237,6 +258,9 @@ if(
 
 												form.addEventListener("submit", function(event) {
 													event.preventDefault();
+													// Obtén el contenido del editor CKEditor y asígnalo al textarea
+													let editor = CKEDITOR.instances.editor1;
+													document.querySelector("textarea[name='descripcion']").value = editor.getData();
 
 													subir_archivos(this);
 												});
@@ -318,6 +342,13 @@ if(
     <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+    </script>
 </body>
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

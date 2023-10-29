@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0120';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -93,11 +98,9 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="estadoR">
                                                 <option value=""></option>
-                                                <option value="1">Matriculado</option>
-                                                <option value="2">Asistente</option>
-                                                <option value="3">Cancelado</option>
-                                                <option value="4">No matriculado</option>
-                                                <option value="5">En inscripción</option>
+                                                <?php foreach( $estadosMatriculasEstudiantes as $clave => $valor ) {?>
+                                                    <option value="<?=$clave;?>"><?=$valor;?></option>
+                                                <?php } ?>
                                                 </select>
                                             </div>
                                         </div>

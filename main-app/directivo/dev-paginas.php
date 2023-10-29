@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once("../class/Paginas.php");
 
 $idPaginaInterna = 'DV0010';
 
@@ -44,10 +45,14 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["uss"])) {
+                                $ussDev='';
+                                if (!empty($_GET["uss"]) && is_numeric($_GET["uss"])) {
+                                    $ussDev=$_GET["uss"];
                                     $filtro .= " AND pagp_tipo_usuario='" . $_GET["uss"] . "'";
                                 }
-                                if (is_numeric($_GET["modulo"])) {
+                                $moduloDev='';
+                                if (!empty($_GET["modulo"]) && is_numeric($_GET["modulo"])) {
+                                    $moduloDev=$_GET["modulo"];
                                     $filtro .= " AND pagp_modulo='" . $_GET["modulo"] . "'";
                                 }
                             ?>
@@ -96,17 +101,8 @@ $Plataforma = new Plataforma;
                                                 <tbody>
                                                     <?php
 													include("includes/consulta-paginacion-dev-paginas.php");
-
-                                                    try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
-                                                        LEFT JOIN ".$baseDatosServicios.".modulos ON mod_id=pagp_modulo
-                                                        LEFT JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=pagp_tipo_usuario
-                                                        WHERE pagp_id=pagp_id $filtro
-                                                        ORDER BY pagp_id
-                                                        LIMIT $inicio,$registros;");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $limite="LIMIT ".$inicio.",".$registros;
+                                                    $consulta = Paginas::listarPaginas($filtro,$limite);
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                     ?>

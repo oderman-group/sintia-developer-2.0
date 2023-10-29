@@ -15,17 +15,6 @@
 			<!-- start page content -->
             <div class="page-content-wrapper">
                 <div class="page-content">
-                    <div class="page-bar">
-                        <div class="page-title-breadcrumb">
-                            <div class=" pull-left">
-                                <div class="page-title"><?=$datosConsulta['ema_asunto'];?></div>
-                            </div>
-                            <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="mensajes.php">Mensajes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$datosConsulta['ema_asunto'];?></li>
-                            </ol>
-                        </div>
-                    </div>
                     <?php include("../compartido/mensajes-ver-contenido.php");?>
                 </div>
             </div>

@@ -4,6 +4,8 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
+$estudiante="";
+if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);}
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -16,7 +18,7 @@ require_once("../class/Estudiantes.php");
 <?php
 								  //ESTUDIANTE ACTUAL
 								  
-								  $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_GET["estudiante"]);
+								  $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($estudiante);
 								  $nombre = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
 								  ?>
     
@@ -68,7 +70,7 @@ require_once("../class/Estudiantes.php");
 										//DEFINITIVAS
 										$carga = $rCargas[0];
 										$periodo = $config[2];
-										$estudiante = $_GET["estudiante"];
+										$estudiante = $estudiante;
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
 										if($porcentajeActual>0){$materiasDividir++;}

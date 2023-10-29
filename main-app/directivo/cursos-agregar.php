@@ -1,7 +1,16 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0065';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +44,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cursos.php" onClick="deseaRegresar(this)"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Cursos</li>
                             </ol>
                         </div>
@@ -57,7 +66,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre Curso <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreC" class="form-control" required>
+                                                <input type="text" name="nombreC" class="form-control" required <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
@@ -69,7 +78,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Curso Siguiente</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="graSiguiente">
+                                                <select class="form-control  select2" name="graSiguiente" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -84,21 +93,23 @@
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Matricula</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="valorM" class="form-control" value="0">
+                                                <input type="text" name="valorM" class="form-control" value="0" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor Pension</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="valorP" class="form-control" value="0">
+                                                <input type="text" name="valorP" class="form-control" value="0" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

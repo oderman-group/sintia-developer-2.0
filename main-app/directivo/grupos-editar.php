@@ -1,13 +1,23 @@
 <?php include("session.php"); ?>
 <?php $idPaginaInterna = 'DT0197'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
-<?php include("../compartido/head.php"); ?>
+<?php include("../compartido/head.php"); 
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 </head>
 <?php 
  if (!is_null($_GET["id"])) {
-    $grupoActual = Grupos::obtenerGrupo($_GET["id"]);
+    $grupoActual = Grupos::obtenerGrupo(base64_decode($_GET["id"]));
     
 } ;
 ?>
@@ -41,23 +51,25 @@
                                     <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
                                     <div class="panel-body">
                                         <form name="formularioGuardar" action="grupos-actualizar.php" method="post">
-                                        <input type="hidden" name="id" value="<?php echo $_GET["id"] ?>">                                        
+                                        <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">                                        
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Codigo Gupo <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-10">
-                                                    <input type="number" value="<?= $grupoActual['gru_codigo']; ?>" name="codigoG" class="form-control" required>
+                                                    <input type="number" value="<?= $grupoActual['gru_codigo']; ?>" name="codigoG" class="form-control" required <?=$disabledPermiso;?>>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Nombre Gupo <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" value="<?= $grupoActual['gru_nombre']; ?>" name="nombreG" class="form-control" required>
+                                                    <input type="text" value="<?= $grupoActual['gru_nombre']; ?>" name="nombreG" class="form-control" required <?=$disabledPermiso;?>>
                                                 </div>
                                             </div>
 
 
-                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                            <a href="#" name="grupos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                            <?php if(Modulos::validarPermisoEdicion()){?>
+                                                <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                            <?php }?>
+                                            <a href="javascript:void(0);" name="grupos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                         </form>
                                     </div>
                                 </div>

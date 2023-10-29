@@ -1,7 +1,9 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0073';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php
+include("session.php");
+$idPaginaInterna = 'DC0073';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -20,11 +22,10 @@
 <?php include("../compartido/body.php");?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
-		
         <?php include("../compartido/panel-color.php");?>
         <!-- start page container -->
         <div class="page-container">
- 			<?php include("../compartido/menu.php");?>
+            <?php include("../compartido/menu.php");?>
 			<!-- start page content -->
             <div class="page-content-wrapper">
                 <div class="page-content">
@@ -36,13 +37,9 @@
                             </div>
                         </div>
                     </div>
-					
                     <?php include("../compartido/empresas-agregar-contenido.php");?>
-
                 </div>
 			</div>
-                <!-- end page content -->
-             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>

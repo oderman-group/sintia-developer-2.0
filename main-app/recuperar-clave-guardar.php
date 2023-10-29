@@ -46,7 +46,7 @@ if(!empty($datosUsuario)){
 	$asunto = 'Tus credenciales han llegado';
 	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-recuperar-clave.php';
 	
-	EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+	EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 	Usuarios::guardarRegistroRestaruracion($data);
 
 	echo '<script type="text/javascript">window.location.href="index.php?success=SC_DT_5&email='.$datosUsuario['uss_email'].'";</script>';

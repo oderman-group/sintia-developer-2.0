@@ -15,7 +15,8 @@ try {
 	dtc_clave_email='" . $_POST["clave"] . "',
 	dtc_dominio='" . $_POST["dominio"] . "',
 	dtc_asesor_ventas='" . $_POST["asesor"] . "',
-	dtc_email_ventas='" . $_POST["emailVentas"] . "'
+	dtc_email_ventas='" . $_POST["emailVentas"] . "',
+	dtc_animacion_login='" . $_POST["animacionLogin"] . "'
 
 	WHERE dtc_id=1");
 

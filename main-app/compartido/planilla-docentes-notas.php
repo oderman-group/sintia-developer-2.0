@@ -28,10 +28,12 @@ require_once("../class/UsuariosPadre.php");
   <?php
   $filtro = '';
   if (!empty($_REQUEST["carga"])) {
-    $filtro .= " AND car_id='" . $_REQUEST["carga"] . "'";
+    $carga = base64_decode($_REQUEST["carga"]);
+    $filtro .= " AND car_id='" . $carga . "'";
   }
   if (!empty($_REQUEST["docente"])) {
-    $filtro .= " AND car_docente='" . $_REQUEST["docente"] . "'";
+    $docente = base64_decode($_REQUEST["docente"]);
+    $filtro .= " AND car_docente='" . $docente . "'";
   }
   if (!empty($_REQUEST["grado"])) {
     $filtro .= " AND car_curso='" . $_REQUEST["grado"] . "'";

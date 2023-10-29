@@ -10,3 +10,5 @@ if (!$tienePermiso && $idPaginaInterna!='DT0107') {
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=302&idPagina='.$idPaginaInterna.'";</script>';
 	exit();	
 }
+
+$datosPaginaActual = Modulos::datosPaginaActual($idPaginaInterna);

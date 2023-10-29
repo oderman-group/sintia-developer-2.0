@@ -45,14 +45,17 @@
 												
 												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
-												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
-												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
+												$porcentaje=0;
+												if(!empty($notapp[0])){
+													$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
+												}
+												if(!empty($notapp[0]) && $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
 													
-													<?php if($notapp[0]!=""){?>
+													<?php if(!empty($notapp[0])){?>
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
@@ -109,18 +112,23 @@
 													<?php
 													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
 													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1");
+														$contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_ausencias 
 														WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$totalAusencia=0;
+														if(!empty($ausencia[3])){
+															$totalAusencia=$ausencia[3];
+														}
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
-														<td><a href="clases-ver.php?idR=<?=$resultado[0];?>"><?=$resultado[1];?></a></td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$resultado[1];?></a></td>
 														<td><?=$resultado[2];?></td>
-														<td><?=$ausencia[3];?></td>
+														<td><?=$totalAusencia;?></td>
 														<td>
-															<a href="clases-ver.php?idR=<?=$resultado[0];?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

@@ -3,8 +3,11 @@ session_start();
 include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
-$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones
+INNER JOIN instituciones_modulos ON ipmod_institucion=ins_id AND ipmod_modulo=8 
+INNER JOIN {$baseDatosAdmisiones}.config_instituciones ON cfgi_id_institucion=ins_id AND cfgi_inscripciones_activas=1 
 WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
+$institucionesCantidad = mysqli_num_rows($institucionesConsulta);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,15 +17,31 @@ WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
         <title>Admisiones | Plataforma sintia</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+        <!-- favicon -->
+        <link rel="shortcut icon" href="../sintia-icono.png" />
     </head>
+    
+<style>
+body {
+    background-image: url(./../../config-general/assets-login-2023/img/bg-login.png);
+    display: grid;
+    grid-template-columns: 100%;
+    height: 100vh;
+    width: 100vw;
+}
+</style>
 
     <body>
-        <div class="container">
+        <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
             <?php include("menu.php"); ?>
             <div class="row justify-content-md-center">
                 <div class="col col-lg-12">
                     <hr class="my-4">
-                    <h3 style="text-align: center;">ESCOGE LA INSTITUCIÓN A LA QUE DESEAS INGRESAR</h3>
+                    <?php include("alertas.php"); ?>
+                    <div style="text-align:center;"><img class="mb-4" src="../../config-general/assets-login-2023/img/logo.png" width="100"></div>
+                    <?php if($institucionesCantidad > 0) {?>
+                    <h5 style="text-align: center;">ESCOGE UNA DE NUESTRAS INSTITUCIONES PARA EMPEZAR</h5>
                     <div class="col col-lg-12">
                         <form action="admision.php" method="post">
                             <div class="form-row justify-content-md-center">
@@ -33,16 +52,22 @@ WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
                                         while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
                                         $selected = (isset($_GET['inst']) and $_GET['inst']==$instituciones['ins_id']) ? 'selected' : '';
                                         ?>
-                                        <option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
+                                        <option value="<?=base64_encode($instituciones['ins_id']);?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
                                         <?php }?>
                                     </select>
                                 </div>
                             </div>
                             <div style="text-align: center;">
-                                <button type="submit" class="btn btn-success btn-lg">INICIAR PROCESO</button>
+                                <button type="submit" class="btn btn-lg" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;">INICIAR PROCESO</button>
                             </div>
                         </form>
                     </div>
+                    <?php } else {?>
+                        <div class="alert alert-success w-50 mx-auto" style="width: 200px;" role="alert">
+                            <h4 class="alert-heading">No se encontraron instituciones disponibles</h4>
+                            <p>En este momento no hay insiticiones con proceso de inscripción abierto. Consulte más adelante.</p>
+                        </div>
+                        <?php }?>
                 </div>
             </div>
         </div>

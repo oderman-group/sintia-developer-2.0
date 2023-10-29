@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0069';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -46,9 +51,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="disciplina-categorias-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0071'])){?>
+                                                            <a href="disciplina-categorias-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -61,7 +68,9 @@
 														<th>ID</th>
 														<th>Categoría</th>
 														<th>Faltas</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -85,20 +94,35 @@
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['dcat_id'];?></td>
 														<td><?=$resultado['dcat_nombre'];?></td>
-														<td><a href="disciplina-faltas.php?cat=<?=$resultado['dcat_id'];?>" style="text-decoration: underline;"><?=$numFaltas[0];?></a></td>
-														
 														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="disciplina-categorias-editar.php?idR=<?=$resultado['dcat_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                      <li><a href="disciplina-categoria-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
-																  </ul>
-															  </div>
-														</td>
+                                                        <?php if(Modulos::validarSubRol(['DT0066'])) {?>
+                                                            <a href="disciplina-faltas.php?cat=<?=base64_encode($resultado['dcat_id']);?>" style="text-decoration: underline;"><?=$numFaltas[0];?></a>
+                                                        <?php } else {?>
+                                                            <?=$numFaltas[0];?>
+                                                        <?php }?>
+                                                        </td>
+														
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <td>
+                                                                <?php if(Modulos::validarSubRol(['DT0070', 'DT0159'])) {?>
+                                                                    <div class="btn-group">
+                                                                        <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                        <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                            <i class="fa fa-angle-down"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu" role="menu">
+                                                                            <?php if(Modulos::validarSubRol(['DT0070'])) {?>
+                                                                                <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                            <?php }?>
+                                                                            
+                                                                            <?php if(Modulos::validarSubRol(['DT0159'])) {?>
+                                                                                <li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
+                                                                            <?php }?>
+                                                                        </ul>
+                                                                    </div>
+                                                                <?php }?>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

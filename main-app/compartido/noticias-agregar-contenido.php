@@ -1,5 +1,6 @@
-					<div class="row">
-                        <div class="col-sm-9">
+					
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
                                     <header><?=$frases[212][$datosUsuarioActual[8]];?></header>
@@ -18,7 +19,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+                                                <textarea name="contenido" id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
                                             </div>
                                         </div>
 										
@@ -52,7 +53,7 @@
 												WHERE gcat_activa=1
 												");
 												?>
-                                                <select class="form-control  select2" name="categoriaGeneral" required>
+                                                <select class="form-control  select2" style="width: 100%" name="categoriaGeneral" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
@@ -83,7 +84,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
                                             <div class="col-sm-10">
-                                                <select id="multiple" class="form-control select2-multiple" multiple>
+                                                <select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple>
                                                   <option value="5">Directivos</option>
                                                   <option value="2">Docentes</option>
 												  <option value="3">Acudientes</option>
@@ -95,7 +96,7 @@
 										<div class="form-group row">
 												<label class="col-sm-2 control-label"><?=$frases[5][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-10">
-													<select id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
+													<select style="width: 100%" id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
 													<?php
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
@@ -122,3 +123,10 @@
                         </div>
 						
                     </div>
+<script src="../ckeditor/ckeditor.js"></script>
+
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor 4
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>

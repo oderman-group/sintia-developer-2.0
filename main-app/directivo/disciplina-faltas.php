@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0066';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -46,9 +51,11 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="disciplina-faltas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0068'])){?>
+                                                            <a href="disciplina-faltas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+                                                                Agregar nuevo <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -61,13 +68,15 @@
 														<th>ID</th>
 														<th>Falta</th>
 														<th>Categoría</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
                                                     $filtro = '';
-                                                    if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".$_GET["cat"]."'";}
+                                                    if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".base64_decode($_GET["cat"])."'";}
 
                                                     try{
                                                         $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas
@@ -85,18 +94,28 @@
 														<td><?=$resultado['dfal_nombre'];?></td>
 														<td><?=$resultado['dcat_nombre'];?></td>
 														
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="disciplina-faltas-editar.php?idR=<?=$resultado['dfal_id'];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                      <li><a href="disciplina-faltas-eliminar.php?id=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>
-																  </ul>
-															  </div>
-														</td>
+                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                            <td>
+                                                                <?php if(Modulos::validarSubRol(['DT0067', 'DT0160'])) {?>
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                    <?php if(Modulos::validarSubRol(['DT0067'])) {?>
+                                                                        <li><a href="disciplina-faltas-editar.php?idR=<?=base64_encode($resultado['dfal_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                    <?php }?>
+                                                                    
+                                                                    <?php if(Modulos::validarSubRol(['DT0160'])) {?>
+                                                                        <li><a href="javascript:void(0);"
+                                                                        onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-faltas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
+                                                                    <?php }?>
+                                                                    </ul>
+                                                                </div>
+                                                                <?php }?>
+                                                            </td>
+                                                        <?php }?>
                                                     </tr>
 													<?php 
 														 $contReg++;

@@ -2,13 +2,16 @@
 <?php include("verificar-usuario.php");?>
 <?php $idPaginaInterna = 'ES0018';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
+<?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
+$idR="";
+if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $actividad = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1"), MYSQLI_BOTH);
+WHERE tar_id='".$idR."' AND tar_estado=1"), MYSQLI_BOTH);
 
 if($actividad[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=105";</script>';
@@ -16,11 +19,27 @@ if($actividad[0]==""){
 }
 
 $fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1"), MYSQLI_BOTH);
+WHERE tar_id='".$idR."' AND tar_estado=1"), MYSQLI_BOTH);
 if($fechas[0]<0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
 }
+
+$filtro = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
+
+include '../class/Tables/BDT_academico_actividad_tareas_entregas.php';
+$predicado = [
+	'ent_id_actividad' => $idR
+];
+
+$numEntregas = BDT_AcademicoActividadTareasEntregas::numRows($predicado);
+
+$porcentajeEnviadas = ($numEntregas / $cantEstudiantes) * 100;
+$porcentajeRestante = 100 - $porcentajeEnviadas;
+$porcentajeEnviadas = round($porcentajeEnviadas,2);
+$porcentajeRestante = round($porcentajeRestante,2);
 ?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
@@ -58,12 +77,12 @@ if($fechas[0]<0){
                                             <div class="states">
                                                 <div class="info">
                                                     <div class="desc pull-left">Enviadas </div>
-                                                    <div class="percent pull-right">30%</div>
+                                                    <div class="percent pull-right"><?=$porcentajeEnviadas;?>%</div>
                                                 </div>
 												
                                                 <div class="progress progress-xs">
-                                                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                                                        <span class="sr-only">90% </span>
+                                                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeEnviadas;?>%">
+                                                        <span class="sr-only"><?=$porcentajeEnviadas;?>% </span>
                                                     </div>
                                                 </div>
 												
@@ -72,11 +91,11 @@ if($fechas[0]<0){
                                             <div class="states">
                                                 <div class="info">
                                                     <div class="desc pull-left">faltantes</div>
-                                                    <div class="percent pull-right">70%</div>
+                                                    <div class="percent pull-right"><?=$porcentajeRestante;?>%</div>
                                                 </div>
                                                 <div class="progress progress-xs">
-                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                                        <span class="sr-only">85% </span>
+                                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?=$porcentajeRestante;?>%">
+                                                        <span class="sr-only"><?=$porcentajeRestante;?>% </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,7 +110,7 @@ if($fechas[0]<0){
                             <!-- BEGIN PROFILE CONTENT -->
                             <div class="profile-content">
                                 <div class="row">
-                                     <div class="card">
+                                     <div class="card w-100">
                                          <div class="card-topline-aqua">
                                              <header></header>
                                          </div>
@@ -122,7 +141,7 @@ if($fechas[0]<0){
 							                                        </div>
 							                                        <div class="col-md-3 col-6"> <strong>Impedir restrasos?</strong>
 							                                            <br>
-							                                            <p class="text-muted"><?=$actividad['tar_impedir_retrasos'];?></p>
+							                                            <p class="text-muted"><?=$opcionSINO[$actividad['tar_impedir_retrasos']];?></p>
 							                                        </div>
 							                                    </div>
 
@@ -133,9 +152,9 @@ if($fechas[0]<0){
 							                                    <h4 class="font-bold"><?=$frases[198][$datosUsuarioActual[8]];?></h4>
 							                                    <hr>
 							                                    <ul>
-							                                        <?php if($actividad['tar_archivo']!=""  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo2']!="" and file_exists('../files/tareas/'.$actividad['tar_archivo2'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo3']!="" and file_exists('../files/tareas/'.$actividad['tar_archivo3'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
+							                                        <?php if(!empty($actividad['tar_archivo'])  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo2']) and file_exists('../files/tareas/'.$actividad['tar_archivo2'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo3']) and file_exists('../files/tareas/'.$actividad['tar_archivo3'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
 							                                    </ul>
 							                                    
 							                                    <br>
@@ -150,16 +169,14 @@ if($fechas[0]<0){
 		                                                                <?php if($fechas[1]<=0 or $actividad['tar_impedir_retrasos']==0){?>
 																		<form id="form_subir" action="guardar.php" method="post" enctype="multipart/form-data">
 																			<input type="hidden" name="id" value="10">
-																			<input type="hidden" name="idR" value="<?=$_GET["idR"];?>">
+																			<input type="hidden" name="idR" value="<?=$idR;?>">
 		                                                                    
-																			<p><textarea class="form-control p-text-area" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
+																			<p><textarea class="form-control border border-primary" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
 																			
-																			<h4>Puedes subir hasta 3 archivos si es necesario.</h4>
+																			<h4><mark>Puedes subir hasta 3 archivos si es necesario.</mark></h4>
 																			<p>
 																				Archivo 1:<br>
-																				<input type="file" name="file" class="default" onChange="archivoPeso(this)"><br><br>
-																				Nombre de Archivo 1:<br>
-																				<input type="text" name="archivo1" class="default">
+																				<input type="file" name="file" class="default" onChange="archivoPeso(this)">
 																			</p>
 																			
 																			
@@ -187,8 +204,8 @@ if($fechas[0]<0){
 																		}?>
 		                                                            </div>
 																	<?php
-																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
-																	if($enviada[0]!=""){
+																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$idR."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+																	if(!empty($enviada[0])){
 																	?>
 																		<div class="panel">
 																			<h4 class="font-bold"><?=$frases[200][$datosUsuarioActual[8]];?></h4>
@@ -197,19 +214,19 @@ if($fechas[0]<0){
 																			
 																			<p><b><?=$frases[202][$datosUsuarioActual[8]];?>:</b> <?=$enviada['ent_fecha'];?> </p>
 																			
-																			<?php if($enviada['ent_archivo']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
+																			<?php if(!empty($enviada['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 1:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if($enviada['ent_archivo2']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
+																			<?php if(!empty($enviada['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 2:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo2'];?>" target="_blank"><?=$enviada['ent_archivo2'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if($enviada['ent_archivo3']!="" and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
+																			<?php if(!empty($enviada['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 3:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo3'];?>" target="_blank"><?=$enviada['ent_archivo3'];?> </a>
 																			</p>

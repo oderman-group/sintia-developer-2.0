@@ -35,7 +35,7 @@
 									</div>
 
 									<div align="center">
-										<p><mark><?=$frases[316][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosEstudianteActual['mat_codigo_tesoreria'];?></b></mark></p>
+										<p><mark><?=$frases[316][$datosUsuarioActual['uss_idioma']];?>: <b><?php if(!empty($datosEstudianteActual['mat_codigo_tesoreria'])){ echo $datosEstudianteActual['mat_codigo_tesoreria'];}?></b></mark></p>
 
 										<p><a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn btn-info" target="_blank"><?=strtoupper($frases[317][$datosUsuarioActual['uss_idioma']]);?></a></p>
 

@@ -66,7 +66,7 @@
 														<?php
 														while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$datos[0];?>" <?php if($datos[0]==$_GET["carpeta"]){echo "selected";}?>><?=$datos['fold_nombre']?></option>
+															<option value="<?=$datos[0];?>" <?php if($datos[0]==$idFolderCarpetaActual){echo "selected";}?>><?=$datos['fold_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -75,18 +75,34 @@
 											<div class="form-group row">
 												<label class="col-sm-3 control-label"><?=$frases[227][$datosUsuarioActual[8]];?></label>
 												<div class="col-sm-9">
-													<select id="multiple" class="form-control select2-multiple" multiple name="compartirCon[]">
-													<?php
-													$infoConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-													");
-													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-													?>	
-													  <option value="<?=$infoDatos['uss_id'];?>"><?=strtoupper($infoDatos['uss_nombre'])." - ".$infoDatos['pes_nombre'];?></option>
-													<?php }?>	
+													<select id="select_usuario" class="form-control select2-multiple" multiple name="compartirCon[]">
 													</select>
 												</div>
 											</div>
+											<script>          
+												$(document).ready(function() {
+													$('#select_usuario').select2({
+													placeholder: 'Seleccione el usuario...',
+													theme: "bootstrap",
+													multiple: true,
+														ajax: {
+															type: 'GET',
+															url: '../compartido/ajax-listar-usuarios.php',
+															processResults: function(data) {
+																data = JSON.parse(data);
+																return {
+																	results: $.map(data, function(item) {                                  
+																		return {
+																			id: item.value,
+																			text: item.label
+																		}
+																	})
+																};
+															}
+														}
+													});
+												});
+											</script>
 										
 											<div class="form-group row">
 												<label class="col-sm-3 control-label"><?=$frases[228][$datosUsuarioActual[8]];?></label>

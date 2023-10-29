@@ -4,7 +4,17 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once("../class/Estudiantes.php");
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 <script type="text/javascript">
   function def(enviada){
@@ -16,7 +26,9 @@ require_once("../class/Estudiantes.php");
   
   var casilla = document.getElementById(codEst);
   
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+ 	if (alertValidarNota(nota)) {
+		return false;
+	}	
 	
 	casilla.disabled="disabled";
 	casilla.style.fontWeight="bold";
@@ -25,6 +37,7 @@ require_once("../class/Estudiantes.php");
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
 				   "&codEst="+(codEst)+
+				   "&notaAnterior="+(notaAnterior)+
 				   "&carga="+(carga);
 			   $.ajax({
 				   type: "POST",
@@ -42,7 +55,9 @@ function niv(enviada){
   var codEst = enviada.id;
   var per = enviada.name;
   var carga = <?=$cargaConsultaActual;?>;
- if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {alert('Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>'); return false;}	
+  if (alertValidarNota(nota)) {
+		return false;
+	}
 	  $('#respRP').empty().hide().html("esperando...").show(1);
 		datos = "nota="+(nota)+
 				   "&per="+(per)+
@@ -80,7 +95,7 @@ function niv(enviada){
                                 <div class="page-title"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></div>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
@@ -187,17 +202,22 @@ function niv(enviada){
 																$definitiva += $notasResultado[4]*$decimal;
 															}
 															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
-															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															 
+															if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
+															 elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+															 else $tipo='';
 															$notaPeriodo="";
 															if(!empty($notasResultado[4]))$notaPeriodo=$notasResultado[4];
 
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones-estudiante.php?usrEstud=<?=$resultado['mat_id_usuario'];?>&periodo=<?=$i;?>&carga=<?=$cargaConsultaActual;?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo."</a><br>".$tipo;?><br>
-																<?php if(!empty($notasResultado[4])){?>
-																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
-																	<span style="font-size:9px; color:rgb(0,0,153);"><?php echo $notasResultado[6];?></span>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo?></a><br><?=$tipo;?><br>
+																<?php if(Modulos::validarPermisoEdicion()){?>
+																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?php if(!empty($notasResultado[4])) echo $notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
+																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>
 														<?php		
@@ -251,7 +271,9 @@ function niv(enviada){
 															<?php
 															if($n==$datosCargaActual['gra_periodos']) $e = ''; else $e = 'disabled';
 															?>
-															<input size="5" name="<?=$i?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
+															<?php if(Modulos::validarPermisoEdicion()){?>
+																<input size="5" name="<?=$i?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
+															<?php }?>
 														</td>
                                                     </tr>
 													<?php

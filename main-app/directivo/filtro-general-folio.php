@@ -3,6 +3,11 @@ include("session.php");
 
 $idPaginaInterna = 'DT0149';
 
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 ?>
@@ -39,7 +44,7 @@ include("../compartido/head.php");
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="estudiantes.php" onClick="deseaRegresar(this)">Estudiantes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php" onClick="deseaRegresar(this)">Estudiantes</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active">Generar Folios</li>
                         </ol>
                     </div>
@@ -89,7 +94,7 @@ include("../compartido/head.php");
 
                                     <input type="submit" class="btn btn-primary" value="Generar Folios">&nbsp;
 
-                                    <a href="#" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>

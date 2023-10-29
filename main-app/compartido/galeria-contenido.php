@@ -10,7 +10,7 @@
 											");
 											while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												$fileFoto = "../files/fotos/".$datos['uss_foto'];
-												if($datos['uss_foto']=="" or !file_exists($fileFoto) or $datos['uss_nombre']=="") continue;
+												if(empty($datos['uss_foto']) or !file_exists($fileFoto) or empty($datos['uss_nombre'])) continue;
 												
 											?>	
 					                        <div class="col-md-3">

@@ -3,12 +3,22 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
-$consultaCursoActual = Grados::obtenerDatosGrados($_GET["curso"]);
+$consultaCursoActual = Grados::obtenerDatosGrados(base64_decode($_GET["curso"]));
 $cursoActual = mysqli_fetch_array($consultaCursoActual, MYSQLI_BOTH);
 $consultaCursoSiguiente = Grados::obtenerDatosGrados($cursoActual['gra_grado_siguiente']);
 $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -62,7 +72,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cursos.php" onClick="deseaRegresar(this)">Cursos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cursos.php" onClick="deseaRegresar(this)">Cursos</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Promocionar Estudiantes</li>
                             </ol>
                         </div>
@@ -81,13 +91,13 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                 </div>
                                 <div class="card-body">
                                     <form name="formularioGuardar" id="formularioPromocionar" action="cursos-promocionar-estudiantes.php" method="post">
-                                        <input type="hidden" name="curso" value="<?=$_GET["curso"];?>">
+                                        <input type="hidden" name="curso" value="<?=base64_decode($_GET["curso"]);?>">
                                         <div class="table-scrollable">
                                             <table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th style="text-align: center; padding: 10px;">
-                                                        <input type="checkbox" checked="checked" id="all">
+                                                        <input type="checkbox" checked="checked" id="all" <?=$disabledPermiso;?>>
                                                         </th>
                                                         <th>DOCUMENTO</th>
                                                         <th>NOMBRES Y APELLIDOS</th>
@@ -96,7 +106,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $filtro = " AND mat_grado=".$_GET['curso']." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
+                                                        $filtro = " AND mat_grado=".base64_decode($_GET["curso"])." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
                                                         $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                                         $numeroEstudiantes=mysqli_num_rows($consultaEstudiantes);
                                                         while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
@@ -104,7 +114,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                     ?>
                                                     <tr>
                                                         <td style="text-align: center; padding: 10px;">
-                                                            <input type="checkbox" checked="checked" id="check" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>">
+                                                            <input type="checkbox" checked="checked" id="check" name="id<?=$datosEstudiante['mat_id'];?>" value="<?=$datosEstudiante['mat_id'];?>" <?=$disabledPermiso;?>>
                                                         </td>
                                                         <td><?=$datosEstudiante['mat_documento'];?></td>
                                                         <td><?=$nombre;?></td>
@@ -118,7 +128,7 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                                                         include("../compartido/error-catch-to-report.php");
                                                                     }
                                                                     ?>
-                                                                    <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>">
+                                                                    <select class="form-control  select2" name="grupo<?=$datosEstudiante['mat_id'];?>" <?=$disabledPermiso;?>>
                                                                         <option value="">Seleccione una opción</option>
                                                                         <?php
                                                                         while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -141,13 +151,13 @@ $cursoSiguiente = mysqli_fetch_array($consultaCursoSiguiente, MYSQLI_BOTH);
                                             </table>
                                         </div>
                                         <?php
-                                            if($numeroEstudiantes>0){
+                                            if($numeroEstudiantes>0 && Modulos::validarPermisoEdicion()){
                                         ?>
                                         <input type="submit" class="btn btn-primary" value="Realizar promoción">
                                         <?php
                                             }
                                         ?>
-                                        <a href="#" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

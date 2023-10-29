@@ -1,5 +1,7 @@
 <?php
-require_once("index-logica.php");
+if(!isset($_GET['nodb'])) {
+    require_once("index-logica.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -95,8 +97,8 @@ require_once("index-logica.php");
             </div>
         </div>
         <div class="logo-container vertical-center">
-            <lottie-player src="animation_lnuqb3rd.json" background="transparent"
-                speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
+            <lottie-player src="<?=$datosContactoSintia['dtc_animacion_login'];?>" background="transparent"
+                speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>

@@ -3,13 +3,22 @@ include("session.php");
 $idPaginaInterna = 'DT0131';
 include("../compartido/sintia-funciones.php");
 include("../compartido/guardar-historial-acciones.php");
+require_once("../class/SubRoles.php");
+
+$archivoSubido = new Archivos;
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 
 if (!empty($_FILES['fotoUss']['name'])) {
+	$archivoSubido->validarArchivo($_FILES['fotoUss']['size'], $_FILES['fotoUss']['name']);
 	$explode = explode(".", $_FILES['fotoUss']['name']);
 	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
-		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&error=ER_DT_8";</script>';
+		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.base64_encode($_POST["idR"]).'&error=ER_DT_8";</script>';
 		exit();
 	}
 
@@ -58,7 +67,7 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 
 	$validarClave=validarClave($_POST["clave"]);
 	if($validarClave!=true){
-		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.$_POST["idR"].'";</script>';
+		echo '<script type="text/javascript">window.location.href="usuarios-editar.php?error=5&id='.base64_encode($_POST["idR"]).'";</script>';
 		exit();
 	}
 
@@ -80,6 +89,15 @@ if ($_POST["tipoUsuario"] == 4) {
 		include("../compartido/error-catch-to-report.php");
 	}
 }
+try{
+if(!empty($_POST["subroles"])){	
+	$listaRoles=SubRoles::actualizarRolesUsuario($_POST["idR"],$_POST["subroles"]);
+}else{
+	$listaRoles=SubRoles::eliminarSubrolesUsuarios($_POST["idR"]);
+}
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
-echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.$_POST["idR"].'&success=SC_DT_2";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id='.base64_encode($_POST["idR"]).'&success=SC_DT_2";</script>';
 exit();

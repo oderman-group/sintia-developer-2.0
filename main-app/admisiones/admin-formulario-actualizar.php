@@ -4,37 +4,43 @@ if ($_SESSION["id"] == "") {
     header("Location:index.php?sesion=0");
     exit();
 }
-?>
-<?php
+
 include("bd-conexion.php");
 include("php-funciones.php");
+require_once("../class/EnviarEmail.php");
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+//DATOS SECRETARIA(O)
+$ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
+$uss = $pdoI->prepare($ussQuery);
+$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_INT);
+$uss->execute();
+$datosUss = $uss->fetch();
+$nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
-require 'phpmailer/Exception.php';
-require 'phpmailer/PHPMailer.php';
-require 'phpmailer/SMTP.php';
-
-if ($_FILES['archivo1']['name'] != "") {
+$seAdjuntoArchivo = 0;
+if (!empty($_FILES['archivo1']['name'])) {
 	$destino = "files/adjuntos";
-	$extension = end(explode(".", $_FILES['archivo1']['name']));
+    $explode = explode(".", $_FILES['archivo1']['name']);
+	$extension = end($explode);
 	$archivo1 = uniqid('a1_') . "." . $extension;
 	@unlink($destino . "/" . $archivo1);
     move_uploaded_file($_FILES['archivo1']['tmp_name'], $destino . "/" . $archivo1);
     $adjunto1 = '<p><a href="https://plataformasintia.com/admisiones/files/adjuntos/'.$archivo1.'">Descargar archivo 1</a></p>';
+    $seAdjuntoArchivo ++;
 } else {
     $archivo1 = $_POST['archivo1A'];
     $adjunto1 = '';
 }
 
-if ($_FILES['archivo2']['name'] != "") {
+if (!empty($_FILES['archivo2']['name'])) {
 	$destino = "files/adjuntos";
-	$extension = end(explode(".", $_FILES['archivo2']['name']));
+    $explode = explode(".", $_FILES['archivo2']['name']);
+	$extension = end($explode);
 	$archivo2 = uniqid('a2_') . "." . $extension;
 	@unlink($destino . "/" . $archivo2);
     move_uploaded_file($_FILES['archivo2']['tmp_name'], $destino . "/" . $archivo2);
     $adjunto2 = '<p><a href="https://plataformasintia.com/admisiones/files/adjuntos/'.$archivo2.'">Descargar archivo 2</a></p>';
+    $seAdjuntoArchivo++;
 } else {
     $archivo2 = $_POST['archivo2A'];
     $adjunto2 = '';
@@ -52,93 +58,50 @@ $asp->bindParam(':archivo1', $archivo1, PDO::PARAM_STR);
 $asp->bindParam(':archivo2', $archivo2, PDO::PARAM_STR);
 $asp->execute();
 
+//INSERTAR EN EL HISTORIAL DE OBSERVACIONES
+$sql = "INSERT INTO historial_observaciones(hiso_id_institucion, hiso_year, hiso_id_solicitud, hiso_estado, hiso_envio_correo, hiso_observacion, hiso_adjuntos, hiso_resposable)VALUES(:institucion, :agno, :solicitud, :estado, :envio_correo, :observacion, :adjuntos, :responsable)";
+$stmt = $pdo->prepare($sql);
+
+$agno = date("Y");
+$idInstitucion = base64_decode($_POST['idInst']);
+
+$stmt->bindParam(':institucion', $idInstitucion, PDO::PARAM_INT);
+$stmt->bindParam(':agno', $agno, PDO::PARAM_INT);
+$stmt->bindParam(':solicitud', $_POST['solicitud'], PDO::PARAM_INT);
+$stmt->bindParam(':estado', $_POST['estadoSolicitud'], PDO::PARAM_INT);
+$stmt->bindParam(':envio_correo', $_POST['enviarCorreo'], PDO::PARAM_INT);
+$stmt->bindParam(':observacion', $_POST['observacion'], PDO::PARAM_STR);
+$stmt->bindParam(':adjuntos', $seAdjuntoArchivo, PDO::PARAM_INT);
+$stmt->bindParam(':responsable', $_SESSION["id"], PDO::PARAM_INT);
+
+$stmt->execute();
+
 if($_POST['enviarCorreo'] == 1){
 
-	//Mensaje para correo
-    $fin =  '<html><body style="background-color:#CCC;">';
-    $fin .= '
-                    <center>
-            
-                        <div style="font-family:arial; background:#FFF; width:800px; color:#000; text-align:justify; padding:15px; border-radius:5px; margin-top:20px;">
-                        
-                            <div style="width:800px; text-align:center; padding:15px;">
-
-                                <img src="http://plataformasintia.com/admisiones/files/logoicolven.jpeg" width="150">
-
-                            </div>
-
-							<p style="color:#000;">
-								Cordial saludo, a su solicitud <b>#'.$_POST['solicitud'].'</b> se la ha añadido la siguiente observación:<br><br>
-								<b>'.$_POST['observacion'].'</b>
-                            </p>
-                            
-
-                            <p>
-                                Puede consultar el estado de su solicitud o hacer correciones en el formulario en el siguiente enlace:<br>
-                                <a href="https://plataformasintia.com/admisiones/consultar-estado.php?idInst='.$_REQUEST['idInst'].'">CONSULTAR ESTADO DE SOLICITUD</a>
-                            </p>
-
-							<p>
-                                Cualquier duda o inquietud no dude en contactarnos.<br>
-                                <b>WhatsApp:</b> +57 317 5721061<br>
-                                <b>Correo:</b> sec.academica@icolven.edu.co
-							</p>
-
-							<p align="center" style="color:#000;">
-								Gracias por preferirnos, que tenga un feliz día.
-							</p>
-
-						</div>
-					</center>
-					<p>&nbsp;</p>
-				';
-    $fin .= '';
-    $fin .=  '<html><body>';
-
-    // Instantiation and passing `true` enables exceptions
-    $mail = new PHPMailer(true);
-    echo '<div style="display:none;">';
-    try {
-        //Server settings
-        $mail->SMTPDebug = 0;                                       // Enable verbose debug output
-        $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = EMAIL_SERVER;  // Specify main and backup SMTP servers
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = EMAIL_USER;                     // SMTP username
-        $mail->Password   = EMAIL_PASSWORD;                              // SMTP password
-        $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 465;                                    // TCP port to connect to
-
-        //Recipients
-        $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
-
-        $mail->addAddress($_POST['emailAcudiente'], '');     // Add a recipient
-        $mail->addAddress('sec.academica@icolven.edu.co', 'Sec. Académica');     // Add a recipient
-        #$mail->addAddress('tecmejia2010@gmail.com', 'Jhon');     // Add a recipient
-
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = "Observación a solicutud #" . $_POST['solicitud'];
-        $mail->Body = $fin;
-        $mail->CharSet = 'UTF-8';
-
-        if($archivo1 != "" and file_exists('files/adjuntos/'.$archivo1)){
-            $mail->AddAttachment('files/adjuntos/'.$archivo1);
-        }
-
-        if($archivo2 != "" and file_exists('files/adjuntos/'.$archivo2)){
-            $mail->AddAttachment('files/adjuntos/'.$archivo2);
-        }
-        
-        
-
-        $mail->send();
-    } catch (Exception $e) {
-        echo "Error: {$mail->ErrorInfo}";
-        exit();
+    $archivos = array();
+    if(!empty($archivo1) and file_exists('files/adjuntos/'.$archivo1)){
+        $archivos[1] = 'files/adjuntos/'.$archivo1;
     }
-    echo '</div>';
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+
+    if(!empty($archivo2) and file_exists('files/adjuntos/'.$archivo2)){
+        $archivos[2] = 'files/adjuntos/'.$archivo2;
+    }
+    $data = [
+        'usuario_email'     => $_POST['emailAcudiente'],
+        'usuario_nombre'    => $_POST['nombreAcudiente'],
+        'usuario2_email'    => $datosUss['uss_email'],
+        'usuario2_nombre'   => $nombreUss,
+        'solicitud_id'      => $_POST["solicitud"],
+        'observaciones'     => $_POST['observacion'],
+        'institucion_id'    => $datosInfo['info_institucion'],
+        'id_aspirante'      => $_POST['documentoAspirante']
+    ];
+    $asunto = 'Actualización de solicitud de admisión '.$_POST["solicitud"];
+	$bodyTemplateRoute = ROOT_PATH.'/config-general/template-email-formulario-inscripcion.php';
+
+    EnviarEmail::enviar($data,$asunto,$bodyTemplateRoute,null,$archivos);
+
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($_POST["solicitud"]).'&id='.base64_encode($_POST["solicitud"]).'&idInst='.$_REQUEST['idInst'].'";</script>';
 }else{
-    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg=3&token='.md5($_POST["solicitud"]).'&id='.$_POST["solicitud"].'&idInst='.$_REQUEST['idInst'].'";</script>';
+    echo '<script type="text/javascript">window.location.href="admin-formulario-editar.php?msg='.base64_encode(3).'&token='.md5($_POST["solicitud"]).'&id='.base64_encode($_POST["solicitud"]).'&idInst='.$_REQUEST['idInst'].'";</script>';
 }

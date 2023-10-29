@@ -5,6 +5,9 @@ $aRemplezar   = array("'", '"', "#", "´");
 $enRemplezo   = array("\'", "|", "\#", "\´");
 $detalleError = str_replace($aRemplezar, $enRemplezo, $e->getMessage());
 $request_data = json_encode($_REQUEST);
+global $conexion;
+global $baseDatosServicios;
+global $config;
 $request_data_sanitizado = mysqli_real_escape_string($conexion, $request_data);
 
 try {

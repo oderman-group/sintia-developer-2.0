@@ -8,15 +8,17 @@
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 
 								<?php
-								if(is_numeric($_GET["carpeta"])){	
-									$idFolderActual = $_GET["carpeta"];
+                                $idFolderCarpetaActual="";
+                                if(!empty($_GET["carpeta"])){ $idFolderCarpetaActual=base64_decode($_GET["carpeta"]);}
+								if(is_numeric($idFolderCarpetaActual)){
+									$idFolderActual = $idFolderCarpetaActual;
 									$var = 1;
 									$i=0;
 									$vectorDatos = array();
 									while($var==1){
 										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT fold_id, fold_padre FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$idFolderActual."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'"), MYSQLI_BOTH);
 										$vectorDatos[$i] = $carpetaActual['fold_id'];
-										if($carpetaActual['fold_padre']!="" and $carpetaActual['fold_padre']!='0'){
+										if(!empty($carpetaActual['fold_padre']) and $carpetaActual['fold_padre']!='0'){
 											$idFolderActual = $carpetaActual['fold_padre'];
 										}else{$var = 2;}
 										$i++;
@@ -31,7 +33,7 @@
 										$carpetaActual = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_id='".$vectorDatos[$cont]."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'"), MYSQLI_BOTH);
 										if($cont>0){
 									?>
-											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=$carpetaActual['fold_id'];?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+											<li><a class="parent-item" href="cargas-carpetas.php?carpeta=<?=base64_encode($carpetaActual['fold_id']);?>"><?=$carpetaActual['fold_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<?php
 										}else{
 									?>
@@ -57,14 +59,14 @@
 	
 											<div class="form-group row">
 												<div class="col-sm-8">
-													<input type="text" name="busqueda" class="form-control" value="<?=$_GET["busqueda"];?>" placeholder="Búsqueda...">
+													<input type="text" name="busqueda" class="form-control" value="<?php if(!empty($_GET["busqueda"])){ echo $_GET["busqueda"];}?>" placeholder="Búsqueda...">
 												</div>
 												<div class="col-sm-4">
 													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual[8]];?>">
 												</div>
 											</div>
 											</form>
-											<?php if(isset($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
+											<?php if(!empty($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
 										</div>
 									</div>
 							
@@ -79,12 +81,11 @@
 						
                         <div class="col-sm-9">
 							
-							
-							<?php if(is_numeric($_GET["carpeta"])){?>
+							<?php $carpeta=""; if(!empty($idFolderCarpetaActual) && is_numeric($idFolderCarpetaActual)){ $carpeta=$idFolderCarpetaActual; ?>
 								<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 							<?php }?>
 							
-							<a href="cargas-carpetas-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&carpeta=<?=$_GET['carpeta'];?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual[8]];?></a>
+							<a href="cargas-carpetas-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carpeta=<?=base64_encode($carpeta);?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual[8]];?></a>
 							<p>&nbsp;</p>
                        	 	<!-- start widget -->
 							<div class="state-overview">
@@ -93,8 +94,8 @@
 									<div class="row">
 										<?php
 										$filtro = '';
-										if(is_numeric($_GET["carpeta"])){$filtro .= " AND fold_padre='".$_GET["carpeta"]."'";}
-										if($_GET["busqueda"]!=""){$filtro .= " AND (fold_nombre LIKE '%".$_GET["busqueda"]."%' OR fold_keywords LIKE '%".$_GET["busqueda"]."%')";}
+										if(!empty($idFolderCarpetaActual) && is_numeric($idFolderCarpetaActual)){$filtro .= " AND fold_padre='".$idFolderCarpetaActual."'";}
+										if(!empty($_GET["busqueda"])){$filtro .= " AND (fold_nombre LIKE '%".$_GET["busqueda"]."%' OR fold_keywords LIKE '%".$_GET["busqueda"]."%')";}
 										$carpetas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders 
 										WHERE fold_id_recurso_principal='".$cargaConsultaActual."' AND fold_propietario='".$_SESSION["id"]."' AND fold_activo=1 AND fold_year='" . $_SESSION["bd"] . "' AND fold_categoria=2 AND fold_estado=1 $filtro
 										ORDER BY fold_tipo, fold_nombre
@@ -103,7 +104,7 @@
 											$compartidoNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$carpeta['fold_id']."'"));
 											
 											$numRecursos = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_padre='".$carpeta['fold_id']."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'"));
-											if(!is_numeric($_GET["carpeta"]) and $carpeta['fold_padre']!="" and $carpeta['fold_padre']!="0" and $_GET["busqueda"]=="") continue;
+											if(!empty($idFolderCarpetaActual) && !is_numeric($idFolderCarpetaActual) and !empty($carpeta['fold_padre']) and $carpeta['fold_padre']!="0" and empty($_GET["busqueda"])) continue;
 										?>
 										
 										<?php if($carpeta['fold_tipo']==1){?>
@@ -111,7 +112,7 @@
 										  <div class="info-box bg-b-green">
 											<span class="info-box-icon push-bottom"><i class="fa fa-folder"></i></span>
 											<div class="info-box-content">
-											  <span class="info-box-text"><a href="cargas-carpetas.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&carpeta=<?=$carpeta['fold_id'];?>" style="color: white;"><?=$carpeta['fold_nombre'];?></a></span>
+											  <span class="info-box-text"><a href="cargas-carpetas.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carpeta=<?=base64_encode($carpeta['fold_id']);?>" style="color: white;"><?=$carpeta['fold_nombre'];?></a></span>
 											
 											  <span class="info-box-number"><?=$numRecursos;?></span>
 											  <div class="progress">
@@ -123,9 +124,9 @@
 												 	<i class="fa fa-share-alt pull-left" style="color: black;" title="Compartido con <?=$compartidoNum;?> usuarios"></i>
 												 <?php }?>
 												 
-												 <a href="cargas-carpetas-editar.php?idR=<?=$carpeta['fold_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" style="color: black;"><i class="fa fa-edit"></i></a>
+												 <a href="cargas-carpetas-editar.php?idR=<?=base64_encode($carpeta['fold_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" style="color: black;"><i class="fa fa-edit"></i></a>
 												 
-												 <a href="#" name="../compartido/guardar.php?get=9&idR=<?=$carpeta['fold_id'];?>" onClick="deseaEliminar(this)" style="color: black;"><i class="fa fa-trash-o"></i></a>
+												 <a href="#" name="../compartido/guardar.php?get=<?=base64_encode(9);?>&idR=<?=base64_encode($carpeta['fold_id']);?>" onClick="deseaEliminar(this)" style="color: black;"><i class="fa fa-trash-o"></i></a>
 											</p>	
 												
 											</div>
@@ -148,7 +149,7 @@
 												</div>
 												
 												<p align="right">
-													<a href="cargas-carpetas-editar.php?idR=<?=$carpeta['fold_id'];?>&carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" style="color: black;"><i class="fa fa-edit"></i></a>
+													<a href="cargas-carpetas-editar.php?idR=<?=base64_encode($carpeta['fold_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" style="color: black;"><i class="fa fa-edit"></i></a>
 													
 													<a href="#" name="../compartido/guardar.php?get=9&idR=<?=$carpeta['fold_id'];?>" onClick="deseaEliminar(this)" style="color: black;"><i class="fa fa-trash-o"></i></a>
 												</p>
@@ -178,7 +179,7 @@
 										");
 										while($carpetaCompartida = mysqli_fetch_array($carpetasCompartidas, MYSQLI_BOTH)){
 											$numRecursosCompartido = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders WHERE fold_padre='".$carpetaCompartida['fold_id']."' AND fold_estado=1 AND fold_year='" . $_SESSION["bd"] . "'"));
-											if(!is_numeric($_GET["carpeta"]) and $carpetaCompartida['fold_padre']!="" and $carpetaCompartida['fold_padre']!="0" and $_GET["busqueda"]=="" and $carpetaCompartida['fxuc_folder']!=$carpetaCompartida['fold_id']) continue;
+											if(!is_numeric($idFolderCarpetaActual) and !empty($carpetaCompartida['fold_padre']) and $carpetaCompartida['fold_padre']!="0" and $_GET["busqueda"]=="" and $carpetaCompartida['fxuc_folder']!=$carpetaCompartida['fold_id']) continue;
 										?>
 										
 										<?php if($carpetaCompartida['fold_tipo']==1){?>
@@ -186,7 +187,7 @@
 										  <div class="info-box bg-b-blue">
 											<span class="info-box-icon push-bottom"><i class="fa fa-folder"></i></span>
 											<div class="info-box-content">
-											  <span class="info-box-text"><a href="cargas-carpetas.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&carpeta=<?=$carpetaCompartida['fold_id'];?>" style="color: white;"><?=$carpetaCompartida['fold_nombre'];?></a></span>
+											  <span class="info-box-text"><a href="cargas-carpetas.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carpeta=<?=base64_encode($carpetaCompartida['fold_id']);?>" style="color: white;"><?=$carpetaCompartida['fold_nombre'];?></a></span>
 											
 											  <span class="info-box-number"><?=$numRecursosCompartido;?></span>
 											  <div class="progress">

@@ -3,6 +3,13 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+
+$grado="";
+if(!empty($_GET["grado"])){ $grado=base64_decode($_GET["grado"]);}
+$grupo="";
+if(!empty($_GET["grupo"])){ $grupo=base64_decode($_GET["grupo"]);}
+$idActividad="";
+if(!empty($_GET["idActividad"])){ $idActividad=base64_decode($_GET["idActividad"]);}
 ?>
 <head>
 	<title>Informes</title>
@@ -13,7 +20,7 @@ require_once("../class/Estudiantes.php");
 <div align="center" style="margin-bottom:20px;">
     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
     <?=$informacion_inst["info_nombre"]?><br>
-    INFORME DE CALIFICACIONES - ACTIVIDAD: <?=$_GET["idActividad"];?></br>
+    INFORME DE CALIFICACIONES - ACTIVIDAD: <?=$idActividad;?></br>
 </div>   
    <table bgcolor="#FFFFFF" width="80%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
@@ -23,20 +30,20 @@ require_once("../class/Estudiantes.php");
                                         <th class="center">Observaciones</th>
   </tr>
   <?php
-									 $con = 1;
-                                     $filtroAdicional= "AND mat_grado='".$_GET["grado"]."' AND mat_grupo='".$_GET["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									 $cont = 1;
+                                     $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
                                      $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                         $nombre =Estudiantes::NombreCompletoDelEstudiante($resultado);
 										 //LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
-										 $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$_GET["idActividad"]);
+										 $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$idActividad);
 										 $notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 									 ?>
   <tr style="font-size:13px;">
       <td class="center"><?=$resultado[0];?></td>
                                         <td><?=$nombre?></td>
-                                        <td class="center" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>"><?=$notasResultado[3];?></td>
-                                        <td class="center"><?=$notasResultado[4];?></td>
+                                        <td class="center" style="font-size: 13px; text-align: center; color:<?php if(!empty($notasResultado[3]) && $notasResultado[3]<$config[5]){ echo $config[6]; }elseif(!empty($notasResultado[3]) && $notasResultado[3]>=$config[5]){ echo $config[7]; }else{ echo "black";}?>"><?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?></td>
+                                        <td class="center"><?php if(!empty($notasResultado[4])){ echo $notasResultado[4];}?></td>
 </tr>
   <?php
   $cont++;

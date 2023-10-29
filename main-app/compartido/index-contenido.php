@@ -90,7 +90,7 @@
                      
 			        <div class="row">
 						
-						<div class="col-sm-4">				
+						<div class="col-sm-5">				
 							
 							<?php include("../compartido/encuestas.php");?>
 							
@@ -133,57 +133,35 @@
 							</div>
 							-->
 
-							<div class="panel">
-								
-							    <header class="panel-heading panel-heading-purple" align="center"><?=$frases[258][$datosUsuarioActual['uss_idioma']];?> (5)</header>
-								<div class="col-sm-12">
-									<ul class="feed-blog">
-									<?php	
-										$ultimasPaginas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-										LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-										WHERE 
-										hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
-										AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
-										ORDER BY hil_id DESC LIMIT 5");										 
-										while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
-										?>
-										
-										<li class="diactive-feed">
-											<div class="feed-user-img">
-												<img src="<?=$fotoPerfilUsr;?>" class="img-radius "
-													alt="User-Profile-Image">
-											</div>
-											<h6>
-												<span class="label label-sm label-success">
-												<a href="<?=$consultaReciente['pagp_ruta'];?>" style="color:#FFF;"><?php echo $consultaReciente["pagp_pagina"]; ?></a>
-												</span> 
-												</span>&nbsp;</span>
-												<small class="text-muted"><?=$consultaReciente['hil_fecha'];?></small>
-											</h6>
-										</li>
+						<nav>
+							<div class="nav nav-tabs" id="nav-tab" role="tablist">
+								<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" onClick="listarInformacion('../compartido/async-ultimas-paginas.php?fotoPerfilUsr=<?=$fotoPerfilUsr;?>', 'nav-home')">Mis páginas recientes</a>
 
-										<?php }?>
-									</ul>	
-								</div>
-							</div>
-
-							<div class="panel">
+								<a class="nav-item nav-link" id="nav-cargas-tab" data-toggle="tab" href="#nav-cargas" role="tab" aria-controls="nav-cargas" aria-selected="false" onClick="listarInformacion('../compartido/async-mas-visitadas-pagina.php', 'nav-cargas')">Mis páginas más visitadas</a>
+								<?php
+								if($datosUsuarioActual['uss_tipo'] == TIPO_DEV || $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO) {
+								?>
+									<a class="nav-item nav-link" id="peso-tab" data-toggle="tab" href="#peso" role="tab" aria-controls="peso" aria-selected="false">Uso del disco</a>
+								<?php }?>
 								
-							    <header class="panel-heading panel-heading-blue" align="center"><?=$frases[259][$datosUsuarioActual['uss_idioma']];?> (5)</header>
-								<div class="col-sm-12">
-								<?php	
-                                    $paginasMasVisitadasConsulta = mysqli_query($conexion, "SELECT count(*) as visitas, pagp_pagina, pagp_ruta FROM ".$baseDatosServicios.".seguridad_historial_acciones
-									INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-									WHERE hil_usuario = ".$datosUsuarioActual[0]." AND hil_institucion = ".$config['conf_id_institucion']."
-									GROUP BY hil_titulo
-									ORDER BY count(*) DESC
-									LIMIT 5");										 
-                                    while($paginasMasVisitadasDatos = mysqli_fetch_array($paginasMasVisitadasConsulta)){						                       
-                                    ?>
-										<li><a href="<?=$paginasMasVisitadasDatos['pagp_ruta'];?>" style="text-decoration: underline;"><?php echo $paginasMasVisitadasDatos["pagp_pagina"]." (".$paginasMasVisitadasDatos["visitas"].")"; ?></a></li>
-									<?php }?>
-								</div>
 							</div>
+						</nav>
+
+						<div class="tab-content" id="nav-tabContent">
+							<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
+							<div class="tab-pane fade" id="nav-cargas" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+							<div class="tab-pane fade" id="peso" role="tabpanel" aria-labelledby="peso-tab">
+								<?php include("../compartido/peso.php");?>
+							</div>
+						</div>
+
+						<script>
+							document.addEventListener('DOMContentLoaded', function() {
+								listarInformacion('../compartido/async-ultimas-paginas.php?fotoPerfilUsr=<?=$fotoPerfilUsr;?>', 'nav-home');
+							});
+						</script>
+							
+							
 
 								
 							<?php include("../compartido/modulo-frases-lateral.php");?>
@@ -191,7 +169,7 @@
 						</div>	
 						
 						<!-- Activity feed start -->
-						<div class="col-sm-8" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
+						<div class="col-sm-7" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
 							<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>

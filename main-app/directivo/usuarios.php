@@ -1,9 +1,19 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0126';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
-<?php
+<?php include("../compartido/head.php");
+require_once '../class/Estudiantes.php';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 $Plataforma = new Plataforma;
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 <!-- Theme Styles -->
     <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
@@ -21,10 +31,10 @@ function guardarAjax(datos){
 
 	if(document.getElementById(idR).checked){
 		valor = 1;
-		document.getElementById("Reg"+idR).style.backgroundColor="#ff572238";
+		document.getElementById("reg"+idR).style.backgroundColor="#ff572238";
 	}else{
 		valor = 0;
-		document.getElementById("Reg"+idR).style.backgroundColor="white";
+		document.getElementById("reg"+idR).style.backgroundColor="white";
 	}
   var operacion = 1;	
 
@@ -68,12 +78,6 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                         <div class="col-md-12">
                             <div class="row">
 								
-							<?php
-							$filtro = '';
-							$tipo = '';
-							if(!empty($_GET["tipo"])){$filtro .= " AND uss_tipo='".$_GET["tipo"]."'"; $tipo = $_GET["tipo"];}
-							?>
-								
 								<div class="col-md-12">
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
 
@@ -93,9 +97,11 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="usuarios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion()){?>
+															<a href="usuarios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+																Agregar nuevo <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 
 													
@@ -115,17 +121,19 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<th>Usuario (REP)</th>
 														<th>Nombre</th>
 														<th>Tipo</th>
-														<th>Sesión</th>
+														<th>Último ingreso</th>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
+
+												
 												
 												<?php
 													include("includes/consulta-paginacion-usuarios.php");	
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
 														INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-														WHERE uss_id=uss_id $filtro
+														WHERE uss_id!={$_SESSION["id"]} $filtro
 														ORDER BY uss_id
 														LIMIT $inicio,$registros;");
 													} catch (Exception $e) {
@@ -134,18 +142,54 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													$contReg = 1;
 													$bloqueado = array("NO","SI");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														if($resultado['uss_tipo']== TIPO_DEV && $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO){
+															continue;
+														}
+
+														$mostrarNumAcudidos = '';
+														if( $resultado['uss_tipo'] == TIPO_ACUDIENTE ) {
+															try{
+																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes
+																INNER JOIN academico_matriculas ON mat_id=upe_id_estudiante
+																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+															$num = mysqli_num_rows($consultaUsuarioAcudiente);
+															
+															$mostrarNumAcudidos = '<br><span style="font-size:9px; color:darkblue">('.$num.' Acudidos)</span>';
+														}
+
+														$backGroundMatricula = '';
+														if($resultado['uss_tipo']== TIPO_ESTUDIANTE) {
+															$tieneMatricula = Estudiantes::obtenerDatosEstudiantePorIdUsuario($resultado['uss_id']);
+															if(empty($tieneMatricula)) {
+																$backGroundMatricula = 'style="background-color:gold;" class="animate__animated animate__pulse animate__delay-2s" data-toggle="tooltip" data-placement="right" title="Este supuesto estudiante no cuenta con un registro en las matrículas."';
+															}
+														}
+
+														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+														$arrayDatos = json_encode($arrayEnviar);
+														$objetoEnviar = htmlentities($arrayDatos);
+
 														 $bgColor = '';
 														 if($resultado['uss_bloqueado']==1) $bgColor = '#ff572238';
 														 
 														$cheked = '';
 														if($resultado['uss_bloqueado']==1){$cheked = 'checked';}
 
-														try{
-															$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
+														
+														$mostrarNumCargas = '';
+														if( $resultado['uss_tipo'] == TIPO_DOCENTE ) {
+															try{
+																$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado[0]."'");
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+															$numCarga = mysqli_num_rows($consultaNumCarga);
+															
+															$mostrarNumCargas = '<br><span style="font-size:9px; color:darkblue">('.$numCarga.' Cargas)</span>';
 														}
-														$numCarga = mysqli_num_rows($consultaNumCarga);
 
 														try{
 															$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
@@ -159,26 +203,43 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$usuarioRepetido = mysqli_fetch_array($consultaUsuariosRepetidos, MYSQLI_BOTH);
 														$avisoRepetido = null;
 														if($usuarioRepetido['rep']>1) $avisoRepetido = 'style="background-color:gold;"';
+														
+														$fotoUsuario = $usuariosClase->verificarFoto($resultado['uss_foto']);
+
+														$infoTooltip = "
+														<p>
+															<img src='{$fotoUsuario}' class='img-thumbnail' width='120px;' height='120px;'>
+														</p>
+														<b>Sesión:</b><br>
+														{$opcionEstado[$resultado['uss_estado']]}<br>
+														<b>Último ingreso:</b><br>
+														{$resultado['uss_ultimo_ingreso']}<br><br>
+														<b>Email:</b><br>
+														{$resultado['uss_email']}<br>
+														<b>Fecha de nacimiento:</b><br>
+														{$resultado['uss_fecha_nacimiento']}
+														";
 													 ?>
-													<tr id="Reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
+													<tr id="reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td>
-															<div class="input-group spinner col-sm-10">
-																<label class="switchToggle">
-																	<input type="checkbox" id="<?=$resultado['uss_id'];?>" name="bloqueado" value="1" onChange="guardarAjax(this)" <?=$cheked;?>>
-																	<span class="slider red round"></span>
-																</label>
-															</div>
+															<?php if(Modulos::validarPermisoEdicion()){?>
+																<div class="input-group spinner col-sm-10">
+																	<label class="switchToggle">
+																		<input type="checkbox" id="<?=$resultado['uss_id'];?>" name="bloqueado" value="1" onChange="guardarAjax(this)" <?=$cheked;?> <?=$disabledPermiso;?>>
+																		<span class="slider red round"></span>
+																	</label>
+																</div>
+															<?php }?>
 														</td>
 														<td><?=$resultado['uss_id'];?></td>
 														<td <?=$avisoRepetido?>>
 															<?=$resultado['uss_usuario'];?>
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
-														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=$resultado['pes_nombre'];?></td>
+														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?>" data-content="<?=$infoTooltip;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a></td>
+														<td <?=$backGroundMatricula;?>><?=$resultado['pes_nombre']."".$mostrarNumCargas."".$mostrarNumAcudidos;?></td>
 														<td>
-															<?=$resultado['uss_estado'];?><br>
 															<span style="font-size: 11px;"><?=$resultado['uss_ultimo_ingreso'];?></span>
 														</td>
 
@@ -189,25 +250,36 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																  <?php if($resultado['uss_tipo']==1 and $datosUsuarioActual['uss_tipo']==5){}else{?>
-																  	<li><a href="usuarios-editar.php?id=<?=$resultado['uss_id'];?>">Editar</a></li>
-																  <?php }?>	
+																	<?php if(Modulos::validarPermisoEdicion()){?>
+																		
+																		<?php
+																		if(($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula)) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
+																		?>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
+																		<?php }?>
+																			
 
-																	  <?php if($resultado['uss_tipo'] != 1 and $resultado['uss_tipo'] != 5){?>
-																	  	<li><a href="auto-login.php?user=<?=$resultado['uss_id'];?>&tipe=<?=$resultado['uss_tipo'];?>">Autologin</a></li>
-																	  <?php }?>
-																	  
-																	<?php if($resultado['uss_tipo']==3){?>
-																		<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																		<?php if($resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO){
+																				if($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
+																		?>
+																					<li><a href="auto-login.php?user=<?=base64_encode($resultado['uss_id']);?>&tipe=<?=base64_encode($resultado['uss_tipo']);?>">Autologin</a></li>
+																		<?php 
+																				} 
+																		}
+																		?>
+																		
+																		<?php if($resultado['uss_tipo'] == TIPO_ACUDIENTE){?>
+																			<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																		<?php }?>
+
+																		<?php if( (!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) ){?>
+																			<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
+																		<?php }?>
 																	<?php }?>
 																	  
-																	  <?php if($resultado['uss_tipo']==2 && $numCarga > 0){?>
-																	  	<li><a href="../compartido/planilla-docentes.php?docente=<?=$resultado['uss_id'];?>" target="_blank">Planillas de las cargas</a></li>
-																	  <?php }?>
-
-																	  <?php if(($numCarga == 0 and $resultado['uss_tipo']==2) or $resultado['uss_tipo']==3){?>
-																	  	<li><a href="#" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['not_id'];?>">Eliminar</a></li>
-																	  <?php }?>
+																	<?php if($resultado['uss_tipo'] == TIPO_DOCENTE && $numCarga > 0){?>
+																		<li><a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($resultado['uss_id']);?>" target="_blank">Planillas de las cargas</a></li>
+																	<?php }?>
 
 																  </ul>
 															  </div>
@@ -263,6 +335,14 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
+
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@ $idPaginaInterna = 'DV0022';
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-    $consultaPagina=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id!='".$_POST["idPagina"]."' AND pagp_ruta='".$_POST["dato"]."'");
+    $consultaPagina=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id!='".$_POST["idPagina"]."' AND pagp_ruta='".$_POST["dato"]."' AND pagp_tipo_usuario='".$_POST["tipoUss"]."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

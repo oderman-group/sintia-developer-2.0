@@ -2,7 +2,12 @@
 <?php $idPaginaInterna = 'DT0121';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/Estudiantes.php");?>
+<?php require_once("../class/Estudiantes.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -32,7 +37,7 @@
 								<?php
 									$filtro = '';
 									$filtroMat = '';
-									if(isset($_GET["curso"]) AND is_numeric($_GET["curso"])){$filtroMat .= " AND mat_grado='".$_GET["curso"]."'";}
+									if(isset($_GET["curso"]) AND is_numeric(base64_decode($_GET["curso"]))){$filtroMat .= " AND mat_grado='".base64_decode($_GET["curso"])."'";}
 									if(isset($_GET["resp"]) AND is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
 									include("includes/barra-superior-reservar-cupo.php");
 								?>
@@ -70,7 +75,8 @@
 														INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
 														INNER JOIN academico_grados ON gra_id=mat_grado
 														INNER JOIN academico_grupos ON gru_id=mat_grupo
-														WHERE genc_id=genc_id $filtro
+														WHERE genc_institucion=".$config['conf_id_institucion']." $filtro
+														ORDER BY genc_id DESC
 														LIMIT $inicio,$registros");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");

@@ -4,6 +4,16 @@ $idPaginaInterna = 'DT0137';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -38,7 +48,7 @@ require_once("../class/Estudiantes.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="usuarios.php?cantidad=10&tipo=3" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="usuarios.php?cantidad=10&tipo=3" onClick="deseaRegresar(this)">Usuarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Acudidos</li>
                             </ol>
                         </div>
@@ -61,7 +71,7 @@ require_once("../class/Estudiantes.php");
                                             <?php
                                             $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 10');
                                             ?>
-                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple>
+                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -81,9 +91,11 @@ require_once("../class/Estudiantes.php");
                                         </div>
                                     </div>
                                     
-                                    <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                        <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                    <?php }?>
                                     
-                                    <a href="#" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>

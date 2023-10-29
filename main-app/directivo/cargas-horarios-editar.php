@@ -3,12 +3,22 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php 
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 try{
-    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".$_GET["id"].";");
+    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM academico_horarios WHERE hor_id=".base64_decode($_GET["id"]).";");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -43,7 +53,7 @@ $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-horarios.php?id=<?=$_GET["id"];?>" onClick="deseaRegresar(this)">Horarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-horarios.php?id=<?=$_GET["id"];?>" onClick="deseaRegresar(this)">Horarios</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Horarios</li>
                             </ol>
                         </div>
@@ -59,13 +69,13 @@ $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
 
                                    
 									<form name="formularioGuardar" action="cargas-horarios-actualizar.php" method="post">
-                                        <input type="hidden" name="idH" value="<?=$_GET["id"];?>">
+                                        <input type="hidden" name="idH" value="<?=base64_decode($_GET["id"]);?>">
                                         <input type="hidden" name="idC" value="<?=$rHorario["hor_id_carga"];?>">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Dia</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="diaH" required>
+                                                <select class="form-control  select2" name="diaH" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci n</option>
                                                     <option value="1" <?php if($rHorario["hor_dia"]==1){echo "selected";}?>>Domingos</option>
                                                     <option value="2" <?php if($rHorario["hor_dia"]==2){echo "selected";}?>>Lunes</option>
@@ -81,21 +91,23 @@ $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Inicio</label>
 											<div class="col-sm-2">
-                                                <input name="inicioH" data-format="hh:mm:ss" type="time" class="form-control" value="<?=$rHorario["hor_desde"]?>">
+                                                <input name="inicioH" data-format="hh:mm:ss" type="time" class="form-control" value="<?=$rHorario["hor_desde"]?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Fin</label>
 											<div class="col-sm-2">
-                                                <input name="finH" data-format="hh:mm:ss" type="time" class="form-control" value="<?=$rHorario["hor_hasta"]?>">
+                                                <input name="finH" data-format="hh:mm:ss" type="time" class="form-control" value="<?=$rHorario["hor_hasta"]?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="cargas-horarios.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="cargas-horarios.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

@@ -6,15 +6,15 @@ require_once("../class/Estudiantes.php");
     
 $year=$agnoBD;
 if(isset($_GET["year"])){
-$year=$_GET["year"];
+$year=base64_decode($_GET["year"]);
 }
 $BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
-if($_GET["periodo"]==""){
+if(empty($_GET["periodo"])){
 	$periodoActual = 1;
 }else{
-	$periodoActual = $_GET["periodo"];
+	$periodoActual = base64_decode($_GET["periodo"]);
 }
 //$periodoActual=2;
 if($periodoActual==1) $periodoActuales = "Primero";
@@ -25,9 +25,9 @@ if($periodoActual==4) $periodoActuales = "Final";?>
 <?php
 //CONSULTA ESTUDIANTES MATRICULADOS
 $filtro = '';
-if(!empty($_GET["id"])){$filtro .= " AND mat_id='".$_GET["id"]."'";}
-if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$_REQUEST["curso"]."'";}
-if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+if(!empty($_GET["id"])){$filtro .= " AND mat_id='".base64_decode($_GET["id"])."'";}
+if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".base64_decode($_REQUEST["curso"])."'";}
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";}
 
 $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
@@ -87,7 +87,8 @@ $numeroPeriodos=2;
 
 <?php
 $nombreInforme = "BOLETÍN DE CALIFICACIONES";
-include("../compartido/head_informes.php") ?>
+include("head-informes.php");
+?>
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px; border:solid; 
   border-color:<?=$Plataforma->colorUno;?>; ">
@@ -242,7 +243,7 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numeroPeriodos;$l++){ ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
-			<?php $consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta");
+			<?php $consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND '".$notas[$l]."'>=notip_desde AND '".$notas[$l]."'<=notip_hasta");
 			$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
 			if($datosUsr["mat_grado"]>11){
 				$notaF = ceil($notas[$l]);
@@ -399,7 +400,7 @@ if(@mysqli_num_rows($cndisiplina)>0){
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$rndisiplina["dn_nota"].">=notip_desde AND ".$rndisiplina["dn_nota"]."<=notip_hasta");
+$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND '".$rndisiplina["dn_nota"]."'>=notip_desde AND '".$rndisiplina["dn_nota"]."'<=notip_hasta");
 $desempenoND = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">

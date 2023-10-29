@@ -60,7 +60,7 @@
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if($_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
+													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
 													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
 													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta
@@ -82,7 +82,7 @@
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
-																<a href="guardar.php?get=1&id=<?=$resultado['dr_id'];?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
+																<a href="guardar.php?get=<?=base64_encode(1);?>&id=<?=base64_encode($resultado['dr_id']);?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
 															<?php }else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_estudiante_fecha'];?>"></i>
 															<?php }?>

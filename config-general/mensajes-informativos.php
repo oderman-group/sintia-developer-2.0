@@ -40,6 +40,14 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Verifica que hayas seleccionado la institución y el año correctamente.';
             break;
 
+            case 8:
+                $tipo = 'danger';
+                $mensaje = '
+                No se pudo establecer una conexión. Revise su red.<br>
+                <a href="index.php" class="btn btn-primary">Intente nuevamente</a>
+                ';
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
@@ -47,7 +55,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_2':
                 $tipo = 'danger';
-                $mensaje = 'No tienes permiso para editar a este usuario: <b>' . $_GET["usuario"] . '</b>';
+                $mensaje = 'No tienes permiso para editar a este usuario: <b>' . base64_decode($_GET["usuario"]) . '</b>';
             break;
 
             case 'ER_DT_3':
@@ -72,7 +80,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_7':
                 $tipo = 'danger';
-                $mensaje = $_GET['msj'];
+                $mensaje = base64_decode($_GET['msj']);
             break;
 
             case 'ER_DT_8':
@@ -92,7 +100,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_11':
                 $tipo = 'danger';
-                $mensaje = 'Este documento(<b>' . $_GET["documento"] . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
+                $mensaje = 'Este documento(<b>' . base64_decode($_GET["documento"]) . '</b>) ya existe para otra persona. Cambie el numero de documento por favor.';
             break;
 
             case 'ER_DT_12':
@@ -113,7 +121,32 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                     Sí, deseo mostrar la información
                 </a>';
             break;
+            case 'ER_DT_15':
+                $tipo = 'danger';
+                $mensaje = $_GET["msj"];
+            break;
 
+            case 'ER_DT_16':
+                $tipo = 'warning';
+                $mensaje = 'No se encontró ninguna coincidencia o usted no tiene permisos para ver este registro.';
+            break;
+
+            case 'ER_DT_17':
+                $tipo = 'danger';
+                $mensaje = "Este archivo pesa <b>{$_GET['pesoMB']}MB</b>. 
+                Lo ideal es que pese menos de {$config['conf_max_peso_archivos']}MB. 
+                Intente comprimirlo o busque reducir su peso.";
+            break;
+
+            case 'ER_DT_18':
+                $tipo = 'danger';
+                $mensaje = 'Lo sentimos, todavía no se ha activado el año <b>'.base64_decode($_GET['yearPasar']).'</b> para su institución, por favor, ponte en contacto con la administración de la plataforma SINTIA.';
+            break;
+
+            case 'ER_DT_19':
+                $tipo = 'danger';
+                $mensaje = 'Este estudiante ya existe en el año <b>'.base64_decode($_GET['yearPasar']).'</b>.';
+            break;
 
             default:
                 $tipo = 'secondary';
@@ -123,26 +156,26 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }    
     
     /* MENSAJES DE EXITO */
-    if(isset($_GET['success'])){
+    else if(isset($_GET['success'])){
         switch($_GET['success']){
             case 'SC_DT_1':
                 $tipo = 'success';
-                $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_2':
                 $tipo = 'success';
-                $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_3':
                 $tipo = 'success';
-                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . $_GET["id"] . '</b>';
+                $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_4':
                 $tipo = 'primary';
-                $mensaje = $_GET["summary"];
+                $mensaje = base64_decode($_GET["summary"]);
             break;
 
             case 'SC_DT_5':
@@ -153,18 +186,18 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_6':
                 $tipo = 'success';
                 $mensaje = '
-                Fueron creadas <b>' . $_GET["creadas"] . '</b> cargas académicas nuevas.
+                Fueron creadas <b>' . base64_decode($_GET["creadas"]) . '</b> cargas académicas nuevas.
                 ';
-                if($_GET["noCreadas"] > 0) {
+                if(base64_decode($_GET["noCreadas"]) > 0) {
                     $mensaje .= '
-                    <br>No se pudieron crear <b>' . $_GET["noCreadas"] . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
+                    <br>No se pudieron crear <b>' . base64_decode($_GET["noCreadas"]) . '</b> cargas académicas porque ya existía ese registro en el sistema. Por favor verifique.
                     ';
                 }
             break;
 
             case 'SC_DT_7':
                 $tipo = 'success';
-                $mensaje = 'Del curso <b>'.$_GET["curso"].'</b> se promovieron <b>'.$_GET["numEstudiantesPromocionados"].'</b> estudiantes al curso <b>'.$_GET["siguiente"].'</b> correctamente.';
+                $mensaje = 'Del curso <b>'.base64_decode($_GET["curso"]).'</b> se promovieron <b>'.base64_decode($_GET["numEstudiantesPromocionados"]).'</b> estudiantes al curso <b>'.base64_decode($_GET["siguiente"]).'</b> correctamente.';
             break;
 
             case 'SC_DT_8':
@@ -175,7 +208,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_9':
                 $tipo = 'success';
                 $mensaje = '
-                Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.$_GET['numRegistros'].'</b><br>
+                Todos los estudiantes que NO estaban en estado <b>Matriculado</b> fueron removidos de la plataforma. TOTAL: <b>'.base64_decode($_GET['numRegistros']).'</b><br>
                 Ahora la plataforma está más limpia y puedes trabajar con los estudiantes que necesitas para este año.</b>
                 ';
             break;
@@ -201,6 +234,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case base64_encode('SC_DT_13'):
+                $tipo = 'success';
+                $mensaje = 'Las cargas fueron transferidas exitosamente.';
+            break;
+
+            case 'SC_DT_14':
+                $tipo = 'success';
+                $mensaje = 'El estudiante fue movido al año <b>'.base64_decode($_GET['yearPasar']).'</b> exitosamente.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];
@@ -209,7 +252,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }
 ?>
     
-    <div class="alert alert-block alert-<?=$tipo;?>">
+    <div class="alert alert-block alert-<?=$tipo;?> animate__animated animate__flash animate__delay-1s animate__repeat-2">
         <p><?=$mensaje;?></p>
     </div>
 

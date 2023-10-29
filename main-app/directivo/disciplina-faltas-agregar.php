@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0068';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +45,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Faltas</li>
                             </ol>
                         </div>
@@ -57,14 +67,14 @@
                                         <div class="form-group row">
 											<label class="col-sm-2 control-label">Código</label>
 											<div class="col-sm-2">
-												<input type="text" name="codigo" class="form-control">
+												<input type="text" name="codigo" class="form-control" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Nombre</label>
 											<div class="col-sm-10">
-												<input type="text" name="nombre" class="form-control">
+												<input type="text" name="nombre" class="form-control" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
@@ -79,7 +89,7 @@
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
-                                                <select class="form-control  select2" name="categoria" required>
+                                                <select class="form-control  select2" name="categoria" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -93,9 +103,11 @@
 										
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
 										
-										<a href="#" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

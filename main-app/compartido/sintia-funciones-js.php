@@ -1,37 +1,5 @@
 <script type="application/javascript">
 
-function hayInternet(){
-
-	if(navigator.onLine) {
-
-		if(localStorage.getItem("internet")==0){
-
-			document.getElementById("siInternet").style.display="block";
-
-		}
-
-		
-
-		localStorage.setItem("internet", 1);
-
-		document.getElementById("noInternet").style.display="none";
-
-	} 
-
-	else {
-
-		localStorage.setItem("internet", 0);
-
-		document.getElementById("noInternet").style.display="block";
-
-	}
-
-}
-
-setInterval('hayInternet()', 1000);
-
-	
-
 function cupoNo(dato){
 
 	var opcion = dato;
@@ -320,141 +288,26 @@ function tipoFolder(dato){
 
 		
 
-function deseaRegresar(dato){
 
-	var url = dato.name;
+ /**
+     * Esta funcion genera una alerta validadno la nota ingresada
+     * 
+     * @param nota
+     * @return boolean 
+     */
+function alertValidarNota(nota){	
 
-	var v = confirm('Si va a regresar verifique que no haya hecho cambios en esta página y estén sin guardar. Desea regresar de todas formas?');
-
-	if(v == true)
-
-	{	
-
-		window.location.href=url;
-
+	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
+		Swal.fire('Nota '+nota+' no valida','Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>')
+		return true;
 	}else{
-
 		return false;
-
 	}
+	
 
 }
-
 	
 
-function deseaEliminar(dato){
-
-	//alert(typeof dato.title);
-
-	if(dato.title !== ''){
-
-		let variable = (dato.title);
-
-		var varObjet = JSON.parse(variable);
-
-		console.log(varObjet);
-
-		var input = document.getElementById(parseInt(varObjet.idInput));
-
-	}
-
-
-
-	var v = confirm('Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?');
-
-	var url = dato.name;
-
-	var id = dato.id;
-
-	var registro = document.getElementById("reg"+id);
-
-	var evaPregunta = document.getElementById("pregunta"+id);
-
-	var publicacion = document.getElementById("PUB"+id);
-
-	console.log("id:"+id);
-
-	
-
-	if(v == true)
-
-	{	
-
-		if(typeof id !== "undefined"){
-
-			axios.get(url)
-
-			  .then(function (response) {
-
-				// handle success
-
-				console.log("El registro fue eliminado correctamente.");
-
-				//divRespuesta.innerHTML = response.data;
-
-				
-
-				if(varObjet.tipo === 1){registro.style.display="none";}
-
-
-
-				if(varObjet.tipo === 2){
-
-				   document.getElementById(id).style.display="none";
-
-				   input.value="";
-
-				}
-
-				
-
-				if(varObjet.tipo === 3){evaPregunta.style.display="none";}
-
-				
-
-				if(varObjet.tipo === 4){publicacion.style.display="none";}
-
-				
-
-				$.toast({
-
-					heading: 'Acción realizada', text: 'El reigstro fue eliminado correctamente.', position: 'mid-center',
-
-					loaderBg:'#26c281', icon: 'success', hideAfter: 5000, stack: 6
-
-				});
-
-				
-
-			  })
-
-			  .catch(function (error) {
-
-				// handle error
-
-				console.log(error);
-
-			  });
-
-
-
-		}else{
-
-			window.location.href=url;
-
-		}
-
-		
-
-	}else{
-
-		return false;
-
-	}
-
-}
-
-	
 
 function archivoPeso(dato){
 
@@ -474,7 +327,7 @@ function archivoPeso(dato){
 
 		msj = `Este archivo ${extension} pesa ${tama}MB. Lo ideal es que pese menos de ${maxPeso}MB. Intenta comprimirlo o reducir su tamaño.`;
 
-		alert(msj);
+		Swal.fire(msj);
 
 		dato.value = '';
 
@@ -917,44 +770,6 @@ if($datosUsuarioActual['uss_tipo']==5){
 <?php }?>
 
 
-function axiosAjax(datos){
-
-	let url = datos.id;
-
-	let divRespuestaNombre = 'RESP_'+datos.title;
-
-	let divRespuesta = document.getElementById(divRespuestaNombre);
-
-	
-
-	axios.get(url)
-
-	  .then(function (response) {
-
-		// handle success
-
-		console.log(response.data);
-
-		divRespuesta.innerHTML = response.data;
-
-	  })
-
-	  .catch(function (error) {
-
-		// handle error
-
-		console.log(error);
-
-	  })
-
-	  .then(function () {
-
-		// always executed
-
-	  });
-
-}
-
 	
 
 	
@@ -1009,35 +824,27 @@ function usuariosChat(){
 
 }
 
-function deseaGenerarIndicadores(dato){
-	document.getElementById('agregarNuevo').style.display="none";
-	document.getElementById('preestablecidos').style.display="none";
+/**
+ * Esta función sirve para aplicar color instantaneo a la nota colocada
+ * por el docente a los estudiantes
+ * 
+ * @param nota
+ * @param idInput
+ * 
+ * return void
+ */
+function aplicarColorNota(nota, idInput) {
 
-	var respuesta = window.confirm('Al ejecutar esta acción se eliminaran los indicadores y actividades ya creados. Desea continuar bajo su responsabilidad?');
-	var url = dato.name;
-
-	if(respuesta == true){
-		// window.location.href=url;
-		$.toast({
-
-			heading: 'Acción en proceso', text: 'Estamos creando los indicadores y actividades para ti, te avisaremos encuanto esten creados.', position: 'mid-center',
-			loaderBg:'#26c281', icon: 'warning', hideAfter: 5000, stack: 6
-
-		});
-
-		document.getElementById('msjPree').style.display="block";
-
-		axios.get(url).then(function (response) {
-			document.getElementById('msjPree').style.display="none";
-			$.toast({
-
-				heading: 'Acción realizada', text: 'Los indicadores y actividades fueron creados correctamente, racargaremos la página.', position: 'mid-center',
-				loaderBg:'#26c281', icon: 'success', hideAfter: 5000, stack: 6
-
-			});
-			location.reload();
-		})
+	var aplicarColor = null;
+	
+	if(nota >= <?=$config['conf_nota_minima_aprobar'];?>) {
+		aplicarColor = "<?=$config['conf_color_ganada'];?>";
+	} else {
+		aplicarColor = "<?=$config['conf_color_perdida'];?>";
 	}
+
+	document.getElementById(idInput).style.color=aplicarColor;
+
 }
 
 	

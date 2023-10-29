@@ -55,18 +55,50 @@
                                                 <input type="text" value="<?=$usuarioPerfil["uss_usuario"];?>" name="usuario" class="form-control" disabled>
                                             </div>
                                         </div>
+
+                                        <?php if($usuarioPerfil['uss_tipo'] == 5) {?>
+
+                                            <div class="form-group row"  >
+                                                <label class="col-sm-2 control-label">Mis Sub Roles</label>
+                                                <div class="col-sm-4" >
+                                                    <?php
+                                                    $parametrosBuscar = array(
+                                                        "institucion" =>$config['conf_id_institucion']
+                                                    );	
+                                                    $listaRoles=SubRoles::listar($parametrosBuscar);
+                                                    $listaRolesUsuarios=SubRoles::listarRolesUsuarios($usuarioPerfil['uss_id']);
+                                                    ?>
+                                                    <select   class="form-control select2-multiple" style="width: 100% !important" name="subroles[]" multiple disabled>
+                                                        <option value="">Seleccione una opción</option>
+                                                        <?php
+                                                        while ($subRol = mysqli_fetch_array($listaRoles, MYSQLI_BOTH)) {
+                                                            $selected = '';
+                                                            if (!empty($listaRolesUsuarios)) {
+                                                                $selecionado = array_key_exists($subRol["subr_id"], $listaRolesUsuarios);
+                                                                if ($selecionado) {
+                                                                    $selected = 'selected';
+                                                                }
+                                                            }
+                                                            
+                                                            echo '<option value="' . $subRol["subr_id"] . '" ' . $selected . '>' . $subRol["subr_nombre"] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?> <mark>(Cuadrada)</mark></label>
                                             <div class="col-sm-4">
-                                                <input type="file" name="fotoPerfil" class="form-control">
+                                                <input type="file" name="fotoPerfil" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg" class="form-control">
                                             </div>
                                         </div>
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Firma digital</label>
                                             <div class="col-sm-4">
-                                                <input type="file" name="firmaDigital" class="form-control">
+                                                <input type="file" name="firmaDigital" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg" class="form-control">
                                             </div>
                                         </div>
 										

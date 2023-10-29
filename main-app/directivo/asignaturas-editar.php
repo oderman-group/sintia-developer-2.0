@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0021';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +45,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="asignaturas.php" onClick="deseaRegresar(this)"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="asignaturas.php" onClick="deseaRegresar(this)"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Asignatura</li>
                             </ol>
                         </div>
@@ -53,7 +63,7 @@
 
                                     <?php
                                     try{
-                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$_GET["id"].";");
+                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".base64_decode($_GET["id"]).";");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -61,33 +71,33 @@
                                     ?>
                                    
 									<form name="formularioGuardar" action="asignaturas-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idM">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idM">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Codigo</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="codigoM" class="form-control" value="<?=$rMateria["mat_codigo"]?>">
+                                                <input type="text" name="codigoM" class="form-control" value="<?=$rMateria["mat_codigo"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre de la Asignatura</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreM" class="form-control" value="<?=$rMateria["mat_nombre"]?>">
+                                                <input type="text" name="nombreM" class="form-control" value="<?=$rMateria["mat_nombre"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Siglas</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="siglasM" class="form-control" value="<?=$rMateria["mat_siglas"]?>">
+                                                <input type="text" name="siglasM" class="form-control" value="<?=$rMateria["mat_siglas"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Area acad&eacute;mica</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="areaM" required>
+                                                <select class="form-control  select2" name="areaM" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci n</option>
                                                 <?php
                                                 try{
@@ -111,13 +121,15 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Porcentaje</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="porcenAsigna" class="form-control" value="<?=$rMateria["mat_valor"]?>">
+                                                    <input type="text" name="porcenAsigna" class="form-control" value="<?=$rMateria["mat_valor"]?>" <?=$disabledPermiso;?>>
                                                 </div>
                                             </div>
                                         <?php } ?>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>

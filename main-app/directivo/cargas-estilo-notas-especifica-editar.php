@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0046';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -35,7 +45,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["id"]?>" onClick="deseaRegresar(this)">Estilio Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-estilo-notas-especifica.php?id=<?=$_GET["idCN"]?>" onClick="deseaRegresar(this)">Estilio Notas Especifica</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Categoria Notas especifica</li>
                             </ol>
                         </div>
@@ -51,7 +61,7 @@
 
                                     <?php 
                                     try{
-                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".$_GET["id"].";");
+                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".base64_decode($_GET["id"]).";");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -61,31 +71,33 @@
                                    
 									<form name="formularioGuardar" action="cargas-estilo-notas-especifica-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=$_GET["idCN"]?>" name="idCN">
-                                        <input type="hidden" value="<?=$_GET["id"]?>" name="idN">
+                                        <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idN">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreCN" class="form-control" value="<?=$rCategoriaN["notip_nombre"]?>">
+                                                <input type="text" name="nombreCN" class="form-control" value="<?=$rCategoriaN["notip_nombre"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nota Desde</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="ndesdeCN" class="form-control" value="<?=$rCategoriaN["notip_desde"]?>">
+                                                <input type="text" name="ndesdeCN" class="form-control" value="<?=$rCategoriaN["notip_desde"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nota Hasta</label>
                                             <div class="col-sm-3">
-                                                <input type="text" name="nhastaCN" class="form-control" value="<?=$rCategoriaN["notip_hasta"]?>">
+                                                <input type="text" name="nhastaCN" class="form-control" value="<?=$rCategoriaN["notip_hasta"]?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>	
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>

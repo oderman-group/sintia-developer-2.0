@@ -3,6 +3,11 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0132';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
@@ -29,7 +34,7 @@ if($validarClave!=true){
 }
 
 try{
-    mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_ocupacion, uss_intentos_fallidos, uss_tema_sidebar,
+    mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tema_sidebar,
     uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES(
         '" . $_POST["usuario"] . "',
         SHA1('" . $_POST["clave"] . "'),
@@ -47,7 +52,6 @@ try{
         0,
         now(),
         '" . $_SESSION["id"] . "', 
-        '" . $_POST["ocupacion"] . "',
         0,
         'cyan-sidebar-color',
         'header-indigo',
@@ -64,5 +68,5 @@ try{
 }
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id=' . $idRegistro . '&success=SC_DT_1";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-editar.php?id=' . base64_encode($idRegistro) . '&success=SC_DT_1";</script>';
 exit();

@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0058';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -84,7 +89,9 @@
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="configuracion-opciones-generales-info.php?a=2&idogen=<?=$resultado["ogen_id"];?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
-																	  <li><a href="guardar.php?idogen=<?=$resultado["ogen_id"];?>&get=50" title="Eliminar" onClick="if(!confirm('Desea eliminar este registro?')){return false;}" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios">Eliminar</a></li>
+																	  <li>
+                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','guardar.php?idogen=<?=$resultado["ogen_id"];?>&get=50')">Eliminar</a>  
+                                                                     </li>
 																  </ul>
 															</div>
 														</td>

@@ -1,5 +1,7 @@
 <?php
 include("session.php");
+require_once("../class/SubRoles.php");
+require_once("../class/Paginas.php");
 
 $idPaginaInterna = 'DV0017';
 
@@ -64,7 +66,7 @@ include("../compartido/head.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Paginas</li>
                             </ol>
                         </div>
@@ -162,6 +164,41 @@ include("../compartido/head.php");
                                                     <option value="READ">READ</option>
                                                     <option value="UPDATE">UPDATE</option>
                                                     <option value="DELETE">DELETE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Pagina Padre</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="paginaPadre" id="paginaPadre">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                    try{
+                                                        $consultaPaginas = SubRoles::listarPaginas();
+                                                    } catch (Exception $e) {
+                                                        include("../compartido/error-catch-to-report.php");
+                                                    }
+                                                    while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                        echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Paginas de Dependencia</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control  select2" multiple name="paginaDependencia[]" id="paginaDependencia">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <?php
+                                                        $filtro="AND pagp_tipo_usuario=5";
+                                                        $consultaPaginas = Paginas::listarPaginas($filtro);
+                                                        while($pagina=mysqli_fetch_array($consultaPaginas, MYSQLI_BOTH)){
+                                                            echo'<option value="'.$pagina["pagp_id"].'">['.$pagina["pagp_id"].'] '.$pagina["pagp_pagina"].'</option>';
+                                                        }
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>

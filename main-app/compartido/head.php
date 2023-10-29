@@ -34,6 +34,11 @@ require_once("../class/Plataforma.php");
 require_once("../class/TipoUsuario.php");
 require_once("../class/CargaAcademica.php");
 require_once("../class/Grupos.php");
+
+$tituloDePagina = $frases[102][$datosUsuarioActual['uss_idioma']];
+if (!empty($datosPaginaActual)) {
+	$tituloDePagina .= " | ".$datosPaginaActual['pagp_pagina'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +53,7 @@ require_once("../class/Grupos.php");
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta name="description" content="Plataforma Educativa SINTIA | Para Colegios y Universidades" />
     <meta name="author" content="ODERMAN" />
-    <title><?=$frases[102][$datosUsuarioActual['uss_idioma']];?></title>
+    <title><?=$tituloDePagina;?></title>
      <!-- Estilos de LiveView  -->
 	<link rel="stylesheet" type="text/css" href="../../librerias/modal-img-styles/estilos_redimencionar_fotos.css">
     <!-- google font -->
@@ -80,6 +85,14 @@ require_once("../class/Grupos.php");
     <link rel="shortcut icon" href="../sintia-icono.png" />
 	<!-- Jquery Toast css -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
+	<script src="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
+
+	<!-- libreria de animate.style -->
+	<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+	/>
 	
 	<?php 
 	//SE INCLUYE PARA EL FORMULARIO QUE SOLICITA LOS DATOS
@@ -97,6 +110,8 @@ require_once("../class/Grupos.php");
 		<!--select2-->
 		<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 		<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+   
 	<?php }?>
 	
 	<!-- Para la vista guiada -->
@@ -122,7 +137,12 @@ require_once("../class/Grupos.php");
 	<!-- Axios -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
 	
-	
+	<!-- Mis funciones JS -->
+	<script src="../compartido/funciones.js" ></script>
+	<script src="../js/Utilidades.js" ></script>
+	<script src="../js/Estudiantes.js" ></script>
+	<script src="../js/Docentes.js" ></script>
+	<script src="../js/Calificaciones.js" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
@@ -165,7 +185,63 @@ require_once("../class/Grupos.php");
 	  width: 100%;
 	  height: 100%;
 	}
-	</style>
+
+	/* Para bloquear la pagina mientras carga un modal*/
+#overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+	z-index: 9999;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#loader {
+	border: 6px solid #f3f3f3; /* Light gray */
+	border-top: 6px solid #3498db; /* Blue */
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	animation: spin 2s linear infinite;
+}
+
+#loading-text {
+	margin-top: 10px;
+	color: white;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+/* Estilos para el esqueleto */
+.skeleton {
+	background: #f0f0f0; /* Color de fondo del esqueleto */
+	border-radius: 4px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.skeleton-header {
+	height: 20px; /* Altura del encabezado del esqueleto */
+	width: 80%; /* Anchura del encabezado del esqueleto */
+	background: #e0e0e0; /* Color de fondo del encabezado */
+	margin-bottom: 10px;
+}
+
+.skeleton-content {
+	height: 10px; /* Altura del contenido del esqueleto */
+	width: 100%; /* Anchura del contenido del esqueleto */
+	background: #e0e0e0; /* Color de fondo del contenido */
+	margin-bottom: 5px;
+}
+</style>
 
 	<script type="text/javascript">
 	$(window).load(function() {

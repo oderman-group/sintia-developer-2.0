@@ -54,7 +54,7 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="#" name="dev-instituciones.php" onClick="deseaRegresar(this)">Insituciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="dev-instituciones.php" onClick="deseaRegresar(this)">Insituciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active"><?= $frases[17][$datosUsuarioActual[8]]; ?> del Sistema de <b><?= $datosInstitucion['ins_siglas']; ?></b></li>
                         </ol>
                     </div>
@@ -309,6 +309,17 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                     </div>
 
                                     <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Generar informes con estudiantes con menos de 100%?</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" name="generarInforme" <?=$disabledPermiso;?>>
+                                                <option value="1" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==1){ echo "selected";} ?>>No generar informe hasta que todos estén al 100%</option>
+                                                <option value="2" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==2){ echo "selected";} ?>>Omitir los estudiantes que no tengan el 100%</option>
+                                                <option value="3" <?php if($datosInstitucion['conf_porcentaje_completo_generar_informe']==3){ echo "selected";} ?>>Registrar la definitiva con el porcentaje actual</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">Medidas del Logo en los informes (Ancho - Alto)</label>
                                         <div class="col-sm-10">
                                             <input type="text" style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?= $datosInstitucion[30]; ?>">
@@ -380,6 +391,16 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Editar información en años anteriores?</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control col-sm-2 select2" name="editarInfoYears">
+                                                <option value="1" <?php if($datosInstitucion['conf_permiso_edicion_years_anteriores']==1){ echo "selected";} ?>>SI</option>
+                                                <option value="0" <?php if($datosInstitucion['conf_permiso_edicion_years_anteriores']==0){ echo "selected";} ?>>NO</option>
+                                            </select>
+                                            <span style="color:#6017dc;">Esta acción permite a los directivos editar registros en años anteriores al actual.</span>
+                                        </div>
+                                    </div>
 
                                     <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                 </form>

@@ -40,57 +40,15 @@ $tematica = mysqli_fetch_array($consultaTematica, MYSQLI_BOTH);
                                 <div class="page-title"><?=$frases[251][$datosUsuarioActual[8]];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
-							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[251][$datosUsuarioActual[8]];?></li>
-                            </ol>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-						<?php include("info-carga-actual.php");?>
-							
-						<?php include("filtros-cargas.php");?>	
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
-								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                	<div class="panel-body">
-
-                                   
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
-										<input type="hidden" value="39" name="id">
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Descripción</label>
-											<div class="col-sm-10">
-												<textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required><?=$tematica['ind_nombre'];?></textarea>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Fecha creación</label>
-											<div class="col-sm-4">
-												<input type="text" name="fecha" class="form-control" value="<?=$tematica['ind_fecha_creacion'];?>" readonly>
-											</div>
-										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Última edición</label>
-											<div class="col-sm-4">
-												<input type="text" name="fecha" class="form-control" value="<?=$tematica['ind_fecha_modificacion'];?>" readonly>
-											</div>
-										</div>
-
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                    </form>
-                                </div>
+								
                             </div>
                         </div>
 						

@@ -4,6 +4,20 @@
 
 $l = 1;
 
+/**
+ * Propuesta #2 parea manejar los idiomas
+*/
+$language = [
+    'social.amigos' => [
+        'ES' => 'Amigos',  1 => 'Amigos',
+        'EN' => 'Friends', 2 => 'Friends'
+    ],
+    'academico.clases' => [
+        'ES' => 'Clases', 1 => 'Clases',
+        'EN' => 'Lesson', 2 => 'Lesson'
+    ]
+];
+
 $frases[1][$l] = 'Amigos';
 
 $frases[2][$l] = 'Enviar mensaje';
@@ -728,6 +742,31 @@ $frases[361][$l] = 'Video de Guia';
 
 $frases[362][$l] = 'Todas las opciones más importantes están en la opción acudidos del menú. Te recomendamos ver el video de esta pagina para que tengas claridad sobre el manejo de la plataforma.';
 
+$frases[367][$l] = 'Cancelar servicio';
+
+$frases[368][$l] = 'Motivo de Cancelacion';
+
+$frases[369][$l] = 'Crear';
+
+$frases[370][$l] = 'Páginas Disponibles';
+
+$frases[371][$l] = 'Páginas';
+
+$frases[372][$l] = 'Institución';
+
+$frases[373][$l] = 'Año';
+
+$frases[374][$l] = 'Unidades Tematicas';
+
+$frases[375][$l] = 'Editar';
+
+$frases[376][$l] = 'Escoge la carga y el periodo desde donde quieres importar la información.';
+
+$frases[377][$l] = 'Ahora puedes especificar la información que quieres importar.';
+
+$frases[378][$l] = 'Al importar las calificaciones también se importarán los indicadores automáticamente.';
+
+$frases[379][$l] = 'Verifica que hayas seleccionado todo correctamente para esta importación. Una vez hecha no hay vuelta atrás.';
 
 
 //ENGLISH
@@ -1047,6 +1086,7 @@ $frases[155][$l] = 'The answer marked was the one you chose. Next to each answer
 $frases[156][$l] = 'Correct';
 
 $frases[157][$l] = 'Incorrect';
+
 
 $frases[158][$l] = 'Not answered';
 
@@ -1458,4 +1498,28 @@ $frases[361][$l] = 'Video Guide';
 
 $frases[362][$l] = 'All the most important options are in the menu option attended. We recommend you to watch the video on this page so that you have clarity on how to use the platform.';
 
-?>
+$frases[367][$l] = 'Cancel service';
+
+$frases[368][$l] = 'Reason for cancellation';
+
+$frases[369][$l] = 'Create';
+
+$frases[370][$l] = 'Available Pages';
+
+$frases[371][$l] = 'Páginas';
+
+$frases[372][$l] = 'Institution';
+
+$frases[373][$l] = 'Year';
+
+$frases[374][$l] = 'Thematic Units';
+
+$frases[375][$l] = 'Edit';
+
+$frases[376][$l] = 'Choose the load and the period from which you want to import the data.';
+
+$frases[377][$l] = 'Now you can specify the data you want to import.';
+
+$frases[378][$l] = 'When importing the grades, the indicators will also be imported automatically.';
+
+$frases[379][$l] = 'Verify that you have selected everything correctly for this import. Once it is done there is no turning back.';

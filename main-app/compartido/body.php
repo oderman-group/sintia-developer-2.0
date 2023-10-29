@@ -6,12 +6,31 @@ $consultaFinanzas=mysqli_query($conexion, "SELECT
 $resumenEC = mysqli_fetch_array($consultaFinanzas, MYSQLI_BOTH);
 $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 ?>
-
-<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md <?=$datosUsuarioActual['uss_tema_header'];?> <?=$datosUsuarioActual['uss_tema_sidebar'];?> 
-			 <?=$datosUsuarioActual['uss_tema_logo'];?>"> <!-- chat-sidebar-open-->
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+<body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md 
+<?=$datosUsuarioActual['uss_tema_header'];?>  
+<?=$datosUsuarioActual['uss_tema_sidebar'];?>  
+<?=$datosUsuarioActual['uss_tema_logo'];?> 
+<?=$datosUsuarioActual['uss_tipo_menu'];?> 
+"> <!-- chat-sidebar-open-->
 	
-	
+  <script>
+		var urlApi = 'wss://plataformasintia.com:3600';
+		var socket = io(urlApi, {
+			transports: ['websocket', 'polling', 'flashsocket']
+		});
+		var chat_remite_usuario = <?php echo $idSession ?>;
+		socket.emit('join', "sala_" + chat_remite_usuario);
+		
+	</script>
 <div class="loader"></div>
+
+<div id="overlay">
+	<div id="loader"></div>
+	<div id="loading-text">Cargando...</div>
+</div>
+
+<?php include("../compartido/modal-general.php");?>
 
 <?php include("../compartido/modal-licencia.php");?>
 

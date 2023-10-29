@@ -15,10 +15,12 @@ $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
 
 if(
-	($datosCargaActual['car_configuracion']==0 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] 
-	and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
+	(
+	( $datosCargaActual['car_configuracion'] == CONFIG_AUTOMATICO_CALIFICACIONES && $valores[1] < $datosCargaActual['car_maximas_calificaciones'] ) 
 													
-	or($datosCargaActual['car_configuracion']==1 and $valores[1]<$datosCargaActual['car_maximas_calificaciones'] and $periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
+	or($datosCargaActual['car_configuracion'] == CONFIG_MANUAL_CALIFICACIONES && $valores[1]<$datosCargaActual['car_maximas_calificaciones'] && $periodoConsultaActual <= $datosCargaActual['gra_periodos'] && $porcentajeRestante > 0)
+	)
+	&& CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual)
 )
 {
 	
@@ -81,7 +83,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="10" name="id">
 
 											<div class="form-group row">
@@ -177,7 +179,7 @@ if(
 										
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
-										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "";}else{?>
+										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "No hay indicador definitivo configurado";}else{?>
 											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										<?php }?>
 										

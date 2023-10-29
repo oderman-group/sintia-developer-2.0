@@ -16,10 +16,6 @@ if (!empty($_GET['busqueda'])) {
         OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
         )";
 }
-$curso = '';
-if (!empty($_GET['curso'])) {
-    $curso = $_GET['curso'];
-}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,25 +25,31 @@ if (!empty($_GET['curso'])) {
     <div class="navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
+            <?php if(Modulos::validarPermisoEdicion()){?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
+                        Más opciones
+                        <span class="fa fa-angle-down"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
+                        <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0);"  data-toggle="modal" data-target="#modalTranferirCargas"  >Transferir cargas</a>
+                        <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
+
+                    </div>
+                </li>
+
+                <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
+                <?php
+                $idModal = "modalTranferirCargas";
+                $contenido = "../directivo/cargas-transferir-modal.php";
+                include("../compartido/contenido-modal.php");
+                } ?>
+
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
-                    Más opciones
-                    <span class="fa fa-angle-down"></span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
-                    <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="cargas-transferir.php">Transferir cargas</a>
-                    <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
-
-                </div>
-            </li>
-
-            <li class="nav-item"> <a class="nav-link" href="#">|</a></li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
                     Filtrar por curso
                     <span class="fa fa-angle-down"></span>
                 </a>
@@ -58,15 +60,21 @@ if (!empty($_GET['curso'])) {
                         $estiloResaltado = '';
                         if ($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= $grado['gra_id']; ?>&busqueda=<?=$busqueda;?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?=$busqueda;?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
+
+            <?php if (!empty($filtro)) { ?>
+                <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
+
+                <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+            <?php } ?>
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="cargas.php" method="get">
-            <input type="hidden" name="curso" value="<?= $curso; ?>"/>
+            <input type="hidden" name="curso" value="<?= base64_encode($curso) ?>"/>
             <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>

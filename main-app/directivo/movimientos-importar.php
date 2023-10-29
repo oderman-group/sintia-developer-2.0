@@ -1,7 +1,17 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0105';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion()){
+	$disabledPermiso = "disabled";
+}?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -34,7 +44,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Importar saldos</li>
                             </ol>
                         </div>
@@ -78,14 +88,14 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 control-label">Subir la planilla lista <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <input type="file" class="form-control" name="planilla" required>
+                                                <input type="file" class="form-control" name="planilla" required <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-3 control-label">Coloque el número de la última fila hasta donde quiere que el archivo sea leido <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <input type="number" class="form-control" name="filaFinal" placeholder="200" required><br>
+                                                <input type="number" class="form-control" name="filaFinal" placeholder="200" required <?=$disabledPermiso;?>><br>
                                                 <span style="font-size: 12px; color:#6017dc;">Fila hasta donde hay información de los usuarios. Esto se usa para evitar que se lean filas que no tienen información.</span>
                                             </div>
                                         </div>
@@ -93,7 +103,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Qué acción desea ejecutar? <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="accion" require>
+                                                <select class="form-control select2" name="accion" require <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">No hacer nada</option>
 													<option value="2">Bloquear usuarios con deuda</option>
@@ -104,7 +114,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Qué dato está en la primera columna de excel? <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <select class="form-control select2" name="datoID" require>
+                                                <select class="form-control select2" name="datoID" <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">Documento</option>
 													<option value="2">Código de tesorería</option>
@@ -115,12 +125,14 @@
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Detalle <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-6">
-                                                <input type="text" name="detalle" class="form-control" autocomplete="off" required>
+                                                <input type="text" name="detalle" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 
-                                        <input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
-										<a href="#" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <?php if(Modulos::validarPermisoEdicion()){?>
+										    <input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
+                                        <?php }?>
+										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

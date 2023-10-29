@@ -3,6 +3,11 @@ include("session.php");
 $idPaginaInterna = 'DT0140';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
 ?>
 
 	<!--bootstrap -->
@@ -37,7 +42,7 @@ include("../compartido/head.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="informes-todos.php" onClick="deseaRegresar(this)">Informes<i class="fa fa-angle-right"></i></a></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="informes-todos.php" onClick="deseaRegresar(this)">Informes<i class="fa fa-angle-right"></i></a></li>
                                 <li class="active">Reporte Sabanas</li>
                             </ol>
                         </div>
@@ -132,7 +137,7 @@ include("../compartido/head.php");
                                         
                                         <input type="submit" class="btn btn-primary" value="Generar Sabana">&nbsp;
                                         
-                                        <a href="#" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

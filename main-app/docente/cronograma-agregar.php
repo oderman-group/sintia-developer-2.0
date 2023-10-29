@@ -5,14 +5,9 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-if(
-	($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)) 
-													
-	or($periodoConsultaActual<=$datosCargaActual['gra_periodos'] and $porcentajeRestante>0)
-)
+if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) )
 {
-	
-}else{
+
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=212";</script>';
 	exit();
 }
@@ -50,7 +45,7 @@ if(
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cronograma.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></li>
                             </ol>
                         </div>
@@ -74,7 +69,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post">
+									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="14" name="id">
 
 
@@ -109,7 +104,7 @@ if(
 
 										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										
-										<a href="#" name="cronograma.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<a href="#" name="cronograma-calendario.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>
                                 </div>
                             </div>

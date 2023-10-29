@@ -32,7 +32,7 @@ if (!empty($_GET['curso'])) {
 
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
           Filtrar por curso
           <span class="fa fa-angle-down"></span>
         </a>
@@ -43,7 +43,7 @@ if (!empty($_GET['curso'])) {
             $estiloResaltado = '';
             if ($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= $grado['gra_id']; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
           <?php } ?>
           <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
@@ -53,7 +53,7 @@ if (!empty($_GET['curso'])) {
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-      <input type="hidden" name="curso" value="<?= $curso; ?>" />
+      <input type="hidden" name="curso" value="<?= base64_encode($curso); ?>" />
       <?php
       if (!empty($_GET["resp"])) {
       ?>

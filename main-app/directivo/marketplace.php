@@ -2,20 +2,11 @@
 <?php $idPaginaInterna = 'DT0103';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-
 <?php
-if($_SESSION["empresa"] == ""){
-    try{
-        $consultaEmpresa=mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
-    } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
-    }
-	$empresa = mysqli_fetch_array($consultaEmpresa, MYSQLI_BOTH);
-	
-	if($empresa[0]!=""){
-		$_SESSION["empresa"] = $empresa[0];
-	}
-	
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
 }
 ?>
 

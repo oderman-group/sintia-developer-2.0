@@ -1,7 +1,12 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0035';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -24,7 +29,7 @@
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)">Cargas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Indicadores Obligatorios</li>
                             </ol>
                         </div>
@@ -107,9 +112,11 @@
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=$resultado[0];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                        							    <li><a href="cargas-indicadores-obligatorios-eliminar.php?idN=<?=$resultado[0];?>" onClick="if(!confirm('Desea eliminar este registro?')){return false;}">Eliminar</a></li>	
-																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=$resultado[0];?>&indNombre=<?=$resultado[1];?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
+																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                        							  <li>
+                                                                      <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado[0]);?>')">Eliminar</a>    
+                                                                      </li>	
+																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado[0]);?>&indNombre=<?=base64_encode($resultado[1]);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
 																  </ul>
 															  </div>
 														</td>
