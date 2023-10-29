@@ -144,7 +144,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 
 														$marcaMediaTecnica = '';
 														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {
-															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true"></i> ';
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
 														} 
 
 														$miArray = [

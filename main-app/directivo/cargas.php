@@ -130,7 +130,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														$filtroDocentesParaListarEstudiantes = " AND mat_grado='".$resultado['car_curso']."' AND mat_grupo='".$resultado['car_grupo']."'";
 														if($resultado['gra_tipo'] == GRADO_INDIVIDUAL) {
 															$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentesMT($resultado);
-															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true"></i> ';
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
 														} else {
 															$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 														}
