@@ -13,6 +13,7 @@ if (!empty($_GET["curso"])) {
 	$cursoV = $_POST['curso'];
 	$grupoV = $_POST['grupo'];
 }
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>SINTIA | Consolidado Final</title>
@@ -57,14 +58,19 @@ include("../compartido/head-informes.php") ?>
                                                <th style="text-align:center;">Fecha</th>
                                            	<?php
                                             }
-									$filtroAdicional= "AND mat_grado='".$cursoV."' AND mat_grupo='".$grupoV."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+									
+									$filtroAdicional = "";
+									if(!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])){
+										$filtroAdicional= "AND mat_grado='".$cursoV."' AND mat_grupo='".$grupoV."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+									}
+									$cursoActual=GradoServicios::consultarCurso($cursoV);
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 									 $defPorEstudiante = 0;
 									 ?>
                                       <tr style="border-color:<?=$Plataforma->colorDos;?>;">
-                                        <td style="font-size:9px;"><?=$resultado[1];?></td>
+                                        <td style="font-size:9px;"><?=$resultado['mat_matricula'];?></td>
                                         <td style="font-size:9px;"><?=$nombreCompleto?></td>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1"); 
@@ -75,7 +81,7 @@ include("../compartido/head-informes.php") ?>
                                             $defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
+												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 												if (!empty($boletin[4])) {
 													if ($boletin[4] < $config[5]) $color = $config[6];
@@ -86,7 +92,7 @@ include("../compartido/head-informes.php") ?>
                                             }
 											$defPorMateria = round($defPorMateria/$config[19],2);
 											//CONSULTAR NIVELACIONES
-											$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
+											$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga[0]."'");
 											$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 											if (!empty($cNiv[3]) && $cNiv[3] > $defPorMateria) {
 												$defPorMateria = $cNiv[3];

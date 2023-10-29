@@ -29,9 +29,11 @@
       
   }
   $curso = '';
+  $cursoActual = '';
   if (!empty($_GET['curso'])) {
       $curso = base64_decode($_GET['curso']);
       $filtro .= " AND mat_grado='".$curso."'";
+      $cursoActual=GradoServicios::consultarCurso($curso);
   }
   $estadoM = '';
   if (!empty($_GET['estadoM'])) {

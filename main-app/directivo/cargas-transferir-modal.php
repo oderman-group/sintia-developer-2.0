@@ -4,6 +4,8 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
     exit();
 }
 
+require_once '../class/UsuariosPadre.php';
+
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
     $disabledPermiso = "disabled";
@@ -24,13 +26,9 @@ if (!Modulos::validarPermisoEdicion()) {
                 <label class="col-sm-2 control-label">Del Docente</label>
                 <div class="col-sm-4">
                     <select style="width: 100%" class="form-control  select2" name="de" required <?= $disabledPermiso; ?>>
-                        <option value="">Seleccione una opci�n</option>
+                        <option value="">Seleccione una opción</option>
                         <?php
-                        try {
-                            $docen = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
-                        } catch (Exception $e) {
-                            include("../compartido/error-catch-to-report.php");
-                        }
+                        $docen = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DOCENTE);
                         while ($nDocen = mysqli_fetch_array($docen, MYSQLI_BOTH)) {
                             echo "<option value='" . $nDocen["uss_id"] . "'>" . UsuariosPadre::nombreCompletoDelUsuario($nDocen) . "</option>";
                         }
@@ -43,13 +41,9 @@ if (!Modulos::validarPermisoEdicion()) {
                 <label class="col-sm-2 control-label">Al Docente</label>
                 <div class="col-sm-4">
                     <select  style="width: 100%" class="form-control  select2" name="para" required <?= $disabledPermiso; ?>>
-                        <option value="">Seleccione una opci�n</option>
+                        <option value="">Seleccione una opción</option>
                         <?php
-                        try {
-                            $docen = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
-                        } catch (Exception $e) {
-                            include("../compartido/error-catch-to-report.php");
-                        }
+                        $docen = $docen = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DOCENTE);
                         while ($nDocen = mysqli_fetch_array($docen, MYSQLI_BOTH)) {
                             echo "<option value='" . $nDocen["uss_id"] . "'>" . UsuariosPadre::nombreCompletoDelUsuario($nDocen) . "</option>";
                         }

@@ -6,16 +6,9 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
-?>
-<script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
-<!-- data tables -->
-<link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
-</head>
-<!-- END HEAD -->
-<?php
-	include("../compartido/body.php");
 
-	$idE="";
+
+$idE="";
 	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 
 	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
@@ -31,8 +24,13 @@ require_once("../class/Estudiantes.php");
 	");
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
-
-	?>
+?>
+<script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
+<!-- data tables -->
+<link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+</head>
+<!-- END HEAD -->
+<?php include("../compartido/body.php");?>
 
 	<input type="hidden" id="idE" name="idE" value="<?=$idE;?>">
     <div class="page-wrapper">
@@ -206,7 +204,7 @@ require_once("../class/Estudiantes.php");
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -238,10 +236,10 @@ require_once("../class/Estudiantes.php");
 														 //Exportar las notas
 														 if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and !empty($nota)){
 															 
-															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
+															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado['mat_id']."'");
 															
 															 
-															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado[0]."','".$nota."','".$_POST["actividad"]."', now(), 0)");
+															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado['mat_id']."','".$nota."','".$_POST["actividad"]."', now(), 0)");
 															
 															
 															 //Solo actuliza una vez que la actividad fue registrada.

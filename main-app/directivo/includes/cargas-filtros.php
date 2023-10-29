@@ -89,14 +89,8 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[28][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$docentes = mysqli_query($conexion, "SELECT * FROM usuarios
-												WHERE uss_tipo=2 AND uss_bloqueado=0
-												ORDER BY uss_nombre
-												");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$docentes = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo = ".TIPO_DOCENTE." AND uss_bloqueado=0
+											ORDER BY uss_nombre");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
 													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");

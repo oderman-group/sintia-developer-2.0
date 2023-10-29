@@ -4,6 +4,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 	exit();
 }
 ?>
+<?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -44,7 +45,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
 														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
+														<div class="profile-desc-item pull-right"><?=Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);?></div>
 													</li>
 													
 												</ul>
@@ -78,10 +79,16 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														<?php
 															$p = 1;
 															while($p<=$datosEstudianteActual['gra_periodos']){
-																$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
+																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																"), MYSQLI_BOTH);
-																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+																");
+																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+																$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+																$porcentaje=25;
+																if($numPeriodosCursos>0){
+																	$porcentaje=$periodosCursos['gvp_valor'];
+																}
+																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
 																$p++;
 															}
 														?> 
@@ -93,8 +100,14 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
                                                 </thead>
                                                 <tbody>
 													<?php
-													$contReg = 1; 
-													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													$contReg = 1;
+													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+													$filtroOr='';
+													foreach ($listaCursosMediaTecnica as $dato) {
+														$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+													}
+													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
@@ -113,10 +126,16 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														 $n = 0;
 														 for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 															
-															 $periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
-															"), MYSQLI_BOTH);
-															 $decimal = $periodosCursos['gvp_valor']/100;
+															$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
+															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
+															");
+															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+															$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+															$porcentaje=25;
+															if($numPeriodosCursos>0){
+																$porcentaje=$periodosCursos['gvp_valor'];
+															}
+															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
 															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$datosEstudianteActual[0]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);

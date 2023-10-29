@@ -130,8 +130,7 @@ require_once("../class/UsuariosPadre.php");
         <td align="center" colspan="17" width="2%">NOTAS</td>
         <td align="center" colspan="7">Inasistencia</td>
         <?php
-          $filtroDocentesParaListarEstudiantes = " AND mat_grado='" . $resultadoCargas['car_curso'] . "' AND mat_grupo='" . $resultadoCargas['car_grupo'] . "'";
-          $estudiantes = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+          $estudiantes = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($resultadoCargas);
 
           $n = 1;
 

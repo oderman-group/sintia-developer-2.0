@@ -1,9 +1,10 @@
 <?php
 $tiempo_inicial = microtime(true);
-require_once("../modelo/conexion.php");
-require_once("../class/Plataforma.php");
-require_once("../class/Utilidades.php");
-require_once("../class/Modulos.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/modelo/conexion.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Modulos.php");
 
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;

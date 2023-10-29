@@ -1,12 +1,9 @@
 <?php
 include("session.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
-try{
-	$consultaEstudiante=mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_id='" . $_POST["estudiante"] . "'");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$consultaEstudiante = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_id='" . $_POST["estudiante"] . "'");
+
 $estudiante = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
 try{
 	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $estudiante["mat_grado"] . "' AND car_grupo='" . $estudiante["mat_grupo"] . "'");

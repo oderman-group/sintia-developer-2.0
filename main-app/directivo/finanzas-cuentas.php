@@ -49,7 +49,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
                                         <div class="card-head" style="display: flex;">
                                             <header><span class="hidden-phone">Estado de cuenta</span> <span class="hidden-phone">#<?=$e[1];?></span></header>
 											<div class="btn-group" style="margin-left: auto; margin-right: 5px;">
-												<a class="btn btn-success" href="../compartido/pazysalvo.php?id=<?=$_GET["id"];?>" target="_blank"><i class="icon-file"></i> Generar paz y salvo</a>
+												<a class="btn btn-success" href="../compartido/documents/pazysalvo.php?id=<?=$_GET["id"];?>" target="_blank"><i class="icon-file"></i> Generar paz y salvo</a>
 											</div>
 											
 											<div class="btn-group">

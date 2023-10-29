@@ -6,6 +6,7 @@ $idPaginaInterna = 'DT0130';
 include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
 if (!empty($_POST["id"])) {
 //GUARDAR MOVIMIENTO
@@ -176,11 +177,8 @@ if ($_POST["id"] == 50) {
 	$cValor = mysqli_fetch_array($consultaValor, MYSQLI_BOTH);
 	$valor = $cValor[2];
 	$detalle = $cValor[1];
-	try{
-		$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas WHERE mat_grado='" . $_POST["grado"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+
+	$consulta = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_grado='" . $_POST["grado"] . "'");
 	while ($datosE = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 		try{
 			mysqli_query($conexion, "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, fcu_forma_pago, fcu_cerrado)VALUES('" . $_POST["fecha"] . "','" . $detalle . "','" . $valor . "','" . $_POST["tipo"] . "','" . $_POST["obs"] . "','" . $datosE["mat_id_usuario"] . "',0,5,0)");

@@ -34,13 +34,13 @@ $modulo = 1;
 
     <?php
      $nombreInforme = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
-     include("../compartido/head_informes.php") ?>	    include("../compartido/head-informes.php") ?>
+     include("../compartido/head-informes.php") ?>
 
     <div align="left" style="margin-bottom:20px;">
 
         CÓDIGO DEL DANE 305001003513</b><br><br>
 
-        Los suscritos Rector y Secretaria del Instituto Colombo Venezolano, establecimiento de carácter privado, calendario A, con sus estudios aprobados de Primaria y Bachillerato, según Resolución 8339 del 25 de octubre de 1993, por los años de 1993 a 1997 y 008965 del 21 de junio de 1994.
+        Los suscritos Rector y Secretaria del <b><?= $informacion_inst["info_nombre"] ?></b>, establecimiento de carácter privado, calendario A, con sus estudios aprobados de Primaria y Bachillerato, según Resolución 8339 del 25 de octubre de 1993, por los años de 1993 a 1997 y 008965 del 21 de junio de 1994.
 
     </div>
 
@@ -78,14 +78,19 @@ $modulo = 1;
 	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
 	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
+	
+	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
+	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=9) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
+	elseif($estudiante["mat_grado"]>=10 and $estudiante["mat_grado"]<=11) {$educacion = "MEDIA SECUNDARIA"; $horasT = 35;}	
+	elseif($estudiante["mat_grado"]>=12 and $estudiante["mat_grado"]<=15) {$educacion = "PREESCOLAR"; $horasT = 25;}
 
         if ($i < $restaAgnos)
 
-            $grados .= $estudiante["gra_nombre"] . ", ";
+            $grados .= strtoupper($estudiante["gra_nombre"]) . ", ";
 
         else
 
-            $grados .= $estudiante["gra_nombre"];
+            $grados .= strtoupper($estudiante["gra_nombre"]);
 
         $inicio++;
 
@@ -96,7 +101,7 @@ $modulo = 1;
 
 
 
-    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=$grados;?></b> grado(s) de educación básica primaria  y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=$grados;?></b> grado(s) de <?=$educacion;?>  y obtuvo las siguientes calificaciones:</p>
 
 
 
@@ -116,9 +121,8 @@ $modulo = 1;
     ?>
 
 
-         <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?>
         <p align="center" style="font-weight:bold;">
-            <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
+            <?= strtoupper(Utilidades::getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN <?=$educacion;?> <?= $inicio; ?><br>
             MATRÍCULA <?= strtoupper(Utilidades::getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(Utilidades::getToString($matricula["mat_folio"])); ?>
         </p>
 
@@ -185,6 +189,56 @@ $modulo = 1;
                 <?php
 
                 }
+
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+                //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS DE MT
+
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+
+                                            INNER JOIN academico_materias ON mat_id=car_materia
+
+                                            INNER JOIN academico_areas ON ar_id=mat_area
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
+
+                $materiasPerdidas = 0;
+
+                while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+                    //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
+
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "'");
+                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
+
+                    if ($nota < $config[5]) {
+
+                        $materiasPerdidas++;
+                    }
+
+                ?>
+
+                    <tr>
+
+                        <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
+
+                        <td><?= $nota; ?></td>
+
+                        <td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
+
+                    </tr>
+
+                <?php
+
+                }}}}
 
                 ?>
 
@@ -337,6 +391,72 @@ $modulo = 1;
                 <?php
 
                 }
+
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+
+                //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+
+                                            INNER JOIN academico_materias ON mat_id=car_materia
+
+                                            INNER JOIN academico_areas ON ar_id=mat_area
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
+
+                while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+                    //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
+
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
+
+                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+                    $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+
+                ?>
+
+                    <tr style="text-align:center;">
+
+                        <td style="text-align:left;"><?= strtoupper($cargas["mat_nombre"]); ?></td>
+
+                        <td><?= $cargas["car_ih"]; ?></td>
+
+                        <?php
+
+                        $p = 1;
+
+                        //PERIODOS
+
+                        while ($p <= $config[19]) {
+
+                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+                            $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
+
+                            if(!empty($notasPeriodo[0])){ echo '<td>' . $notasPeriodo[0] . '</td>';} else { echo '<td></td>';}
+
+                            $p++;
+                        }
+
+                        ?>
+
+                        <td><?= $nota; ?></td>
+
+                        <td><?= $desempeno[1]; ?></td>
+
+                    </tr>
+
+                <?php
+
+                }}}}
 
                 ?>
 

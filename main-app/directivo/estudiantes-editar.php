@@ -9,6 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
 
 $id="";
 if(!empty($_GET["id"])){

@@ -12,7 +12,7 @@ $(function () {
  */
 function fetchGeneral(url, title, method='POST', paramsJSON=null) {
 
-    document.getElementById("overlay").style.display = "block";
+    document.getElementById("overlay").style.display = "flex";
     
     const formData = new FormData();
 
@@ -139,4 +139,34 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                     $('#respuestaGuardar').empty().hide().html(data).show(1);
                 }
         });
+}
+
+function verCuentaBancaria() {
+    document.getElementById("cuentaBancaria").innerHTML = `
+    Cuenta de ahorros Bancolombia número <b>431-565882-54</b>
+    `;
+}
+
+function cambiarPosicion(idCarga, posicionNueva) {
+	fetch('../compartido/guardar.php?get=29&idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
+		method: 'GET'
+	})
+	.then(response => response.text()) // Convertir la respuesta a texto
+	.then(data => {
+		$.toast({
+
+			heading: 'Proceso completado', 
+			text: 'Se ha guardado la nueva posición para la carga.', 
+			position: 'top-left',
+			loaderBg:'#26c281', 
+			icon: 'success', 
+			hideAfter: 3000, 
+			stack: 6
+
+		});
+	})
+	.catch(error => {
+		// Manejar errores
+		console.error('Error:', error);
+	});
 }

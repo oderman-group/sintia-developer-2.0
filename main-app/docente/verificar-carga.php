@@ -50,3 +50,10 @@ if(empty($datosCargaActual))
 	exit();		
 }
 $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
+
+require_once("../class/Estudiantes.php");
+if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+	$cantidadEstudiantesParaDocentes = Estudiantes::contarEstudiantesParaDocentesMT($datosCargaActual);
+} else {
+	$cantidadEstudiantesParaDocentes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+}

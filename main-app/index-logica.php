@@ -10,8 +10,9 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 	}
 
     require_once(ROOT_PATH."/main-app/modelo/conexion.php");
-    $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios 
-    WHERE uss_id='" . $_SESSION["id"] . "'");
+	require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+    
+    $consultaSesion = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_id='" . $_SESSION["id"] . "'");
 		$sesionAbierta = mysqli_fetch_array($consultaSesion, MYSQLI_BOTH);
 
 		switch ($sesionAbierta[3]) {

@@ -21,6 +21,10 @@ $_SESSION["configuracion"] = $config;
     background-color: #f5c426;
     border-color: #ffeeba;
 }
+
+.elemento-draggable {
+    cursor: grab;
+}
 </style>
  <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -61,7 +65,7 @@ $_SESSION["configuracion"] = $config;
 							 INNER JOIN academico_grados ON gra_id=car_curso
 							 INNER JOIN academico_grupos ON gru_id=car_grupo
 							 WHERE car_docente='".$_SESSION["id"]."'
-							 ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre
+							 ORDER BY CAST(car_posicion_docente AS SIGNED)
 							 ");
 							  $cargasCont = 1;
 							 $nCargas = mysqli_num_rows($cCargas);
@@ -80,7 +84,7 @@ $_SESSION["configuracion"] = $config;
 									 <a href="javascript:void(0);" onClick="fetchGeneral('../compartido/progreso-docentes.php?modal=1', 'Progreso de los docentes')" style="text-decoration: underline;">Ver progreso de los docentes</a>
 							 </p>
 							 <?php }?>
-							 <div class="row">
+							 <div class="row" id="sortable-container">
 								 
 								 
 								 
@@ -155,21 +159,21 @@ $_SESSION["configuracion"] = $config;
 													switch($jobsEncontrado["job_estado"]){
 														case JOBS_ESTADO_ERROR:														
 															if($configGenerarJobs == 1) {
-																$mensajeI = '<div class="alert alert-danger mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+																$mensajeI = '<div class="alert alert-danger mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															} else {
 																$mensajeI = $btnGenerarInforme
-																	.'<div class="alert alert-info mt-2" role="alert" style="margin-right: 20px;">Por favor, vuelva a intentarlo!</div>';
+																	.'<div class="alert alert-info mt-3" role="alert" style="margin-right: 20px;">Por favor, vuelva a intentarlo!</div>';
 															}
 															
 
 																	break;
 														case JOBS_ESTADO_PENDIENTE:
 															if($intento==0){
-																$mensajeI ='<div class="alert alert-success mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
+																$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															}elseif($intento>0 && $seleccionado){
-																$mensajeI ='<div class="alert alert-warning-select mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
+																$mensajeI ='<div class="alert alert-warning-select mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}elseif($intento>0){
-																$mensajeI ='<div class="alert alert-warning mt-2" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
+																$mensajeI ='<div class="alert alert-warning mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}
 															break;
 
@@ -192,11 +196,20 @@ $_SESSION["configuracion"] = $config;
 											$induccionSabanas = 'data-hint="Puedes ver las sábanas de cada uno de los periodos pasados."';
 										}
 
-										$filtro = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
-										$cantEstudiantesConsulta = Estudiantes::listarEstudiantesParaDocentes($filtro);
+										$cantEstudiantesConsulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($rCargas);
 										$cantEstudiantes = mysqli_num_rows($cantEstudiantesConsulta);
+
+										$marcaMediaTecnica = '';
+										if($rCargas['gra_tipo'] == GRADO_INDIVIDUAL) {
+											$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
+										}
+
+										$marcaDG = '';
+										if($rCargas['car_director_grupo']==1){
+											$marcaDG = '<i class="fa fa-star text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Director de grupo"></i> ';
+										}
 									?>
-						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
+						 <div class="col-lg-3 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable" draggable="true" id="carga-<?=$rCargas['car_id'];?>"> 
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
 									<a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar">
@@ -207,7 +220,7 @@ $_SESSION["configuracion"] = $config;
 	                        	<h5 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<span> <b><?=$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
+										<span> <b><?=$marcaDG ." ".$marcaMediaTecnica."".$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
 									</p>
 									
 									
@@ -219,8 +232,6 @@ $_SESSION["configuracion"] = $config;
 									
 									<div class="text">
 										<span class="m-r-10" style="font-size: 10px;"><b>Notas:</b> <?=$spcd[0];?>% / <?=$spcr[0];?>% | <b>Periodo:</b> <?=$rCargas['car_periodo'];?> | <b>Posición:</b> <?=$rCargas['car_posicion_docente'];?></span> 
-
-		                            	<?php if($rCargas['car_director_grupo']==1){?><br><a class="course-likes m-l-10" style="color: slateblue;"><i class="fa fa-user-circle-o"></i> Director de grupo</a><?php }?>
 		                            </div>
 									
 									<span id="mensajeI<?=$rCargas['car_id']?>"><?=$mensajeI;?></span>
@@ -275,6 +286,69 @@ $_SESSION["configuracion"] = $config;
     <script src="../../config-general/assets/plugins/summernote/summernote.js" ></script>
     <script src="../../config-general/assets/js/pages/summernote/summernote-data.js" ></script>
     <!-- end js include path -->
+
+<script>
+
+const sortableContainer = document.getElementById("sortable-container");
+let draggedItem = null;
+let fromIndex, toIndex;
+let idCarga;
+let target;
+
+sortableContainer.addEventListener("dragstart", (e) => {
+    draggedItem = e.target;
+    fromIndex = Array.from(sortableContainer.children).indexOf(draggedItem);
+	idCarga = e.target.id.split('-')[1];
+	console.log('dragstart...');
+	
+	target = e.target;
+
+	target.style.backgroundColor = "#f0f0f0";
+	target.style.transition = "all 0.2s ease";
+});
+
+sortableContainer.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    const targetItem = e.target;
+    if (targetItem.classList.contains("sortable-item")) {
+        toIndex = Array.from(sortableContainer.children).indexOf(targetItem);
+    }
+	console.log('dragover...');
+});
+
+sortableContainer.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (fromIndex > -1 && toIndex > -1) {
+        if (fromIndex < toIndex) {
+            sortableContainer.insertBefore(draggedItem, sortableContainer.children[toIndex].nextSibling);
+        } else {
+            sortableContainer.insertBefore(draggedItem, sortableContainer.children[toIndex]);
+        }
+    }
+	target = e.target;
+
+	target.style.backgroundColor = "initial";
+	target.style.transition = "initial";
+
+	console.log('drop...');
+	console.log(fromIndex, idCarga);
+	console.log(toIndex);
+
+	if(typeof toIndex === undefined) {
+		toIndex = 1;
+	} else {
+		toIndex ++;
+	}
+
+	cambiarPosicion(idCarga, toIndex);
+});
+
+// Prevenir eventos por defecto
+document.addEventListener("dragover", (e) => {
+    e.preventDefault();
+});
+
+</script>
   </body>
 
 </html>
