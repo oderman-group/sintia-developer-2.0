@@ -213,11 +213,11 @@
 }
 
 .switchToggle input:checked + .aqua{
-  background-color: #00C0EF;
+  background-color: #41c4c4;
 }
 
 .switchToggle input:focus + .aqua{
-  box-shadow: 0 0 1px #00C0EF;
+  box-shadow: 0 0 1px #41c4c4;
 }
 
 .switchToggle input:checked + .yellow{
@@ -227,6 +227,14 @@
 .switchToggle input:focus + .yellow{
   box-shadow: 0 0 1px #F39C12;
 }
+
+.switchToggle input:checked + .sintia{
+	background-color: #6017dc;
+  }
+  
+  .switchToggle input:focus + .sintia{
+	box-shadow: 0 0 1px #6017dc;
+  }
 
 
 .switchToggle input:checked + .slider:before {

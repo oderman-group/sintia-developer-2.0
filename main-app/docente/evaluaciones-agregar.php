@@ -122,7 +122,7 @@
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
 														<input type="checkbox" name="compartir" value="1" checked>
-														<span class="slider red round"></span>
+														<span class="slider sintia round"></span>
 													</label>
 												</div>
 											 </div>
@@ -152,9 +152,12 @@
                                             </div>
                                         </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-
 										<a href="#" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+										<button type="submit" class="btn  btn-info">
+											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										</button>
+
 										</form>
 
 
