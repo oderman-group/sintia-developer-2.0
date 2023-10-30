@@ -21,7 +21,8 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores de la barra lateral.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
@@ -49,7 +50,8 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores del encabezado del menú.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
@@ -76,11 +78,12 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores del encabezado del menú.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
-				stack: 6
+				stack: 6,
 
 			});
 		})

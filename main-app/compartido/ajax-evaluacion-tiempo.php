@@ -32,7 +32,8 @@ if($horas[0]==0 and $minutos[0]==4 and $segundos[0]==59){
     	  $.toast({
     		  	heading: 'Tiempo restante',  
 			  	text: 'Te quedan 5 minutos para finalizar la evaluación y enviarla.',
-			  	position: 'bottom-center',
+			  	position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#FFD913',
 				icon: 'warning',
     		    hideAfter: false
@@ -52,7 +53,8 @@ if($horas[0]==0 and $minutos[0]==1 and $segundos[0]==59){
     	  $.toast({
     		  	heading: 'Tiempo restante',  
 			  	text: 'Te quedan 2 minutos para finalizar la evaluación y enviarla. Te recomendamos rectificar las preguntas rápidamente y enviar la evaluación. La evaluación se enviará automáticamente con las respuestas seleccionadas.',
-			  	position: 'bottom-center',
+			  	position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#FFD913',
 				icon: 'warning',
     		    hideAfter: false

@@ -276,7 +276,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 													$.toast({
 														heading: data.titulo, 
 														text: data.mensaje, 
-														position: 'mid-center',
+														position: 'bottom-right',
+                										showHideTransition: 'slide',
 														loaderBg:'#26c281', 
 														icon: data.estado, 
 														hideAfter: 5000, 

@@ -45,6 +45,7 @@ $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 										heading: 'Notificación',  
 										text: 'Tienes <?=$mensajesNumero;?> mensajes nuevos. Revisalos en el icono del sobre, que está en la parte superior.',
 										position: 'bottom-right',
+                						showHideTransition: 'slide',
 										loaderBg:'#ff6849',
 										icon: 'info',
 										hideAfter: 10000, 
