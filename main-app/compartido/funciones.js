@@ -160,7 +160,8 @@ function deseaGenerarIndicadores(dato) {
 
 			heading: 'Acción en proceso', 
 			text: 'Estamos creando los indicadores y actividades para ti, te avisaremos encuanto esten creados.', 
-			position: 'mid-center',
+			position: 'bottom-right',
+            showHideTransition: 'slide',
 			loaderBg:'#26c281', 
 			icon: 'warning', 
 			hideAfter: 5000, 
@@ -175,7 +176,8 @@ function deseaGenerarIndicadores(dato) {
 			$.toast({
 
 				heading: 'Acción realizada', text: 'Los indicadores y actividades fueron creados correctamente, racargaremos la página.', 
-				position: 'mid-center',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 5000, 
@@ -271,7 +273,8 @@ function deseaEliminar(dato) {
                         $.toast({
                             heading: 'Acción realizada',
                             text: 'El registro fue eliminado correctamente.',
-                            position: 'mid-center',
+                            position: 'bottom-right',
+                            showHideTransition: 'slide',
                             loaderBg: '#26c281',
                             icon: 'success',
                             hideAfter: 5000,
@@ -337,7 +340,8 @@ function ocultarNoticia(datos) {
         $.toast({
             heading: 'Acción realizada',
             text: mensaje,
-            position: 'mid-center',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
             loaderBg: '#26c281',
             icon: 'success',
             hideAfter: 5000,
@@ -431,7 +435,8 @@ function crearNoticia() {
         $.toast({
             heading: 'Acción realizada',
             text: 'La noticia se publicado correctamente',
-            position: 'mid-center',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
             loaderBg: '#26c281',
             icon: 'success',
             hideAfter: 5000,
@@ -519,7 +524,8 @@ function cambiarBloqueo(data) {
             $.toast({
                 heading: 'Acción realizada',
                 text: mensaje,
-                position: 'mid-center',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
                 loaderBg: '#26c281',
                 icon: 'success',
                 hideAfter: 5000,
@@ -565,7 +571,8 @@ function mensajeGenerarInforme(datos){
                     $.toast({
                         heading: 'Acción realizada',
                         text: 'El informe ya se está generando.',
-                        position: 'botom-left',
+                        position: 'bottom-right',
+                        showHideTransition: 'slide',
                         loaderBg: '#26c281',
                         icon: 'success',
                         hideAfter: 5000,
@@ -605,7 +612,8 @@ function mensajeGenerarInforme(datos){
                             $.toast({
                                 heading: 'Acción realizada',
                                 text: 'El informe ya se está generando.',
-                                position: 'botom-left',
+                                position: 'bottom-right',
+                                showHideTransition: 'slide',
                                 loaderBg: '#26c281',
                                 icon: 'success',
                                 hideAfter: 5000,

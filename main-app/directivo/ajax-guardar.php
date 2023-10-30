@@ -36,7 +36,8 @@ include("../compartido/guardar-historial-acciones.php");
 		$.toast({
 			heading: 'Cambios guardados',  
 			text: '<?=$mensajeNot;?>',
-			position: 'botom-left',
+			position: 'bottom-right',
+            showHideTransition: 'slide',
 			loaderBg:'#ff6849',
 			icon: 'success',
 			hideAfter: 3000, 

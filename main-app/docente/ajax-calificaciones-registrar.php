@@ -336,7 +336,8 @@ function notifica(){
 	$.toast({
 		heading: '<?=$heading;?>',  
 		text: '<?=$mensajeNot;?>',
-		position: 'top-right',
+		position: 'bottom-right',
+        showHideTransition: 'slide',
 		loaderBg:'#ff6849',
 		icon: '<?=$icon;?>',
 		hideAfter: 5000, 
@@ -395,7 +396,8 @@ function notifica(){
 	$.toast({
 		heading: 'Cambios guardados',  
 		text: '<?=$mensajeNot;?>',
-		position: 'botom-left',
+		position: 'bottom-right',
+        showHideTransition: 'slide',
 		loaderBg:'#ff6849',
 		icon: 'success',
 		hideAfter: 3000, 

@@ -146,6 +146,10 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														{$opcionSINO[$resultado['car_permiso2']]}<br>
 														<b>Indicadores automáticos?:</b> 
 														{$opcionSINO[$resultado['car_indicador_automatico']]}<br>
+														<b>Max. Indicadores:</b> 
+														{$resultado['car_maximos_indicadores']}<br>
+														<b>Max. Calificaciones:</b> 
+														{$resultado['car_maximas_calificaciones']}<br>
 														<b>Nro. Estudiantes:</b> 
 														{$cantidadEstudiantes}
 														";

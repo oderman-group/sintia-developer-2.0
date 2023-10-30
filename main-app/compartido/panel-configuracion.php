@@ -228,12 +228,12 @@
 														$.toast({
 															heading: mensaje.nombre,  
 															text: mensaje.data,
-															position: 'left-bottom',
+															position: 'bottom-right',
+            												showHideTransition: 'slide',
 															loaderBg:'#ff6849',
 															icon: 'info',
 															hideAfter: 5000, 
 															stack: 1,
-															showHideTransition: 'slide',
 															bgColor: '#007bff',
     														textColor: 'white'
 														});
