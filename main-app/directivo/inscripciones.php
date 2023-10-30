@@ -124,6 +124,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 }
                                                 while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
+                                                    $observacion = strip_tags($resultado['asp_observacion']);
                                                     $infoTooltipEstudiante = "
                                                     <b>Nombre acudiente:</b><br>
                                                     {$resultado['asp_nombre_acudiente']}<br>
@@ -134,7 +135,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     <b>Email:</b><br>
                                                     {$resultado['asp_email_acudiente']}<br><br>
                                                     <b>Observación:</b><br>
-                                                    <span style='color:darkblue; font-size:11px; font-style:italic;'>{$resultado['asp_observacion']}</span>
+                                                    <span style='color:darkblue; font-size:11px; font-style:italic;'>{$observacion}</span>
                                                     ";
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
