@@ -1,6 +1,6 @@
 <!-- ESTADO DE CUENTAS -->
 <?php
-if($saldoEC>0){
+if(!empty($saldoEC) && $saldoEC>0){
 ?>
 	<div class="panel">
 		<header class="panel-heading panel-heading-yellow">SALDO PENDIENTE</header>
