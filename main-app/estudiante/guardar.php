@@ -12,7 +12,7 @@ $archivoSubido = new Archivos;
 
 if(!empty($_POST["id"])){
 	//ACTUALIZAR MATRICULA
-	if($_POST["id"]==1000){
+	if($_POST["id"]==1000){//No se esta llamando en nigun lado
 		try{
 			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_tipo_documento='".$_POST["tipoD"]."', mat_documento='".$_POST["nDoc"]."', mat_religion='".$_POST["religion"]."', mat_email='".$_POST["email"]."', mat_direccion='".$_POST["direccion"]."', mat_barrio='".$_POST["barrio"]."', mat_telefono='".$_POST["telefono"]."', mat_celular='".$_POST["celular"]."', mat_estrato='".$_POST["estrato"]."', mat_genero='".$_POST["genero"]."', mat_fecha_nacimiento='".$_POST["fNac"]."', mat_primer_apellido='".$_POST["apellido1"]."', mat_segundo_apellido='".$_POST["apellido2"]."', mat_nombres='".$_POST["nombres"]."', mat_grado='".$_POST["grado"]."', mat_tipo='".$_POST["tipoEst"]."' WHERE mat_id_usuario='".$_SESION["id"]."'");
 
@@ -27,7 +27,7 @@ if(!empty($_POST["id"])){
 	}
 
 	//GUARDAR COMENTARIO
-	if($_POST["id"]==7){
+	if($_POST["id"]==7){//No se esta llamando en nigun lado
 		try{
 			mysqli_query($conexion, "INSERT INTO academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".$_POST["com"]."', '".$_SESION["id"]."', now())");
 		} catch (Exception $e) {
@@ -70,7 +70,7 @@ if(!empty($_POST["id"])){
 	}
 
 	//GUARDAR RESPUESTA
-	if($_POST["id"]==8){
+	if($_POST["id"]==8){//No se esta llamando en nigun lado
 		try{
 			mysqli_query($conexion, "INSERT INTO academico_actividad_foro_respuestas(fore_id_comentario, fore_respuesta, fore_id_estudiante, fore_fecha)VALUES('".$_POST["idCom"]."', '".$_POST["respu"]."', '".$_SESION["id"]."', now())");
 		} catch (Exception $e) {
