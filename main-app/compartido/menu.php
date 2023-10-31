@@ -35,14 +35,6 @@
 	                                </div>
 	                                <div class="pull-left info">
 	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?></p>
-										<?php
-											if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
-												if(Modulos::validarSubRol(['DT0030'])){
-										?>
-	                                    <a href="cambiar-bd.php" style="text-decoration:underline;">
-										<i class="fa fa-calendar"></i>
-										<span class="txtOnline"> Año: <?=$_SESSION["bd"];?></span></a>
-										<?php }}?>
 	                                </div>
 	                            </div>
 	                        </li>
