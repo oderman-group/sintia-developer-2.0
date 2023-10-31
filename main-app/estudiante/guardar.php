@@ -202,18 +202,6 @@ if(!empty($_POST["id"])){
 	//ENVIAR ACTIVIDAD
 
 	//FIRMAR ASPECTOS
-	if($_POST["id"]==11){
-		try{
-			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aprobado=1, dn_fecha_aprobado=now()
-			WHERE dn_cod_estudiante=" . $_POST["estudiante"] . " AND dn_periodo='" . $_POST["periodo"] . "'");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-
-		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="aspectos.php";</script>';
-		exit();
-	}
 }
 
 //GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET
