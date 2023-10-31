@@ -237,7 +237,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 
 																		
 																		<?php if(!empty($resultado['gra_nombre'])){ ?>
-																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#cambiarGrupoModal<?=$resultado['mat_id'];?>" >Cambiar de grupo</a></li>
+																		<li><a href="javascript:void(0);" onclick="fetchGeneral('../directivo/estudiantes-cambiar-grupo-modal.php?id=<?=base64_encode($resultado['mat_id']);?>','Cambiar de grupo')">Cambiar de grupo</a></li>
 																		<?php } ?>
 																		<?php 
 																		$retirarRestaurar='Retirar';
