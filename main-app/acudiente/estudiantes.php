@@ -70,9 +70,8 @@ require_once("../class/Estudiantes.php");
 											</div>
 											<div class="card-body">
 												<p><?=$frases[278][$datosUsuarioActual[8]];?></p>
-												<form name="formularioCupo" class="form-horizontal" action="guardar.php" method="post">
-													<input type="hidden" name="id" value="2">
-													<input type="hidden" name="idEstudiante" value="<?=$_GET["idE"];?>">
+												<form name="formularioCupo" class="form-horizontal" action="encuesta-reservar-cupo.php" method="post">
+													<input type="hidden" name="idEstudiante" value="<?=base64_decode($_GET["idE"]);?>">
 													
 													<div class="col-sm-12">
 														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /><?=$frases[275][$datosUsuarioActual[8]];?>
@@ -211,7 +210,7 @@ require_once("../class/Estudiantes.php");
 																else{}
 															}else{
 																echo "
-																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
+																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".base64_encode($resultado['mat_id'])."&nameE=".base64_encode($resultado['uss_nombre'])."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
 																";	
 															}
 															?>
