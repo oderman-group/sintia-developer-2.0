@@ -52,14 +52,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												<div class="col-sm-12">
 													<div class="btn-group">
                                                         <?php if (Modulos::validarPermisoEdicion()) { ?>
-                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAreaModal" class="btn deepPink-bgcolor">
+                                                        <a href="javascript:void(0);" onclick="fetchGeneral('../directivo/areas-agregar-modal.php','Agregar Areas')" class="btn deepPink-bgcolor">
                                                             Agregar nuevo <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <?php
-                                                        $idModal = "nuevaAreaModal";
-                                                        $contenido = "../directivo/areas-agregar-modal.php";
-                                                        include("../compartido/contenido-modal.php");
-                                                        } ?>
+                                                        <?php } ?>
 													</div>
 												</div>
 											</div>
