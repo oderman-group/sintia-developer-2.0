@@ -1,4 +1,7 @@
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0019';
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -80,8 +83,6 @@ if (!Modulos::validarPermisoEdicion()) {
             <?php } ?>
         </form>
     </div>
-    </body>
+</div>
 
-    <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
-
-    </html>
+<?php include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>

@@ -31,9 +31,20 @@ function fetchGeneral(url, title, method='POST', paramsJSON=null) {
     .then(data => {
 
         document.getElementById("overlay").style.display = "none";
-        $("#modalGeneral").modal("show");
         document.getElementById("respuestaTituloGeneral").innerHTML = title;
         document.getElementById("respuestaGeneral").innerHTML = data;
+
+        $('#modalGeneral').on('shown.bs.modal', function () {
+            // Encontrar y ejecutar scripts dentro del contenido
+            $('#respuestaGeneral').find('script').each(function() {
+                var scriptText = $(this).text();
+                var scriptNode = document.createElement('script');
+                scriptNode.text = scriptText;
+                document.body.appendChild(scriptNode);
+                // Remover el script después de ejecutarlo para evitar que se ejecute dos veces
+                $(this).remove();
+            });
+        }).modal("show");
 
     })
     .catch(error => {

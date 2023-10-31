@@ -1,4 +1,8 @@
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0033';
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -59,6 +63,7 @@ if (!Modulos::validarPermisoEdicion()) {
     </div>
 </div>
 
+<?php include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
