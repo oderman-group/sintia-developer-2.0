@@ -123,18 +123,6 @@ if(!empty($_POST["id"])){
 
 if(!empty($_GET["get"])){
 	//FIRMA DIGITAL DE LOS REPORTES
-	if(base64_decode($_GET["get"])==1){
-		$id=base64_decode($_GET["id"]);
-		try{
-			mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=1, dr_aprobacion_estudiante_fecha=now() WHERE dr_id='".$id."'");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-
-		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="reportes-disciplinarios.php";</script>';
-		exit();
-	}
 }
 
 //EN CASO DE QUE NO ENTRE POR NINGUNA DE LAS ANTERIORES
