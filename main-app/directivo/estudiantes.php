@@ -245,7 +245,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																				$retirarRestaurar='Restaurar';
 																		}
 																		?>
-																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#retirarModal<?=$resultado['mat_id'];?>"><?=$retirarRestaurar?></a></li>
+																		<li><a href="javascript:void(0);" onclick="fetchGeneral('../directivo/estudiantes-retirar-modal.php?id=<?=base64_encode($resultado['mat_id']);?>','<?=$retirarRestaurar?> Estudiante')"><?=$retirarRestaurar?></a></li>
 																		<li><a href="javascript:void(0);"
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
 																		>Reservar cupo</a></li>
@@ -282,17 +282,6 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														</td>
                                                     </tr>
 													<?php 
-														  $_GET["id"]=base64_encode($resultado['mat_id']); 
-													      if(!empty($resultado['gra_nombre'])){
-															$idModal="cambiarGrupoModal".$resultado['mat_id'];															
-															$contenido="../directivo/estudiantes-cambiar-grupo-modal.php"; 
-															include("../compartido/contenido-modal.php");
-														  }
-														 
-															$idModal="retirarModal".$resultado['mat_id'];															
-															$contenido="../directivo/estudiantes-retirar-modal.php"; 
-															include("../compartido/contenido-modal.php");
-													     
 														 $contReg++;
 													  }
 													  ?>
@@ -311,9 +300,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
-		
-		
-		<?php $idModal="ModalSintia1"; $_GET["id"]=base64_encode(2803); $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
+
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
