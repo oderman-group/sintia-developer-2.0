@@ -52,14 +52,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												<div class="col-sm-12">
 													<div class="btn-group">
 														<?php if (Modulos::validarPermisoEdicion()) { ?>
-                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAsigModal" class="btn deepPink-bgcolor">
+                                                        <a href="javascript:void(0);" onclick="fetchGeneral('../directivo/asignaturas-agregar-modal.php','Agregar Asignatura')" class="btn deepPink-bgcolor">
 														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <?php
-                                                        $idModal = "nuevaAsigModal";
-                                                        $contenido = "../directivo/asignaturas-agregar-modal.php";
-                                                        include("../compartido/contenido-modal.php");
-                                                        } ?>
+                                                        <?php } ?>
 													</div>
 												</div>
 											</div>
