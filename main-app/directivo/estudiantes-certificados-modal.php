@@ -1,4 +1,7 @@
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0082';
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
@@ -157,3 +160,5 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
+
+<?php include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
