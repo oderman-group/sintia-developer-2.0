@@ -64,8 +64,7 @@
                                 <header><?=$frases[264][$datosUsuarioActual[8]];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
-                                <form action="guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="3">
+                                <form action="aspectos-firmar.php" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="estudiante" value="<?=$datosEstudianteActual['mat_id'];?>">
                                     <input type="hidden" name="periodo" value="<?=$periodo;?>">
 
@@ -83,7 +82,7 @@
                                         </div>
                                     </div>
 
-                                    <?php if($config['conf_ver_observador']==1 && (!empty($aspectos["dn_aprobado"]) && $aspectos["dn_aprobado"]=='0')){ ?>
+                                    <?php if($config['conf_ver_observador']==1 && !empty($aspectos[0]) && $aspectos["dn_aprobado"]=='0'){ ?>
                                         <input type="submit" class="btn btn-primary" value="He leído y estoy de acuerdo">&nbsp;
                                     <?php } ?>
 
@@ -103,6 +102,10 @@
 											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+                                                    $porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
@@ -116,7 +119,7 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= base64_encode($usrEstud); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= base64_encode($usrEstud); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
 												<?php if (!empty($notapp[0]) && $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">
