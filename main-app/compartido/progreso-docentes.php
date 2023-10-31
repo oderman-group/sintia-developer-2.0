@@ -75,3 +75,5 @@ if( !empty($_GET["modal"]) && $_GET["modal"] == 1 ) {
 												<p class="text-info" style="margin-top: 15px;">Los docentes que no aparecen en este listado es porque aún no han iniciado este proceso. Los instamos a iniciar pronto.</p>
 											</div>
 										</div>
+
+<?php include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
