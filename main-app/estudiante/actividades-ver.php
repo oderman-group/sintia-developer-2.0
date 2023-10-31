@@ -168,8 +168,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 		                                                            <div class="panel">
 																		<p><?=$frases[199][$datosUsuarioActual[8]];?></p>
 		                                                                <?php if($fechas[1]<=0 or $actividad['tar_impedir_retrasos']==0){?>
-																		<form id="form_subir" action="guardar.php" method="post" enctype="multipart/form-data">
-																			<input type="hidden" name="id" value="10">
+																		<form id="form_subir" action="actividades-enviar.php" method="post" enctype="multipart/form-data">
 																			<input type="hidden" name="idR" value="<?=$idR;?>">
 		                                                                    
 																			<p><textarea class="form-control border border-primary" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
@@ -285,7 +284,12 @@ $porcentajeRestante = round($porcentajeRestante,2);
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Archivos subidos totalmente(100%)";
-													
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
 													setTimeout(redirect(), 5000);
 													
 													function redirect(){
@@ -294,7 +298,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "actividades-enviar.php");
 												peticion.send(new FormData(form));
 
 											}
