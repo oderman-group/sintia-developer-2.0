@@ -141,6 +141,32 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
         });
 }
 
+/**
+ * Limita la selección en un elemento <select> múltiple a una sola opción y muestra un mensaje de alerta si se seleccionan más de una.
+ *
+ * @param {HTMLSelectElement} select - El elemento <select> en el que se desea limitar la selección.
+ */
+function limitarSeleccion(select) {
+    var opcionesSeleccionadas = [];
+    for (var i = 0; i < select.options.length; i++) {
+        if (select.options[i].selected) {
+            opcionesSeleccionadas.push(select.options[i]);
+        }
+    }
+
+    if (opcionesSeleccionadas.length > 1) {
+        alert('Solo puedes seleccionar una opción. Si escoje más de una opción, la plataforma tendrá en cuenta solo la últma opción que aparezca en la selección.');
+
+        // Desmarcar todas las opciones excepto la última seleccionada
+        for (var i = 0; i < select.options.length; i++) {
+            select.options[i].selected = false;
+        }
+
+        // Marcar solo la última opción seleccionada
+        opcionesSeleccionadas[opcionesSeleccionadas.length - 1].selected = true;
+    }
+}
+
 function verCuentaBancaria() {
     document.getElementById("cuentaBancaria").innerHTML = `
     Cuenta de ahorros Bancolombia número <b>431-565882-54</b>

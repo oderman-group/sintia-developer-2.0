@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Utilidades.php");
 
 $modulo = 1;
 
@@ -34,7 +35,7 @@ $modulo = 1;
 
     <?php
      $nombreInforme = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
-     include("../compartido/head-informes.php") ?>
+     include("head-informes.php") ?>
 
     <div align="left" style="margin-bottom:20px;">
 
