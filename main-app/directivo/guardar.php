@@ -83,25 +83,7 @@ if ($_POST["id"] == 27) {
 	exit();
 }
 
-
-
-
-
-
-
 //CREAR OPCION GENERALS
-if ($_POST["id"] == 46) {
-	try{
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".opciones_generales (ogen_nombre, ogen_grupo)VALUES('" . $_POST["nombre"] . "','" . $_POST["grupo"] . "')");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$idIte = mysqli_insert_id($conexion);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php"</script>';
-	exit();
-}
 //EDITAR OPCION GENERALS
 if ($_POST["id"] == 47) {
 	try{

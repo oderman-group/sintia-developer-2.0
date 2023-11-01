@@ -1,12 +1,11 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0058';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
+<?php
+include("session.php");
+$idPaginaInterna = 'DV0068';
+include("../compartido/historial-acciones-guardar.php");
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}?>
+Modulos::verificarPermisoDev();
+include("../compartido/head.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -50,7 +49,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="configuracion-opciones-generales-info.php?a=1" id="addRow" class="btn deepPink-bgcolor">
+														<a href="configuracion-opciones-generales-info.php" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
