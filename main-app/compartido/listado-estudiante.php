@@ -4,6 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>LISTADO DE ESTUDIANTES</title>
@@ -38,16 +39,17 @@ include("../compartido/head-informes.php") ?>
   </tr>
   <?php
   $filtro = "";
-  if(isset($_POST["grado"])) { $filtro = " AND mat_grado = '".$_POST["grado"]."'";}
-  if(isset($_GET["grado"]))  { $filtro = " AND mat_grado = '".$_GET["grado"]."'";}
-  if(isset($_POST["grupo"]) AND $_POST["grupo"]!=""){ $filtro .= " AND mat_grupo='".$_POST["grupo"]."'";}
-  if(isset($_POST["estadoM"]) AND $_POST["estadoM"]==1){ $filtro .= " AND mat_estado_matricula=1";}
+  if(!empty($_REQUEST["grado"])) { $filtro .= " AND mat_grado = '".$_REQUEST["grado"]."'";}
+  $idGrupo="";
+  if(!empty($_REQUEST["grupo"]) AND $_REQUEST["grupo"]!=""){ $filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'";$idGrupo=$_REQUEST["grupo"];}
+  if(!empty($_REQUEST["estadoM"]) AND $_REQUEST["estadoM"]==1){ $filtro .= " AND mat_estado_matricula=1";}
 
   $cont=1;
-  $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+  $cursoActual=GradoServicios::consultarCurso($_REQUEST["grado"]);
+  $consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,"",$idGrupo);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-  $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
-	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+  $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
+	$acudiente = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
   ?>
   <tr style="border-color:<?=$Plataforma->colorDos;?>;">
       <td style="text-align:center"><?=$cont;?></td>  
@@ -55,7 +57,7 @@ include("../compartido/head-informes.php") ?>
       <td style="text-align:center"><?=$resultado["uss_id"];?></td>
       <td style="text-align:center"><?=$estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];?></td>
       <td><?=$resultado['mat_documento'];?></td>
-      <td><?=strtoupper($resultado[3]." ".$resultado[4]." ".$resultado[5]);?></td>
+      <td><?=$nombre;?></td>
       <td><?=$resultado["gra_nombre"];?></td>
       <td style="text-align:center"><?=$resultado["gru_nombre"];?></td>
       <td><?=$resultado["ogen_nombre"];?></td>

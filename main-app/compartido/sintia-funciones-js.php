@@ -178,7 +178,8 @@ function avisoBancoDatos(dato){
 
 			text: 'Recuerda que al escoger una opción del banco de datos, ésta será tomada como prioritaria y será la que el sistema use.',
 
-			position: 'mid-center',
+			position: 'bottom-right',
+            showHideTransition: 'slide',
 
 			loaderBg:'#ff6849',
 

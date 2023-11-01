@@ -39,21 +39,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<div class="col-md-12">
 								
 									<?php include("../../config-general/mensajes-informativos.php"); ?>
-
-									<?php if(Modulos::validarPermisoEdicion()){?>
-										<div class="btn-group">
-											<button type="button" class="btn btn-primary">MÁS ACCIONES</button>
-											<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-												<i class="fa fa-angle-down"></i>
-											</button>
-											<ul class="dropdown-menu" role="menu">
-												<li><a href="cursos-intensidad.php">I.H por curso</a></li>
-												<!--<li><a href="cursos-aplicar-formato.php" onClick="if(!confirm('Desea ejecutar esta accion?')){return false;}">Aplicar Formato 1</a></li>-->
-												<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-matricula.php')">Poner en $0 la matricula</a></li>
-												<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-pension.php')">Poner en $0 la pensión</a></li>
-											</ul>
-										</div>
-									<?php }?>
+									
+									<?php include("includes/barra-superior-cursos.php"); ?>
+								
 
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
@@ -91,26 +79,33 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[5][$datosUsuarioActual[8]];?></th>
 														<th>Formato boletín</th>
 														<th>Matrícula</th>
-														<th>Pensión</th>
+														<th>Pensión</th>														
 														<th>#P</th>
+														<?php if(array_key_exists(10,$arregloModulos) ){?>
+															<th>Tipo</th>
+														<?php }?>
 														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-													<?php													
-                           							 $consulta = Grados::listarGrados(1);
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-													 ?>
+													<?php	
+													$tipo=NULL;
+													if(!empty($_GET['tipo'])){ $tipo=$_GET['tipo'];}
+													$consulta = Grados::listarGrados(1,$tipo);
+													$contReg = 1;
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado[0];?></td>
 														<td><?=$resultado['gra_nombre'];?></td>
 														<td><?=$resultado[3];?></td>
 														<td>$<?=number_format($resultado[4]);?></td>
-														<td>$<?=number_format($resultado[5]);?></td>
+														<td>$<?=number_format($resultado[5]);?></td>														
 														<td><?=$resultado[11];?></td>
-														
+														<?php if(array_key_exists(10,$arregloModulos) ){?>
+															<td><?=strtoupper($resultado['gra_tipo']);?></td>
+														<?php }?>
 														<td>
 															<div class="btn-group">
 																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>

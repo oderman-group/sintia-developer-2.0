@@ -2,15 +2,18 @@
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Boletin.php");
+require_once("../class/servicios/GradoServicios.php");
 
 $year=$agnoBD;
 if(isset($_POST["year"])){
 	$year=$_POST["year"];
 }
 $BD = $_SESSION["inst"] . "_" . $year;
+$bdConsulta = $BD.".";
 
-$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."'";
-$asig =Estudiantes::estudiantesMatriculados($filtroAdicional,$BD);		
+$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta);	
 $num_asg = mysqli_num_rows($asig);
 $consultaGrados = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, academico_grupos 
 WHERE gra_id='" . $_REQUEST["curso"] . "' 
@@ -63,7 +66,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   while($fila = mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
   		$cuentaest = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-		WHERE bol_estudiante=".$fila[0]." 
+		WHERE bol_estudiante=".$fila['mat_id']." 
 		AND bol_periodo=".$_REQUEST["per"]." 
 		GROUP BY bol_carga");
 		// $numero = mysqli_num_rows($cuentaest);
@@ -86,7 +89,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 					if($config['conf_id_institucion']!=23){
 						$notas = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-						WHERE bol_estudiante=" . $fila[0] . " 
+						WHERE bol_estudiante=" . $fila['mat_id'] . " 
 						AND bol_carga=" . $mat1[0] . " 
 						AND bol_periodo=" . $_REQUEST["per"]);
 
@@ -104,7 +107,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 						INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
 						INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
-						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila[0]." and act_periodo=".$_REQUEST["per"]."
+						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila['mat_id']." and act_periodo=".$_REQUEST["per"]."
 						group by act_id_tipo, act_id_carga
 						order by mat_id,ipc_periodo,ind_id;");
 

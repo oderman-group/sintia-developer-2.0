@@ -73,7 +73,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre del Areas</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>" <?=$disabledPermiso;?> require>
+                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>" <?=$disabledPermiso;?> required>
                                             </div>
                                         </div>	
 										

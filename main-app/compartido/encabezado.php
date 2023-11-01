@@ -56,6 +56,73 @@ $institucionNombre = $institucion['ins_siglas'];
 						
 						
                     	<li><a href="javascript:;" class="fullscreen-btn"><i class="fa fa-arrows-alt"></i></a></li>
+
+                        <?php
+                            if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {
+                                if(Modulos::validarSubRol(['DT0030'])) {
+                        ?>
+                            <li class="dropdown dropdown-user">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="fa fa-calendar-o"></i>    
+                                <span class="username username-hide-on-mobile"> AÑO ACTUAL: <b><?=$_SESSION["bd"];?></b> </span>
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-default">
+                                    <?php
+                                    while($yearStart <= $yearEnd){	
+                                        if($_SESSION["bd"] == $yearStart) {
+                                    ?>
+                                            <li class="active"><a href="javascript:;" style="font-weight:bold;"><?=$yearStart;?></a></li>
+                                    <?php
+                                        } else {
+                                    ?>
+                                            <li><a href="cambiar-bd.php?agno=<?=base64_encode($yearStart);?>"><?=$yearStart;?></a></li>
+                                    <?php
+                                        }
+                                        $yearStart++;
+                                    }
+                                    ?>
+                                </ul>
+                            </li>
+                        <?php 
+                            }
+                        
+                            if(Modulos::validarSubRol(['DT0053'])) {
+                        ?>
+                            <li class="dropdown dropdown-user">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="fa fa-calendar-o"></i>    
+                                <span class="username username-hide-on-mobile"> PERIODO ACTUAL: <b><?=$config['conf_periodo'];?></b> </span>
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-default">
+                                    <?php
+                                    $p = 1;
+                                    $pFinal = $config[19] + 1;
+                                    while($p <= $pFinal){
+                                        $label = 'Periodo '.$p;
+                                        if($p == $pFinal) {
+                                            $label = 'AÑO FINALIZADO';
+                                        }
+
+                                        if($p==$config['conf_periodo']) {
+                                    ?>
+                                        <li class="active"><a href="javascript:;" style="font-weight:bold;"><?=$label;?></a></li>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <li><a href="cambiar-periodo.php?periodo=<?=base64_encode($p);?>"><?=$label;?></a></li>
+                                    <?php
+                                    }
+                                        $p++;
+                                    }
+                                    ?>
+                                </ul>
+                            </li>
+                        <?php 
+                            }
+                        }
+                        ?>
 						
                     	<!-- start language menu -->
                         <li class="dropdown language-switch" data-step="3" data-intro="<b>Idiomas:</b> Aquí puedes cambiar el idioma de la plataforma." data-position='bottom' data-scrollTo='tooltip'>

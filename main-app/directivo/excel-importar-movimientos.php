@@ -69,12 +69,8 @@ if($extension == 'xlsx'){
 
 					}elseif($_POST["datoID"]==2){//Si es por código de tesorería
 
-						try{
-							$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-							WHERE mat_codigo_tesoreria='".$arrayIndividual['fcu_usuario']."' AND mat_eliminado=0");
-						} catch (Exception $e) {
-							include("../compartido/error-catch-to-report.php");
-						}
+
+						$consultaDatosUsuario=Estudiantes::obtenerListadoDeEstudiantes(" AND mat_codigo_tesoreria='".$arrayIndividual['fcu_usuario']."' AND mat_eliminado=0");
 						$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);
 						$idUsuario = $datosUsuario['mat_id_usuario'];
 

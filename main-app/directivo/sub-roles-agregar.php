@@ -76,12 +76,8 @@ $listaPaginas = SubRoles::listarPaginas();
                                     <select class="form-control select2" name="directivos[]" multiple>
                                         <option value="">Seleccione una opción</option>
                                         <?php 
-                                            try{
-                                                $consultaDirectivos=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
-                                            } catch (Exception $e) {
-                                                include("../compartido/error-catch-to-report.php");
-                                            }
-                                            while($directivos=mysqli_fetch_array($consultaDirectivos, MYSQLI_BOTH)){
+                                        $consultaDirectivos = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." AND uss_bloqueado=0");
+                                        while($directivos = mysqli_fetch_array($consultaDirectivos, MYSQLI_BOTH)){
                                         ?>
                                             <option value="<?=$directivos["uss_id"];?>"><?=UsuariosPadre::nombreCompletoDelUsuario($directivos);?></option>
                                         <?php

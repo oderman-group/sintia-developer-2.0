@@ -2,12 +2,10 @@
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 $datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idR);
 
-
-$usuarioEstudiante = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios
-WHERE uss_id='".$idR."'"), MYSQLI_BOTH);
-
+$usuarioEstudiante = UsuariosPadre::sesionUsuario($idR);
 
 $agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
 WHERE mat_id_usuario='".$idR."'"), MYSQLI_BOTH);

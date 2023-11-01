@@ -4,11 +4,13 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php"); 
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
 $jQueryTable = '';
 if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
 	$jQueryTable = 'id="example1"';
@@ -123,18 +125,12 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														try{
-															$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
-															WHERE uss_id='".$resultado["mat_acudiente"]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
+														$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
 
@@ -145,6 +141,11 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 															$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente); 
 															$idAcudiente = $acudiente['uss_id'];
 														}
+
+														$marcaMediaTecnica = '';
+														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
+														} 
 
 														$miArray = [
 															'id_estudiante'    => $resultado['mat_id'], 
@@ -198,7 +199,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<td style="color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
+														<td style="color:<?=$color;?>;"><?=$marcaMediaTecnica;?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>

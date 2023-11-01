@@ -126,8 +126,14 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														$periodoSP = $resultado['car_periodo'];
 														include("../suma-porcentajes.php");
 
+														$marcaMediaTecnica = '';
 														$filtroDocentesParaListarEstudiantes = " AND mat_grado='".$resultado['car_curso']."' AND mat_grupo='".$resultado['car_grupo']."'";
-														$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+														if($resultado['gra_tipo'] == GRADO_INDIVIDUAL) {
+															$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentesMT($resultado);
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
+														} else {
+															$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+														}
 
 														$infoTooltipCargas = "
 														<b>COD:</b> 
@@ -140,6 +146,10 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														{$opcionSINO[$resultado['car_permiso2']]}<br>
 														<b>Indicadores automáticos?:</b> 
 														{$opcionSINO[$resultado['car_indicador_automatico']]}<br>
+														<b>Max. Indicadores:</b> 
+														{$resultado['car_maximos_indicadores']}<br>
+														<b>Max. Calificaciones:</b> 
+														{$resultado['car_maximas_calificaciones']}<br>
 														<b>Nro. Estudiantes:</b> 
 														{$cantidadEstudiantes}
 														";
@@ -148,7 +158,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                           								<td><?=$contReg;?></td>
 														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Información adicional" data-content="<?=$infoTooltipCargas;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$resultado['car_id'];?></a></td>
 														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
-														<td><?="[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
+														<td><?=$marcaMediaTecnica ."[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
 														<td><?=$resultado['car_ih'];?></td>
 														<td><?=$resultado['car_periodo'];?></td>

@@ -77,9 +77,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
-
-            <a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+            <input type="submit" class="btn btn-primary" value="Generar informe">
         </form>
     </div>
 </div>

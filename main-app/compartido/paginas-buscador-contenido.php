@@ -55,8 +55,7 @@
                                         //buscador usuarios
                                         if ($numDatos<=0){
                                             $dato = 2;
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM usuarios 
-                                            WHERE uss_usuario LIKE '%".$_GET["query"]."%' 
+                                            $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario LIKE '%".$_GET["query"]."%' 
                                             OR uss_nombre LIKE '%".$_GET["query"]."%' 
                                             OR uss_email LIKE '%".$_GET["query"]."%'");
                                         }

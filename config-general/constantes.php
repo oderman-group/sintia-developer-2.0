@@ -6,6 +6,9 @@ define('EMAIL_SENDER', 'info@plataformasintia.com');
 define('NAME_SENDER', 'Plataforma Sintia');
 
 define('HEADER_EMAIL_BACKGROUND', '#6017dc');
+define('GRADO_INDIVIDUAL', 'individual');
+define('GRADO_GRUPAL', 'grupal');
+
 
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');

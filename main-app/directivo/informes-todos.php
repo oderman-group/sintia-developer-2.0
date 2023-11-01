@@ -51,7 +51,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal10" >10. Reporte general de estudiantes</a></p>
 											<p><a href="../compartido/reporte-informe-parcial.php" target="_blank">11. Reporte informe parcial</a></p>
 											<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal12" >12. Reporte de asistencia a entrega de informes</a></p>
-											<p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
+											<p><a href="../compartido/informes/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
 										</div>
                                 	</div>
 								</div>

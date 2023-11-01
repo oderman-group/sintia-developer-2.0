@@ -105,12 +105,8 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 						
                         <div class="col-sm-9">
 								
-								<?php if(!empty($_GET["idMsg"]) && base64_decode($_GET["idMsg"])==1){?>
-									<p class="text-success">La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b></p>
-											
-								<?php }?>
+							<?php include("../../config-general/mensajes-informativos.php"); ?>
 							
-
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
@@ -151,7 +147,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
 														<input type="checkbox" name="compartir" value="1" checked>
-														<span class="slider red round"></span>
+														<span class="slider sintia round"></span>
 													</label>
 												</div>
 											 </div>
@@ -210,7 +206,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="c1" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
@@ -223,7 +219,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="c2" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
@@ -236,7 +232,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="c3" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
@@ -249,7 +245,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="c4" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
@@ -258,27 +254,27 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 											
 											<div id="verdadero" style="display: none;">
 												<div class="form-group row">
-														<label class="col-sm-2 control-label">A</label>
+														<label class="col-sm-2 control-label">Verdadero</label>
 														<div class="col-sm-8">
 															<input type="text" name="rv1" value="Verdadero" class="form-control" autocomplete="off">
 														</div>
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="cv1" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
 
 													<div class="form-group row">
-														<label class="col-sm-2 control-label">B</label>
+														<label class="col-sm-2 control-label">Falso</label>
 														<div class="col-sm-8">
 															<input type="text" name="rv2" value="Falso" class="form-control" autocomplete="off">
 														</div>
 														<div class="col-sm-2">
 															<label class="switchToggle">
 																<input type="checkbox" name="cv2" value="1">
-																<span class="slider red round"></span>
+																<span class="slider green round"></span>
 															</label>
 														</div>
 													</div>
@@ -298,9 +294,14 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 								</div>
 							</div>
 									
-									<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										
+									<a href="#" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
-												<a href="#" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+									<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
+
+												
 										</form>
 							
                         </div>

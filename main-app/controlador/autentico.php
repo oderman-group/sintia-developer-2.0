@@ -22,6 +22,7 @@ if(isset($yearEnd) and is_numeric($yearEnd)){
 
 include("../modelo/conexion.php");
 require_once("../class/Plataforma.php");
+require_once("../class/UsuariosPadre.php");
 
 
 $rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
@@ -39,8 +40,7 @@ if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"])
 	exit();
 }
 
-$rst_usr = mysqli_query($conexion, "SELECT * FROM usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
+$rst_usr = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
 
 $num = mysqli_num_rows($rst_usr);
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);

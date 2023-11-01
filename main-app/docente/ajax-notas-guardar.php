@@ -1,8 +1,19 @@
 <?php 
 include("session.php");
 include("verificar-carga.php");
+require_once("../class/CargaAcademica.php");
 
 Modulos::validarAccesoDirectoPaginas();
+
+$infoCargaActual = CargaAcademica::cargasDatosEnSesion($cargaConsultaActual, $_SESSION["id"]);
+$_SESSION["infoCargaActual"] = $infoCargaActual;
+$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
+
+if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) { 
+    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
+    exit();
+}
+
 $idPaginaInterna = 'DC0092';
 include("../compartido/historial-acciones-guardar.php");
 
@@ -71,7 +82,8 @@ function notifica(){
 	$.toast({
 		heading: 'Cambios guardados',  
 		text: '<?=$mensajeNot;?>',
-		position: 'botom-left',
+		position: 'bottom-right',
+        showHideTransition: 'slide',
 		loaderBg:'#ff6849',
 		icon: 'success',
 		hideAfter: 3000, 

@@ -9,7 +9,8 @@ function notifica(){
 	$.toast({
 		heading: '<?=$datosMensaje['heading']?>',  
 		text: '<?=$datosMensaje['mensaje']?>',
-		position: 'botom-left',
+		position: 'bottom-right',
+        showHideTransition: 'slide',
 		loaderBg:'#ff6849',
 		icon: '<?=$datosMensaje['estado']?>',
 		hideAfter: 3000, 

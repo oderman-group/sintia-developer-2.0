@@ -46,14 +46,31 @@ class UsuariosPadre {
         return $arraysDatos;
     }
 
-    public static function sesionUsuario($idUsuario)
+    /**
+     * Obtiene los datos de un usuario a partir de su ID de usuario.
+     *
+     * Esta función consulta la base de datos para recuperar los datos de un usuario utilizando su ID de usuario.
+     *
+     * @param string $idUsuario - El ID de usuario para el cual se desean obtener los datos.
+     * @param string $filtroAdicional (Opcional) - Un filtro adicional que se puede aplicar a la consulta SQL.
+     *
+     * @return array - Un array que contiene los datos del usuario si se encuentra en la base de datos, o un array vacío si no se encuentra.
+     */
+    public static function sesionUsuario($idUsuario, $filtroAdicional='')
     {
         global $conexion;
 
-        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$idUsuario."'");
-        $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
+        try{
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$idUsuario."' {$filtroAdicional}");
+            $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            return [];
+        }
+    
         return $datosUsuarioAuto;
     }
+
     public static function sesionUsuarioAnio($usuario,$instYear)
     {
         global $conexion;
@@ -62,8 +79,8 @@ class UsuariosPadre {
         return $datosUsuarioAuto;
     }
 
-   public static function actualizarUsuariosAnios()
-   {
+    public static function actualizarUsuariosAnios()
+    {
         $get=$_GET["get"];
         $campoGet=null;
         $campoTabla=null;
@@ -138,8 +155,32 @@ class UsuariosPadre {
         $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".$BD.".usuarios 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
         WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
-         
+
         return $consulta;         
+    }
+
+    /**
+     * Obtiene todos los datos de usuarios de la base de datos, opcionalmente aplicando un filtro de búsqueda.
+     *
+     * Esta función realiza una consulta a la base de datos para recuperar todos los datos de los usuarios. 
+     * Puede aplicarse un filtro de búsqueda opcional para refinar la consulta.
+     *
+     * @param string $filtroBusqueda (Opcional) - Un filtro de búsqueda que se puede aplicar a la consulta SQL.
+     *
+     * @return mixed - Un objeto de resultado de la consulta si tiene éxito, o 0 si ocurre un error.
+     */
+    public static function obtenerTodosLosDatosDeUsuarios($filtroBusqueda='')
+    {
+        global $conexion;
+
+        try{
+            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id=uss_id {$filtroBusqueda}");
+            return $consultaUsuario;
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            return 0;
+        }
+
     }
 
 }   

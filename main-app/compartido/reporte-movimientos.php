@@ -31,10 +31,8 @@ require_once("../class/UsuariosPadre.php");
 									 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_anulado=0");
                    $cont=0;
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                    $consultaU=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[6]."'");
-										 $u = mysqli_fetch_array($consultaU, MYSQLI_BOTH);
-                     $consultaCerrado=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[11]."'");
-										 $cerrado = mysqli_fetch_array($consultaCerrado, MYSQLI_BOTH);
+										 $u = UsuariosPadre::sesionUsuario($resultado[6]);
+										 $cerrado = UsuariosPadre::sesionUsuario($resultado[11]);
 										 $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
 										 switch($resultado[4]){case 1: $tipo = "Ingreso"; break; case 2: $tipo = "Egreso"; break; case 3: $tipo = "Cuenta por cobrar"; break; case 4: $tipo = "Cuenta por pagar"; break;}
 										 switch($resultado[8]){case 1: $forma = "Efectivo"; break; case 2: $forma = "Cheque"; break; case 3: $forma = "T. D&eacute;bito"; break; case 4: $forma = "T. Cr&eacute;dito"; break; case 5: $forma = "N/A"; break; default: $forma = "N/A"; break;}

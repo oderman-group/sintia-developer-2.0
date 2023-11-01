@@ -14,19 +14,6 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-
-$disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion()){
-	$disabledPermiso = "disabled";
-}
-
-if($resultado['fcu_anulado'] == 1) {
-    $disabledPermiso = "disabled";
-    echo '<script>
-    var idBtn = "btnEditarMovimientos";
-    ejecutarOtrasFunciones(idBtn);
-    </script>';
-}
 ?>
 
 	<!--bootstrap -->
@@ -98,7 +85,7 @@ if($resultado['fcu_anulado'] == 1) {
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="number" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
+														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required>
 													</div>
 											</div>
 										
@@ -166,10 +153,14 @@ if($resultado['fcu_anulado'] == 1) {
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
-                                                $resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH);
 												?>
-                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
-                                                    <option value="<?=$resultadosDatos[0];?>" selected><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+                                                <select class="form-control  select2" name="usuario" required>
+                                                    <option value="">Seleccione una opción</option>
+													<?php
+													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
+													?>
+                                                    	<option value="<?=$resultadosDatos[0];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos[0]){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+													<?php }?>
                                                 </select>
                                             </div>
                                         </div>
@@ -217,9 +208,7 @@ if($resultado['fcu_anulado'] == 1) {
 										
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios" id="btnEditarMovimientos">&nbsp;
-                                        <?php }?>
+										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
 										
 										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

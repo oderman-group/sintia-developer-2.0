@@ -35,14 +35,6 @@
 	                                </div>
 	                                <div class="pull-left info">
 	                                    <p> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?></p>
-										<?php
-											if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){
-												if(Modulos::validarSubRol(['DT0030'])){
-										?>
-	                                    <a href="cambiar-bd.php" style="text-decoration:underline;">
-										<i class="fa fa-calendar"></i>
-										<span class="txtOnline"> Año: <?=$_SESSION["bd"];?></span></a>
-										<?php }}?>
 	                                </div>
 	                            </div>
 	                        </li>
@@ -261,7 +253,7 @@
 									<?php
 										}
 										
-										if(Modulos::validarSubRol(["DT0204"])){
+										if( array_key_exists(16, $arregloModulos) && Modulos::validarSubRol(["DT0204"])){
 									?>
 										<li <?php agregarClass(MENU,["DT0204","DT0205"]) ?>><a href="sub-roles.php" class="nav-link"> <span class="title">Sub Roles</span></a></li>
 									<?php
@@ -370,14 +362,6 @@
 	                            </a>
 	                        </li>
 							
-													
-							<!--
-							<li class="nav-item">
-	                            <a href="chat-grupal.php" class="nav-link nav-toggle"> <i class="fa fa-comments"></i>
-	                                <span class="title">Sala de chat</span> 
-	                            </a>
-	                        </li>
-							-->
 							
 							<?php 
 							if((!empty($_COOKIE["carga"]) && !empty($_COOKIE["periodo"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){
@@ -397,32 +381,43 @@
 									
 									<li <?php agregarClass(MENU,["DC0035", "DC0021", "DC0020", "DC0029", "DC0039", "DC0007"]) ?>><a href="calificaciones.php" class="nav-link "> <span class="title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
-									<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(11, $arregloModulos)){?>
+										<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 
-									<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(15, $arregloModulos)){?>
+										<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
 									<li <?php agregarClass(MENU,["DC0022"]) ?>><a href="importar-info.php" class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
 
-									<li <?php agregarClass(MENU,["DC0018"]) ?>><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(14, $arregloModulos)){?>
+										<li <?php agregarClass(MENU,["DC0018"]) ?>><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
-									<li <?php agregarClass(MENU,["DC0043"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(12, $arregloModulos)){?>
+										<li <?php agregarClass(MENU,["DC0043"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 
-									<li <?php agregarClass(MENU,["DC0037"]) ?>><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(13, $arregloModulos)){?>
+										<li <?php agregarClass(MENU,["DC0037"]) ?>><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 
 	                            </ul>
 	                        </li>
 							<?php }?>
 							
-							
-							<li class="nav-item">
-	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
-	                                <span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-	                            </a>
-	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-	                            </ul>
-	                        </li>
+							<?php if(array_key_exists(3, $arregloModulos)){?>
+								<li class="nav-item">
+									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
+										<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu">
+										<li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									</ul>
+								</li>
+							<?php }?>
 							
 							<?php if(isset($datosCargaActual) && $datosCargaActual['car_director_grupo']==1){?>
 							<li class="nav-item">
@@ -478,7 +473,7 @@
 							
 							<?php 
 							//MENÚ ACUDIENTES
-							if($datosUsuarioActual[3]==3){?>
+							if($datosUsuarioActual['uss_tipo'] == TIPO_ACUDIENTE){?>
 							
 							<li class="nav-item" data-step="10" data-intro="<b><?=$frases[71][$datosUsuarioActual[8]];?>:</b> Aquí verás tus acudidos y toda su información." data-position='left'>
 	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
@@ -502,7 +497,7 @@
 							
 							<?php 
 							//MENÚ ESTUDIANTES
-							if($datosUsuarioActual[3]==4){?>
+							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){?>
 
 	                        
 							
@@ -537,15 +532,25 @@
 
 									<?php }?>
 									
-									<li class="nav-item"><a href="ausencias.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(11, $arregloModulos)){?>
+										<li class="nav-item"><a href="ausencias.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
-									<li class="nav-item"><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(15, $arregloModulos)){?>
+										<li class="nav-item"><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
-									<li class="nav-item"><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(14, $arregloModulos)){?>
+										<li class="nav-item"><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
-									<li class="nav-item"><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(13, $arregloModulos)){?>
+										<li class="nav-item"><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
-									<li class="nav-item"><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php if(array_key_exists(12, $arregloModulos)){?>
+										<li class="nav-item"><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
 	                            </ul>
 	                        </li>

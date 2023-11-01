@@ -116,16 +116,18 @@
 												</label>
 											</div>
 										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></label>
-											<div class="input-group spinner col-sm-10">
-												<label class="switchToggle">
-													<input type="checkbox" name="clases" value="1">
-													<span class="slider red round"></span>
-												</label>
+
+										<?php if(array_key_exists(11, $arregloModulos)){?>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></label>
+												<div class="input-group spinner col-sm-10">
+													<label class="switchToggle">
+														<input type="checkbox" name="clases" value="1">
+														<span class="slider red round"></span>
+													</label>
+												</div>
 											</div>
-										</div>
+										<?php }?>
 										
 										<!--
 										<div class="form-group row">

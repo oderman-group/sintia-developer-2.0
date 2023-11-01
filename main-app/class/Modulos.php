@@ -71,7 +71,12 @@ class Modulos {
      * @return bool
     **/
     public static function validarSubRol($paginas){
-        global $conexion, $baseDatosServicios, $datosUsuarioActual, $config;
+        global $conexion, $baseDatosServicios, $datosUsuarioActual, $config, $arregloModulos;
+
+        //Si la institución no tiene este módulo (Subroles) asignado entonces devolvemos true siempre
+        if( empty($arregloModulos) || !array_key_exists(16, $arregloModulos) ) {
+            return true;
+        }
 
         if ($datosUsuarioActual['uss_tipo'] == TIPO_DEV) { 
             return true;

@@ -92,37 +92,36 @@
 						          </div>
 						        </div>
 					
+								<?php if(array_key_exists(11, $arregloModulos)){?>
+									<div class="col-xl-3 col-md-6 col-12" onClick="url('clases.php')" style="cursor: pointer;">
+									<div class="info-box bg-b-pink">
+										<span class="info-box-icon push-bottom"><i class="fa fa-file-movie-o"></i></span>
+										<div class="info-box-content">
+										<span class="info-box-text">Clases</span>
+											<span class="info-box-number">&nbsp;</span>
+											<div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+											<span class="progress-description">&nbsp;</span>
+										</div>
+									</div>
+									</div>
+								<?php }?>
 					
-								<div class="col-xl-3 col-md-6 col-12" onClick="url('clases.php')" style="cursor: pointer;">
-						          <div class="info-box bg-b-pink">
-						            <span class="info-box-icon push-bottom"><i class="fa fa-file-movie-o"></i></span>
-						            <div class="info-box-content">
-						              <span class="info-box-text">Clases</span>
-										<span class="info-box-number">&nbsp;</span>
-						              	<div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
-						              	<span class="progress-description">&nbsp;</span>
-						            </div>
-						          </div>
-						        </div>
-					</div>
-					
-					
-					<div class="row">
-						
-						        <div class="col-xl-3 col-md-6 col-12" onClick="url('evaluaciones.php')" style="cursor: pointer;">
-						          <div class="info-box bg-purple">
-						            <span class="info-box-icon push-bottom"><i class="fa fa-laptop"></i></span>
-						            <div class="info-box-content">
-						              <span class="info-box-text">Evaluaciones virtuales</span>
-										<span class="info-box-number">&nbsp;</span>
-						              	<div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
-						              	<span class="progress-description">&nbsp;</span>
-						            </div>
-						          </div>
-						        </div>
+								<?php if(array_key_exists(12, $arregloModulos)){?>
+									<div class="col-xl-3 col-md-6 col-12" onClick="url('evaluaciones.php')" style="cursor: pointer;">
+									<div class="info-box bg-purple">
+										<span class="info-box-icon push-bottom"><i class="fa fa-laptop"></i></span>
+										<div class="info-box-content">
+										<span class="info-box-text">Evaluaciones virtuales</span>
+											<span class="info-box-number">&nbsp;</span>
+											<div class="progress"><div class="progress-bar" style="width: 100%"></div></div>
+											<span class="progress-description">&nbsp;</span>
+										</div>
+									</div>
+									</div>
+								<?php }?>
 
 								
-						
+								<?php if(array_key_exists(14, $arregloModulos)){?>
 						        <div class="col-xl-3 col-md-6 col-12" onClick="url('actividades.php')" style="cursor: pointer;">
 						          <div class="info-box bg-orange">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-tasks"></i></span>
@@ -134,8 +133,10 @@
 						            </div>
 						          </div>
 						        </div>
+								<?php }?>
 						      
 					
+								<?php if(array_key_exists(13, $arregloModulos)){?>
 								<div class="col-xl-3 col-md-6 col-12" onClick="url('foros.php')" style="cursor: pointer;">
 						          <div class="info-box bg-success">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-comments-o"></i></span>
@@ -147,6 +148,7 @@
 						            </div>
 						          </div>
 						        </div>
+								<?php }?>
 					
 					
 								<div class="col-xl-3 col-md-6 col-12" onClick="url('calificaciones.php?tab=4')" style="cursor: pointer;">
@@ -160,10 +162,7 @@
 						            </div>
 						          </div>
 						        </div>
-					</div>
 					
-					
-					<div class="row">
 						
 						        <div class="col-xl-3 col-md-6 col-12" onClick="url('cargas-carpetas.php')" style="cursor: pointer;">
 						          <div class="info-box bg-danger">
@@ -191,7 +190,7 @@
 						          </div>
 						        </div>
 						      
-					
+								<?php if(array_key_exists(15, $arregloModulos)){?>
 								<div class="col-xl-3 col-md-6 col-12" onClick="url('cronograma-calendario.php')" style="cursor: pointer;">
 						          <div class="info-box bg-warning">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-calendar"></i></span>
@@ -203,6 +202,7 @@
 						            </div>
 						          </div>
 						        </div>
+								<?php }?>
 					
 					
 								<div class="col-xl-3 col-md-6 col-12" onClick="url('importar-info.php')" style="cursor: pointer;">

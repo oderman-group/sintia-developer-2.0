@@ -108,12 +108,7 @@ $Plataforma = new Plataforma;
                                                         $ussAutologin="NO";
                                                         if($resultado['hil_usuario_autologin']!=0){
 
-                                                            try{
-                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
-                                                            } catch (Exception $e) {
-                                                                include("../compartido/error-catch-to-report.php");
-                                                            }
-                                                            $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
+                                                            $datosUssAutologin = UsuariosPadre::sesionUsuario($resultado['hil_usuario_autologin']);
                                                             $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
 
                                                         }

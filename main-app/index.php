@@ -98,7 +98,7 @@ if(!isset($_GET['nodb'])) {
         </div>
         <div class="logo-container vertical-center">
             <lottie-player src="<?=$datosContactoSintia['dtc_animacion_login'];?>" background="transparent"
-                speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
+                speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>

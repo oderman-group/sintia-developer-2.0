@@ -1,6 +1,8 @@
-<?php include("../modelo/conexion.php");?>
-<?php include("config.php");?>
+<?php require_once("../modelo/conexion.php");?>
+<?php require_once("config.php");?>
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 $modulo = 1;
 if($_GET["periodo"]==""){
 	$periodoActual = 1;
@@ -14,7 +16,8 @@ if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
-$matriculadosPorCurso = mysqli_query($conexion,"SELECT * FROM academico_matriculas WHERE mat_grado='".$_REQUEST["curso"]."' AND mat_eliminado=0 AND mat_estado_matricula=1 ORDER BY mat_grupo, mat_primer_apellido");
+$matriculadosPorCurso = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_grado='".$_REQUEST["curso"]."' AND mat_eliminado=0 AND mat_estado_matricula=1 
+ORDER BY mat_grupo, mat_primer_apellido");
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $cont_periodos=0;

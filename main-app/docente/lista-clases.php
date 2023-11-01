@@ -62,7 +62,6 @@ require_once("../class/Estudiantes.php");
             </thead>
             <tbody>
                 <?php
-                    $cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
                     $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
                     LEFT JOIN academico_unidades ON uni_id=cls_unidad AND uni_eliminado!=1
                     WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
@@ -78,12 +77,18 @@ require_once("../class/Estudiantes.php");
                 <?php
                         }
                         $bg = '';
-                        $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-                        (SELECT count(*) FROM academico_ausencias 
-                        INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-                        WHERE aus_id_clase='".$resultado[0]."')");
+                        if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+                            INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_id_matricula=aus_id_estudiante
+                            INNER JOIN academico_matriculas ON (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=matcur_id_matricula
+                            WHERE aus_id_clase='".$resultado[0]."'");
+                        }else{
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
+                            INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
+                            WHERE aus_id_clase='".$resultado[0]."'");
+                        }
                         $numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-                        if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+                        if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';
                         
                         $cheked = '';
                         if($resultado['cls_disponible']==1){$cheked = 'checked';}
@@ -105,7 +110,7 @@ require_once("../class/Estudiantes.php");
                     </td>
                     <td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado['cls_tema'];?></a></td>
                     <td><?=$resultado['cls_fecha'];?></td>
-                    <td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantes;?></td>
+                    <td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantesParaDocentes;?></td>
                     <td>
                         <?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
                         
