@@ -85,17 +85,6 @@ if ($_POST["id"] == 27) {
 
 //CREAR OPCION GENERALS
 //EDITAR OPCION GENERALS
-if ($_POST["id"] == 47) {
-	try{
-		mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".opciones_generales SET ogen_nombre='" . $_POST["nombre"] . "', ogen_grupo='" . $_POST["grupo"] . "' WHERE ogen_id='" . $_POST["idogen"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php"</script>';
-	exit();
-}
 
 
 //GENERAR COBRO MASIVO 
@@ -341,19 +330,6 @@ if ($_POST["id"] == 59) {
 	exit();
 }
 //AGREGAR FALTAS
-if ($_POST["id"] == 60) {
-	try{
-		mysqli_query($conexion, "INSERT INTO disciplina_faltas(dfal_nombre, dfal_id_categoria, dfal_codigo)
-		VALUES('" . $_POST["nombre"] . "', '" . $_POST["categoria"] . "', '" . $_POST["codigo"] . "')");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$idRegistro=mysqli_insert_id($conexion);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-faltas.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
-	exit();
-}
 //AGREGAR categoria
 if ($_POST["id"] == 61) {
 	try{
