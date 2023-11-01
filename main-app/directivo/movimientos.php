@@ -141,7 +141,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<ul class="dropdown-menu" role="menu">
 																		<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
 																		<?php if($resultado['fcu_anulado']!=1){?>
-																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','guardar.php?get=<?=base64_encode(11)?>&idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
+																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
 																		<?php } ?>
 																	</ul>
 																</div>
