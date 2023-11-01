@@ -11,7 +11,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 if (!empty($_POST["id"])) {
 //GUARDAR MOVIMIENTO
 //GUARDAR REPORTE
-if ($_POST["id"] == 9) {
+if ($_POST["id"] == 9) {// esta en compartido
 	if (trim($_POST["fecha"]) == "" or trim($_POST["codigo"]) == "" or trim($_POST["falta"]) == "" or trim($_POST["tipo"]) == "") {
 		include("../compartido/guardar-historial-acciones.php");
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
@@ -42,7 +42,7 @@ if ($_POST["id"] == 9) {
 	exit();
 }
 //ACTUALIZAR CONFIGURACION REPORTES
-if ($_POST["id"] == 13) {
+if ($_POST["id"] == 13) {// esta en compartido
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["color_borde"]) == "" or trim($_POST["color_encabezado"]) == "" or trim($_POST["tborde"]) == "") {
 		include("../compartido/guardar-historial-acciones.php");
@@ -61,10 +61,8 @@ if ($_POST["id"] == 13) {
 	exit();
 }
 
-
-
 //MODIFICAR REPORTE
-if ($_POST["id"] == 27) {
+if ($_POST["id"] == 27) {// esta en compartido
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["fecha"]) == "" or trim($_POST["falta"]) == "" or trim($_POST["tipo"]) == "") {
 		include("../compartido/guardar-historial-acciones.php");
@@ -88,7 +86,7 @@ if ($_POST["id"] == 27) {
 
 
 //GENERAR COBRO MASIVO 
-if ($_POST["id"] == 50) {
+if ($_POST["id"] == 50) {// No se esta llamando de ningun lado
 	if (trim($_POST["grado"]) == "" or trim($_POST["fecha"]) == "" or trim($_POST["detalle"]) == "") {
 		include("../compartido/guardar-historial-acciones.php");
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.<br>
@@ -118,7 +116,7 @@ if ($_POST["id"] == 50) {
 	exit();
 }
 //CREAR COBROS MASIVOS
-if ($_POST["id"] == 52) {
+if ($_POST["id"] == 52) {// No se esta llamando de ningun lado
 	try{
 		mysqli_query($conexion, "INSERT INTO finanzas_cobros_masivos (mas_nombre, mas_valor)VALUES('" . $_POST["nombre"] . "','" . $_POST["costo"] . "')");
 	} catch (Exception $e) {
@@ -130,7 +128,7 @@ if ($_POST["id"] == 52) {
 	exit();
 }
 //EDITAR COBROS MASIVOS
-if ($_POST["id"] == 53) {
+if ($_POST["id"] == 53) {// No se esta llamando de ningun lado
 	try{
 		mysqli_query($conexion, "UPDATE finanzas_cobros_masivos SET mas_nombre='" . $_POST["nombre"] . "', mas_valor='" . $_POST["costo"] . "' WHERE mas_id='" . $_POST["idMas"] . "'");
 	} catch (Exception $e) {
