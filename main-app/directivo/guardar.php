@@ -317,18 +317,6 @@ if ($_POST["id"] == 58) {
 	exit();
 }
 //ACTUALIZAR FALTAS
-if ($_POST["id"] == 59) {
-	try{
-		mysqli_query($conexion, "UPDATE disciplina_faltas SET dfal_codigo='" . $_POST["codigo"] . "', dfal_nombre='" . $_POST["nombre"] . "', dfal_id_categoria='" . $_POST["categoria"] . "' 
-		WHERE dfal_id='" . $_POST["idR"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-faltas-editar.php?success=SC_DT_2&idR='.base64_encode($_POST["idR"]).'&id='.base64_encode($_POST["idR"]).'";</script>';
-	exit();
-}
 //AGREGAR FALTAS
 //AGREGAR categoria
 if ($_POST["id"] == 61) {
