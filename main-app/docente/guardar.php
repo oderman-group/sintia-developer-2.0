@@ -949,7 +949,7 @@ if(!empty($_POST["id"])){
 		}
 
 		include("../compartido/guardar-historial-acciones.php");
-		echo '<script type="text/javascript">window.location.href="preguntas-agregar.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'&idE='.base64_encode($idRegistro).'&idMsg='.base64_encode(1).'";</script>';
+		echo '<script type="text/javascript">window.location.href="preguntas-agregar.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'&idE='.base64_encode($idRegistro).'&success=SC_GN_1";</script>';
 		exit();
 	}
 

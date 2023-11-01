@@ -244,6 +244,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'El estudiante fue movido al año <b>'.base64_decode($_GET['yearPasar']).'</b> exitosamente.';
             break;
 
+            case 'SC_GN_1':
+                $tipo = 'success';
+                $mensaje = 'La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b>';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

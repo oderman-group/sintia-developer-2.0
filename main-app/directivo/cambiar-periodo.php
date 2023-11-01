@@ -1,7 +1,7 @@
 <?php 
 include("session.php");
 
-$idPaginaInterna = 'DT0030';
+$idPaginaInterna = 'DT0053';
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -10,8 +10,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 include("../compartido/historial-acciones-guardar.php");
 
-$_SESSION["yearAnterior"]=$_SESSION["bd"];
-$_SESSION["bd"] = base64_decode($_GET["agno"]);
+try {
+	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET 
+	conf_periodo='" . base64_decode($_GET["periodo"]) . "'
+	WHERE conf_id='".$config['conf_id']."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
