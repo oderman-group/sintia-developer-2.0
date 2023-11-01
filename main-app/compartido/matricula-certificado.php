@@ -34,7 +34,7 @@ $modulo = 1;
 
     <?php
      $nombreInforme = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
-     include("../compartido/head_informes.php") ?>	    include("../compartido/head-informes.php") ?>
+     include("../compartido/head_informes.php") ?>
 
     <div align="left" style="margin-bottom:20px;">
 
