@@ -32,7 +32,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estudiante</label>
                     <div class="col-sm-9">
-                        <select class="form-control  select2" name="id" required>
+                        <select id="selectEstudiantes1" class="form-control  select2" name="id" multiple required>
                             <option value=""></option>
                             <?php
                             $c = Estudiantes::listarEstudiantesEnGrados('', '');
@@ -43,6 +43,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                             }
                             ?>
                         </select>
+                        <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>
                     </div>
                 </div>
 
@@ -97,7 +98,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estudiante</label>
                     <div class="col-sm-9">
-                        <select class="form-control  select2" name="id" required>
+                        <select id="selectEstudiantes2" class="form-control  select2" name="id" multiple required>
                             <option value=""></option>
                             <?php
                             $c = Estudiantes::listarEstudiantesEnGrados('', '');
@@ -108,6 +109,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                             }
                             ?>
                         </select>
+                        <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>
                     </div>
                 </div>
 
@@ -157,3 +159,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
+
+<script>
+// Agregar el evento onchange al select
+var miSelect = document.getElementById('selectEstudiantes1');
+miSelect.onchange = function() {
+    limitarSeleccion(this);
+};
+
+// Agregar el evento onchange al select
+var miSelect = document.getElementById('selectEstudiantes2');
+miSelect.onchange = function() {
+    limitarSeleccion(this);
+};
+</script>

@@ -32,7 +32,7 @@ if (!Modulos::validarPermisoEdicion()) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" style="width: 100%" name="docente" required     <?= $disabledPermiso; ?>>
+                    <select id="selectDocentes" class="form-control  select2" style="width: 100%" name="docente" required  multiple   <?= $disabledPermiso; ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
@@ -42,6 +42,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             <option value="<?= $opcionesDatos[0]; ?>" <?= $disabled; ?>><?= $opcionesDatos['uss_usuario'] . " - " . UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos); ?></option>
                         <?php } ?>
                     </select>
+                    <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>
                 </div>
             </div>
 
@@ -245,3 +246,11 @@ if (!Modulos::validarPermisoEdicion()) {
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
+
+<script>
+// Agregar el evento onchange al select
+var miSelect = document.getElementById('selectDocentes');
+miSelect.onchange = function() {
+    limitarSeleccion(this);
+};
+</script>
