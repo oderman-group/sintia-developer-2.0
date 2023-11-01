@@ -90,7 +90,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  <ul class="dropdown-menu" role="menu">
 																	  <li><a href="configuracion-opciones-generales-info.php?a=2&idogen=<?=$resultado["ogen_id"];?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
 																	  <li>
-                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','guardar.php?idogen=<?=$resultado["ogen_id"];?>&get=50')">Eliminar</a>  
+                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','configuracion-opciones-generales-eliminar.php?idogen=<?=$resultado["ogen_id"];?>')">Eliminar</a>  
                                                                      </li>
 																  </ul>
 															</div>
