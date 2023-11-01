@@ -149,40 +149,8 @@ if ($_POST["id"] == 53) {// No se esta llamando de ningun lado
 //========================================== GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET  GET GET GET GET GET GET GET GET GET GET GET GET GET ======================
 
 if (!empty($_GET["get"])) {
-
-//ELIMINAR USUARIOS
-if ($_GET["get"] == 6) {
-	try{
-		mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_id='".$_GET["id"]."' AND uss_tipo!=5");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'";</script>';
-	exit();
-}
-
-
-
-
-//ANULAR MOVIMIENTO
-if (base64_decode($_GET["get"]) == 11) {
-	try{
-		mysqli_query($conexion, "UPDATE finanzas_cuentas SET fcu_anulado=1 WHERE fcu_id='" . base64_decode($_GET["idR"]) . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="movimientos.php?id=' . $_GET["id"] . '";</script>';
-	exit();
-}
-
-
-
 //ELIMINAR REPORTE
-if ($_GET["get"] == 12) {
+if ($_GET["get"] == 12) {//No se llama de ningun lado
 	try{
 		mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . $_GET["idR"] . "'");
 	} catch (Exception $e) {
@@ -193,10 +161,8 @@ if ($_GET["get"] == 12) {
 	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 	exit();
 }
-
-
 //BLOQUEAR O DESBLOQUEAR UN USUARIO
-if (base64_decode($_GET["get"]) == 17) {
+if (base64_decode($_GET["get"]) == 17) {//No se llama de ningun lado
 	if (base64_decode($_GET["lock"]) == 1) $estado = 0;
 	else $estado = 1;
 	try{
@@ -209,167 +175,6 @@ if (base64_decode($_GET["get"]) == 17) {
 	echo $estado;
 	exit();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//ELIMINAR OPCION GENERAL
-if ($_GET["get"] == 50) {
-	try{
-		mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='" . $_GET["idogen"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="configuracion-opciones-generales.php";</script>';
-	exit();
-}
-
-
-
-//ELIMINAR NOTA NIVELACION
-if ($_GET["get"] == 57) {
-	try{
-		mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_id='" . $_GET["idNiv"] . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="estudiantes-nivelaciones-registrar.php?curso='.$_GET["curso"].'&grupo='.$_GET["grupo"].'";</script>';
-	exit();
-}
-
-
-
-//ELIMINAR INDICADORES DE LOS DOCENTES
-if (base64_decode($_GET["get"]) == 68) {
-	include("verificar-carga.php");
-	//include("verificar-periodos-diferentes.php");
-
-	try{
-		$actividadesRelacionadasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-		WHERE act_id_tipo='" . base64_decode($_GET["idIndicador"]) . "' AND act_id_carga='" . base64_decode($_GET["carga"]) . "' AND act_periodo='" . base64_decode($_GET["periodo"]) . "' AND act_estado=1");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	while ($actividadesRelacionadasDatos = mysqli_fetch_array($actividadesRelacionadasConsulta, MYSQLI_BOTH)) {
-		try{
-			mysqli_query($conexion, "UPDATE academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='DIRECTIVO " . $_SESSION["id"] . ": Eliminar indicadores de carga: " . $cargaConsultaActual . ", del P: " . $periodoConsultaActual . "' WHERE act_id='" . $actividadesRelacionadasDatos['act_id'] . "'");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-	}
-
-	try{
-		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_id='" . base64_decode($_GET["idR"]) . "'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	try{
-		$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-		(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=0),
-		(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1),
-		(SELECT count(*) FROM academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1)");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
-	$porcentajePermitido = 100 - $sumaIndicadores[0];
-	$porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
-
-	//Si decide poner los valores porcentuales de los indicadores de forma manual
-	if ($datosCargaActual['car_valor_indicador'] == 1) {
-	}
-	//El sistema reparte los porcentajes automáticamente y equitativamente.
-	else {
-		$valorIgualIndicador = 0;
-		if(!empty($sumaIndicadores[2])){ $valorIgualIndicador = ($porcentajePermitido / ($sumaIndicadores[2])); }
-		//Actualiza todos valores de la misma carga y periodo.
-		try{
-			mysqli_query($conexion, "UPDATE academico_indicadores_carga SET ipc_valor='" . $valorIgualIndicador . "' 
-			WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-
-		//Si decide que los valores de las calificaciones son de forma automática.
-		if ($datosCargaActual['car_configuracion'] == 0) {
-			//Repetimos la consulta de los indicadores porque los valores fueron actualizados
-			try{
-				$indicadoresConsultaActualizado = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-				WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-
-			//Actualizamos todas las actividades por cada indicador
-			while ($indicadoresDatos = mysqli_fetch_array($indicadoresConsultaActualizado, MYSQLI_BOTH)) {
-				try{
-					$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-					WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1");
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
-				$actividadesNum = mysqli_num_rows($consultaNumActividades);
-				//Si hay actividades relacionadas al indicador, actualizamos su valor.
-				if ($actividadesNum > 0) {
-					$valorIgualActividad = ($indicadoresDatos['ipc_valor'] / $actividadesNum);
-					try{
-						mysqli_query($conexion, "UPDATE academico_actividades SET act_valor='" . $valorIgualActividad . "' 
-						WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1");
-					} catch (Exception $e) {
-						include("../compartido/error-catch-to-report.php");
-					}
-				}
-			}
-		}
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-indicadores.php?carga=' . $_GET["carga"] . '&docente=' . $_GET["docente"] . '";</script>';
-	exit();
-}
-//BLOQUEAR ESTUDIANTES
-if (base64_decode($_GET["get"]) == 69) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_tipo='".base64_decode($_GET["tipo"])."'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'";</script>';
-	exit();
-}
-//DESBLOQUEAR ESTUDIANTES
-if (base64_decode($_GET["get"]) == 70) {
-	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=0 WHERE uss_tipo='".base64_decode($_GET["tipo"])."'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="usuarios.php?tipo='.$_GET["tipo"].'";</script>';
-	exit();
-}
-
-
-
 }
 
 //EN CASO DE QUE NO ENTRE POR NINGUNA DE LAS ANTERIORES
