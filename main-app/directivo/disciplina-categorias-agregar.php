@@ -61,8 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="61" name="id">
+									<form name="formularioGuardar" action="disciplina-categorias-guardar.php" method="post">
 										<input type="hidden" value="<?=$datosEditar['dcat_id'];?>" name="idR">
 
 										<div class="form-group row">

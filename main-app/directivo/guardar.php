@@ -319,19 +319,6 @@ if ($_POST["id"] == 58) {
 //ACTUALIZAR FALTAS
 //AGREGAR FALTAS
 //AGREGAR categoria
-if ($_POST["id"] == 61) {
-	try{
-		mysqli_query($conexion, "INSERT INTO disciplina_categorias(dcat_nombre)
-		VALUES('" . $_POST["categoria"] . "')");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$idRegistro=mysqli_insert_id($conexion);
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
-	exit();
-}
 }
 //========================================== GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET  GET GET GET GET GET GET GET GET GET GET GET GET GET ======================
 
