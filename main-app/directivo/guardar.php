@@ -305,17 +305,6 @@ if ($_POST["id"] == 57) {
 	exit();
 }
 //ACTUALIZAR CATEGORÍAS FALTAS
-if ($_POST["id"] == 58) {
-	try{
-		mysqli_query($conexion, "UPDATE disciplina_categorias SET dcat_nombre='" . $_POST["categoria"] . "' WHERE dcat_id=" . $_POST["idR"] . ";");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="disciplina-categorias-editar.php?success=SC_DT_2&idR='.base64_encode($_POST["idR"]).'&id='.base64_encode($_POST["idR"]).'";</script>';
-	exit();
-}
 //ACTUALIZAR FALTAS
 //AGREGAR FALTAS
 //AGREGAR categoria
