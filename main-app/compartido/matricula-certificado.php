@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/Utilidades.php");
 
 $modulo = 1;
 
@@ -34,7 +35,7 @@ $modulo = 1;
 
     <?php
      $nombreInforme = "CERTIFICADO DE ESTUDIOS" . "<br>" . " No. 12114";
-     include("../compartido/head_informes.php") ?>
+     include("head-informes.php") ?>
 
     <div align="left" style="margin-bottom:20px;">
 
@@ -116,9 +117,8 @@ $modulo = 1;
     ?>
 
 
-         <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?>
         <p align="center" style="font-weight:bold;">
-            <?= strtoupper(Utilidades::getToString($matricula["mat_grupo"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
+            <?= strtoupper(Utilidades::getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
             MATRÍCULA <?= strtoupper(Utilidades::getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(Utilidades::getToString($matricula["mat_folio"])); ?>
         </p>
 
