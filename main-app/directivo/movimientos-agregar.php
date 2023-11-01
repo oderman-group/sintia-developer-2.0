@@ -60,8 +60,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="8" name="id">
+									<form name="formularioGuardar" action="movimientos-guardar.php" method="post">
 										
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Fecha</label>
