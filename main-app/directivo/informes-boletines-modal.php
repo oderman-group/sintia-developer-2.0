@@ -118,7 +118,7 @@ require_once("../class/Estudiantes.php");
                     <label class="col-sm-2 control-label">Estudiante</label>
                     <div class="col-sm-8">
 
-                        <select class="form-control  select2" name="estudiante" required>
+                        <select id="selectEstudiantes" class="form-control  select2" name="estudiante" multiple required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             try {
@@ -150,6 +150,7 @@ require_once("../class/Estudiantes.php");
                             <?php } ?>
 
                         </select>
+                        <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>
                     </div>
                 </div>
 
@@ -195,6 +196,14 @@ require_once("../class/Estudiantes.php");
         </div>
     </div>
 </div>
+
+<script>
+// Agregar el evento onchange al select
+var miSelect = document.getElementById('selectEstudiantes');
+miSelect.onchange = function() {
+    limitarSeleccion(this);
+};
+</script>
 
 
 
