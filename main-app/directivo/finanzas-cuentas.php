@@ -116,7 +116,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 															<td><?=$resultado[2];?></td>
 															<td>$<?=number_format($resultado[3],2,".",",");?></td>
 															<td><a href="javascript:void(0);" 
-															onClick="sweetConfirmacion('Alerta!','Desea anular este movimiento?','question','guardar.php?get=<?=base64_encode(11)?>&idR=<?=base64_encode($resultado[0]);?>&id=<?=$_GET["id"];?>')"
+															onClick="sweetConfirmacion('Alerta!','Desea anular este movimiento?','question','movimientos-anular.php?idR=<?=base64_encode($resultado[0]);?>&id=<?=$_GET["id"];?>')"
 															><img src="../files/iconos/1363803022_001_052.png"></a></td>
 															</tr>
 															<!-- END PRODUCT INFO -->
