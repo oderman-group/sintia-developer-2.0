@@ -286,7 +286,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 													<?php if (!empty($cNiv[0])) { ?>
 														<span style="font-size:10px; color:rgb(255,0,0);"><?= $msj; ?></span><br>
 														<a href="javascript:void(0);" 
-														onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','guardar.php?get=57&idNiv=<?= $cNiv[0]; ?>&curso=<?= $_REQUEST["curso"]; ?>&grupo=<?= $_REQUEST["grupo"]; ?>')"
+														onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','estudiantes-nivelaciones-eliminar.php?idNiv=<?= $cNiv[0]; ?>&curso=<?= $_REQUEST["curso"]; ?>&grupo=<?= $_REQUEST["grupo"]; ?>')"
 														><img src="../files/iconos/1363803022_001_052.png"></a>
 													<?php } ?>
 												</td>
