@@ -39,8 +39,7 @@
 											</div>
 											<div class="card-body">
 												<p><?=$frases[288][$datosUsuarioActual[8]];?></p>
-												<form class="form-horizontal" action="guardar.php" method="get">
-													<input type="hidden" name="get" value="1">
+												<form class="form-horizontal" action="reportes-disciplinarios-firmar.php" method="post">
 													<input type="hidden" name="id" value="<?=base64_decode($_GET["id"]);?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
