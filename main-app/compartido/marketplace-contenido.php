@@ -68,10 +68,10 @@
 			<div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosConsulta['prod_id']; ?>">
 				<div class="blogThumb border <?=$bordeDestacado;?>" style="height: 100%;  <?=$fondoSinStock;?>">
 					<div class="thumb-center" style="height: 55%;">
-						<a name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
+						<a href="javascript:void(0);" onclick="mostrarDetalles('../compartido/marketplace-detalles-productos.php?id=<?=base64_encode($datosConsulta['prod_id']);?>')"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
 					</div>
 					<div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
-						<h5><a style="color:cadetblue;" name="modalMarketplaceDetalles<?= $datosConsulta['prod_id']; ?>" onClick="mostrarDetalles(this)"><?= strtoupper($datosConsulta['prod_nombre']); ?></a> <?php if($datosConsulta['prod_destacado'] >= 1) {?>
+						<h5><a style="color:cadetblue;" href="javascript:void(0);" onclick="mostrarDetalles('../compartido/marketplace-detalles-productos.php?id=<?=base64_encode($datosConsulta['prod_id']);?>')"><?= strtoupper($datosConsulta['prod_nombre']); ?></a> <?php if($datosConsulta['prod_destacado'] >= 1) {?>
 							<span class="badge badge-info">Destacado</span>
 							<?php }?></h5>
 						<div class="text-muted" style="overflow: hidden;">
@@ -105,15 +105,57 @@
 				</div>
 			</div>
 		<?php
-			include('modal-marketplace-detalles.php');
 			}
 		?>
 		</div>
 	</div>
 </div>
 <!-- End course list -->
+<?php
+	include('modal-marketplace-detalles.php');
+?>
 <script>
-	function mostrarDetalles(datos){
-		$("#"+datos.name).modal("show");
+	function mostrarDetalles(url, method='POST', paramsJSON=null) {
+
+		document.getElementById("overlay").style.display = "flex";
+
+		const formData = new FormData();
+
+		for (const clave in paramsJSON) {
+			if (paramsJSON.hasOwnProperty(clave)) {
+				const valor = paramsJSON[clave];
+				formData.append(clave, valor);
+			}
+		}
+
+		fetch(url, {
+			method: method,
+			body: formData
+		})
+		.then(response => response.text()) // Convertir la respuesta a texto
+		.then(data => {
+
+			document.getElementById("overlay").style.display = "none";
+			document.getElementById("detallesProducto").innerHTML = data;
+
+			$('#modalMarketplaceDetalles').on('shown.bs.modal', function () {
+				// Encontrar y ejecutar scripts dentro del contenido
+				$('#detallesProducto').find('script').each(function() {
+					var scriptText = $(this).text();
+					var scriptNode = document.createElement('script');
+					scriptNode.text = scriptText;
+					document.body.appendChild(scriptNode);
+					// Remover el script después de ejecutarlo para evitar que se ejecute dos veces
+					$(this).remove();
+				});
+			}).modal("show");
+
+		})
+		.catch(error => {
+			// Manejar errores
+			console.error('Error:', error);
+
+			document.getElementById("overlay").style.display = "none";
+		});
 	}
 </script>
