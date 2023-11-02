@@ -1,5 +1,7 @@
-<?php $idPaginaInterna = 'DT0196'; ?>
 <?php 
+include("session.php");
+$idPaginaInterna = 'DT0196';
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -38,6 +40,5 @@ if (!Modulos::validarPermisoEdicion()) {
                     </form>
                 </div>
             </div>
-</body>
 
-</html>
+<?php include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>

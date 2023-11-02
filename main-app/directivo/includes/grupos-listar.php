@@ -13,14 +13,10 @@
             <div class="col-sm-12">
                 <div class="btn-group">
                     <?php if (Modulos::validarPermisoEdicion()) { ?>
-                        <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevoGrupoModal" class="btn deepPink-bgcolor">
+                        <a href="javascript:void(0);" onclick="fetchGeneral('../directivo/grupos-agregar-modal.php','Agregar Grupos')" class="btn deepPink-bgcolor">
                             Agregar nuevo <i class="fa fa-plus"></i>
                         </a>
-                    <?php
-                        $idModal = "nuevoGrupoModal";
-                        $contenido = "../directivo/grupos-agregar-modal.php";
-                        include("../compartido/contenido-modal.php");
-                    } ?>
+                    <?php } ?>
 
                 </div>
 
