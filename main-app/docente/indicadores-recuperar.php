@@ -20,77 +20,6 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-<script type="application/javascript">
-//CALIFICACIONES	
-function notas(enviada){
-  var carga = <?=$cargaConsultaActual;?>;	
-  var periodo = <?=$periodoConsultaActual;?>;
-  var codNota = <?=$idR;?>;
-  var valorDecimalIndicador = <?=($calificacion['ipc_valor']/100);?>;
-  
-  var nota = enviada.value;
-  var notaAnterior = enviada.name;	
-  var codEst = enviada.id;
-  var nombreEst = enviada.alt;
-  var operacion = enviada.title;
-	
-  var casilla = document.getElementById(codEst);
- 
-var notaAnteriorTransformada = (notaAnterior/valorDecimalIndicador);
-notaAnteriorTransformada = Math.round(notaAnteriorTransformada * 10) / 10;
-
-if(isNaN(nota)){
-	Swal.fire('Esto no es un valor numérico: '+nota+'. Si estás usando comas, reemplacelas por un punto.'); 
-	casilla.value="";
-	casilla.focus();
-	return false;	
-}	
-	
-if (alertValidarNota(nota)) {
-	casilla.value="";
-	casilla.focus();
-	return false;
-	}
-
-/*
-if(nota<notaAnteriorTransformada){
-   alert(`No es permitido colocar una nota de recuperación menor: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
-	casilla.value="";
-	casilla.focus();
-	return false;
-}*/
-	
-if(nota==notaAnteriorTransformada){
-	Swal.fire(`No es permitido colocar una nota de recuperación igual: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
-	casilla.value="";
-	casilla.focus();
-	return false;
-}	
-	
-	
-casilla.disabled="disabled";
-casilla.style.fontWeight="bold";
-		  
-$('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
-	datos = "nota="+(nota)+
-			"&codNota="+(codNota)+
-			"&notaAnterior="+(notaAnterior)+
-			"&carga="+(carga)+
-			"&periodo="+(periodo)+
-			"&operacion="+(operacion)+
-			"&nombreEst="+(nombreEst)+
-			"&valorDecimalIndicador="+(valorDecimalIndicador)+
-			"&codEst="+(codEst);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-calificaciones-registrar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respRC').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -274,7 +203,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															}
 															else{	
 															?>
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notaRecuperacion;?>" name="<?=$notas['rind_nota_actual'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="9" onChange="notas(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notaRecuperacion;?>" name="<?=$notas['rind_nota_actual'];?>" step="<?=$cargaConsultaActual;?>-<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$idR;?>" title="<?=($calificacion['ipc_valor']/100);?>" onChange="recuperarIndicador(this)" tabindex="<?=$contReg;?>">
 															<?php }?>
 															
 															
