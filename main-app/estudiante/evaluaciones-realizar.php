@@ -231,9 +231,8 @@
                             </div>
 						
 							<div class="col-md-6">
-									<form name="evaluacionEstudiante" action="guardar.php" method="post" enctype="multipart/form-data">
+									<form name="evaluacionEstudiante" action="evaluaciones-guardar-respuesta.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" id="envioauto" name="envioauto" value="0">
-										<input type="hidden" name="id" value="9">
 										<input type="hidden" name="idE" value="<?=$idE;?>">
 										<input type="hidden" name="cantPreguntas" value="<?=$cantPreguntas;?>">
 										
