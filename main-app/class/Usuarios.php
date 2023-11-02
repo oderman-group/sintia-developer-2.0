@@ -114,4 +114,19 @@ class Usuarios {
         }
     }
 
+    /**
+     * Este metodo se usa para bloquear o desbloquear usuarios por tipo
+     * @param mysqli    $conexion
+     * @param int       $tipoUsuarios
+     * @param bool      $bloquearDesbloquear
+     **/
+    public static function bloquearDesbloquearUsuarios($conexion,$tipoUsuarios,$bloquearDesbloquear)
+    {
+        try{
+            mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado={$bloquearDesbloquear} WHERE uss_tipo={$tipoUsuarios}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
 }
