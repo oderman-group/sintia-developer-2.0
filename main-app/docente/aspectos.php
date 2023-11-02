@@ -22,40 +22,6 @@ include("../compartido/head.php");
 
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-
-<script type="application/javascript">
-//CALIFICACIONES	
-function notas(enviada){
-  var carga = <?=$cargaConsultaActual;?>;
-  var periodo = <?=$periodoConsultaActual;?>; 
-  var nota = enviada.value;
-  var codEst = enviada.id;
-  var nombreEst = enviada.alt;
-  var operacion = enviada.title;
- 
-if(operacion == 1 || operacion == 3 || operacion == 5){
-    if (alertValidarNota(nota)) {
-		return false;
-	}
-}
-	  
-$('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
-	datos = "nota="+(nota)+
-			"&operacion="+(operacion)+
-			"&nombreEst="+(nombreEst)+
-			"&carga="+(carga)+
-			"&periodo="+(periodo)+
-			"&codEst="+(codEst);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-calificaciones-registrar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respRC').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -99,7 +65,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                         <div class="card-body">
 											
 											
-										<span style="color: blue; font-size: 15px;" id="respRC"></span>
+										<span style="color: blue; font-size: 15px;" id="respRCT"></span>
 											
 											
                                         <div class="table-responsive">
@@ -136,11 +102,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 														</td>
 														<td width="20%">
 															
-															<textarea rows="7" cols="50" name="A<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="10" onChange="notas(this)"><?=!empty($notas['dn_aspecto_academico'])?$notas['dn_aspecto_academico']:"";?></textarea>
+															<textarea rows="7" cols="50" id="<?=$resultado['mat_id'];?>" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" onChange="aspectosAcademicos(this)"><?=!empty($notas['dn_aspecto_academico'])?$notas['dn_aspecto_academico']:"";?></textarea>
 														</td>
 														<td width="20%">
 															
-															<textarea rows="7" cols="50" name="C<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="11" onChange="notas(this)"><?=!empty($notas['dn_aspecto_convivencial'])?$notas['dn_aspecto_convivencial']:"";?></textarea>
+															<textarea rows="7" cols="50" id="<?=$resultado['mat_id'];?>" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" onChange="aspectosConvivencial(this)"><?=!empty($notas['dn_aspecto_convivencial'])?$notas['dn_aspecto_convivencial']:"";?></textarea>
 														</td>
                                                     </tr>
 													<?php 
