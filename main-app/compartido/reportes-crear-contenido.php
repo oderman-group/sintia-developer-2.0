@@ -44,8 +44,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
                                                 <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple <?=$disabledPermiso;?>>
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+												INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+												WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
 												");
 												while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												?>	

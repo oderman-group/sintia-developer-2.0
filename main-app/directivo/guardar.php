@@ -393,8 +393,8 @@ if ($_POST["id"] == 58) {
 //ACTUALIZAR FALTAS
 if ($_POST["id"] == 59) {
 	try{
-		mysqli_query($conexion, "UPDATE disciplina_faltas SET dfal_codigo='" . $_POST["codigo"] . "', dfal_nombre='" . $_POST["nombre"] . "', dfal_id_categoria='" . $_POST["categoria"] . "' 
-		WHERE dfal_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disciplina_faltas SET dfal_codigo='" . $_POST["codigo"] . "', dfal_nombre='" . $_POST["nombre"] . "', dfal_id_categoria='" . $_POST["categoria"] . "' 
+		WHERE dfal_id_nuevo='" . $_POST["idRNuevo"] . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -406,8 +406,8 @@ if ($_POST["id"] == 59) {
 //AGREGAR FALTAS
 if ($_POST["id"] == 60) {
 	try{
-		mysqli_query($conexion, "INSERT INTO disciplina_faltas(dfal_nombre, dfal_id_categoria, dfal_codigo)
-		VALUES('" . $_POST["nombre"] . "', '" . $_POST["categoria"] . "', '" . $_POST["codigo"] . "')");
+		mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disciplina_faltas(dfal_nombre, dfal_id_categoria, dfal_codigo, dfal_institucion, dfal_year)
+		VALUES('" . $_POST["nombre"] . "', '" . $_POST["categoria"] . "', '" . $_POST["codigo"] . "', '".$config['conf_id_institucion']."', '".$_SESSION["bd"]."')");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

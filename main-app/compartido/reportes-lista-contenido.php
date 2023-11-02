@@ -92,8 +92,8 @@
 													include("../directivo/includes/consulta-paginacion-reportes-lista.php");
 													
 													$consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-													INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-													INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+													INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
+													INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
 													INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
 													LEFT JOIN academico_grados ON gra_id=mat_grado
 													LEFT JOIN academico_grupos ON gru_id=mat_grupo
