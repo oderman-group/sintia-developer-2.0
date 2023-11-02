@@ -4,17 +4,30 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 //config
-$tablaDestino = 'general_resultados';
+$tablaDestino = 'matriculas_aspectos';
 $camposDestino = '
-resg_id_pregunta,
-resg_id_respuesta,
-resg_id_estudiante,
-resg_id_asignacion,
-resg_institucion,
-resg_year
+mata_id,
+mata_estudiante,
+mata_aspecto_academico,
+mata_aspecto_disciplinario,
+mata_usuario,
+mata_fecha,
+mata_fecha_evento,
+mata_aspectos_positivos,
+mata_aspectos_mejorar,
+mata_tratamiento,
+mata_descripcion,
+mata_periodo,
+mata_aprobacion_acudiente,
+mata_aprobacion_acudiente_fecha,
+institucion,
+year
 ';
 
-$tablaOrigen = 'general_resultados';
+mysqli_query($conexion, "TRUNCATE TABLE {$baseDatosServicios}.{$tablaDestino}");
+
+
+$tablaOrigen = 'matriculas_aspectos';
 
 //consulta a instituciones activas
 $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM instituciones
@@ -28,12 +41,23 @@ while($datosInstitucion = mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH
 	
 	while($yearStart <= $yearEnd){
 		$camposOrigen = '
-		resg_id_pregunta,
-resg_id_respuesta,
-resg_id_estudiante,
-resg_id_asignacion,
+		mata_id,
+mata_estudiante,
+mata_aspecto_academico,
+mata_aspecto_disciplinario,
+mata_usuario,
+mata_fecha,
+mata_fecha_evento,
+mata_aspectos_positivos,
+mata_aspectos_mejorar,
+mata_tratamiento,
+mata_descripcion,
+mata_periodo,
+mata_aprobacion_acudiente,
+mata_aprobacion_acudiente_fecha,
 		'.$datosInstitucion['ins_id'].',
-		'.$yearStart;
+		'.$yearStart
+		;
 
 		$getDataQuery = mysqli_query($conexion, "INSERT INTO $baseDatosServicios.".$tablaDestino."(".$camposDestino.") SELECT ".$camposOrigen." FROM ".$datosInstitucion['ins_bd']."_".$yearStart.".".$tablaOrigen);
 		$totalRegistros = mysqli_affected_rows($conexion);
