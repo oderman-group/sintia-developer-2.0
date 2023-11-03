@@ -70,8 +70,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="59" name="id">
+									<form name="formularioGuardar" action="disciplina-faltas-actualizar.php" method="post">
 										<input type="hidden" value="<?=$datosEditar['dfal_id'];?>" name="idR">
                                         <input type="hidden" value="<?=$datosEditar['dfal_id_nuevo'];?>" name="idRNuevo">
 

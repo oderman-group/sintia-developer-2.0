@@ -1,17 +1,11 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0068';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
+<?php
+include("session.php");
+$idPaginaInterna = 'DV0071';
+include("../compartido/historial-acciones-guardar.php");
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}
-
-$disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion()){
-	$disabledPermiso = "disabled";
-}?>
+Modulos::verificarPermisoDev();
+include("../compartido/head.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -41,12 +35,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Agregar Faltas</div>
+                                <div class="page-title">Editar Opciones</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Agregar Faltas</li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="configuracion-opciones-generales.php" onClick="deseaRegresar(this)">Opciones Generales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Editar Opciones</li>
                             </ol>
                         </div>
                     </div>
@@ -54,59 +48,50 @@ if(!Modulos::validarPermisoEdicion()){
 						
                         <div class="col-sm-12">
 
-
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
-                                   
-									<form name="formularioGuardar" action="disciplina-faltas-guardar.php" method="post">
-
-
+                                    <?php
+                                        try{
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
+                                        } catch (Exception $e) {
+                                            include("../compartido/error-catch-to-report.php");
+                                        }
+                                        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);	
+                                    ?>
+                                    <form action="configuracion-opciones-generales-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                    <input type="hidden" name="idogen" value="<?=$_GET["idogen"]?>">
+										
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Código</label>
-											<div class="col-sm-2">
-												<input type="text" name="codigo" class="form-control" value="FL<?=$numeroEnteroUnico;?>" <?=$disabledPermiso;?>>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Nombre</label>
-											<div class="col-sm-10">
-												<input type="text" name="nombre" class="form-control" <?=$disabledPermiso;?> autofocus>
-											</div>
-										</div>
-
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Categoría</label>
+                                            <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-												<?php
-                                                try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM {$baseDatosServicios}.disciplina_categorias WHERE dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
-												?>
-                                                <select class="form-control  select2" name="categoria" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['dcat_id']." - ".strtoupper($opcionesDatos['dcat_nombre']);?></option>
-													<?php }?>
-                                                </select>
+                                                <input type="text" class="form-control" name="nombre" value="<?=$resultado["ogen_nombre"]?>" />
                                             </div>
                                         </div>
 										
-										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Grupo</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control  select2" name="grupo" required>
+                                                    <option value="">Seleccione una opcion</option>
+                                                    <?php
+                                                        foreach ($opcionesGenerales as $key => $value) {
+                                                            if($key!=0){
+                                                                $selected="";
+                                                                if($resultado["ogen_grupo"]==$key){ $selected="selected";}
+                                                    ?>
+                                                        <option value="<?=$key?>" <?=$selected?>><?=$value?></option>
+                                                    <?php
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                        <?php }?>
-										
-										<a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                     </form>
                                 </div>
                             </div>

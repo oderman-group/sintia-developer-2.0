@@ -82,7 +82,7 @@
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
-																<a href="guardar.php?get=<?=base64_encode(1);?>&id=<?=base64_encode($resultado['dr_id']);?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
+																<a href="reportes-disciplinarios-firmar.php?id=<?=base64_encode($resultado['dr_id']);?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
 															<?php }else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_estudiante_fecha'];?>"></i>
 															<?php }?>
