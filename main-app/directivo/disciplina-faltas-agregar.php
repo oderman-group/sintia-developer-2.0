@@ -60,8 +60,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="60" name="id">
+									<form name="formularioGuardar" action="disciplina-faltas-guardar.php" method="post">
 
 
                                         <div class="form-group row">

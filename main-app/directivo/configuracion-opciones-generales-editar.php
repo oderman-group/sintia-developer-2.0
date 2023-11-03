@@ -1,24 +1,10 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0067';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DV0071';
+include("../compartido/historial-acciones-guardar.php");
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}
-try{
-    $consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".base64_decode($_GET["idR"])."'");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$datosEditar = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
-
-$disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion()){
-	$disabledPermiso = "disabled";
-}
+Modulos::verificarPermisoDev();
+include("../compartido/head.php");
 ?>
 
 	<!--bootstrap -->
@@ -49,77 +35,63 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> Faltas</div>
+                                <div class="page-title">Editar Opciones</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> Faltas</li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="configuracion-opciones-generales.php" onClick="deseaRegresar(this)">Opciones Generales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Editar Opciones</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
 						
                         <div class="col-sm-12">
-                                <?php include("../../config-general/mensajes-informativos.php"); ?>
-
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
-                                   
-									<form name="formularioGuardar" action="disciplina-faltas-actualizar.php" method="post">
-										<input type="hidden" value="<?=$datosEditar['dfal_id'];?>" name="idR">
-
-
+                                    <?php
+                                        try{
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
+                                        } catch (Exception $e) {
+                                            include("../compartido/error-catch-to-report.php");
+                                        }
+                                        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);	
+                                    ?>
+                                    <form action="configuracion-opciones-generales-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                    <input type="hidden" name="idogen" value="<?=$_GET["idogen"]?>">
+										
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Código</label>
-											<div class="col-sm-2">
-												<input type="text" name="codigo" class="form-control" value="<?=$datosEditar['dfal_codigo'];?>" <?=$disabledPermiso;?>>
-											</div>
-										</div>
-
-										<div class="form-group row">
-											<label class="col-sm-2 control-label">Nombre</label>
-											<div class="col-sm-10">
-												<input type="text" name="nombre" class="form-control" value="<?=$datosEditar['dfal_nombre'];?>" <?=$disabledPermiso;?>>
-											</div>
-										</div>
-
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Categoría</label>
+                                            <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-												<?php
-                                                try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
-												?>
-                                                <select class="form-control  select2" name="categoria" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														$select = '';
-														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['dfal_id_categoria']) $select = 'selected';
-													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['dcat_id']." - ".strtoupper($opcionesDatos['dcat_nombre']);?></option>
-													<?php }?>
-                                                </select>
+                                                <input type="text" class="form-control" name="nombre" value="<?=$resultado["ogen_nombre"]?>" />
                                             </div>
                                         </div>
 										
-										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Grupo</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control  select2" name="grupo" required>
+                                                    <option value="">Seleccione una opcion</option>
+                                                    <?php
+                                                        foreach ($opcionesGenerales as $key => $value) {
+                                                            if($key!=0){
+                                                                $selected="";
+                                                                if($resultado["ogen_grupo"]==$key){ $selected="selected";}
+                                                    ?>
+                                                        <option value="<?=$key?>" <?=$selected?>><?=$value?></option>
+                                                    <?php
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                        <?php }?>
-										
-										<a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
                                     </form>
                                 </div>
                             </div>

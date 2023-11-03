@@ -87,8 +87,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
-										<input type="hidden" value="56" name="id">
+									<form name="formularioGuardar" action="cargas-indicadores-actualizar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
 										<input type="hidden" value="<?=$indicador['ipc_id'];?>" name="idR">
 										<input type="hidden" value="<?=$indicador['ipc_indicador'];?>" name="idInd">
 										<input type="hidden" value="<?=$indicador['ipc_valor'];?>" name="valorIndicador">
