@@ -100,7 +100,9 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 												</div>
 											</div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 												<a href="#" name="evaluaciones-preguntas.php?idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>

@@ -177,11 +177,11 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                             </div>
                                         </div>
 
-                                        
-                                        <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-                                        
                                         <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 
+                                        <button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -223,7 +223,9 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         </div>
 
                                         
-                                        <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         
                                         <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
 
