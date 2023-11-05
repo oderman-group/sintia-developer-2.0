@@ -3,10 +3,10 @@
                             <div class="row">
 								<?php
 								$resumen = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=1),
-								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=2),
-								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=3),
-								(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=4)
+								(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+								(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=2 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+								(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=3 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+								(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND fcu_tipo=4 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 								"), MYSQLI_BOTH);
 								$saldo = ($resumen[0] - $resumen[2]);
 								$mensajeSaldo=$frases[309][$datosUsuarioActual['uss_idioma']];
@@ -68,9 +68,8 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $tiposArray = array("","ABONO","PAGO REALIZADO A TI","COBRO","POR PAGARTE");
-													 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas 
-													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas 
+													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $colorValor = 'black';
@@ -80,7 +79,7 @@
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_fecha'];?></td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td><?=$tiposArray[$resultado['fcu_tipo']];?></td>
+														<td><?=$tipoEstadoFinanzas[$resultado['fcu_tipo']];?></td>
 														<td style="color:<?=$colorValor;?>;">$<?=number_format($resultado['fcu_valor'],0,",",".");?></td>
                                                     </tr>
 													<?php 
