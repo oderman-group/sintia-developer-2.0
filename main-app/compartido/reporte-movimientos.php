@@ -27,27 +27,25 @@ require_once("../class/UsuariosPadre.php");
                                         <th>Observaciones</th>
                                         <th>Cerrado</th>
   </tr>
-  <?php
-									 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                   $cont=0;
-									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-										 $u = UsuariosPadre::sesionUsuario($resultado[6]);
-										 $cerrado = UsuariosPadre::sesionUsuario($resultado[11]);
-										 $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
-										 switch($resultado[4]){case 1: $tipo = "Ingreso"; break; case 2: $tipo = "Egreso"; break; case 3: $tipo = "Cuenta por cobrar"; break; case 4: $tipo = "Cuenta por pagar"; break;}
-										 switch($resultado[8]){case 1: $forma = "Efectivo"; break; case 2: $forma = "Cheque"; break; case 3: $forma = "T. D&eacute;bito"; break; case 4: $forma = "T. Cr&eacute;dito"; break; case 5: $forma = "N/A"; break; default: $forma = "N/A"; break;}
-									 ?>
+                  <?php
+									$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                  $cont=0;
+									while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                    $u = UsuariosPadre::sesionUsuario($resultado['fcu_usuario']);
+                    $cerrado = UsuariosPadre::sesionUsuario($resultado['fcu_cerrado_usuario']);
+                    $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
+									?>
   <tr style="font-size:13px;">
       <td><?=$resultado[0];?></td>
                                         <td><?=$nombreCompleto;?></td>
                                         <td><?=$resultado[1];?></td>
                                         <td><?=$resultado[2];?></td>
-                                        <td>$<?=number_format($resultado[3],2,",",".");?></td>
-                                        <td><?=$tipo;?></td>
-                                        <td><?=$forma;?></td>
+                                        <td>$<?=number_format($resultado['fcu_valor'],2,",",".");?></td>
+                                        <td><?=$tipoEstadoFinanzas[$resultado['fcu_tipo']];?></td>
+                                        <td><?=$formasPagoFinanzas[$resultado['fcu_forma_pago']];?></td>
                                         
-                                        <td><?=$resultado[5];?></td>
-                                        <td><?=$resultado[10];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado[4]);?></td>
+                                        <td><?=$resultado['fcu_observaciones'];?></td>
+                                        <td><?=$resultado['fcu_cerrado'];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado[4]);?></td>
 </tr>
   <?php
   $cont++;
