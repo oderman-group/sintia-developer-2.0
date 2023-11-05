@@ -34,13 +34,15 @@
 										</div>
 									</div>
 
-									<div align="center">
-										<p><mark><?=$frases[316][$datosUsuarioActual['uss_idioma']];?>: <b><?php if(!empty($datosEstudianteActual['mat_codigo_tesoreria'])){ echo $datosEstudianteActual['mat_codigo_tesoreria'];}?></b></mark></p>
+									<?php if($config['conf_id_institucion'] == ICOLVEN) {?>
+										<div align="center">
+											<p><mark><?=$frases[316][$datosUsuarioActual['uss_idioma']];?>: <b><?php if(!empty($datosEstudianteActual['mat_codigo_tesoreria'])){ echo $datosEstudianteActual['mat_codigo_tesoreria'];}?></b></mark></p>
 
-										<p><a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn btn-info" target="_blank"><?=strtoupper($frases[317][$datosUsuarioActual['uss_idioma']]);?></a></p>
+											<p><a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" class="btn btn-info" target="_blank"><?=strtoupper($frases[317][$datosUsuarioActual['uss_idioma']]);?></a></p>
 
-										<p><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$datosEstudianteActual['mat_codigo_tesoreria'];?>/<?=date('Y');?>" class="btn btn-success" target="_blank"><?=strtoupper($frases[104][$datosUsuarioActual['uss_idioma']]);?></a></p>
-									</div>
+											<p><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$datosEstudianteActual['mat_codigo_tesoreria'];?>/<?=date('Y');?>" class="btn btn-success" target="_blank"><?=strtoupper($frases[104][$datosUsuarioActual['uss_idioma']]);?></a></p>
+										</div>
+									<?php }?>
 
 								</div>
 									
@@ -69,7 +71,7 @@
                                                 <tbody>
 													<?php
 													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas 
-													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													 WHERE fcu_usuario='".$_SESSION["id"]."' AND fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $colorValor = 'black';
