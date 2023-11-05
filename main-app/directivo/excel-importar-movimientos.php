@@ -33,7 +33,7 @@ if($extension == 'xlsx'){
 			$arrayTodos = [];
 			$claves_validar = array('fcu_usuario', 'fcu_valor', 'fcu_tipo');
 			$tiposMovimientos = ['DEUDA'   => '1', 'A FAVOR'   => '2'];
-			$sql = "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES";
+			$sql = "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, institucion, year)VALUES";
 			
 			$movimientosCreados     = array();
 			$movimientosNoCreados   = array();
@@ -78,7 +78,7 @@ if($extension == 'xlsx'){
 
 					if(!empty($idUsuario)){
 						try{
-							mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
+							mysqli_query($conexion, "DELETE FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
@@ -110,7 +110,7 @@ if($extension == 'xlsx'){
 							}
 						}
 
-						$sql .="(now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0),";
+						$sql .="(now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$movimientosCreados["FILA_".$f] = $arrayIndividual['fcu_usuario'];
 					} else {

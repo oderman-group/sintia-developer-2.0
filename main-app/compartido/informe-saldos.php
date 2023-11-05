@@ -36,9 +36,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 if($resultado[5]==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado[5]==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
 										 if($resultado[3]==5) $b = "bold"; else $b="";
 										 if($resultado['uss_bloqueado']==1) $c = "#F00"; else $c="";
-                     $consultaCobros=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]."");
+                     $consultaCobros=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=3 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $cobros = mysqli_fetch_array($consultaCobros, MYSQLI_BOTH);
-                     $consultaPagos=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]."");
+                     $consultaPagos=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=1 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $pagos = mysqli_fetch_array($consultaPagos, MYSQLI_BOTH);
 										 $estadoC = $pagos[0] - $cobros[0];
 										 if($estadoC==0){continue;}

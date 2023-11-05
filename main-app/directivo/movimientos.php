@@ -39,10 +39,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										include("includes/barra-superior-movimientos-financieros.php");
 
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=2 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0')");
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=2 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 										$estadisticasCuentas = mysqli_fetch_array($consultaEstadisticas, MYSQLI_BOTH);
 
 										if($estadisticasCuentas[2]>0){
@@ -102,9 +102,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													include("includes/consulta-paginacion-movimientos.php");
 													
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
 														INNER JOIN usuarios ON uss_id=fcu_usuario
-														WHERE fcu_id=fcu_id $filtro
+														WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 														ORDER BY fcu_id
 														LIMIT $inicio,$registros");
 													} catch (Exception $e) {

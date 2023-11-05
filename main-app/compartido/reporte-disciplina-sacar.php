@@ -61,17 +61,17 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
     }
 
     if($datos['gra_tipo']==GRADO_GRUPAL){
-      $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+      $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes
       INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
       INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
       INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante $filtroMat
       LEFT JOIN academico_grados ON gra_id=mat_grado
       LEFT JOIN academico_grupos ON gru_id=mat_grupo
       INNER JOIN usuarios ON uss_id=dr_usuario
-      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");
     }else{
-      $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
+      $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes
       INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
       INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
       INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
@@ -79,7 +79,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
       LEFT JOIN academico_grados ON gra_id=matcur_id_curso
       LEFT JOIN academico_grupos ON gru_id=1
       INNER JOIN usuarios ON uss_id=dr_usuario
-      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");
     }
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {

@@ -180,7 +180,9 @@ if(
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
 										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "No hay indicador definitivo configurado";}else{?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+											<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										<?php }?>
 										
 										<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>

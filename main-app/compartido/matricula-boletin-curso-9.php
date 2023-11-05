@@ -138,8 +138,8 @@ $contador_periodos=0;
 </table>
 	<p>&nbsp;</p>
 <?php 
-$cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota 
-WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."'
+$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 GROUP BY dn_cod_estudiante, dn_periodo
 ORDER BY dn_id
 ");

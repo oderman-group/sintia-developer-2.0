@@ -118,8 +118,8 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                                                         WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_periodo='".$periodoConsultaActual."'");
+														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                                                         WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
                                                         if(!empty($notas[4])){
                                                             if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];

@@ -103,7 +103,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 												<tbody>
 												<?php
 												try{
-													$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 ORDER BY fcu_id DESC");
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+													ORDER BY fcu_id DESC");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -114,7 +115,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 															<td><?=$resultado[0];?></td>
 															<td><?=$resultado[1];?></td>
 															<td><?=$resultado[2];?></td>
-															<td>$<?=number_format($resultado[3],2,".",",");?></td>
+															<td><?php if(!empty($resultado['fcu_valor'])) echo "$".number_format($resultado['fcu_valor'],2,".",",");?></td>
 															<td><a href="javascript:void(0);" 
 															onClick="sweetConfirmacion('Alerta!','Desea anular este movimiento?','question','movimientos-anular.php?idR=<?=base64_encode($resultado[0]);?>&id=<?=$_GET["id"];?>')"
 															><img src="../files/iconos/1363803022_001_052.png"></a></td>
@@ -123,14 +124,14 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 													<?php 
 													}
 													try{
-														$consultaC=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 AND fcu_tipo=3");
+														$consultaC=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 AND fcu_tipo=3 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
 														$c = mysqli_fetch_array($consultaC, MYSQLI_BOTH);
 														if(empty($c[0])){ $c[0]=0; }
 													try{
-														$consultaA=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 AND fcu_tipo=1");
+														$consultaA=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$id."' AND fcu_anulado=0 AND fcu_tipo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}

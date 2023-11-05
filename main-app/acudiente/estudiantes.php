@@ -130,11 +130,11 @@ require_once("../class/Estudiantes.php");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 
-														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1"), MYSQLI_BOTH);
+														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "'"), MYSQLI_BOTH);
+															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>

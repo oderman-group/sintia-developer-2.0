@@ -39,3 +39,6 @@ $opcionesGenerales = array("","T. Documento","Religion","Estratos","Generos","Nu
 $fechaDeInicio     = strtotime('2023-04-07 21:00:00');
 $timestampActual   = time();
 $numeroEnteroUnico = $timestampActual - $fechaDeInicio;
+
+$tipoEstadoFinanzas = array("","ABONO","PAGO REALIZADO A TI","COBRO","POR PAGARTE");
+$formasPagoFinanzas = array("N/A","Efectivo","Cheque","T. D&eacute;bito","T. Cr&eacute;dito", "N/A");

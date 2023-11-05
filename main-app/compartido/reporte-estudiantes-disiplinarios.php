@@ -65,7 +65,7 @@ CASE dr_tipo WHEN 1 THEN 'Leve' WHEN 2 THEN 'Grave' WHEN 3 THEN 'Gravísima' END
 FROM academico_matriculas am INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
 INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
 INNER JOIN ".$baseDatosServicios.".opciones_generales og ON og.ogen_id=am.mat_tipo
-INNER JOIN disciplina_reportes dr ON dr.dr_estudiante=am.mat_id ".$condicionw.$condicion."
+INNER JOIN ".BD_DISCIPLINA.".disciplina_reportes dr ON dr.dr_estudiante=am.mat_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$condicionw.$condicion."
 ORDER BY mat_primer_apellido;");
  while($resultado=mysqli_fetch_array($c_matricEst)){
   ?>

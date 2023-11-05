@@ -179,7 +179,7 @@ if(!empty($_POST['carga'])){
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 															$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 															try{
-																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$carga."' AND dn_periodo='".$periodo."'");
+																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$carga."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}

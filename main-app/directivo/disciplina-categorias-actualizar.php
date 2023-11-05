@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 try{
-    mysqli_query($conexion, "UPDATE disciplina_categorias SET dcat_nombre='" . $_POST["categoria"] . "' WHERE dcat_id=" . $_POST["idR"] . ";");
+    mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disciplina_categorias SET dcat_nombre='" . $_POST["categoria"] . "' WHERE dcat_id_nuevo=" . $_POST["idRNuevo"] . ";");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

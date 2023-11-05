@@ -170,15 +170,14 @@ class Boletin {
 
     public static function obtenerNotaDisciplina(
         $estudiante,
-        $condicion,
-        string $BD    = ''
+        $condicion
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='" . $estudiante . "' AND dn_periodo in(" . $condicion . ");");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $estudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_periodo in(" . $condicion . ");");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();

@@ -67,7 +67,7 @@ if(!empty($_GET["busqueda"])){
 
           <td><?= $resultado['mat_id']; ?></td>
           <td><?= $resultado[12]; ?></td>
-          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
+          <td><a href="../directivo/estudiantes-editar.php?id=<?= base64_encode($resultado[0]); ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
           <td><?= $resultado["gra_nombre"]; ?></td>
           <td style="text-align:center;"><?php if(!empty($resultado["dn_periodo"])) echo $resultado["dn_periodo"]; ?></td>
           <td align="center"><?php if(!empty($resultado["dn_ultima_lectura"])) echo $resultado["dn_ultima_lectura"]; ?></td>

@@ -21,7 +21,8 @@ class UsuarioServicios
 
     public static function listarUsuariosEstudiante($parametrosArray=null)
     {
-      $sqlInicial="SELECT * FROM usuarios_por_estudiantes";
+      global $config;
+      $sqlInicial="SELECT * FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('upe_id_usuario');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
