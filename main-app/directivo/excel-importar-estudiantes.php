@@ -232,13 +232,13 @@ if($extension == 'xlsx'){
 							if (!empty($_POST['actualizarCampo']) && in_array(4, $_POST['actualizarCampo'])) {
 								//Borramos si hay alguna asociación igual y creamos la nueva
 								try{
-									mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."'");
+									mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$datosEstudianteExistente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}
 
 								try{
-									mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."')");
+									mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".(upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}

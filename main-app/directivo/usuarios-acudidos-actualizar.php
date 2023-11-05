@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try {
-    mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_POST["id"]."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_usuario='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente=NULL  WHERE mat_acudiente='".$_POST["id"]."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
@@ -28,7 +28,7 @@ while ($contador < $numero) {
     }		
 
     try {
-        mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$_POST["id"]."', '".$_POST["acudidos"][$contador]."')");
+        mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('".$_POST["id"]."', '".$_POST["acudidos"][$contador]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }

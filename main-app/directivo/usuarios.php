@@ -149,9 +149,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$mostrarNumAcudidos = '';
 														if( $resultado['uss_tipo'] == TIPO_ACUDIENTE ) {
 															try{
-																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes
+																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios_por_estudiantes
 																INNER JOIN academico_matriculas ON mat_id=upe_id_estudiante
-																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL");
+																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
