@@ -83,8 +83,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                         try{
-                                                            $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM disciplina_faltas
-                                                            WHERE dfal_id_categoria='".$resultado['dcat_id']."'");
+                                                            $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM ".BD_DISCIPLINA.".disciplina_faltas
+                                                            WHERE dfal_id_categoria='".$resultado['dcat_id']."' AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }

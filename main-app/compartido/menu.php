@@ -83,7 +83,7 @@
 								if($datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){							
 								
 								//MÓDULO ACADÉMICO
-								if(array_key_exists(1, $arregloModulos)){
+								if(!empty($arregloModulos) && array_key_exists(1, $arregloModulos)){
 									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
@@ -129,7 +129,7 @@
 									<?php
 										}
 										
-										if(array_key_exists(9, $arregloModulos)){
+										if(!empty($arregloModulos) && array_key_exists(9, $arregloModulos)){
 											if(Modulos::validarSubRol(['DT0121'])){
 									?>
 										<li <?php agregarClass(MENU,["DT0121"]) ?>><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
@@ -141,7 +141,7 @@
 
 							<?php 
 							//MÓDULO INSCRIPCIONES Y ADMISIONES
-							if(array_key_exists(8, $arregloModulos)){
+							if(!empty($arregloModulos) && array_key_exists(8, $arregloModulos)){
 								if(Modulos::validarSubRol(["DT0102"])){
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0102", "DT0014"]) ?>>
@@ -166,7 +166,7 @@
 							
 							<?php 
 							//MÓDULO FINANCIERO
-							if(array_key_exists(2, $arregloModulos)){
+							if(!empty($arregloModulos) && array_key_exists(2, $arregloModulos)){
 								if(Modulos::validarSubRol(["DT0104"])){
 							?>
 								<li class="nav-item">
@@ -185,7 +185,7 @@
 							
 							<?php 
 							//MÓDULO DISCIPLINARIO
-							if(array_key_exists(3, $arregloModulos)){
+							if(!empty($arregloModulos) && array_key_exists(3, $arregloModulos)){
 								if(Modulos::validarSubRol(["DT0119","DT0117","DT0069","DT0066"])){
 							?>
 								<li class="nav-item">
@@ -226,7 +226,7 @@
 							
 							<?php 
 							//MÓDULO ADMINISTRTIVO
-							if(array_key_exists(4, $arregloModulos)){
+							if(!empty($arregloModulos) && array_key_exists(4, $arregloModulos)){
 								if(Modulos::validarSubRol(["DT0126","DT0122","DT0011"])){
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"]) ?>>
@@ -265,7 +265,7 @@
 							
 							<?php 
 							//MÓDULO MERCADEO
-							if(array_key_exists(6, $arregloModulos)){?>
+							if(!empty($arregloModulos) && array_key_exists(6, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
 	                                <span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -381,25 +381,25 @@
 									
 									<li <?php agregarClass(MENU,["DC0035", "DC0021", "DC0020", "DC0029", "DC0039", "DC0007"]) ?>><a href="calificaciones.php" class="nav-link "> <span class="title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
-									<?php if(array_key_exists(11, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(11, $arregloModulos)){?>
 										<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 
-									<?php if(array_key_exists(15, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(15, $arregloModulos)){?>
 										<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
 									<li <?php agregarClass(MENU,["DC0022"]) ?>><a href="importar-info.php" class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
 
-									<?php if(array_key_exists(14, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(14, $arregloModulos)){?>
 										<li <?php agregarClass(MENU,["DC0018"]) ?>><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if(array_key_exists(12, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(12, $arregloModulos)){?>
 										<li <?php agregarClass(MENU,["DC0043"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 
-									<?php if(array_key_exists(13, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(13, $arregloModulos)){?>
 										<li <?php agregarClass(MENU,["DC0037"]) ?>><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 
@@ -407,7 +407,7 @@
 	                        </li>
 							<?php }?>
 							
-							<?php if(array_key_exists(3, $arregloModulos)){?>
+							<?php if(!empty($arregloModulos) && array_key_exists(3, $arregloModulos)){?>
 								<li class="nav-item">
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
 										<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -532,23 +532,23 @@
 
 									<?php }?>
 									
-									<?php if(array_key_exists(11, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(11, $arregloModulos)){?>
 										<li class="nav-item"><a href="ausencias.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if(array_key_exists(15, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(15, $arregloModulos)){?>
 										<li class="nav-item"><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if(array_key_exists(14, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(14, $arregloModulos)){?>
 										<li class="nav-item"><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if(array_key_exists(13, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(13, $arregloModulos)){?>
 										<li class="nav-item"><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<?php if(array_key_exists(12, $arregloModulos)){?>
+									<?php if(!empty($arregloModulos) && array_key_exists(12, $arregloModulos)){?>
 										<li class="nav-item"><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									

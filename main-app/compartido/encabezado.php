@@ -81,6 +81,7 @@ $institucionNombre = $institucion['ins_siglas'];
                                         }
                                         $yearStart++;
                                     }
+                                    $yearStart = $yearArray[0];
                                     ?>
                                 </ul>
                             </li>

@@ -108,8 +108,9 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         <option value="">Seleccione una opción</option>
                         <?php
                         try {
-                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-                                                    INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria");
+                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+                                                    INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+                                                    WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }

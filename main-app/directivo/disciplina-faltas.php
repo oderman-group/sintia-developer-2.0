@@ -79,9 +79,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     if(isset($_GET["cat"])){$filtro .=" AND dfal_id_categoria='".base64_decode($_GET["cat"])."'";}
 
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas
-                                                        INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-                                                        WHERE dfal_id=dfal_id $filtro");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas
+                                                        INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+                                                        WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]} $filtro");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -109,7 +109,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     
                                                                     <?php if(Modulos::validarSubRol(['DT0160'])) {?>
                                                                         <li><a href="javascript:void(0);"
-                                                                        onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-faltas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
+                                                                        onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-faltas-eliminar.php?id=<?=base64_encode($resultado['dfal_id_nuevo']);?>')">Eliminar</a></li>
                                                                     <?php }?>
                                                                     </ul>
                                                                 </div>
