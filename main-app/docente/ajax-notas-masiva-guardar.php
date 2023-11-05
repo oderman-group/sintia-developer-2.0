@@ -15,10 +15,10 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
     exit();
 }
 
-$idPaginaInterna = 'DC0092';
+$idPaginaInterna = 'DC0102';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-$datosMensaje = AjaxCalificaciones::ajaxGuardarNota($conexion,$config,$_POST["codEst"],$_POST["nombreEst"],$_POST["codNota"],$_POST["nota"],$_POST["notaAnterior"]);
+$datosMensaje = AjaxCalificaciones::ajaxGuardarNotasMasiva($conexion,$datosCargaActual,$_POST["codNota"],$_POST["nota"]);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
@@ -43,3 +43,22 @@ setTimeout ("notifica()", 100);
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<i class="icon-exclamation-sign"></i><strong>INFORMACI&Oacute;N:</strong> <?=$datosMensaje['mensaje']?>
 </div>
+
+<?php 
+if($_POST["recargarPanel"]==1){
+?>
+	<script type="text/javascript">
+	setTimeout(function() {
+    	listarInformacion('listar-calificaciones-todas.php', 'nav-calificaciones-todas');
+  	}, 3000);
+	</script>
+<?php
+}
+
+if($_POST["recargarPanel"]==0){
+?>
+	<script type="text/javascript">
+	setTimeout('document.location.reload()',5000);
+	</script>
+<?php
+}

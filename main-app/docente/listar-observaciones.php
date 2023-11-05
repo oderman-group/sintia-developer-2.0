@@ -69,10 +69,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                     <td width="25%">
                         
                         <textarea rows="7" cols="80" 
-                        name="O<?=$contReg;?>" 
-                        id="<?=$resultado['mat_id'].'-'.$resultado['mat_nombres'].'-'.$cargaConsultaActual.'-'.$periodoConsultaActual;?>" 
-                        title="8" 
-                        onChange="notas(this)" 
+                        id="<?=$resultado['mat_id'];?>" 
+                        name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" 
+                        onChange="observacionesBoletin(this)" 
                         <?=$disabled;?>
                         ><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
                     </td>

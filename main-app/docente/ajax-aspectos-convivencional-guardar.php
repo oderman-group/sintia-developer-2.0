@@ -15,10 +15,10 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
     exit();
 }
 
-$idPaginaInterna = 'DC0092';
+$idPaginaInterna = 'DC0110';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-$datosMensaje = AjaxCalificaciones::ajaxGuardarNota($conexion,$config,$_POST["codEst"],$_POST["nombreEst"],$_POST["codNota"],$_POST["nota"],$_POST["notaAnterior"]);
+$datosMensaje = AjaxCalificaciones::ajaxGuardarAspectosConvivencional($conexion,$_POST["codEst"],$_POST["carga"],$_POST["periodo"],$_POST["aspecto"]);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
