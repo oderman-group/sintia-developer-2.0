@@ -28,7 +28,7 @@ require_once("../class/UsuariosPadre.php");
                                         <th>Cerrado</th>
   </tr>
   <?php
-									 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_anulado=0");
+									 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                    $cont=0;
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 										 $u = UsuariosPadre::sesionUsuario($resultado[6]);

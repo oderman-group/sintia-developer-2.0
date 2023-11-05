@@ -22,7 +22,8 @@ if (trim($fecha) == "" or trim($_POST["detalle"]) == "" or trim($_POST["valor"])
 
 if ($_POST["tipo"] == 1) {
     try{
-        $consultaConsecutivoActual=mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_tipo=1 ORDER BY fcu_id DESC");
+        $consultaConsecutivoActual=mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+        ORDER BY fcu_id DESC");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
@@ -37,7 +38,8 @@ if ($_POST["tipo"] == 1) {
 
 if ($_POST["tipo"] == 2) {
     try{
-        $consultaConsecutivoActual=mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_tipo=2 ORDER BY fcu_id DESC");
+        $consultaConsecutivoActual=mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=2 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+        ORDER BY fcu_id DESC");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
@@ -50,7 +52,7 @@ if ($_POST["tipo"] == 2) {
 }
 
 try{
-    mysqli_query($conexion, "UPDATE finanzas_cuentas SET
+    mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".finanzas_cuentas SET
     fcu_fecha='".$fecha."',
     fcu_detalle='".$_POST["detalle"]."',
     fcu_valor='".$_POST["valor"]."',
@@ -62,7 +64,7 @@ try{
     fcu_cerrado='".$_POST["estado"]."',
     fcu_consecutivo='" . $consecutivo . "'
 
-    WHERE fcu_id='".$_POST['idU']."'");
+    WHERE fcu_id='".$_POST['idU']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
