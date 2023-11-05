@@ -11,8 +11,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 try{
-    mysqli_query($conexion, "INSERT INTO disciplina_categorias(dcat_nombre)
-    VALUES('" . $_POST["categoria"] . "')");
+    mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disciplina_categorias(dcat_nombre, dcat_institucion, dcat_year)
+    VALUES('" . $_POST["categoria"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

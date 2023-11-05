@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."'");
+    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."' AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -71,6 +71,7 @@ if(!Modulos::validarPermisoEdicion()){
                                    
 									<form name="formularioGuardar" action="disciplina-categorias-actualizar.php" method="post">
 										<input type="hidden" value="<?=$datosEditar['dcat_id'];?>" name="idR">
+										<input type="hidden" value="<?=$datosEditar['dcat_id_nuevo'];?>" name="idRNuevo">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>

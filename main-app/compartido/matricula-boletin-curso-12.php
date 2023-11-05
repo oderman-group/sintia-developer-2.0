@@ -485,7 +485,7 @@
                 <tr style="color:#000;">
                     <td style="padding-left: 20px;">
                         <?php 
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo='".$periodoActual."'");
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
 
                                 if(!empty($rndisiplina['dn_observacion'])){

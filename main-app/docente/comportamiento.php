@@ -138,7 +138,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."'");
+														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														if(!empty($notas[4]) && $notas[4]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[4]) && $notas[4]>=$config[5]) $colorNota = $config[7];
 
@@ -189,7 +189,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															
 															<p>
 															<?php
-															$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_id_carga='".$cargaConsultaActual."' AND dn_observacion IS NOT NULL");
+															$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_id_carga='".$cargaConsultaActual."' AND dn_observacion IS NOT NULL AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															?>
 															<select class="form-control  select2" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)">
 																<option value="">Seleccione una opción</option>

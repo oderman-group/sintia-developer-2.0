@@ -248,8 +248,8 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                         $p=1;
                                         while($p<=4){
 
-                                            $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                                            WHERE dn_cod_estudiante='".$datosEditar['mat_id']."' AND dn_periodo='".$p."'"), MYSQLI_BOTH);
+                                            $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                                            WHERE dn_cod_estudiante='".$datosEditar['mat_id']."' AND dn_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
                                         ?>
 
@@ -325,9 +325,10 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                             
                                 
                             <?php
-                            $aspectosCosnulta = mysqli_query($conexion, "SELECT * FROM matriculas_aspectos
+                            $aspectosCosnulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".matriculas_aspectos
                                 INNER JOIN usuarios ON uss_id=mata_usuario
-                                WHERE mata_estudiante='".$datosEditar['mat_id']."' AND mata_periodo='".$p."' ORDER BY mata_id DESC");
+                                WHERE mata_estudiante='".$datosEditar['mat_id']."' AND mata_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+                                ORDER BY mata_id DESC");
                             while($aspectos = mysqli_fetch_array($aspectosCosnulta, MYSQLI_BOTH)){
                             ?>
                                 

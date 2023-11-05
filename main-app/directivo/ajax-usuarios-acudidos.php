@@ -7,7 +7,7 @@ $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 100');
 $i=0;
 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
     try{
-        $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_REQUEST['idA']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
+        $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_usuario='".$_REQUEST['idA']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
