@@ -249,6 +249,21 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b>';
             break;
 
+            case 'SC_GN_2':
+                $tipo = 'success';
+                $mensaje = 'La información fue importada correctamente';
+            break;
+
+            case 'SC_GN_3':
+                $tipo = 'success';
+                $mensaje = 'La tematica fue registrada correctamente';
+            break;
+
+            case 'SC_GN_4':
+                $tipo = 'success';
+                $mensaje = 'La plan de clase fue registrado correctamente';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

@@ -95,8 +95,7 @@ if(
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="9" name="id">
+									<form name="formularioGuardar" action="indicadores-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 										<!-- Esto es porque hay un campo que existe o no dependiendo la configuración de la carga y afecta la función javascript-->
 										<input type="hidden" value="<?=$datosCargaActual['car_valor_indicador'];?>" name="configInd">

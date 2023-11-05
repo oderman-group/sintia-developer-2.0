@@ -60,8 +60,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="19" name="id">
+									<form name="formularioGuardar" action="foros-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Titulo</label>
