@@ -70,8 +70,7 @@ $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="8" name="id">
+									<form name="formularioGuardar" action="preguntas-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$idE;?>" name="idE">
 										<input type="hidden" value="<?=$pregunta['preg_id'];?>" name="idR">
 

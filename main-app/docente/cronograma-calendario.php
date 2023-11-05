@@ -26,6 +26,7 @@
                             </div>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
                         <div class="col-md-7">
                             <div class="card card-topline-purple">

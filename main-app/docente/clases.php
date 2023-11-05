@@ -35,6 +35,7 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                             </div>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
