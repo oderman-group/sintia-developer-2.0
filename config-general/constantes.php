@@ -76,6 +76,12 @@ switch($_SERVER['HTTP_HOST']){
         error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
+        case 'copyprod.plataformasintia.com':
+        define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
+        define('ENVIROMENT', 'PROD');
+        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+
         default:
         define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
         define('ENVIROMENT', 'TEST');
