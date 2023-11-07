@@ -249,6 +249,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b>';
             break;
 
+            case 'SC_GN_5':
+                $tipo = 'success';
+                base64_decode($_GET["estado"])==1 ? $mensaje = 'La respuesta cambio de estado a correcta' : $mensaje = 'La respuesta cambio de estado a incorrecta';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];
