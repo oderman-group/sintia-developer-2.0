@@ -263,6 +263,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $tipo = 'success';
                 $mensaje = 'La plan de clase fue registrado correctamente';
             break;
+            
+            case 'SC_GN_5':
+                $tipo = 'success';
+                base64_decode($_GET["estado"])==1 ? $mensaje = 'La respuesta cambio de estado a correcta' : $mensaje = 'La respuesta cambio de estado a incorrecta';
+            break;
 
             default:
                 $tipo = 'secondary';
