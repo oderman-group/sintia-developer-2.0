@@ -104,7 +104,7 @@
 																	  <li><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>">Participación</a></li>
 																	  <li><a href="foros-editar.php?idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	  
-																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="guardar.php?get=<?=base64_encode(16);?>&idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	  <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['foro_id'];?>" name="foros-eliminar.php?idR=<?=base64_encode($resultado['foro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																  </ul>
 															  </div>
 															<?php } ?>
