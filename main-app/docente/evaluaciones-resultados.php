@@ -55,6 +55,7 @@ $idE="";
                             </ol>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 
 							<div class="col-md-3">
@@ -269,7 +270,7 @@ $idE="";
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
-																	<a href="#" name="guardar.php?get=<?=base64_encode(28);?>&idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
+																	<a href="#" name="evaluaciones-eliminar-intento.php?idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
 															<?php }?>
 															
 															
