@@ -436,7 +436,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 
 															<?php }?>
 
