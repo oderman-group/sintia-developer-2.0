@@ -122,7 +122,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
                                     <?php if($resultado['ipc_creado']==1 and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)){?>
                                         <li><a href="indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>">Editar</a></li>
                                 
-                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="guardar.php?get=<?=base64_encode(10);?>&idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="indicadores-eliminar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                     <?php } ?>
                                     
                                     <?php if($periodoConsultaActual<$datosCargaActual['car_periodo']){?>
