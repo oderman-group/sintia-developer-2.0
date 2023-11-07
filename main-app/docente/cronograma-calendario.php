@@ -102,7 +102,7 @@
                                                             <ul class="dropdown-menu" role="menu">
                                                                 <li><a href="cronograma-editar.php?idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
                                                                 
-                                                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cro_id'];?>" name="guardar.php?get=<?=base64_encode(13);?>&idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cro_id'];?>" name="cronograma-eliminar.php?idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                             </ul>
                                                         </div>
                                                     <?php } ?>
@@ -182,6 +182,9 @@
 	<script src="../../config-general/assets/js/app.js" ></script>
     <script src="../../config-general/assets/js/layout.js" ></script>
 	<script src="../../config-general/assets/js/theme-color.js" ></script>
+	<!-- notifications -->
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->
