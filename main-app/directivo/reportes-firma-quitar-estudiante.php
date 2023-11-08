@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 try{
-    mysqli_query($conexion, "UPDATE disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "'");
+    mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disciplina_reportes SET dr_aprobacion_estudiante=0, dr_aprobacion_estudiante_fecha='0000-00-00' WHERE dr_id='" . base64_decode($_GET["idR"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

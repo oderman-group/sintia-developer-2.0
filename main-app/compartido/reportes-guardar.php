@@ -15,7 +15,7 @@ $cont = count($_POST["faltas"]);
 $i = 0;
 while ($i < $cont) {
     try{
-        mysqli_query($conexion, "INSERT INTO disciplina_reportes(dr_fecha, dr_estudiante, dr_falta, dr_usuario, dr_aprobacion_estudiante, dr_aprobacion_acudiente, dr_observaciones)VALUES('" . $_POST["fecha"] . "', '" . $datosEstudiante['uss_id'] . "', '" . $_POST["faltas"][$i] . "','" . $_POST["usuario"] . "', 0, 0,'" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "')");
+        mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disciplina_reportes(dr_fecha, dr_estudiante, dr_falta, dr_usuario, dr_aprobacion_estudiante, dr_aprobacion_acudiente, dr_observaciones, institucion, year)VALUES('" . $_POST["fecha"] . "', '" . $datosEstudiante['uss_id'] . "', '" . $_POST["faltas"][$i] . "','" . $_POST["usuario"] . "', 0, 0,'" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }

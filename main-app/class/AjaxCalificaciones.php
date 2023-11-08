@@ -275,7 +275,7 @@ class AjaxCalificaciones {
         if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
 
         try{
-            $consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."'");
+            $consultaNumD=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -283,13 +283,13 @@ class AjaxCalificaciones {
 
         if($numD==0){
             try{
-                mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo)VALUES('".$codEstudiante."','".$carga."','".$nota."', now(),'".$periodo."')");
+                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
         }else{
             try{
-                mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."';");
+                mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -315,13 +315,14 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarObservacionDisciplina($conexion, $codEstudiante, $carga, $observacion, $periodo)
     {
+        global $config;
         if(trim($observacion)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una observación correcta."];
             return $datosMensaje;
         }
 
         try{
-            $consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."'");
+            $consultaNumD=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -329,13 +330,13 @@ class AjaxCalificaciones {
 
         if($numD==0){
             try{
-                mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo)VALUES('".$codEstudiante."','".$carga."','".mysqli_real_escape_string($conexion,$observacion)."', now(),'".$periodo."')");
+                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".mysqli_real_escape_string($conexion,$observacion)."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
         }else{
             try{
-                mysqli_query($conexion, "UPDATE disiplina_nota SET dn_observacion='".mysqli_real_escape_string($conexion,$observacion)."', dn_fecha=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."';");
+                mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_observacion='".mysqli_real_escape_string($conexion,$observacion)."', dn_fecha=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -360,6 +361,7 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarNotasDisciplinaMasiva($conexion, $datosCargaActual, $carga, $periodo, $nota)
     {
+        global $config;
         if(trim($nota)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
             return $datosMensaje;
@@ -373,13 +375,13 @@ class AjaxCalificaciones {
         $datosDelete = '';
     
         while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
-            $consultaNumE=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$estudiantes['mat_id']."' AND dn_periodo='".$periodo."'");
+            $consultaNumE=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$estudiantes['mat_id']."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
                 $accionBD = 1;
                 $datosDelete .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
-                $datosInsert .="('".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."'),";
+                $datosInsert .="('".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
             }else{
                 $accionBD = 2;
                 $datosUpdate .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
@@ -390,10 +392,10 @@ class AjaxCalificaciones {
             $datosInsert = substr($datosInsert,0,-1);
             $datosDelete = substr($datosDelete,0,-4);
             
-            mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_periodo='".$periodo."' AND (".$datosDelete.")");
+            mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (".$datosDelete.")");
             
             
-            mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo)VALUES
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES
             ".$datosInsert."
             ");
                 
@@ -401,7 +403,8 @@ class AjaxCalificaciones {
         
         if($accionBD==2){
             $datosUpdate = substr($datosUpdate,0,-4);
-            mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_periodo='".$periodo."' AND (".$datosUpdate.")");
+            $datosUpdate .= " AND (institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})"; 
+            mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_periodo='".$periodo."' AND (".$datosUpdate.")");
         }
 
         $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>'Se ha guardado la misma nota de comportamiento para todos los estudiantes en esta actividad. La página se actualizará en unos segundos para que vea los cambios...'];
@@ -574,19 +577,20 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarAspectosAcademicos($conexion, $codEstudiante, $carga, $periodo, $aspectoAcademico)
     {
+        global $config;
         if(trim($aspectoAcademico)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite un aspecto correcto."];
             return $datosMensaje;
         }
 
-        $consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."'");
+        $consultaNumD=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         $numD = mysqli_num_rows($consultaNumD);
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 	
         if($numD==0){
-            mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_academico, dn_periodo)VALUES('".$codEstudiante."','".$carga."','".$aspectoAcademico."', '".$periodo."')");
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_academico, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$aspectoAcademico."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         }else{
-            mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_academico='".$aspectoAcademico."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."';");
+            mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_aspecto_academico='".$aspectoAcademico."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         }
 
         $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>'El aspecto academico se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>'];
@@ -607,19 +611,20 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarAspectosConvivencional($conexion, $codEstudiante, $carga, $periodo, $aspectoConvivencial)
     {
+        global $config;
         if(trim($aspectoConvivencial)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite un aspecto correcto."];
             return $datosMensaje;
         }
 
-        $consultaNumD=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."'");
+        $consultaNumD=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$codEstudiante."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         $numD = mysqli_num_rows($consultaNumD);
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 	
         if($numD==0){
-            mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_convivencial, dn_periodo)VALUES('".$codEstudiante."','".$carga."','".$aspectoConvivencial."', '".$periodo."')");
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_convivencial, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$aspectoConvivencial."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         }else{
-            mysqli_query($conexion, "UPDATE disiplina_nota SET dn_aspecto_convivencial='".$aspectoConvivencial."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."';");
+            mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_aspecto_convivencial='".$aspectoConvivencial."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         }
 
         $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>'El aspecto convivencial se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>'];

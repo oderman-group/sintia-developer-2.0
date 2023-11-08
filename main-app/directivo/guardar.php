@@ -8,7 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
 if ($_GET["get"] == 12) {//No se llama de ningun lado
     try{
-        mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_id='" . $_GET["idR"] . "'");
+        mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_reportes WHERE dr_id='" . $_GET["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }

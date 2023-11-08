@@ -7,7 +7,7 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 $usuariosClase = new Usuarios;
 
 try{
-    mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_id='" . $_GET["idA"] . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_id='" . $_GET["idA"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
