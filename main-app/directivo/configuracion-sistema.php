@@ -351,6 +351,18 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Activar encuesta de reserva de cupos?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los acudientes responder si desean reservar o no el cupo para sus acudidos para el siguiente año."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="activarEncuestaReservaCupo" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_activar_encuesta']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_activar_encuesta']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         
 										<p class="h3">Otras</p>
 
