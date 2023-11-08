@@ -88,7 +88,7 @@ if(!Modulos::validarPermisoEdicion()){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Ingreso</option>
@@ -101,7 +101,7 @@ if(!Modulos::validarPermisoEdicion()){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Efectivo</option>
@@ -145,16 +145,6 @@ if(!Modulos::validarPermisoEdicion()){
                                                 });
                                             });
                                         </script>
-
-											<div class="form-group row">
-												<label class="col-sm-2 control-label">Notificar al usuario</label>
-												<div class="input-group spinner col-sm-10">
-													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
-														<span class="slider red round"></span>
-													</label>
-												</div>
-											 </div>
 										
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
@@ -164,14 +154,14 @@ if(!Modulos::validarPermisoEdicion()){
 											</div>
 										
 
-
+                                        <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                         <?php if(Modulos::validarPermisoEdicion()){?>
 										    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
                                         <?php }?>
 										
-										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>
