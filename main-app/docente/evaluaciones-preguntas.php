@@ -121,6 +121,7 @@ function mostrarNuevaRespuesta(datos){
                             </ol>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 
 							<div class="col-md-3">
@@ -209,7 +210,7 @@ function mostrarNuevaRespuesta(datos){
 																			
 																		   <li class = "mdl-menu__item"><a href="preguntas-editar.php?idR=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>"><i class="fa fa-edit"></i> Editar pregunta</a></li>
 																		   
-																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="guardar.php?get=<?=base64_encode(27);?>&idP=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
+																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="evaluaciones-preguntas-eliminar.php?idP=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
 																		</ul>
 													</div>
 													
@@ -255,9 +256,9 @@ function mostrarNuevaRespuesta(datos){
 												
 														
 												<p id="reg<?=$respuestas['resp_id'];?>">	
-													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="guardar.php?get=<?=base64_encode(9);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
+													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="evaluaciones-respuestas-eliminar.php?idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
 													
-													<a href="guardar.php?get=<?=base64_encode(8);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>">
+													<a href="evaluaciones-respuestas-cambiar-estado.php?idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>">
 														<i class="fa fa-exchange"></i>
 													</a>
 													

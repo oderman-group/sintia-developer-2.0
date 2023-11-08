@@ -43,6 +43,7 @@ include("../compartido/head.php");
                             </div>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
@@ -116,7 +117,7 @@ include("../compartido/head.php");
 														<td width="15%">
 															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['dn_nota'])){ echo $notas['dn_nota'];}?>" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasDisciplina(this)" tabindex="<?=$contReg;?>">
 															<?php if(!empty($notas['dn_nota'])){?>
-															<a href="#" name="guardar.php?get=<?=base64_encode(31);?>&id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="comportamiento-nota-eliminar.php?id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														<td width="50%">

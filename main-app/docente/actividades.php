@@ -155,7 +155,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<li><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>">Entregas</a></li>
 																	  	<li><a href="actividades-editar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	 	 
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="guardar.php?get=<?=base64_encode(17);?>&idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="actividades-eliminar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
  
 																</ul>
 															</div>

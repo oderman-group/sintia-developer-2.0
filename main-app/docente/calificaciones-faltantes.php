@@ -80,7 +80,7 @@ include("../compartido/sintia-funciones-js.php");
 					echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR=' . base64_encode($rA[0]) . '" title="' . $rA[1] . '">' . $rA[0] . '<br>
 														' . $rA[1] . '<br>
 														(' . $rA[3] . '%)</a><br>
-														<a href="#" name="guardar.php?get=' . base64_encode(12) . '&idR=' . base64_encode($rA[0]) . '&idIndicador=' . base64_encode($rA['act_id_tipo']) . '&carga=' . base64_encode($cargaConsultaActual) . '&periodo=' . base64_encode($periodoConsultaActual) . '" onClick="deseaEliminar(this)" ' . $deleteOculto . '><i class="fa fa-times"></i></a><br>
+														<a href="#" name="calificaciones-eliminar.php?idR=' . base64_encode($rA[0]) . '&idIndicador=' . base64_encode($rA['act_id_tipo']) . '&carga=' . base64_encode($cargaConsultaActual) . '&periodo=' . base64_encode($periodoConsultaActual) . '" onClick="deseaEliminar(this)" ' . $deleteOculto . '><i class="fa fa-times"></i></a><br>
 														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" name="'.$rA[0].'" onChange="notasMasiva(this)" ' . $habilitado . '>
 														</th>';
 				}
@@ -136,7 +136,7 @@ include("../compartido/sintia-funciones-js.php");
 						<td style="text-align:center;">
 							<input size="5" maxlength="3" name="<?= $notasResultado[3] ?>" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" value="<?php if (!empty($notasResultado[3])) { echo $notasResultado[3]; } ?>" alt="<?= $resultado['mat_nombres']; ?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if ($notasResultado[3] < $config[5] and $notasResultado[3] != "") echo $config[6]; elseif ($notasResultado[3] >= $config[5]) echo $config[7]; else echo "black"; ?>;" <?= $habilitado; ?>>
 							<?php if (!empty($notasResultado[3])) { ?>
-								<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $notasResultado['cal_id']; ?>" name="guardar.php?get=<?= base64_encode(21); ?>&id=<?= base64_encode($notasResultado['cal_id']); ?>" onClick="deseaEliminar(this)" <?= $deleteOculto; ?>><i class="fa fa-times"></i></a>
+								<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $notasResultado['cal_id']; ?>" name="calificaciones-nota-eliminar.php?id=<?= base64_encode($notasResultado['cal_id']); ?>" onClick="deseaEliminar(this)" <?= $deleteOculto; ?>><i class="fa fa-times"></i></a>
 								<?php if ($notasResultado[3] < $config[5]) { ?>
 									<br><br><input size="5" maxlength="3" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" alt="<?= $resultado['mat_nombres']; ?>" name="<?= $notasResultado[3]; ?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?= $habilitado; ?>>
 								<?php } ?>
