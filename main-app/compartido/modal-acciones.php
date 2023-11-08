@@ -12,8 +12,7 @@
                                     <header>Contactar con el vendedor</header>
                                 </div>
                                 <div class="card-body" id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="18">
+                                    <form class="form-horizontal" action="../compartido/mensajes-enviar-vendedor.php" method="post">
 										<input type="hidden" id="destinoMarketplace" name="destinoMarketplace">
 										<input type="hidden" id="asuntoMarketplace" name="asuntoMarketplace">
 										

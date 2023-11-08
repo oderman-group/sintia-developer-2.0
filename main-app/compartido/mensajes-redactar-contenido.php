@@ -19,8 +19,7 @@
 		                                    <div class="inbox-body no-pad">
 		                                        <div class="mail-list">
 		                                            <div class="compose-mail">
-		                                                <form method="post" action="../compartido/guardar.php">
-															<input type="hidden" name="id" value="7">
+		                                                <form method="post" action="../compartido/mensajes-enviar.php">
 															<label>Para:</label>
 		                                                    <div class="form-group">
 																<select id="select_usuario" class="form-control select2-multiple" multiple name="para[]" required>
