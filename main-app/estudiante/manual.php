@@ -62,11 +62,7 @@
 
 
 
-						            <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-						                <input type="hidden" name="id" value="26">
-
-						                
-
+						            <form action="../compartido/aceptar-manual-convivencia.php" method="post" enctype="multipart/form-data">
 						                <?php if ($datosEstudianteActual["mat_compromiso_convivencia"] == 1 AND $datosEstudianteActual["mat_manual"] == '0') { ?>
 						                    <input type="submit" class="btn btn-primary" value="Aceptar y continuar">&nbsp;
 						                <?php }?>
