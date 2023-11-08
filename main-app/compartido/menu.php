@@ -262,6 +262,21 @@
 	                            </ul>
 	                        </li>
 							<?php }}?>
+
+							<?php 
+							//MÓDULO CUESTIONARIO EVALUATIVO
+							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
+							<li class="nav-item">
+	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
+	                                <span class="title">Cuestionarios</span> <span class="arrow"></span>
+	                            </a>
+	                            <ul class="sub-menu">
+	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title">Ver cuestionarios</span></a></li>
+									<li class="nav-item"><a href="#" class="nav-link "> <span class="title">Preguntas</span></a></li>
+
+	                            </ul>
+	                        </li>
+							<?php }?>
 							
 							<?php 
 							//MÓDULO MERCADEO
