@@ -172,7 +172,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
 
-            <tr style="font-weight:bold; background-color:#4c9858; border-color:#000; height:40px; color:#000; font-size:12px;">
+            <tr style="font-weight:bold; background-color:#2e537dab; border-color:#000; height:40px; color:#000; font-size:12px;">
 
                 <td width="2%" align="center">NO</td>
 
@@ -313,7 +313,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             ?>
 
-                    <tr style="background-color: #e0e0153b" style="font-size:12px;">
+                    <tr style="background-color: #b9b91730" style="font-size:12px;">
 
                         <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;"><?php echo $resultado_not_area["ar_nombre"]; ?></td>
 
@@ -607,13 +607,13 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
 
-                <tr style="font-weight:bold; background:#4c9858; border-color:#036; height:40px; font-size:12px; text-align:center">
+                <tr style="font-weight:bold; background:#2e537dab; border-color:#036; height:40px; font-size:12px; text-align:center">
 
                     <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
 
                 </tr>
 
-                <tr style="font-weight:bold; background:#e0e0153b; height:25px; color:#000; font-size:12px; text-align:center">
+                <tr style="font-weight:bold; background:#b9b91730; height:25px; color:#000; font-size:12px; text-align:center">
 
                     <td width="8%">Periodo</td>
 

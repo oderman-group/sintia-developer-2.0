@@ -2,17 +2,17 @@
 #VARIABLES PARA MODULO DE ADMISIONES
 $estadosSolicitud = [
 	8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-	4 => 'EN PROCESO',
-	3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-	5 => 'EXAMEN Y ENTREVISTA', 
 	1 => 'VERIFICACIÓN DE PAGO', 
 	2 => 'PAGO RECHAZADO', 
+	3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
+	4 => 'EN PROCESO',
+	5 => 'EXAMEN Y ENTREVISTA', 
 	6 => 'APROBADO', 
 	7 => 'NO APROBADO',
 	9 => 'MOVIDO AL AÑO SIGUIENTE'
 ];
 
-$ordenReal = [8, 4, 3, 5, 1, 2, 6, 7, 9];
+$ordenReal = [8, 1, 2, 3, 4, 5, 6, 7, 9];
 
 $progresoSolicitud = [
 	1 => '75%', 
