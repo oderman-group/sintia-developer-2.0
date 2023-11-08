@@ -122,8 +122,15 @@ $institucionNombre = $institucion['ins_siglas'];
                             </li>
                         <?php 
                             }
-                        }
+                        } else {
                         ?>
+                            <li class="dropdown dropdown-user">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="fa fa-calendar-o"></i>    
+                                <span class="username username-hide-on-mobile"> AÑO ACTUAL: <b><?=$_SESSION["bd"];?></b> </span>
+                                </a>
+                            </li>
+                        <?php }?>
 						
                     	<!-- start language menu -->
                         <li class="dropdown language-switch" data-step="3" data-intro="<b>Idiomas:</b> Aquí puedes cambiar el idioma de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
