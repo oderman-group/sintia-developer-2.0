@@ -259,6 +259,16 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Forma para mostrar las notas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción mostrará a los usuarios las notas en formato numérico o con frases de desempeño que corresponden a las notas numéricas, dependiendo la opción que seleccione."><i class="fa fa-question"></i></button> </label>
+											<div class="col-sm-2">
+                                                <select class="form-control  select2" name="formaNotas" <?=$disabledPermiso;?>>
+                                                    <option value="CUALITATIVA" <?php if($cfg['conf_forma_mostrar_notas'] == 'CUALITATIVA'){ echo "selected";} ?>>CUALITATIVA (sin numéros)</option>
+                                                    <option value="CUANTITATIVA" <?php if($cfg['conf_forma_mostrar_notas'] == 'CUANTITATIVA'){ echo "selected";} ?>>CUANTITATIVA (con números)</option>
+                                                </select>
+											</div>
+										</div>
 										
                                         
                                         <p class="h3">Permisos</p>
