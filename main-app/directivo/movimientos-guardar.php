@@ -50,10 +50,12 @@ if ($_POST["tipo"] == 2) {
 
 try{
     mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, fcu_forma_pago, fcu_cerrado, fcu_consecutivo, institucion, year)VALUES('" . $_POST["fecha"] . "','" . $_POST["detalle"] . "','" . $_POST["valor"] . "','" . $_POST["tipo"] . "','" . $_POST["obs"] . "','" . $_POST["usuario"] . "',0,'" . $_POST["forma"] . "',0,'" . $consecutivo . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+    $idRegistro = mysqli_insert_id($conexion);
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="movimientos.php";</script>';
+
+echo '<script type="text/javascript">window.location.href="movimientos.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
 exit();
