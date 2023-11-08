@@ -123,7 +123,7 @@ require_once("../class/Estudiantes.php");
                                 <li><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>">Acceder</a></li>
                                 <li><a href="clases-editar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
                                 
-                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="clases-eliminar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                             </ul>
                         </div>
                         <?php } ?>

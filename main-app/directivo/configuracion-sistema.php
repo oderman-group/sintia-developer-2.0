@@ -259,6 +259,16 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Forma para mostrar las notas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción mostrará a los usuarios las notas en formato numérico o con frases de desempeño que corresponden a las notas numéricas, dependiendo la opción que seleccione."><i class="fa fa-question"></i></button> </label>
+											<div class="col-sm-2">
+                                                <select class="form-control  select2" name="formaNotas" <?=$disabledPermiso;?>>
+                                                    <option value="CUALITATIVA" <?php if($cfg['conf_forma_mostrar_notas'] == 'CUALITATIVA'){ echo "selected";} ?>>CUALITATIVA (sin numéros)</option>
+                                                    <option value="CUANTITATIVA" <?php if($cfg['conf_forma_mostrar_notas'] == 'CUANTITATIVA'){ echo "selected";} ?>>CUANTITATIVA (con números)</option>
+                                                </select>
+											</div>
+										</div>
 										
                                         
                                         <p class="h3">Permisos</p>
@@ -347,6 +357,18 @@ if(!Modulos::validarPermisoEdicion()){
                                                 <select class="form-control col-sm-2 select2" name="permisoDocentesPuestosSabanas" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['conf_ver_promedios_sabanas_docentes']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($cfg['conf_ver_promedios_sabanas_docentes']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Activar encuesta de reserva de cupos?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los acudientes responder si desean reservar o no el cupo para sus acudidos para el siguiente año."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="activarEncuestaReservaCupo" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_activar_encuesta']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_activar_encuesta']==0){ echo "selected";} ?>>NO</option>
                                                 </select>
                                             </div>
                                         </div>

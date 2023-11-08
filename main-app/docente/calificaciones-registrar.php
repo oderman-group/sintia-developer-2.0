@@ -21,103 +21,6 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 
-<script type="application/javascript">
-
-//CALIFICACIONES
-function notasGuardar(enviada){
-
-	var codNota = <?=$idR;?>;	 
-	var nota = enviada.value;
-	var notaAnterior = enviada.name;	
-	var codEst = enviada.id;
-	var nombreEst = enviada.alt;
-
-	
-	if (alertValidarNota(nota)) {		
-		return false;
-	}
-
-	aplicarColorNota(nota, codEst);
-
-	$('#respNota').empty().hide().html("Guardando la nota, espere por favor...").show(1);
-
-	datos = "nota="+(nota)+
-			"&codNota="+(codNota)+
-			"&notaAnterior="+(notaAnterior)+
-			"&nombreEst="+(nombreEst)+
-			"&codEst="+(codEst);
-			$.ajax({
-				type: "POST",
-				url: "ajax-notas-guardar.php",
-				data: datos,
-				success: function(data){
-					$('#respNota').empty().hide().html(data).show(1);
-				}
-			});
-}
-
-
-
-function notas(enviada){
-
-  var codNota = <?=$idR;?>;	 
-
-  var nota = enviada.value;
-
-  var notaAnterior = enviada.name;	
-
-  var codEst = enviada.id;
-
-  var nombreEst = enviada.alt;
-
-  var operacion = enviada.title;
-
- 
-
-if(operacion == 1 || operacion == 3){
-
-	if (alertValidarNota(nota)) {
-		return false;
-	}
-
-}
-
-	  
-
-$('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
-
-	datos = "nota="+(nota)+
-
-			"&codNota="+(codNota)+
-
-			"&notaAnterior="+(notaAnterior)+
-
-			"&operacion="+(operacion)+
-
-			"&nombreEst="+(nombreEst)+
-
-			"&codEst="+(codEst);
-
-		   $.ajax({
-
-			   type: "POST",
-
-			   url: "ajax-calificaciones-registrar.php",
-
-			   data: datos,
-
-			   success: function(data){
-
-			   	$('#respRC').empty().hide().html(data).show(1);
-
-		   	   }
-
-		  });
-
-}
-
-</script>
-
 </head>
 
 <!-- END HEAD -->
@@ -332,7 +235,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 													<p style="color: darkblue;">Utilice esta casilla para colocar la misma nota a todos los estudiantes. Esta opción <mark>reemplazará las notas existentes</mark> en esta actividad.</p>
 
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" onChange="notas(this)">
+													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" onChange="notasMasiva(this)" name="<?=$idR;?>">
 
 												</div>
 
@@ -342,8 +245,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 											
 
-										<span style="color: blue; font-size: 15px;" id="respRC"></span>
-										<span style="color: blue; font-size: 15px;" id="respNota"></span>
+										<span style="color: blue; font-size: 15px;" id="respRCT"></span>
 
 											
 
@@ -432,11 +334,11 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 
 															<?php }?>
 
@@ -446,13 +348,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<input type="text" style="text-align: center;" size="5" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="4" onChange="notas(this)">
+															<input type="text" style="text-align: center;" size="5" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="notaRecuperacion(this)">
 
 															<?php }?>
 
 														</td>
 
-														<td><input type="text" value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="2" onChange="notas(this)" tabindex="10<?=$contReg;?>"></td>
+														<td><input type="text" value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="guardarObservacion(this)" tabindex="10<?=$contReg;?>"></td>
 
                                                     </tr>
 

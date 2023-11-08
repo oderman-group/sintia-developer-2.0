@@ -174,7 +174,7 @@ function verCuentaBancaria() {
 }
 
 function cambiarPosicion(idCarga, posicionNueva) {
-	fetch('../compartido/guardar.php?get=29&idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
+	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
 		method: 'GET'
 	})
 	.then(response => response.text()) // Convertir la respuesta a texto
@@ -195,4 +195,57 @@ function cambiarPosicion(idCarga, posicionNueva) {
 		// Manejar errores
 		console.error('Error:', error);
 	});
+}
+
+/**
+ * Obtiene datos de la URL especificada y muestra un mensaje de éxito usando $.toast.
+ * @param {string} url - La URL para obtener los datos.
+ */
+function fetchSoloAccion(url) {
+
+    fetch(url, {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        $.toast({
+
+			heading: 'Acción exitosa', 
+			text: 'La acción fue realizada con éxito', 
+			position: 'bottom-right',
+            showHideTransition: 'slide',
+			loaderBg:'#26c281', 
+			icon: 'success', 
+			hideAfter: 5000, 
+			stack: 6
+
+		});
+    })
+    .catch(error => {
+        // Manejar errores
+        console.error('Error:', error);
+    });
+
+}
+
+/**
+ * Cambia el estado de un registro y actualiza la interfaz de usuario.
+ *
+ * @param {HTMLElement} data - Elemento HTML que contiene atributos de datos necesarios.
+ */
+function cambiarEstados (data) {
+    const estados = {
+        1: 'Pendiente',
+        2: 'En proceso',
+        3: 'Aceptada',
+        4: 'Rechazada'
+    };
+    var idRegistro = data.getAttribute('data-id-registro');
+    var idEstado = data.getAttribute('data-id-estado');
+    var idRecurso = data.getAttribute('data-id-recurso');
+    var idUsuario = data.getAttribute('data-id-usuario');
+    
+    document.getElementById('estado'+idRegistro).innerHTML= estados[idEstado];
+    var url = 'solicitudes-estado-actualizar.php?idRegistro='+idRegistro+'&estado='+idEstado+'&idUsuario='+idUsuario;
+    fetchSoloAccion(url);
 }

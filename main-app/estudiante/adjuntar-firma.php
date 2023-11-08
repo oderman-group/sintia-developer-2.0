@@ -57,8 +57,7 @@
 
 
 
-                                <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="25">
+                                <form action="../compartido/guardar-firma.php" method="post" enctype="multipart/form-data">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[353][$datosUsuarioActual[8]];?></label>

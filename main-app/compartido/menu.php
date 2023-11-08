@@ -262,6 +262,21 @@
 	                            </ul>
 	                        </li>
 							<?php }}?>
+
+							<?php 
+							//MÓDULO CUESTIONARIO EVALUATIVO
+							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
+							<li class="nav-item">
+	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
+	                                <span class="title">Cuestionarios</span> <span class="arrow"></span>
+	                            </a>
+	                            <ul class="sub-menu">
+	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title">Ver cuestionarios</span></a></li>
+									<li class="nav-item"><a href="#" class="nav-link "> <span class="title">Preguntas</span></a></li>
+
+	                            </ul>
+	                        </li>
+							<?php }?>
 							
 							<?php 
 							//MÓDULO MERCADEO
@@ -481,15 +496,15 @@
 	                            </a>
 	                        </li>
 							
-							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
-	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart fa-spin"></i>
-	                                <span class="title">Marketplace</span> 
-	                            </a>
-	                        </li>
-							
 							<li class="nav-item" data-step="12" data-intro="<b><?=$frases[104][$datosUsuarioActual[8]];?>:</b> Aquí verás toda la información relacionada con tu estado de cuenta financiero." data-position='left'>
 	                            <a href="estado-de-cuenta.php" class="nav-link nav-toggle"> <i class="material-icons">attach_money</i>
 	                                <span class="title"><?=$frases[104][$datosUsuarioActual['uss_idioma']];?></span> 
+	                            </a>
+	                        </li>
+
+							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual[8]];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
+	                            <a href="marketplace.php" class="nav-link nav-toggle bg-warning text-dark"> <i class="fa fa-shopping-cart text-dark"></i>
+	                                <span class="title">Marketplace</span> 
 	                            </a>
 	                        </li>
 							

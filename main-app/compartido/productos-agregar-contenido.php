@@ -5,9 +5,7 @@
                                     <header>Registra tu producto o servicio</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="17">
-                                        
+                                    <form class="form-horizontal" action="../compartido/productos-guardar.php" method="post" enctype="multipart/form-data">                                        
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Titulo del producto (*)</label>
                                             <div class="col-sm-10">
@@ -80,15 +78,12 @@
 												<span style="color: navy;">Con estas palabras claves relacionadas pueden encontrar más fácil esta publicación.</span>
 											</div>
                                         </div>
-										
-										
-											
+                                            
+                                        <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
-										
-										<input type="submit" class="btn btn-primary" value="Registrar producto">&nbsp;
-										
-										<a href="#" name="marketplace.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-
+                                        <button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
                                     </form>
                                 </div>
                             </div>

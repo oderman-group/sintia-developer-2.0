@@ -81,8 +81,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="24" name="id">
+									<form name="formularioGuardar" action="evaluaciones-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 

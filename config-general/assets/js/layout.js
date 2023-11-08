@@ -341,7 +341,7 @@ var Layout = function () {
                 }
             }
 
-            fetch('../compartido/guardar.php?get=28&tipoMenu='+tipoMenu, {
+            fetch('../compartido/cambiar-menu.php?tipoMenu='+tipoMenu, {
                 method: 'GET'
             })
             .then(response => response.text()) // Convertir la respuesta a texto

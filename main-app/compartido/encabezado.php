@@ -122,13 +122,20 @@ $institucionNombre = $institucion['ins_siglas'];
                             </li>
                         <?php 
                             }
-                        }
+                        } else {
                         ?>
+                            <li class="dropdown dropdown-user">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="fa fa-calendar-o"></i>    
+                                <span class="username username-hide-on-mobile"> AÑO ACTUAL: <b><?=$_SESSION["bd"];?></b> </span>
+                                </a>
+                            </li>
+                        <?php }?>
 						
                     	<!-- start language menu -->
                         <li class="dropdown language-switch" data-step="3" data-intro="<b>Idiomas:</b> Aquí puedes cambiar el idioma de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
 							<?php
-							switch($datosUsuarioActual[8]){
+							switch($datosUsuarioActual['uss_idioma']){
 								case 1:
 									$idiomaImg = 'es.png';
 									$idiomaNombre = 'Español';
@@ -145,10 +152,10 @@ $institucionNombre = $institucion['ins_siglas'];
 							
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(2)?>" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/cambiar-idioma-tema.php?get=1&idioma=2" class="english"><img src="../../config-general/assets/img/flags/gb.png" alt=""> <?=$frases[261][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                                 <li>
-                                    <a href="../compartido/guardar.php?get=<?=base64_encode(1)?>&idioma=<?=base64_encode(1)?>" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
+                                    <a href="../compartido/cambiar-idioma-tema.php?get=1&idioma=1" class="espana"><img src="../../config-general/assets/img/flags/es.png" alt=""> <?=$frases[262][$datosUsuarioActual['uss_idioma']];?></a>
                                 </li>
                             </ul>
                         </li>

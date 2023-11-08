@@ -30,7 +30,7 @@ LIMIT ".$empezarMF.",1
 		
 		<?php if($publicidadLateralMF['pub_descripcion']!=""){?><p><?=$publicidadLateralMF['pub_descripcion'];?></p><?php }?>
 		
-		<?php if($publicidadLateralMF['pub_imagen']!=""){?><div class="item"><a href="../compartido/guardar.php?get=14&idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadLateralMF['pub_id'];?>&idUb=1&url=<?=$publicidadLateralMF['pub_url'];?>" target="_blank"><img class="img-re" src="http://plataformasintia.com/files-general/frases/<?=$publicidadLateralMF['pub_imagen'];?>"></a></div><p>&nbsp;</p><?php }?>
+		<?php if($publicidadLateralMF['pub_imagen']!=""){?><div class="item"><a href="../compartido/guardar-click-publicitario.php?idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadLateralMF['pub_id'];?>&idUb=1&url=<?=$publicidadLateralMF['pub_url'];?>" target="_blank"><img class="img-re" src="http://plataformasintia.com/files-general/frases/<?=$publicidadLateralMF['pub_imagen'];?>"></a></div><p>&nbsp;</p><?php }?>
 		
 		<?php if($publicidadLateralMF['pub_video']!=""){?><p>
 		<iframe width="450" height="315" src="https://www.youtube.com/embed/<?=$publicidadLateralMF['pub_video'];?>?rel=0&amp;mute=<?=$publicidadLateralMF['pub_mute'];?>&start=<?=$publicidadLateralMF['pub_start'];?>&end=<?=$publicidadLateralMF['pub_end'];?>&autoplay=<?=$publicidadLateralMF['pub_autoplay'];?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen volume="0"></iframe></p><?php }?>
@@ -42,7 +42,7 @@ LIMIT ".$empezarMF.",1
 		</script>
 		
 		<?php if($guardadaNum==0){?>
-			<p id="guardarRecurso"><a href="../compartido/guardar.php?get=15&idPub=<?=$publicidadLateralMF['pub_id'];?>" target="_blank" onClick="guardarRec()"><i class="fa fa-save"></i> Guardar recurso</a></p>
+			<p id="guardarRecurso"><a href="../compartido/guardar-frase.php?idPub=<?=$publicidadLateralMF['pub_id'];?>" target="_blank" onClick="guardarRec()"><i class="fa fa-save"></i> Guardar recurso</a></p>
 		<?php }else{?>
 			<p><i class="fa fa-check"></i> Recurso guardado</p>
 		<?php }?>

@@ -112,8 +112,7 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="7" name="id">
+									<form name="formularioGuardar" action="preguntas-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$idE;?>" name="idE">
 
 										<div id="infoCero">

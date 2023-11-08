@@ -5,9 +5,7 @@
                                     <header>Registrar mi negocio</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="16">
-                                        
+                                    <form class="form-horizontal" action="../compartido/empresas-guardar.php" method="post" enctype="multipart/form-data">
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Nombre de tu negocio (*)</label>
                                             <div class="col-sm-9">
@@ -46,15 +44,12 @@
 												</div>
 												
 											</div>
-											
-
-										
-										<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-										
+                                            
 										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
+										<button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
                                     </form>
                                 </div>
                             </div>

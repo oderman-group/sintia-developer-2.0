@@ -3,8 +3,7 @@
         
         <div class="panel-body">
             <p>Puedes reemplazar el plan actual si ya tienes uno montado.</p>
-            <form action="guardar.php" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="id" value="16">
+            <form action="plan-clases-guardar.php" method="post" enctype="multipart/form-data">
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <input type="file" name="file" class="form-control" onChange="archivoPeso(this)" <?=$disabled;?>>

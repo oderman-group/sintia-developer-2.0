@@ -105,8 +105,7 @@
 											Muchas gracias por enviar tu opinión! La tendremos en cuenta para seguir mejorando.
 										</p>
 									<?php }else{?>
-									<form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="10">
+									<form class="form-horizontal" action="../compartido/enviar-sugerencias-sintia.php" method="post">
 										<input type="hidden" name="usuario" value="<?=$datosUsuarioActual['uss_nombre'];?>">
 										<input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
 										

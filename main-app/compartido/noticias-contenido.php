@@ -76,8 +76,7 @@
                         $fotoUsrActual = $usuariosClase->verificarFoto($datosUsuarioActual['uss_foto']);
                         ?>
                     <div class="card-body " id="bar-parent1">
-                        <form class="form-horizontal" action="../compartido/guardar.php" method="post">
-                            <input type="hidden" name="id" value="1">
+                        <form class="form-horizontal" action="../compartido/noticia-rapida-guardar.php" method="post">
                             <input type="hidden" id="infoGeneral" value="<?=base64_encode($datosUsuarioActual['uss_id']);?>|<?=$fotoUsrActual;?>|<?=$datosUsuarioActual['uss_nombre'];?>">
                             <div class="form-group row">
                                 <div class="col-sm-12" data-hint="Realiza una publicación rápida, con solo texto.">
@@ -189,7 +188,7 @@
                                         <a
                                         href="javascript:void(0);"
                                         id="<?=base64_encode($resultado['not_id']);?>|1"  
-                                        name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                        name="../compartido/noticias-gestionar.php?e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                         onClick="ocultarNoticia(this)"
                                         >
                                         <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
@@ -198,7 +197,7 @@
                                     <a
                                     href="javascript:void(0);"
                                     id="<?=base64_encode($resultado['not_id']);?>|2"  
-                                    name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                    name="../compartido/noticias-gestionar.php?e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                     onClick="ocultarNoticia(this)"
                                     >
                                         <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?>
@@ -213,7 +212,7 @@
                                         
                                         <li class="mdl-menu__item"><a href="javascript:void(0);" title="<?=$objetoEnviar;?>"
                                                 id="<?=base64_encode($resultado['not_id']);?>"
-                                                name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                                name="../compartido/noticias-gestionar.php?e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                                 onClick="deseaEliminar(this)"><i
                                                     class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
                                         </li>
@@ -320,7 +319,7 @@
 									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=<?=base64_encode(8)?>&r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
+                                            href="../compartido/noticias-reaccionar.php?r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
                                                 class="fa <?=$rIcons[$i];?>"></i><?=$rName[$i];?></a></li>
                                     <?php $i++;}?>
                                 </ul>

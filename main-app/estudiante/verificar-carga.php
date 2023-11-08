@@ -54,7 +54,7 @@ if($numCargaActual==0)
 
 if($config['conf_activar_encuesta']==1){
 	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
-	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."'"));
+	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
 	if($respuesta==0 and $datosEstudianteActual[6]!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();	

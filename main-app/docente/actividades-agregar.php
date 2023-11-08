@@ -73,8 +73,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="21" name="id">
+									<form id="form_subir" name="formularioGuardar" action="actividades-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
@@ -207,16 +206,23 @@
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
-													
+
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
+
 													setTimeout(redirect(), 2000);
 													
 													function redirect(){
-														location.href='actividades.php';
+														location.href='actividades.php?success=SC_DT_1&id='+respuesta;
 													}
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "actividades-guardar.php");
 												peticion.send(new FormData(form));
 
 											}
