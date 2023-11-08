@@ -17,8 +17,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                     <header><?=$frases[217][$datosUsuarioActual[8]];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="4">
+                                    <form class="form-horizontal" action="../compartido/noticias-actualizar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="idR" value="<?=$idR;?>">
                                         
 										<div class="form-group row">
@@ -57,7 +56,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                             ?>
 												<div class="item col-sm-4" id="reg<?=$datosConsulta['not_id']?>">
 													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
-													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$datosConsulta['not_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($datosConsulta['not_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
+													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$datosConsulta['not_id'];?>" name="../compartido/noticias-eliminar-imagen.php?idR=<?=base64_encode($datosConsulta['not_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 												</div>
 												<p>&nbsp;</p>
 											<?php }?>
