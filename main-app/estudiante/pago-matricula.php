@@ -62,8 +62,7 @@
 
 
 
-                                <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="22">
+                                <form action="../compartido/guardar-pago-matricula.php" method="post" enctype="multipart/form-data">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual[8]];?></label>

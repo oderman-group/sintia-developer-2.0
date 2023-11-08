@@ -130,9 +130,9 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                     <header><?=$frases[292][$datosUsuarioActual[8]];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="28">
+                                    <form class="form-horizontal" action="../compartido/aspectos-estudiantiles-guardar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="estudiante" value="<?=$datosEditar['mat_id'];?>">
+                                        <input type="hidden" name="idR" value="<?=$_GET["idR"];?>">
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
@@ -193,8 +193,8 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                     <header><?=$frases[292][$datosUsuarioActual[8]];?> (<?=$frases[28][$datosUsuarioActual[8]];?>)</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="29">
+                                    <form class="form-horizontal" action="../compartido/aspectos-estudiantiles-guardar-docentes.php" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="idR" value="<?=$_GET["idR"];?>">
                                         <input type="hidden" name="estudiante" value="<?=$datosEditar['mat_id'];?>">
                                         <input type="hidden" name="curso" value="<?=$datosEditar['mat_grado'];?>">
 
@@ -222,12 +222,11 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                             </div>
                                         </div>
 
-                                        
-                                        <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-                                        
                                         <a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
+
+                                        <button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
 
                                     </form>
                                 </div>
@@ -276,7 +275,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                                 <td><?php if(!empty($aspectos['dn_aspecto_convivencial'])){ echo $aspectos['dn_aspecto_convivencial'];}?></td>
                                                 <td>
                                                     <?php if($datosUsuarioActual['uss_tipo'] == 5 && !empty($aspectos)){
-                                                        $href='../compartido/guardar.php?get=27&idR='.$aspectos['dn_id'];?>
+                                                        $href='../compartido/aspectos-estudiantiles-eliminar-docentes.php?idA='.$aspectos['dn_id'].'&idR='.$_GET["idR"];?>
                                                         <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>
                                                     <?php }?>
 
@@ -354,7 +353,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
                                     <td>
                                         <?php if($datosUsuarioActual['uss_tipo'] == 5){
-                                            $href='../compartido/guardar.php?get=26&idR='.$aspectos['mata_id'];
+                                            $href='../compartido/aspectos-estudiantiles-eliminar.php?idA='.$aspectos['mata_id'].'&idR='.$_GET["idR"];
                                             ?>
                                             <a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>
                                         <?php }?>

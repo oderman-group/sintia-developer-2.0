@@ -26,7 +26,7 @@ $usuarioActual= $_POST["usuarioActual"];
 				<div class="panel-body">
 					<p><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_fecha']; ?></span>
 					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){
-						$href='../compartido/guardar.php?get='.base64_encode(24).'&idCom='.base64_encode($preguntasDatos['cpp_id']);?>
+						$href='../compartido/clases-eliminar-comentarios.php?idCom='.base64_encode($preguntasDatos['cpp_id']).'&idR='.base64_encode($_POST["claseId"]);?>
 						
 						<a href="javascript:void(0);" id="<?= base64_encode($preguntasDatos['cpp_id']); ?>" name="<?= $href ?>" onClick="deseaEliminar(this)">
 							<i class="fa fa-trash"></i>

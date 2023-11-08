@@ -12,7 +12,7 @@
 				 
 				 <?php if($publicidadPopUp['pub_imagen']!=""){?>
 					 <div class="item">
-						 <a href="../compartido/guardar.php?get=14&idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadPopUp['pub_id'];?>&idUb=3&url=<?=$publicidadPopUp['pub_url'];?>" target="_blank">
+						 <a href="../compartido/guardar-click-publicitario.php?idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadPopUp['pub_id'];?>&idUb=3&url=<?=$publicidadPopUp['pub_url'];?>" target="_blank">
 							 <img src="https://plataformasintia.com/files-general/pub/<?=$publicidadPopUp['pub_imagen'];?>" width="470">
 						 </a>
 					 </div>
@@ -26,7 +26,7 @@
 			</div>
 			 <div class="modal-footer">
 				<?php if($publicidadPopUp['pub_boton_accion']!=""){?>
-					<a href="../compartido/guardar.php?get=14&idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadPopUp['pub_id'];?>&idUb=3&url=<?=$publicidadPopUp['pub_url'];?>" class="btn btn-success" target="_blank"><?=$publicidadPopUp['pub_boton_accion'];?></a>
+					<a href="../compartido/guardar-click-publicitario.php?idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadPopUp['pub_id'];?>&idUb=3&url=<?=$publicidadPopUp['pub_url'];?>" class="btn btn-success" target="_blank"><?=$publicidadPopUp['pub_boton_accion'];?></a>
 				 <?php }?>
 				<a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
 		 	</div>
@@ -56,12 +56,9 @@ if($datosUsuarioActual['uss_solicitar_datos']==1){
                                     <header>Información</header>
                                 </div>
                                 <div class="card-body" id="bar-parent6">
-                                    <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="15">
+                                    <form action="../compartido/guardar-datos-demos.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
-										
-										
-                                                <input type="hidden" value="<?=$datosUsuarioActual["uss_celular"];?>" name="celular">
+										<input type="hidden" name="celular" value="<?=$datosUsuarioActual["uss_celular"];?>">
 										
 										<div class="form-group row">
                                             <label class="col-sm-4 control-label">Nombre de la Institución</label>
@@ -165,8 +162,7 @@ if($datosUsuarioActual['uss_preguntar_animo']==1){
                                     <header>Escribe tu opinión aquí abajo</header>
                                 </div>
                                 <div class="card-body" id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="10">
+                                    <form class="form-horizontal" action="../compartido/enviar-sugerencias-sintia.php" method="post">
 										<div class="form-group row">
 											<div class="col-sm-12">
 												<textarea name="contenido" class="form-control" rows="3" placeholder="¿Cuál es tu opinión o sugerencia sobre la plataforma SINTIA?" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
@@ -263,8 +259,7 @@ if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
 										
 									</div>
 									<!--
-                                    <form class="form-horizontal" action="#../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="10">
+                                    <form class="form-horizontal" action="#../compartido/enviar-sugerencias-sintia.php" method="post">
 										<div class="form-group row">
 											<div class="col-sm-12">
 												<textarea name="contenido" class="form-control" rows="3" placeholder="Si tienes algún comentario respecto a este cobro puedes hacernoslo saber..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
