@@ -206,12 +206,14 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														
 														$fotoUsuario = $usuariosClase->verificarFoto($resultado['uss_foto']);
 
+														$estadoUsuario = !empty($resultado['uss_estado']) ? $opcionEstado[$resultado['uss_estado']] : '';
+
 														$infoTooltip = "
 														<p>
 															<img src='{$fotoUsuario}' class='img-thumbnail' width='120px;' height='120px;'>
 														</p>
 														<b>Sesión:</b><br>
-														{$opcionEstado[$resultado['uss_estado']]}<br>
+														{$estadoUsuario}<br>
 														<b>Último ingreso:</b><br>
 														{$resultado['uss_ultimo_ingreso']}<br><br>
 														<b>Email:</b><br>
