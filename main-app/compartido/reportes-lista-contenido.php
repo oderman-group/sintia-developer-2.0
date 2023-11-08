@@ -143,24 +143,24 @@
 																		</button>
 																		<ul class="dropdown-menu" role="menu">
 																		<?php if( Modulos::validarSubRol(['DT0025']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(20);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
+																			<li><a href="reportes-firmar-estudiante.php?idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0056']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(21);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
+																			<li><a href="reportes-firmar-acudiente.php?idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0055']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(22);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
+																			<li><a href="reportes-firma-quitar-estudiante.php?idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0054']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(23);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
+																			<li><a href="reportes-firmar-quitar-acudiente.php?idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
 																		<?php }?>
 																			
-																			<?php if( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && Modulos::validarSubRol(['DT0026'])){?>
+																			<?php if( ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) && Modulos::validarSubRol(['DT0026'])){?>
 
-																				<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(19);?>&idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																				<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="reportes-eliminar.php?idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																				
 																			<?php }?>
 
