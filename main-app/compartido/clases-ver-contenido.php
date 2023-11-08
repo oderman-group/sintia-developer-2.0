@@ -294,26 +294,24 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 										window.onload = consultarPreguntas();	
 										
-										function guardar(){																
-											id="14";
+										function guardar(){
 											idClase=<?=$idR;?>;
 											sesionUsuario=<?=$_SESSION["id"];?>;
 											contenido=document.getElementById("contenido").value;
 											btn=document.getElementById("btnEnviar");
 											if(validar()){
-												datos = "id="+id
-														+"&idClase="+idClase
+												datos = "&idClase="+idClase
 														+"&sesionUsuario="+sesionUsuario
 														+"&contenido="+contenido;
 													
 												
 													$.ajax({
 													type: "POST",
-													url: "../compartido/guardar.php",
+													url: "../compartido/clases-guardar-comentarios.php",
 													data: datos,
 													success: function(data){
 														document.getElementById("contenido").value="";
-														btn.disabled=false;																				
+														btn.disabled=false;
 														consultarPreguntas();
 													}
 													});
