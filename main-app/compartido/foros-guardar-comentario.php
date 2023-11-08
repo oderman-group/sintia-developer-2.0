@@ -12,7 +12,7 @@ try{
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
-$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'foros-detalles.php?idR='.base64_encode($_POST["idR"]));
+$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'foros-detalles.php?idR='.base64_encode($_POST["foro"]));
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
