@@ -13,11 +13,7 @@ if($config['conf_id_institucion'] == ICOLVEN){
 						            <header><?= $frases[60][$datosUsuarioActual[8]]; ?></header>
 						        </div>
 						        <div class="card-body " id="bar-parent6">
-						            <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-						                <input type="hidden" name="id" value="19">
-
-						               
-
+						            <form action="../compartido/matricula-actualizar.php" method="post" enctype="multipart/form-data">
 										<div class="form-group row">
 						                    <label class="col-sm-2 control-label"><?= $frases[321][$datosUsuarioActual[8]]; ?></label>
 						                    <div class="col-sm-4">

@@ -12,8 +12,7 @@ if(!Modulos::validarPermisoEdicion()){
                                     <header><?=$frases[96][$datosUsuarioActual[8]];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="12">
+                                    <form class="form-horizontal" action="../compartido/reportes-guardar.php" method="post" enctype="multipart/form-data">
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>

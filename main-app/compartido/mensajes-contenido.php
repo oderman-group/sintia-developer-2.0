@@ -112,7 +112,7 @@ $numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDa
 																		('.$resultado['ema_fecha_visto'].')</span>';?></td>
 																	<?php }?>
 																	
-																	<td class="view-message  text-right"><a href="../compartido/guardar.php?get=<?=base64_encode(17)?>&idR=<?=base64_encode($resultado['ema_id']);?>&elm=<?=base64_encode($eliminar);?>"><i class="fa fa-trash"></i></a></td>
+																	<td class="view-message  text-right"><a href="../compartido/mensajes-eliminar.php?idR=<?=base64_encode($resultado['ema_id']);?>&elm=<?=base64_encode($eliminar);?>"><i class="fa fa-trash"></i></a></td>
 				                                                </tr>
 																<?php
 																	$contReg++;	 

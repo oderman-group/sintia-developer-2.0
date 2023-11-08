@@ -174,7 +174,7 @@ function verCuentaBancaria() {
 }
 
 function cambiarPosicion(idCarga, posicionNueva) {
-	fetch('../compartido/guardar.php?get=29&idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
+	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
 		method: 'GET'
 	})
 	.then(response => response.text()) // Convertir la respuesta a texto

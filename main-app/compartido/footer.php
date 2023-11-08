@@ -25,7 +25,7 @@ LIMIT ".$empezar.",1
 		<?php if($publicidadFooter['pub_titulo']!=""){?><h4><?=$publicidadFooter['pub_titulo'];?></h4><?php }?>
 		<?php if($publicidadFooter['pub_descripcion']!=""){?><p><?=$publicidadFooter['pub_descripcion'];?></p><?php }?>
 		<?php if($publicidadFooter['pub_imagen']!=""){?>
-			<div class="item"><a href="../compartido/guardar.php?get=14&idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadFooter['pub_id'];?>&idUb=2&url=<?=$publicidadFooter['pub_url'];?>" target="_blank"><img src="http://plataformasintia.com/files-general/pub/<?=$publicidadFooter['pub_imagen'];?>" width="470"></a></div>
+			<div class="item"><a href="../compartido/guardar-click-publicitario.php?idPag=<?=$idPaginaInterna;?>&idPub=<?=$publicidadFooter['pub_id'];?>&idUb=2&url=<?=$publicidadFooter['pub_url'];?>" target="_blank"><img src="http://plataformasintia.com/files-general/pub/<?=$publicidadFooter['pub_imagen'];?>" width="470"></a></div>
 			<p>&nbsp;</p>
 		<?php }?>
 	</div>

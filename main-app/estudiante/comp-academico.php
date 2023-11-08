@@ -72,11 +72,7 @@
 
 
 
-						            <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-						                <input type="hidden" name="id" value="23">
-
-						                
-
+						            <form action="../compartido/aceptar-comp-academico.php" method="post" enctype="multipart/form-data">
 						                <?php if ($datosEstudianteActual["mat_pagare"] == 1 AND $datosEstudianteActual["mat_compromiso_academico"] == '0') { ?>
 						                    <input type="submit" class="btn btn-primary" value="Aceptar y continuar">&nbsp;
 						                <?php }?>

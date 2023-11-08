@@ -79,8 +79,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 									<div class="card card-box">
 										
 										<div class="card-body " id="bar-parent1">
-										<form class="form-horizontal" action="../compartido/guardar.php" method="post">
-											<input type="hidden" name="id" value="8">
+										<form class="form-horizontal" action="../compartido/foros-guardar-comentario.php" method="post">
 											<input type="hidden" name="foro" value="<?=$idR;?>">
 											
 											<div class="form-group row">
@@ -129,7 +128,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 															<div class="card-head">
 																
 																	<?php if($_SESSION["id"]==$resultado['com_id_estudiante']){
-																		 $href='../compartido/guardar.php?get='.base64_encode(12).'&e='.base64_encode(2).'&idCom='.base64_encode($resultado['com_id']);
+																		 $href='../compartido/foros-eliminar-comentario.php?e='.base64_encode(2).'&idCom='.base64_encode($resultado['com_id']).'&idR='.$_GET["idR"];
 																		?>
 																	<button id ="panel-<?=$resultado['com_id'];?>" 
 																	   class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
@@ -177,8 +176,8 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																<a class="pull-right" onClick="ocultarDetalles(this)" name="<?=base64_encode($resultado['com_id']);?>">Ocultar</a>
 															</header>
 															<div class="panel-body">
-																<form class="form-horizontal" action="../compartido/guardar.php" method="post">
-																	<input type="hidden" name="id" value="9">
+																<form class="form-horizontal" action="../compartido/foros-guardar-respuesta.php" method="post">
+																	<input type="hidden" name="idR" value="<?=$idR;?>">
 																	<input type="hidden" name="comentario" value="<?=$resultado['com_id'];?>">
 
 																	<div class="form-group row">
@@ -200,7 +199,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 																?>
 																	<p>
 																		<?php if($_SESSION["id"]==$datoReacciones['fore_id_estudiante']){?>
-																			<a href="#" name="../compartido/guardar.php?get=<?=base64_encode(13);?>&idResp=<?=base64_encode($datoReacciones['fore_id']);?>&idCom=<?=base64_encode($resultado['com_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-times"></i></a>
+																			<a href="#" name="../compartido/foros-eliminar-respuesta.php?idResp=<?=base64_encode($datoReacciones['fore_id']);?>&idCom=<?=base64_encode($resultado['com_id']);?>&idR=<?=$_GET["idR"];?>" onClick="deseaEliminar(this)"><i class="fa fa-times"></i></a>
 																		<?php }?>
 																		<a><?=$datoReacciones['uss_nombre'];?></a>: <?=$datoReacciones['fore_respuesta'];?></p>
 																<?php }?>
