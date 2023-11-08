@@ -145,7 +145,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												</button>
 												<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-p">
 													<li class = "mdl-menu__item"><a href="clases-editar.php?idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>"><i class="fa fa-edit"></i>Editar</a></li>
-													<li class = "mdl-menu__item"><a href="javascript:void(0);" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar</a></li>
+													<li class = "mdl-menu__item"><a href="javascript:void(0);" name="clases-eliminar.php?idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar</a></li>
 												</ul>
 											<?php }?>
 											
