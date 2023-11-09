@@ -29,6 +29,7 @@
 											'matcur_years' 			=> $config['conf_agno']
 										];
 										$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+										if(!empty($listaCursosMediaTecnica)){ 
 										foreach ($listaCursosMediaTecnica as $dato) {
 											$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]);
 
@@ -55,6 +56,6 @@
 											
 											</div>
 										</div>
-										<?php }?>
+										<?php }}?>
                                     
 									<?php } ?>
