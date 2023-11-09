@@ -1,4 +1,5 @@
 <?php
+	require_once(ROOT_PATH."/main-app/class/Boletin.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -348,6 +349,12 @@
 															WHERE ind_id='".$resultado['act_id_tipo']."'
 															"), MYSQLI_BOTH); 
 
+															$notaFinal=$nota3;
+															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota3);
+																$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+															}
+
 													 ?>
 
                                                     
@@ -367,7 +374,7 @@
 
 														<td><?=$resultado[3];?>%</td>
 
-														<td style="color:<?=$colorNota;?>"><?=$nota3;?></td>
+														<td style="color:<?=$colorNota;?>"><?=$notaFinal;?></td>
 
 														<td><?=$nota4;?></td>
 
@@ -389,6 +396,12 @@
 
 														include("../definitivas.php");
 
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
+
 													  ?>
 
                                                 </tbody>
@@ -407,7 +420,7 @@
 
 														<td><?=$porcentajeActualActividad;?>%</td>
 
-														<td style="color:<?=$colorDefinitiva;?>"><?=$definitiva;?></td>
+														<td style="color:<?=$colorDefinitiva;?>"><?=$definitivaFinal;?></td>
 
 														<td></td>
 

@@ -3,7 +3,8 @@
 <?php $idPaginaInterna = 'ES0007'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php include("verificar-carga.php"); ?>
-<?php include("../compartido/head.php"); ?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -153,6 +154,18 @@
 															if($notaRecuperacion<$config[5] and $notaRecuperacion!="") $colorNota = $config[6]; elseif($notaRecuperacion>=$config[5]) $colorNota = $config[7];
 														}
 
+														$notaFinal=$notasResultado;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado);
+															$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
+
+														$notaRecuperacionFinal=$notaRecuperacion;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaRecuperacion = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaRecuperacion);
+															$notaRecuperacionFinal= !empty($estiloNotaRecuperacion['notip_nombre']) ? $estiloNotaRecuperacion['notip_nombre'] : "";
+														}
+
 													?>
 														<tr>
 															<td><?= $contReg; ?></td>
@@ -164,9 +177,9 @@
 															<td align="center" style="width: 100px; text-align:center; color:<?php if ($notasResultado < $config[5] and $notasResultado != "") echo $config[6];
 																																																																					elseif ($notasResultado >= $config[5]) echo $config[7];
 																																																																					else echo "black"; ?>;">
-																<?= $notasResultado; ?>
+																<?= $notaFinal; ?>
 															</td>
-															<td style="text-align: center; color:<?=$colorNota;?>"><?=$notaRecuperacion;?></td>
+															<td style="text-align: center; color:<?=$colorNota;?>"><?=$notaRecuperacionFinal;?></td>
 														</tr>
 													<?php
 														$contReg++;
