@@ -2,7 +2,7 @@
 include("bd-conexion.php");
 
 $gradosConsulta = "SELECT * FROM academico_grados
-WHERE gra_estado = 1";
+WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."'";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();
