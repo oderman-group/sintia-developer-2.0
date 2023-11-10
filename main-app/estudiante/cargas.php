@@ -145,7 +145,7 @@ if($config['conf_activar_encuesta']==1){
 							'matcur_years' => $config['conf_agno']
 						];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
-						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';}
+						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';
 						foreach ($listaCursosMediaTecnica as $dato) {
 							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>			
 
@@ -201,7 +201,7 @@ if($config['conf_activar_encuesta']==1){
 									';
 							} ?>
 							</div>
-							<?php } ?>
+							<?php }} ?>
 					<?php } ?>
                 </div>
             </div>
