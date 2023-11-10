@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Página PHP</title>
+    <title>SINTIA - FUNCTIONS EXECUTE</title>
     <style>
         body {
             background-color: #333; /* Fondo oscuro */
@@ -24,7 +24,14 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 
-$arrayTables = ['academico_cargas_estudiantes', 'academico_clases', 'academico_clases_preguntas'];
+$arrayTables = [
+	'academico_matriculas', 
+	'academico_areas', 
+	'academico_ausencias', 
+	'academico_cargas', 
+	'academico_categorias_notas', 
+	'academico_grados'
+];
 
 foreach($arrayTables as $table) {
 
