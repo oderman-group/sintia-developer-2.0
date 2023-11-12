@@ -44,11 +44,9 @@ include("../compartido/head.php");
 						</ol>
 					</div>
 				</div>
+				<?php include("includes/barra-superior-informacion-actual.php"); ?>
 				<div class="row">
-					<div class="col-sm-3">
-						<?php include("info-carga-actual.php"); ?>
-					</div>
-					<div class="col-sm-9">
+					<div class="col-sm-12">
 						<div class="panel">
 							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
 							<div class="panel-body">
@@ -68,10 +66,11 @@ include("../compartido/head.php");
 										</div>
 									</div>
 
+									<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 									<button type="submit" class="btn  btn-info">
 										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
 									</button>
-									<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+									
 								</form>
 							</div>
 						</div>

@@ -1,16 +1,12 @@
+<?php 
+					if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){
+						include("includes/barra-superior-informacion-actual.php"); 
+					}
+					?>
 <div class="row">
 						
-						<div class="col-sm-3">
-						<?php 
-							//DOCENTES
-							if($datosUsuarioActual[3]==2){?>
-							<?php include("info-carga-actual.php");?>
-						<?php }?>
-							
-							<?php include("../compartido/publicidad-lateral.php");?>
-                        </div>
 						
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
@@ -112,18 +108,15 @@
 										
 
 
-										<input type="submit" class="btn btn-primary" value="<?=$frases[41][$datosUsuarioActual[8]];?>">&nbsp;
+											<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
+											<button type="submit" class="btn  btn-info">
+												<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+											</button>
 										
-										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
+										
                                     </form>
                                 </div>
                             </div>
-                        </div>
-						
-						<div class="col-sm-3">
-
-						<?php include("../compartido/publicidad-lateral.php");?>
-
                         </div>
 						
                     </div>

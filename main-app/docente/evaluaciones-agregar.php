@@ -42,14 +42,11 @@
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
 						<div class="col-sm-3">
 
-
-						<?php include("info-carga-actual.php");?>
-
-							
                             <div class="panel">
 								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 <div class="panel-body">

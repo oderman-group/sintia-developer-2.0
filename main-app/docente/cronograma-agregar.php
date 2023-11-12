@@ -50,16 +50,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                             </ol>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-                        </div>
 						
                         <div class="col-sm-9">
 

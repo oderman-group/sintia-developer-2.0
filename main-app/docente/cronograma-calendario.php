@@ -26,6 +26,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
 					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
                         <div class="col-md-7">

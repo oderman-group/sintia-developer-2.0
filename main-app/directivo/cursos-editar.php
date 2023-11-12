@@ -392,14 +392,14 @@ if(!Modulos::validarPermisoEdicion()){
                                             }
                                         </script>
 
-
+                                        <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                         <?php if(Modulos::validarPermisoEdicion()){?>
                                             <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
                                         <?php }?>
                                         
-                                        <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        
                                     </form>
                                 </div>
                             </div>
