@@ -11,12 +11,12 @@ class Estudiantes {
         $cursoActual=null
     )
     {
-        global $conexion, $baseDatosServicios, $config;
-        $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
+        global $conexion, $baseDatosServicios, $config, $arregloModulos;
+        $tipoGrado = $cursoActual ? $cursoActual["gra_tipo"] : GRADO_GRUPAL;
         $resultado = [];
         
         try {
-            if($tipoGrado==GRADO_GRUPAL){
+            if( $tipoGrado == GRADO_GRUPAL || !array_key_exists(10, $arregloModulos) ){
                 $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                 LEFT JOIN usuarios ON uss_id=mat_id_usuario
                 LEFT JOIN academico_grados ON gra_id=mat_grado
