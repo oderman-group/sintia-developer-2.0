@@ -72,7 +72,7 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["plan"])) {
+                                if (!empty($_GET["plan"]) && is_numeric($_GET["plan"])) {
                                     $filtro .= " AND ins_id_plan='" . $_GET["plan"] . "'";
                                 }                    
                             ?>
