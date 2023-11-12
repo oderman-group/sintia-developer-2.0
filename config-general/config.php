@@ -49,3 +49,8 @@ $estadosSolicitudes = [
     3 => 'Aceptada',
     4 => 'Rechazada'
 ];
+
+
+if( !array_key_exists(10, $_SESSION["modulos"]) ) { 
+    $filtroMT = " AND gra_tipo ='".GRADO_GRUPAL."'";
+}
