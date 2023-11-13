@@ -69,6 +69,7 @@ function niv(enviada){
  * @param enviada //Datos enviados por imput
  */
 function notasGuardar(enviada){
+    var carga = enviada.step;
 
 	var nota = enviada.value;
 	var notaAnterior = enviada.name;	
@@ -82,6 +83,8 @@ function notasGuardar(enviada){
 	}
 
 	aplicarColorNota(nota, codEst);
+
+    notaCualitativa(nota,codEst,carga);
 
 	$('#respRCT').empty().hide().html("Guardando la nota, espere por favor...").show(1);
 
@@ -132,6 +135,8 @@ function notasMasiva(enviada){
  * @param enviada //Datos enviados por input
  */
 function notaRecuperacion(enviada){
+    var carga = enviada.step;
+
     var codEst = enviada.id; 
     var nota = enviada.value;
     var notaAnterior = enviada.name;	
@@ -141,6 +146,8 @@ function notaRecuperacion(enviada){
     if (alertValidarNota(nota)) {
         return false;
     }
+
+    notaCualitativa(nota,codEst,carga);
 
     $('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);
         datos = "nota="+(nota)+
@@ -392,6 +399,7 @@ function recuperarIndicador(enviada){
         casilla.focus();
         return false;
     }	
+    notaCualitativa(nota,codEst,carga);
         
         
     casilla.disabled="disabled";
