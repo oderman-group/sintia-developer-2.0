@@ -5,12 +5,16 @@ class Grados {
 
     public static function listarGrados($estado = 1,$tipo =null){
         
-        global $conexion;
+        global $conexion, $arregloModulos;
         
         $resultado = [];
         $filtro="";
         if(!is_null($tipo)){
             $filtro="AND gra_tipo ='".$tipo."'";
+        }
+
+        if( !array_key_exists(10,$arregloModulos) ) { 
+            $filtro="AND gra_tipo ='".GRADO_GRUPAL."'";
         }
          
         try {

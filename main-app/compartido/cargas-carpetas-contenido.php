@@ -49,7 +49,11 @@
                         </div>
                     </div>
                    
-                     <!-- chart start -->
+					<?php 
+					if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){
+						include("includes/barra-superior-informacion-actual.php"); 
+					}
+					?>
                     <div class="row">
                     	<div class="col-sm-3">
 							<div class="panel">
@@ -69,14 +73,6 @@
 											<?php if(!empty($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
 										</div>
 									</div>
-							
-							<?php 
-							//DOCENTES
-							if($datosUsuarioActual[3]==2){?>
-								<?php include("info-carga-actual.php");?>
-
-								<?php include("filtros-cargas.php");?>
-							<?php }?>
                         </div>
 						
                         <div class="col-sm-9">

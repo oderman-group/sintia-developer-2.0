@@ -38,15 +38,10 @@
                             </div>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-							<?php include("filtros-cargas.php");?>
-							
-                            <?php include("../compartido/publicidad-lateral.php");?>
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
                                     <header>Configuración de carga</header>
@@ -160,11 +155,15 @@
                                             </div>
                                         </div>
 										
-										<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+										<div class="text-left">
+                                            <a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+                                            <button type="submit" class="btn  btn-info">
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
+                                        </div>
 										
-										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
 
                                     </form>
                                 </div>

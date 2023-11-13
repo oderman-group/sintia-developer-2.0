@@ -32,7 +32,7 @@ if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or 
 if( !empty($_SESSION["infoCargaActual"]) ) {
 	$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
 
-	if($datosCargaActual['car_primer_acceso_docente']==""){
+	if(!empty($datosCargaActual['car_primer_acceso_docente']) && $datosCargaActual['car_primer_acceso_docente']==""){
 		mysqli_query($conexion, "UPDATE academico_cargas SET car_primer_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
 		
 	}else{

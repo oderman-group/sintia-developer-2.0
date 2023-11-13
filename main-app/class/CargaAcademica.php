@@ -35,13 +35,13 @@ class CargaAcademica {
      */
     public static function cargasDatosEnSesion(Int $carga, Int $sesion): array 
     {
-        global $conexion;
+        global $conexion, $filtroMT;
 
         $infoCargaActual = [];
 		try{
 			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 			INNER JOIN academico_materias ON mat_id=car_materia
-			INNER JOIN academico_grados ON gra_id=car_curso
+			INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
 			INNER JOIN academico_grupos ON gru_id=car_grupo
 			WHERE car_id='".$carga."' AND car_docente='".$sesion."' AND car_activa=1");
 		} catch (Exception $e) {
