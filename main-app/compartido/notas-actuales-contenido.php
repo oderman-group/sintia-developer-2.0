@@ -1,4 +1,5 @@
 <?php
+	require_once(ROOT_PATH."/main-app/class/Boletin.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -79,8 +80,10 @@
 													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 													$filtroOr='';
-													foreach ($listaCursosMediaTecnica as $dato) {
-														$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+													if ($listaCursosMediaTecnica != null) { 
+														foreach ($listaCursosMediaTecnica as $dato) {
+															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+														}
 													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 													WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
@@ -94,6 +97,11 @@
 														$estudiante = $datosEstudianteActual['mat_id'];
 														include("../definitivas.php");
 														if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';}
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
 													?>
                                                     
 													<tr>
@@ -104,7 +112,7 @@
 														
 														<?php if($config['conf_sin_nota_numerica']!=1){?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitiva;?></a>
+															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitivaFinal;?></a>
 														</td>
 														<?php }else{?>
 														<td style="text-align:center;">

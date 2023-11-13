@@ -4,6 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $estudiante="";
 if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);}
 $year=date("Y");
@@ -71,13 +72,19 @@ if(isset($_GET["periodo"])){
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
 										if($porcentajeActual>0){$materiasDividir++;}
+
+                    $definitivaFinal=$definitiva;
+                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                      $estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                      $definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+                    }
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas[0];?></td>
                                         <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
                                         <td><?=$rDatos['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
-                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
+                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                       </tr>
                                    <?php 
 								   		$promedioG += $definitiva;
@@ -100,23 +107,33 @@ if(isset($_GET["periodo"])){
                             $periodo = $cPeriodo;
                             $estudiante = $_GET["estudiante"];
                             include("../definitivas.php");
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
                     ?>
                                       <tr id="data1" class="odd gradeX">
                                           <td style="text-align:center;"><?=$rCargas[0];?></td>
                                           <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
                                           <td><?=$rDatos['mat_nombre'];?></td>
                                           <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
-                                          <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
+                                          <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                         </tr>
                                      <?php
                      }}}}
+                     $promedioGFinal=$promedioG;
+                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                       $estiloNotaPromedioG = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioG);
+                       $promedioGFinal= !empty($estiloNotaPromedioG['notip_nombre']) ? $estiloNotaPromedioG['notip_nombre'] : "";
+                     }
 								   ?>   
                                     </tbody>
                                     <!-- END -->
                                      <tfoot>
                                       <tr style="font-weight:bold;">
                                         <td colspan="4" style="text-align:right;">PROMEDIO GENERAL</td>
-                                        <td style="text-align:center;"><?php echo $promedioG;?></td>
+                                        <td style="text-align:center;"><?php echo $promedioGFinal;?></td>
                                       </tr>
                                     </tfoot>
                                   </table>

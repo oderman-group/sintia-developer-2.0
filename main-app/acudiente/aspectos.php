@@ -2,7 +2,8 @@
 <?php include("../estudiante/verificar-usuario.php");?>
 <?php //include("verificar-sanciones.php"); ?>
 <?php $idPaginaInterna = 'AC0015'; ?>
-<?php include("../compartido/historial-acciones-guardar.php"); ?>
+<?php include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
 <?php //include("verificar-carga.php"); ?>
 <?php include("../compartido/head.php");
 	$usrEstud="";
@@ -121,12 +122,20 @@
 											<p>
 												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= base64_encode($usrEstud); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
-												<?php if (!empty($notapp[0]) && $config['conf_sin_nota_numerica'] != 1) { ?>
+                                                <?php
+                                                    if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+                                                    $notaPorPeriodo=$notapp[0];
+                                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+                                                        $notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                                    }
+                                                ?>
 													<div class="work-monitor work-progress">
 														<div class="states">
 															<div class="info">
 																<div class="desc pull-left"><b><?= $frases[62][$datosUsuarioActual['uss_idioma']]; ?>:</b>
-																	<?= $notapp[0]; ?>
+																	<?= $notaPorPeriodo; ?>
 																</div>
 																<div class="percent pull-right"><?= $porcentaje; ?>%</div>
 															</div>

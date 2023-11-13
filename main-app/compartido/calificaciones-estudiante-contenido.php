@@ -1,4 +1,5 @@
 <?php
+	require_once(ROOT_PATH."/main-app/class/Boletin.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -175,7 +176,15 @@
 
 													
 
-													<?php if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){?>
+													<?php
+														if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+														$notaPorPeriodo=$notapp[0];
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+															$notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
+													?>
 
 														<div class="work-monitor work-progress">
 
@@ -183,7 +192,7 @@
 
 																<div class="info">
 
-																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notapp[0];?></div>
+																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notaPorPeriodo;?></div>
 
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 
@@ -348,6 +357,12 @@
 															WHERE ind_id='".$resultado['act_id_tipo']."'
 															"), MYSQLI_BOTH); 
 
+															$notaFinal=$nota3;
+															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota3);
+																$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+															}
+
 													 ?>
 
                                                     
@@ -367,7 +382,7 @@
 
 														<td><?=$resultado[3];?>%</td>
 
-														<td style="color:<?=$colorNota;?>"><?=$nota3;?></td>
+														<td style="color:<?=$colorNota;?>"><?=$notaFinal;?></td>
 
 														<td><?=$nota4;?></td>
 
@@ -389,6 +404,12 @@
 
 														include("../definitivas.php");
 
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
+
 													  ?>
 
                                                 </tbody>
@@ -407,7 +428,7 @@
 
 														<td><?=$porcentajeActualActividad;?>%</td>
 
-														<td style="color:<?=$colorDefinitiva;?>"><?=$definitiva;?></td>
+														<td style="color:<?=$colorDefinitiva;?>"><?=$definitivaFinal;?></td>
 
 														<td></td>
 
