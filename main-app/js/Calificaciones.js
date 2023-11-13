@@ -413,3 +413,17 @@ function recuperarIndicador(enviada){
                     }
                 });
 }
+
+function notaCualitativa(nota,idEstudiante,idCarga){
+    let idHref = 'CU'+idEstudiante+idCarga;
+    let href   = document.getElementById(idHref);
+    fetch('../compartido/ajax-estilo-notas.php?nota='+nota, {method: 'GET'})
+	.then(response => response.text()) // Convertir la respuesta a texto
+	.then(data => {
+        href.innerHTML = '<span>'+data+'</span>';
+	})
+	.catch(error => {
+		// Manejar errores
+		console.error('Error:', error);
+	});
+}
