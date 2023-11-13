@@ -43,7 +43,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
     PERIODO: <?=$per;?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
 
-    <?php if($informacion_inst["info_institucion"]==34){?>
+    <?php if($informacion_inst["info_institucion"]==ICOLVEN){?>
     <p><a href="reportes-sabanas-indicador.php?curso=<?=$_GET["curso"];?>&grupo=<?=$_GET["grupo"];?>&per=<?=$_GET["per"];?>" target="_blank">VER SABANAS CON INDICADORES</a></p>
     <?php } ?>
 </div>  
