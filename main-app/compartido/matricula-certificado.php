@@ -2,6 +2,7 @@
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $modulo = 1;
 
@@ -170,10 +171,15 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    if ($nota < $config[5]) {
+                if ($nota < $config[5]) {
+                    $materiasPerdidas++;
+                }
 
-                        $materiasPerdidas++;
-                    }
+                $notaFinal=$nota;
+                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+                    $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                }
 
                 ?>
 
@@ -181,7 +187,7 @@ $modulo = 1;
 
                         <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
 
-                        <td><?= $nota; ?></td>
+                        <td><?= $notaFinal; ?></td>
 
                         <td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
 
@@ -220,10 +226,15 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    if ($nota < $config[5]) {
+                if ($nota < $config[5]) {
+                    $materiasPerdidas++;
+                }
 
-                        $materiasPerdidas++;
-                    }
+                $notaFinal=$nota;
+                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+                    $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                }
 
                 ?>
 
@@ -231,7 +242,7 @@ $modulo = 1;
 
                         <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
 
-                        <td><?= $nota; ?></td>
+                        <td><?= $notaFinal; ?></td>
 
                         <td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
 
@@ -283,11 +294,11 @@ $modulo = 1;
 
             if ($materiasPerdidas == 0)
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
             else
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
             ?>
 
@@ -376,7 +387,16 @@ $modulo = 1;
                             $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
                             $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
 
-                            echo '<td>' . $notasPeriodo[0] . '</td>';
+                            $notasPeriodoFinal='';
+                            if(!empty($notasPeriodo[0])){
+                                $notasPeriodoFinal=$notasPeriodo[0];
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+                                    $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+                            }
+
+                            echo '<td>' . $notasPeriodoFinal . '</td>';
 
                             $p++;
                         }
@@ -442,7 +462,16 @@ $modulo = 1;
                             $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
                             $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
 
-                            if(!empty($notasPeriodo[0])){ echo '<td>' . $notasPeriodo[0] . '</td>';} else { echo '<td></td>';}
+                            $notasPeriodoFinal='';
+                            if(!empty($notasPeriodo[0])){
+                                $notasPeriodoFinal=$notasPeriodo[0];
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+                                    $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+                            }
+
+                            echo '<td>' . $notasPeriodoFinal . '</td>';
 
                             $p++;
                         }

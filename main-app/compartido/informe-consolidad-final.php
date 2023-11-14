@@ -6,6 +6,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 require_once("../class/Estudiantes.php");
 require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $year = $agnoBD;
 $BD   = $_SESSION["inst"]."_".$agnoBD;
 $bdConsulta = "";
@@ -109,13 +110,22 @@ include("../compartido/head-informes.php") ?>
 												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 												if(!empty($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(!empty($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
-												//$defPorMateria += $boletin[4];
+												
+												$notaBoletinFinal="";
+												$title='';
 												if(!empty($boletin[4])){
-												$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
+													$notaBoletinFinal=$boletin[4];
+													if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+														$title='title="Nota Cuantitativa: '.$boletin[4].'"';
+														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $boletin[4], $BD);
+														$notaBoletinFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+													}
+
+													$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
 												}
 												//DEFINITIVA DE CADA PERIODO
 											?>	
-												<td style="text-align:center; color:<?=$color;?>"><?php if(!empty($boletin[4])){echo $boletin[4];}?></td>
+												<td style="text-align:center; color:<?=$color;?>" <?=$title;?>><?=$notaBoletinFinal?></td>
                                             <?php
 												$p++;
                                             }
@@ -123,8 +133,15 @@ include("../compartido/head-informes.php") ?>
 											$defPorMateria = round($defPorMateria,2);
 												//DEFINITIVA DE CADA MATERIA
 												if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
+												$defPorMateriaFinal=$defPorMateria;
+												$title='';
+												if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+													$title='title="Nota Cuantitativa: '.$defPorMateria.'"';
+													$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $defPorMateria, $BD);
+													$defPorMateriaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+												}
 											?>
-                                            	<td style="text-align:center; background:#FFC; color:<?=$color;?>; text-decoration:underline;"><?=$defPorMateria;?></td>
+                                            	<td style="text-align:center; background:#FFC; color:<?=$color;?>; text-decoration:underline;" <?=$title;?>><?=$defPorMateriaFinal;?></td>
                                         <?php
 											//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 											$defPorEstudiante += $defPorMateria;   

@@ -4,6 +4,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
 
 $year = $agnoBD;
@@ -159,11 +160,19 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                             if(!is_null($notaMaterias['bol_nota'])){
                                 $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
 
+                                $notaMateriaFinal=$notaMateria;
+                                $diseñoCelda='';
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $diseñoCelda='class="vertical" title="Nota Cuantitativa: '.$notaMateria.'"';
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                                    $notaMateriaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+
                                 $estiloNota="";
                                 if($notaMateria<$config['conf_nota_minima_aprobar']){
                                     $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
                                 }
-                                echo '<td align="center" '.$estiloNota.'>'.$notaMateria.'</td>';
+                                echo '<td align="center" '.$estiloNota.' '.$diseñoCelda.'>'.$notaMateriaFinal.'</td>';
                             }else{
                                 echo '<td align="center">&nbsp;</td>';
                             } 

@@ -42,6 +42,7 @@
             break;
     }
 
+    $filtro = "";
     if (!empty($_REQUEST["id"])) {
         $filtro .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
     }
@@ -241,6 +242,9 @@
                             if($notaMateria<10){
                                 $estiloNota['notip_nombre']="Bajo";
                             }
+                            if($notaMateria>50){
+                                $estiloNota['notip_nombre']="Superior";
+                            }
 
                             //AUSENCIAS EN ESTA MATERIA
                             $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
@@ -268,8 +272,20 @@
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
                                                 $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
                                                 $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
+
+                                                $notaMateriasPeriodosFinal=$notaMateriasPeriodos;
+                                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                                    $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateriasPeriodos, $BD);
+                                                    $notaMateriasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                                    if($notaMateriasPeriodos<10){
+                                                        $notaMateriasPeriodosFinal="Bajo";
+                                                    }
+                                                    if($notaMateriasPeriodos>50){
+                                                        $notaMateriasPeriodosFinal="Superior";
+                                                    }
+                                                }
                                     ?>
-                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodos?></td>
+                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
                                     <?php
                                                 }else{
                                     ?>
@@ -305,7 +321,6 @@
 
                             //NOTA PARA LAS AREAS
                             if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
-                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
 
                         } //FIN WHILE DE LAS MATERIAS
                     ?>
@@ -342,10 +357,29 @@
                                                 $promGeneralPer3+=$notaAreasPeriodos;
                                                 break;
                                         }
+
+                                        $notaAreasPeriodosFinal=$notaAreasPeriodos;
+                                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos, $BD);
+                                            $notaAreasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                            if($notaAreasPeriodos<10){
+                                                $notaAreasPeriodosFinal="Bajo";
+                                            }
+                                            if($notaAreasPeriodos>50){
+                                                $notaAreasPeriodosFinal="Superior";
+                                            }
+                                        }
                             ?>
-                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodos?></td>
+                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal?></td>
                             <?php
                                     }else{
+                                        $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
+                                        if($notaArea<10){
+                                            $estiloNotaAreas['notip_nombre']="Bajo";
+                                        }
+                                        if($notaArea>50){
+                                            $estiloNotaAreas['notip_nombre']="Superior";
+                                        }
                             ?>
                             <td align="center"><?=$notaArea?></td>
                             <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
@@ -414,8 +448,20 @@
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
                             $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
                             $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
+
+                            $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneralPeriodos, $BD);
+                                $promedioGeneralPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                if($promedioGeneralPeriodos<10){
+                                    $promedioGeneralPeriodosFinal="Bajo";
+                                }
+                                if($promedioGeneralPeriodos>50){
+                                    $promedioGeneralPeriodosFinal="Superior";
+                                }
+                            }
                     ?>
-                    <td align="center"><?=$promedioGeneralPeriodos;?></td>
+                    <td align="center"><?=$promedioGeneralPeriodosFinal;?></td>
                     <?php
                         }else{
                     ?>
@@ -526,6 +572,7 @@
             <?php
             $conCargasDos = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	        INNER JOIN $BD.academico_materias ON mat_id=car_materia
+	        INNER JOIN $BD.usuarios ON uss_id=car_docente
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
@@ -533,7 +580,7 @@
             ?>
                 <tbody>
                     <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= $datosCargasDos['uss_nombre']; ?></span></td>
+                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
                         <td>
                         
                             <?php

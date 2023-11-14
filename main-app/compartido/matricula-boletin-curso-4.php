@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
     
 
 $year=$agnoBD;
@@ -360,8 +361,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         mysqli_data_seek($consulta_a_mat_per, 0);
 
                         $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-                        INNER JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$_GET['periodo']."'");
+                        LEFT JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
+                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$periodoActual."'");
                         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 
 
@@ -373,8 +374,13 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         //Calculo
                         if(!empty($datosBoletin['bol_nota'])) $sumaNotasPorArea += $datosBoletin['bol_nota'] * ($fila2["mat_valor"] / 100);
 
-
-
+                        $notaBoletin=$datosBoletin['bol_nota'];
+                        $notaDefFinal=$notaFinal['def'];
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                            $notaBoletin= $datosBoletin['notip_nombre'];
+                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaFinal['def'], $BD);
+                            $notaDefFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                        }
 
                     ?>
 
@@ -386,9 +392,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"]; ?></td>
 
-                            <td align="center" style="font-weight:bold; font-size:14px;background:#EAEAEA;"><?=$datosBoletin['bol_nota'];?></td>
+                            <td align="center" style="font-weight:bold; font-size:14px;background:#EAEAEA;"><?=$notaBoletin;?></td>
 
-                            <td align="center" style="font-weight:bold; font-size:15px;background:#EAEAEA;"><?=$notaFinal['def'];?></td>
+                            <td align="center" style="font-weight:bold; font-size:15px;background:#EAEAEA;"><?=$notaDefFinal;?></td>
 
                         </tr>
 
@@ -405,14 +411,14 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
 
                                     $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion 
-                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$_GET["periodo"]."' AND rind_indicador='".$fila4["ind_id"]."'");
+                                    WHERE rind_estudiante='".$matriculadosDatos[0]."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$periodoActual."' AND rind_indicador='".$fila4["ind_id"]."'");
                                     $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                     
 
                                     $contador_indicadores++;
                                     $leyendaRI = '';
-                                    if($recuperacionIndicador['rind_nota']>$fila4["nota"]){
+                                    if(!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota']>$fila4["nota"]){
                                         $nota_indicador = round($recuperacionIndicador['rind_nota'], 1);
                                         $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                     }else{
@@ -431,6 +437,12 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                     if ($nota_indicador == 5)    $nota_indicador = "5.0";
 
+                                    $notaIndicadorFinal=$nota_indicador;
+                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $BD);
+                                        $notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                    }
+
                         ?>
 
                                     <tr bgcolor="#FFF" style="font-size:12px;">
@@ -441,7 +453,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                         <td>&nbsp;</td>
 
-                                        <td align="center" style="font-weight:bold; font-size:12px;"><?= $nota_indicador." ".$leyendaRI; ?></td>
+                                        <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicadorFinal." ".$leyendaRI; ?></td>
 
                                         <td>&nbsp;</td>
 
@@ -466,10 +478,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         $consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
 
-						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $_GET["periodo"] . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
+						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $periodoActual . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
                         $observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 
-                        if ($observacion['bol_observaciones_boletin'] != "") {
+                        if (!empty($observacion['bol_observaciones_boletin'])) {
 
                         ?>
 
