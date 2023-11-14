@@ -2,6 +2,7 @@
 date_default_timezone_set("America/New_York");//Zona horaria
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
 
 $modulo = 1;
@@ -135,7 +136,7 @@ while($i<=$restaAgnos){
 	<?php 
 	$consultaConfig=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
 	$configAA=mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
-	if($inicio<=$config[1] and $configAA[2]==5){?>
+	if($inicio<$config[1] and $configAA[2]<5){?>
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
 
@@ -407,11 +408,9 @@ while($i<=$restaAgnos){
 			}
 		}
 		   if($materiasPerdidas==0 or $niveladas>=$materiasPerdidas)
-                $msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["matri_solo_nombre"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>"; 
-            /*elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
-                $msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";*/
+                $msj = "<center>EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>"; 
             else
-                $msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["matri_solo_nombre"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+                $msj = "<center>EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
         ?>
     
         <br><div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:10px;"><?=$msj;?></div>
@@ -495,7 +494,16 @@ while($i<=$restaAgnos){
 						$consultaNotasPeriodo=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND bol_periodo='".$p."'");
                         $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
 
-						echo '<td>'.$notasPeriodo[0].'</td>';
+						$notasPeriodoFinal='';
+						if(!empty($notasPeriodo[0])){
+							$notasPeriodoFinal=$notasPeriodo[0];
+							if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+								$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+								$notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+							}
+						}
+
+						echo '<td>' . $notasPeriodoFinal . '</td>';
 
                         $p++;
 
@@ -561,7 +569,16 @@ while($i<=$restaAgnos){
 						$consultaNotasPeriodo = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
 						$notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
 
-						echo '<td>' . $notasPeriodo[0] . '</td>';
+						$notasPeriodoFinal='';
+						if(!empty($notasPeriodo[0])){
+							$notasPeriodoFinal=$notasPeriodo[0];
+							if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+								$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+								$notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+							}
+						}
+
+						echo '<td>' . $notasPeriodoFinal . '</td>';
 
 						$p++;
 					}
