@@ -132,7 +132,7 @@ th {
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
 
-															if($notasResultado[3]<$config[5] and $notasResultado[3]!="") $colorNota= $config[6]; elseif($notasResultado[3]>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
+															if(!empty($notasResultado) && $notasResultado[3]<$config[5]) $colorNota= $config[6]; elseif(!empty($notasResultado) && $notasResultado[3]>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
                         
 															$estiloNotaFinal="";
 															if(!empty($notasResultado) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){		
