@@ -41,13 +41,10 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
   var codEst = enviada.id;
   var carga = enviada.name;
   var per = enviada.alt;
-  var config = enviada.step;
   if (alertValidarNota(nota)) {
 		return false;
 	} 
-  if (config==1) {
-    notaCualitativa(config,nota,codEst,carga);
-	} 
+  notaCualitativa(nota,codEst,carga);
     $('#resp').empty().hide().html("Esperando...").show(1);
     datos = "nota="+(nota)+
           "&carga="+(carga)+
@@ -129,7 +126,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 		?>
         	<td align="center" style="color:<?=$color;?>; width: 50px;">
            
-           <input style="text-align:center; width:40px; color:<?=$color;?>;" step="<?=$config['conf_notas_categoria']?>" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
+           <input style="text-align:center; width:40px; color:<?=$color;?>;" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
 
           </td>
           <?php
