@@ -2,8 +2,6 @@
 include("session-compartida.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-// Modulos::validarAccesoDirectoPaginas();
-
 $idPaginaInterna = 'CM0059';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
