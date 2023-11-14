@@ -26,6 +26,8 @@ $num_asg=mysqli_num_rows($asig);
     <link rel="shortcut icon" href="../files/images/ico.png">
 
     <script src="https://plataformasintia.com/eduardoortega/assets/plugins/jquery/jquery-1.9.1.min.js?v1.3.1"></script>
+	  <script src="../js/Calificaciones.js" ></script>
+    <?php include("sintia-funciones-js.php"); ?>
 
 
     <script type="text/javascript">
