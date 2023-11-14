@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
     
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -215,7 +216,12 @@ if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio
 					case 5: echo "E"; break;
 				}
 				}else{
-		echo $totalPromedio;
+					$totalPromedioFinal=$totalPromedio;
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+					  $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $totalPromedio, $BD);
+					  $totalPromedioFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+					}
+		echo $totalPromedioFinal;
 				}
 		
 		?></td>
@@ -232,7 +238,7 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 	
 	 if($fila2["mat_id"]==$fila3["mat_id"]){
 	  $contadorPeriodos++;
-	  $notaPeriodo=round($fila3["bol_nota"],1);
+	  $notaPeriodo=round($fila3["bol_nota"],$config['conf_decimales_notas']);
 	  if($notaPeriodo==1)	$notaPeriodo="1.0";	if($notaPeriodo==2)	$notaPeriodo="2.0";		if($notaPeriodo==3)	$notaPeriodo="3.0";	if($notaPeriodo==4)	$notaPeriodo="4.0";	if($notaPeriodo==5)	$notaPeriodo="5.0";
 	  $notas[$contadorPeriodos] =$notaPeriodo;
 	 }
@@ -243,8 +249,7 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numeroPeriodos;$l++){ ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
-			<?php $consultaDesempenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND '".$notas[$l]."'>=notip_desde AND '".$notas[$l]."'<=notip_hasta");
-			$desempenoNotaP = mysqli_fetch_array($consultaDesempenoNotaP, MYSQLI_BOTH);
+			<?php 
 			if($datosUsr["mat_grado"]>11){
 				$notaF = ceil($notas[$l]);
 				switch($notaF){
@@ -255,18 +260,33 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 					case 5: echo "E"; break;
 				}
 			}else{
-				echo $notas[$l]."<br>".$desempenoNotaP[1];
+				if(isset($notas[$l])){
+					$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notas[$l], $BD);
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+						echo $desempenoNotaP['notip_nombre'];
+					}else{
+						echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
+					}
+				}
 			}
-			
-			$promedios[$l]=$promedios[$l]+$notas[$l];
-			$contpromedios[$l]=$contpromedios[$l]+1;
+
+			if (!isset($promedios[$l])) {
+				$promedios[$l] = 0;
+			}
+			if (!isset($contpromedios[$l])) {
+				$contpromedios[$l] = 0;
+			}
+			if (isset($notas[$l])) {
+				$promedios[$l] += $notas[$l];
+			}
+			$contpromedios[$l]++;
 			?></td>
         <?php }?>
       <?php 
 	  $totalPromedio2=round( $fila2["suma"],1);
 	   
 	   if($totalPromedio2==1)	$totalPromedio2="1.0";	if($totalPromedio2==2)	$totalPromedio2="2.0";		if($totalPromedio2==3)	$totalPromedio2="3.0";	if($totalPromedio2==4)	$totalPromedio2="4.0";	if($totalPromedio2==5)	$totalPromedio2="5.0";
-	   if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
+	   if($totalPromedio2<$config['conf_nota_minima_aprobar']){$materiasPerdidas++;}
 	   ?>
        
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php 
@@ -281,7 +301,12 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 					case 5: echo "E"; break;
 				}
 				}else{
-					echo $totalPromedio2;
+					$totalPromedio2Final=$totalPromedio2;
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+					  $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $totalPromedio2, $BD);
+					  $totalPromedio2Final= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+					}
+					echo $totalPromedio2Final;
 				}
 		
 		?></td>
@@ -305,8 +330,24 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 				}
 			}
 			mysqli_data_seek($consultaDesempeno1,0);
+
+			$j=1;
+			$sumAusencias=0;
+			while($j<=$periodoActual){
+
+				$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
+				INNER JOIN $BD.academico_cargas ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$fila2['mat_id']."'
+				INNER JOIN $BD.academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
+				WHERE aus_id_estudiante='".$datosUsr['mat_id']."'");
+				$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+
+				if($datosAusencias['sumAus']>0){
+					$sumAusencias+=$datosAusencias['sumAus'];
+				}
+				$j++;
+			}
 		 ?></td>
-        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($r_ausencias[0]>0){ echo $r_ausencias[0]."/".$fila2["matmaxaus"];} else{ echo "0.0/".$fila2["matmaxaus"];}?></td>
+        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php if($sumAusencias>0){ echo $sumAusencias;} else{ echo "0.0";}?></td>
 	</tr>
 <?php
 if($numIndicadores>0){
@@ -333,7 +374,12 @@ if($numIndicadores>0){
 					case 5: echo "E"; break;
 				}
 			}else{
-				echo $notaIndicador;
+				$notaIndicadorFinal=$notaIndicador;
+				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+				  $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador, $BD);
+				  $notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+				}
+				echo $notaIndicadorFinal;
 			}
 				
 				} ?></td>
@@ -370,7 +416,13 @@ if($numIndicadores>0){
 					case 5: echo "E"; break;
 					}
 				}else{
-					echo round(($promedios[$n]/$contpromedios[$n]),1);
+					$promedioTotal= round(($promedios[$n]/$contpromedios[$n]),1);
+					$promedioTotalFinal=$promedioTotal;
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+					  $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioTotal, $BD);
+					  $promedioTotalFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+					}
+					echo $promedioTotalFinal;
 				}
 			
 			}?></td>
@@ -472,6 +524,7 @@ $desempenoND = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
 </div>  
 <?php 
+$msj = "";
 if($periodoActual==4){
 	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
 		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";

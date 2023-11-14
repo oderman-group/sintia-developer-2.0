@@ -40,6 +40,7 @@ $colspan=5+$celdas;
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
+$filtro = "";
 if (!empty($_GET["id"])) {
     $filtro .= " AND mat_id='" . base64_decode($_GET["id"]) . "'";
 }
@@ -254,18 +255,19 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     $notaEstudiante= Boletin::agregarDecimales($notaEstudiante);
 
                                     $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante, $BD);
+                                    $desempenoNotaPFinal= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
 
                                     $promedioMateria += $notaEstudiante;
                                     $sumaNota += $notaEstudiante;
                             ?>
                                 <td align="center" style=" font-size:12px;"><?=$notaEstudiante;?></td>
-                                <td align="center" style=" font-size:12px;"><?=$desempenoNotaP['notip_nombre'];?></td>
+                                <td align="center" style=" font-size:12px;"><?=$desempenoNotaPFinal;?></td>
                             <?php
                                 }
                                 $promedioMateria = round($promedioMateria / ($j - 1), 2);
                                 $promedioMateriaFinal = $promedioMateria;
 
-                                $consultaNivelacion = Boletin::obtenerNivelaciones($datosCargas['car_id'], $matriculadosDatos['mat_id'], $BD);
+                                $consultaNivelacion = Boletin::obtenerNivelaciones($materia['car_id'], $matriculadosDatos['mat_id'], $BD);
                                 $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
         
                                 // SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -280,9 +282,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 $promedioMateriaFinal= Boletin::agregarDecimales($promedioMateriaFinal);
 
                                 $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
+                                $promediosMateriaEstiloNotaFinal= !empty($promediosMateriaEstiloNota['notip_nombre']) ? $promediosMateriaEstiloNota['notip_nombre'] : "";
                             ?>
                             <td align="center" style=" font-size:12px;"><?=$promedioMateriaFinal;?></td>
-                            <td align="center" style=" font-size:12px;"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
+                            <td align="center" style=" font-size:12px;"><?=$promediosMateriaEstiloNotaFinal;?></td>
                         </tr>
                         <?php
                         if ($numIndicadores > 0) {
@@ -304,7 +307,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                                 $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                                 $notaIndicador = round($indicadores["nota"], 2);
-                                                if ($recuperacionIndicador['rind_nota'] > $indicadores["nota"]) {
+                                                if (!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota'] > $indicadores["nota"]) {
                                                     $notaIndicador = round($recuperacionIndicador['rind_nota'], 2);
                                                     $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
                                                 }
@@ -312,7 +315,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                                 $notaIndicador= Boletin::agregarDecimales($notaIndicador);
 
                                                 $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador, $BD);
-                                                $desempeno=$desempenoNotaP['notip_nombre'];
+                                                $desempeno= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
                                             }
                                         ?>
                                             <td align="center" style=" font-size:12px;"><?= $notaIndicador . "<br>" . $leyendaRI; ?></td>
@@ -364,10 +367,11 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     $promediosPeriodos = round($promediosPeriodos, 2);
 
                     $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos, $BD);
+                    $promediosEstiloNotaFinal= !empty($promediosEstiloNota['notip_nombre']) ? $promediosEstiloNota['notip_nombre'] : "";
                 ?>
 
                     <td style=" font-size:12px;"><?= $promediosPeriodos; ?></td>
-                    <td style=" font-size:12px;"><?= $promediosEstiloNota['notip_nombre']; ?></td>
+                    <td style=" font-size:12px;"><?= $promediosEstiloNotaFinal; ?></td>
                 <?php 
                     $promedioFinal +=$promediosPeriodos;
                 } 
@@ -375,9 +379,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     $promedioFinal = round($promedioFinal/$periodoActual,2);
 
                     $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $BD);
+                    $promedioFinalEstiloNotaFinal= !empty($promedioFinalEstiloNota['notip_nombre']) ? $promedioFinalEstiloNota['notip_nombre'] : "";
                 ?>
                 <td style=" font-size:12px;"><?=$promedioFinal;?></td>
-                <td style=" font-size:12px;"><?= $promedioFinalEstiloNota['notip_nombre']; ?></td>
+                <td style=" font-size:12px;"><?= $promedioFinalEstiloNotaFinal; ?></td>
             </tr>
 
             <tr bgcolor="#EAEAEA" style="font-size:12px;  text-align:center;">
@@ -436,6 +441,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 while ($rndisciplina = mysqli_fetch_array($cndisciplina, MYSQLI_BOTH)) {
 
                     $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisciplina["dn_nota"], $BD);
+                    $desempenoNDFinal= !empty($desempenoND['notip_nombre']) ? $desempenoND['notip_nombre'] : "";
                 ?>
                     <tr align="center" style=" font-size:12px;">
                         <td><?= $rndisciplina["dn_periodo"] ?></td>

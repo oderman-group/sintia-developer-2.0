@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -42,7 +43,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 $contp = 1;
 $puestoCurso = 0;
 $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$_GET["periodo"]."'
+INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."'
 WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' GROUP BY mat_id ORDER BY prom DESC");	
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
@@ -224,9 +225,18 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             <?php 
 			$promedioMateria = 0;
 			for($j=1;$j<=$periodoActual;$j++){
+
+				$notaIndicadorFinal="&nbsp;";
+				if($j==$periodoActual){
+					$notaIndicadorFinal=$calificacionesIndicadores[0];
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+						$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $calificacionesIndicadores[0], $BD);
+						$notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+					}
+				}
             ?>
                 <td align="center">&nbsp;</td>
-                <td align="center"><?php if($j==$periodoActual)echo $calificacionesIndicadores[0]; else echo "&nbsp;";?></td>
+                <td align="center"><?=$notaIndicadorFinal;?></td>
 
             <?php 
 			}

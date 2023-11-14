@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
     
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -43,7 +44,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 $contp = 1;
 $puestoCurso = 0;
 $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$_GET["periodo"]."'
+INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."'
 WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' GROUP BY mat_id ORDER BY prom DESC");	
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
@@ -159,20 +160,26 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		while($asignatura = mysqli_fetch_array($asignaturas, MYSQLI_BOTH)){
 
 			$consultaDatosBoletinArea=mysqli_query($conexion, "SELECT * FROM academico_boletin
-			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$_GET["periodo"]."'");
+			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
 			$datosBoletinArea = mysqli_fetch_array($consultaDatosBoletinArea, MYSQLI_BOTH);
 			
 			$promedioArea += $datosBoletinArea['bol_nota'];
 			$a++;
 		}
 		$promedioArea = round(($promedioArea/$a),1);
+
+		$promedioAreaFinal=$promedioArea;
+		if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+		  $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioArea, $BD);
+		  $promedioAreaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+		}
 	?>
     
 		<tr style="font-weight:bold;">
             <td width="12%">&nbsp;</td>
             <td width="2%">&nbsp;</td>
 			<td width="2%">&nbsp;</td>
-			<td width="2%" align="center" style="font-size: 14px; font-weight: bold;"><?=$promedioArea;?></td>
+			<td width="2%" align="center" style="font-size: 14px; font-weight: bold;"><?=$promedioAreaFinal;?></td>
 			<td width="80%"><?=$area['ar_nombre'];?></td>
             <td width="2%">&nbsp;</td>
         </tr>
@@ -186,17 +193,17 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
 		$consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
         INNER JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$_GET["periodo"]."'");
+        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 		
 		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM $BD.academico_clases 
         INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='".$datosUsr['mat_id']."'
-        WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$_GET["periodo"]."'");
+        WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$periodoActual."'");
 		$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 		
 		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
 		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$_GET["periodo"]."'");
+		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$periodoActual."'");
 		
 		//INDICADORES PERDIDOS DEL PERIODO ANTERIOR
 		$indicadoresPeridos = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion
@@ -216,12 +223,17 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		if(!empty($datosAusencias[0])){
 			$ausencias = $datosAusencias[0];
 		}
+
+		$notaBoletin=$datosBoletin['bol_nota']."<br>".$datosBoletin['notip_nombre'];
+		if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+			$notaBoletin= $datosBoletin['notip_nombre'];
+		}
 	?>
         <tr>
             <td><?=$datosCargas['mat_nombre'];?></td>
             <td align="center"><?=$datosCargas['car_ih'];?></td>
 			<td align="center"><?=round($ausencias,0);?></td>
-			<td align="center" style="font-size: 12px; font-weight: bold;"><?=$datosBoletin['bol_nota'];?><br><?=$datosBoletin['notip_nombre'];?></td>
+			<td align="center" style="font-size: 12px; font-weight: bold;"><?=$notaBoletin;?></td>
 			
 			<td>
 				<table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
@@ -233,12 +245,22 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						WHERE cal_id_estudiante='".$datosUsr['mat_id']."'");
 						$notaIndicadorPA = mysqli_fetch_array($consultaNotaIndicadorPA, MYSQLI_BOTH);
 						
-						if($indicadorP['rind_periodo'] == $_GET["periodo"]){
+						if($indicadorP['rind_periodo'] == $periodoActual){
 							continue;
 						}
+
+                        $notaIndicadorPAFinal=$notaIndicadorPA[0];
+                        $notaIndicadorPFinal=$indicadorP['rind_nota'];
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicadorPA[0], $BD);
+                            $notaIndicadorPAFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+
+                            $estiloNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $indicadorP['rind_nota'], $BD);
+                            $notaIndicadorPFinal= !empty($estiloNotaP['notip_nombre']) ? $estiloNotaP['notip_nombre'] : "";
+                        }
 					?>
 						<tr>
-							<td width="90%"><b>P.<?=$indicadorP['rind_periodo'];?> Nota <?=$notaIndicadorPA[0];?>  Rec. <?=$indicadorP['rind_nota'];?></b> <?=$indicadorP['ind_nombre'];?></td>
+							<td width="90%"><b>P.<?=$indicadorP['rind_periodo'];?> Nota <?=$notaIndicadorPAFinal;?>  Rec. <?=$notaIndicadorPFinal;?></b> <?=$indicadorP['ind_nombre'];?></td>
 							<td width="10%" align="center">&nbsp;</td>
 						</tr>
 					<?php
@@ -249,21 +271,32 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					//INDICADORES
 					while($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 						$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM $BD.academico_calificaciones
-						INNER JOIN $BD.academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='".$indicador['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$_GET["periodo"]."' AND act_estado=1
+						INNER JOIN $BD.academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='".$indicador['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$periodoActual."' AND act_estado=1
 						WHERE cal_id_estudiante='".$datosUsr['mat_id']."'");
 						$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
+
+                        $notaIndicadorFinal=$notaIndicador[0];
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador[0], $BD);
+                            $notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                        }
 					?>
 						<tr>
 							<td width="90%"><?=$indicador['ind_nombre'];?></td>
-							<td width="10%" align="center"><?=$notaIndicador[0];?></td>
+							<td width="10%" align="center"><?=$notaIndicadorFinal;?></td>
 						</tr>
 					<?php
+					}
+
+					$notaAcumulado=$acumulado[0]."<br>".$acumuladoDesempeno['notip_nombre'];
+					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+						$notaAcumulado= $acumuladoDesempeno['notip_nombre'];
 					}
 					?>
 				</table>
 			</td>
             
-            <td align="center" style="font-size: 12px; font-weight: bold;"><?=$acumulado[0];?><br><?=$acumuladoDesempeno['notip_nombre'];?></td>
+            <td align="center" style="font-size: 12px; font-weight: bold;"><?=$notaAcumulado;?></td>
         </tr>
     
 <?php 
