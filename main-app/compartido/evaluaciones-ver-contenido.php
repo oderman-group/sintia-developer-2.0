@@ -2,6 +2,7 @@
             <div class="page-content-wrapper">
 				
 				<?php
+				require_once(ROOT_PATH."/main-app/class/Boletin.php");
 				$idE="";
 				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
@@ -172,7 +173,7 @@
 												$contRespuestas = 1;
 												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
 													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados
-													WHERE res_id_evaluacion='".$_GET['idE']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."'
+													WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."'
 													"), MYSQLI_BOTH);
 													if(!empty($compararRespuestas[0])) $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
@@ -214,6 +215,16 @@
 											$arrayRespuestasCorrectas = substr($arrayRespuestasCorrectas,0,-1);
 											$arrayColoresC = substr($arrayColoresC,0,-1);
 											$arrayColoresI = substr($arrayColoresI,0,-1);
+
+											$notaFinal=$nota;
+											$title='';
+											$style='';
+											if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+												$title='title="Nota Cuantitativa: '.$nota.'"';
+												$style='style="font-size: 17px; margin-top: 13px"';
+												$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+												$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+											}
 											?>
 
 			
@@ -325,7 +336,7 @@
 														<div class="uppercase profile-stat-text"> <?=$frases[157][$datosUsuarioActual[8]];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
-														<div class="uppercase profile-stat-title"> <?=$nota;?> </div>
+														<div class="uppercase profile-stat-title" <?=$title;?> <?=$style;?>> <?=$notaFinal;?> </div>
 														<div class="uppercase profile-stat-text"> <?=$frases[108][$datosUsuarioActual[8]];?> </div>
 													</div>
 												</div>
