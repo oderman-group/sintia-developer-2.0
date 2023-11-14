@@ -29,3 +29,5 @@ PES-482 - [DOCENTES] Todo lo que está en guardar.php y en otros archivos de ope
 PES-546 - [COMPARTIDO] - Todo lo que está en guardar.php y en otros archivos de operaciones compartidas crearle su pagina independiente. - POST and GET
 PES-523 - Implementar a los estudiantes la opción de ver sus notas de forma cualitativa (Sujeto a la configuración)
 PES-524 - Implementar a los acudientes la opción de ver las notas de forma cualitativa (Sujeto a la configuración)
+PES-525 - Implementar en todos los informes la opción de ver las notas de forma cualitativa (Sujeto a la configuración)
+PES-522 - Implementar la columna en las páginas donde el docente verá la nota cualitativa. (Sujeto a la configuración)
