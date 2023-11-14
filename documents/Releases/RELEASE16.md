@@ -16,6 +16,7 @@ PES-599 - Crear tablas para nuevas acciones
 PES-623 - [DB] New columns in table for the courses
 PES-627 - Add new column in table for course enrollments
 PES-547 - Si se retira el modulo de MT, los cursos individuales y cargas asociadas deben desaparecer (quedar ocultas)
+PES-434 - G. Financiera
 
 ### Enuar Lara
 PES-459 - [ESTUDIANTES] Todo lo que está en guardar.php y en otros archivos de operaciones compartidas crearle su pagina independiente.
