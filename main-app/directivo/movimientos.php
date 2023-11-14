@@ -39,10 +39,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										include("includes/barra-superior-movimientos-financieros.php");
 
 										$consultaEstadisticas=mysqli_query($conexion, "SELECT
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=2 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0'),
-										(SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0')");
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=1 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=2 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=3 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+										(SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=4 AND fcu_anulado='0' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 										$estadisticasCuentas = mysqli_fetch_array($consultaEstadisticas, MYSQLI_BOTH);
 
 										if($estadisticasCuentas[2]>0){
@@ -72,7 +72,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0106']) ) {?>
 															<a href="movimientos-agregar.php" id="addRow" class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -92,7 +92,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Valor</th>
 														<th>Tipo</th>
 														<th>Usuario</th>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
 														<?php }?>
                                                     </tr>
@@ -102,9 +102,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													include("includes/consulta-paginacion-movimientos.php");
 													
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
 														INNER JOIN usuarios ON uss_id=fcu_usuario
-														WHERE fcu_id=fcu_id $filtro
+														WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 														ORDER BY fcu_id
 														LIMIT $inicio,$registros");
 													} catch (Exception $e) {
@@ -131,7 +131,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
 
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
@@ -139,9 +139,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<?php if($resultado['fcu_anulado']!=1){?>
-																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','guardar.php?get=<?=base64_encode(11)?>&idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
+																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
+																			<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php }?>
+																		<?php if($resultado['fcu_anulado']!=1 && Modulos::validarSubRol(['DT0089'])){?>
+																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
 																		<?php } ?>
 																	</ul>
 																</div>

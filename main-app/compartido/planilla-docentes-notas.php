@@ -4,6 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 ?>
 
 <head>
@@ -157,16 +158,32 @@ require_once("../class/UsuariosPadre.php");
           if($notaEstudiante!="" AND $notaEstudiante<$config['conf_nota_minima_aprobar']){
               $estiloNota='style="font-weight:bold; color:#FFF; background:'.$Plataforma->colorDos.';"';
           }
+
+          $notaEstudianteFinal=$notaEstudiante;
+          $title='';
+          if($notaEstudiante!="" && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+            $title='title="Nota Cuantitativa: '.$notaEstudiante.'"';
+            $estiloNotaEstudiante = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante);
+            $notaEstudianteFinal= !empty($estiloNotaEstudiante['notip_nombre']) ? $estiloNotaEstudiante['notip_nombre'] : "";
+          }
       ?>
-        <td align="center" <?=$estiloNota?> width="3%"><?=$notaEstudiante?></td>
+        <td align="center" <?=$estiloNota?> <?=$title;?> width="3%"><?=$notaEstudianteFinal?></td>
       <?php
           // $acomuladoNota+=$notaEstudiante;
         }
         //ACOMULADO PARA LAS MATERIAS
         $totalAcomuladoNota=$acomuladoNota*$acomulado;
         $totalAcomuladoNota= round($totalAcomuladoNota, 1);
+
+        $totalAcomuladoNotaFinal=$totalAcomuladoNota;
+        $title='';
+        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+          $title='title="Nota Cuantitativa: '.$totalAcomuladoNota.'"';
+          $estiloTotalAcomuladoNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $totalAcomuladoNota);
+          $totalAcomuladoNotaFinal= !empty($estiloTotalAcomuladoNota['notip_nombre']) ? $estiloTotalAcomuladoNota['notip_nombre'] : "Bajo";
+        }
       ?>
-        <td align="center" style="background:<?=$Plataforma->colorTres;?>;" width="3%"><?=$totalAcomuladoNota?></td>
+        <td align="center" style="background:<?=$Plataforma->colorTres;?>;" width="3%" <?=$title;?>><?=$totalAcomuladoNotaFinal?></td>
       <?php
         for($i=1;$i<=17;$i++){
       ?>

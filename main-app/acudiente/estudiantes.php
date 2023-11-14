@@ -43,9 +43,8 @@ require_once("../class/Estudiantes.php");
 											</div>
 											<div class="card-body">
 												<p><?=$frases[273][$datosUsuarioActual[8]];?></p>
-												<form class="form-horizontal" action="guardar.php" method="post">
-													<input type="hidden" name="id" value="1">
-													<input type="hidden" name="idRecurso" value="<?=$_GET["idE"];?>">
+												<form class="form-horizontal" action="solicitud-desbloqueo.php" method="post">
+													<input type="hidden" name="idRecurso" value="<?=base64_decode($_GET["idE"]);?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
 															<textarea name="contenido" class="form-control" rows="3" placeholder="<?=$frases[274][$datosUsuarioActual[8]];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
@@ -70,9 +69,8 @@ require_once("../class/Estudiantes.php");
 											</div>
 											<div class="card-body">
 												<p><?=$frases[278][$datosUsuarioActual[8]];?></p>
-												<form name="formularioCupo" class="form-horizontal" action="guardar.php" method="post">
-													<input type="hidden" name="id" value="2">
-													<input type="hidden" name="idEstudiante" value="<?=$_GET["idE"];?>">
+												<form name="formularioCupo" class="form-horizontal" action="encuesta-reservar-cupo.php" method="post">
+													<input type="hidden" name="idEstudiante" value="<?=base64_decode($_GET["idE"]);?>">
 													
 													<div class="col-sm-12">
 														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /><?=$frases[275][$datosUsuarioActual[8]];?>
@@ -132,24 +130,35 @@ require_once("../class/Estudiantes.php");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
 
-														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1"), MYSQLI_BOTH);
+														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "'"), MYSQLI_BOTH);
+															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+
+															$numReportesDis = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes 
+															INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante AND mat_acudiente='".$_SESSION["id"]."'
+															WHERE dr_aprobacion_acudiente=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+															AND dr_estudiante='".$resultado['mat_id_usuario']."'"));
+
+															$iconoReportesDisciplinario = '';
+															if($numReportesDis > 0) {
+																$iconoReportesDisciplinario = '<i class="fa fa-warning text-warning" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Reporte disciplinario pendiente por firmar ('.$numReportesDis.')"></i> ';
+															}
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
                                                         <td><?php echo $resultado['uss_usuario'];?></td>
 														<td><?php echo $resultado['mat_id'];?></td>
-														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
+														<td><?=$iconoReportesDisciplinario."".Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 														<td><?php if(!empty($genero[1])) echo $genero[1];?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td>
 															<?php 
+															$respuesta =0;
 														 	if($config['conf_activar_encuesta']==1){
 																$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
-																WHERE genc_estudiante='".$resultado['mat_id']."'"));
+																WHERE genc_estudiante='".$resultado['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
 															}
 														 
 														 if($config['conf_activar_encuesta']!=1 or $respuesta>0){	
@@ -201,17 +210,31 @@ require_once("../class/Estudiantes.php");
 																	  </ul>
 																  </div>
 															<?php
-																	}else{
-																		echo "
-																		<span style='color:red;'>".$frases[268][$datosUsuarioActual[8]]."</span><br>
-																		<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[269][$datosUsuarioActual[8]]."</a>
-																		";
+																	} else {
+																		$consultaSolicitudes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
+																		LEFT JOIN usuarios ON uss_id=soli_remitente
+																		LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+																		WHERE soli_institucion='".$config['conf_id_institucion']."' 
+																		AND soli_year='".$_SESSION["bd"]."' AND soli_id_recurso={$resultado['mat_id']} AND soli_estado!=3");
+																		$solicitudPendiente = mysqli_fetch_array($consultaSolicitudes, MYSQLI_BOTH);
+																		
+																		if( !empty($solicitudPendiente) ) {
+															?>
+																			<span style='color:darkblue;'>Solicitud de desbloqueo <b><?=$estadosSolicitudes[$solicitudPendiente['soli_estado']];?></b></span>
+															<?php
+
+																		} else {
+																			echo "
+																			<span style='color:red;'>".$frases[268][$datosUsuarioActual[8]]."</span><br>
+																			<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".base64_encode($resultado['mat_id'])."&nameE=".base64_encode($resultado['uss_nombre'])."' style='text-decoration:underline;'>".$frases[269][$datosUsuarioActual[8]]."</a>
+																			";
+																		}
 																	}	
 																}
 																else{}
 															}else{
 																echo "
-																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
+																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".base64_encode($resultado['mat_id'])."&nameE=".base64_encode($resultado['uss_nombre'])."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
 																";	
 															}
 															?>

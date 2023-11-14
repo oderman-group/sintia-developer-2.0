@@ -75,7 +75,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														INNER JOIN academico_matriculas ON mat_id=genc_estudiante $filtroMat
 														INNER JOIN academico_grados ON gra_id=mat_grado
 														INNER JOIN academico_grupos ON gru_id=mat_grupo
-														WHERE genc_institucion=".$config['conf_id_institucion']." $filtro
+														WHERE genc_institucion=".$config['conf_id_institucion']." AND genc_year={$_SESSION["bd"]} $filtro
 														ORDER BY genc_id DESC
 														LIMIT $inicio,$registros");
 													} catch (Exception $e) {

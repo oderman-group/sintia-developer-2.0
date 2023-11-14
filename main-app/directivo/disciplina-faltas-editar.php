@@ -9,7 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaDatos=mysqli_query($conexion, "SELECT * FROM disciplina_faltas WHERE dfal_id='".base64_decode($_GET["idR"])."'");
+    $consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+    WHERE dfal_id='".base64_decode($_GET["idR"])."' AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -69,9 +70,9 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="59" name="id">
+									<form name="formularioGuardar" action="disciplina-faltas-actualizar.php" method="post">
 										<input type="hidden" value="<?=$datosEditar['dfal_id'];?>" name="idR">
+                                        <input type="hidden" value="<?=$datosEditar['dfal_id_nuevo'];?>" name="idRNuevo">
 
 
                                         <div class="form-group row">
@@ -94,7 +95,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_categorias WHERE dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
@@ -105,9 +106,9 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['dfal_id_categoria']) $select = 'selected';
+														if($opcionesDatos['dcat_id']==$datosEditar['dfal_id_categoria']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['dcat_id']." - ".strtoupper($opcionesDatos['dcat_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['dcat_id'];?>" <?=$select;?>><?=$opcionesDatos['dcat_id']." - ".strtoupper($opcionesDatos['dcat_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -116,11 +117,14 @@ if(!Modulos::validarPermisoEdicion()){
 										
 
 
+                                        <a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
                                         <?php }?>
-										
-										<a href="javascript:void(0);" name="disciplina-faltas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+									
                                     </form>
                                 </div>
                             </div>

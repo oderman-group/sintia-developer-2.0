@@ -14,7 +14,7 @@
                                         </div>
                                         <div class="card-body">
 											
-											<a href="#" name="../compartido/guardar.php?get=16" onClick="deseaEliminar(this)" class="btn btn-warning"><i class="fa fa-trash"></i> Eliminar todas las notificaciones</a>
+											<a href="#" name="../compartido/notificaciones-eliminar-todas.php" onClick="deseaEliminar(this)" class="btn btn-warning"><i class="fa fa-trash"></i> Eliminar todas las notificaciones</a>
 											
                                         <div class="table-scrollable">
                                     		<table id="example1" class="display" style="width:100%;">
@@ -56,7 +56,7 @@
 														</td>
 
 														<td>
-															<a href="#" name="../compartido/guardar.php?get=10&idR=<?=$resultado['alr_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash-o"></i></a>
+															<a href="#" name="../compartido/notificaciones-eliminar.php?idR=<?=$resultado['alr_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash-o"></i></a>
 														</td>
                                                     </tr>
 													<?php 

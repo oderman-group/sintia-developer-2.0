@@ -259,7 +259,9 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                 </form>
                             </div>
                         </div>

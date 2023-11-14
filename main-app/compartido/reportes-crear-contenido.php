@@ -12,8 +12,7 @@ if(!Modulos::validarPermisoEdicion()){
                                     <header><?=$frases[96][$datosUsuarioActual[8]];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="12">
+                                    <form class="form-horizontal" action="../compartido/reportes-guardar.php" method="post" enctype="multipart/form-data">
 
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
@@ -44,8 +43,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
                                                 <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple <?=$disabledPermiso;?>>
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+												INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+												WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
 												");
 												while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												?>	
@@ -84,11 +84,13 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 										
-										<?php if(Modulos::validarPermisoEdicion()){?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-										<?php }?>
-										
 										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<button type="submit" class="btn  btn-info">
+												<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+											</button>
+										<?php }?>
 
                                     </form>
                                 </div>

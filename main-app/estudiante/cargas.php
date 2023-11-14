@@ -8,7 +8,8 @@ $_SESSION["bd"] = date("Y");
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php require_once("../class/servicios/CargaServicios.php"); ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
-<?php require_once("../class/servicios/GradoServicios.php"); ?>
+<?php require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
 <?php
 $cargaE="";
 if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
@@ -35,7 +36,7 @@ if(is_numeric($cargaE)){
 <?php
 if($config['conf_activar_encuesta']==1){
 	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
-	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."'"));
+	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
 	if($respuesta==0 and $datosEstudianteActual[6]!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();	
@@ -107,6 +108,12 @@ if($config['conf_activar_encuesta']==1){
 										$periodo = $rCargas['car_periodo'];
 										$estudiante = $datosEstudianteActual[0];
 										include("../definitivas.php");
+
+										$definitivaFinal=$definitiva;
+										if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+											$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+											$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+										}
 									?>
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							
@@ -119,7 +126,7 @@ if($config['conf_activar_encuesta']==1){
 		                            <div class="text-muted">
 										<span class="m-r-10" style="font-size: 10px;"><?=$ultimoAcceso;?></span> 
 										
-		                            	<?php if($datosUsuarioActual['uss_bloqueado']!=1 and $config['conf_sin_nota_numerica']!=1){?><a class="course-likes m-l-10" href="#"> <?=$definitiva;?></a><?php }?>
+		                            	<?php if($datosUsuarioActual['uss_bloqueado']!=1 and $config['conf_sin_nota_numerica']!=1){?><a class="course-likes m-l-10" href="#"> <?=$definitivaFinal;?></a><?php }?>
 										
 		                            </div>
 		                            <p><span><i class="fa fa-clock-o"></i> <?=$frases[101][$datosUsuarioActual['uss_idioma']];?>: <?=$rCargas['car_periodo'];?></span></p>
@@ -145,7 +152,7 @@ if($config['conf_activar_encuesta']==1){
 							'matcur_years' => $config['conf_agno']
 						];
 						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
-						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';}
+						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';
 						foreach ($listaCursosMediaTecnica as $dato) {
 							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>			
 
@@ -201,7 +208,7 @@ if($config['conf_activar_encuesta']==1){
 									';
 							} ?>
 							</div>
-							<?php } ?>
+							<?php }} ?>
 					<?php } ?>
                 </div>
             </div>

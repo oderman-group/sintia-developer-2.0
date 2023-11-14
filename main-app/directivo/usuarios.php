@@ -149,9 +149,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$mostrarNumAcudidos = '';
 														if( $resultado['uss_tipo'] == TIPO_ACUDIENTE ) {
 															try{
-																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes
+																$consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios_por_estudiantes
 																INNER JOIN academico_matriculas ON mat_id=upe_id_estudiante
-																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL");
+																 WHERE upe_id_usuario='".$resultado['uss_id']."' AND upe_id_estudiante IS NOT NULL AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -206,12 +206,14 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														
 														$fotoUsuario = $usuariosClase->verificarFoto($resultado['uss_foto']);
 
+														$estadoUsuario = !empty($resultado['uss_estado']) ? $opcionEstado[$resultado['uss_estado']] : '';
+
 														$infoTooltip = "
 														<p>
 															<img src='{$fotoUsuario}' class='img-thumbnail' width='120px;' height='120px;'>
 														</p>
 														<b>Sesión:</b><br>
-														{$opcionEstado[$resultado['uss_estado']]}<br>
+														{$estadoUsuario}<br>
 														<b>Último ingreso:</b><br>
 														{$resultado['uss_ultimo_ingreso']}<br><br>
 														<b>Email:</b><br>
@@ -273,7 +275,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 
 																		<?php if( (!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) ){?>
-																			<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" name="guardar.php?id=<?=$resultado['uss_id'];?>&get=6" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
+																			<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" name="usuarios-eliminar.php?id=<?=base64_encode($resultado['uss_id']);?>" onClick="deseaEliminar(this)" id="<?=$resultado['uss_id'];?>">Eliminar</a></li>
 																		<?php }?>
 																	<?php }?>
 																	  

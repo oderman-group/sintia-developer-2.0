@@ -1,12 +1,11 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0058';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
+<?php
+include("session.php");
+$idPaginaInterna = 'DV0068';
+include("../compartido/historial-acciones-guardar.php");
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}?>
+Modulos::verificarPermisoDev();
+include("../compartido/head.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -50,7 +49,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="configuracion-opciones-generales-info.php?a=1" id="addRow" class="btn deepPink-bgcolor">
+														<a href="configuracion-opciones-generales-info.php" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
 													</div>
@@ -88,9 +87,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="configuracion-opciones-generales-info.php?a=2&idogen=<?=$resultado["ogen_id"];?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
+																	  <li><a href="configuracion-opciones-generales-editar.php?idogen=<?=$resultado["ogen_id"];?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
 																	  <li>
-                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','guardar.php?idogen=<?=$resultado["ogen_id"];?>&get=50')">Eliminar</a>  
+                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','configuracion-opciones-generales-eliminar.php?idogen=<?=$resultado["ogen_id"];?>')">Eliminar</a>  
                                                                      </li>
 																  </ul>
 															</div>

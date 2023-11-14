@@ -496,29 +496,35 @@ function cambiarBloqueo(data) {
         estudiantesPorEstadosBloqueo[data.id_estudiante] = data.bloqueado;
     }
 
-    var numero = 17;
     var estadoFinal = estudiantesPorEstadosBloqueo[data.id_estudiante];
-    let datos = "get="+btoa(numero.toString())+
-                "&idR="+btoa(data.id_usuario.toString())+
+    let datos = "&idR="+btoa(data.id_usuario.toString())+
                 "&lock="+btoa(estadoFinal.toString())
                 ;
 
     if(estudiantesPorEstadosBloqueo[data.id_estudiante] == 0) {
-        tr.style.backgroundColor="#ff572238";
         estudiantesPorEstadosBloqueo[data.id_estudiante] = 1;
     } else {
-        tr.style.backgroundColor="";
         estudiantesPorEstadosBloqueo[data.id_estudiante] = 0;
     }
 
     $.ajax({
         type: "GET",
-        url: "guardar.php",
+        url: "usuarios-cambiar-estado.php",
         data: datos,
         success: function(data){
-            var mensaje = 'El estudiante fue desbloqueado.';
+            var mensaje = 'Ocurrió un error inesperado';
+            var icon    = 'error';
             if(data == 1) {
                 mensaje = 'El estudiante fue bloqueado';
+                icon    = 'success';
+                tr.style.backgroundColor="#ff572238";
+            } else if(data == 0) {
+                mensaje = 'El estudiante fue desbloqueado';
+                icon    = 'success';
+                tr.style.backgroundColor="";
+            } else if(data == 2) {
+                mensaje = 'Usted no tiene permisos para esta acción';
+                icon    = 'error';
             }
 
             $.toast({
@@ -527,7 +533,7 @@ function cambiarBloqueo(data) {
                 position: 'bottom-right',
                 showHideTransition: 'slide',
                 loaderBg: '#26c281',
-                icon: 'success',
+                icon: icon,
                 hideAfter: 5000,
                 stack: 6
             });

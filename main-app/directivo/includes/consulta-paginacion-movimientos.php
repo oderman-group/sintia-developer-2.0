@@ -2,9 +2,9 @@
     $nombrePagina="movimientos.php";
     if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
-        $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas
+        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
         INNER JOIN usuarios ON uss_id=fcu_usuario
-        WHERE fcu_id=fcu_id $filtro
+        WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
         ORDER BY fcu_id");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");

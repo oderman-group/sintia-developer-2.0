@@ -60,7 +60,7 @@
           <?php
           $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 											INNER JOIN academico_materias ON mat_id=car_materia
-											INNER JOIN academico_grados ON gra_id=car_curso
+											INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
 											INNER JOIN academico_grupos ON gru_id=car_grupo
 											WHERE car_docente='" . $_SESSION["id"] . "'
 											ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre

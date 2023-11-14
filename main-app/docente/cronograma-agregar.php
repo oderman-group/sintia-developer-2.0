@@ -50,16 +50,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                             </ol>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-                        </div>
 						
                         <div class="col-sm-9">
 
@@ -69,8 +62,7 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="14" name="id">
+									<form name="formularioGuardar" action="cronograma-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 
 
 											<div class="form-group row">
@@ -102,7 +94,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 											</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="cronograma-calendario.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

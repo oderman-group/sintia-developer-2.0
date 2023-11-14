@@ -2,7 +2,8 @@
 <?php include("../estudiante/verificar-usuario.php");?>
 <?php //include("verificar-sanciones.php"); ?>
 <?php $idPaginaInterna = 'AC0015'; ?>
-<?php include("../compartido/historial-acciones-guardar.php"); ?>
+<?php include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
 <?php //include("verificar-carga.php"); ?>
 <?php include("../compartido/head.php");
 	$usrEstud="";
@@ -48,12 +49,12 @@
                 <div class="row">
 
                     <?php
-                    $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                    WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "'"), MYSQLI_BOTH);
+                    $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                    WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
                        
                     if(!empty($aspectos[0])){
-                        mysqli_query($conexion, "UPDATE disiplina_nota SET dn_ultima_lectura=now()
-                        WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "'");
+                        mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_ultima_lectura=now()
+                        WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     }   
                     
                     ?>
@@ -64,8 +65,7 @@
                                 <header><?=$frases[264][$datosUsuarioActual[8]];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
-                                <form action="guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="3">
+                                <form action="aspectos-firmar.php" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="estudiante" value="<?=$datosEstudianteActual['mat_id'];?>">
                                     <input type="hidden" name="periodo" value="<?=$periodo;?>">
 
@@ -83,7 +83,7 @@
                                         </div>
                                     </div>
 
-                                    <?php if($config['conf_ver_observador']==1 && (!empty($aspectos["dn_aprobado"]) && $aspectos["dn_aprobado"]=='0')){ ?>
+                                    <?php if($config['conf_ver_observador']==1 && !empty($aspectos[0]) && $aspectos["dn_aprobado"]=='0'){ ?>
                                         <input type="submit" class="btn btn-primary" value="He leído y estoy de acuerdo">&nbsp;
                                     <?php } ?>
 
@@ -103,6 +103,10 @@
 											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+                                                    $porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
@@ -116,14 +120,22 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= base64_encode($usrEstud); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?usrEstud=<?= base64_encode($usrEstud); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
-												<?php if (!empty($notapp[0]) && $config['conf_sin_nota_numerica'] != 1) { ?>
+                                                <?php
+                                                    if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+                                                    $notaPorPeriodo=$notapp[0];
+                                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+                                                        $notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                                    }
+                                                ?>
 													<div class="work-monitor work-progress">
 														<div class="states">
 															<div class="info">
 																<div class="desc pull-left"><b><?= $frases[62][$datosUsuarioActual['uss_idioma']]; ?>:</b>
-																	<?= $notapp[0]; ?>
+																	<?= $notaPorPeriodo; ?>
 																</div>
 																<div class="percent pull-right"><?= $porcentaje; ?>%</div>
 															</div>

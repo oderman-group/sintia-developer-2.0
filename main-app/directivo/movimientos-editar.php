@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -92,7 +92,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
@@ -106,7 +106,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Anulado</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="anulado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
@@ -118,7 +118,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
@@ -129,7 +129,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_forma_pago']==1){ echo "selected";}?>>Efectivo</option>
@@ -188,16 +188,6 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 });
                                             });
                                         </script>
-
-											<div class="form-group row">
-												<label class="col-sm-2 control-label">Notificar al usuario</label>
-												<div class="input-group spinner col-sm-10">
-													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
-														<span class="slider red round"></span>
-													</label>
-												</div>
-											 </div>
 										
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
@@ -207,10 +197,12 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 											</div>
 										
 
-
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                        <a href="javascript:void(0);" <?=$disabledPermiso;?> name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
 										
-										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>

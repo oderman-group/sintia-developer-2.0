@@ -61,6 +61,12 @@ define('CONFIG_MANUAL_CALIFICACIONES', 1);
 define('CONFIG_AUTOMATICO_CALIFICACIONES', 0);
 define('PERMISO_EDICION_PERIODOS_DIFERENTES', true); //Diferentes al actual
 
+/* FORMAS DE VER NOTAS */
+define('CUALITATIVA', 'CUALITATIVA');
+define('CUANTITATIVA', 'CUANTITATIVA');
+
+define('CLAVE_SUGERIDA', 'sherman1298');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');

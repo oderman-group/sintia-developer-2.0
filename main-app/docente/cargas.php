@@ -62,7 +62,7 @@ $_SESSION["configuracion"] = $config;
 							 <?php
 							 $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 							 INNER JOIN academico_materias ON mat_id=car_materia
-							 INNER JOIN academico_grados ON gra_id=car_curso
+							 INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
 							 INNER JOIN academico_grupos ON gru_id=car_grupo
 							 WHERE car_docente='".$_SESSION["id"]."'
 							 ORDER BY CAST(car_posicion_docente AS SIGNED)
@@ -212,12 +212,12 @@ $_SESSION["configuracion"] = $config;
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable" draggable="true" id="carga-<?=$rCargas['car_id'];?>"> 
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar">
+									<a href="cargas-seleccionar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" title="Entrar">
 										<img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg">
 									</a>	
 								</div>
 	                        	<div class="course-box">
-	                        	<h5 <?=$induccionEntrar;?>><a href="guardar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&get=<?=base64_encode(100);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
+	                        	<h5 <?=$induccionEntrar;?>><a href="cargas-seleccionar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
 										<span> <b><?=$marcaDG ." ".$marcaMediaTecnica."".$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>

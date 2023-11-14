@@ -67,24 +67,17 @@ if(
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-						<?php include("info-carga-actual.php");?>
-
-                        </div>
-						
-                        <div class="col-sm-9">
-
+                        <div class="col-sm-12">
 
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="10" name="id">
+									<form name="formularioGuardar" action="calificaciones-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
@@ -108,7 +101,7 @@ if(
 											if($datosCargaActual['car_indicador_automatico']==1){
 												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_definitivo=1");
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
-												$indicadorAuto = $indDef['ind_id'];
+												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
 												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
 												INNER JOIN academico_indicadores ON ind_id=ipc_indicador AND ind_definitivo=1
@@ -117,7 +110,7 @@ if(
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
 
 												//Si no existe el indicador definitivo en la carga lo asociamos.
-												if($indicadorDefitnivo[0]==""){	
+												if(!empty($indicadorDefitnivo[0]) && $indicadorDefitnivo[0]==""){	
 													mysqli_query($conexion, "INSERT INTO academico_indicadores_carga (ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1)");	
 												}
 											?>
@@ -176,14 +169,16 @@ if(
 												</div>
 											<?php }?>
 
-										
+											<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
-										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "No hay indicador definitivo configurado";}else{?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
+											<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										<?php }?>
 										
-										<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>

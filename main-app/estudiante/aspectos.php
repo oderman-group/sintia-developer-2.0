@@ -43,12 +43,12 @@
                 <div class="row">
 
                     <?php
-                    $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                    WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodoConsultaActual . "'"), MYSQLI_BOTH);
+                    $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                    WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodoConsultaActual . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
                        
-                    if($aspectos[0]!=""){
-                        mysqli_query($conexion, "UPDATE disiplina_nota SET dn_ultima_lectura=now()
-                        WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodoConsultaActual . "'");
+                    if(!empty($aspectos[0])){
+                        mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_ultima_lectura=now()
+                        WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodoConsultaActual . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     }   
                     
                     ?>
@@ -59,26 +59,25 @@
                                 <header>Aspectos</header>
                             </div>
                             <div class="card-body " id="bar-parent6">
-                                <form action="guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="11">
+                                <form action="aspectos-firmar.php" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="estudiante" value="<?=$datosEstudianteActual['mat_id'];?>">
                                     <input type="hidden" name="periodo" value="<?=$periodoConsultaActual;?>">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
-                                            <?= $aspectos["dn_aspecto_academico"]; ?>
+                                            <?php echo !empty($aspectos["dn_aspecto_academico"]) ? $aspectos["dn_aspecto_academico"]: ""; ?>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
-                                            <?= $aspectos["dn_aspecto_convivencial"]; ?>
+                                            <?=!empty($aspectos["dn_aspecto_convivencial"]) ? $aspectos["dn_aspecto_convivencial"]: ""; ?>
                                         </div>
                                     </div>
 
-                                    <?php if($config['conf_ver_observador']==1 and $aspectos["dn_aprobado"]=='0'){ ?>
+                                    <?php if($config['conf_ver_observador']==1 and !empty($aspectos[0]) and $aspectos["dn_aprobado"]=='0'){ ?>
 						                    <input type="submit" class="btn btn-primary" value="He leído y estoy de acuerdo">&nbsp;
 						                <?php } ?>
 
@@ -98,6 +97,10 @@
 											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
 												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+                                                    $porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
 											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
 												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
@@ -111,7 +114,7 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
 												<?php if (!empty($notapp[0]) && $config['conf_sin_nota_numerica'] != 1) { ?>
 													<div class="work-monitor work-progress">

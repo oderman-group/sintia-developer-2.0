@@ -66,22 +66,22 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disciplina_matricula_condicional WHERE cond_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_matricula_condicional WHERE cond_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_reportes WHERE dr_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_cod_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $idE . "' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='" . $idU . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='" . $idU . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -106,7 +106,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

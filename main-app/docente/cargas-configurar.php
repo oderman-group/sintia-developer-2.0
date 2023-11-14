@@ -38,22 +38,16 @@
                             </div>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-							<?php include("filtros-cargas.php");?>
-							
-                            <?php include("../compartido/publicidad-lateral.php");?>
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
                                     <header>Configuración de carga</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="1" name="id">
+                                    <form action="cargas-configurar-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-4 control-label">ID carga</label>
@@ -161,9 +155,15 @@
                                             </div>
                                         </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<div class="text-left">
+                                            <a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+                                            <button type="submit" class="btn  btn-info">
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
+                                        </div>
 										
-										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
 
                                     </form>
                                 </div>

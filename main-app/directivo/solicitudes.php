@@ -60,6 +60,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Remitente</th>
 														<th>Estudiante</th>
 														<th>Mensaje</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
 													</tr>
 												</thead>
                                                 <tbody>
@@ -83,6 +85,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 													<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 													<td><?=$resultado['soli_mensaje'];?></td>
+                                                    <td id="estado<?=$resultado['soli_id'];?>"><?=$estadosSolicitudes[$resultado['soli_estado']];?></td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-xs btn-info dropdown-toggle center no-margin" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                                                <i class="fa fa-angle-down"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start">
+                                                                <li data-id-estado="2" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">En proceso</a></li>
+                                                                <li data-id-estado="3" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">Aceptar</a></li>
+                                                                <li data-id-estado="4" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">Rechazar</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
 												</tr>
 												<?php }?>
                                                 </tbody>

@@ -96,6 +96,8 @@ class Usuarios{
 
 		switch($tipoUsuario){	
 
+			case 1: $url = '../directivo/'.$paginaRedireccion; break;
+
 			case 2: $url = '../docente/'.$paginaRedireccion; break;
 
 			case 3: $url = '../acudiente/'.$paginaRedireccion; break;

@@ -107,11 +107,11 @@ $contador_periodos=0;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga
 		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$cargas['car_id']."' AND ipc_periodo='".$_GET["periodo"]."'
+		WHERE ipc_carga='".$cargas['car_id']."' AND ipc_periodo='".$periodoActual."'
 		");
 		
 		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
+		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
 		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 		
 		$colorFondo = '#FFF;';
@@ -138,8 +138,8 @@ $contador_periodos=0;
 </table>
 	<p>&nbsp;</p>
 <?php 
-$cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota 
-WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."'
+$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 GROUP BY dn_cod_estudiante, dn_periodo
 ORDER BY dn_id
 ");

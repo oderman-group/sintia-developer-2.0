@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$agnoBD;
 if(isset($_GET["year"])){
@@ -386,6 +387,12 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                     if ($nota_indicador == 5)    $nota_indicador = "5.0";
 
+                                    $notaIndicadorFinal=$nota_indicador;
+                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                      $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $BD);
+                                      $notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                    }
+
                         ?>
 
                                     <tr bgcolor="#FFF" style="font-size:12px;">
@@ -396,7 +403,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                                         <td>&nbsp;</td>
 
-                                        <td align="center" style="font-weight:bold; font-size:12px;"><?= $nota_indicador." ".$leyendaRI; ?></td>
+                                        <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicadorFinal." ".$leyendaRI; ?></td>
 
                                     </tr>
 
@@ -556,12 +563,18 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                         if ($notaIndicador == 3)    $notaIndicador = "3.0";
                                         if ($notaIndicador == 4)    $notaIndicador = "4.0";
                                         if ($notaIndicador == 5)    $notaIndicador = "5.0";
+
+                                        $notaIndicadorFinal=$notaIndicador;
+                                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                          $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador, $BD);
+                                          $notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                        }
                             ?>
                                         <tr bgcolor="#FFF" style="font-size:12px;">
                                             <td align="center">&nbsp;</td>
                                             <td style="font-size:12px; height:15px;"><?php echo $contadorIndicadores . "." . $fila4["ind_nombre"]; ?></td>
                                             <td>&nbsp;</td>
-                                            <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicador." ".$leyendaRI; ?></td>
+                                            <td align="center" style="font-weight:bold; font-size:12px;"><?= $notaIndicadorFinal." ".$leyendaRI; ?></td>
                                         </tr>
                             <?php
                                     } //fin if
@@ -599,7 +612,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <?php
 
-        $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND dn_periodo in(" . $condicion . ");");
+        $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_periodo in(" . $condicion . ");");
 
         if (@mysqli_num_rows($cndisiplina) > 0) {
 

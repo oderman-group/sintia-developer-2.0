@@ -42,12 +42,10 @@
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
 						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
 
 							
                             <div class="panel">
@@ -73,8 +71,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="21" name="id">
+									<form id="form_subir" name="formularioGuardar" action="actividades-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
@@ -143,7 +140,7 @@
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
 														<input type="checkbox" name="compartir" value="1" checked>
-														<span class="slider red round"></span>
+														<span class="slider sintia round"></span>
 													</label>
 												</div>
 											 </div>
@@ -174,9 +171,12 @@
                                             </div>
                                         </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-
 										<a href="#" name="actividades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<button type="submit" class="btn  btn-info">
+											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										</button>
+
+										
 										</form>
 										
 										<script>
@@ -205,16 +205,23 @@
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
-													
+
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
+
 													setTimeout(redirect(), 2000);
 													
 													function redirect(){
-														location.href='actividades.php';
+														location.href='actividades.php?success=SC_DT_1&id='+respuesta;
 													}
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "actividades-guardar.php");
 												peticion.send(new FormData(form));
 
 											}

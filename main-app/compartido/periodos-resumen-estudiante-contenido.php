@@ -3,6 +3,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=218";</script>';
 	exit();
 }
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
@@ -104,8 +105,10 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 													$filtroOr='';
-													foreach ($listaCursosMediaTecnica as $dato) {
-														$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+													if ($listaCursosMediaTecnica != null) { 
+														foreach ($listaCursosMediaTecnica as $dato) {
+															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+														}
 													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
@@ -151,9 +154,18 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															$usrEstud="";
 															if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 
+															$notaFinal="";
+															if(!empty($notasResultado[4])) {
+																$notaFinal=$notasResultado[4];
+																if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																	$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[4]);
+																	$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+																}
+															}
+
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?php if(!empty($notasResultado[4])) { echo $notasResultado[4]."<br>".$tipo;} ?></a>
+																<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?=$notaFinal."<br>".$tipo;?></a>
 															</td>
 														<?php		
 														 }
@@ -186,7 +198,12 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															
 															if(!empty($decimal2)){ 
 																$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);
-															} 
+															}
+
+															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																$estiloNotaRecuperacion = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMinima);
+																$notaMinima= !empty($estiloNotaRecuperacion['notip_nombre']) ? $estiloNotaRecuperacion['notip_nombre'] : "";
+															}
 															 
 															 if($notaMinima<=0){
 																$notaMinima = "-";

@@ -94,8 +94,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="25" name="id">
+									<form name="formularioGuardar" action="indicadores-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="<?=$indicador['ipc_id'];?>" name="idR">
 										<input type="hidden" value="<?=$indicador['ipc_indicador'];?>" name="idInd">
 										<input type="hidden" value="<?=$indicador['ipc_valor'];?>" name="valorIndicador">
@@ -141,7 +140,9 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										<?php }?>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="indicadores.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

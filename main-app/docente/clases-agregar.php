@@ -51,12 +51,10 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
 						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
 
 							
                             <div class="panel">
@@ -78,8 +76,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="11" name="id">
+									<form id="form_subir" name="formularioGuardar" action="clases-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$config['conf_id_institucion']."".$cargaConsultaActual;?>" name="idMeeting">
 
 
@@ -246,7 +243,9 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                         </div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 									</form>
@@ -281,16 +280,23 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
+
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
 													
 													setTimeout(redirect(), 2000);
 													
 													function redirect(){
-														location.href='clases.php';
+														location.href='clases.php?success=SC_DT_1&id='+respuesta;
 													}
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "clases-guardar.php");
 												peticion.send(new FormData(form));
 
 											}

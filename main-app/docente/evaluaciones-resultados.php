@@ -6,6 +6,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 
 $idE="";
@@ -55,6 +56,7 @@ $idE="";
                             </ol>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 
 							<div class="col-md-3">
@@ -251,6 +253,15 @@ $idE="";
 															 $registroNotas ++;
 															
 														 }
+
+														$notaFinal="";
+														$title='';
+														if(!empty($datos2[1]) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$notaFinal=$nota;
+															$title='title="Nota Cuantitativa: '.$nota.'"';
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+															$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
 													 ?>
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
@@ -261,7 +272,7 @@ $idE="";
 														<td><?php if(!empty($datos2[1])){echo $datos2[2]."/".$cantPreguntas;}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $datos2[1]."/".$datos2[0];}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $porcentaje."%";}?></td>
-														<td style="color: <?=$color;?>;" align="center"><?php if(!empty($datos2[1])){echo $nota;}?></td>
+														<td style="color: <?=$color;?>;" <?=$title;?> align="center"><?=$notaFinal;?></td>
 														<td align="center">
 														<?php if(!empty($datos2[1]) or !empty($datos1['epe_inicio'])){?>
 															
@@ -269,7 +280,7 @@ $idE="";
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
-																	<a href="#" name="guardar.php?get=<?=base64_encode(28);?>&idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
+																	<a href="#" name="evaluaciones-eliminar-intento.php?idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
 															<?php }?>
 															
 															

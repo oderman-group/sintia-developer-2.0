@@ -78,6 +78,7 @@ $Plataforma = new Plataforma;
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>ID</th>
                                                         <th>Cod</th>
                                                         <th>Fecha</th>
                                                         <th>Error</th>
@@ -115,6 +116,7 @@ $Plataforma = new Plataforma;
                                                     ?>
                                                         <tr>
                                                             <td><?= $contReg; ?></td>
+                                                            <td><?= $resultado['rperr_id']; ?></td>
                                                             <td><?= $resultado['rperr_numero']; ?></td>
                                                             <td><?= $resultado['rperr_fecha']; ?></td>
                                                             <td><?= $resultado['rperr_error']; ?></td>

@@ -55,7 +55,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $contp = 1;
     $puestoCurso = 0;
     $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='" . $_GET["periodo"] . "'
+INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='" . $periodoActual . "'
 WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $matriculadosDatos['mat_grupo'] . "' GROUP BY mat_id ORDER BY prom DESC");
     while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
         if ($puesto['bol_estudiante'] == $matriculadosDatos['mat_id']) {
@@ -221,8 +221,13 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             if($notaBoletin == 3){$notaBoletin='3.0';}
                             if($notaBoletin == 4){$notaBoletin='4.0';}
                             if($notaBoletin == 5){$notaBoletin='5.0';}
+
+                            $notaBoletinFinal=$notaBoletin;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                $notaBoletinFinal= !empty($datosBoletin['notip_nombre']) ? $datosBoletin['notip_nombre'] : "";
+                            }
                         ?>
-                            <td align="center"><?= $notaBoletin; ?></td>
+                            <td align="center"><?= $notaBoletinFinal; ?></td>
                             <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
                         <?php
                         }
@@ -251,8 +256,13 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             if($promedioMateriaFinal == 4){$promedioMateriaFinal='4.0';}
                             if($promedioMateriaFinal == 5){$promedioMateriaFinal='5.0';}
 
+                            $promedioMateriaTotal=$promedioMateriaFinal;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                              $promedioMateriaTotal= !empty($promediosMateriaEstiloNota['notip_nombre']) ? $promediosMateriaEstiloNota['notip_nombre'] : "";
+                            }
+
                         ?>
-                        <td align="center"><?= $promedioMateriaFinal; ?></td>
+                        <td align="center"><?= $promedioMateriaTotal; ?></td>
                         <td align="center"><img src="../files/iconos/<?= $promediosMateriaEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                         <td align="center">&nbsp;</td>
                     </tr>
@@ -286,9 +296,14 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
                         WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promediosPeriodos['promedio'] . "'>=notip_desde AND '" . $promediosPeriodos['promedio'] . "'<=notip_hasta");
                         $promediosEstiloNota = mysqli_fetch_array($consultaPromedioEstiloNota, MYSQLI_BOTH);
+
+                        $promediosPeriodosTotal=$promediosPeriodos['promedio'];
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                          $promediosPeriodosTotal= !empty($promediosEstiloNota['notip_nombre']) ? $promediosEstiloNota['notip_nombre'] : "";
+                        }
                     ?>
 
-                        <td><?= $promediosPeriodos['promedio']; ?></td>
+                        <td><?= $promediosPeriodosTotal; ?></td>
                         <td><img src="../files/iconos/<?= $promediosEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <?php 
                         $promedioFinal +=$promediosPeriodos['promedio'];
@@ -298,8 +313,13 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
                         WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta");
                         $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
+
+                        $promedioFinalTotal=$promedioFinal;
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                          $promedioFinalTotal= !empty($promedioFinalEstiloNota['notip_nombre']) ? $promedioFinalEstiloNota['notip_nombre'] : "";
+                        }
                     ?>
-                    <td><?=$promedioFinal;?></td>
+                    <td><?=$promedioFinalTotal;?></td>
                     <td><img src="../files/iconos/<?= $promedioFinalEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <td>-</td>
                 </tr>
@@ -348,8 +368,8 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                 </tr>
 
                 <?php 
-                $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                WHERE dn_cod_estudiante='".$datosUsr[0]."' AND dn_periodo<='".$_GET["periodo"]."'");
+                $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                WHERE dn_cod_estudiante='".$datosUsr[0]."' AND dn_periodo<='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                 while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
                 ?>
 
@@ -412,6 +432,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             <?php
             $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
 	        INNER JOIN academico_materias ON mat_id=car_materia
+	        INNER JOIN usuarios ON uss_id=car_docente
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
@@ -419,14 +440,14 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             ?>
                 <tbody>
                     <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= $datosCargasDos['uss_nombre']; ?></span></td>
+                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
                         <td>
                         
                             <?php
                             //INDICADORES
                             $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
 		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $_GET["periodo"] . "'");
+		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    

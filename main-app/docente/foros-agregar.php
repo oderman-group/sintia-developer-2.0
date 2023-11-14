@@ -42,17 +42,10 @@
                             </ol>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
-
-
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
@@ -60,8 +53,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="19" name="id">
+									<form name="formularioGuardar" action="foros-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Titulo</label>
@@ -80,7 +72,9 @@
 											
 											
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 										<a href="#" name="foros.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>

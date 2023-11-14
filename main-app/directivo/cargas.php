@@ -108,7 +108,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													include("includes/consulta-paginacion-cargas.php");	
 													try{										       
 														$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
-														LEFT JOIN academico_grados ON gra_id=car_curso
+														INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
 														LEFT JOIN academico_grupos ON gru_id=car_grupo
 														LEFT JOIN academico_materias ON mat_id=car_materia
 														LEFT JOIN usuarios ON uss_id=car_docente

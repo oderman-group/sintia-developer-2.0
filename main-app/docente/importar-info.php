@@ -49,8 +49,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="40" name="id">
+									<form name="formularioGuardar" action="importar-info-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual[8]];?></p>	
 										

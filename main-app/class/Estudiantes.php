@@ -11,12 +11,12 @@ class Estudiantes {
         $cursoActual=null
     )
     {
-        global $conexion, $baseDatosServicios, $config;
-        $tipoGrado=$cursoActual?$cursoActual["gra_tipo"]:GRADO_GRUPAL;
+        global $conexion, $baseDatosServicios, $config, $arregloModulos;
+        $tipoGrado = $cursoActual ? $cursoActual["gra_tipo"] : GRADO_GRUPAL;
         $resultado = [];
         
         try {
-            if($tipoGrado==GRADO_GRUPAL){
+            if( $tipoGrado == GRADO_GRUPAL || !array_key_exists(10, $arregloModulos) ){
                 $resultado = mysqli_query($conexion, "SELECT * FROM academico_matriculas
                 LEFT JOIN usuarios ON uss_id=mat_id_usuario
                 LEFT JOIN academico_grados ON gra_id=mat_grado
@@ -183,7 +183,7 @@ class Estudiantes {
 
     public static function listarEstudiantesParaAcudientes($acudiente)
     {
-        global $conexion, $baseDatosServicios;
+        global $conexion, $baseDatosServicios, $config;
         $resultado = [];
 
         try {
@@ -192,7 +192,7 @@ class Estudiantes {
             LEFT JOIN academico_grados ON gra_id=mat_grado
             LEFT JOIN academico_grupos ON gru_id=mat_grupo
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero
-            INNER JOIN usuarios_por_estudiantes ON upe_id_estudiante=mat_id AND upe_id_usuario='".$acudiente."'
+            INNER JOIN ".BD_GENERAL.".usuarios_por_estudiantes ON upe_id_estudiante=mat_id AND upe_id_usuario='".$acudiente."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
             WHERE mat_eliminado=0 
             ORDER BY mat_primer_apellido, mat_segundo_apellido, mat_nombres
             ");

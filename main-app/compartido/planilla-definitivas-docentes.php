@@ -1,6 +1,7 @@
 <?php
 include("../docente/session.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -19,13 +20,19 @@ $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
 $grados = mysqli_fetch_array($asig, MYSQLI_BOTH);		
 $num_asg=mysqli_num_rows($asig);
+$colspan=1;
+if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+  $colspan=2;
+}
 ?>
 <head>
 	<title>Sabanas</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="../files/images/ico.png">
-
     <script src="https://plataformasintia.com/eduardoortega/assets/plugins/jquery/jquery-1.9.1.min.js?v1.3.1"></script>
+	<!--bootstrap -->
+	<link href="./../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	  <script src="../js/Calificaciones.js" ></script>
+    <?php include("sintia-funciones-js.php"); ?>
 
 
     <script type="text/javascript">
@@ -37,19 +44,20 @@ $num_asg=mysqli_num_rows($asig);
   if (alertValidarNota(nota)) {
 		return false;
 	} 
+  notaCualitativa(nota,codEst,carga);
     $('#resp').empty().hide().html("Esperando...").show(1);
     datos = "nota="+(nota)+
-           "&carga="+(carga)+
-           "&codEst="+(codEst)+
-           "&per="+(per);
-         $.ajax({
-           type: "POST",
-           url: "ajax-definitivas-registrar.php",
-           data: datos,
-           success: function(data){
-           $('#resp').empty().hide().html(data).show(1);
-           }
-         });
+          "&carga="+(carga)+
+          "&codEst="+(codEst)+
+          "&per="+(per);
+        $.ajax({
+          type: "POST",
+          url: "ajax-definitivas-registrar.php",
+          data: datos,
+          success: function(data){
+            $('#resp').empty().hide().html(data).show(1);
+          }
+        });
 
   }
   </script>
@@ -69,6 +77,10 @@ $num_asg=mysqli_num_rows($asig);
 <div style="margin: 10px;">
 
   <span id="resp"></span>
+		
+  <p>
+    <a href="../docente/pagina-opciones.php" type="button" class="btn btn-primary">Regresar</a>
+  </p>
 
   <table bgcolor="#FFFFFF" width="100%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
@@ -82,7 +94,7 @@ $num_asg=mysqli_num_rows($asig);
 			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
-        	<td align="center"><?=strtoupper($Mat[3]);?></td>      
+        	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat[3]);?></td>      
   		<?php
 		}
 		?>
@@ -116,12 +128,22 @@ $num_asg=mysqli_num_rows($asig);
       if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
 		?>
-        	<td align="center" style="color:<?=$color;?>;">
+        	<td align="center" style="color:<?=$color;?>; width: 50px;">
            
-           <input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
+           <input style="text-align:center; width:40px; color:<?=$color;?>;" value="<?php if(!empty($nota[4])){ echo $nota[4];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
 
-          </td>      
+          </td>
+          <?php
+            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+              $notaFinal='';
+              if(!empty($nota[4])){
+                $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota[4]);
+                $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+              }
+          ?>
+        	  <td align="center" style="font-weight:bold; color:<?=$color;?>; width: 50px;" id="CU<?=$fila[0].$mat1[0];?>"><?=$notaFinal?></td>
   		<?php
+            }
 		}
 		if($numero>0) {
 			$def=round(($suma/$numero),2);
@@ -130,8 +152,13 @@ $num_asg=mysqli_num_rows($asig);
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
+      $defFinal= "";
+      if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+          $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def);
+          $defFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "Bajo";
+      }
 		?>
-      <td align="center" style="font-weight:bold; color:<?=$color;?>;"><?=$def;?></td>  
+      <td align="center" style="font-weight:bold; color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br><?=$def?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:<?=$color?>;"><?=$defFinal;?></a></td>  
 </tr>
   <?php
   $cont++;
@@ -141,6 +168,18 @@ $num_asg=mysqli_num_rows($asig);
    
 </div>
 
+    <!-- start js include path -->
+    <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
+    <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+    <!-- bootstrap -->
+    <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 </html>
 

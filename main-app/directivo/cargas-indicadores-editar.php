@@ -87,8 +87,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
-										<input type="hidden" value="56" name="id">
+									<form name="formularioGuardar" action="cargas-indicadores-actualizar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
 										<input type="hidden" value="<?=$indicador['ipc_id'];?>" name="idR">
 										<input type="hidden" value="<?=$indicador['ipc_indicador'];?>" name="idInd">
 										<input type="hidden" value="<?=$indicador['ipc_valor'];?>" name="valorIndicador">
@@ -152,7 +151,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
 										
 										<a href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
