@@ -77,6 +77,10 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 <div style="margin: 10px;">
 
   <span id="resp"></span>
+		
+  <p>
+    <a href="../docente/pagina-opciones.php" type="button" class="btn btn-primary">Regresar</a>
+  </p>
 
   <table bgcolor="#FFFFFF" width="100%" cellspacing="5" cellpadding="5" rules="all" border="<?php echo $config[13] ?>" style="border:solid; border-color:<?php echo $config[11] ?>;" align="center">
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
