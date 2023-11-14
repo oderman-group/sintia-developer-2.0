@@ -169,15 +169,15 @@
 							if(!empty($arregloModulos) && array_key_exists(2, $arregloModulos)){
 								if(Modulos::validarSubRol(["DT0104"])){
 							?>
-								<li class="nav-item">
+								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>>
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
 										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu">
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>>
 										<?php
 											if(Modulos::validarSubRol(["DT0104"])){
 										?>
-											<li class="nav-item"><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual[8]];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual[8]];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
