@@ -266,6 +266,10 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
 
+														<?php if($config['conf_forma_mostrar_notas'] == CUALITATIVA){	?>
+															<th>Nota<br>Cualitativa</th>
+														<?php }	?>
+
 														<th>Recup.</th>
 
 														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
@@ -348,9 +352,12 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 
 															<?php }?>
-                        									<br><span id="CU<?=$resultado['mat_id'].$cargaConsultaActual;?>" style="margin-left: 10px; font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
 
 														</td>
+
+														<?php if($config['conf_forma_mostrar_notas'] == CUALITATIVA){	?>
+															<td id="CU<?=$resultado['mat_id'].$cargaConsultaActual;?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></td>
+														<?php }	?>
 
 														<td>
 

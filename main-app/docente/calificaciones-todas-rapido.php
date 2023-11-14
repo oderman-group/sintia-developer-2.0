@@ -132,7 +132,7 @@ th {
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
 
-															if($notasResultado[3]<$config[5] and $notasResultado[3]!="") $colorNota= $config[6]; elseif($notasResultado[3]>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
+															if(!empty($notasResultado) && $notasResultado[3]<$config[5]) $colorNota= $config[6]; elseif(!empty($notasResultado) && $notasResultado[3]>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
                         
 															$estiloNotaFinal="";
 															if(!empty($notasResultado) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){		
@@ -158,7 +158,7 @@ th {
 														$definitivaFinal=$definitiva;
 														$atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
 														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
+															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
 									
 															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
 															$definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
@@ -181,7 +181,17 @@ th {
 <!-- notifications -->
 <script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
 <script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
-    <!-- end js include path -->
+<script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+<!-- bootstrap -->
+<script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+<!-- end js include path -->
+<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>
