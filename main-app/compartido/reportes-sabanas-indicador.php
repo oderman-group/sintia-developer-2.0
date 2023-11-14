@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
 
 $curso='';
@@ -18,8 +19,10 @@ if(!empty($_GET["per"])) {
   $per = base64_decode($_GET["per"]);
 }
 
-
-$asig = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_grado='" . $curso . "' AND mat_grupo='" . $grupo . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+require_once("../class/servicios/GradoServicios.php");
+$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+$cursoActual=GradoServicios::consultarCurso($curso);
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);
 $num_asg = mysqli_num_rows($asig);
 
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='" . $curso . "' AND gru_id='" . $grupo . "'");
@@ -111,7 +114,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					}
 					while ($act = mysqli_fetch_array($activivdades, MYSQLI_BOTH)) {
 						//Consulta de recuperaciones si ya la tienen puestas.
-						$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila[0] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $per . "' AND rind_carga='" . $mat1['car_id'] . "'");
+						$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila['mat_id'] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $per . "' AND rind_carga='" . $mat1['car_id'] . "'");
 						$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
 						$notaRecuperacion = 0;
@@ -119,16 +122,22 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 							$notaRecuperacion = round($notas['rind_nota_actual']/($notas['rind_valor_indicador_registro']/100),2);
 						}
 						
-						$notaRecuperacion = 0;
 						if ((!empty($notas['rind_nota']) && !empty($notas['rind_nota_original'])) && ($notas['rind_nota'] > $notas['rind_nota_original'])) {
 							$notaRecuperacion = round($notas['rind_nota'],2);
+						}
+						$notaRecuperacionFinal=$notaRecuperacion;
+						$title='';
+						if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+						  $title='title="Nota Cuantitativa: '.$notaRecuperacion.'"';
+						  $estiloNotaRecuperacion = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaRecuperacion);
+						  $notaRecuperacionFinal= !empty($estiloNotaRecuperacion['notip_nombre']) ? $estiloNotaRecuperacion['notip_nombre'] : "";
 						}
 
 						//Color nota
 						if ($notaRecuperacion < $config[5] and $notaRecuperacion != "") $colorNota = $config[6];
 						elseif ($notaRecuperacion >= $config[5]) $colorNota = $config[7];
 				?>
-						<td align="center" style="color:<?= $colorNota; ?>;"><?= $notaRecuperacion; ?></td>
+						<td align="center" style="color:<?= $colorNota; ?>;" <?=$title;?>><?= $notaRecuperacionFinal; ?></td>
 				<?php
 					}
 				}

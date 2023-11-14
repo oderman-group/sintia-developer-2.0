@@ -6,6 +6,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 
 $idE="";
@@ -252,6 +253,15 @@ $idE="";
 															 $registroNotas ++;
 															
 														 }
+
+														$notaFinal="";
+														$title='';
+														if(!empty($datos2[1]) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$notaFinal=$nota;
+															$title='title="Nota Cuantitativa: '.$nota.'"';
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+															$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
 													 ?>
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
@@ -262,7 +272,7 @@ $idE="";
 														<td><?php if(!empty($datos2[1])){echo $datos2[2]."/".$cantPreguntas;}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $datos2[1]."/".$datos2[0];}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $porcentaje."%";}?></td>
-														<td style="color: <?=$color;?>;" align="center"><?php if(!empty($datos2[1])){echo $nota;}?></td>
+														<td style="color: <?=$color;?>;" <?=$title;?> align="center"><?=$notaFinal;?></td>
 														<td align="center">
 														<?php if(!empty($datos2[1]) or !empty($datos1['epe_inicio'])){?>
 															
