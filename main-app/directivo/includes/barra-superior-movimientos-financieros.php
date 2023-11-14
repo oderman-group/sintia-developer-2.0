@@ -46,14 +46,16 @@
 	</button>
 	<div class="navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<?php if(Modulos::validarPermisoEdicion()){?>
+			<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105'])){?>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
 						Menú movimiento financiero
 						<span class="fa fa-angle-down"></span>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<?php if( Modulos::validarSubRol(['DT0105']) ){?>
 						<a class="dropdown-item" href="movimientos-importar.php">Importar saldos</a>
+					<?php }?>
 					</div>
 				</li>
 			<?php }?>
