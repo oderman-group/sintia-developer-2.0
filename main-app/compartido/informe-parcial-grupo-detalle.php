@@ -4,6 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -23,6 +24,11 @@ $matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"
 
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
+
+  $filtroOR='';
+  if($cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+    $filtroOR=" OR (car_curso='".$matriculadosDatos['matcur_id_curso']."' AND car_grupo='".$matriculadosDatos['matcur_id_grupo']."')";
+  }
 ?>
 <div align="center" style="margin-bottom:20px;">
     ESTUDIANTE: <?=$nombre;?></br>
@@ -48,7 +54,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 									INNER JOIN academico_materias ON mat_id=car_materia
 									INNER JOIN academico_grados ON gra_id=car_curso
 									INNER JOIN usuarios ON uss_id=car_docente
-									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' OR car_curso='".$matriculadosDatos['matcur_id_curso']."') AND (car_grupo='".$matriculadosDatos['mat_grupo']."' OR car_grupo='".$matriculadosDatos['matcur_id_grupo']."')");
+									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'){$filtroOR}");
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
@@ -61,13 +67,19 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 										if($definitiva>=$config[5] or $porcentajeActual==0) continue;
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
 										if($porcentajeActual>0){$materiasDividir++;}
+
+                    $definitivaFinal=$definitiva;
+                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                      $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                      $definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                    }
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas[0];?></td>
                                         <td><?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></td>
                                         <td><?=$rCargas['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
-                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
+                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                       </tr>
                                    <?php 
 								   		$promedioG += $definitiva;
