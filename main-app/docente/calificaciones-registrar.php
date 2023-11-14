@@ -7,6 +7,7 @@ include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/sintia-funciones-js.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
@@ -315,6 +316,12 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 													$arrayDatos = json_encode($arrayEnviar);
 
 													$objetoEnviar = htmlentities($arrayDatos);
+                        
+													$estiloNotaFinal="";
+													if(!empty($notas['cal_nota']) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){		
+														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notas['cal_nota']);
+														$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+													}
 
 													?>
 
@@ -334,13 +341,14 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" step="<?=$cargaConsultaActual;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
 															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 
 															<?php }?>
+                        									<br><span id="CU<?=$resultado['mat_id'].$cargaConsultaActual;?>" style="margin-left: 10px; font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
 
 														</td>
 
@@ -348,7 +356,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<input type="text" style="text-align: center;" size="5" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="notaRecuperacion(this)">
+															<input type="text" style="text-align: center;" size="5" step="<?=$cargaConsultaActual;?>" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="notaRecuperacion(this)">
 
 															<?php }?>
 

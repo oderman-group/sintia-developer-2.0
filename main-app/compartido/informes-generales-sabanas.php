@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -42,7 +43,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
     PERIODO: <?=$per;?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
 
-    <?php if($informacion_inst["info_institucion"]==1){?>
+    <?php if($informacion_inst["info_institucion"]==ICOLVEN){?>
     <p><a href="reportes-sabanas-indicador.php?curso=<?=$_GET["curso"];?>&grupo=<?=$_GET["grupo"];?>&per=<?=$_GET["per"];?>" target="_blank">VER SABANAS CON INDICADORES</a></p>
     <?php } ?>
 </div>  
@@ -91,8 +92,21 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
       $defini = 0;
       if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
+
+      $notaEstudiante="";
+      if(!empty($nota[4])){
+        $notaEstudiante=$nota[4];
+      }
+
+      $notaEstudianteFinal=$notaEstudiante;
+      $title='';
+      if($notaEstudiante!="" && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+        $title='title="Nota Cuantitativa: '.$notaEstudiante.'"';
+        $estiloNotaEstudiante = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante);
+        $notaEstudianteFinal= !empty($estiloNotaEstudiante['notip_nombre']) ? $estiloNotaEstudiante['notip_nombre'] : "";
+      }
 		?>
-        	<td align="center" style="color:<?=$color;?>;"><?php if(!empty($nota[4])){ echo $nota[4];}?></td>      
+        	<td align="center" style="color:<?=$color;?>;" <?=$title;?>><?=$notaEstudianteFinal?></td>      
   		<?php
 		}
 		if($numero>0) {
@@ -102,8 +116,16 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = $nombre;
+
+    $defFinal=$def;
+    $title='';
+    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+      $title='title="Nota Cuantitativa: '.$def.'"';
+      $estiloDef = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def);
+      $defFinal= !empty($estiloDef['notip_nombre']) ? $estiloDef['notip_nombre'] : "";
+    }
 		?>
-      <td align="center" style="font-weight:bold; color:<?=$color;?>;"><?=$def;?></td>  
+      <td align="center" style="font-weight:bold; color:<?=$color;?>;" <?=$title;?>><?=$defFinal;?></td>  
 </tr>
   <?php
   $cont++;
@@ -138,11 +160,19 @@ ORDER BY suma DESC
     $j=1;
       while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){	
         $prom=round(($ptos['suma']/$numero),2);	
+
+        $promFinal=$prom;
+        $title='';
+        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+          $title='title="Nota Cuantitativa: '.$prom.'"';
+          $estiloProm = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $prom);
+          $promFinal= !empty($estiloProm['notip_nombre']) ? $estiloProm['notip_nombre'] : "";
+        }
     ?>	
       <tr style="font-weight:bold; font-size:12px;">
           <td align="center"><?=$j;?></td>
           <td><?=Estudiantes::NombreCompletoDelEstudiante($ptos);?></td>
-          <td align="center"><?=$prom;?></td>
+          <td align="center"  <?=$title;?>><?=$promFinal;?></td>
       </tr>
     <?php	
       $j++;

@@ -3,7 +3,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/Estudiantes.php");?>
+<?php require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 
 </head>
 
@@ -106,17 +107,35 @@
                                     $sumaPorcentaje += $decimal;
                                 }
                                 if(isset($notasResultado) && $notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado[4]>=$config[5]) $color = $config[7];
+
+                                $notasResultadoFinal="";
+                                $notasAnteriorFinal="";
+                                $atributosA='';
+                                if(!empty($notasResultado)){
+                                    $notasResultadoFinal=$notasResultado[4];
+                                    $notasAnteriorFinal=$notasResultado['bol_nota_anterior'];
+                                    $atributosA='style="text-decoration:underline; color:'.$color.';"';
+                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                        $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado[4].'" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado[4].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+                
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[4]);
+                                        $notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota_anterior']);
+                                        $notasAnteriorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                    }
+                                }
                                     
-                                if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
-                                elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
-                                    elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+                                if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasAnteriorFinal.')</span>';}
+                                elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasAnteriorFinal.')</span>';}
+                                    elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasAnteriorFinal.')</span>';}
                                 elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
                                     else $tipo='';
 
 
                             ?>
                                 <td style="text-align:center;">
-                                    <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?php if(isset($notasResultado)){ echo $notasResultado[4];}?></a><br><?=$tipo;?><br>
+                                    <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$notasResultadoFinal?></a><br><?=$tipo;?><br>
 
                                     <?php if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5]){?>
                                         <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
@@ -164,6 +183,15 @@
                                     $tN = '<span style="color:red; font-size:9px;">'.$frases[124][$datosUsuarioActual['uss_idioma']].'</span>';
                                 }
                                 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];
+
+                                $definitivaFinal=$definitiva;
+                                $atributosA='style="text-decoration:underline; color:'.$color.';"';
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+            
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                                    $definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
                                 
                                 
                             ?>
@@ -171,7 +199,7 @@
                             <td style="text-align:center; color:<?=$colorFaltante;?>; font-weight:bold;"><?=$notaMinima;?></td>
 
                             <td style="text-align:center; color:<?=$color;?>;">
-                                <?=$definitiva."<br>".$tN;?><br>
+                                <?=$definitivaFinal."<br>".$tN;?><br>
                                 <?php
                                 if($n==$datosCargaActual['gra_periodos'] and $definitiva<$config[5]) $e = ''; else $e = 'disabled';
                                 ?>
