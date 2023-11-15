@@ -355,13 +355,12 @@ class Estudiantes {
         }
     }
 
-    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $year)
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion)
     {
-        global $conexion;
         $codigo = "MRT".$idEstudiante.$config['conf_id_institucion'].strtotime("now");
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year)VALUES('".$codigo."', '".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."', {$config['conf_id_institucion']}, {$year})");
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year)VALUES('".$codigo."', '".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         } catch (Exception $e) {
             echo "Excepción capturada: ".$e->getMessage();
             exit();
