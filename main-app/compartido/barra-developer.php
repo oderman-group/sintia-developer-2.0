@@ -1,33 +1,39 @@
-<?php if( 
-$datosUsuarioActual[3]==1 
+<?php 
+if( 
+$datosUsuarioActual['uss_tipo'] == TIPO_DEV 
 || isset($_SESSION['admin']) 
 || isset($_SESSION['docente']) 
 || isset($_SESSION['acudiente']) 
-){?>
-<div style="
-        position:relative;
-        background-color: #41c4c4; 
-        color:#fff; 
-        height: 40px; 
-        width: 100%; 
-        margin-bottom: 20px; 
-        padding: 6px;
-        display:flex; 
-        justify-content: center; 
-        align-items: center;
-        font-family:Arial;
-        font-size:11px;
-">
+) {
+
+  $backgroundColor = '#41c4c4';
+  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV ) {
+      $backgroundColor = '#607d8b';
+  }
+?>
+  <div style="
+          position:relative;
+          background-color: <?=$backgroundColor;?>; 
+          color:#fff; 
+          height: 40px; 
+          width: 100%; 
+          margin-bottom: 20px; 
+          padding: 6px;
+          display:flex; 
+          justify-content: center; 
+          align-items: center;
+          font-family:Arial;
+          font-size:11px;
+  ">
 
 <?php 
-if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
-  $archivo = explode("/", $_SERVER['PHP_SELF']);
-  $nombre_fichero = $archivo[4];
+  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV ) {
+    $archivo = explode("/", $_SERVER['PHP_SELF']);
+    $nombre_fichero = $archivo[4];
 
-  $lines = file('../../.git/HEAD');
-  foreach ($lines as $line_num => $line) {
-  }
-  $ramaActual = substr($line, 16);
+    $lines = file('../../.git/HEAD');
+    foreach ($lines as $line_num => $line) {}
+    $ramaActual = substr($line, 16);
 ?>
 
     <b>Rama GIT:</b>&nbsp;<?php echo $ramaActual;?>&nbsp;|&nbsp;
@@ -45,30 +51,54 @@ if( $datosUsuarioActual[3]==1 || isset($_SESSION['admin']) ){
 			<a href="../compartido/return-admin-panel.php?tipo=<?=base64_encode($datosUsuarioActual[3]);?>" style="color:white; text-decoration:underline;">VOLVER A MI PANEL</a>
 		<?php }?>
 
-<?php }?>
+<?php 
+  } 
+?>
+
 
 
 <?php
-/* AUTOLOGIN DE DOCENTES */
-if( isset($_SESSION['docente']) ){
+  /* AUTOLOGIN DE DIRECTIVOS */
+  if( isset($_SESSION['admin']) ){
+?>
+    <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
+    <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
+    <b>User Admin:&nbsp;</b> <?=$_SESSION['admin']; ?>&nbsp;|&nbsp;
+    <a href="../compartido/return-admin-panel.php?tipo=<?=base64_encode($datosUsuarioActual[3]);?>" style="color:white; text-decoration:underline;">VOLVER A MI PANEL</a>
+
+<?php 
+  }
+?>
+
+
+<?php
+  /* AUTOLOGIN DE DOCENTES */
+  if( isset($_SESSION['docente']) ){
 ?>
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
     <b>User Docente:&nbsp;</b> <?=$_SESSION['docente']; ?>&nbsp;|&nbsp;
 		<a href="../compartido/return-docente-panel.php" style="color:white; text-decoration:underline;">VOLVER AL PANEL DOCENTE</a>
 
-<?php }?>
+<?php 
+  }
+?>
 
 <?php
-/* AUTOLOGIN DE ACUDIENTES */
-if( isset($_SESSION['acudiente']) ){
+  /* AUTOLOGIN DE ACUDIENTES */
+  if( isset($_SESSION['acudiente']) )
+  {
 ?>
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual[0];?>&nbsp;|&nbsp;
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual[3];?>&nbsp;|&nbsp;
     <b>User Acudiente:&nbsp;</b> <?=$_SESSION['acudiente']; ?>&nbsp;|&nbsp;
 		<a href="../compartido/return-acudiente-panel.php" style="color:white; text-decoration:underline;">VOLVER AL PANEL ACUDIENTE</a>
 
-<?php }?>
+<?php 
+  }
+?>
 
 </div>
-<?php }?>
+<?php 
+}
+?>
