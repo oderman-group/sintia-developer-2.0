@@ -61,8 +61,8 @@
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													
 													//Cantidad de preguntas de la evaluación
-													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."'");
+													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
+													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$cantPreguntas = mysqli_num_rows($consultaCantPreguntas);
 												 ?>
 												  <div class="panel panel-default" id="reg<?=$resultado['eva_id'];?>">

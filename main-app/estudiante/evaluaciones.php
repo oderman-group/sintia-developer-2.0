@@ -85,8 +85,8 @@
 													  if(!empty($resultado['eva_clave'])) $ulrEva = 'evaluaciones-clave.php'; else $ulrEva = 'evaluaciones-realizar.php';
 													
 													//Cantidad de preguntas de la evaluación
-													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."'
+													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
+													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													"));
 													  
 													  //Obtener los datos si ya ha realizado la evaluación

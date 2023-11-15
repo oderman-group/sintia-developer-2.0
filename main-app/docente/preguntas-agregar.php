@@ -14,9 +14,9 @@ WHERE eva_id='".$idE."' AND eva_estado=1");
 $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 //Cantidad de preguntas de la evaluación
-$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-WHERE evp_id_evaluacion='".$idE."'
+$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
+INNER JOIN academico_actividad_preguntas ON preg_id=aca_eva_pre.evp_id_pregunta
+WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
 ORDER BY preg_id DESC");
 
 $cantPreguntas = mysqli_num_rows($preguntasConsulta);

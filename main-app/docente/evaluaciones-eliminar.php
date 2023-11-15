@@ -12,7 +12,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_evaluacion_preguntas WHERE evp_id_evaluacion='".$idR."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas WHERE evp_id_evaluacion='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

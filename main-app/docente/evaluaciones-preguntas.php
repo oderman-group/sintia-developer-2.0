@@ -90,9 +90,9 @@ function mostrarNuevaRespuesta(datos){
 
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
 	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$idE."'
+	WHERE evp_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 	ORDER BY preg_id DESC
 	");
 	
@@ -147,7 +147,7 @@ function mostrarNuevaRespuesta(datos){
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="evaluaciones-preguntas.php?idE=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-preguntas.php?idE=<?=base64_encode($evaComun['eva_id']);?>"><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>

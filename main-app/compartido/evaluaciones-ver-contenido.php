@@ -21,9 +21,9 @@
 				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
-				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
 				INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-				WHERE evp_id_evaluacion='".$idE."'
+				WHERE evp_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 				");
 				
 				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -114,7 +114,7 @@
 												
 												if($nume==0){continue;}
 											?>
-												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>" <?=$estiloResaltado;?>><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>"><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
