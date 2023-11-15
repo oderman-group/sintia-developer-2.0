@@ -153,11 +153,16 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<b>Nro. Estudiantes:</b> 
 														{$cantidadEstudiantes}
 														";
+
+														$marcaDG = '';
+														if($resultado['car_director_grupo'] == 1){
+															$marcaDG = '<i class="fa fa-star text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Director de grupo"></i> ';
+														}
 													?>
 													<tr>
                           								<td><?=$contReg;?></td>
 														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Información adicional" data-content="<?=$infoTooltipCargas;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$resultado['car_id'];?></a></td>
-														<td><?=strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
+														<td><?=$marcaDG."".strtoupper($resultado['uss_nombre']." ".$resultado['uss_nombre2']." ".$resultado['uss_apellido1']." ".$resultado['uss_apellido2']);?></td>
 														<td><?=$marcaMediaTecnica ."[".$resultado['gra_id']."] ".strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
 														<td><?=$resultado['car_ih'];?></td>
