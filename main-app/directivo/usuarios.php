@@ -221,6 +221,11 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<b>Fecha de nacimiento:</b><br>
 														{$resultado['uss_fecha_nacimiento']}
 														";
+
+														$managerPrimary = '';
+														if($resultado['uss_permiso1'] == CODE_PRIMARY_MANAGER && $resultado['uss_tipo'] == TIPO_DIRECTIVO){
+															$managerPrimary = '<i class="fa fa-user-circle text-primary" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Director principal"></i> ';
+														}
 													 ?>
 													<tr id="reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -239,7 +244,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 															<?=$resultado['uss_usuario'];?>
 															<?php if($usuarioRepetido['rep']>1){echo " (".$usuarioRepetido['rep'].")";}?>
 														</td>
-														<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?>" data-content="<?=$infoTooltip;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a></td>
+														<td><?=$managerPrimary;?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?>" data-content="<?=$infoTooltip;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a></td>
 														<td <?=$backGroundMatricula;?>><?=$resultado['pes_nombre']."".$mostrarNumCargas."".$mostrarNumAcudidos;?></td>
 														<td>
 															<span style="font-size: 11px;"><?=$resultado['uss_ultimo_ingreso'];?></span>
