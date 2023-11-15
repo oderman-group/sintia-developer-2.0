@@ -106,19 +106,19 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 												<label class="col-sm-2 control-label">Unidad</label>
 												<div class="col-sm-10">
 													<?php
-													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
-													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													?>
 													<select class="form-control  select2" name="unidad">
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
 															$selected='';
-															if($unidadDatos['uni_id']==$datosConsulta['cls_unidad']){
+															if($unidadDatos['id_nuevo']==$datosConsulta['cls_unidad']){
 																$selected='selected';
 															}
 														?>
-															<option value="<?=$unidadDatos['uni_id'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
+															<option value="<?=$unidadDatos['id_nuevo'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>

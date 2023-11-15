@@ -63,7 +63,7 @@ require_once("../class/Estudiantes.php");
             <tbody>
                 <?php
                     $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-                    LEFT JOIN academico_unidades ON uni_id=cls_unidad AND uni_eliminado!=1
+                    LEFT JOIN ".BD_ACADEMICA.".academico_unidades aca_uni ON aca_uni.id_nuevo=cls_unidad AND aca_uni.uni_eliminado!=1 AND aca_uni.institucion={$config['conf_id_institucion']} AND aca_uni.year={$_SESSION["bd"]}
                     WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
                     $contReg = 1;
                     $unidadAnterior=0;

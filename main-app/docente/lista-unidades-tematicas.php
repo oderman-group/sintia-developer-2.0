@@ -36,16 +36,16 @@ include("../compartido/head.php");
                 </thead>
                 <tbody>
                     <?php
-                        $consulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
-                        WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
+                        WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                         $contReg = 1;
                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
                             $consultaClases = mysqli_query($conexion, "SELECT cls_id FROM academico_clases 
-                            WHERE cls_id_carga='" . $cargaConsultaActual . "' AND cls_periodo='" . $periodoConsultaActual . "' AND cls_unidad='" . $resultado['uni_id'] . "' AND cls_estado=1");
+                            WHERE cls_id_carga='" . $cargaConsultaActual . "' AND cls_periodo='" . $periodoConsultaActual . "' AND cls_unidad='" . $resultado['id_nuevo'] . "' AND cls_estado=1");
                             $numClases=mysqli_num_rows($consultaClases);
                     ?>
-                        <tr id="reg<?= $resultado['uni_id']; ?>">
+                        <tr id="reg<?= $resultado['id_nuevo']; ?>">
                             <td><?= $contReg; ?></td>
                             <td><?= $resultado['uni_id']; ?></td>
                             <td><?= $resultado['uni_nombre']; ?></td>
@@ -60,9 +60,9 @@ include("../compartido/head.php");
                                         <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                        <li><a href="unidades-editar.php?idR=<?= base64_encode($resultado['uni_id']); ?>">Editar</a></li>
+                                        <li><a href="unidades-editar.php?idR=<?= base64_encode($resultado['id_nuevo']); ?>">Editar</a></li>
                                         <?php if($numClases<1){?>
-                                            <li><a href="#" title="<?= $objetoEnviar; ?>" id="<?= $resultado['uni_id']; ?>" name="unidades-eliminar.php?idR=<?= base64_encode($resultado['uni_id']); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                            <li><a href="#" title="<?= $objetoEnviar; ?>" id="<?= $resultado['id_nuevo']; ?>" name="unidades-eliminar.php?idR=<?= base64_encode($resultado['id_nuevo']); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                         <?php }?>
                                     </ul>
                                 </div>
