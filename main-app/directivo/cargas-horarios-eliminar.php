@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "UPDATE academico_horarios SET hor_estado=0 WHERE hor_id=" . base64_decode($_GET["idH"]) . ";");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_estado=0 WHERE id_nuevo='" . base64_decode($_GET["idH"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

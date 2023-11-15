@@ -16,11 +16,13 @@ include("../compartido/historial-acciones-guardar.php");
 		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
 		exit();
 	}
+
 	$numero = (count($_POST["diaH"]));
 	$contador = 0;
 	while ($contador < $numero) {
+		$codigo = "HOR".$_POST["diaH"][$contador].strtotime("now");
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_horarios(hor_id_carga, hor_dia, hor_desde, hor_hasta)VALUES(" . $_POST["idH"] . ",'" . $_POST["diaH"][$contador] . "','" . $_POST["inicioH"] . "','" . $_POST["finH"] . "');");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year)VALUES('" . $codigo . "'," . $_POST["idH"] . ",'" . $_POST["diaH"][$contador] . "','" . $_POST["inicioH"] . "','" . $_POST["finH"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
