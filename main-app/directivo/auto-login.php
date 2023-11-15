@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/UsuariosPadre.php");
+Modulos::validarAccesoDirectoPaginas();
 
 $idPaginaInterna = 'DT0129';
 
@@ -30,6 +31,10 @@ switch (base64_decode($_GET['tipe'])) {
 
 	case 4:
 		$url = '../estudiante/cargas.php';
+	break;
+
+	case 5:
+		$url = '../directivo/noticias.php';
 	break;
 
 	default:

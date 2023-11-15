@@ -217,7 +217,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Modulos</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-10">
                                             <select class="form-control  select2-multiple" name="modulos[]" multiple>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
