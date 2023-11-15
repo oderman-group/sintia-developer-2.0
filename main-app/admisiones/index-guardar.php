@@ -107,9 +107,11 @@ if ($newId > 0) {
     $matId = $pdoI->lastInsertId();
 
     //Documentos
-    $documentosQuery = "INSERT INTO academico_matriculas_documentos(matd_matricula)VALUES(:matricula)";
+    $documentosQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_documentos(matd_matricula, institucion, year)VALUES(:matricula, :idInstitucion, :year)";
     $documentos = $pdoI->prepare($documentosQuery);
     $documentos->bindParam(':matricula', $matId, PDO::PARAM_INT);
+    $documentos->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $documentos->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $documentos->execute();
 
 
