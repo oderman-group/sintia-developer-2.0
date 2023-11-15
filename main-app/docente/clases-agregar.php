@@ -115,7 +115,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 														<?php
 														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$unidadDatos['id_nuevo'];?>"><?=$unidadDatos['uni_nombre']?></option>
+															<option value="<?=$unidadDatos['uni_id'];?>"><?=$unidadDatos['uni_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>

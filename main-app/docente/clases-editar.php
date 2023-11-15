@@ -114,11 +114,11 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 														<?php
 														while($unidadDatos = mysqli_fetch_array($unidadConsulta, MYSQLI_BOTH)){
 															$selected='';
-															if($unidadDatos['id_nuevo']==$datosConsulta['cls_unidad']){
+															if($unidadDatos['uni_id']==$datosConsulta['cls_unidad']){
 																$selected='selected';
 															}
 														?>
-															<option value="<?=$unidadDatos['id_nuevo'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
+															<option value="<?=$unidadDatos['uni_id'];?>" <?=$selected?>><?=$unidadDatos['uni_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>
