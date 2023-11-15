@@ -1,6 +1,6 @@
 <?php
-$consulta = mysqli_query($conexion, "SELECT cro_id, cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color, DAY(cro_fecha) as dia, MONTH(cro_fecha) as mes, YEAR(cro_fecha) as agno FROM academico_cronograma 
-WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."'");
+$consulta = mysqli_query($conexion, "SELECT cro_id, cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color, DAY(cro_fecha) as dia, MONTH(cro_fecha) as mes, YEAR(cro_fecha) as agno FROM ".BD_ACADEMICA.".academico_cronograma 
+WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $contReg=1; 
 $eventos ="";
 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
