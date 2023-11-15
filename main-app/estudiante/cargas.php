@@ -95,8 +95,8 @@ if($config['conf_activar_encuesta']==1){
 									    
 										$ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
-										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cargas_acceso 
-										WHERE carpa_id_carga='".$rCargas[0]."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso 
+										WHERE carpa_id_carga='".$rCargas[0]."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 										if(!empty($cargaHistorial['carpa_id'])){
 											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 										}

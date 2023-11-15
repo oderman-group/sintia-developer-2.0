@@ -17,16 +17,17 @@ if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or 
 	$periodoConsultaActual = $periodo;
 }
 
-$cargaHconsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas_acceso 
-WHERE carpa_id_carga='".$cargaConsultaActual."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."'");
+$cargaHconsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso 
+WHERE carpa_id_carga='".$cargaConsultaActual."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+
 $cargaHnum = mysqli_num_rows($cargaHconsulta);
 if($cargaHnum==0){
-	mysqli_query($conexion, "INSERT INTO academico_cargas_acceso(carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad)
-	VALUES('".$cargaConsultaActual."', '".$datosEstudianteActual['mat_id']."', now(), now(), 1)
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_cargas_acceso(carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year)
+	VALUES('".$cargaConsultaActual."', '".$datosEstudianteActual['mat_id']."', now(), now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})
 	");
 }else{
-	mysqli_query($conexion, "UPDATE academico_cargas_acceso SET carpa_ultimo_acceso=now(), carpa_cantidad=carpa_cantidad+1
-	WHERE carpa_id_carga='".$cargaConsultaActual."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas_acceso SET carpa_ultimo_acceso=now(), carpa_cantidad=carpa_cantidad+1
+	WHERE carpa_id_carga='".$cargaConsultaActual."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 }
 
 $consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
