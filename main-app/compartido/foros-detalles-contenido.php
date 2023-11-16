@@ -113,10 +113,10 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 											");
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_respuestas
-												INNER JOIN usuarios ON uss_id=fore_id_estudiante
-												WHERE fore_id_comentario='".$resultado[0]."'
-												ORDER BY fore_id ASC
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
+												INNER JOIN usuarios ON uss_id=fore.fore_id_estudiante
+												WHERE fore.fore_id_comentario='".$resultado['com_id']."' AND fore.institucion={$config['conf_id_institucion']} AND fore.year={$_SESSION["bd"]}
+												ORDER BY fore.fore_id ASC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
 	
