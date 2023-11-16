@@ -9,8 +9,8 @@ include("../compartido/head.php");
 $idE="";
 if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 
-$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$idE."' AND eva_estado=1");
+$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 //Cantidad de preguntas de la evaluación

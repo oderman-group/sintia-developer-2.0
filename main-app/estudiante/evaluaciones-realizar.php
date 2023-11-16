@@ -86,16 +86,16 @@
 	<?php
 	$idE="";
 	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
+	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+	WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 	if($evaluacion[0]==""){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=106";</script>';
 		exit();
 	}
 	
-	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
+	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+	WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 	if($fechas[2]>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=204&fechaD='.$evaluacion['eva_desde'].'&diasF='.$fechas[0].'&segundosF='.$fechas[2].'";</script>';
 		exit();
