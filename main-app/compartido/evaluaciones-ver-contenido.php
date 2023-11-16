@@ -11,10 +11,10 @@
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res.res_id_pregunta AND resp_id=res.res_id_respuesta AND resp_correcta=1 
+				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]} 
 				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
 				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res.res_id_pregunta AND resp_id=res.res_id_respuesta AND resp_correcta=0
+				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
 				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
 				(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
 				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND res_id_respuesta=0)
@@ -139,8 +139,8 @@
 											$arrayColoresI = "";
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
+												WHERE resp_id_pregunta='".$preguntas['preg_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
@@ -151,11 +151,11 @@
 												
 												$respuestasXpregunta = mysqli_fetch_array(mysqli_query($conexion, "SELECT
 												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res.res_id_pregunta AND resp_id=res.res_id_respuesta AND resp_correcta=1
+												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
 												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
 												
 												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res.res_id_pregunta AND resp_id=res.res_id_respuesta AND resp_correcta=0
+												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
 												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]})
 												"), MYSQLI_BOTH);
 												
