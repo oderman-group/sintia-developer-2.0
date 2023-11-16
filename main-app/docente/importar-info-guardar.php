@@ -7,6 +7,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 //Importar indicadores
 if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
@@ -220,28 +221,29 @@ if(!empty($_POST["actividades"])){
 //Importar foros
 if(!empty($_POST["foros"])){		
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_foro SET foro_estado=0
-		WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_foro SET foro_estado=0
+		WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 	//Consultamos las foros a Importar
 	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro
-		WHERE foro_id_carga='".$_POST["cargaImportar"]."' AND foro_periodo='".$_POST["periodoImportar"]."' AND foro_estado=1");
+		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro
+		WHERE foro_id_carga='".$_POST["cargaImportar"]."' AND foro_periodo='".$_POST["periodoImportar"]."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-		$datosInsert .="('".$calImpDatos['foro_nombre']."', '".$calImpDatos['foro_descripcion']."', '".$cargaConsultaActual."', '".$periodoConsultaActual."', 1),";
+		$codigo=Utilidades::generateCode("FORO");
+		$datosInsert .="('".$codigo."', '".$calImpDatos['foro_nombre']."', '".$calImpDatos['foro_descripcion']."', '".$cargaConsultaActual."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 	}
 
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_foro(foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado)VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro(foro_id, foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado, institucion, year)VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
