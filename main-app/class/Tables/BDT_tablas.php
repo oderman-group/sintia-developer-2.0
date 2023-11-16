@@ -22,7 +22,7 @@ class BDT_Tablas {
         if( !empty($predicado) ) {
             $where = "WHERE ";
             foreach( $predicado as $clave => $valor ) {
-                $where .= $clave ."=".$valor." AND ";
+                $where .= $clave ."='".$valor."' AND ";
             }
             $where = substr($where, 0, -5);
         }
