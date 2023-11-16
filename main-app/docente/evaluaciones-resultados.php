@@ -218,12 +218,12 @@ $idE="";
 														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre ON aca_eva_pre.evp_id_pregunta=preg_id AND aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}),
  
 														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1),
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1),
 														 
 														 (SELECT count(preg_id) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1)
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1)
 														 ");
 														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
 														 
