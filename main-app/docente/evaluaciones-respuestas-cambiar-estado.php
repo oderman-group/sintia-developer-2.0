@@ -10,7 +10,7 @@ include("verificar-periodos-diferentes.php");
 
 if(base64_decode($_GET["estado"])==0) $estado=1; else $estado=0;
 try{
-    mysqli_query($conexion, "UPDATE academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".base64_decode($_GET["idR"])."'");
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

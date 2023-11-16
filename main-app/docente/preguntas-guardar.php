@@ -38,9 +38,10 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		$cont=1;
 		$datosInsert = '';
 		while($cont<=4){
+			$codigoR=Utilidades::generateCode("RES");
 			if(!empty(trim($_POST["r$cont"]))){
 				if(empty($_POST["c$cont"])){$_POST["c$cont"]=0;}
-				$datosInsert .="('".mysqli_real_escape_string($conexion,$_POST["r$cont"])."','".$_POST["c$cont"]."','".$codigo."'),";
+				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["r$cont"])."','".$_POST["c$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 				$cont++;
 			}
 		}
@@ -48,7 +49,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		if(!empty($datosInsert)){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
@@ -59,9 +60,10 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		$cont=1;
 		$datosInsert = '';
 		while($cont<=2){
+			$codigoR=Utilidades::generateCode("RES");
 			if(!empty(trim($_POST["rv$cont"]))){
 				if(empty($_POST["cv$cont"])){$_POST["cv$cont"]=0;}
-				$datosInsert .="('".mysqli_real_escape_string($conexion,$_POST["rv$cont"])."','".$_POST["cv$cont"]."','".$codigo."'),";
+				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["rv$cont"])."','".$_POST["cv$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 				$cont++;
 			}
 		}
@@ -69,7 +71,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		if(!empty($datosInsert)){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
@@ -77,11 +79,12 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	}
 
 	if($_POST["opcionR"]==3){
-		$datosInsert .="('Adjuntar un archivo','0','".$codigo."'),";
+		$codigoR=Utilidades::generateCode("RES");
+		$datosInsert .="('".$codigoR."', 'Adjuntar un archivo','0','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 		if(!empty($datosInsert)){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES $datosInsert");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES $datosInsert");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
@@ -102,14 +105,15 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	}
 
 	try{
-		$respuestasPreguntaConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas WHERE resp_id_pregunta='".$_POST["bancoDatos"]."'");
+		$respuestasPreguntaConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id_pregunta='".$_POST["bancoDatos"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	while($respuestasPreguntaDatos = mysqli_fetch_array($respuestasPreguntaConsulta, MYSQLI_BOTH)){
+		$codigoR=Utilidades::generateCode("RES");
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen)VALUES('".$respuestasPreguntaDatos['resp_descripcion']."', '".$respuestasPreguntaDatos['resp_correcta']."', '".$codigo."', '".$respuestasPreguntaDatos['resp_imagen']."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES('".$codigoR."', '".$respuestasPreguntaDatos['resp_descripcion']."', '".$respuestasPreguntaDatos['resp_correcta']."', '".$codigo."', '".$respuestasPreguntaDatos['resp_imagen']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
