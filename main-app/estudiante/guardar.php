@@ -29,7 +29,7 @@ if(!empty($_POST["id"])){
 	//GUARDAR COMENTARIO
 	if($_POST["id"]==7){//No se esta llamando en nigun lado
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".$_POST["com"]."', '".$_SESION["id"]."', now())");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".$_POST["com"]."', '".$_SESION["id"]."', now())");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

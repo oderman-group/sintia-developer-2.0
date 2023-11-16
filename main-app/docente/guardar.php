@@ -28,7 +28,7 @@ if(!empty($_POST["id"])){
 	//GUARDAR COMENTARIO
 	if($_POST["id"]==17){//No se llama de ningun lado
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".mysqli_real_escape_string($conexion,$_POST["com"])."', '".$idSession."', now())");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro_comentarios(com_id_foro, com_descripcion, com_id_estudiante, com_fecha)VALUES('".$_POST["idForo"]."', '".mysqli_real_escape_string($conexion,$_POST["com"])."', '".$idSession."', now())");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -588,7 +588,7 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id=".$_GET["idCom"]);
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id=".$_GET["idCom"]);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
