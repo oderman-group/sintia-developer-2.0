@@ -79,15 +79,15 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
-													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro 
+													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$contReg = 1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr id="reg<?=$resultado['foro_id'];?>">
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>"><?=$resultado[1];?></a></td>
+														<td><?=$resultado['foro_id'];?></td>
+														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>"><?=$resultado['foro_nombre'];?></a></td>
 														<td>
 															<?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 															

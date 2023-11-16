@@ -92,16 +92,16 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
-													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro 
+													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                     $contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><?=$resultado[1];?></td>
-														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado[0]);?>">Participación</a></td>
+														<td><?=$resultado['foro_id'];?></td>
+														<td><?=$resultado['foro_nombre'];?></td>
+														<td><a href="foros-detalles.php?idR=<?=base64_encode($resultado['foro_id']);?>">Participación</a></td>
                                                     </tr>
 													<?php 
 														 $contReg++;

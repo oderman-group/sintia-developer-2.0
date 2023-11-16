@@ -16,12 +16,12 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id_carga='" . base64_decode($_GET["id"]) . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id_carga='" . base64_decode($_GET["id"]) . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id_carga='" . base64_decode($_GET["id"]) . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id_carga='" . base64_decode($_GET["id"]) . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

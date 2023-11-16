@@ -29,7 +29,7 @@ try{
 }
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_foro WHERE foro_id='".base64_decode($_GET["idR"])."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
