@@ -16,8 +16,8 @@ try{
 }
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados 
-    WHERE res_id_evaluacion='".base64_decode($_GET["idE"])."' AND res_id_estudiante='".base64_decode($_GET["idEstudiante"])."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+    WHERE res_id_evaluacion='".base64_decode($_GET["idE"])."' AND res_id_estudiante='".base64_decode($_GET["idEstudiante"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
