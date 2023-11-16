@@ -47,7 +47,7 @@ if($_POST["operacion"]==3){
 //Impedir retrasos o no en las actividades
 if($_POST["operacion"]==4){
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_impedir_retrasos='".$_POST["valor"]."' WHERE tar_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_impedir_retrasos='".$_POST["valor"]."' WHERE tar_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

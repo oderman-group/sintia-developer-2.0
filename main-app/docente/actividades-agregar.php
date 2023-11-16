@@ -155,8 +155,8 @@
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-												WHERE tar_id_carga='".$cargaConsultaActual."' 
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
+												WHERE tar_id_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">

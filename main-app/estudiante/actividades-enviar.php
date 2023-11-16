@@ -11,8 +11,8 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 $archivoSubido = new Archivos;
 
 try{
-	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()), tar_fecha_entrega, tar_impedir_retrasos FROM academico_actividad_tareas 
-	WHERE tar_id='".$_POST["idR"]."' AND tar_estado=1"), MYSQLI_BOTH);
+	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()), tar_fecha_entrega, tar_impedir_retrasos FROM ".BD_ACADEMICA.".academico_actividad_tareas 
+	WHERE tar_id='".$_POST["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
