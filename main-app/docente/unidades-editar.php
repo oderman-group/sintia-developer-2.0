@@ -9,7 +9,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consulta=mysqli_query($conexion, "SELECT * FROM academico_unidades WHERE uni_id='".$idR."'");
+$consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades WHERE id_nuevo='".$idR."'");
 $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 
@@ -58,8 +58,8 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual[8]]; ?> </header>
 							<div class="panel-body">
 								<?php
-								$unidadesEnComun = mysqli_query($conexion, "SELECT * FROM academico_unidades 
-										WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND uni_id!='" . $idR . "'");
+								$unidadesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
+										WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND id_nuevo!='" . $idR . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								while ($uniComun = mysqli_fetch_array($unidadesEnComun, MYSQLI_BOTH)) {
 								?>
 									<p><a href="unidades-editar.php?idR=<?= base64_encode($uniComun['uni_id']); ?>"><?= $uniComun['uni_nombre']; ?></a></p>
@@ -72,7 +72,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
 							<div class="panel-body">
 								<form name="formularioGuardar" action="unidades-actualizar.php?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" method="post">
-									<input type="hidden" value="<?= $datosUnidad['uni_id']; ?>" name="idR">
+									<input type="hidden" value="<?= $datosUnidad['id_nuevo']; ?>" name="idR">
 
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Nombre:</label>

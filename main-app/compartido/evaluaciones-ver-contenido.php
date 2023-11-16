@@ -5,8 +5,8 @@
 				require_once(ROOT_PATH."/main-app/class/Boletin.php");
 				$idE="";
 				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-				WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
+				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+				WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
@@ -21,9 +21,9 @@
 				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
-				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
+				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
 				INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-				WHERE evp_id_evaluacion='".$idE."'
+				WHERE evp_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 				");
 				
 				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -103,8 +103,8 @@
 										<div class="panel-body">
 											<p><?=$frases[159][$datosUsuarioActual[8]];?></p>
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -114,7 +114,7 @@
 												
 												if($nume==0){continue;}
 											?>
-												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>" <?=$estiloResaltado;?>><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>"><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>

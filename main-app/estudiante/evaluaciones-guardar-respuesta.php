@@ -32,9 +32,9 @@ try{
 
 //Cantidad de preguntas de la evaluación
 try{
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$_POST["idE"]."'");
+	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
+	INNER JOIN academico_actividad_preguntas ON preg_id=aca_eva_pre.evp_id_pregunta
+	WHERE aca_eva_pre.evp_id_evaluacion='".$_POST["idE"]."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

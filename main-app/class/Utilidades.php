@@ -29,4 +29,22 @@ class Utilidades {
         return false;
     
     }
+
+    /**
+     * Generates a unique code based on a given index and a combination of numbers and the current timestamp.
+     *
+     * @param string $index An optional index to prepend to the generated code.
+     * @return string The generated unique code.
+     */
+    public static function generateCode($index='')
+    {
+        $key = "";
+        $pattern = "1234567890";
+        $max = strlen($pattern)-1;
+        for($i = 0; $i < 2; $i++){
+            $key .= substr($pattern, mt_rand(0,$max), 1);
+        }
+        $code=$index.$key.strtotime("now");
+        return $code;
+    }
 }
