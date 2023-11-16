@@ -19,9 +19,9 @@ $idE="";
 	
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-	INNER JOIN academico_actividad_preguntas ON preg_id=aca_eva_pre.evp_id_pregunta
+	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
 	WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-	ORDER BY preg_id DESC
+	ORDER BY preg.preg_id DESC
 	");
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -214,17 +214,24 @@ $idE="";
 														 WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														 $datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
 														 $consultaDatos2=mysqli_query($conexion, "SELECT
+<<<<<<< HEAD
 														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
 														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre ON aca_eva_pre.evp_id_pregunta=preg_id AND aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}),
+=======
+														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN academico_actividad_evaluacion_preguntas ON evp_id_pregunta=preg.preg_id AND evp_id_evaluacion='".$idE."'
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
+>>>>>>> a71248f5 (PES-553 - Se actualizan consultas a tabla academico_actividad_preguntas)
  
-														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1),
+														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
 														 
-														 (SELECT count(preg_id) FROM academico_actividad_preguntas
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1)
-														 ");
+														 (SELECT count(preg_id) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN academico_actividad_respuestas ON resp_id=res.res_id_respuesta AND resp_correcta=1
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]})");
 														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
 														 
 														 if($datos2[0] > 0){
