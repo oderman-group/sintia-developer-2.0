@@ -91,9 +91,9 @@ function mostrarNuevaRespuesta(datos){
 	
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
+	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
 	WHERE evp_id_evaluacion='".$idE."'
-	ORDER BY preg_id DESC
+	ORDER BY preg.preg_id DESC
 	");
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);

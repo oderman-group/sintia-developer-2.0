@@ -12,7 +12,7 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $idE="";
 if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 
-$consultaPregunta=mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas WHERE preg_id='".$idR."'");
+$consultaPregunta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_preguntas WHERE preg_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $pregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH);
 ?>
 
