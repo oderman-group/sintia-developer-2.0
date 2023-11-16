@@ -90,8 +90,8 @@
 													"));
 													  
 													  //Obtener los datos si ya ha realizado la evaluación
-													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes
-													  WHERE epe_id_evaluacion='".$resultado['eva_id']."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL
+													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes
+													  WHERE epe_id_evaluacion='".$resultado['eva_id']."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL
 													  "), MYSQLI_BOTH);
 													  
 													  //respuestas
