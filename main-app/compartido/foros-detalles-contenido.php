@@ -105,9 +105,9 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 											$filtro = '';
 											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
 									
-											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
+											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
-											WHERE com_id_foro='".$idR."'
+											WHERE com_id_foro='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											$filtro
 											ORDER BY com_id DESC
 											");
