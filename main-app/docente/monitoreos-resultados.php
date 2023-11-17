@@ -5,7 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_id='".$_GET["idF"]."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idF"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
@@ -61,8 +61,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="panel-body">
 											<p>Puedes cambiar a otro formato rápidamente para monitorear a los evaluados.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_formatos 
-											WHERE form_id!='".$_GET["idF"]."'
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos 
+											WHERE form_id!='".$_GET["idF"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY form_id DESC");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>

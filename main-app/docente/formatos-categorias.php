@@ -7,7 +7,7 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_id='".$_GET["idF"]."'");
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idF"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
     <div class="page-wrapper">

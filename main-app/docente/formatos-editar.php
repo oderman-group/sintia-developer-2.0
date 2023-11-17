@@ -4,7 +4,7 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_id='".$_GET["idR"]."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
