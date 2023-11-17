@@ -150,7 +150,7 @@ function niv(enviada){
 															$p = 1;
 															while($p<=$datosCargaActual['gra_periodos']){
 																try{
-																	$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'");
+																	$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																} catch (Exception $e) {
 																	include("../compartido/error-catch-to-report.php");
 																}
@@ -187,7 +187,7 @@ function niv(enviada){
 														 $n = 0;
 														 for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
 															try{
-																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -255,7 +255,7 @@ function niv(enviada){
 														 if($config[2]==$datosCargaActual['gra_periodos']){
 															 $notaMinima = ($config[5]-$definitiva);
 															try{
-															 	$consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
+															 	$consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
