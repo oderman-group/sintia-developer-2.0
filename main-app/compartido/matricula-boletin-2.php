@@ -225,7 +225,7 @@ for($l=1;$l<=$numero_periodos;$l++){
 	   if($total_promedio2==1)	$total_promedio2="1.0";	if($total_promedio2==2)	$total_promedio2="2.0";		if($total_promedio2==3)	$total_promedio2="3.0";	if($total_promedio2==4)	$total_promedio2="4.0";	if($total_promedio2==5)	$total_promedio2="5.0";
 	   $msj='';
 	   if($total_promedio2<$config[5]){
-			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$_GET["id"]."'");
+			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$_GET["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		   $nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
 		   if($nivelaciones[3]<$config[5]){
 				$materiasPerdidas++;

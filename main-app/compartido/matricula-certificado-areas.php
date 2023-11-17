@@ -356,13 +356,13 @@ include("../compartido/head-informes.php") ?>
 
 			<?php
 
-			$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM academico_nivelaciones 
+			$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
 
-									INNER JOIN academico_cargas ON car_id=niv_id_asg
+									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
 									INNER JOIN academico_materias ON mat_id=car_materia
 
-									WHERE niv_cod_estudiante='" . $_POST["id"] . "'");
+									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
 
 
@@ -402,7 +402,7 @@ include("../compartido/head-informes.php") ?>
 				$m = 0;
 				$niveladas = 0;
 				while ($m < $materiasPerdidas) {
-					$nMP = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $_POST["id"] . "' AND niv_id_asg='" . $vectorMP[$m] . "' AND niv_definitiva>='" . $config[5] . "'");
+					$nMP = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $_POST["id"] . "' AND niv_id_asg='" . $vectorMP[$m] . "' AND niv_definitiva>='" . $config[5] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$numNivMP = mysqli_num_rows($nMP);
 					if ($numNivMP > 0) {
 						$niveladas++;

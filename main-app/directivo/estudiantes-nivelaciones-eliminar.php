@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 try{
-	mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_id='" . $_GET["idNiv"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id='" . $_GET["idNiv"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

@@ -301,12 +301,12 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 	   //if($total_promedio2<$r_desempeno["desbasdesde"]){$materiasPerdidas++;}
 	    $msj='';
 	   if($total_promedio2<$config[5]){
-			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  $BD.academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos[0]."'");
+			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		   $nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
-		   if($nivelaciones[3]<$config[5]){
+		   if($nivelaciones['niv_definitiva']<$config[5]){
 				$materiasPerdidas++;
 			}else{
-				$total_promedio2 = $nivelaciones[3];
+				$total_promedio2 = $nivelaciones['niv_definitiva'];
 				$msj='Niv';
 			}
 		   

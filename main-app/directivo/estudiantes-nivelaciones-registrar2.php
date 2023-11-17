@@ -266,13 +266,13 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 												$defPorMateria = round($defPorMateria / $config[19], 2);
 												//CONSULTAR NIVELACIONES
 												try {
-													$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga[0] . "'");
+													$consultaNiv = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga[0] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
 												$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
-												if (!empty($cNiv[3]) && $cNiv[3] > $defPorMateria) {
-													$defPorMateria = $cNiv[3];
+												if (!empty($cNiv['niv_definitiva']) && $cNiv['niv_definitiva'] > $defPorMateria) {
+													$defPorMateria = $cNiv['niv_definitiva'];
 													$msj = 'Nivelación';
 												} else {
 													$defPorMateria = $defPorMateria;
@@ -283,15 +283,15 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 												elseif ($defPorMateria >= $config[5]) $color = $config[7];
 											?>
 												<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?= $color; ?>" value="<?= $defPorMateria; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="1" onChange="niv(this)" <?= $disabledPermiso; ?>><br>
-													<?php if (!empty($cNiv[0])) { ?>
+													<?php if (!empty($cNiv['niv_id'])) { ?>
 														<span style="font-size:10px; color:rgb(255,0,0);"><?= $msj; ?></span><br>
 														<a href="javascript:void(0);" 
-														onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','estudiantes-nivelaciones-eliminar.php?idNiv=<?= $cNiv[0]; ?>&curso=<?= $_REQUEST["curso"]; ?>&grupo=<?= $_REQUEST["grupo"]; ?>')"
+														onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','estudiantes-nivelaciones-eliminar.php?idNiv=<?= $cNiv['niv_id']; ?>&curso=<?= $_REQUEST["curso"]; ?>&grupo=<?= $_REQUEST["grupo"]; ?>')"
 														><img src="../files/iconos/1363803022_001_052.png"></a>
 													<?php } ?>
 												</td>
-												<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if (!empty($cNiv[5])) echo $cNiv[5]; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="2" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
-												<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if (!empty($cNiv[6])) echo $cNiv[6]; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="3" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
+												<td style="text-align:center;"><input style="text-align:center; width:40px;" value="<?php if (!empty($cNiv['niv_acta'])) echo $cNiv['niv_acta']; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="2" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
+												<td style="text-align:center;"><input type="date" style="text-align:center; width:150px;" value="<?php if (!empty($cNiv['niv_fecha_nivelacion'])) echo $cNiv['niv_fecha_nivelacion']; ?>" id="<?= $resultado['mat_id']; ?>" name="<?= $carga[0]; ?>" alt="3" onChange="niv(this)" <?= $disabledPermiso; ?>></td>
 											<?php
 												//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 												$defPorEstudiante += $defPorMateria;

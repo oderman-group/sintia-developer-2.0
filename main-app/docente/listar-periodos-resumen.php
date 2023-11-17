@@ -170,7 +170,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                     $definitiva = ($definitiva / $sumaPorcentaje);
                                 }
                                 
-                                $consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
+                                $consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 
                                 $numN = mysqli_num_rows($consultaN);
                                 $rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -179,7 +179,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                         $definitiva = round(($definitiva), $config['conf_decimales_notas']);
                                         $tN = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';
                                 }else{
-                                    $definitiva = $rN[3];
+                                    $definitiva = $rN['niv_definitiva'];
                                     $tN = '<span style="color:red; font-size:9px;">'.$frases[124][$datosUsuarioActual['uss_idioma']].'</span>';
                                 }
                                 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];
