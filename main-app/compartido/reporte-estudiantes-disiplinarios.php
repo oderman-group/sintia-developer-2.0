@@ -62,10 +62,10 @@ include("../../config-general/consulta-usuario-actual.php");?>
 		}
 		$c_matricEst=mysqli_query($conexion, "SELECT mat_matricula,mat_primer_apellido,mat_segundo_apellido,mat_nombres,gru_nombre,gra_nombre,ogen_nombre,dr_fecha, dr_estudiante, dr_falta,
 CASE dr_tipo WHEN 1 THEN 'Leve' WHEN 2 THEN 'Grave' WHEN 3 THEN 'Gravísima' END as tipo_falta
-FROM academico_matriculas am INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
+FROM academico_matriculas am INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
 INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
 INNER JOIN ".$baseDatosServicios.".opciones_generales og ON og.ogen_id=am.mat_tipo
-INNER JOIN ".BD_DISCIPLINA.".disciplina_reportes dr ON dr.dr_estudiante=am.mat_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$condicionw.$condicion."
+INNER JOIN ".BD_DISCIPLINA.".disciplina_reportes dr ON dr.dr_estudiante=am.mat_id AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]} ".$condicionw.$condicion."
 ORDER BY mat_primer_apellido;");
  while($resultado=mysqli_fetch_array($c_matricEst)){
   ?>

@@ -132,7 +132,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-8">
 												<?php
 												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -142,9 +142,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['car_grupo']) $select = 'selected';
+														if($opcionesDatos['gru_id']==$datosEditar['car_grupo']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gru_id'];?>" <?=$select;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>

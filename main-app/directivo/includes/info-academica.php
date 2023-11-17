@@ -23,7 +23,7 @@
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+													$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 													<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
@@ -165,7 +165,7 @@
 					<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
 					<div class="col-sm-4">
 						<?php
-						$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+						$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						?>
 						<select class="form-control" name="grupoMT">
 						<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){

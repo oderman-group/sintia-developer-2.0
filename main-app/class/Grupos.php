@@ -2,10 +2,10 @@
 class Grupos {
 
     public static function obtenerDatosGrupos($grupo = 0){
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id=$grupo");            
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE gru_id='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");            
         } catch (Exception $e){
             echo "Excepción capturada: ".$e->getMessage();
             exit();
@@ -20,10 +20,10 @@ class Grupos {
     }
 
     public static function listarGrupos(){
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e){
             echo "Excepción capturada: ".$e->getMessage();
             exit();

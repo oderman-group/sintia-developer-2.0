@@ -23,7 +23,7 @@ $cursoActual=GradoServicios::consultarCurso($curso);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);	
 
 $num_asg=mysqli_num_rows($asig);
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$curso."' AND gru_id='".$grupo."'");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$curso."' AND gru.gru_id='".$grupo."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}");
 
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>

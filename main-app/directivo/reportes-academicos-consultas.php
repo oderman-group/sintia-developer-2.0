@@ -81,7 +81,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <option value=""></option>
                                                 <?php 
                                                 try{
-                                                    $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM academico_grupos ORDER BY gru_nombre;");
+                                                    $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gru_nombre;");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }

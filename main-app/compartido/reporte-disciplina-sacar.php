@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
 $consultaDatos = mysqli_query($conexion, "SELECT * FROM academico_grados
-LEFT JOIN academico_grupos ON gru_id='" . $_POST["grupo"] . "'
+LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id='" . $_POST["grupo"] . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 WHERE gra_id='" . $_POST["grado"] . "'");
 $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
@@ -66,7 +66,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
       INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
       INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante $filtroMat
       LEFT JOIN academico_grados ON gra_id=mat_grado
-      LEFT JOIN academico_grupos ON gru_id=mat_grupo
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
       INNER JOIN usuarios ON uss_id=dr_usuario
       WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");
@@ -77,7 +77,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
       INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
       INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula=mat_id AND matcur_id_curso='" . $_POST["grado"] . "'
       LEFT JOIN academico_grados ON gra_id=matcur_id_curso
-      LEFT JOIN academico_grupos ON gru_id=1
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
       INNER JOIN usuarios ON uss_id=dr_usuario
       WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");

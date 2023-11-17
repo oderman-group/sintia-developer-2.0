@@ -56,7 +56,7 @@ if(!Modulos::validarPermisoEdicion()){
 		}
 		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 		try{
-			$consultaGrupo=mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."'");
+			$consultaGrupo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE gru_id='".$_REQUEST["grupo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?></div>
+                                <div class="page-title"><b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo['gru_nombre'];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>

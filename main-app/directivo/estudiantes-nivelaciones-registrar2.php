@@ -119,7 +119,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 		}
 		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 		try {
-			$consultaGrupo = mysqli_query($conexion, "SELECT * FROM academico_grupos WHERE gru_id='" . $_REQUEST["grupo"] . "'");
+			$consultaGrupo = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE gru_id='" . $_REQUEST["grupo"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -133,7 +133,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 
 				<div class="card card-topline-purple">
 					<div class="card-head">
-						<header><b>Nivelaciones Curso:</b> <?= $curso[2]; ?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?= $grupo[2]; ?></header>
+						<header><b>Nivelaciones Curso:</b> <?= $curso[2]; ?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?= $grupo['gru_nombre']; ?></header>
 						<div class="tools">
 							<a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 							<a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>

@@ -8,7 +8,7 @@ $consulta = mysqli_query($conexion, "SELECT GROUP_CONCAT( car_id SEPARATOR ', ')
 FROM academico_cargas
 INNER JOIN usuarios ON uss_id=car_docente
 INNER JOIN academico_grados ON gra_id=car_curso
-INNER JOIN academico_grupos ON gru_id=car_grupo
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 INNER JOIN academico_materias ON mat_id=car_materia
 GROUP BY car_docente, car_curso, car_grupo, car_materia
 HAVING COUNT(*) > 1 

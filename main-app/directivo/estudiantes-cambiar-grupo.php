@@ -97,7 +97,7 @@ require_once("../class/Estudiantes.php");
                                             <label class="col-sm-2 control-label">Grupo</label>
                                           	<?php 
                                             try{
-                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
