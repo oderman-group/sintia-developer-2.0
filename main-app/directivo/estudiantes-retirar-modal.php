@@ -15,7 +15,7 @@ if (!empty($_GET["id"])) {
 
 try {
     $consultaE = mysqli_query($conexion, "SELECT academico_matriculas.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM academico_matriculas
-    LEFT JOIN (SELECT * FROM academico_matriculas_retiradas ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=academico_matriculas.mat_id
+    LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=academico_matriculas.mat_id
     LEFT JOIN usuarios ON uss_id=matret_responsable
     WHERE mat_id='" . $id . "'");
 } catch (Exception $e) {

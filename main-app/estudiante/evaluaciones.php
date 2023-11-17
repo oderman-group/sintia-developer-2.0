@@ -77,16 +77,16 @@
 										<div class="card-body" id="line-parent">
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1
+												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												  ORDER BY eva_id DESC
 												  ");
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													  if(!empty($resultado['eva_clave'])) $ulrEva = 'evaluaciones-clave.php'; else $ulrEva = 'evaluaciones-realizar.php';
 													
 													//Cantidad de preguntas de la evaluación
-													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."'
+													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
+													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													"));
 													  
 													  //Obtener los datos si ya ha realizado la evaluación

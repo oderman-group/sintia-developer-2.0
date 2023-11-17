@@ -17,7 +17,7 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 try{
-	mysqli_query($conexion, "UPDATE academico_horarios SET hor_dia=" . $_POST["diaH"] . ", hor_desde='" . $_POST["inicioH"] . "', hor_hasta='" . $_POST["finH"] . "' WHERE hor_id=" . $_POST["idH"] . ";");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_dia=" . $_POST["diaH"] . ", hor_desde='" . $_POST["inicioH"] . "', hor_hasta='" . $_POST["finH"] . "' WHERE id_nuevo='" . $_POST["idH"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

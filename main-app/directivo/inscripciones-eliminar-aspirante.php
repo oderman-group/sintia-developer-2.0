@@ -14,7 +14,7 @@ $matricula="";
 if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
 
 try{
-    $consultaDocumentos=mysqli_query($conexion, "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula='".$matricula."'");
+    $consultaDocumentos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula='".$matricula."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     $documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
@@ -32,7 +32,7 @@ if(file_exists($ruta."/".$documentos['matd_documento_identidad'])){	unlink($ruta
 if(file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$documentos['matd_certificados']);	}
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_matriculas_documentos WHERE matd_matricula='".$matricula."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula='".$matricula."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

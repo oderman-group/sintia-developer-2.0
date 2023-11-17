@@ -32,9 +32,11 @@ $num = $est->rowCount();
 $datos = $est->fetch();
 
 //Documentos
-$documentosQuery = "SELECT * FROM academico_matriculas_documentos WHERE matd_matricula = :id";
+$documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula = :id AND institucion= :idInstitucion AND year= :year";
 $documentos = $conexionPDO->prepare($documentosQuery);
 $documentos->bindParam(':id', $datos['mat_id'], PDO::PARAM_INT);
+$documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$documentos->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $documentos->execute();
 $datosDocumentos = $documentos->fetch();
 

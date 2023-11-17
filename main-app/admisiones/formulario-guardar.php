@@ -159,7 +159,7 @@ if (!empty($_FILES['certificado']['name'])) {
 	$certificado = $_POST['certificadoA'];
 }
 
-$documentosQuery = "UPDATE academico_matriculas_documentos SET
+$documentosQuery = "UPDATE ".BD_ACADEMICA.".academico_matriculas_documentos SET
 matd_pazysalvo = :pazysalvo, 
 matd_observador = :observador, 
 matd_eps = :eps, 
@@ -168,7 +168,7 @@ matd_vacunas = :vacunas,
 matd_boletines_actuales = :boletines,
 matd_documento_identidad = :documentoIde,
 matd_certificados = :certificado
-WHERE matd_matricula = :idMatricula";
+WHERE matd_matricula = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $documentos = $pdoI->prepare($documentosQuery);
 
 $documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_INT);
@@ -180,6 +180,8 @@ $documentos->bindParam(':boletines', $boletines, PDO::PARAM_STR);
 $documentos->bindParam(':documentoIde', $documentoIde, PDO::PARAM_STR);
 $documentos->bindParam(':recomendacion', $recomendacion, PDO::PARAM_STR);
 $documentos->bindParam(':certificado', $certificado, PDO::PARAM_STR);
+$documentos->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+$documentos->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
 
 $documentos->execute();
 $filasAfectadasDoc = $documentos->rowCount();

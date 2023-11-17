@@ -1,13 +1,13 @@
 <?php
 include("../modelo/conexion.php");
-$consultaHoras=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaHoras=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $horas = mysqli_fetch_array($consultaHoras, MYSQLI_BOTH);
-$consultaMinutos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(MINUTE, NOW(), eva_hasta),60) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaMinutos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(MINUTE, NOW(), eva_hasta),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $minutos = mysqli_fetch_array($consultaMinutos, MYSQLI_BOTH);
-$consultaSegundos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(SECOND, NOW(), eva_hasta),60) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaSegundos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(SECOND, NOW(), eva_hasta),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $segundos = mysqli_fetch_array($consultaSegundos, MYSQLI_BOTH);
 
 if($horas[0]==0){
