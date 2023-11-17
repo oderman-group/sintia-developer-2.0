@@ -26,12 +26,14 @@ if($fechas[1]<0 and $fechas[3]==1){
 
 $destino = ROOT_PATH."/main-app/files/tareas-entregadas";
 try{
-	$num = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'"));
+	$num = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }	
 
 if($num == 0){
+	require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+	$codigo=Utilidades::generateCode("ENT");
 
 	if(!empty($_FILES['file']['name'])){
 		$nombreInputFile = 'file';
@@ -64,13 +66,13 @@ if($num == 0){
 	}
 
 	try{
-		mysqli_query($conexion, "DELETE FROM academico_actividad_tareas_entregas WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'");
+		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_actividad_tareas_entregas (ent_id_estudiante, ent_id_actividad, ent_archivo, ent_fecha, ent_comentario, ent_archivo2, ent_archivo3, ent_peso1, ent_peso2, ent_peso3) VALUES(".$datosEstudianteActual['mat_id'].", '".$_POST["idR"]."', '".$archivo."', now(), '".mysqli_real_escape_string($conexion,$_POST["comentario"])."', '".$archivo2."', '".$archivo3."', '".$pesoMB1."', '".$pesoMB2."', '".$pesoMB3."')");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas_entregas (ent_id, ent_id_estudiante, ent_id_actividad, ent_archivo, ent_fecha, ent_comentario, ent_archivo2, ent_archivo3, ent_peso1, ent_peso2, ent_peso3, institucion, year) VALUES('".$codigo."', ".$datosEstudianteActual['mat_id'].", '".$_POST["idR"]."', '".$archivo."', now(), '".mysqli_real_escape_string($conexion,$_POST["comentario"])."', '".$archivo2."', '".$archivo3."', '".$pesoMB1."', '".$pesoMB2."', '".$pesoMB3."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -85,7 +87,7 @@ if($num == 0){
 		$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile);
 
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividad_tareas_entregas SET ent_archivo='".$archivo."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo='".$archivo."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -99,7 +101,7 @@ if($num == 0){
 		@unlink($destino."/".$archivo2);
 		$archivoSubido->subirArchivo($destino, $archivo2, $nombreInputFile);
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividad_tareas_entregas SET ent_archivo2='".$archivo2."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo2='".$archivo2."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -113,14 +115,14 @@ if($num == 0){
 		@unlink($destino."/".$archivo3);
 		$archivoSubido->subirArchivo($destino, $archivo3, $nombreInputFile);
 		try{
-			mysqli_query($conexion, "UPDATE academico_actividad_tareas_entregas SET ent_archivo3='".$archivo3."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo3='".$archivo3."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
 	}
 
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_tareas_entregas SET ent_comentario='".mysqli_real_escape_string($conexion,$_POST["comentario"])."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_comentario='".mysqli_real_escape_string($conexion,$_POST["comentario"])."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
