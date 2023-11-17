@@ -44,7 +44,7 @@ if($numCargaActual==0)
 }else{
 	//Verificar si el estudiante está matriculado en cursos de extensión o complementarios
 	if($datosCargaActual['car_curso_extension']==1){
-		$cursoExtensionNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_cargas_estudiantes WHERE carpest_carga='".$datosCargaActual['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1"));
+		$cursoExtensionNum = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga='".$datosCargaActual['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 		if($cursoExtensionNum==0){
 			echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=100&cursoext=1";</script>';
 			exit();	
