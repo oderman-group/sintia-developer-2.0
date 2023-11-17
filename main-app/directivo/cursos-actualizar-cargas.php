@@ -9,6 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 try{
 	$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_ih!=''");
@@ -16,14 +17,15 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 	while ($c = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
+		$codigo=Utilidades::generateCode("IPC");
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_intensidad_curso WHERE ipc_curso='" . $c[2] . "' AND ipc_materia='" . $c[4] . "'");
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='" . $c[2] . "' AND ipc_materia='" . $c[4] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('" . $c[2] . "','" . $c[4] . "','" . $c['car_ih'] . "')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '" . $c[2] . "','" . $c[4] . "','" . $c['car_ih'] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
