@@ -116,20 +116,20 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_registrada=1 AND cls_estado=1");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_registrada=1 AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-														WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><?=$resultado[1];?></td>
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['cls_id'];?></td>
+														<td><?=$resultado['cls_tema'];?></td>
+														<td><?=$resultado['cls_fecha'];?></td>
 														<td><?=$ausencia[3];?></td>
 														<td>
-															<a href="clases-ver.php?idClase=<?=$resultado[0];?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idClase=<?=$resultado['cls_id'];?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

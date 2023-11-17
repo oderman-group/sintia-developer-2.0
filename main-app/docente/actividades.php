@@ -110,21 +110,21 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 ");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
+													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultafd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[5]."','".date("Y-m-d")."')");
+														$consultafd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_entrega']."','".date("Y-m-d")."')");
 														$fd = mysqli_fetch_array($consultafd, MYSQLI_BOTH);
-														$consultasd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[4]."','".date("Y-m-d")."')");
+														$consultasd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_disponible']."','".date("Y-m-d")."')");
 														$sd = mysqli_fetch_array($consultasd, MYSQLI_BOTH);
 														
 														$cheked = '';
 														if($resultado['tar_impedir_retrasos']==1){$cheked = 'checked';}
 													 ?>
-													<tr id="reg<?=$resultado[0];?>">
+													<tr id="reg<?=$resultado['tar_id'];?>">
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['tar_id'];?></td>
 														<td>
 															<div class="input-group spinner col-sm-10">
 																<label class="switchToggle">
@@ -133,9 +133,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																</label>
 															</div>
 														</td>
-														<td><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>" style="text-decoration: underline;"><?=$resultado[1];?></a></td>
-														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado[4];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado[5];?></td>
-														<td><?php if(!empty($resultado[6]) and file_exists('../files/tareas/'.$resultado[6])){?><a href="../files/tareas/<?=$resultado[6];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
+														<td><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>" style="text-decoration: underline;"><?=$resultado['tar_titulo'];?></a></td>
+														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_entrega'];?></td>
+														<td><?php if(!empty($resultado['tar_archivo']) and file_exists('../files/tareas/'.$resultado['tar_archivo'])){?><a href="../files/tareas/<?=$resultado['tar_archivo'];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
 															
 															<?php
@@ -155,7 +155,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<li><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>">Entregas</a></li>
 																	  	<li><a href="actividades-editar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
 																	 	 
-																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado[0];?>" name="actividades-eliminar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																	<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['tar_id'];?>" name="actividades-eliminar.php?idR=<?=base64_encode($resultado['tar_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
  
 																</ul>
 															</div>

@@ -7,6 +7,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 //Importar indicadores
 if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
@@ -151,7 +152,7 @@ if(!empty($_POST["calificaciones"])){
 //Importar clases
 if(!empty($_POST["clases"])){	
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_estado=0
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0
 		WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."'");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -159,7 +160,7 @@ if(!empty($_POST["clases"])){
 
 	//Consultamos las clases a Importar
 	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases
 		WHERE cls_id_carga='".$_POST["cargaImportar"]."' AND cls_periodo='".$_POST["periodoImportar"]."' AND cls_estado=1");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -173,7 +174,7 @@ if(!empty($_POST["clases"])){
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible) VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible) VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -187,29 +188,30 @@ if(!empty($_POST["clases"])){
 
 if(!empty($_POST["actividades"])){		
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_estado=0
-		WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_estado=0
+		WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	//Consultamos las actividades a Importar
 	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas
-		WHERE tar_id_carga='".$_POST["cargaImportar"]."' AND tar_periodo='".$_POST["periodoImportar"]."' AND tar_estado=1");
+		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
+		WHERE tar_id_carga='".$_POST["cargaImportar"]."' AND tar_periodo='".$_POST["periodoImportar"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-		$datosInsert .="('".$calImpDatos['tar_titulo']."', '".$calImpDatos['tar_descripcion']."', '".$cargaConsultaActual."', '".$calImpDatos['tar_fecha_disponible']."', '".$calImpDatos['tar_fecha_entrega']."', '".$calImpDatos['tar_archivo']."', '".$calImpDatos['tar_impedir_retrasos']."', '".$periodoConsultaActual."', 1, '".$calImpDatos['tar_archivo2']."', '".$calImpDatos['ar_archivo3']."'),";	
+		$codigo=Utilidades::generateCode("TAR");
+		$datosInsert .="('".$codigo."', '".$calImpDatos['tar_titulo']."', '".$calImpDatos['tar_descripcion']."', '".$cargaConsultaActual."', '".$calImpDatos['tar_fecha_disponible']."', '".$calImpDatos['tar_fecha_entrega']."', '".$calImpDatos['tar_archivo']."', '".$calImpDatos['tar_impedir_retrasos']."', '".$periodoConsultaActual."', 1, '".$calImpDatos['tar_archivo2']."', '".$calImpDatos['ar_archivo3']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";	
 	}
 
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_tareas(tar_titulo, tar_descripcion, tar_id_carga, tar_fecha_disponible, tar_fecha_entrega, tar_archivo, tar_impedir_retrasos, tar_periodo, tar_estado, tar_archivo2, ar_archivo3)VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas(tar_id, tar_titulo, tar_descripcion, tar_id_carga, tar_fecha_disponible, tar_fecha_entrega, tar_archivo, tar_impedir_retrasos, tar_periodo, tar_estado, tar_archivo2, ar_archivo3, institucion, year)VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -220,28 +222,29 @@ if(!empty($_POST["actividades"])){
 //Importar foros
 if(!empty($_POST["foros"])){		
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_foro SET foro_estado=0
-		WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_foro SET foro_estado=0
+		WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 	//Consultamos las foros a Importar
 	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro
-		WHERE foro_id_carga='".$_POST["cargaImportar"]."' AND foro_periodo='".$_POST["periodoImportar"]."' AND foro_estado=1");
+		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro
+		WHERE foro_id_carga='".$_POST["cargaImportar"]."' AND foro_periodo='".$_POST["periodoImportar"]."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-		$datosInsert .="('".$calImpDatos['foro_nombre']."', '".$calImpDatos['foro_descripcion']."', '".$cargaConsultaActual."', '".$periodoConsultaActual."', 1),";
+		$codigo=Utilidades::generateCode("FORO");
+		$datosInsert .="('".$codigo."', '".$calImpDatos['foro_nombre']."', '".$calImpDatos['foro_descripcion']."', '".$cargaConsultaActual."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 	}
 
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividad_foro(foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado)VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro(foro_id, foro_nombre, foro_descripcion, foro_id_carga, foro_periodo, foro_estado, institucion, year)VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}

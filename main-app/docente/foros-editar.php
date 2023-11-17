@@ -9,7 +9,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$idR."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 

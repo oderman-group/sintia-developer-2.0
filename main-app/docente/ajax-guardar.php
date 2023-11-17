@@ -5,13 +5,14 @@ include("verificar-carga.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0091';
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
 
 //Actualizar respuesta de una pregunta
 if($_POST["operacion"]==1){
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_respuestas SET resp_descripcion='".$_POST["valor"]."' WHERE resp_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_descripcion='".$_POST["valor"]."' WHERE resp_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -22,8 +23,9 @@ if($_POST["operacion"]==1){
 
 //Agregar respuesta a una pregunta
 if($_POST["operacion"]==2){
+	$codigo=Utilidades::generateCode("RES");
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_actividad_respuestas(resp_descripcion, resp_correcta, resp_id_pregunta)VALUES('".$_POST["valor"]."', 0, '".$_POST["pregunta"]."')");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES('".$codigo."', '".$_POST["valor"]."', 0, '".$_POST["pregunta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -34,7 +36,7 @@ if($_POST["operacion"]==2){
 //Clase disponible o no
 if($_POST["operacion"]==3){
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_disponible='".$_POST["valor"]."' WHERE cls_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_disponible='".$_POST["valor"]."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -45,7 +47,7 @@ if($_POST["operacion"]==3){
 //Impedir retrasos o no en las actividades
 if($_POST["operacion"]==4){
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_impedir_retrasos='".$_POST["valor"]."' WHERE tar_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_impedir_retrasos='".$_POST["valor"]."' WHERE tar_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

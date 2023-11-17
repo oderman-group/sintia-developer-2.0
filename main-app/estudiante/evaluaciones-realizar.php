@@ -107,7 +107,7 @@
 	
 	//Cantidad de preguntas de la evaluación
 	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-	INNER JOIN academico_actividad_preguntas ON preg_id=aca_eva_pre.evp_id_pregunta
+	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
 	WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
 	");
 	
@@ -120,8 +120,8 @@
 	}
 
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-	WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
+	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+	WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 	
 	if($nume>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=200";</script>';
@@ -129,22 +129,24 @@
 	}
 	
 	//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-	$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-	WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+	$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+	WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 	if($estadoSesionEvaluacion>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 		exit();
 	}
+	require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+	$codigo=Utilidades::generateCode("EPE");
 	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
-	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
-	mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_estudiantes(epe_id_estudiante, epe_id_evaluacion, epe_inicio)VALUES('".$datosEstudianteActual[0]."', '".$idE."', now())");
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes(epe_id, epe_id_estudiante, epe_id_evaluacion, epe_inicio, institucion, year)VALUES('".$codigo."', '".$datosEstudianteActual[0]."', '".$idE."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	
 
 	//CUANTOS ESTÁN REALIZANDO LA EVALUACIÓN EN ESTE MOMENTO Y CUANTOS TERMINARON
 	$Numerosevaluados = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_fin IS NULL),
-	(SELECT count(epe_id) FROM academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
+	(SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_fin IS NULL),
+	(SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
 	"), MYSQLI_BOTH);
 	
 	?>
@@ -240,8 +242,8 @@
 											<?php
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
+												WHERE resp_id_pregunta='".$preguntas['preg_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);

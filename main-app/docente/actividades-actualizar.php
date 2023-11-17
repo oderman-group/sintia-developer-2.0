@@ -20,7 +20,7 @@ if(!empty($_FILES['file']['name'])){
 	@unlink($destino."/".$archivoAnterior);
 	$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile); 
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_archivo='".$archivo."' WHERE tar_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_archivo='".$archivo."' WHERE tar_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -29,7 +29,7 @@ if(!empty($_FILES['file']['name'])){
 if(empty($_POST["retrasos"]) || $_POST["retrasos"]!=1) $_POST["retrasos"]='0';
 
 try{
-	mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_titulo='".mysqli_real_escape_string($conexion,$_POST["titulo"])."', tar_descripcion='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', tar_fecha_disponible='".$_POST["desde"]."', tar_fecha_entrega='".$_POST["hasta"]."', tar_impedir_retrasos='".$_POST["retrasos"]."' WHERE tar_id='".$_POST["idR"]."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_titulo='".mysqli_real_escape_string($conexion,$_POST["titulo"])."', tar_descripcion='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', tar_fecha_disponible='".$_POST["desde"]."', tar_fecha_entrega='".$_POST["hasta"]."', tar_impedir_retrasos='".$_POST["retrasos"]."' WHERE tar_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

@@ -94,28 +94,28 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 ");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
+													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1  AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$fd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[5]."','".date("Y-m-d")."')"), MYSQLI_BOTH);
-														$sd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado[4]."','".date("Y-m-d")."')"), MYSQLI_BOTH);
+														$fd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_entrega']."','".date("Y-m-d")."')"), MYSQLI_BOTH);
+														$sd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_disponible']."','".date("Y-m-d")."')"), MYSQLI_BOTH);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><?=$resultado[1];?></td>
-														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado[4];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado[5];?></td>
+														<td><?=$resultado['tar_id'];?></td>
+														<td><?=$resultado['tar_titulo'];?></td>
+														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_entrega'];?></td>
 														
                                                         
                                                         <td>
 
                                                         <?php
                                                         if($sd[0] <= 0){
-                                                        if($resultado[6]!=""  and file_exists('../files/tareas/'.$resultado[6])){
+                                                        if($resultado['tar_archivo']!=""  and file_exists('../files/tareas/'.$resultado['tar_archivo'])){
                                                         ?>
 
-                                                            <a href="../files/tareas/<?=$resultado[6];?>" target="_blank">Descargar </a>
+                                                            <a href="../files/tareas/<?=$resultado['tar_archivo'];?>" target="_blank">Descargar </a>
 
                                                         <?php 
                                                         }
@@ -125,7 +125,7 @@
                                                         </td>
 
 
-														<td><a href="actividades-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$frases[154][$datosUsuarioActual[8]];?></a></td>
+														<td><a href="actividades-ver.php?idR=<?=base64_encode($resultado['tar_id']);?>"><?=$frases[154][$datosUsuarioActual[8]];?></a></td>
                                                     </tr>
 													<?php 
 														 $contReg++;

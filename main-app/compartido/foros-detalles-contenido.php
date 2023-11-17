@@ -4,7 +4,7 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $usuario="";
 if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_foro WHERE foro_id='".$idR."'"), MYSQLI_BOTH);
+$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 ?>					
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -105,18 +105,18 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 											$filtro = '';
 											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
 									
-											$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_comentarios
+											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios
 											INNER JOIN usuarios ON uss_id=com_id_estudiante
-											WHERE com_id_foro='".$idR."'
+											WHERE com_id_foro='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											$filtro
 											ORDER BY com_id DESC
 											");
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro_respuestas
-												INNER JOIN usuarios ON uss_id=fore_id_estudiante
-												WHERE fore_id_comentario='".$resultado[0]."'
-												ORDER BY fore_id ASC
+												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
+												INNER JOIN usuarios ON uss_id=fore.fore_id_estudiante
+												WHERE fore.fore_id_comentario='".$resultado['com_id']."' AND fore.institucion={$config['conf_id_institucion']} AND fore.year={$_SESSION["bd"]}
+												ORDER BY fore.fore_id ASC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
 	
@@ -222,8 +222,8 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM aca
 										<header class="panel-heading panel-heading-purple"><?=strtoupper($frases[113][$datosUsuarioActual['uss_idioma']]);?> </header>
 										<div class="panel-body">
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_foro 
-											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$idR."'
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro 
+											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY foro_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){

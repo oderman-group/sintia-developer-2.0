@@ -9,7 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
 try{
-	$rEntregas = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."'");
+	$rEntregas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
@@ -30,13 +30,13 @@ while($registroEntregas = mysqli_fetch_array($rEntregas, MYSQLI_BOTH)){
 }
 
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
 try{
-	$consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".base64_decode($_GET["idR"])."'");
+	$consultaRegistro=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
@@ -56,7 +56,7 @@ if(file_exists($ruta."/".$registro['tar_archivo3'])){
 }
 
 try{
-	mysqli_query($conexion, "UPDATE academico_actividad_tareas SET tar_estado=0 WHERE tar_id='".base64_decode($_GET["idR"])."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_estado=0 WHERE tar_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

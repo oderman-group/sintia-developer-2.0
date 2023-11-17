@@ -14,8 +14,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$actividadesConsulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_entrega, now()), tar_id_carga, tar_titulo, tar_id FROM academico_actividad_tareas
-	WHERE tar_fecha_entrega IS NOT NULL AND tar_fecha_entrega!='0000-00-00'");
+	$actividadesConsulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_entrega, now()), tar_id_carga, tar_titulo, tar_id FROM ".BD_ACADEMICA.".academico_actividad_tareas
+	WHERE tar_fecha_entrega IS NOT NULL AND tar_fecha_entrega!='0000-00-00' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 	while($actividadesDatos = mysqli_fetch_array($actividadesConsulta, MYSQLI_BOTH)){
 		//Cuando faltan 2 días
@@ -25,8 +25,8 @@ if($notificacionID[1]>=$notificacionID[2])
 			WHERE car_id='".$actividadesDatos['tar_id_carga']."'");
 
 			while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
-				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas 
-				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."'");
+				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
+				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){
@@ -50,8 +50,8 @@ if($notificacionID[1]>=$notificacionID[2])
 			");
 
 			while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
-				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas 
-				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."'");
+				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
+				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){

@@ -123,12 +123,12 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-														WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
 														$totalAusencia=0;
 														if(!empty($ausencia[3])){
 															$totalAusencia=$ausencia[3];
@@ -136,12 +136,12 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$resultado[1];?></a></td>
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['cls_id'];?></td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado[1];?></a></td>
+														<td><?=$resultado['cls_fecha'];?></td>
 														<td><?=$totalAusencia;?></td>
 														<td>
-															<a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

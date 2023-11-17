@@ -15,9 +15,9 @@ $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 //Cantidad de preguntas de la evaluación
 $preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-INNER JOIN academico_actividad_preguntas ON preg_id=aca_eva_pre.evp_id_pregunta
+INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
 WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-ORDER BY preg_id DESC");
+ORDER BY preg.preg_id DESC");
 
 $cantPreguntas = mysqli_num_rows($preguntasConsulta);
 ?>
@@ -158,8 +158,8 @@ $cantPreguntas = mysqli_num_rows($preguntasConsulta);
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_preguntas 
-												WHERE preg_id_carga='".$cargaConsultaActual."'");
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_preguntas 
+												WHERE preg_id_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

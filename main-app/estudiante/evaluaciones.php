@@ -90,20 +90,20 @@
 													"));
 													  
 													  //Obtener los datos si ya ha realizado la evaluación
-													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes
-													  WHERE epe_id_evaluacion='".$resultado['eva_id']."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL
+													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes
+													  WHERE epe_id_evaluacion='".$resultado['eva_id']."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL
 													  "), MYSQLI_BOTH);
 													  
 													  //respuestas
 													  $respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-													  (SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-													  INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1 
-													  WHERE res_id_evaluacion='".$resultado['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
-													  (SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-													  INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
-													  WHERE res_id_evaluacion='".$resultado['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
-													  (SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-													  WHERE res_id_evaluacion='".$resultado['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0)
+													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+													  INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+													  WHERE res.res_id_evaluacion='".$resultado['eva_id']."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
+													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+													  INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+													  WHERE res.res_id_evaluacion='".$resultado['eva_id']."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
+													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+													  WHERE res_id_evaluacion='".$resultado['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 													  "), MYSQLI_BOTH);
 												 ?>
 												  <div class="panel panel-default">

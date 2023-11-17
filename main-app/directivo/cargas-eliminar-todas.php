@@ -16,22 +16,22 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_preguntas");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_preguntas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_tareas");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -51,7 +51,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_clases");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_clases WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -86,17 +86,17 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -106,7 +106,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
