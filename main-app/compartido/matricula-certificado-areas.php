@@ -209,7 +209,7 @@ include("../compartido/head-informes.php") ?>
 					<?php
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
-					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
@@ -309,7 +309,7 @@ include("../compartido/head-informes.php") ?>
 					<?php
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
-					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
