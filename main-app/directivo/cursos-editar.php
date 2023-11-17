@@ -365,13 +365,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                         select.appendChild(option);
 
                                                         <?php
-                                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                            $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             $cont=1;
                                                             while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                         ?>
                                                                 // Agregar opciones al select
                                                                 var option<?=$cont?> = document.createElement('option');
-                                                                option<?=$cont?>.value = '<?=$rv[0]?>';
+                                                                option<?=$cont?>.value = '<?=$rv['gru_id']?>';
                                                                 option<?=$cont?>.textContent = '<?=$rv['gru_nombre']?>';
 
                                                                 // Agregar las opciones al select

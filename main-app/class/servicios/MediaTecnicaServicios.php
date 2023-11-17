@@ -36,12 +36,12 @@ class MediaTecnicaServicios extends Servicios
     
     public static function listarEstudiantes($parametrosArray=null,string $BD    = '')
     {
-      global $baseDatosServicios;
+      global $baseDatosServicios, $config;
       
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
       LEFT JOIN ".$BD."academico_matriculas ON matcur_id_matricula=mat_id
 			LEFT JOIN ".$BD."academico_grados ON gra_id=matcur_id_curso
-      LEFT JOIN ".$BD."academico_grupos ON gru_id=matcur_id_grupo
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 			LEFT JOIN ".$BD."usuarios ON uss_id=mat_id_usuario
       LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero			
       ";
@@ -168,7 +168,7 @@ class MediaTecnicaServicios extends Servicios
             END AS estado
             FROM $baseDatosServicios.mediatecnica_matriculas_cursos mt 
             INNER JOIN academico_matriculas am ON mt.matcur_id_matricula=am.mat_id
-            INNER JOIN academico_grupos ag ON mt.matcur_id_grupo=ag.gru_id
+            INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON mt.matcur_id_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
             INNER JOIN academico_grados agr ON agr.gra_id=mt.matcur_id_curso
             INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
             INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero

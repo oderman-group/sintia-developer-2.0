@@ -585,9 +585,9 @@
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.".BD_ACADEMICA.".academico_indicadores_carga aic
 		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
+		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    

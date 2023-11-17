@@ -252,7 +252,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}
 
 				INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 

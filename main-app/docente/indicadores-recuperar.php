@@ -15,7 +15,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
-INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 WHERE ind_id='".$idR."'");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
@@ -94,10 +94,10 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 										<div class="panel-body">
 											<p>Puedes cambiar a otro indicador rápidamente para calificar a tus estudiantes o hacer modificaciones de notas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-											INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-											WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_indicador!='".$idR."'
-											ORDER BY ipc_id DESC
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+											INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+											WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.ipc_indicador!='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+											ORDER BY ipc.ipc_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>

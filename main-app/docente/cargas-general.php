@@ -75,13 +75,13 @@
 													$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 													INNER JOIN academico_materias ON mat_id=car_materia
 													INNER JOIN academico_grados ON gra_id=car_curso
-													INNER JOIN academico_grupos ON gru_id=car_grupo
+													INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 													WHERE car_docente='".$_SESSION["id"]."'
 													ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre
 													");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaNumerosCargas=mysqli_query($conexion, "SELECT
-														(SELECT COUNT(ipc_id) FROM academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."'),
+														(SELECT COUNT(ipc_id) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(act_id) FROM academico_actividades WHERE act_id_carga='".$resultado['car_id']."' AND act_periodo='".$resultado['car_periodo']."' AND act_estado=1),
 														(SELECT COUNT(eva_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id_carga='".$resultado['car_id']."' AND eva_periodo='".$resultado['car_periodo']."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(cls_id) FROM academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1),

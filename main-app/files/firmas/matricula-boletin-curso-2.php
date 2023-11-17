@@ -25,7 +25,7 @@ $contador_indicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 $usr=mysqli_query($conexion,"SELECT * FROM academico_matriculas am
-INNER JOIN academico_grupos ON mat_grupo=gru_id
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
 $num_usr=mysqli_num_rows($usr);
 $datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);

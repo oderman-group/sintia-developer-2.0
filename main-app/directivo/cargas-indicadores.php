@@ -77,7 +77,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 												INNER JOIN academico_materias ON mat_id=car_materia
 												INNER JOIN academico_grados ON gra_id=car_curso
-												INNER JOIN academico_grupos ON gru_id=car_grupo
+												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 												WHERE car_docente='".$datosCargaActual['car_docente']."'
 												ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre");
 											} catch (Exception $e) {
@@ -139,12 +139,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc_periodo='".$periodoConsultaActual."'";}
+													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc.ipc_periodo='".$periodoConsultaActual."'";}
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-														INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-														WHERE ipc_carga='".$cargaConsultaActual."' $filtro
-														ORDER BY ipc_periodo");
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+														INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+														WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]} $filtro
+														ORDER BY ipc.ipc_periodo");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}

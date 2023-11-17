@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -286,7 +286,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 
 				INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 
@@ -511,7 +511,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM $BD.academico_materias am
                     INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
                     INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
-                    INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
                     INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
                     INNER JOIN $BD.academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
                     INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id

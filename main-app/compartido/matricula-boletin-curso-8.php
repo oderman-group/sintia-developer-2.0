@@ -6,7 +6,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -445,9 +445,9 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
-		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic 
+		                    INNER JOIN $BD.academico_indicadores ON ind_id=aic.ipc_indicador
+		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    

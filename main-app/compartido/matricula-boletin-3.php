@@ -153,7 +153,7 @@ ORDER BY mat_id,bol_periodo
 $consulta_a_mat_indicadores=mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,(SUM(cal_nota)/COUNT(cal_nota))as nota FROM academico_materias am
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}
 INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id
 INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id

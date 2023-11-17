@@ -45,7 +45,7 @@ try{
 	$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 	INNER JOIN academico_materias ON mat_id=car_materia
 	INNER JOIN academico_grados ON gra_id=car_curso
-	INNER JOIN academico_grupos ON gru_id=car_grupo
+	INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 	WHERE car_id='".$cargaConsultaActual."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");

@@ -70,7 +70,7 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+												$grupos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}

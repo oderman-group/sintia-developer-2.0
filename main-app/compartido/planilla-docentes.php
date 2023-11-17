@@ -59,7 +59,7 @@ INNER JOIN academico_materias ON mat_id=car_materia
 
 INNER JOIN academico_grados ON gra_id=car_curso
 
-INNER JOIN academico_grupos ON gru_id=car_grupo
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 
 INNER JOIN usuarios ON uss_id=car_docente AND uss_tipo=2
 

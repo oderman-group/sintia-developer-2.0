@@ -271,8 +271,8 @@ if($_POST["operacion"]==9){
 	
 	
 	if($caso == 1){
-		$consultaIndicador=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-		WHERE ipc_indicador='".$_POST["codNota"]."' AND ipc_carga='".$_POST["carga"]."' AND ipc_periodo='".$_POST["periodo"]."'");
+		$consultaIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+		WHERE ipc_indicador='".$_POST["codNota"]."' AND ipc_carga='".$_POST["carga"]."' AND ipc_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
 		$valorIndicador = ($indicador['ipc_valor']/100);
 		$rindNotaActual = ($_POST["nota"] * $valorIndicador);

@@ -9,8 +9,8 @@ require_once("../class/Estudiantes.php");
 </head>
 <body style="font-family:Arial;">
 <?php
-  $year=$agnoBD;
-  $BD=$_SESSION["inst"]."_".$agnoBD;
+  $year=$_SESSION["bd"];
+  $BD=$_SESSION["inst"]."_".$_SESSION["bd"];
   $bdConsulta='';
   if(isset($_REQUEST["agno"])){
     $year=$_REQUEST["agno"];
@@ -18,11 +18,11 @@ require_once("../class/Estudiantes.php");
     $bdConsulta=$BD.'.';
 	}
 	if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."' AND gru_id='".$_REQUEST["grupo"]."'");
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$_REQUEST["grado"]."' AND gru.gru_id='".$_REQUEST["grupo"]."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}");
 	}elseif(!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])){
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos WHERE gra_id='".$_REQUEST["grado"]."'");
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$_REQUEST["grado"]."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}");
 	}else{
-    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, $BD.academico_grupos");
+    $consultaGrados=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}");
 	}
   $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
