@@ -295,7 +295,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										window.onload = consultarPreguntas();	
 										
 										function guardar(){
-											idClase=<?=$idR;?>;
+											idClase='<?=$idR;?>';
 											sesionUsuario=<?=$_SESSION["id"];?>;
 											contenido=document.getElementById("contenido").value;
 											btn=document.getElementById("btnEnviar");
@@ -330,7 +330,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										}
 										function consultarPreguntas(){
 
-											var claseId = <?= $idR; ?>;
+											var claseId = '<?= $idR; ?>';
 											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
 											var usuario = <?= $usuario; ?>;
 											datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;

@@ -1,11 +1,11 @@
 <?php
-session_start();
-include("../modelo/conexion.php");
+include("session-compartida.php");
+Modulos::validarAccesoDirectoPaginas();
 $filtro="";
-if(!empty($_POST["usuario"]) && $_POST["usuario"]!=0){ $filtro= "AND cpp_usuario = '".$_POST["usuario"]."'";}
-$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases_preguntas 
-INNER JOIN usuarios ON uss_id=cpp_usuario
-WHERE cpp_id_clase='" . $_POST["claseId"] . "' $filtro ORDER BY cpp_fecha DESC");
+if(!empty($_POST["usuario"]) && $_POST["usuario"]!=0){ $filtro= "AND cpp.cpp_usuario = '".$_POST["usuario"]."'";}
+$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
+INNER JOIN usuarios ON uss_id=cpp.cpp_usuario
+WHERE cpp.cpp_id_clase='" . $_POST["claseId"] . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} $filtro ORDER BY cpp.cpp_fecha DESC");
 $usuarioActual= $_POST["usuarioActual"];
 ?>
 <?php while ($preguntasDatos = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) { ?>
