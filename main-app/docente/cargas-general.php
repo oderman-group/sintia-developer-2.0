@@ -84,7 +84,7 @@
 														(SELECT COUNT(ipc_id) FROM academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."'),
 														(SELECT COUNT(act_id) FROM academico_actividades WHERE act_id_carga='".$resultado['car_id']."' AND act_periodo='".$resultado['car_periodo']."' AND act_estado=1),
 														(SELECT COUNT(eva_id) FROM academico_actividad_evaluaciones WHERE eva_id_carga='".$resultado['car_id']."' AND eva_periodo='".$resultado['car_periodo']."' AND eva_estado=1),
-														(SELECT COUNT(cls_id) FROM academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1),
+														(SELECT COUNT(cls_id) FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(cro_id) FROM academico_cronograma WHERE cro_id_carga='".$resultado['car_id']."' AND cro_periodo='".$resultado['car_periodo']."'),
 														(SELECT COUNT(foro_id) FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id_carga='".$resultado['car_id']."' AND foro_periodo='".$resultado['car_periodo']."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(tar_id) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id_carga='".$resultado['car_id']."' AND tar_periodo='".$resultado['car_periodo']."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");

@@ -9,7 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
 try{
-    $consultaRegistro=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".base64_decode($_GET["idR"])."'");
+    $consultaRegistro=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
@@ -29,7 +29,7 @@ if(!empty($registro['cls_archivo3']) && file_exists($ruta."/".$registro['cls_arc
 }
 
 try{
-    mysqli_query($conexion, "UPDATE academico_clases SET cls_estado=0 WHERE cls_id=".base64_decode($_GET["idR"]));
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0 WHERE cls_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

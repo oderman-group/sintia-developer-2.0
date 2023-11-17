@@ -7,6 +7,8 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$codigo=Utilidades::generateCode("CLS");
 
 $archivoSubido = new Archivos;
 
@@ -52,13 +54,12 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	if($_POST["disponible"]==1) $disponible=1;
 
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad)"." VALUES('".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$date."', '".$cargaConsultaActual."', 1, '".$periodoConsultaActual."', '".$video."', '".$_POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$_POST["archivo1"]."', '".$_POST["archivo2"]."', '".$_POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', '".$disponible."', '".$_POST["idMeeting"]."', '".$_POST["vinculo"]."', '".$_POST["unidad"]."')");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$date."', '".$cargaConsultaActual."', 1, '".$periodoConsultaActual."', '".$video."', '".$_POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$_POST["archivo1"]."', '".$_POST["archivo2"]."', '".$_POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', '".$disponible."', '".$_POST["idMeeting"]."', '".$_POST["vinculo"]."', '".$_POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 }
-$idRegistro=mysqli_insert_id($conexion);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo base64_encode($idRegistro);
+echo base64_encode($codigo);
 exit();

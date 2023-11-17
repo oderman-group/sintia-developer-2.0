@@ -20,7 +20,7 @@ if(!empty($_FILES['file']['name'])){
 	@unlink($destino."/".$archivo);
 	move_uploaded_file($_FILES['file']['tmp_name'], $destino ."/".$archivo);
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_archivo='".$archivo."' WHERE cls_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo='".$archivo."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -34,7 +34,7 @@ if(!empty($_FILES['file2']['name'])){
 	@unlink($destino."/".$archivo2);
 	move_uploaded_file($_FILES['file2']['tmp_name'], $destino ."/".$archivo2);
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_archivo2='".$archivo2."' WHERE cls_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo2='".$archivo2."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -48,7 +48,7 @@ if(!empty($_FILES['file3']['name'])){
 	@unlink($destino."/".$archivo3);
 	move_uploaded_file($_FILES['file3']['tmp_name'], $destino ."/".$archivo3);
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_archivo3='".$archivo3."' WHERE cls_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo3='".$archivo3."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -64,8 +64,8 @@ if($_POST["disponible"]==1) $disponible=1;
 $date = date('Y-m-d', strtotime(str_replace('-', '/', $_POST["fecha"])));
 
 try{
-	mysqli_query($conexion, "UPDATE academico_clases SET cls_tema='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', cls_fecha='".$date."', cls_video='".$video."', cls_video_url='".$_POST["video"]."', cls_descripcion='".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', cls_nombre_archivo1='".$_POST["archivo1"]."', cls_nombre_archivo2='".$_POST["archivo2"]."', cls_nombre_archivo3='".$_POST["archivo3"]."', cls_disponible='".$disponible."', cls_hipervinculo='".$_POST["vinculo"]."', cls_unidad='".$_POST["unidad"]."'
-	WHERE cls_id='".$_POST["idR"]."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_tema='".mysqli_real_escape_string($conexion,$_POST["contenido"])."', cls_fecha='".$date."', cls_video='".$video."', cls_video_url='".$_POST["video"]."', cls_descripcion='".mysqli_real_escape_string($conexion,$_POST["descripcion"])."', cls_nombre_archivo1='".$_POST["archivo1"]."', cls_nombre_archivo2='".$_POST["archivo2"]."', cls_nombre_archivo3='".$_POST["archivo3"]."', cls_disponible='".$disponible."', cls_hipervinculo='".$_POST["vinculo"]."', cls_unidad='".$_POST["unidad"]."'
+	WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

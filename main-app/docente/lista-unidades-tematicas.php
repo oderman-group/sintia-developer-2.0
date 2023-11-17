@@ -41,8 +41,8 @@ include("../compartido/head.php");
                         $contReg = 1;
                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                            $consultaClases = mysqli_query($conexion, "SELECT cls_id FROM academico_clases 
-                            WHERE cls_id_carga='" . $cargaConsultaActual . "' AND cls_periodo='" . $periodoConsultaActual . "' AND cls_unidad='" . $resultado['uni_id'] . "' AND cls_estado=1");
+                            $consultaClases = mysqli_query($conexion, "SELECT cls_id FROM ".BD_ACADEMICA.".academico_clases 
+                            WHERE cls_id_carga='" . $cargaConsultaActual . "' AND cls_periodo='" . $periodoConsultaActual . "' AND cls_unidad='" . $resultado['uni_id'] . "' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                             $numClases=mysqli_num_rows($consultaClases);
                     ?>
                         <tr id="reg<?= $resultado['uni_id']; ?>">
