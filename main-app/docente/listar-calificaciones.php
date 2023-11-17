@@ -121,7 +121,7 @@ $porcentajeRestante = 100 - $valores[0];
 						$porcentajeActual +=$resultado['act_valor'];
 						
 						if($datosCargaActual['car_evidencia']==1){
-						$consultaEvidencia=mysqli_query($conexion, "SELECT * FROM academico_evidencias WHERE evid_id='".$resultado['act_id_evidencia']."'");
+						$consultaEvidencia=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE evid_id='".$resultado['act_id_evidencia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						$evidencia = mysqli_fetch_array($consultaEvidencia, MYSQLI_BOTH);
 						}
 					?>
