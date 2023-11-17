@@ -142,7 +142,7 @@ if(
                                             <label class="col-sm-2 control-label">Evidencia</label>
                                             <div class="col-sm-10">
 												<?php
-												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM academico_evidencias
+												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="evidencia" required>
