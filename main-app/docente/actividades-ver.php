@@ -158,7 +158,7 @@ if($fechas[0]>0){
 																		}?>
 		                                                            </div>
 																	<?php
-																	$consultaEntrega=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."'");
+																	$consultaEntrega=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																	$enviada = mysqli_fetch_array($consultaEntrega, MYSQLI_BOTH);
 																	if($enviada[0]!=""){
 																	?>
