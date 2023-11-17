@@ -7,13 +7,14 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 //Importar indicadores
 if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 	try{
-		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga
-		WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga
+		WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -27,9 +28,9 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 	//Consultamos los indicadores a importar
 	try{
-		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-		INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$_POST["cargaImportar"]."' AND ipc_periodo='".$_POST["periodoImportar"]."'");
+		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+		INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+		WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -51,14 +52,15 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
+		$codigo=Utilidades::generateCode("IPC");
 
-		$datosInsert .="('".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."'),";	
+		$datosInsert .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";	
 	}
 
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado) VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -69,8 +71,8 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 //Importar calificaciones y los indicadores también porque están realacionados.
 if(!empty($_POST["calificaciones"])){
 	try{
-		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga
-		WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga
+		WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -84,9 +86,9 @@ if(!empty($_POST["calificaciones"])){
 
 	//Consultamos los indicadores a importar
 	try{
-		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-		INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$_POST["cargaImportar"]."' AND ipc_periodo='".$_POST["periodoImportar"]."'");
+		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+		INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+		WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -107,8 +109,9 @@ if(!empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
+		$codigo=Utilidades::generateCode("IPC");
 
-		$datosInsertInd .="('".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."'),";
+		$datosInsertInd .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 		//Consultamos las calificaciones del indicador a Importar
 		try{
@@ -140,7 +143,7 @@ if(!empty($_POST["calificaciones"])){
 	if(!empty($datosInsertInd)){
 		$datosInsertInd = substr($datosInsertInd,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado) VALUES $datosInsertInd");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES $datosInsertInd");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}

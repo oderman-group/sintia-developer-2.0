@@ -4,7 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -105,9 +105,9 @@ $contador_periodos=0;
 	WHERE car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."'");
 	$i=1;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
-		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga
-		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$cargas['car_id']."' AND ipc_periodo='".$periodoActual."'
+		$indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+		INNER JOIN $BD.academico_indicadores ON ind_id=aic.ipc_indicador
+		WHERE aic.ipc_carga='".$cargas['car_id']."' AND aic.ipc_periodo='".$periodoActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 		");
 		
 		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin

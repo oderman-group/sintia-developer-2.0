@@ -81,7 +81,7 @@
 													");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaNumerosCargas=mysqli_query($conexion, "SELECT
-														(SELECT COUNT(ipc_id) FROM academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."'),
+														(SELECT COUNT(ipc_id) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(act_id) FROM academico_actividades WHERE act_id_carga='".$resultado['car_id']."' AND act_periodo='".$resultado['car_periodo']."' AND act_estado=1),
 														(SELECT COUNT(eva_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id_carga='".$resultado['car_id']."' AND eva_periodo='".$resultado['car_periodo']."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
 														(SELECT COUNT(cls_id) FROM academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1),

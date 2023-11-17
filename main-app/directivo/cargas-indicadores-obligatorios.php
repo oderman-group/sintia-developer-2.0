@@ -49,7 +49,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 }
                                 $ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
                                 try{
-                                    $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_creado=0");
+                                    $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 } catch (Exception $e) {
                                     include("../compartido/error-catch-to-report.php");
                                 }

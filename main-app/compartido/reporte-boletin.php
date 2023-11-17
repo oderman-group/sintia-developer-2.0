@@ -177,7 +177,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center"><?php if($aus[0]>0){ echo $aus[0]."/".$fila_mat[3];} else{ echo "0.0/".$fila_mat[3];};?></td>
 	</tr>
 <?php
-  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, academico_indicadores_carga WHERE ind_id=ipc_indicador AND ipc_periodo=".$periodoActual." AND ipc_carga=".$fila[3]);
+  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ind_id=aic.ipc_indicador AND aic.ipc_periodo='".$periodoActual."' AND aic.ipc_carga='".$fila[3]."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
 	$num = mysqli_num_rows($consulta);
 	if ($num>0) // si tiene indicadores 
 	{

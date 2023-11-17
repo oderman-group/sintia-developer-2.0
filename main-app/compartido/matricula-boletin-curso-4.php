@@ -6,7 +6,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
     
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -305,7 +305,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN $BD.academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 
 				INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 
