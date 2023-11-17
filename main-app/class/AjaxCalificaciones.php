@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 class AjaxCalificaciones {
 
@@ -235,9 +236,10 @@ class AjaxCalificaciones {
             return $datosMensaje;
         }
         if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
+        $codigo=Utilidades::generateCode("REC");
         
         try{
-            mysqli_query($conexion, "INSERT INTO academico_recuperaciones_notas(rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior)VALUES('".$codEstudiante."','".$nota."','".$codNota."', now(),'".$notaAnterior."')");
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_recuperaciones_notas(rec_id, rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior, institucion, year)VALUES('".$codigo."', '".$codEstudiante."','".$nota."','".$codNota."', now(),'".$notaAnterior."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
