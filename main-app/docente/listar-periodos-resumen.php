@@ -49,8 +49,8 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                             <?php
                                 $p = 1;
                                 while($p<=$datosCargaActual['gra_periodos']){
-                                    $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'
+                                    $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                     ");
                                     $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
                                     $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
@@ -86,8 +86,8 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                 $sumaPorcentaje = 0;
                                 $n = 0;
                                 for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-                                $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'
+                                $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                 ");
                                 $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
                                 $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
@@ -148,8 +148,8 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                 //CALCULAR NOTA MINIMA EN EL ULTIMO PERIODO PARA APROBAR LA MATERIA
                                     //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
                                     if($config[2]==$datosCargaActual['gra_periodos']){
-                                    $consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
+                                    $consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                         $periodosCursos2 = mysqli_fetch_array($consultaPeriodosCursos2, MYSQLI_BOTH);
                                         $decimal2 = $periodosCursos2['gvp_valor']/100;
                                         
