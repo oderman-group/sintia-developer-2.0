@@ -103,8 +103,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             
             <?php  
 			for($j=1;$j<=$periodoActual;$j++){
-			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
+			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 			$periodosCursos['gvp_valor'] = 25;
 			?>
@@ -163,8 +163,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$promedioMateria = 0;
 			$sumaPorcentaje = 0;
 			for($j=1;$j<=$periodoActual;$j++){
-				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
+				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 				
 				$periodosCursos['gvp_valor'] = 25;
