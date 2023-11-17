@@ -62,9 +62,9 @@ require_once("../class/Estudiantes.php");
             </thead>
             <tbody>
                 <?php
-                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-                    LEFT JOIN ".BD_ACADEMICA.".academico_unidades aca_uni ON aca_uni.uni_id=cls_unidad AND aca_uni.uni_eliminado!=1 AND aca_uni.institucion={$config['conf_id_institucion']} AND aca_uni.year={$_SESSION["bd"]}
-                    WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
+                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases cls 
+                    LEFT JOIN ".BD_ACADEMICA.".academico_unidades aca_uni ON aca_uni.uni_id=cls.cls_unidad AND aca_uni.uni_eliminado!=1 AND aca_uni.institucion={$config['conf_id_institucion']} AND aca_uni.year={$_SESSION["bd"]}
+                    WHERE cls.cls_id_carga='".$cargaConsultaActual."' AND cls.cls_periodo='".$periodoConsultaActual."' AND cls.cls_estado=1 AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]} ORDER BY cls.cls_unidad");
                     $contReg = 1;
                     $unidadAnterior=0;
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -81,11 +81,11 @@ require_once("../class/Estudiantes.php");
                             $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
                             INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_id_matricula=aus_id_estudiante
                             INNER JOIN academico_matriculas ON (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=matcur_id_matricula
-                            WHERE aus_id_clase='".$resultado[0]."'");
+                            WHERE aus_id_clase='".$resultado['cls_id']."'");
                         }else{
                             $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM academico_ausencias 
                             INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-                            WHERE aus_id_clase='".$resultado[0]."'");
+                            WHERE aus_id_clase='".$resultado['cls_id']."'");
                         }
                         $numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
                         if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';

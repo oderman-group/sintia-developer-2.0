@@ -152,7 +152,7 @@ if(!empty($_POST["calificaciones"])){
 //Importar clases
 if(!empty($_POST["clases"])){	
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_estado=0
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0
 		WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."'");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -160,7 +160,7 @@ if(!empty($_POST["clases"])){
 
 	//Consultamos las clases a Importar
 	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases
+		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases
 		WHERE cls_id_carga='".$_POST["cargaImportar"]."' AND cls_periodo='".$_POST["periodoImportar"]."' AND cls_estado=1");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -174,7 +174,7 @@ if(!empty($_POST["clases"])){
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible) VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_tema, cls_fecha, cls_id_carga, cls_registrada, cls_fecha_creacion, cls_estado, cls_periodo, cls_archivo, cls_video, cls_video_url, cls_descripcion, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_disponible) VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}

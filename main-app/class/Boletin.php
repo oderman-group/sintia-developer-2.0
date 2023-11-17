@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
 class Boletin {
 
@@ -320,13 +321,13 @@ class Boletin {
         string $BD    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
 
         try {
             $resultado = mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
             INNER JOIN $BD.academico_cargas ON car_curso='".$grado."' AND car_materia='".$materia."'
-            INNER JOIN $BD.academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$periodo."'
+            INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$periodo."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}
             WHERE aus_id_estudiante='".$estudiante."'");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

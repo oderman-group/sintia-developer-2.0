@@ -36,7 +36,7 @@ if($_POST["operacion"]==2){
 //Clase disponible o no
 if($_POST["operacion"]==3){
 	try{
-		mysqli_query($conexion, "UPDATE academico_clases SET cls_disponible='".$_POST["valor"]."' WHERE cls_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_disponible='".$_POST["valor"]."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
