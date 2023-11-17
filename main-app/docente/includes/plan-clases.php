@@ -12,8 +12,8 @@
                 <input type="submit" class="btn btn-primary" value="Guardar cambios" <?=$disabled;?>>
             </form>
             <?php
-            $consultaPclase=mysqli_query($conexion, "SELECT * FROM academico_pclase 
-            WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."'");
+            $consultaPclase=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_pclase 
+            WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             $pclase = mysqli_fetch_array($consultaPclase, MYSQLI_BOTH);
             if(isset($pclase) && $pclase['pc_plan']!=""){
             ?>
