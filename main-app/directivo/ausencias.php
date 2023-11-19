@@ -142,8 +142,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													}
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-															WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'");
+															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
+															WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -154,7 +154,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado[0];?></td>
 														<td><?=$resultado[1];?></td>
 														<td><?=$resultado[2];?></td>
-														<td><?=$ausencia[3];?></td>
+														<td><?=$ausencia['aus_ausencias'];?></td>
 														<td>
 															<a href="clases-ver.php?idClase=<?=$resultado[0];?>"><i class="material-icons">trending_flat</i></a>
 														</td>

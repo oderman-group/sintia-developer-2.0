@@ -177,8 +177,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
                 $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 				
 				$consultaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
-                INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls.cls_id AND aus_id_estudiante<='".$datosUsr['mat_id']."'
-                WHERE cls.cls_id_carga='".$datosCargas['car_id']."' AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}");
+                INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante<='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}
+                WHERE cls.cls_id_carga='".$datosCargas['car_id']."' AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
 				$datosAusencias = mysqli_fetch_array($consultaAusencias, MYSQLI_BOTH);
 				
 				$promedioMateria +=$datosBoletin['bol_nota']*$decimal;

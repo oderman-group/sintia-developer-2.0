@@ -335,10 +335,10 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 			$sumAusencias=0;
 			while($j<=$periodoActual){
 
-				$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
+				$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM ".BD_ACADEMICA.".academico_ausencias aus
 				INNER JOIN $BD.academico_cargas ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$fila2['mat_id']."'
-				INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}
-				WHERE aus_id_estudiante='".$datosUsr['mat_id']."'");
+				INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus.aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}
+				WHERE aus.aus_id_estudiante='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}");
 				$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 
 				if($datosAusencias['sumAus']>0){

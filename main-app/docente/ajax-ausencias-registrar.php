@@ -1,19 +1,21 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."'");
+$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 $num = mysqli_num_rows($consulta);
 $rC = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 if($num==0){
-	mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."'");
+	$codigo=Utilidades::generateCode("AUS");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_clase='".$_POST["codNota"]."' AND aus_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
-	mysqli_query($conexion, "INSERT INTO academico_ausencias(aus_id_estudiante, aus_ausencias, aus_id_clase)VALUES('".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."')");
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_ausencias(aus_id, aus_id_estudiante, aus_ausencias, aus_id_clase, institucion, year)VALUES('".$codigo."', '".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	
 	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_registro=now() WHERE cls_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
 }else{
-	mysqli_query($conexion, "UPDATE academico_ausencias SET aus_ausencias='".$_POST["nota"]."' WHERE aus_id='".$rC[0]."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_ausencias SET aus_ausencias='".$_POST["nota"]."' WHERE aus_id='".$rC[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
 	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_modificacion=now() WHERE cls_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	

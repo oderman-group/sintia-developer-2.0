@@ -326,17 +326,19 @@ class Boletin {
         int    $materia      = 0,
         int    $periodo      = 0,
         int    $estudiante      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
         global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
+            $resultado = mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM ".BD_ACADEMICA.".academico_ausencias aus
             INNER JOIN $BD.academico_cargas ON car_curso='".$grado."' AND car_materia='".$materia."'
-            INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$periodo."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}
-            WHERE aus_id_estudiante='".$estudiante."'");
+            INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus.aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$periodo."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}
+            WHERE aus.aus_id_estudiante='".$estudiante."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
