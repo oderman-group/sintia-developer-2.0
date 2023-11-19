@@ -20,7 +20,7 @@ include("../compartido/historial-acciones-guardar.php");
 		exit();
 	}
 	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $_POST["nombreCN"] . "'," . $_POST["ndesdeCN"] . "," . $_POST["nhastaCN"] . "," . $_POST["idCN"] . ", {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $_POST["nombreCN"] . "'," . $_POST["ndesdeCN"] . "," . $_POST["nhastaCN"] . ",'" . $_POST["idCN"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

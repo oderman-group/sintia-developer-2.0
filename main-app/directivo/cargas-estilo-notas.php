@@ -76,7 +76,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT catn_id, catn_nombre FROM academico_categorias_notas;");
+                                                        $consulta = mysqli_query($conexion, "SELECT catn_id, catn_nombre FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
