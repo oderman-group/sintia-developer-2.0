@@ -1,5 +1,6 @@
 <?php
-
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class AjaxNotas {
 
     /**
@@ -69,7 +70,7 @@ class AjaxNotas {
         if($nota>$config[4]) $nota = $config[4]; if($nota<1) $nota = 1;
 
         try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$codEstudiante." AND niv_id_asg=".$carga);
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$codEstudiante." AND niv_id_asg='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -77,14 +78,15 @@ class AjaxNotas {
         $num = mysqli_num_rows($consulta);
         $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         if($num==0){
+            $codigo=Utilidades::generateCode("NIV");
             try{
-                mysqli_query($conexion, "INSERT INTO academico_nivelaciones(niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha)VALUES('".$carga."','".$codEstudiante."','".$nota."',now())");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_nivelaciones(niv_id, niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha, institucion, year)VALUES('".$codigo."', '".$carga."','".$codEstudiante."','".$nota."',now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
         }else{
             try{
-                mysqli_query($conexion, "UPDATE academico_nivelaciones SET niv_definitiva='".$nota."', niv_fecha=now() WHERE niv_id=".$rB[0]);
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_nivelaciones SET niv_definitiva='".$nota."', niv_fecha=now() WHERE niv_id='".$rB[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }

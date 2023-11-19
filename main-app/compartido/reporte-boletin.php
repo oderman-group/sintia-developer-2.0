@@ -146,12 +146,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		}//FIN MIENTRAS QUE DE PERIODOS (1-4)
 		$defini = ($defini/$periodoActual);
 		$defini = round($defini,1);
-		$nivelaciones = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante=".$_GET["id"]);
+		$nivelaciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante='".$_GET["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$numNivelaciones = mysqli_num_rows($nivelaciones);
 		$notasNivelaciones = mysqli_fetch_array($nivelaciones, MYSQLI_BOTH);
 		if($numNivelaciones>0){
-			if($notasNivelaciones[3]>$defini){
-				$defini = $notasNivelaciones[3];
+			if($notasNivelaciones['niv_definitiva']>$defini){
+				$defini = $notasNivelaciones['niv_definitiva'];
 				$msjH = '<br><span style="font-size:9px; color:red;">Nivelada</span>';
 			}	
 		}else{$msjH = '';}
