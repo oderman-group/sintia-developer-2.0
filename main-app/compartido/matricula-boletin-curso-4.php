@@ -361,7 +361,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         mysqli_data_seek($consulta_a_mat_per, 0);
 
                         $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-                        LEFT JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
+                        LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
                         WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$periodoActual."'");
                         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 
@@ -523,7 +523,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <?php
 
-        $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_periodo in(" . $condicion . ");");
+        $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos[0] . "' AND institucion={$config['conf_id_institucion']} AND year={$year} AND dn_periodo in(" . $condicion . ");");
 
         if (@mysqli_num_rows($cndisiplina) > 0) {
 
@@ -551,7 +551,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
 
-                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND '" . $rndisiplina["dn_nota"] . "'>=notip_desde AND '" . $rndisiplina["dn_nota"] . "'<=notip_hasta");
+                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND '" . $rndisiplina["dn_nota"] . "'>=notip_desde AND '" . $rndisiplina["dn_nota"] . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
                     $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 
                 ?>
@@ -560,7 +560,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         <td><?= $rndisiplina["dn_periodo"] ?></td>
 
-                        <!--<td><?= $desempenoND[1] ?></td>-->
+                        <!--<td><?= $desempenoND['notip_nombre'] ?></td>-->
 
                         <td align="left"><?= $rndisiplina["dn_observacion"] ?></td>
 

@@ -18,7 +18,7 @@ if (trim($_POST["nombreCN"]) == "" or trim($_POST["ndesdeCN"]) == "" or trim($_P
 }
 
 try{
-	mysqli_query($conexion, "UPDATE academico_notas_tipos SET notip_nombre='" . $_POST["nombreCN"] . "', notip_desde=" . $_POST["ndesdeCN"] . ", notip_hasta=" . $_POST["nhastaCN"] . " WHERE notip_id=" . $_POST["idN"] . ";");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_notas_tipos SET notip_nombre='" . $_POST["nombreCN"] . "', notip_desde=" . $_POST["ndesdeCN"] . ", notip_hasta=" . $_POST["nhastaCN"] . " WHERE notip_id='" . $_POST["idN"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

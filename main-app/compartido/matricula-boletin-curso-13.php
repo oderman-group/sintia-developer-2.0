@@ -90,7 +90,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 <body style="font-family:Arial;">
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM $BD.academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
+$consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
 INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
@@ -216,7 +216,7 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 			<td class=""  align="center" style="font-weight:bold;"></td>
             <?php }?>
         <td align="center" style="font-weight:bold;"><?php 
-		$consultaDesempenoNotaPromArea=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio.">=notip_desde AND ".$total_promedio."<=notip_hasta");
+		$consultaDesempenoNotaPromArea=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio.">=notip_desde AND ".$total_promedio."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$desempenoNotaPromArea = mysqli_fetch_array($consultaDesempenoNotaPromArea, MYSQLI_BOTH);
 		
 		if($datosUsr["mat_grado"]>100){
@@ -264,7 +264,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 
 			if($notaDelEstudiante['bol_nota']!=""){
-				$consultaDesmpenoNotaP=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta");
+				$consultaDesmpenoNotaP=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaDelEstudiante['bol_nota'].">=notip_desde AND ".$notaDelEstudiante['bol_nota']."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$desempenoNotaP = mysqli_fetch_array($consultaDesmpenoNotaP, MYSQLI_BOTH);
 				if($datosUsr["mat_grado"]>100){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
@@ -277,10 +277,10 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 						case 5: echo "E"; break;
 					}
 					*/
-					echo $desempenoNotaP[1];
+					echo $desempenoNotaP['notip_nombre'];
 				}else{
-					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP[1];
-					//echo $notas[$l]."<br>".$desempenoNotaP[1];
+					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP['notip_nombre'];
+					//echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
 				}
 				$promedios[$l]=$promedios[$l]+$notaDelEstudiante['bol_nota'];
 				$contpromedios[$l]=$contpromedios[$l]+1;
@@ -314,7 +314,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 	   ?>
        
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php 
-		$consultaDesmpenoNotaXasig=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio2.">=notip_desde AND ".$total_promedio2."<=notip_hasta");
+		$consultaDesmpenoNotaXasig=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$total_promedio2.">=notip_desde AND ".$total_promedio2."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$desempenoNotaXasig = mysqli_fetch_array($consultaDesmpenoNotaXasig, MYSQLI_BOTH);
 	
 					if($datosUsr["mat_grado"]>100){
@@ -367,7 +367,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 if($numIndicadores>0){
 	 mysqli_data_seek($consulta_a_mat_indicadores,0);
 	 $contador_indicadores=0;
-	 $consultaDesmpenoNotaInd=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$nota_indicador."' AND notip_hasta>='".$nota_indicador."'");
+	 $consultaDesmpenoNotaInd=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$nota_indicador."' AND notip_hasta>='".$nota_indicador."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 	while($fila4=mysqli_fetch_array($consulta_a_mat_indicadores, MYSQLI_BOTH)){
 	if($fila4["mat_id"]==$fila2["mat_id"]){
 		$contador_indicadores++;
@@ -444,7 +444,7 @@ if($numIndicadores>0){
 		if(!empty($contpromedios[$n])){
 			$notaFFF = round(($promedios[$n]/$contpromedios[$n]),1);
 		}
-		$consultaDesempenoNotaProm=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaFFF.">=notip_desde AND ".$notaFFF."<=notip_hasta");
+		$consultaDesempenoNotaProm=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notaFFF.">=notip_desde AND ".$notaFFF."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$desempenoNotaProm = mysqli_fetch_array($consultaDesempenoNotaProm, MYSQLI_BOTH);
 		?>
         <td style="font-size:16px;">
@@ -469,7 +469,7 @@ if($numIndicadores>0){
 
 <p>&nbsp;</p>
 <?php 
-$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_periodo in(".$condicion.");");
+$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$year} AND dn_periodo in(".$condicion.");");
 if(@mysqli_num_rows($cndisiplina)>0){
 ?>
 <table width="100%" id="tblBoletin" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
@@ -484,12 +484,12 @@ if(@mysqli_num_rows($cndisiplina)>0){
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-$consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND '".$rndisiplina["dn_nota"]."'>=notip_desde AND '".$rndisiplina["dn_nota"]."'<=notip_hasta");
+$consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND '".$rndisiplina["dn_nota"]."'>=notip_desde AND '".$rndisiplina["dn_nota"]."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <!--<td><?=$desempenoND[1]?></td>-->
+        <!--<td><?=$desempenoND['notip_nombre']?></td>-->
         <td align="left"><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
 <?php }?>

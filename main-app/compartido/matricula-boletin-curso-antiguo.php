@@ -1,7 +1,7 @@
 <?php include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=$_GET["year"];
 }
@@ -114,7 +114,7 @@ $contador_periodos=0;
 
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
 
-$consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
+$consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
 
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 
@@ -300,7 +300,7 @@ INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
-INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 
 INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 
@@ -540,7 +540,7 @@ if($numIndicadores>0){
 
 <?php 
 
-$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_periodo in(".$condicion.");");
+$cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$year} AND dn_periodo in(".$condicion.");");
 
 if(@mysqli_num_rows($cndisiplina)>0){
 

@@ -9,13 +9,14 @@ class Boletin {
 
     }
 
-    public static function listarTipoDeNotas($categoria, string $BD    = ''){
-        global $conexion;
+    public static function listarTipoDeNotas($categoria, string $yearBd    = ''){
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-            WHERE notip_categoria='".$categoria."'");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+            WHERE notip_categoria='".$categoria."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
             
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -41,13 +42,14 @@ class Boletin {
         return $nota;
     }
 
-    public static function obtenerDatosTipoDeNotas($categoria, $nota, string $BD    = ''){
-        global $conexion;
+    public static function obtenerDatosTipoDeNotas($categoria, $nota, string $yearBd    = ''){
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-            WHERE notip_categoria='".$categoria."' AND '".$nota."'>=notip_desde AND '".$nota."'<=notip_hasta");
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+            WHERE notip_categoria='".$categoria."' AND '".$nota."'>=notip_desde AND '".$nota."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
             
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {

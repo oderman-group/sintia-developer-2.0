@@ -93,7 +93,7 @@ $contadorPeriodos=0;
 <body style="font-family:Arial;">
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM $BD.academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
+$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
 INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia

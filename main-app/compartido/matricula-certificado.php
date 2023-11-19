@@ -365,7 +365,7 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
                 ?>
@@ -405,7 +405,7 @@ $modulo = 1;
 
                         <td><?= $nota; ?></td>
 
-                        <td><?= $desempeno[1]; ?></td>
+                        <td><?= $desempeno['notip_nombre']; ?></td>
 
                     </tr>
 
@@ -440,7 +440,7 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
                 ?>
@@ -480,7 +480,7 @@ $modulo = 1;
 
                         <td><?= $nota; ?></td>
 
-                        <td><?= $desempeno[1]; ?></td>
+                        <td><?= $desempeno['notip_nombre']; ?></td>
 
                     </tr>
 
