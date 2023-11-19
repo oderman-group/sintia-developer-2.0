@@ -198,7 +198,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		
 		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
         INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls.cls_id AND aus_id_estudiante='".$datosUsr['mat_id']."'
-        WHERE cls.cls_id_carga='".$datosCargas['car_id']."' AND cls.cls_periodo='".$periodoActual."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}");
+        WHERE cls.cls_id_carga='".$datosCargas['car_id']."' AND cls.cls_periodo='".$periodoActual."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
 		$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 		
 		$indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
@@ -206,9 +206,9 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		WHERE ipc.ipc_carga='".$datosCargas['car_id']."' AND ipc.ipc_periodo='".$periodoActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$year}");
 		
 		//INDICADORES PERDIDOS DEL PERIODO ANTERIOR
-		$indicadoresPeridos = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion
-		INNER JOIN $BD.academico_indicadores ON ind_id=rind_indicador
-		WHERE rind_carga='".$datosCargas['car_id']."' AND rind_estudiante='".$datosUsr['mat_id']."' AND rind_nota>rind_nota_original
+		$indicadoresPeridos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion rind
+		INNER JOIN $BD.academico_indicadores ON ind_id=rind.rind_indicador
+		WHERE rind.rind_carga='".$datosCargas['car_id']."' AND rind.rind_estudiante='".$datosUsr['mat_id']."' AND rind.rind_nota>rind.rind_nota_original AND rind.institucion={$config['conf_id_institucion']} AND rind.year={$year}
 		");
 		
 		$consultaAcumulado=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),1) FROM $BD.academico_boletin
@@ -317,7 +317,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 				
 				$consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
                 INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls.cls_id AND aus_id_estudiante='".$datosUsr['mat_id']."'
-                WHERE cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}");
+                WHERE cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
 				$sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 				
 				$consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
