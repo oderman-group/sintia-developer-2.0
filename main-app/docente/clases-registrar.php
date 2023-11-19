@@ -18,7 +18,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
-  var codNota = <?=$idR;?>;	 
+  var codNota = '<?=$idR;?>';	 
   var nota = enviada.value;
   var codEst = enviada.id;
   var nombreEst = enviada.alt;
