@@ -512,7 +512,7 @@ class AjaxCalificaciones {
             $rindNotaActual = ($nota * $valorIndicador);
 
             try{
-                $consultaNum=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."'");
+                $consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -520,14 +520,15 @@ class AjaxCalificaciones {
 
             if($num==0){
                 try{
-                    mysqli_query($conexion, "INSERT INTO academico_indicadores_recuperacion(rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_actual, rind_valor_indicador_registro)VALUES(now(), '".$codEstudiante."', '".$carga."', '".$nota."', '".$codNota."', '".$periodo."', 1, '".$rindNotaActual."', '".$indicador['ipc_valor']."')");
+                    $codigo=Utilidades::generateCode("RIN");
+                    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$codEstudiante."', '".$carga."', '".$nota."', '".$codNota."', '".$periodo."', 1, '".$rindNotaActual."', '".$indicador['ipc_valor']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
                 } catch (Exception $e) {
                     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
                 }
             }else{
                 if($notaAnterior==""){$notaAnterior = "0.0";}
                 try{
-                    mysqli_query($conexion, "UPDATE academico_indicadores_recuperacion SET rind_nota='".$nota."', rind_nota_anterior='".$notaAnterior."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$rindNotaActual."', rind_tipo_ultima_actualizacion=2, rind_valor_indicador_actualizacion='".$indicador['ipc_valor']."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."'");
+                    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota='".$nota."', rind_nota_anterior='".$notaAnterior."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$rindNotaActual."', rind_tipo_ultima_actualizacion=2, rind_valor_indicador_actualizacion='".$indicador['ipc_valor']."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                 } catch (Exception $e) {
                     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
                 }
@@ -535,14 +536,14 @@ class AjaxCalificaciones {
             
             //Actualizamos la nota actual a los que la tengan nula.
             try{
-                mysqli_query($conexion, "UPDATE academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
 
             //Se suman los decimales de todos los indicadores para obtener la definitiva de la asignatura
             try{
-                $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT SUM(rind_nota_actual) FROM academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."'");
+                $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT SUM(rind_nota_actual) FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }

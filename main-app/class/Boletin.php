@@ -200,14 +200,16 @@ class Boletin {
         int    $carga      = 0,
         int    $periodo      = 0,
         int    $indicador      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion WHERE rind_estudiante='" . $estudiante . "' AND rind_carga='" . $carga . "' AND rind_periodo='" . $periodo . "' AND rind_indicador='" . $indicador . "'");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='" . $estudiante . "' AND rind_carga='" . $carga . "' AND rind_periodo='" . $periodo . "' AND rind_indicador='" . $indicador . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
