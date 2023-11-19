@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -103,8 +103,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             
             <?php  
 			for($j=1;$j<=$periodoActual;$j++){
-			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
+			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 			$periodosCursos['gvp_valor'] = 25;
 			?>
@@ -163,8 +163,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$promedioMateria = 0;
 			$sumaPorcentaje = 0;
 			for($j=1;$j<=$periodoActual;$j++){
-				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM $BD.academico_grados_periodos
-				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."'");
+				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 				
 				$periodosCursos['gvp_valor'] = 25;
@@ -208,9 +208,9 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		
 		
 		<?php
-		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga
-		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$periodoActual."'
+		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.".BD_ACADEMICA.".academico_indicadores_carga aic
+		INNER JOIN $BD.academico_indicadores ON ind_id=aic.ipc_indicador
+		WHERE aic.ipc_carga='".$datosCargas['car_id']."' AND aic.ipc_periodo='".$periodoActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 		");
 		while($ind = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 			$consultaCalificacionesIndicadores=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),2) FROM $BD.academico_calificaciones

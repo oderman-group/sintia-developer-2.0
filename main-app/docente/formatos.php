@@ -59,7 +59,7 @@
 											
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_carga='".$cargaConsultaActual."'");
+												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													$consultaCantCategoria=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_formato='".$resultado['form_id']."'");
 													$cantCategorias = mysqli_num_rows($consultaCantCategoria);

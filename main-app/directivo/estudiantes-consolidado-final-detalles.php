@@ -228,11 +228,11 @@ if(!Modulos::validarPermisoEdicion()){
 															//DEFINITIVA DE CADA MATERIA
 															if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
 															//CONSULTAR NIVELACIONES
-															$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga[0]."'");
+															$consultaNiv=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
-															if(isset($cNiv[3]) and $cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
+															if(isset($cNiv['niv_definitiva']) and $cNiv['niv_definitiva']>$defPorMateria){$defPorMateria=$cNiv['niv_definitiva']; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														?>
-															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?php if(isset($defPorMateria)){ echo $defPorMateria;}?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?php if(isset($msj)){ echo $msj;}?><br><?php if(isset($cNiv[5]) and isset($cNiv[6])){ echo "Acta ".$cNiv[5]." de ".$cNiv[6];}?></span></td>
+															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?php if(isset($defPorMateria)){ echo $defPorMateria;}?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?php if(isset($msj)){ echo $msj;}?><br><?php if(isset($cNiv['niv_acta']) and isset($cNiv['niv_fecha_nivelacion'])){ echo "Acta ".$cNiv['niv_acta']." de ".$cNiv['niv_fecha_nivelacion'];}?></span></td>
 													<?php
 														//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 														$defPorEstudiante += $defPorMateria;   

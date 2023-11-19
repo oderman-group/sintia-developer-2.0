@@ -64,7 +64,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                             </td>
                                         <?php		
 										 }
-											$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$_GET["estudiante"]." AND niv_id_asg=".$rCargas[0]);
+											$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$_GET["estudiante"]." AND niv_id_asg='".$rCargas[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											
 											$numN = mysqli_num_rows($consultaN);
 											$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -73,7 +73,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 													$definitiva = round(($definitiva/$n), 1);
 												$tN = '<span style="color:blue; font-size:9px;">Normal</span>';
 											}else{
-												$definitiva = $rN[3];
+												$definitiva = $rN['niv_definitiva'];
 												$tN = '<span style="color:red; font-size:9px;">Nivelada</span>';
 											}
 										 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];

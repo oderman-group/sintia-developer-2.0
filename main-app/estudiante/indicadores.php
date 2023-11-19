@@ -39,8 +39,8 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 										<?php
 										$porcentaje = 0;
 										for ($i = 1; $i <= $datosEstudianteActual['gra_periodos']; $i++) {
-											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
+											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												"), MYSQLI_BOTH);
 												$porcentajeGrado=25;
 												if(!empty($periodosCursos['gvp_valor'])){
@@ -128,9 +128,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 												</thead>
 												<tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-													 INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-													 WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "'");
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+													 INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+													 WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 													$contReg = 1;
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 

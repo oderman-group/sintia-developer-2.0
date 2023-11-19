@@ -144,9 +144,9 @@
 
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 
-												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
+												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
 
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
+												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
 												"), MYSQLI_BOTH);
 												$porcentajeGrado=25;
@@ -353,7 +353,7 @@
 														else $colorNota = $config[7];
 
 														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores 
-															INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
+															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 															WHERE ind_id='".$resultado['act_id_tipo']."'
 															"), MYSQLI_BOTH); 
 

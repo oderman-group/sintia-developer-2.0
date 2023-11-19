@@ -37,7 +37,7 @@ require_once("../class/UsuariosPadre.php");
   $consulta = Estudiantes::listarEstudiantes(0, $adicional, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 	$acudiente = UsuariosPadre::sesionUsuario($resultado[26]);
-  $consultaGrado=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$resultado[6]."' AND gru_id='".$resultado[7]."'");
+  $consultaGrado=mysqli_query($conexion, "SELECT * FROM academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$resultado['mat_grado']."' AND gru.gru_id='".$resultado['mat_grupo']."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}");
 	$grados = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);	
   ?>
   <tr style="font-size:13px;">

@@ -66,10 +66,10 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_monitoreo 
-													 INNER JOIN usuarios ON uss_id=moni_evaluado
-													 WHERE moni_evaluador='".$_SESSION["id"]."' 
-													 ORDER BY moni_id DESC");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_monitoreo moni
+													 INNER JOIN usuarios ON uss_id=moni.moni_evaluado
+													 WHERE moni.moni_evaluador='".$_SESSION["id"]."'  AND moni.institucion={$config['conf_id_institucion']} AND moni.year={$_SESSION["bd"]}
+													 ORDER BY moni.moni_id DESC");
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>

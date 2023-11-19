@@ -83,7 +83,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         <div class="col-sm-4">
                                             <?php
                                             try{
-                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }

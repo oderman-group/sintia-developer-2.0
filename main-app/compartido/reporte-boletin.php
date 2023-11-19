@@ -146,12 +146,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		}//FIN MIENTRAS QUE DE PERIODOS (1-4)
 		$defini = ($defini/$periodoActual);
 		$defini = round($defini,1);
-		$nivelaciones = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante=".$_GET["id"]);
+		$nivelaciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante='".$_GET["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$numNivelaciones = mysqli_num_rows($nivelaciones);
 		$notasNivelaciones = mysqli_fetch_array($nivelaciones, MYSQLI_BOTH);
 		if($numNivelaciones>0){
-			if($notasNivelaciones[3]>$defini){
-				$defini = $notasNivelaciones[3];
+			if($notasNivelaciones['niv_definitiva']>$defini){
+				$defini = $notasNivelaciones['niv_definitiva'];
 				$msjH = '<br><span style="font-size:9px; color:red;">Nivelada</span>';
 			}	
 		}else{$msjH = '';}
@@ -177,7 +177,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center"><?php if($aus[0]>0){ echo $aus[0]."/".$fila_mat[3];} else{ echo "0.0/".$fila_mat[3];};?></td>
 	</tr>
 <?php
-  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, academico_indicadores_carga WHERE ind_id=ipc_indicador AND ipc_periodo=".$periodoActual." AND ipc_carga=".$fila[3]);
+  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ind_id=aic.ipc_indicador AND aic.ipc_periodo='".$periodoActual."' AND aic.ipc_carga='".$fila[3]."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
 	$num = mysqli_num_rows($consulta);
 	if ($num>0) // si tiene indicadores 
 	{

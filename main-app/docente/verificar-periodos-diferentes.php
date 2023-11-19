@@ -31,7 +31,7 @@ if($existeURL != false){
 $URL = 'indicadores-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['ipc_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';

@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(!empty($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
@@ -152,7 +152,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			}
 			$promedioMateria = round($promedioMateria/($j-1),2);
 			$promedioMateriaFinal = $promedioMateria;
-            $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_nivelaciones WHERE niv_id_asg='".$datosCargas['car_id']."' AND niv_cod_estudiante='".$datosUsr['mat_id']."'");
+            $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$datosCargas['car_id']."' AND niv_cod_estudiante='".$datosUsr['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 			
 			// SI PERDIÓ LA MATERIA A FIN DE AÑO

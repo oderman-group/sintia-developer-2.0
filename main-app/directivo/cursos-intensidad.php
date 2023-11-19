@@ -129,7 +129,7 @@ if(!Modulos::validarPermisoEdicion()){
 														}
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
 															try{
-																$consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_intensidad_curso WHERE ipc_curso=".$c[0]." AND ipc_materia=".$m[0]."");
+																$consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$c[0]."' AND ipc_materia='".$m[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}

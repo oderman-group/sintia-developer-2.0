@@ -17,7 +17,7 @@ if($periodoActual==1) $periodoActuales = "Primero";
 if($periodoActual==2) $periodoActuales = "Segundo";
 if($periodoActual==3) $periodoActuales = "Tercero";
 if($periodoActual==4) $periodoActuales = "Final";
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_POST["year"])){
 $year=$_POST["year"];
 }
@@ -235,14 +235,14 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 	   //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 	    $msj='';
 	   if($totalPromedio2<$config[5]){
-			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  $BD.academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."'");
+			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$numNiv=mysqli_num_rows($consultaNivelaciones);
 			if($numNiv>0){
 				$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
-				if($nivelaciones[3]<$config[5]){
+				if($nivelaciones['niv_definitiva']<$config[5]){
 					$materiasPerdidas++;
 				}else{
-					$totalPromedio2 = $nivelaciones[3];
+					$totalPromedio2 = $nivelaciones['niv_definitiva'];
 					$msj='Niv';
 				}
 			}		   
@@ -400,14 +400,14 @@ if($totalPromedio2==1)	$totalPromedio2="1.0";	if($totalPromedio2==2)	$totalProme
 //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 $msj='';
 if($totalPromedio2<$config[5]){
-	$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  $BD.academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."'");
+	$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 	$numNiv=mysqli_num_rows($consultaNivelaciones);
 	if($numNiv>0){
 		$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
-		if($nivelaciones[3]<$config[5]){
+		if($nivelaciones['niv_definitiva']<$config[5]){
 			$materiasPerdidas++;
 		}else{
-			$totalPromedio2 = $nivelaciones[3];
+			$totalPromedio2 = $nivelaciones['niv_definitiva'];
 			$msj='Niv';
 		}
 	}		   

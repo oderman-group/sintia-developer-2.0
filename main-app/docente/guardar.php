@@ -447,13 +447,14 @@ if(!empty($_POST["id"])){
 	if($_POST["id"]==42){//No se se estan usando
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
+		require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+		$codigo=Utilidades::generateCode("MONI");
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_monitoreo(moni_fecha, moni_evaluador, moni_evaluado, moni_id_formato)
-			VALUES(now(), '".$_SESSION["id"]."','".$_POST["evaluado"]."','".$_POST["idF"]."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_monitoreo(moni_id, moni_fecha, moni_evaluador, moni_evaluado, moni_id_formato, institucion, year)
+			VALUES('".$codigo."', now(), '".$_SESSION["id"]."','".$_POST["evaluado"]."','".$_POST["idF"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		$idRegistro = mysqli_insert_id($conexion);
 
 		try{
 			$consultaCat = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
@@ -477,7 +478,7 @@ if(!empty($_POST["id"])){
 				if(empty($_POST["P$contReg"])) $_POST["P$contReg"] = 0;
 				try{
 					mysqli_query($conexion, "INSERT INTO academico_actividad_evaluaciones_resultados(res_id_pregunta, res_id_respuesta, res_id_estudiante, res_id_evaluacion, res_id_monitoreo)
-					VALUES('".$preguntas['preg_id']."', '".$_POST["P$contReg"]."', '".$_POST["evaluado"]."', '".$resultadoCat['eva_id']."', '".$idRegistro."')");
+					VALUES('".$preguntas['preg_id']."', '".$_POST["P$contReg"]."', '".$_POST["evaluado"]."', '".$resultadoCat['eva_id']."', '".$codigo."')");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -548,9 +549,11 @@ if(!empty($_POST["id"])){
 	if($_POST["id"]==46){//No se se estan usando
 		include("verificar-carga.php");
 		include("verificar-periodos-diferentes.php");
+		require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+		$codigo=Utilidades::generateCode("FOR");
 
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_formatos(form_nombre, form_carga)VALUES('".$_POST["titulo"]."', '".$cargaConsultaActual."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_formatos(form_id, form_nombre, form_carga, institucion, year)VALUES('".$codigo."', '".$_POST["titulo"]."', '".$cargaConsultaActual."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -564,7 +567,7 @@ if(!empty($_POST["id"])){
 	if($_POST["id"]==47){//No se se estan usando
 
 		try{
-			mysqli_query($conexion, "UPDATE academico_formatos SET form_nombre='".$_POST["titulo"]."' WHERE form_id='".$_POST["idR"]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_formatos SET form_nombre='".$_POST["titulo"]."' WHERE form_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -758,7 +761,7 @@ if(!empty($_GET["get"])){
 		}
 
 		try{
-			mysqli_query($conexion, "DELETE FROM academico_formatos WHERE form_id=".$_GET["idR"]);
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

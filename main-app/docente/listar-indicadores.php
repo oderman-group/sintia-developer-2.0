@@ -6,12 +6,12 @@ include("verificar-carga.php");
 include("../compartido/head.php");
 
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -88,9 +88,9 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
             <tbody>
                 <?php
                     $saberes = array("","Saber saber (55%)","Saber hacer (35%)","Saber ser (10%)");
-                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-                    INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-                    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+                    INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+                    WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
                     $contReg = 1; 
                     $porcentajeActual = 0;
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){

@@ -264,13 +264,13 @@ $modulo = 1;
 
             <?php
 
-            $nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM academico_nivelaciones 
+            $nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
 
-									INNER JOIN academico_cargas ON car_id=niv_id_asg
+									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
 									INNER JOIN academico_materias ON mat_id=car_materia
 
-									WHERE niv_cod_estudiante='" . $_POST["id"] . "'");
+									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
 
 

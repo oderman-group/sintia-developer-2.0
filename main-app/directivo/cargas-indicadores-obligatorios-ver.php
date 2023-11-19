@@ -124,7 +124,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                                         if(!empty($carga[0])){
                                                             try{
-                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0");
+                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -139,7 +139,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         $indCreados=0;
                                                         while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
                                                             try{
-                                                                $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_creado=1");
+                                                                $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

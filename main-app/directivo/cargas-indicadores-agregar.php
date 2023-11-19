@@ -10,21 +10,21 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-    INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+    INNER JOIN academico_indicadores ON ind_id=aic.ipc_indicador
+    WHERE aic.ipc_carga='".$cargaConsultaActual."' AND aic.ipc_periodo='".$periodoConsultaActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $indicador = mysqli_fetch_array($consultaIndicadores, MYSQLI_BOTH);
 
 try{
-    $consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-    (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-    (SELECT count(*) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+    $consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+    (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

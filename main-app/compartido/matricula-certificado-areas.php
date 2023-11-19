@@ -209,7 +209,7 @@ include("../compartido/head-informes.php") ?>
 					<?php
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
-					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
@@ -309,7 +309,7 @@ include("../compartido/head-informes.php") ?>
 					<?php
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
-					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
+					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 					while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 						$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
@@ -356,13 +356,13 @@ include("../compartido/head-informes.php") ?>
 
 			<?php
 
-			$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM academico_nivelaciones 
+			$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
 
-									INNER JOIN academico_cargas ON car_id=niv_id_asg
+									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
 									INNER JOIN academico_materias ON mat_id=car_materia
 
-									WHERE niv_cod_estudiante='" . $_POST["id"] . "'");
+									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
 
 
@@ -402,7 +402,7 @@ include("../compartido/head-informes.php") ?>
 				$m = 0;
 				$niveladas = 0;
 				while ($m < $materiasPerdidas) {
-					$nMP = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $_POST["id"] . "' AND niv_id_asg='" . $vectorMP[$m] . "' AND niv_definitiva>='" . $config[5] . "'");
+					$nMP = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $_POST["id"] . "' AND niv_id_asg='" . $vectorMP[$m] . "' AND niv_definitiva>='" . $config[5] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$numNivMP = mysqli_num_rows($nMP);
 					if ($numNivMP > 0) {
 						$niveladas++;

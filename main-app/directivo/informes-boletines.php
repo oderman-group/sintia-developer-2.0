@@ -87,7 +87,7 @@ require_once("../class/Estudiantes.php");
                                             <div class="col-sm-4">
 												<?php
                                                 try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
@@ -97,7 +97,7 @@ require_once("../class/Estudiantes.php");
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gru_id'];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>

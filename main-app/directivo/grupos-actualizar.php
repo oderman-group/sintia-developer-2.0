@@ -20,10 +20,10 @@ try {
 	if (!is_null($_POST["id"] )) {		
 		mysqli_query(
 			$conexion,
-			"UPDATE academico_grupos SET
+			"UPDATE ".BD_ACADEMICA.".academico_grupos SET
 				gru_codigo =".$_POST['codigoG'].", 
 				gru_nombre  ='".$_POST['nombreG']."'
-				WHERE gru_id=".$_POST["id"].""
+				WHERE gru_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"
 		);
 		$idRegistro =$_POST["id"];
 	}

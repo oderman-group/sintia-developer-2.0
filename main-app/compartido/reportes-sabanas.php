@@ -5,7 +5,7 @@ require_once("../class/Boletin.php");
 require_once("../class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_POST["year"])){
 	$year=$_POST["year"];
 }
@@ -16,9 +16,9 @@ $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQ
 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta);	
 $num_asg = mysqli_num_rows($asig);
-$consultaGrados = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, academico_grupos 
+$consultaGrados = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados, ".BD_ACADEMICA.".academico_grupos gru 
 WHERE gra_id='" . $_REQUEST["curso"] . "' 
-AND gru_id='" . $_REQUEST["grupo"] . "'");
+AND gru.gru_id='" . $_REQUEST["grupo"] . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 
@@ -104,7 +104,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM academico_materias am
 						INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 						INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-						INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
+						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}
 						INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 						INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
 						INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id

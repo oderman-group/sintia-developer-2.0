@@ -438,17 +438,17 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													");
 													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($rv[0]==$datosMatricula['grupo'])
-																echo '<option value="'.$rv[0].'" selected>'.$rv['gru_nombre'].'</option>';
+															if($rv['gru_id']==$datosMatricula['grupo'])
+																echo '<option value="'.$rv['gru_id'].'" selected>'.$rv['gru_nombre'].'</option>';
 															else
-																echo '<option value="'.$rv[0].'">'.$rv['gru_nombre'].'</option>';	
+																echo '<option value="'.$rv['gru_id'].'">'.$rv['gru_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -543,11 +543,11 @@ if(!Modulos::validarPermisoEdicion()){
 															<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
 															<div class="col-sm-4">
 																<?php
-																$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM academico_grupos");
+																$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																?>
 																<select class="form-control" name="grupoMT">
 																<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
-																	echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';
+																	echo '<option value="'.$rv['gru_id'].'">'.$rv['gru_nombre'].'</option>';
 																}?>
 																</select>
 															</div>

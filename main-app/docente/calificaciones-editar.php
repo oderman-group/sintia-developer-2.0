@@ -113,9 +113,9 @@ $porcentajeRestante = 100 - $valores[0];
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
@@ -136,7 +136,7 @@ $porcentajeRestante = 100 - $valores[0];
                                             <label class="col-sm-2 control-label">Evidencia</label>
                                             <div class="col-sm-10">
 												<?php
-												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM academico_evidencias
+												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="evidencia" required>

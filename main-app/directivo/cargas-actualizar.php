@@ -10,6 +10,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$codigo=Utilidades::generateCode("IPC");
 
 try{
 	mysqli_query($conexion, "UPDATE academico_cargas SET 
@@ -35,13 +37,13 @@ try{
 }
 
 try{
-	mysqli_query($conexion, "DELETE FROM academico_intensidad_curso WHERE ipc_curso='" . $_POST["curso"] . "' AND ipc_materia='" . $_POST["asignatura"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='" . $_POST["curso"] . "' AND ipc_materia='" . $_POST["asignatura"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
 try{
-	mysqli_query($conexion, "INSERT INTO academico_intensidad_curso(ipc_curso, ipc_materia, ipc_intensidad)VALUES('" . $_POST["curso"] . "','" . $_POST["asignatura"] . "','" . $_POST["ih"] . "')");
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '" . $_POST["curso"] . "','" . $_POST["asignatura"] . "','" . $_POST["ih"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

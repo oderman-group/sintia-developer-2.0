@@ -103,15 +103,18 @@ if(
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
-												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador AND ind_definitivo=1
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador AND ind_definitivo=1
+												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
 
 												//Si no existe el indicador definitivo en la carga lo asociamos.
-												if(!empty($indicadorDefitnivo[0]) && $indicadorDefitnivo[0]==""){	
-													mysqli_query($conexion, "INSERT INTO academico_indicadores_carga (ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1)");	
+												if(!empty($indicadorDefitnivo[0]) && $indicadorDefitnivo[0]==""){
+													require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+													$codigo=Utilidades::generateCode("IPC");
+
+													mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga (ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 												}
 											?>
 											<input type="hidden" name="indicador" class="form-control" value="<?=$indicadorAuto;?>">
@@ -120,9 +123,9 @@ if(
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
@@ -142,7 +145,7 @@ if(
                                             <label class="col-sm-2 control-label">Evidencia</label>
                                             <div class="col-sm-10">
 												<?php
-												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM academico_evidencias
+												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="evidencia" required>

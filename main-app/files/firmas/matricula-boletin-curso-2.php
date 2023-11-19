@@ -25,7 +25,7 @@ $contador_indicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 $usr=mysqli_query($conexion,"SELECT * FROM academico_matriculas am
-INNER JOIN academico_grupos ON mat_grupo=gru_id
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=".$matriculadosDatos[0]);
 $num_usr=mysqli_num_rows($usr);
 $datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
@@ -257,11 +257,11 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 	   //if($total_promedio2<$r_desempeno["desbasdesde"]){$materiasPerdidas++;}
 	    $msj='';
 	   if($total_promedio2<$config[5]){
-		   $nivelaciones = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM  academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos[0]."'"), MYSQLI_BOTH);
-		   if($nivelaciones[3]<$config[5]){
+		   $nivelaciones = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+		   if($nivelaciones['niv_definitiva']<$config[5]){
 				$materiasPerdidas++;
 			}else{
-				$total_promedio2 = $nivelaciones[3];
+				$total_promedio2 = $nivelaciones['niv_definitiva'];
 				$msj='Niv';
 			}
 		   
