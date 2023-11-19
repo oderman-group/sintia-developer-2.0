@@ -91,10 +91,10 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
         <?php
 		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
+			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
-        	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat[3]);?></td>      
+        	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat['mat_siglas']);?></td>      
   		<?php
 		}
 		?>

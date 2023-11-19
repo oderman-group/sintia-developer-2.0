@@ -31,7 +31,7 @@ if($cargaHnum==0){
 }
 
 $consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-INNER JOIN academico_materias ON mat_id=car_materia
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 INNER JOIN usuarios ON uss_id=car_docente
 LEFT JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula='".$datosEstudianteActual['mat_id']."'
 WHERE car_id='".$cargaConsultaActual."' AND (car_curso='".$datosEstudianteActual[6]."' OR car_curso=matcur_id_curso) AND (car_grupo='".$datosEstudianteActual[7]."' OR car_grupo=matcur_id_grupo) AND car_activa=1");

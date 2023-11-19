@@ -151,9 +151,9 @@ $modulo = 1;
 
                 $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN academico_areas ON ar_id=am.mat_area
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
@@ -206,9 +206,9 @@ $modulo = 1;
 
                 $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN academico_areas ON ar_id=am.mat_area
 
                                             WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
 
@@ -268,7 +268,7 @@ $modulo = 1;
 
 									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
-									INNER JOIN academico_materias ON mat_id=car_materia
+									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
 									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
@@ -347,9 +347,9 @@ $modulo = 1;
 
                 $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN academico_areas ON ar_id=am.mat_area
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
@@ -422,9 +422,9 @@ $modulo = 1;
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
                 $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN academico_areas ON ar_id=am.mat_area
 
                                             WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
 

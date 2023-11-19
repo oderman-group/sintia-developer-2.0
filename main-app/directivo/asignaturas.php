@@ -84,11 +84,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND mat_area='".base64_decode($_GET["area"])."'";}
+													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";}
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
-														INNER JOIN academico_areas ON ar_id=mat_area
-														WHERE mat_id=mat_id $filtro");
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
+														INNER JOIN academico_areas ON ar_id=am.mat_area
+														WHERE am.mat_id=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} $filtro");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
@@ -119,8 +119,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<?php if($numeros[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li><?php } ?>
+																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php if($numeros[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado['mat_id']);?>')">Eliminar</a></li><?php } ?>
 																	</ul>
 																</div>
 															</td>

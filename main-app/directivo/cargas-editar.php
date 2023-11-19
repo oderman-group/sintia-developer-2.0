@@ -155,7 +155,10 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-8">
 												<?php
 												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am 
+													INNER JOIN academico_areas ON ar_id=am.mat_area
+													AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+													ORDER BY am.mat_nombre");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -167,7 +170,7 @@ if(!Modulos::validarPermisoEdicion()){
 														$select = '';
 														if($opcionesDatos[0]==$datosEditar['car_materia']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
+                                                    	<option value="<?=$opcionesDatos['mat_id'];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
                                                 </select>
                                             </div>

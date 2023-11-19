@@ -78,7 +78,7 @@
 										<div class="panel-body">
 											<?php
 											$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-											INNER JOIN academico_materias ON mat_id=car_materia
+											INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion={$config['conf_id_institucion']} AND mate.year={$_SESSION["bd"]}
 											WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
 											$nCargas = mysqli_num_rows($cCargas);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){

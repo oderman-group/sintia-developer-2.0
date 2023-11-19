@@ -7,7 +7,7 @@ require_once("../class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
 
-$year = $agnoBD;
+$year = $_SESSION["bd"];
 if (isset($_REQUEST["year"])) {
     $year = $_REQUEST["year"];
 }
@@ -43,10 +43,11 @@ if($config['conf_firma_estudiante_informe_asistencia']==1){
     $colspan=2;
 }
 
-$consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM $BD.academico_materias
-INNER join $BD.academico_areas ON ar_id = mat_area
-INNER JOIN $BD.academico_cargas on car_materia = mat_id and car_curso = '" . $_REQUEST["curso"] . "' AND car_grupo = '" . $_REQUEST["grupo"] . "'
-ORDER BY mat_id");
+$consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
+INNER join $BD.academico_areas ON ar_id = am.mat_area
+INNER JOIN $BD.academico_cargas on car_materia = am.mat_id and car_curso = '" . $_REQUEST["curso"] . "' AND car_grupo = '" . $_REQUEST["grupo"] . "'
+WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+ORDER BY am.mat_id");
 $numMaterias=mysqli_num_rows($consultaNombreMaterias);
 ?>
 <!doctype html>
@@ -148,11 +149,12 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                 <td><?=$resultado["gra_nombre"]." ".$resultado["gru_nombre"]?></td>
                 <td><?= $nombre ?></td>
                 <?php
-                    $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM academico_materias
-                    INNER JOIN academico_areas ON ar_id = mat_area
-                    INNER JOIN academico_cargas on car_materia = mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
+                    $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM ".BD_ACADEMICA.".academico_materias am
+                    INNER JOIN academico_areas ON ar_id = am.mat_area
+                    INNER JOIN academico_cargas on car_materia = am.mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
                     LEFT JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
-                    ORDER BY mat_id;");
+                    AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                    ORDER BY am.mat_id;");
                     $numNotas = mysqli_num_rows($consultaNotaMaterias);
                     if($numNotas>0){
                         // $notaMateria= 0;

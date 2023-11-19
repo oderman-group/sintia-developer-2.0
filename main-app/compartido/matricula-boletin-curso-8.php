@@ -148,7 +148,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             $ausPer4Total=0;
             $sumAusenciasTotal=0;
             $conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	WHERE car_curso='" . $datosUsr['mat_grado'] . "' AND car_grupo='" . $datosUsr['mat_grupo'] . "'");
             while ($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
                 //DIRECTOR DE GRUPO
@@ -431,7 +431,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
             <?php
             $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
-	        INNER JOIN academico_materias ON mat_id=car_materia
+	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	        INNER JOIN usuarios ON uss_id=car_docente
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {

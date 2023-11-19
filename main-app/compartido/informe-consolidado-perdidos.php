@@ -38,10 +38,10 @@ include("../compartido/head-informes.php") ?>
 			//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 			$numCargasPorCurso = mysqli_num_rows($cargas); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-				$consultaMaterias=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+				$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 			?>
-            <th style="font-size:9px; text-align:center; border:groove;" width="5%"><?=$materia[2];?></th>
+            <th style="font-size:9px; text-align:center; border:groove;" width="5%"><?=$materia['mat_nombre'];?></th>
             <?php
 			}
 			?>
@@ -63,7 +63,7 @@ include("../compartido/head-informes.php") ?>
 			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1"); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 				//PRUEBA CONSULTA PHP 8
-				$consultaMaterias= mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+				$consultaMaterias= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 				$p = 1;
 				$porcPeriodo = array("",0.25,0.25,0.25,0.25);

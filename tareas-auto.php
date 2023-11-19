@@ -2,6 +2,7 @@
 include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 $bdDemo="mobiliar_dev_".date("Y");
+$year=date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
@@ -292,7 +293,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			
 			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_actividades 
 			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=act_id_carga
-			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
+			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
@@ -368,7 +369,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		//Del tipo 4
 		if($cDat['corr_tipo']==4){
 			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_cargas 
-			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
+			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado

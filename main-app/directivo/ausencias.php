@@ -93,7 +93,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<?php
 											try{
 												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
+												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 												WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
