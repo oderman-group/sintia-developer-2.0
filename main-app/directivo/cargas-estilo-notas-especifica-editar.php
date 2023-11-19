@@ -61,7 +61,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                     <?php 
                                     try{
-                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_id=".base64_decode($_GET["id"]).";");
+                                        $consultaCategoriaNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }

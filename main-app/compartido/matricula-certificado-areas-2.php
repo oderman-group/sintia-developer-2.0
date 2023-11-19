@@ -189,7 +189,7 @@ while($i<=$restaAgnos){
 				for($n=0; $n<=5; $n++){
 					if($nota==$n) $nota=$nota.".0";
 				}
-				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$nota."' AND notip_hasta>='".$nota."'");
+				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$nota."' AND notip_hasta>='".$nota."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);				   
 
             ?>
@@ -198,7 +198,7 @@ while($i<=$restaAgnos){
 
                 <td><?=strtoupper($cargas["ar_nombre"]);?></td>
 
-                <td><?=$nota;?> (<?=strtoupper($desempenoA[1]);?>)</td>
+                <td><?=$nota;?> (<?=strtoupper($desempenoA['notip_nombre']);?>)</td>
 
                 <td><?=$cargas["car_ih"]." (".$horas[$cargas["car_ih"]].")";?></td>
 
@@ -206,7 +206,7 @@ while($i<=$restaAgnos){
             
             <?php
 			//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
-			$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc.ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='".$cargas["ar_id"]."' AND mat_id=car_materia AND car_curso='".$matricula["gra_id"]."' AND car_grupo='".$matricula["gru_id"]."' AND ipc.ipc_curso='".$matricula["mat_grado"]."' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+			$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc.ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='".$cargas["ar_id"]."' AND mat_id=car_materia AND car_curso='".$matricula["gra_id"]."' AND car_grupo='".$matricula["gru_id"]."' AND ipc.ipc_curso='".$matricula["mat_grado"]."' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$inicio}");
 			
 			while($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)){
 				$consultaNotaDefMateria=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$mda["car_id"]."'");
@@ -218,7 +218,7 @@ while($i<=$restaAgnos){
 				if($notaDefMateria<$config[5]){
                     $materiasPerdidas++;
                 }
-				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$notaDefMateria."' AND notip_hasta>='".$notaDefMateria."'");
+				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND notip_desde<='".$notaDefMateria."' AND notip_hasta>='".$notaDefMateria."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 				//PARA PREESCOLARES
 				if($matricula["gra_id"]>=12 and $matricula["gra_id"]<=15){
@@ -232,7 +232,7 @@ while($i<=$restaAgnos){
 			?>
                 <tr style="font-size:11px;"> 
                     <td><?=$mda["mat_nombre"];?></td>
-                    <td><?=$notaDefMateria;?> <?php if($matricula["gra_id"]<12){?> (<?=strtoupper($desempeno[1]);?>) <?php }?></td>
+                    <td><?=$notaDefMateria;?> <?php if($matricula["gra_id"]<12){?> (<?=strtoupper($desempeno['notip_nombre']);?>) <?php }?></td>
                     <td><?=$mda["ipc_intensidad"]." (".$horas[$mda["ipc_intensidad"]].")";?></td>
                 </tr>
             <?php }?>
@@ -288,7 +288,7 @@ while($i<=$restaAgnos){
 				for ($n = 0; $n <= 5; $n++) {
 					if ($nota == $n) $nota = $nota . ".0";
 				}
-				$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "'");
+				$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
 			?>
@@ -297,7 +297,7 @@ while($i<=$restaAgnos){
 
 					<td><?= strtoupper($cargas["ar_nombre"]); ?></td>
 
-					<td><?= $nota; ?> (<?= strtoupper($desempenoA[1]); ?>)</td>
+					<td><?= $nota; ?> (<?= strtoupper($desempenoA['notip_nombre']); ?>)</td>
 
 					<td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
 
@@ -306,7 +306,7 @@ while($i<=$restaAgnos){
 				<?php
 				//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
-				$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+				$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$inicio}");
 
 				while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
 					$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
@@ -318,7 +318,7 @@ while($i<=$restaAgnos){
 					if ($notaDefMateria < $config[5]) {
 						$materiasPerdidas++;
 					}
-					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "'");
+					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 					//PARA PREESCOLARES
 					if ($matricula["gra_id"] >= 12 and $matricula["gra_id"] <= 15) {
@@ -332,7 +332,7 @@ while($i<=$restaAgnos){
 				?>
 					<tr style="font-size:11px;">
 						<td><?= $mda["mat_nombre"]; ?></td>
-						<td><?= $notaDefMateria; ?> <?php if ($matricula["gra_id"] < 12) { ?> (<?= strtoupper($desempeno[1]); ?>) <?php } ?></td>
+						<td><?= $notaDefMateria; ?> <?php if ($matricula["gra_id"] < 12) { ?> (<?= strtoupper($desempeno['notip_nombre']); ?>) <?php } ?></td>
 						<td><?= $mda["ipc_intensidad"] . " (" . $horas[$mda["ipc_intensidad"]] . ")"; ?></td>
 					</tr>
 				<?php } ?>
@@ -472,7 +472,7 @@ while($i<=$restaAgnos){
 
                 $nota = round($boletin[0],1);
 
-				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota.">=notip_desde AND ".$nota."<=notip_hasta");
+				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota.">=notip_desde AND ".$nota."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);					   
 
             ?>
@@ -513,7 +513,7 @@ while($i<=$restaAgnos){
 
                 <td><?=$nota;?></td>
 
-                <td><?=$desempeno[1];?></td>  
+                <td><?=$desempeno['notip_nombre'];?></td>  
 
             </tr>
 
@@ -547,7 +547,7 @@ while($i<=$restaAgnos){
 
 				$nota = round($boletin[0], 1);
 
-				$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+				$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
 			?>
@@ -587,7 +587,7 @@ while($i<=$restaAgnos){
 
 					<td><?= $nota; ?></td>
 
-					<td><?= $desempeno[1]; ?></td>
+					<td><?= $desempeno['notip_nombre']; ?></td>
 
 				</tr>
 

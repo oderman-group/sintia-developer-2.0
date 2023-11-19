@@ -104,7 +104,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             <?php  
 			for($j=1;$j<=$periodoActual;$j++){
 			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 			$periodosCursos['gvp_valor'] = 25;
 			?>
@@ -164,7 +164,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$sumaPorcentaje = 0;
 			for($j=1;$j<=$periodoActual;$j++){
 				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 				
 				$periodosCursos['gvp_valor'] = 25;
@@ -172,7 +172,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 				$decimal = $periodosCursos['gvp_valor']/100;
 				
 				$consultaBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-                INNER JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
+                INNER JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
                 WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."'");
                 $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 				
@@ -197,8 +197,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$colorFondoPromedioM = '';
 			if($promedioMateria!="" and $promedioMateria<$config["conf_nota_minima_aprobar"]){$colorFondoPromedioM = 'tomato'; $materiasPerdidas++;}
 			
-			$consultaPromediosMateriasEstiloNotas=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-			WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioMateria."'>=notip_desde AND '".$promedioMateria."'<=notip_hasta");
+			$consultaPromediosMateriasEstiloNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+			WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioMateria."'>=notip_desde AND '".$promedioMateria."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$promediosMateriaEstiloNota = mysqli_fetch_array($consultaPromediosMateriasEstiloNotas, MYSQLI_BOTH);
 			?>
             <td align="center" style="background-color: <?=$colorFondoPromedioM;?>"><?=$promedioMateria;?></td>
@@ -267,8 +267,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
                 WHERE bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."'");
 				$promediosPeriodos = mysqli_fetch_array($consultaPromediosPeriodos, MYSQLI_BOTH);
 				
-				$consultaPromediosEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta");
+				$consultaPromediosEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$promediosEstiloNota = mysqli_fetch_array($consultaPromediosEstiloNota, MYSQLI_BOTH);
             ?>
                 <td><?=$promediosPeriodos['promedio'];?></td>
@@ -302,8 +302,8 @@ if($periodoActual==$datosUsr['gra_periodos']){
         	<table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
             	<?php
 				$contador=1;
-				$estilosNota = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."'
+				$estilosNota = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}
 				ORDER BY notip_desde DESC");
 				while($eN = mysqli_fetch_array($estilosNota, MYSQLI_BOTH)){
 					if($contador%2==1){$fondoFila = '#EAEAEA';}else{$fondoFila = '#FFF';}

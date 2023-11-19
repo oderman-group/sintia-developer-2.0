@@ -43,7 +43,7 @@ $contadorPeriodos=0;
 
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
+$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id FROM academico_cargas ac
 INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
@@ -139,7 +139,7 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 	   }?></td>
        <td align='center' style='font-size:12px;border-bottom-style:solid;border-bottom-width:2;'><?php echo $totalPromedio;?></td>
         <td  align="center" style="border-bottom-style:solid;border-bottom-width:2;font-size:12px;"><?php //DESEMPEÑO
-		while($r_desempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
+		while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
         if(!empty($rDesempeno["notip_desde"]) && !empty($rDesempeno["notip_hasta"])){
           if($totalPromedio>=$rDesempeno["notip_desde"] && $totalPromedio<=$rDesempeno["notip_hasta"]){
             echo $rDesempeno["notip_nombre"];
