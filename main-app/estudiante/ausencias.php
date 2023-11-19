@@ -127,11 +127,11 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
+														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														$totalAusencia=0;
-														if(!empty($ausencia[3])){
-															$totalAusencia=$ausencia[3];
+														if(!empty($ausencia['aus_ausencias'])){
+															$totalAusencia=$ausencia['aus_ausencias'];
 														}
 													 ?>
 													<tr>

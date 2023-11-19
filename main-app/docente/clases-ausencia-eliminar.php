@@ -9,7 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id='".base64_decode($_GET["id"])."'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
