@@ -87,7 +87,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
-														INNER JOIN academico_areas ON ar_id=am.mat_area
+														INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
 														WHERE am.mat_id=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} $filtro");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");

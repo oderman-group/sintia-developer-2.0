@@ -131,7 +131,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	$colspan = 2 + (2 * $periodoActual);
 	$conAreas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
+	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
 	GROUP BY am.mat_area
 	ORDER BY ar_posicion

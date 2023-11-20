@@ -136,7 +136,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 
-		INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
+		INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
 
 		WHERE  car_curso=" . $datos_usr["mat_grado"] . " AND car_grupo=" . $datos_usr["mat_grupo"] . " GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
@@ -233,7 +233,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 $consulta_notdef_area = mysqli_query($conexion,"SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 
 				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -247,7 +247,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 $consulta_a_mat = mysqli_query($conexion,"SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM ".BD_ACADEMICA.".academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 
 				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -263,7 +263,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 $consulta_a_mat_per = mysqli_query($conexion,"SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 
 				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -283,7 +283,7 @@ INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDa
 
                 $consulta_a_mat_indicadores = mysqli_query($conexion,"SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo, ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
 
-				INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+				INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 
 				INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 

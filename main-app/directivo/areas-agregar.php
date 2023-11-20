@@ -75,7 +75,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
+                                                    $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

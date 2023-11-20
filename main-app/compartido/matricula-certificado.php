@@ -153,7 +153,7 @@ $modulo = 1;
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=am.mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
@@ -208,7 +208,7 @@ $modulo = 1;
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=am.mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
                                             WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
 
@@ -349,7 +349,7 @@ $modulo = 1;
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=am.mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
@@ -424,7 +424,7 @@ $modulo = 1;
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=am.mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
                                             WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
 

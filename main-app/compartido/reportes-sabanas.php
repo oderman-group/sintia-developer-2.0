@@ -102,7 +102,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
 						$consultaNotaMateriaIndicadoresxPeriodo = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
 						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
-						INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+						INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 						INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 						INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}

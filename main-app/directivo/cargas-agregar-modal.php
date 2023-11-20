@@ -91,7 +91,7 @@ if (!Modulos::validarPermisoEdicion()) {
                     <?php
                     try {
                         $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
-                                                    INNER JOIN academico_areas ON ar_id=am.mat_area
+                                                    INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
                                                     WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
                                                     ORDER BY am.mat_nombre");
                     } catch (Exception $e) {
