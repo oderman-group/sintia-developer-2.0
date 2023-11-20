@@ -144,7 +144,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	$contador=1;
 	$areas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
+	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
 	GROUP BY am.mat_area
 	");
@@ -153,7 +153,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		//OBTENER EL PROMEDIO POR AREA
 		$asignaturas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-		INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
+		INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 		$a = 0;
 		$promedioArea = 0;
@@ -187,7 +187,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	//ASIGNATURAS
 	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
+	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 

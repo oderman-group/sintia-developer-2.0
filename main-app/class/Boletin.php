@@ -99,7 +99,7 @@ class Boletin {
         try {
             $resultado = mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-            INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
             WHERE  car_curso=".$grado." AND car_grupo=".$grupo." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -123,7 +123,7 @@ class Boletin {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,car_id,car_ih FROM ".BD_ACADEMICA.".academico_materias am
-            INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
             WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
@@ -252,7 +252,7 @@ class Boletin {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_area,mat_valor,mat_id,car_id,car_docente,car_ih,car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
-            INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
             WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
@@ -280,7 +280,7 @@ class Boletin {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
-            INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
             WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year=$year}
@@ -312,7 +312,7 @@ class Boletin {
         try {
             $resultado = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
             ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
-            INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
@@ -372,7 +372,7 @@ class Boletin {
         try {
             $resultado = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
             ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
-            INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
+            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
             INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}

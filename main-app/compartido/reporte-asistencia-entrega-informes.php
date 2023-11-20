@@ -44,7 +44,7 @@ if($config['conf_firma_estudiante_informe_asistencia']==1){
 }
 
 $consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
-INNER join $BD.academico_areas ON ar_id = am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 INNER JOIN $BD.academico_cargas on car_materia = am.mat_id and car_curso = '" . $_REQUEST["curso"] . "' AND car_grupo = '" . $_REQUEST["grupo"] . "'
 WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 ORDER BY am.mat_id");
@@ -150,7 +150,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                 <td><?= $nombre ?></td>
                 <?php
                     $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM ".BD_ACADEMICA.".academico_materias am
-                    INNER JOIN academico_areas ON ar_id = am.mat_area
+                    INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
                     INNER JOIN academico_cargas on car_materia = am.mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
                     LEFT JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
                     AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}

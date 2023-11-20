@@ -81,7 +81,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     try{											
-													    $consulta = mysqli_query($conexion, "SELECT * FROM academico_areas ORDER BY ar_posicion");
+													    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY ar_posicion");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -109,8 +109,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-                                                                        <?php if($numMaterias[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li><?php }?>
+                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado['ar_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                        <?php if($numMaterias[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado['ar_id']);?>')">Eliminar</a></li><?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

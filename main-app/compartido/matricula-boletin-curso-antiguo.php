@@ -122,7 +122,7 @@ $consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM academ
 
 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
-INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
 
 WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
@@ -246,7 +246,7 @@ $numero_periodos=$config["conf_periodos_maximos"];
 
 $consulta_notdef_area=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
 
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -260,7 +260,7 @@ GROUP BY ar_id;");
 
 $consulta_a_mat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
 
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -276,7 +276,7 @@ ORDER BY mat_id;");
 
 $consulta_a_mat_per=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
 
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
@@ -296,7 +296,7 @@ ORDER BY mat_id,bol_periodo
 
 $consulta_a_mat_indicadores=mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,(SUM(cal_nota)/COUNT(cal_nota))as nota FROM ".BD_ACADEMICA.".academico_materias am
 
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 
