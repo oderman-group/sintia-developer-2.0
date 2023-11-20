@@ -187,7 +187,7 @@ include("../compartido/head.php");
 
 																//LAS CALIFICACIONES
 																$consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-																INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='" . $rA['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
+																INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='" . $rA['ipc_indicador'] . "' AND aa.act_periodo='" . $periodoConsultaActual . "' AND aa.act_id_carga='" . $cargaConsultaActual . "' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
 																WHERE aac.cal_id_estudiante='" . $resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 																$sumaNotas = mysqli_fetch_array($consultaSumaNotas, MYSQLI_BOTH);
 

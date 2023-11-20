@@ -145,7 +145,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                             }
                                                             $ipcC = mysqli_num_rows($consultaNumIpcC);
                                                             try{
-                                                                $consultaCalC=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cgs[0]."' AND act_estado=1");
+                                                                $consultaCalC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cgs[0]."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

@@ -158,7 +158,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														//Promedio nota indicador según nota de actividades relacionadas
 														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-														INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_estado=1 AND act_id_tipo='".$idR."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
+														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_id_tipo='".$idR."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_id_carga='".$cargaConsultaActual."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
 														WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 														$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 														 

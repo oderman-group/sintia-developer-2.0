@@ -12,9 +12,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-WHERE act_id='".$idR."' AND act_estado=1");
+$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades aa 
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+WHERE aa.act_id='".$idR."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 
@@ -170,9 +170,8 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 											<?php
 
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-
-											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$idR."'
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
+											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
 											ORDER BY act_id DESC
 

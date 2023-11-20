@@ -5,7 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1");
+$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id='".$_GET["idR"]."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 
@@ -69,8 +69,8 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 								<header class="panel-heading panel-heading-purple"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?> </header>
 								<div class="panel-body">
 										<?php
-										$enComun = mysqli_query($conexion, "SELECT * FROM academico_actividades
-										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$_GET["idR"]."' AND act_estado=1
+										$enComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades
+										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$_GET["idR"]."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 										");
 										while($regComun = mysqli_fetch_array($enComun, MYSQLI_BOTH)){
 										?>

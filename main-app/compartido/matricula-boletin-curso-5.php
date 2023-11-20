@@ -241,7 +241,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					//INDICADORES PERDIDOS
 					while($indicadorP = mysqli_fetch_array($indicadoresPeridos, MYSQLI_BOTH)){
 						$consultaNotaIndicadorPA=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-						INNER JOIN $BD.academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='".$indicadorP['rind_indicador']."'
+						INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='".$indicadorP['rind_indicador']."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
 						WHERE aac.cal_id_estudiante='".$datosUsr['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}");
 						$notaIndicadorPA = mysqli_fetch_array($consultaNotaIndicadorPA, MYSQLI_BOTH);
 						
@@ -271,7 +271,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					//INDICADORES
 					while($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 						$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-						INNER JOIN $BD.academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='".$indicador['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$periodoActual."' AND act_estado=1
+						INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='".$indicador['ipc_indicador']."' AND aa.act_id_carga='".$datosCargas['car_id']."' AND aa.act_periodo='".$periodoActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
 						WHERE aac.cal_id_estudiante='".$datosUsr['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}");
 						$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 

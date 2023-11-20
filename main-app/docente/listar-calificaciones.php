@@ -7,10 +7,10 @@
 require_once("../class/Estudiantes.php");
 
 $consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
@@ -94,9 +94,9 @@ $porcentajeRestante = 100 - $valores[0];
 			</thead>
 			<tbody>
 				<?php
-					$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-					INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-					WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
+					$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades aa
+					INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+					WHERE aa.act_id_carga='".$cargaConsultaActual."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
 					");
 					$contReg = 1;
 					$porcentajeActual = 0;

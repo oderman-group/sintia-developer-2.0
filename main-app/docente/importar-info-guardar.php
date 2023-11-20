@@ -20,8 +20,8 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 	}
 
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Importar indicadores de carga: ".$cargaConsultaActual.", del P: ".$_POST["periodoImportar"]." al P: ".$periodoConsultaActual."'
-		WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Importar indicadores de carga: ".$cargaConsultaActual.", del P: ".$_POST["periodoImportar"]." al P: ".$periodoConsultaActual."'
+		WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -78,8 +78,8 @@ if(!empty($_POST["calificaciones"])){
 	}
 
 	try{
-		mysqli_query($conexion, "UPDATE academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Importar de calificaciones de carga: ".$cargaConsultaActual.", del P: ".$_POST["periodoImportar"]." al P: ".$periodoConsultaActual."'
-		WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_estado=0, act_fecha_eliminacion=now(), act_motivo_eliminacion='Importar de calificaciones de carga: ".$cargaConsultaActual.", del P: ".$_POST["periodoImportar"]." al P: ".$periodoConsultaActual."'
+		WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -115,16 +115,17 @@ if(!empty($_POST["calificaciones"])){
 
 		//Consultamos las calificaciones del indicador a Importar
 		try{
-			$calImpConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-			WHERE act_id_carga='".$_POST["cargaImportar"]."' AND act_periodo='".$_POST["periodoImportar"]."' AND act_id_tipo='".$indImpDatos['ind_id']."' AND act_estado=1");
+			$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades
+			WHERE act_id_carga='".$_POST["cargaImportar"]."' AND act_periodo='".$_POST["periodoImportar"]."' AND act_id_tipo='".$indImpDatos['ind_id']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
 
 		$datosInsert = '';
 		while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
+			$codigoACT=Utilidades::generateCode("ACT");
 
-			$datosInsert .="('".mysqli_real_escape_string($conexion,$calImpDatos['act_descripcion'])."', '".$calImpDatos['act_fecha']."', '".$calImpDatos['act_valor']."', '".$idRegInd."', '".$cargaConsultaActual."', 0, now(), 1, '".$periodoConsultaActual."','".$calImpDatos['act_compartir']."'),";
+			$datosInsert .="('".$codigoACT."', '".mysqli_real_escape_string($conexion,$calImpDatos['act_descripcion'])."', '".$calImpDatos['act_fecha']."', '".$calImpDatos['act_valor']."', '".$idRegInd."', '".$cargaConsultaActual."', 0, now(), 1, '".$periodoConsultaActual."','".$calImpDatos['act_compartir']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 		}
 
@@ -133,7 +134,7 @@ if(!empty($_POST["calificaciones"])){
 		if(!empty($datosInsert)){
 			$datosInsert = substr($datosInsert,0,-1);
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_actividades(act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir) VALUES $datosInsert");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir, institucion, year) VALUES $datosInsert");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
