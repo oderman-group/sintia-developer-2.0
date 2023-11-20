@@ -92,15 +92,15 @@ class Estudiantes {
         string $periodo,
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
 
         try {
             $sqlString= "SELECT *, sum(act_valor) as acumulado 
             FROM academico_matriculas
             LEFT JOIN academico_cargas on car_id='".$carga."'
-            LEFT JOIN academico_calificaciones on cal_id_estudiante=mat_id 
-            LEFT JOIN academico_actividades on act_id=cal_id_actividad and act_id_carga=car_id and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
+            LEFT JOIN ".BD_ACADEMICA.".academico_calificaciones aac on aac.cal_id_estudiante=mat_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} 
+            LEFT JOIN academico_actividades on act_id=aac.cal_id_actividad and act_id_carga=car_id and act_periodo='".$periodo."' and act_registrada=1 and act_estado=1
             WHERE mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_grado=car_curso AND mat_grupo=car_grupo
             GROUP BY mat_id
             HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL

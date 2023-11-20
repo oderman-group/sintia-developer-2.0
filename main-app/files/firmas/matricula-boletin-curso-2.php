@@ -160,9 +160,9 @@ $consulta_a_mat_indicadores=mysqli_query($conexion,"SELECT mat_nombre,mat_area,m
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id
-INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id
-INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
+INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 WHERE car_curso=".$datos_usr["mat_grado"]."  and car_grupo=".$datos_usr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2." AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 group by act_id_tipo, act_id_carga
 order by mat_id,ipc_periodo,ind_id;");

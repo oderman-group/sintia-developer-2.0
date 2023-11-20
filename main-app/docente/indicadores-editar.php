@@ -9,7 +9,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 $consultaIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 WHERE ipc.ipc_id='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 $indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
@@ -74,7 +74,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 								<div class="panel-body">
 										<?php
 										$indicadoresEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-										INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+										INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 										WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.ipc_id!='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 										");
 										while($indComun = mysqli_fetch_array($indicadoresEnComun, MYSQLI_BOTH)){

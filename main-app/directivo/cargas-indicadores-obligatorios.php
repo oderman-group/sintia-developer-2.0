@@ -43,7 +43,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								  
                                 <?php
                                 try{
-                                    $consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor) FROM academico_indicadores WHERE ind_obligatorio=1");
+                                    $consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor) FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_obligatorio=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 } catch (Exception $e) {
                                     include("../compartido/error-catch-to-report.php");
                                 }
@@ -91,20 +91,20 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_obligatorio=1");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_obligatorio=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
 													$contReg = 1;
                                                     $sumaP = 0;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                                                        $sumaP = $sumaP + $resultado[3];
+                                                        $sumaP = $sumaP + $resultado['ind_valor'];
 													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-                                                        <td><?=$resultado[0];?></td>
-                                                        <td><?=$resultado[1];?></td>
-                                                        <td><?=$resultado[3];?></td>														
+                                                        <td><?=$resultado['ind_id'];?></td>
+                                                        <td><?=$resultado['ind_nombre'];?></td>
+                                                        <td><?=$resultado['ind_valor'];?></td>														
 														<td>
 															<div class="btn-group">
 																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
@@ -112,11 +112,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado['ind_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
                                         							  <li>
-                                                                      <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado[0]);?>')">Eliminar</a>    
+                                                                      <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado['ind_id']);?>')">Eliminar</a>    
                                                                       </li>	
-																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado[0]);?>&indNombre=<?=base64_encode($resultado[1]);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
+																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado['ind_id']);?>&indNombre=<?=base64_encode($resultado['ind_nombre']);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
 																  </ul>
 															  </div>
 														</td>

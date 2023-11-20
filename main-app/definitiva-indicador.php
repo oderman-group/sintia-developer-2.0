@@ -5,11 +5,11 @@ $acumulaValor = "";
 $sumaNota = "";
 $definitiva = "";
 while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
-	$consultaNotas=mysqli_query($conexion,"SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'");
+	$consultaNotas=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$nota = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 	$porNuevo = ($resultadoD[3] / 100);
 	$acumulaValor = ($acumulaValor + $porNuevo);
-	$notaMultiplicada = ($nota[3] * $porNuevo);
+	$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 	$sumaNota = ($sumaNota + $notaMultiplicada);
 }
 if($acumulaValor>0)// SI EL VALOR ACUMULADO DE LOS PORCENTAJES ES MAYOR QUE 0

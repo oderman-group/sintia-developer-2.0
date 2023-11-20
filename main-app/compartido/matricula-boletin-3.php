@@ -56,7 +56,7 @@ $contador_periodos=0;
 $consulta_desempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM academico_cargas ac
-INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
 WHERE  car_curso=".$datos_usr["mat_grado"]." AND car_grupo=".$datos_usr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
@@ -129,14 +129,14 @@ $consulta_notdef_area=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_n
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 GROUP BY ar_id;");
 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 $consulta_a_mat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id, car_id FROM ".BD_ACADEMICA.".academico_materias am
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 GROUP BY mat_id
 ORDER BY mat_id;");
 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
@@ -144,7 +144,7 @@ $consulta_a_mat_per=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nomb
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$_GET["id"]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 ORDER BY mat_id,bol_periodo
 ;");
 
@@ -154,10 +154,10 @@ $consulta_a_mat_indicadores=mysqli_query($conexion, "SELECT mat_nombre,mat_area,
 INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
-INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
 INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id
-INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
-WHERE car_curso=".$datos_usr["mat_grado"]."  and car_grupo=".$datos_usr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$_GET["id"]."' and act_periodo=".$condicion2." AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}
+WHERE car_curso=".$datos_usr["mat_grado"]."  and car_grupo=".$datos_usr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$_GET["id"]."' and act_periodo=".$condicion2." AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 group by act_id_tipo, act_id_carga
 order by mat_id,ipc_periodo,ind_id;");
 
