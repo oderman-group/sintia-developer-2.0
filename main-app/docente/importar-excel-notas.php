@@ -1,6 +1,7 @@
 <?php include("session.php");?>
 <?php include("verificar-carga.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 if($_FILES['planilla']['name']!=""){
 	$archivo = $_FILES['planilla']['name']; $destino = "../files/excel";
 	move_uploaded_file($_FILES['planilla']['tmp_name'], $destino ."/".$archivo);
@@ -38,16 +39,17 @@ $datosUpdate = '';
 $datosDelete = '';
 for ($i = 2; $i <= $data->sheets[0]['numRows']; $i++) {
 	if(trim($data->sheets[0]['cells'][$i][2])!="" and trim($data->sheets[0]['cells'][$i][4])!=""){
-		$consultaNumE=mysqli_query($conexion, "SELECT academico_calificaciones.cal_id_actividad, academico_calificaciones.cal_id_estudiante FROM academico_calificaciones WHERE academico_calificaciones.cal_id_actividad='".$_POST["idR"]."' AND academico_calificaciones.cal_id_estudiante='".$data->sheets[0]['cells'][$i][2]."'");
+		$consultaNumE=mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["idR"]."' AND cal_id_estudiante='".$data->sheets[0]['cells'][$i][2]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$numE = mysqli_num_rows($consultaNumE);
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");
 		if($numE==0){
+			$codigo=Utilidades::generateCode("CAL");
 			$accionBD = 1;
 			$datosDelete .="cal_id_estudiante='".$data->sheets[0]['cells'][$i][2]."' OR ";
-			$datosInsert .="('".$data->sheets[0]['cells'][$i][2]."','".$data->sheets[0]['cells'][$i][4]."','".$_POST["idR"]."', now(), 0, '".$data->sheets[0]['cells'][$i][5]."'),";
+			$datosInsert .="('".$codigo."', '".$data->sheets[0]['cells'][$i][2]."','".$data->sheets[0]['cells'][$i][4]."','".$_POST["idR"]."', now(), 0, '".$data->sheets[0]['cells'][$i][5]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 		}else{
-			mysqli_query($conexion, "UPDATE academico_calificaciones SET cal_nota='".$data->sheets[0]['cells'][$i][4]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad='".$_POST["idR"]."' AND cal_id_estudiante='".$data->sheets[0]['cells'][$i][2]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$data->sheets[0]['cells'][$i][4]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad='".$_POST["idR"]."' AND cal_id_estudiante='".$data->sheets[0]['cells'][$i][2]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
 		}
@@ -58,11 +60,11 @@ if($accionBD==1){
 	$datosInsert = substr($datosInsert,0,-1);
 	$datosDelete = substr($datosDelete,0,-4);
 		
-	mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["idR"]."' AND (".$datosDelete.")");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["idR"]."' AND (".$datosDelete.") AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");
 		
-	mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, cal_observaciones)VALUES ".$datosInsert."");
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, cal_observaciones, institucion, year)VALUES ".$datosInsert."");
 	$lineaError = __LINE__;
 	include("../compartido/reporte-errores.php");	
 }

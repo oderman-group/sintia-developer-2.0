@@ -121,7 +121,7 @@ th {
 														 $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
 														 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
 															//LAS CALIFICACIONES
-															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad=".$rA[0]);
+															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$rA[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 															
 															$arrayEnviar = [
@@ -132,21 +132,21 @@ th {
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
 
-															if(!empty($notasResultado) && $notasResultado[3]<$config[5]) $colorNota= $config[6]; elseif(!empty($notasResultado) && $notasResultado[3]>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
+															if(!empty($notasResultado) && $notasResultado['cal_nota']<$config[5]) $colorNota= $config[6]; elseif(!empty($notasResultado) && $notasResultado['cal_nota']>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
                         
 															$estiloNotaFinal="";
 															if(!empty($notasResultado) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){		
-																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[3]);
+																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['cal_nota']);
 																$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 															}
 														?>
 															<td style="text-align:center;">
-															<input size="5" maxlength="3" step="<?=$rA[0];?>" name="<?=$notasResultado[3]?>" id="<?=$resultado['mat_id'];?>" title="<?=$rA[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" step="<?=$rA[0];?>" name="<?=$notasResultado['cal_nota']?>" id="<?=$resultado['mat_id'];?>" title="<?=$rA[0];?>" value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
                         									<br><span id="CU<?=$resultado['mat_id'].$rA[0];?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
-															<?php if(!empty($notasResultado[3])){?>
+															<?php if(!empty($notasResultado['cal_nota'])){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
-																<?php if($notasResultado[3]<$config[5]){?>
-																	<br><br><input size="5" maxlength="3" id="<?=$resultado['mat_id'];?>" title="<?=$rA[0];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado[3];?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
+																<?php if($notasResultado['cal_nota']<$config[5]){?>
+																	<br><br><input size="5" maxlength="3" id="<?=$resultado['mat_id'];?>" title="<?=$rA[0];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado['cal_nota'];?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
 																<?php }?>
 															<?php }?>
 

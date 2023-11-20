@@ -82,10 +82,10 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	 
 	
 	//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
-	$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM academico_calificaciones
-	INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_registrada=1 AND act_periodo='".$periodo."' AND act_id_carga='".$carga."'
+	$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM ".BD_ACADEMICA.".academico_calificaciones aac
+	INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_estado=1 AND act_registrada=1 AND act_periodo='".$periodo."' AND act_id_carga='".$carga."'
 	INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=act_id_tipo AND ipc.ipc_carga='".$carga."' AND ipc.ipc_periodo='".$periodo."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-	WHERE cal_id_estudiante='".$resultado['mat_id']."'
+	WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 	GROUP BY act_id_tipo");
 	$sumaNotaIndicador = 0; 
 	while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){

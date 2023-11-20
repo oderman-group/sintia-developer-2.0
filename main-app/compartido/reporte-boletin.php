@@ -198,7 +198,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 <?php 
 		$ind ++;
 		$a = $_GET['id'];
-		$reg = mysqli_query($conexion, "SELECT * FROM academico_calificaciones, academico_actividades WHERE cal_id_actividad in(SELECT act_id FROM academico_actividades WHERE act_id_carga=".$fila[3]." and act_id_tipo=".$indicador[0]." and act_periodo=".$periodoActual.") and cal_id_estudiante=".$_GET['id']." and cal_id_actividad=act_id");
+		$reg = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones aac, academico_actividades WHERE aac.cal_id_actividad in(SELECT act_id FROM academico_actividades WHERE act_id_carga=".$fila[3]." and act_id_tipo=".$indicador[0]." and act_periodo=".$periodoActual.") and aac.cal_id_estudiante=".$_GET['id']." and aac.cal_id_actividad=act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 		$num = mysqli_num_rows($reg);
     	$contador = 0;
 		while ($nota = mysqli_fetch_array($reg, MYSQLI_BOTH)){ //While de notas
@@ -208,7 +208,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
            </tr> 
 <?php
 		  //Todo este codigo es para sacar el resultado de cada indicador
-		   $array[$contador] = $nota[1];
+		   $array[$contador] = $nota['cal_id'];
 		   $contador++;
 		} //End while notas 
 		if ($num>0)

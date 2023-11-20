@@ -107,7 +107,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 						INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
 						INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
-						INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
+						INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}
 						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila['mat_id']." and act_periodo=".$_REQUEST["per"]." AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 						group by act_id_tipo, act_id_carga
 						order by mat_id,ipc_periodo,ind_id;");

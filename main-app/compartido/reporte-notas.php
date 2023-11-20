@@ -50,7 +50,7 @@ include("../compartido/head-informes.php") ?>
   $consultaInd=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$resultado[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
 	if($resultado[6]==1) $estado = "REGISTRADA"; else $estado = "PENDIENTE";
-  $consultaNumCalificados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultado[0]."'");
+  $consultaNumCalificados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$numCalificados = mysqli_num_rows($consultaNumCalificados);
 	if($numEstudiantes!=$numCalificados) $bg = '#FCC'; else $bg = '#FFF';
   ?>

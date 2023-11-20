@@ -21,17 +21,17 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 	while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
 
-		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'"), MYSQLI_BOTH);
+		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 		
 
-		if(isset($nota[3])&&$nota[3]!=""){
+		if(isset($nota['cal_nota'])&&$nota['cal_nota']!=""){
 
 			$porNuevo = ($resultadoD[3] / 100);
 
 			$acumulaValor = ($acumulaValor + $porNuevo);
 
-			$notaMultiplicada = ($nota[3] * $porNuevo);
+			$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 
 			$sumaNota = ($sumaNota + $notaMultiplicada);
 

@@ -327,8 +327,8 @@
 													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
-														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
+														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 														$porNuevo = ($resultado[3] / 100);
 
@@ -337,10 +337,10 @@
 														$notaMultiplicada=0;
 														$nota3="";
 														$nota4="";
-														if(!empty($nota[3])){
-															$nota3=$nota[3];
-															$nota4=$nota[4];
-															$notaMultiplicada = ($nota[3] * $porNuevo);
+														if(!empty($nota['cal_nota'])){
+															$nota3=$nota['cal_nota'];
+															$nota4=$nota['cal_observaciones'];
+															$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
@@ -348,7 +348,7 @@
 
 														//COLOR DE CADA NOTA
 
-														if(!empty($nota[3]) && $nota[3]<$config[5]) $colorNota = $config[6];
+														if(!empty($nota['cal_nota']) && $nota['cal_nota']<$config[5]) $colorNota = $config[6];
 
 														else $colorNota = $config[7];
 

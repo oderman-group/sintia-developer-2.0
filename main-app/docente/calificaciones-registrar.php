@@ -294,10 +294,10 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 														 if($calificacion['act_registrada']==1){
 
 															 //Consulta de calificaciones si ya la tienen puestas.
-															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$idR."'");
+															$consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
-															 if(!empty($notas[3]) && $notas[3]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[3]) && $notas[3]>=$config[5]) $colorNota = $config[7];
+															 if(!empty($notas['cal_nota']) && $notas['cal_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['cal_nota']) && $notas['cal_nota']>=$config[5]) $colorNota = $config[7];
 
 														 }
 

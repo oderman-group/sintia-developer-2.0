@@ -134,9 +134,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 													$contReg = 1;
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-														$sumaNotas = mysqli_fetch_array(mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)), SUM(act_valor) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $resultado['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
-														WHERE cal_id_estudiante=" . $datosEstudianteActual['mat_id']), MYSQLI_BOTH);
+														$sumaNotas = mysqli_fetch_array(mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)), SUM(act_valor) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='" . $resultado['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
+														WHERE aac.cal_id_estudiante='" . $datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 														$notasResultado = 0;
 														if(!empty($sumaNotas[1])){
@@ -150,9 +150,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
-														$notaIndicador = mysqli_fetch_array(mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
-														WHERE cal_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+														$notaIndicador = mysqli_fetch_array(mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_estado=1 AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
+														WHERE aac.cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";
 														if(!empty($notas['rind_nota']) and $notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){

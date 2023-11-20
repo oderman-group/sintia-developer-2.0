@@ -127,9 +127,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
                         while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
                             //LAS CALIFICACIONES
-                            $consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM academico_calificaciones
-                            INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $rA['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
-                            WHERE cal_id_estudiante=" . $resultado['mat_id']);
+                            $consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+                            INNER JOIN academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='" . $rA['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
+                            WHERE aac.cal_id_estudiante='" . $resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
                             $sumaNotas = mysqli_fetch_array($consultaSumaNotas, MYSQLI_BOTH);
 
                             $notasResultado = round($sumaNotas[0] / ($rA['ipc_valor'] / 100), $config['conf_decimales_notas']);

@@ -122,7 +122,7 @@ include("../compartido/sintia-funciones-js.php");
 					$cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND act_periodo='" . $periodoConsultaActual . "'");
 					while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 						//LAS CALIFICACIONES
-						$consultaNotasResultados = mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=" . $resultado['mat_id'] . " AND cal_id_actividad=" . $rA[0]);
+						$consultaNotasResultados = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='" . $resultado['mat_id'] . "' AND cal_id_actividad='" . $rA[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 
 						$arrayEnviar = [
@@ -134,11 +134,11 @@ include("../compartido/sintia-funciones-js.php");
 						$objetoEnviar = htmlentities($arrayDatos);
 					?>
 						<td style="text-align:center;">
-							<input size="5" maxlength="3" name="<?= $notasResultado[3] ?>" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" value="<?php if (!empty($notasResultado[3])) { echo $notasResultado[3]; } ?>" alt="<?= $resultado['mat_nombres']; ?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if ($notasResultado[3] < $config[5] and $notasResultado[3] != "") echo $config[6]; elseif ($notasResultado[3] >= $config[5]) echo $config[7]; else echo "black"; ?>;" <?= $habilitado; ?>>
-							<?php if (!empty($notasResultado[3])) { ?>
+							<input size="5" maxlength="3" name="<?= $notasResultado['cal_nota'] ?>" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" value="<?php if (!empty($notasResultado['cal_nota'])) { echo $notasResultado['cal_nota']; } ?>" alt="<?= $resultado['mat_nombres']; ?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if ($notasResultado['cal_nota'] < $config[5] and $notasResultado['cal_nota'] != "") echo $config[6]; elseif ($notasResultado['cal_nota'] >= $config[5]) echo $config[7]; else echo "black"; ?>;" <?= $habilitado; ?>>
+							<?php if (!empty($notasResultado['cal_nota'])) { ?>
 								<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $notasResultado['cal_id']; ?>" name="calificaciones-nota-eliminar.php?id=<?= base64_encode($notasResultado['cal_id']); ?>" onClick="deseaEliminar(this)" <?= $deleteOculto; ?>><i class="fa fa-times"></i></a>
-								<?php if ($notasResultado[3] < $config[5]) { ?>
-									<br><br><input size="5" maxlength="3" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" alt="<?= $resultado['mat_nombres']; ?>" name="<?= $notasResultado[3]; ?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?= $habilitado; ?>>
+								<?php if ($notasResultado['cal_nota'] < $config[5]) { ?>
+									<br><br><input size="5" maxlength="3" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" alt="<?= $resultado['mat_nombres']; ?>" name="<?= $notasResultado['cal_nota']; ?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?= $habilitado; ?>>
 								<?php } ?>
 							<?php } ?>
 
