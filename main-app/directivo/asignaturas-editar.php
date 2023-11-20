@@ -63,7 +63,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                     <?php
                                     try{
-                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".base64_decode($_GET["id"]).";");
+                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }

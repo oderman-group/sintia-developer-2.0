@@ -46,7 +46,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
     $filtro .= " AND car_periodo='" . $_REQUEST["periodo"] . "'";
   }
   $consultaCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas
-  INNER JOIN academico_materias ON mat_id=car_materia 
+  INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} 
   INNER JOIN academico_grados ON gra_id=car_curso
   INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
   INNER JOIN usuarios ON uss_id=car_docente AND uss_tipo=2

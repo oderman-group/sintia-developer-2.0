@@ -202,10 +202,10 @@ if (!Modulos::validarPermisoEdicion()) {
 										//SACAMOS EL NUMERO DE CARGAS O MATERIASQUE TIENE UN CURSO PARAQUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-											$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+											$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga[4] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 										?>
-											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia[2]; ?></th>
+											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia['mat_nombre']; ?></th>
 										<?php
 										}
 										?>
@@ -256,7 +256,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 
-												$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+												$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga[4] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 												$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 												$p = 1;
@@ -290,7 +290,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																name="<?= $carga[0]; ?>" id="<?= $resultado['mat_id']; ?>" 
 																onChange="def(this)" 
 																alt="<?= $p; ?>" 
-																title="Materia: <?= $materia[2]; ?> - Periodo: <?= $p; ?>" 
+																title="Materia: <?= $materia['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
 																<?= $disabled; ?> 
 																<?= $disabledPermiso; ?>
 														/>

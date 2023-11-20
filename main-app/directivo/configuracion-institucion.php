@@ -205,8 +205,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <select class="form-control" name="secretarioI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");include("../compartido/error-catch-to-report.php");
-
+                                                    $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_secretaria_academica"]==$r["uss_id"]){
                                                     ?>

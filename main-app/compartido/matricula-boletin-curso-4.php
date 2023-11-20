@@ -131,7 +131,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM $BD.academico_cargas ac
 
-		INNER JOIN $BD.academico_materias am ON am.mat_id=ac.car_materia
+		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
 		INNER JOIN $BD.academico_areas ar ON ar.ar_id= am.mat_area
 
@@ -248,7 +248,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
 
-                $consulta_notdef_area = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre, ar_id FROM $BD.academico_materias am
+                $consulta_notdef_area = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre, ar_id FROM ".BD_ACADEMICA.".academico_materias am
 
 				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
@@ -256,13 +256,13 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
 				GROUP BY ar_id;");
 
                 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 
-                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma, ar_nombre, mat_nombre, mat_id, car_id, mat_valor FROM $BD.academico_materias am
+                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma, ar_nombre, mat_nombre, mat_id, car_id, mat_valor FROM ".BD_ACADEMICA.".academico_materias am
 
 				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
@@ -270,7 +270,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
 				GROUP BY mat_id
 
@@ -278,7 +278,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
 
-                $consulta_a_mat_per = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id, mat_valor FROM $BD.academico_materias am
+                $consulta_a_mat_per = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id, mat_valor FROM ".BD_ACADEMICA.".academico_materias am
 
 				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
@@ -286,7 +286,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
 
-				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ")
+				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
 				ORDER BY mat_id,bol_periodo
 
@@ -299,7 +299,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA
 
                 $consulta_a_mat_indicadores = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
-                ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM $BD.academico_materias am
+                ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
 
 				INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 
@@ -313,7 +313,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 
-				WHERE car_curso=" . $datosUsr["mat_grado"] . "  and car_grupo=" . $datosUsr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . "
+				WHERE car_curso=" . $datosUsr["mat_grado"] . "  and car_grupo=" . $datosUsr["mat_grupo"] . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos[0] . "' and act_periodo=" . $condicion2 . " AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
 				group by act_id_tipo, act_id_carga
 
@@ -331,9 +331,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 if ($numfilas_not_area > 0) {
 
-                    $consultaSumaValorMateria=mysqli_query($conexion, "SELECT SUM(mat_valor) FROM $BD.academico_materias
-                    INNER JOIN $BD.academico_cargas ON car_materia=mat_id AND car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'
-                    WHERE mat_area='".$resultado_not_area["ar_id"]."'");
+                    $consultaSumaValorMateria=mysqli_query($conexion, "SELECT SUM(mat_valor) FROM ".BD_ACADEMICA.".academico_materias am
+                    INNER JOIN $BD.academico_cargas ON car_materia=am.mat_id AND car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'
+                    WHERE am.mat_area='".$resultado_not_area["ar_id"]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}");
                     $sumaValorMaterias = mysqli_fetch_array($consultaSumaValorMateria, MYSQLI_BOTH); 
 
             ?>

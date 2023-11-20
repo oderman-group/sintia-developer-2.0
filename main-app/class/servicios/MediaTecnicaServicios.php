@@ -17,11 +17,11 @@ class MediaTecnicaServicios extends Servicios
 
     public static function listarMaterias($parametrosArray=null)
     {
-      global $baseDatosServicios;
+      global $baseDatosServicios, $config;
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
       INNER JOIN academico_matriculas ON matcur_id_matricula=mat_id
       INNER JOIN academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
-      INNER JOIN academico_materias ON academico_materias.mat_id=car_materia
+      INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
       INNER JOIN academico_grados ON gra_id=car_curso
 	    INNER JOIN usuarios ON uss_id=car_docente
       ";

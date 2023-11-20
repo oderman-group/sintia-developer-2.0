@@ -9,8 +9,10 @@ class CargaServicios
 
     public static function listar($parametrosArray=null)
     {
+        global $config;
+
         $sqlInicial = "SELECT * FROM academico_cargas 
-        INNER JOIN academico_materias ON mat_id=car_materia
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
         INNER JOIN academico_grados ON gra_id=car_curso
         INNER JOIN usuarios ON uss_id=car_docente";
          if($parametrosArray && count($parametrosArray)>0){

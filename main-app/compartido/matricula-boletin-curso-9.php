@@ -101,7 +101,7 @@ $contador_periodos=0;
 	
 	<?php
 	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
+	INNER JOIN ".BD_ACADEMICA.".academico_materias ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	WHERE car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."'");
 	$i=1;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){

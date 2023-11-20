@@ -37,7 +37,7 @@ if($num==0){
 		
 		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
-		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, academico_materias WHERE car_id='".$datosCargaActual[0]."' AND mat_id=car_materia");
+		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual[0]."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 
 		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable[1]);

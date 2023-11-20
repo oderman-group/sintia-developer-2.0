@@ -101,14 +101,14 @@ if(!Modulos::validarPermisoEdicion()){
                                                 <tbody>
                                                 <?php
                                                 try{
-                                                    $materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+                                                    $materias = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while($m = mysqli_fetch_array($materias, MYSQLI_BOTH)){
                                                 ?>
                                                 <tr id="data1" class="odd gradeX">
-                                                    <td><?=$m[2];?></td>
+                                                    <td><?=$m['mat_nombre'];?></td>
                                                     <?php
                                                     try{
                                                         $curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
@@ -117,7 +117,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     }
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
                                                         try{
-                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m['mat_id']."");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
@@ -132,7 +132,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         }
                                                         
                                                         try{
-                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m[0]."");
+                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m['mat_id']."");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
@@ -157,7 +157,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>
-                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=base64_decode($_GET["ind"]);?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m[2];?>" <?php if(!empty($ipc[0])){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
+                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=base64_decode($_GET["ind"]);?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m['mat_nombre'];?>" <?php if(!empty($ipc[0])){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
                                                     <?php
                                                     }
                                                     ?>

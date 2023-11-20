@@ -13,7 +13,7 @@ $consulta = mysqli_query($conexion, "SELECT car_id, uss_nombre, gra_nombre, gru_
 INNER JOIN usuarios ON uss_id=car_docente
 INNER JOIN academico_grados ON gra_id=car_curso
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-INNER JOIN academico_materias ON mat_id=car_materia
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 WHERE car_id=car_id $filtro
 GROUP BY car_id
 ORDER BY car_docente");

@@ -16,33 +16,40 @@ include("../compartido/historial-acciones-guardar.php");
         echo '<script type="text/javascript">window.location.href="asignaturas-agregar.php?error=ER_DT_4";</script>';
         exit();
     }
+    require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+    $codigo=Utilidades::generateCode("MAT");
 
     if(empty($_POST["siglasM"])) {$_POST["siglasM"] = substr($_POST["nombreM"], 0, 3);}
     if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
 	$codigoAsignatura = "ASG".strtotime("now");
 
     try{
-        mysqli_query($conexion, "INSERT INTO academico_materias(
+        mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_materias(
+            mat_id, 
             mat_codigo, 
             mat_nombre, 
             mat_siglas, 
             mat_area, 
             mat_oficial, 
-            mat_valor
+            mat_valor, 
+            institucion, 
+            year
         )
         VALUES (
+            '".$codigo."', 
             '".$codigoAsignatura."', 
             '".$_POST["nombreM"]."', 
             '".strtoupper($_POST["siglasM"])."', 
             '".$_POST["areaM"]."', 
             1, 
-            '".$_POST["porcenAsigna"]."'
+            '".$_POST["porcenAsigna"]."', 
+            {$config['conf_id_institucion']}, 
+            {$_SESSION["bd"]}
         )");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
-	$idRegistro=mysqli_insert_id($conexion);
     
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
+	echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_1&id='.base64_encode($codigo).'";</script>';
     exit();

@@ -51,7 +51,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 			while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 				
-				$nombresMat = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=" . $mat1[4]);
+				$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 
 				$consultaActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -60,7 +60,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					$activivdadesNum = 1;
 				}
 			?>
-				<td align="center" colspan="<?= $activivdadesNum; ?>"><?= strtoupper($Mat[3]); ?></td>
+				<td align="center" colspan="<?= $activivdadesNum; ?>"><?= strtoupper($Mat['mat_siglas']); ?></td>
 			<?php
 			}
 			?>
