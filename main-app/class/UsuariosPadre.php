@@ -174,7 +174,9 @@ class UsuariosPadre {
         global $conexion;
 
         try{
-            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id=uss_id {$filtroBusqueda}");
+            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios 
+            INNER JOIN ".BD_GENERAL.".general_perfiles ON pes_id=uss_tipo 
+            WHERE uss_id=uss_id {$filtroBusqueda}");
             return $consultaUsuario;
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
