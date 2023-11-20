@@ -17,7 +17,7 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 try{
-	$consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor)+" . $_POST["valor"] . " FROM academico_indicadores where ind_obligatorio=1 AND ind_id!='" . $_POST["idI"] . "'");
+	$consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor)+" . $_POST["valor"] . " FROM ".BD_ACADEMICA.".academico_indicadores where ind_obligatorio=1 AND ind_id!='" . $_POST["idI"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
@@ -28,7 +28,7 @@ try{
 	}
 
 try{
-	mysqli_query($conexion, "UPDATE academico_indicadores SET ind_nombre='" . $_POST["nombre"] . "', ind_valor='" . $_POST["valor"] . "' WHERE ind_id='" . $_POST["idI"] . "'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores SET ind_nombre='" . $_POST["nombre"] . "', ind_valor='" . $_POST["valor"] . "' WHERE ind_id='" . $_POST["idI"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

@@ -178,7 +178,7 @@ $consultaMatIndicadores=mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_
 INNER JOIN $BD.academico_areas a ON a.ar_id=am.mat_area
 INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
-INNER JOIN $BD.academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
 INNER JOIN $BD.academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id
 INNER JOIN $BD.academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
 WHERE car_curso=".$datosUsr["mat_grado"]."  and car_grupo=".$datosUsr["mat_grupo"]." and mat_area=".$fila["ar_id"]." AND ipc_periodo in (".$condicion.") AND cal_id_estudiante='".$matriculadosDatos[0]."' and act_periodo=".$condicion2." AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}

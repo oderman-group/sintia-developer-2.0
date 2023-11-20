@@ -352,9 +352,9 @@
 
 														else $colorNota = $config[7];
 
-														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores 
-															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-															WHERE ind_id='".$resultado['act_id_tipo']."'
+														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai 
+															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+															WHERE ai.ind_id='".$resultado['act_id_tipo']."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 															"), MYSQLI_BOTH); 
 
 															$notaFinal=$nota3;

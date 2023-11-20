@@ -99,12 +99,12 @@ if(
 											
 											<?php 
 											if($datosCargaActual['car_indicador_automatico']==1){
-												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_definitivo=1");
+												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
 												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador AND ind_definitivo=1
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.ind_definitivo=1 AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
@@ -124,7 +124,7 @@ if(
                                             <div class="col-sm-10">
 												<?php
 												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>

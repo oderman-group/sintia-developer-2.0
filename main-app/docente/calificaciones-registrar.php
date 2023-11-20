@@ -13,7 +13,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 $consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-INNER JOIN academico_indicadores ON ind_id=act_id_tipo
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 WHERE act_id='".$idR."' AND act_estado=1");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>

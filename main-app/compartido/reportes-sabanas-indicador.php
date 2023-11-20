@@ -71,7 +71,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 			while ($car = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 				$activivdades = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc.
-				INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+				INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 				WHERE ipc.ipc_carga='" . $car['car_id'] . "' AND ipc.ipc_periodo='" . $per . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 				$activivdadesNum = mysqli_num_rows($activivdades);

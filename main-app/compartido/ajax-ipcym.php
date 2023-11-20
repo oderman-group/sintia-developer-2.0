@@ -2,7 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_POST["indicador"]."'");
+$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$_POST["indicador"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $indicadorObg = mysqli_fetch_array($consultaIndicadorObg, MYSQLI_BOTH);
 
 $consultaCargasEjemplo=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."'");

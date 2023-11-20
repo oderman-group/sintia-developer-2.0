@@ -10,7 +10,7 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
     $disabled = 'disabled';
 }
 
-$consultaTematica=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_carga='".$cargaConsultaActual."' AND ind_periodo='".$periodoConsultaActual."' AND ind_tematica=1");
+$consultaTematica=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_carga='".$cargaConsultaActual."' AND ind_periodo='".$periodoConsultaActual."' AND ind_tematica=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $tematica = mysqli_fetch_array($consultaTematica, MYSQLI_BOTH);
 ?>
 </head>

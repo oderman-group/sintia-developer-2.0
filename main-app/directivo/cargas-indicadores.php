@@ -142,7 +142,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc.ipc_periodo='".$periodoConsultaActual."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-														INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+														INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 														WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]} $filtro
 														ORDER BY ipc.ipc_periodo");
 													} catch (Exception $e) {

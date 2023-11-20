@@ -95,7 +95,7 @@ $porcentajeRestante = 100 - $valores[0];
 			<tbody>
 				<?php
 					$consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-					INNER JOIN academico_indicadores ON ind_id=act_id_tipo
+					INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 					WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1
 					");
 					$contReg = 1;
@@ -107,12 +107,12 @@ $porcentajeRestante = 100 - $valores[0];
 						$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM academico_calificaciones
 						INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
 						INNER JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_id=cal_id_estudiante AND mat_id=matcur_id_matricula
-						WHERE cal_id_actividad='".$resultado[0]."'
+						WHERE cal_id_actividad='".$resultado['act_id']."'
 						");
 					} else {
 						$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM academico_calificaciones
 						INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=cal_id_estudiante
-						WHERE cal_id_actividad='".$resultado[0]."'
+						WHERE cal_id_actividad='".$resultado['act_id']."'
 						");
 					}
 					$numerosEstudiantes = mysqli_fetch_array($consultaNumEstudiante, MYSQLI_BOTH);

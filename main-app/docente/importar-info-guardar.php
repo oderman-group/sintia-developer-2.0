@@ -29,7 +29,7 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 	//Consultamos los indicadores a importar
 	try{
 		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-		INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+		INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 		WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -42,12 +42,12 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 		//Si el indicador NO es de los obligatorios lo REcreamos.
 		if($indImpDatos['ind_obligatorio']==0){
+			$idRegInd=Utilidades::generateCode("IND");
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_indicadores(ind_nombre, ind_periodo, ind_carga, ind_publico)VALUES('".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."')");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_periodo, ind_carga, ind_publico, institucion, year)VALUES('".$idRegInd."', '".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
-			$idRegInd = mysqli_insert_id($conexion);
 		}
 
 		$copiado = 0;
@@ -87,7 +87,7 @@ if(!empty($_POST["calificaciones"])){
 	//Consultamos los indicadores a importar
 	try{
 		$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-		INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+		INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 		WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
@@ -99,12 +99,12 @@ if(!empty($_POST["calificaciones"])){
 
 		//Si el indicador NO es de los obligatorios lo REcreamos.
 		if($indImpDatos['ind_obligatorio']==0){
+			$idRegInd=Utilidades::generateCode("IND");
 			try{
-				mysqli_query($conexion, "INSERT INTO academico_indicadores(ind_nombre, ind_periodo, ind_carga, ind_publico)VALUES('".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."')");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_periodo, ind_carga, ind_publico, institucion, year)VALUES('".$idRegInd."', '".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
-			$idRegInd = mysqli_insert_id($conexion);
 		}
 
 		$copiado = 0;

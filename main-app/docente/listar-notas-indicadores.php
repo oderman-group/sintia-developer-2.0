@@ -48,7 +48,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
                     <?php
 
                     $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-                    INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
                     WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
                     while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
@@ -121,7 +121,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
                         <?php
 
                         $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-                        INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+                        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
                         WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
                         while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {

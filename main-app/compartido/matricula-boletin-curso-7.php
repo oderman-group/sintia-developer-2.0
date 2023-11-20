@@ -278,7 +278,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	INNER JOIN $BD.usuarios ON uss_id=car_docente
-	INNER JOIN $BD.academico_indicadores ON ind_carga=car_id AND ind_periodo='".$_GET['periodo']."' AND ind_tematica=1
+	INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_carga=car_id AND ai.ind_periodo='".$_GET['periodo']."' AND ai.ind_tematica=1 AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 	?>
