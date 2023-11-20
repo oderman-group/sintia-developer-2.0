@@ -291,13 +291,13 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		//De los primeros tipos: 1, 2 y 3
 		if($cDat['corr_tipo']==1 or $cDat['corr_tipo']==2 or $cDat['corr_tipo']==3){
 			
-			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_actividades 
-			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=act_id_carga
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_actividades ac 
+			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=ac.act_id_carga
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE act_id='".$cDat["corr_actividad"]."'");
+			WHERE ac.act_id='".$cDat["corr_actividad"]."' AND ac.institucion={$config['conf_id_institucion']} AND ac.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
 			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");

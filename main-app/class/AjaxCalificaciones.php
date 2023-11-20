@@ -43,7 +43,7 @@ class AjaxCalificaciones {
             }
             
             try{
-                mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id={$codNota}");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id={$codNota} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -58,7 +58,7 @@ class AjaxCalificaciones {
             }
             
             try{
-                mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1 WHERE act_id={$codNota}");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id={$codNota} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -106,7 +106,7 @@ class AjaxCalificaciones {
             }
             
             try{
-                mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$codObservacion."'");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$codObservacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -119,7 +119,7 @@ class AjaxCalificaciones {
             }
             
             try{
-                mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1 WHERE act_id='".$codObservacion."'");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='".$codObservacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -210,7 +210,7 @@ class AjaxCalificaciones {
         }
         
         try{
-            mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$codNota."'");
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$codNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }

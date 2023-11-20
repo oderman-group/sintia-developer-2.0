@@ -214,7 +214,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		");
 		while($ind = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 			$consultaCalificacionesIndicadores=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-			INNER JOIN $BD.academico_actividades ON act_id=aac.cal_id_actividad AND act_id_tipo='".$ind['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$periodoActual."' AND act_estado=1
+			INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='".$ind['ipc_indicador']."' AND aa.act_id_carga='".$datosCargas['car_id']."' AND aa.act_periodo='".$periodoActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
 			WHERE aac.cal_id_estudiante='".$datosUsr['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}");
 			$calificacionesIndicadores = mysqli_fetch_array($consultaCalificacionesIndicadores, MYSQLI_BOTH);
 		?>

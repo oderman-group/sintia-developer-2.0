@@ -7,6 +7,8 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$codigoACT=Utilidades::generateCode("ACT");
 
 try{
 	$consultaIndicadoresDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
@@ -18,10 +20,10 @@ $indicadoresDatos = mysqli_fetch_array($consultaIndicadoresDatos, MYSQLI_BOTH);
 
 try{
 	$consultaValores=mysqli_query($conexion, "SELECT
-	(SELECT sum(act_valor) FROM academico_actividades 
-	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id_tipo='".$_POST["indicador"]."' AND act_estado=1),
-	(SELECT count(*) FROM academico_actividades 
-	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)");
+	(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id_tipo='".$_POST["indicador"]."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+	(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+	WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
@@ -44,14 +46,14 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	if($datosCargaActual['car_configuracion']==0){
 		//Insertamos la calificación
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividades(act_descripcion, act_fecha, act_periodo, act_id_tipo, act_id_carga, act_estado, act_compartir, act_fecha_creacion, act_id_evidencia)"." VALUES('".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$fecha."', '".$periodoConsultaActual."','".$_POST["indicador"]."','".$cargaConsultaActual."', 1, '".$infoCompartir."', now(),'".$_POST["evidencia"]."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_periodo, act_id_tipo, act_id_carga, act_estado, act_compartir, act_fecha_creacion, act_id_evidencia, institucion, year)"." VALUES('".$codigoACT."', '".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$fecha."', '".$periodoConsultaActual."','".$_POST["indicador"]."','".$cargaConsultaActual."', 1, '".$infoCompartir."', now(),'".$_POST["evidencia"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
 
 		//Actualizamos el valor de todas las actividades del indicador
 		try{
-			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1");
+			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -61,7 +63,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		if($actividadesNum>0){
 			$valorIgualActividad = ($indicadoresDatos['ipc_valor']/$actividadesNum);
 			try{
-				mysqli_query($conexion, "UPDATE academico_actividades SET act_valor='".$valorIgualActividad."' WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1");
+				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor='".$valorIgualActividad."' WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
@@ -80,7 +82,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 
 		//Insertamos la calificación
 		try{
-			mysqli_query($conexion, "INSERT INTO academico_actividades(act_descripcion, act_fecha, act_periodo, act_id_tipo, act_id_carga, act_estado, act_compartir, act_valor, act_fecha_creacion)"." VALUES('".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$fecha."', '".$periodoConsultaActual."','".$_POST["indicador"]."','".$cargaConsultaActual."', 1, '".$infoCompartir."', '".$_POST["valor"]."', now())");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_periodo, act_id_tipo, act_id_carga, act_estado, act_compartir, act_valor, act_fecha_creacion, institucion, year)"." VALUES('".$codigoACT."', '".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$fecha."', '".$periodoConsultaActual."','".$_POST["indicador"]."','".$cargaConsultaActual."', 1, '".$infoCompartir."', '".$_POST["valor"]."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -89,8 +91,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 //Si escoge del banco de datos
 else{
 }
-$idRegistro=mysqli_insert_id($conexion);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="calificaciones.php?success=SC_DT_1&id='.base64_encode($idRegistro).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
+echo '<script type="text/javascript">window.location.href="calificaciones.php?success=SC_DT_1&id='.base64_encode($codigoACT).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 exit();

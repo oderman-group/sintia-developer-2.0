@@ -310,11 +310,11 @@
 
 													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".base64_decode($_GET["indicador"])."'";}
 
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
 
 													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'
 
-													 AND act_registrada=1 AND act_estado=1 $filtro
+													 AND act_registrada=1 AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 
 													 ");
 
@@ -328,9 +328,9 @@
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
-														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-														$porNuevo = ($resultado[3] / 100);
+														$porNuevo = ($resultado['act_valor'] / 100);
 
 														$acumulaValor = ($acumulaValor + $porNuevo);
 
@@ -344,7 +344,7 @@
 														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
-														$porcentajeActualActividad +=$resultado[3];
+														$porcentajeActualActividad +=$resultado['act_valor'];
 
 														//COLOR DE CADA NOTA
 
@@ -371,16 +371,16 @@
 
                                                         <td><?=$contReg;?></td>
 
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['act_id'];?></td>
 
 														<td>
-															<?=$resultado[1];?><br>
+															<?=$resultado['act_descripcion'];?><br>
 															<span style="font-size: 10px; color: blue;"><b>INDICADOR:</b> <?=$indicadorName['ind_nombre']." (".$indicadorName['ipc_valor']."%)";?></span>
 														</td>
 
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['act_fecha'];?></td>
 
-														<td><?=$resultado[3];?>%</td>
+														<td><?=$resultado['act_valor'];?>%</td>
 
 														<td style="color:<?=$colorNota;?>"><?=$notaFinal;?></td>
 

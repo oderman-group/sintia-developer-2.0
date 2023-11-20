@@ -138,8 +138,8 @@ if($datosCargaActual['car_configuracion']==0){
 	//Actualizamos todas las actividades por cada indicador
 	while($indicadoresDatos = mysqli_fetch_array($indicadoresConsultaActualizado, MYSQLI_BOTH)){
 		try{
-			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-			WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1");
+			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
+			WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -149,8 +149,8 @@ if($datosCargaActual['car_configuracion']==0){
 			$valorIgualActividad = ($indicadoresDatos['ipc_valor']/$actividadesNum);
 
 			try{
-				mysqli_query($conexion, "UPDATE academico_actividades SET act_valor='".$valorIgualActividad."' 
-				WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1");
+				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor='".$valorIgualActividad."' 
+				WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}

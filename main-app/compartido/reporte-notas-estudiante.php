@@ -26,11 +26,11 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                         <th>Observaciones</th>
                                       </tr>
                                      <?php
-									 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$_GET["periodo"]."'");
+									 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$_GET["carga"]."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$_GET["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                    $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$_GET["estudiante"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                    $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$_GET["estudiante"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									 	$nota = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-										$porNuevo = ($resultado[3] / 100);
+										$porNuevo = ($resultado['act_valor'] / 100);
 										$acumulaValor = ($acumulaValor + $porNuevo);
 										$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 										$sumaNota = ($sumaNota + $notaMultiplicada);
@@ -41,10 +41,10 @@ include("../../config-general/consulta-usuario-actual.php");?>
 											$colorNota = $config[7];	
 									 ?>
                                       <tr>
-                                        <td><?=$resultado[0];?></td>
-                                        <td><?=$resultado[1];?></td>
-                                        <td><?=$resultado[2];?></td>
-                                        <td><?=$resultado[3];?></td>
+                                        <td><?=$resultado['act_id'];?></td>
+                                        <td><?=$resultado['act_descripcion'];?></td>
+                                        <td><?=$resultado['act_fecha'];?></td>
+                                        <td><?=$resultado['act_valor'];?></td>
                                         <td style="color:<?=$colorNota;?>"><?=$nota['cal_nota'];?></td>
                                         <td><?=$nota['cal_observaciones'];?></td>
                                       </tr>

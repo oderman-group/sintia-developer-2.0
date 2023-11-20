@@ -156,15 +156,15 @@ $idE="";
 												<label class="col-sm-2 control-label">Actividades</label>
 												<div class="col-sm-10">
 													<?php
-													$actividadesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-													WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND (act_registrada=0 OR act_registrada IS NULL)");
+													$actividadesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades
+													WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (act_registrada=0 OR act_registrada IS NULL)");
 													?>
 													<select class="form-control  select2" name="actividad" required>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($actividadesDatos = mysqli_fetch_array($actividadesConsulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$actividadesDatos[0];?>"><?=$actividadesDatos['act_descripcion']." (".$actividadesDatos['act_valor']."%)"?></option>
+															<option value="<?=$actividadesDatos['act_id'];?>"><?=$actividadesDatos['act_descripcion']." (".$actividadesDatos['act_valor']."%)"?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -250,7 +250,7 @@ $idE="";
 															
 															 //Solo actuliza una vez que la actividad fue registrada.
 															 if($registroNotas<1){
-																mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."'");
+																mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																
 															}
 															 

@@ -8,7 +8,7 @@ if($periodoConsultaActual!=$datosCargaActual['car_periodo'] and $datosCargaActua
 $URL = 'calificaciones-registrar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['act_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
@@ -19,7 +19,7 @@ if($existeURL != false){
 $URL = 'calificaciones-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatosHistoricos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$datosHistoricos = mysqli_fetch_array($consultaDatosHistoricos, MYSQLI_BOTH);
 	if($datosHistoricos['act_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';

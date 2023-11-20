@@ -261,7 +261,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'SC_GN_4':
                 $tipo = 'success';
-                $mensaje = 'La plan de clase fue registrado correctamente';
+                $mensaje = 'El plan de clase fue registrado correctamente';
             break;
             
             case 'SC_GN_5':

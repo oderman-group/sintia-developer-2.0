@@ -69,7 +69,7 @@ if($accionBD==1){
 	include("../compartido/reporte-errores.php");	
 }
 
-mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["idR"]."'");
+mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $lineaError = __LINE__;
 include("../compartido/reporte-errores.php");
 

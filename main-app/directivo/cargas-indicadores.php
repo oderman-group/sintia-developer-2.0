@@ -153,7 +153,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 $sumaPorcentaje = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
+															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
