@@ -2,7 +2,7 @@
 include("session.php");
 try{
     $consultaCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas
-    INNER JOIN academico_materias ON mat_id=car_materia
+    INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
     INNER JOIN usuarios ON uss_id=car_docente
     WHERE car_curso='".$_POST["grado"]."' AND car_grupo='".$_POST["grupo"]."'
     ORDER BY car_id");

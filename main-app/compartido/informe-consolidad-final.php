@@ -7,7 +7,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
-$year = $agnoBD;
+$year = $_SESSION["bd"];
 $BD   = $_SESSION["inst"]."_".$agnoBD;
 $bdConsulta = "";
 if(!empty($_REQUEST["agno"])){
@@ -59,10 +59,10 @@ include("../compartido/head-informes.php") ?>
 										//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_materias WHERE mat_id='".$carga[4]."'");
+											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 										?>
-                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(!empty($materia[2])){echo $materia['mat_nombre'];}?></th>
+                                        	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(!empty($materia['mat_nombre'])){echo $materia['mat_nombre'];}?></th>
                                         <?php
 										}
 										?>
@@ -100,7 +100,7 @@ include("../compartido/head-informes.php") ?>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1"); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_materias WHERE mat_id='".$carga[4]."'");
+											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 											$p = 1;
                                             $porcPeriodo = array("",0.25,0.15,0.35,0.25);

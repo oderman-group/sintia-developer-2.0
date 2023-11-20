@@ -51,7 +51,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
                                     <tbody>
                                     <?php
 									$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-									INNER JOIN academico_materias ON mat_id=car_materia
+									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 									INNER JOIN academico_grados ON gra_id=car_curso
 									INNER JOIN usuarios ON uss_id=car_docente
 									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'){$filtroOR}");

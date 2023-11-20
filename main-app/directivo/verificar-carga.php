@@ -43,7 +43,7 @@ if($cargaHconsulta['car_primer_acceso_docente']==""){
 //A los directivos no se les consulta el docente ni tampoco el estado de la carga (Activa o Inactiva)
 try{
 	$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-	INNER JOIN academico_materias ON mat_id=car_materia
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 	INNER JOIN academico_grados ON gra_id=car_curso
 	INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 	WHERE car_id='".$cargaConsultaActual."'");

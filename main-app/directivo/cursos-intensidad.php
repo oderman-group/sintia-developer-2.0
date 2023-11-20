@@ -113,14 +113,14 @@ if(!Modulos::validarPermisoEdicion()){
 												<tbody>
 													<?php
 													try{
-														$materias = mysqli_query($conexion, "SELECT * FROM academico_materias");
+														$materias = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
 													while($m = mysqli_fetch_array($materias, MYSQLI_BOTH)){
 													?>
 													<tr id="data1">
-														<td><?=$m[2];?></td>
+														<td><?=$m['mat_nombre'];?></td>
 														<?php
 														try{
 															$curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
@@ -129,13 +129,13 @@ if(!Modulos::validarPermisoEdicion()){
 														}
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
 															try{
-																$consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$c[0]."' AND ipc_materia='".$m[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$c[0]."' AND ipc_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
 															$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH); 
 														?>
-															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m[0];?>" onChange="ipc(this)" title="<?=$c[2];?>" <?=$disabledPermiso;?>></td>
+															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c[0];?>" name="<?=$m['mat_id'];?>" onChange="ipc(this)" title="<?=$c[2];?>" <?=$disabledPermiso;?>></td>
 														<?php
 														}
 														?>

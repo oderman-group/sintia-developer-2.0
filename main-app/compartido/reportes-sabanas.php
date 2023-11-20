@@ -49,11 +49,11 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		WHERE car_curso=".$_REQUEST["curso"]." 
 		AND car_grupo='".$_REQUEST["grupo"]."'");
 		while($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat = mysqli_query($conexion, "SELECT * FROM $BD.academico_materias 
-			WHERE mat_id=".$mat1[4]);
+			$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias 
+			WHERE mat_id='".$mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
-        	<td align="center"><?=$Mat[3];?></td>      
+        	<td align="center"><?=$Mat['mat_siglas'];?></td>      
   		<?php
 			$numero++;
 		}
@@ -101,14 +101,14 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					}else{
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
 						$consultaNotaMateriaIndicadoresxPeriodo = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
-						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM academico_materias am
+						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
 						INNER JOIN academico_areas a ON a.ar_id=am.mat_area
 						INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}
+						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 						INNER JOIN academico_indicadores ai ON aic.ipc_indicador=ai.ind_id
 						INNER JOIN academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1
 						INNER JOIN academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id
-						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila['mat_id']." and act_periodo=".$_REQUEST["per"]."
+						WHERE car_curso=".$_REQUEST["curso"]."  and car_grupo=".$_REQUEST["grupo"]." and mat_id=".$mat1['car_materia']."  AND ipc_periodo=".$_REQUEST["per"]." AND cal_id_estudiante=".$fila['mat_id']." and act_periodo=".$_REQUEST["per"]." AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 						group by act_id_tipo, act_id_carga
 						order by mat_id,ipc_periodo,ind_id;");
 

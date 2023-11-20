@@ -116,7 +116,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     <?php
 	$contador=1;
 	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 		if($contador%2==1){$fondoFila = '#EAEAEA';}else{$fondoFila = '#FFF';}
@@ -276,7 +276,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     
     <?php
 	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	INNER JOIN $BD.usuarios ON uss_id=car_docente
 	INNER JOIN $BD.academico_indicadores ON ind_carga=car_id AND ind_periodo='".$_GET['periodo']."' AND ind_tematica=1
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");

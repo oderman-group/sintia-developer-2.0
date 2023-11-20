@@ -126,7 +126,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <label class="col-sm-2 control-label">Carga Acad&eacute;mica</label> 
                                           	<?php 
                                             try{
-                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas, academico_materias WHERE car_curso='".$e[6]."' AND car_grupo='".$e[7]."' AND mat_id=car_materia");
+                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas, ".BD_ACADEMICA.".academico_materias am WHERE car_curso='".$e[6]."' AND car_grupo='".$e[7]."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }

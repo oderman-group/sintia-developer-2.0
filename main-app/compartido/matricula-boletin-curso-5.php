@@ -143,17 +143,17 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	//AREAS
 	$contador=1;
 	$areas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
-	INNER JOIN $BD.academico_areas ON ar_id=mat_area
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+	INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
-	GROUP BY mat_area
+	GROUP BY am.mat_area
 	");
 	
 	while($area = mysqli_fetch_array($areas, MYSQLI_BOTH)){
 		//OBTENER EL PROMEDIO POR AREA
 		$asignaturas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-		INNER JOIN $BD.academico_materias ON mat_id=car_materia AND mat_area='".$area['ar_id']."'
-		INNER JOIN $BD.academico_areas ON ar_id=mat_area
+		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+		INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
 		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 		$a = 0;
 		$promedioArea = 0;
@@ -186,8 +186,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	<?php 
 	//ASIGNATURAS
 	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia AND mat_area='".$area['ar_id']."'
-	INNER JOIN $BD.academico_areas ON ar_id=mat_area
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+	INNER JOIN $BD.academico_areas ON ar_id=am.mat_area
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 

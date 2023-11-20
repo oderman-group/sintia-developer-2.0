@@ -191,13 +191,13 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 											try {
-												$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+												$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga[4] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}
 											$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 										?>
-											<th style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;" colspan="3" width="5%"><?= $materia[2]; ?></th>
+											<th style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;" colspan="3" width="5%"><?= $materia['mat_nombre']; ?></th>
 										<?php
 										}
 										?>
@@ -241,7 +241,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 											}
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 												try {
-													$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+													$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga[4] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

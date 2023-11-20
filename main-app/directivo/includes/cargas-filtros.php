@@ -130,7 +130,7 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$docentes = mysqli_query($conexion, "SELECT * FROM academico_materias
+												$docentes = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												ORDER BY mat_nombre
 												");
 											} catch (Exception $e) {

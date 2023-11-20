@@ -182,7 +182,7 @@ $mensaje="";
 	
 		mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
 		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_cargas ac
-		INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
+		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 		WHERE  car_id='".$carga."'"));
 		$respuesta ="
 		<h4>Resumen del proceso:</h4>

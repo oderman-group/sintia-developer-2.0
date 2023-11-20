@@ -127,13 +127,13 @@ if(!Modulos::validarPermisoEdicion()){
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 													?>
-														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia[2];?></th>
+														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia['mat_nombre'];?></th>
 													<?php
 													}
 													?>
@@ -190,7 +190,7 @@ if(!Modulos::validarPermisoEdicion()){
 													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -219,7 +219,7 @@ if(!Modulos::validarPermisoEdicion()){
 															}
 														?>	
 															<td style="text-align:center;">
-																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
+																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia['mat_nombre'];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
 															</td>
 														<?php
 															$p++;
