@@ -97,12 +97,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['gra_id'];?></td>
 														<td><?=$resultado['gra_nombre'];?></td>
-														<td><?=$resultado[3];?></td>
-														<td>$<?=number_format($resultado[4]);?></td>
-														<td>$<?=number_format($resultado[5]);?></td>														
-														<td><?=$resultado[11];?></td>
+														<td><?=$resultado['gra_formato_boletin'];?></td>
+														<td>$<?=number_format($resultado['gra_valor_matricula']);?></td>
+														<td>$<?=number_format($resultado['gra_valor_pension']);?></td>														
+														<td><?=$resultado['gra_periodos'];?></td>
 														<?php if(array_key_exists(10,$arregloModulos) ){?>
 															<td><?=strtoupper($resultado['gra_tipo']);?></td>
 														<?php }?>
@@ -114,14 +114,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<li><a href="cursos-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas eliminar este curso?','question','cursos-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
-																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=base64_encode($resultado[0]);?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
+																		<li><a href="cursos-editar.php?id=<?=base64_encode($resultado['gra_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas eliminar este curso?','question','cursos-eliminar.php?id=<?=base64_encode($resultado['gra_id']);?>')">Eliminar</a></li>
+																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
 																	<?php }?>
-																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado[3];?>.php?curso=<?=base64_encode($resultado[0]);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
-																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($resultado[0]);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
-																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=base64_encode($resultado[0]);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
-																	<li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=base64_encode($resultado[0]);?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
+																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
+																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
+																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
+																	<li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
 																  </ul>
 															  </div>
 														</td>

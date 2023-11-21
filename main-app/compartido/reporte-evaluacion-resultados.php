@@ -6,7 +6,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 $consultaDatosGenerales=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_evaluacion_asignar 
 INNER JOIN ".$baseDatosServicios.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion='".$config['conf_id_institucion']."' AND evag_year='".$_SESSION["bd"]."'
 INNER JOIN usuarios ON uss_id=epag_usuario
-INNER JOIN academico_grados ON gra_id=epag_curso
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=epag_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=epag_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 WHERE epag_id='".$_GET["a"]."'");
 $datosGenerales = mysqli_fetch_array($consultaDatosGenerales, MYSQLI_BOTH);

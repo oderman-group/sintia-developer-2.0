@@ -2,7 +2,7 @@
     include("session.php");
     require_once("../class/Estudiantes.php");
     
-    $year=$agnoBD;
+    $year=$_SESSION["bd"];
     if(isset($_POST["year"])){
     $year=$_POST["year"];
     }
@@ -20,14 +20,14 @@
     $consulta="";
     if(isset($_POST["curso"]) AND $_POST["curso"]!=""){
         try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM $BD.academico_grados WHERE gra_id='".$_POST["curso"]."' ");
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='".$_POST["curso"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
     }
 
     if(isset($_POST["estudiante"]) AND $_POST["estudiante"]!=""){
-    $consulta =Estudiantes::obtenerDatosEstudiantesParaBoletin($_POST["estudiante"],$BD);
+    $consulta =Estudiantes::obtenerDatosEstudiantesParaBoletin($_POST["estudiante"],$BD,$year);
     }
 
     $boletin = mysqli_fetch_array($consulta, MYSQLI_BOTH);

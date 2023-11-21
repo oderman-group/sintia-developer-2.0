@@ -63,13 +63,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <option value=""></option>
                                                 <?php 
                                                 try{
-                                                    $c=mysqli_query($conexion, "SELECT * FROM academico_grados");
+                                                    $c=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while($r=mysqli_fetch_array($c, MYSQLI_BOTH)){
                                                 ?>
-                                                    <option value="<?php echo $r[0]; ?>"><?php echo $r[2];?></option>
+                                                    <option value="<?php echo $r['gra_id']; ?>"><?php echo $r['gra_nombre'];?></option>
                                                 <?php 
                                                 }
                                                 ?>

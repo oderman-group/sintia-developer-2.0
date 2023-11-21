@@ -24,7 +24,7 @@ if(!empty($_REQUEST["tipoEstudiantes"]) && $_REQUEST["tipoEstudiantes"]!=0){$fil
 
 try {
 	$consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-	INNER JOIN ".$BD.".academico_grados ON gra_id=mat_grado
+	INNER JOIN ".BD_ACADEMICA.".academico_grados ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
 	WHERE mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro
 	ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres");
 } catch (Exception $e) {

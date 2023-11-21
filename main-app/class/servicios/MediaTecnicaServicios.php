@@ -22,7 +22,7 @@ class MediaTecnicaServicios extends Servicios
       INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
       INNER JOIN academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
       INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-      INNER JOIN academico_grados ON gra_id=car_curso
+      INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 	    INNER JOIN usuarios ON uss_id=car_docente
       ";
       if($parametrosArray && count($parametrosArray)>0){
@@ -45,7 +45,7 @@ class MediaTecnicaServicios extends Servicios
       
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
       LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-			LEFT JOIN ".$BD."academico_grados ON gra_id=matcur_id_curso
+			LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
       LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
 			LEFT JOIN ".$BD."usuarios ON uss_id=mat.mat_id_usuario
       LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero			
@@ -174,7 +174,7 @@ class MediaTecnicaServicios extends Servicios
             FROM $baseDatosServicios.mediatecnica_matriculas_cursos mt 
             INNER JOIN ".BD_ACADEMICA.".academico_matriculas am ON mt.matcur_id_matricula=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
             INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON mt.matcur_id_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
-            INNER JOIN academico_grados agr ON agr.gra_id=mt.matcur_id_curso
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=mt.matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
             INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
             INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion

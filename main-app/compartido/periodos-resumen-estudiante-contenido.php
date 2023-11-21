@@ -112,7 +112,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, academico_grados, usuarios WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, usuarios WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 													?>
                                                     

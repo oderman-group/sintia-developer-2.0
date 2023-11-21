@@ -5,7 +5,7 @@ require_once("../class/Usuarios.php");
 
 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
 LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario 
-INNER JOIN academico_grados ON gra_id=mat.mat_grado 
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} 
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 WHERE mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres");

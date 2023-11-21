@@ -126,8 +126,8 @@ if($extension == 'xlsx'){
 				$grado = "";
 				if(!empty($arrayIndividual['mat_grado'])) {
 					try{
-						$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
-						WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+						$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
+						WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 					} catch (Exception $e) {
 						include("../compartido/error-catch-to-report.php");
 					}

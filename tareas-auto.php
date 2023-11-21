@@ -296,8 +296,8 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
-			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE ac.act_id='".$cDat["corr_actividad"]."' AND ac.institucion={$config['conf_id_institucion']} AND ac.year={$year}");
+			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
+			WHERE ac.act_id='".$cDat["corr_actividad"]."' AND ac.institucion={$cProg['corr_institucion']} AND ac.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
 			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");
@@ -372,7 +372,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
-			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
+			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
 			WHERE car_id='".$cDat["corr_carga"]."'");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			

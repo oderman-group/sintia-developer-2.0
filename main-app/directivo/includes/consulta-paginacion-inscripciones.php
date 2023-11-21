@@ -4,7 +4,7 @@
     try{
         $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
         INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
-        LEFT JOIN academico_grados ON gra_id=asp_grado
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
         WHERE mat_estado_matricula=5 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro
         ORDER BY mat_primer_apellido");
     } catch (Exception $e) {

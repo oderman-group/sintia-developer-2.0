@@ -3,7 +3,7 @@
 	include("../modelo/conexion.php");
 	
 	try{
-		mysqli_query($conexion, "UPDATE academico_grados SET gra_valor_matricula=0");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET gra_valor_matricula=0 WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

@@ -140,7 +140,7 @@
                         <div class="col-sm-10">
                             <select style="width: 100%" id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
                                 <?php
-                                $infoConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados");
+                                $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 while ($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)) {
                                 ?>
                                     <option value="<?= $infoDatos['gra_id']; ?>"><?= strtoupper($infoDatos['gra_nombre']); ?></option>

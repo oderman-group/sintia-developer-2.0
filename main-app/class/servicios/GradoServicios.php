@@ -1,10 +1,11 @@
 <?php
 require_once("Servicios.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class GradoServicios 
 {
     public static function listarCursos($parametrosArray=null)
     {
-      $sqlInicial="SELECT * FROM academico_grados";
+      $sqlInicial="SELECT * FROM ".BD_ACADEMICA.".academico_grados";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('gra_tipo','gra_estado');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
@@ -16,13 +17,15 @@ class GradoServicios
 
     public static function consultarCurso($idCurso = 1)
     {
-        return Servicios::getSql("SELECT * FROM academico_grados WHERE gra_id=" . $idCurso);
+        global $config;
+        return Servicios::getSql("SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='" . $idCurso."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     }
 
     public static function editar($Post)
     {
+        global $config;
        Servicios::UpdateSql(
-            "UPDATE academico_grados SET 
+            "UPDATE ".BD_ACADEMICA.".academico_grados SET 
             gra_codigo='" . $Post["codigoC"] . "', 
             gra_nombre='" . $Post["nombreC"] . "', 
             gra_formato_boletin='" . $Post["formatoB"] . "', 
@@ -35,15 +38,19 @@ class GradoServicios
             gra_nivel='" . $Post["nivel"] . "', 
             gra_estado='" . $Post["estado"] . "',
             gra_tipo='" . $Post["tipoG"] . "'
-            WHERE gra_id='" . $Post["id_curso"] . "'"
+            WHERE gra_id='" . $Post["id_curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"
         );
     }
 
     public static function guardar($Post, $codigoCurso, $config)
     {
+        global $config;
+        $codigo=Utilidades::generateCode("GRA");
+
         $idRegistro = Servicios::InsertSql(
-            "INSERT INTO academico_grados 
+            "INSERT INTO ".BD_ACADEMICA.".academico_grados 
             (
+                gra_id,
                 gra_codigo,
                 gra_nombre,
                 gra_formato_boletin,
@@ -52,10 +59,13 @@ class GradoServicios
                 gra_estado,
                 gra_grado_siguiente,
                 gra_periodos,
-                gra_tipo
+                gra_tipo, 
+                institucion, 
+                year
             )
                 VALUES
             (
+                '".$codigo."', 
                 '" . $codigoCurso . "',
                 '" . $Post["nombreC"] . "', 
                 '1',
@@ -64,9 +74,11 @@ class GradoServicios
                 1,
                 '" . $Post["graSiguiente"] . "',
                 '" . $config['conf_periodos_maximos'] . "',
-                 '" . $Post["tipoG"] . "'
+                '" . $Post["tipoG"] . "', 
+                {$config['conf_id_institucion']}, 
+                {$_SESSION["bd"]}
             )"
         );
-        return $idRegistro;
+        return $codigo;
     }
 }

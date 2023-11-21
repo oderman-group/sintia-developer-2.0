@@ -74,7 +74,7 @@ include("../compartido/head_informes.php");
     }
 
     $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
-    LEFT JOIN academico_grados ON gra_id=mat_grado
+    LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
     WHERE mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro
     ORDER BY $ordenado");
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {

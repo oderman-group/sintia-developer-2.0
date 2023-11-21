@@ -10,7 +10,7 @@ GROUP_CONCAT( mat_matricula SEPARATOR ', ') as mat_matricula,
 GROUP_CONCAT( gra_nombre SEPARATOR ', ') as gra_nombre, 
 mat_documento, mat_estado_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, COUNT(*) as duplicados 
 FROM ".BD_ACADEMICA.".academico_matriculas mat 
-INNER JOIN academico_grados ON gra_id=mat_grado
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 WHERE mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 GROUP BY mat_documento
 HAVING COUNT(*) > 1 

@@ -50,7 +50,7 @@ if(!Modulos::validarPermisoEdicion()){
         <?php include("../compartido/encabezado.php");?>
 		<?php
 		try{
-			$consultaCurso=mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id='".$_REQUEST["curso"]."'");
+			$consultaCurso=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='".$_REQUEST["curso"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo['gru_nombre'];?></div>
+                                <div class="page-title"><b>Curso:</b> <?=$curso['gra_nombre'];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo['gru_nombre'];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ if(!Modulos::validarPermisoEdicion()){
 									<div id="resp"></div>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><b>Curso:</b> <?=$curso[2];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?></header>
+                                            <header><b>Curso:</b> <?=$curso['gra_nombre'];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>

@@ -84,13 +84,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                         <th width="20%">Materia</th>
                                                         <?php
                                                         try{
-                                                            $cursos = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                            $cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         while($c = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
                                                         ?>
-                                                            <th style="font-size:8px; text-align:center;"><?=$c[2];?></th>
+                                                            <th style="font-size:8px; text-align:center;"><?=$c['gra_nombre'];?></th>
                                                         <?php
                                                         }
                                                         ?>
@@ -111,13 +111,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <td><?=$m['mat_nombre'];?></td>
                                                     <?php
                                                     try{
-                                                        $curso = mysqli_query($conexion, "SELECT * FROM academico_grados"); 
+                                                        $curso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
                                                         try{
-                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m['mat_id']."");
+                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c['gra_id']." AND car_materia=".$m['mat_id']."");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
@@ -132,7 +132,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         }
                                                         
                                                         try{
-                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c[0]." AND car_materia=".$m['mat_id']."");
+                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c['gra_id']." AND car_materia=".$m['mat_id']."");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
@@ -157,7 +157,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         elseif($indCreados==1){$estadoD = 'disabled'; $fondo = '#F03';} 
                                                         else {$estadoD = ''; $fondo = '#FFF';}
                                                     ?>
-                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=base64_decode($_GET["ind"]);?>" onClick="ipc(this)" title="<?=$c[2]." - ".$m['mat_nombre'];?>" <?php if(!empty($ipc[0])){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
+                                                        <td style="background:<?=$fondo;?>;"><input type="checkbox" style="width:20px; text-align:center;"  value="1" id="<?=$carga['car_id'];?>" name="<?=base64_decode($_GET["ind"]);?>" onClick="ipc(this)" title="<?=$c['gra_nombre']." - ".$m['mat_nombre'];?>" <?php if(!empty($ipc[0])){echo "checked";}?> <?=$estadoD;?> <?=$disabledPermiso;?>></td>
                                                     <?php
                                                     }
                                                     ?>

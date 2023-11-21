@@ -55,7 +55,7 @@ if($config['conf_id_institucion'] == ICOLVEN){
 						                        <select class="form-control  select2" name="lNacimiento">
 						                            <option value="">Seleccione una opción</option>
 						                            <?php
-                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM academico_grados
+                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													");
                                                     while ($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)) {
                                                     ?>

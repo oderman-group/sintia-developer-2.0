@@ -141,8 +141,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			$grado = "";
 			if(!empty($arrayIndividual['mat_grado'])) {
 				try{
-					$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
-								WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+					$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
+								WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
 				} catch (Exception $e) {
 					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 				}

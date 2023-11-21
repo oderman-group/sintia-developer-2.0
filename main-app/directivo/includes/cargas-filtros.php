@@ -25,8 +25,8 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-												WHERE gra_estado=1
+												$cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+												WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												ORDER BY gra_vocal
 												");
 											} catch (Exception $e) {

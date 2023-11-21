@@ -20,7 +20,7 @@ class Estudiantes {
             if( $tipoGrado == GRADO_GRUPAL || !array_key_exists(10, $arregloModulos) ){
                 $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
                 LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-                LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+                LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
                 LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
                 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
                 LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat.mat_lugar_nacimiento
@@ -64,7 +64,7 @@ class Estudiantes {
             if($tipoGrado==GRADO_GRUPAL){
                 $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
                 LEFT JOIN ".$BD."usuarios ON uss_id=mat.mat_id_usuario
-                INNER JOIN ".$BD."academico_grados ON gra_id=mat.mat_grado
+                INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
                 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
                 LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
                 WHERE mat.mat_eliminado = 0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
@@ -124,7 +124,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             WHERE mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} 
@@ -149,7 +149,7 @@ class Estudiantes {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             WHERE (mat.mat_id='".$estudiante."' || mat.mat_documento='".$estudiante."' || mat.mat_matricula='".$estudiante."') AND mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
@@ -191,7 +191,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             INNER JOIN ".BD_GENERAL.".usuarios_por_estudiantes upe ON upe.upe_id_estudiante=mat.mat_id AND upe.upe_id_usuario='".$acudiente."' AND upe.institucion={$config['conf_id_institucion']} AND upe.year={$_SESSION["bd"]}
@@ -215,7 +215,7 @@ class Estudiantes {
              if($tipoGrado==GRADO_GRUPAL){
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             WHERE mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} 
@@ -251,7 +251,7 @@ class Estudiantes {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             WHERE mat.mat_id_usuario='".$estudianteIdUsuario."' AND mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
@@ -307,7 +307,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN $BD.usuarios ON uss_id=mat.mat_id_usuario
-            LEFT JOIN $BD.academico_grados ON gra_id=mat.mat_grado
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
             LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=mat.mat_lugar_nacimiento
@@ -387,7 +387,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat.mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
-            INNER JOIN $BD.academico_grados ON mat.mat_grado=gra_id 
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat.mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year} 
             WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula=1 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
             GROUP BY mat.mat_id
             ORDER BY mat.mat_grupo, mat.mat_primer_apellido");
@@ -412,7 +412,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas am
             INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON am.mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
-            INNER JOIN $BD.academico_grados ON am.mat_grado=gra_id 
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON am.mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year} 
             WHERE am.mat_id='" . $estudiante."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -450,7 +450,7 @@ class Estudiantes {
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos
             LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND mat.mat_id=matcur_id_matricula AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
-            LEFT JOIN academico_grados ON gra_id=matcur_id_curso
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
@@ -473,7 +473,7 @@ class Estudiantes {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos
             LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND mat.mat_grupo='".$datosCargaActual['car_grupo']."' AND mat.mat_id=matcur_id_matricula AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
-            LEFT JOIN academico_grados ON gra_id=matcur_id_curso
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN usuarios ON uss_id=mat.mat_id_usuario
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
@@ -522,7 +522,7 @@ class Estudiantes {
             END AS estado
             FROM ".BD_ACADEMICA.".academico_matriculas am 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
-            INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
             INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
             INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion

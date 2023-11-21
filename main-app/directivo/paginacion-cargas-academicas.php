@@ -4,7 +4,7 @@ $limite_inferior = 0;
 
 try{
     $sql = "SELECT COUNT(*) AS total FROM academico_cargas
-    INNER JOIN academico_grados ON gra_id=car_curso
+    INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
     INNER JOIN usuarios ON uss_id=car_docente
@@ -39,7 +39,7 @@ if ($pagina_actual == 1) {
 // Consultar los datos de la tabla
 try{
     $sql = "SELECT * FROM academico_cargas
-    INNER JOIN academico_grados ON gra_id=car_curso
+    INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
     INNER JOIN usuarios ON uss_id=car_docente
