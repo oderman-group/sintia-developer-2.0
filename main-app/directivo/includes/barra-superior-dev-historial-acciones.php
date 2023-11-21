@@ -6,6 +6,7 @@ if (isset($_GET['busqueda'])) {
         OR hil_url LIKE '%" . $busqueda . "%' 
         OR ins_nombre LIKE '%" . $busqueda . "%' 
         OR ins_siglas LIKE '%" . $busqueda . "%'
+        OR hil_titulo LIKE '%" . $busqueda . "%'
         )";
 }
 ?>

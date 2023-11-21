@@ -14,9 +14,11 @@ $yearEnd = $yearArray[1];
 
 $_SESSION["inst"] = $institucion['ins_bd'];
 
-if(isset($yearEnd) and is_numeric($yearEnd)){
+if( !empty($institucion['ins_year_default']) && is_numeric($institucion['ins_year_default']) ) {
+	$_SESSION["bd"] = $institucion['ins_year_default'];
+} elseif( isset($yearEnd) && is_numeric($yearEnd) ) {
 	$_SESSION["bd"] = $yearEnd;
-}else{
+} else {
 	$_SESSION["bd"] = date("Y");
 }
 

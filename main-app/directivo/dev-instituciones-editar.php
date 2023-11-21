@@ -228,7 +228,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                     }
                                                     while($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                 ?>
-                                                <option value="<?=$modulos['mod_id'];?>" <?php if(Modulos::verificarModulosDeInstitucion($_GET["id"],$modulos['mod_id'])){echo "selected";}?>><?=$modulos['mod_nombre']?></option>
+                                                <option value="<?=$modulos['mod_id'];?>" <?php if(Modulos::verificarModulosDeInstitucion($_GET["id"],$modulos['mod_id'])){echo "selected";}?>><?="[{$modulos['mod_id']}] - ".$modulos['mod_nombre'];?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
