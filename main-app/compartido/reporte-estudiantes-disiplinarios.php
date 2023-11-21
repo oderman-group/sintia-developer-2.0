@@ -60,7 +60,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 CASE dr_tipo WHEN 1 THEN 'Leve' WHEN 2 THEN 'Grave' WHEN 3 THEN 'Gravísima' END as tipo_falta
 FROM ".BD_ACADEMICA.".academico_matriculas am 
 INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
-INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 INNER JOIN ".$baseDatosServicios.".opciones_generales og ON og.ogen_id=am.mat_tipo
 INNER JOIN ".BD_DISCIPLINA.".disciplina_reportes dr ON dr.dr_estudiante=am.mat_id AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]} 
 WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} ".$condicion."

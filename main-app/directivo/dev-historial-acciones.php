@@ -81,6 +81,7 @@ $Plataforma = new Plataforma;
                                                         <th>#</th>
                                                         <th>Cod</th>
                                                         <th>Fecha</th>
+                                                        <th>Cod. Pagina</th>
                                                         <th>Pagina</th>
                                                         <th>Responsable</th>
                                                         <th>Tiempo de carga</th>
@@ -138,6 +139,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['hil_id']; ?></td>
                                                             <td><?= $resultado['hil_fecha']; ?></td>
+                                                            <td><?= $resultado['pagp_id']; ?></td>
                                                             <td><?= $resultado['pagp_pagina']; ?></td>
                                                             <td><?= $responsable; ?></td>
                                                             <td><?= $resultado['hil_tiempo_carga']; ?></td>

@@ -72,7 +72,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 
-INNER JOIN academico_grados ON mat_grado=gra_id 
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} 
 WHERE mat_id='" . $matriculadosDatos['mat_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
 
     $num_usr = mysqli_num_rows($usr);

@@ -166,9 +166,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
-					                                        if($resultadoCurso["gra_grado_siguiente"]==$opcionesDatos[0]){$select='selected';}
+					                                        if($resultadoCurso["gra_grado_siguiente"]==$opcionesDatos['gra_id']){$select='selected';}
                                                     ?>
-                                                        <option value="<?=$opcionesDatos[0];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                        <option value="<?=$opcionesDatos['gra_id'];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>
@@ -185,9 +185,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
-					                                        if($resultadoCurso["gra_grado_anterior"]==$opcionesDatos[0]){$select='selected';}
+					                                        if($resultadoCurso["gra_grado_anterior"]==$opcionesDatos['gra_id']){$select='selected';}
                                                     ?>
-                                                        <option value="<?=$opcionesDatos[0];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                        <option value="<?=$opcionesDatos['gra_id'];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>

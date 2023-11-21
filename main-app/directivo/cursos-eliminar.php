@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "UPDATE academico_grados SET gra_estado=0 WHERE gra_id='" . base64_decode($_GET["id"]) . "'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET gra_estado=0 WHERE gra_id='" . base64_decode($_GET["id"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

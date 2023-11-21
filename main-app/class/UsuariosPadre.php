@@ -171,11 +171,11 @@ class UsuariosPadre {
      */
     public static function obtenerTodosLosDatosDeUsuarios($filtroBusqueda='')
     {
-        global $conexion;
+        global $conexion, $baseDatosServicios;
 
         try{
             $consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios 
-            INNER JOIN ".BD_GENERAL.".general_perfiles ON pes_id=uss_tipo 
+            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
             WHERE uss_id=uss_id {$filtroBusqueda}");
             return $consultaUsuario;
         } catch (Exception $e) {

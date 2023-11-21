@@ -22,9 +22,11 @@ if (md5($id) != $_GET['token']) {
 }
 
 //Grados
-$gradosConsulta = "SELECT * FROM academico_grados
-WHERE gra_estado = 1";
+$gradosConsulta = "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+WHERE gra_estado = 1 AND institucion= :idInstitucion AND year= :year";
 $grados = $conexionPDO->prepare($gradosConsulta);
+$grados->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$grados->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $grados->execute();
 $num = $grados->rowCount();
 

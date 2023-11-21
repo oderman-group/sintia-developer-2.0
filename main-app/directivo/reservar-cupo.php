@@ -73,7 +73,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas
 														INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=genc_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtroMat
-														INNER JOIN academico_grados ON gra_id=mat_grado
+														INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 														INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru_id=mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 														WHERE genc_institucion=".$config['conf_id_institucion']." AND genc_year={$_SESSION["bd"]} $filtro
 														ORDER BY genc_id DESC

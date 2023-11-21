@@ -418,17 +418,17 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													?>
 													<select class="form-control" name="grado" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($opcionesDatos[0]==$datosMatricula['grado'])
-																echo '<option value="'.$opcionesDatos[0].'" selected>'.$opcionesDatos[2].'</option>';
+															if($opcionesDatos['gra_id']==$datosMatricula['grado'])
+																echo '<option value="'.$opcionesDatos['gra_id'].'" selected>'.$opcionesDatos['gra_nombre'].'</option>';
 															else
-																echo '<option value="'.$opcionesDatos[0].'">'.$opcionesDatos[2].'</option>';	
+																echo '<option value="'.$opcionesDatos['gra_id'].'">'.$opcionesDatos['gra_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
