@@ -67,6 +67,19 @@ define('CUANTITATIVA', 'CUANTITATIVA');
 
 define('CLAVE_SUGERIDA', 'sherman1298');
 
+/* SINTIA PLATFORM MODULES */
+define('MODULO_ACADEMICO', 1);
+define('MODULO_FINANCIERO', 2);
+define('MODULO_DISCIPLINARIO', 3);
+define('MODULO_ADMINISTRATIVO', 4);
+define('MODULO_COMUNICATIVO', 5);
+define('MODULO_MERCADEO', 6);
+define('MODULO_GENERAL', 7);
+define('MODULO_ADMISIONES', 8);
+define('MODULO_RESERVA_CUPO', 9);
+define('MODULO_MEDIA_TECNICA', 10);
+
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
