@@ -14,7 +14,7 @@ if (!empty($_FILES['foto']['name'])) {
 	$foto = $_POST['fotoA'];
 }
 
-$sql = "UPDATE academico_matriculas SET 
+$sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET 
 mat_primer_apellido = :apellido1, 
 mat_segundo_apellido = :apellido2, 
 mat_nombres = :nombre, 
@@ -33,10 +33,10 @@ mat_lugar_colegio_procedencia = :iLugarProcedencia,
 mat_lugar_expedicion = :lugarExp,
 mat_motivo_retiro_anterior = :motivoRetiro,
 mat_foto = :foto
-WHERE mat_id = :idMatricula";
+WHERE mat_id = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $stmt = $pdoI->prepare($sql);
 
-$stmt->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_INT);
+$stmt->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_STR);
 $stmt->bindParam(':apellido1', $_POST['primerApellidos'], PDO::PARAM_STR);
 $stmt->bindParam(':apellido2', $_POST['segundoApellidos'], PDO::PARAM_STR);
 $stmt->bindParam(':nombre', $_POST['nombre'], PDO::PARAM_STR);
@@ -55,6 +55,8 @@ $stmt->bindParam(':iLugarProcedencia', $_POST['lugar'], PDO::PARAM_STR);
 $stmt->bindParam(':lugarExp', $_POST['LugarExp'], PDO::PARAM_STR);
 $stmt->bindParam(':motivoRetiro', $_POST['motivo'], PDO::PARAM_STR);
 $stmt->bindParam(':foto', $foto, PDO::PARAM_STR);
+$stmt->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+$stmt->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
 
 $stmt->execute();
 $filasAfectadas = $stmt->rowCount();
@@ -171,7 +173,7 @@ matd_certificados = :certificado
 WHERE matd_matricula = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $documentos = $pdoI->prepare($documentosQuery);
 
-$documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_INT);
+$documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_STR);
 $documentos->bindParam(':pazysalvo', $pazysalvo, PDO::PARAM_STR);
 $documentos->bindParam(':observador', $observador, PDO::PARAM_STR);
 $documentos->bindParam(':eps', $eps, PDO::PARAM_STR);

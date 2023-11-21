@@ -43,9 +43,9 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 	}
 $contp = 1;
 $puestoCurso = 0;
-$puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
+$puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM ".BD_ACADEMICA.".academico_matriculas mat
 INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."'
-WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' GROUP BY mat_id ORDER BY prom DESC");	
+WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} GROUP BY mat_id ORDER BY prom DESC");	
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
 	$contp ++;

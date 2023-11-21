@@ -44,7 +44,7 @@ $datosGenerales = mysqli_fetch_array($consultaDatosGenerales, MYSQLI_BOTH);
 <?php
 $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_resultados
 INNER JOIN ".$baseDatosServicios.".general_preguntas ON pregg_id=resg_id_pregunta
-INNER JOIN academico_matriculas ON mat_id=resg_id_estudiante
+INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=resg_id_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 WHERE resg_id_asignacion='".$_GET["a"]."'");
 $consultaNumPregunta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
 $preguntasNum = mysqli_num_rows($consultaNumPregunta);

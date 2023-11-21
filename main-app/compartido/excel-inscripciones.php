@@ -16,33 +16,11 @@ include("../../config-general/consulta-usuario-actual.php");
 
 
 <?php
-$estadosSolicitud = [
-    1 => 'VERIFICACIÓN DE PAGO',
-    2 => 'PAGO RECHAZADO',
-    3 => 'PENDIENTE POR DILIGENCIAR EL FORMULARIO',
-    4 => 'EN PROCESO',
-    5 => 'EXAMEN Y ENTREVISTA',
-    6 => 'APROBADO',
-    7 => 'NO APROBADO',
-    8 => 'VERIFICACIÓN DE CUPO DISPONIBLE',
-    9 => 'MOVIDO AL AÑO SIGUIENTE'
-];
+include(ROOT_PATH."/config-general/config-admisiones.php");
 
-$fondoSolicitud = [
-    1 => 'yellow',
-    2 => 'tomato',
-    3 => 'orange',
-    4 => '#AFB372',
-    5 => 'aquamarine',
-    6 => 'green',
-    7 => 'red',
-    8 => 'yellow',
-    9 => '#00FAB5'
-];
-
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
-INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
-  WHERE mat_estado_matricula=5 ORDER BY mat_primer_apellido");
+$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
+WHERE mat.mat_estado_matricula=5 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} ORDER BY mat.mat_primer_apellido");
 ?>
 <div align="center">
     <table width="100%" border="1" rules="all">

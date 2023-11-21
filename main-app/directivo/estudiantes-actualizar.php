@@ -75,7 +75,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	$destino = "../files/fotos";
 	move_uploaded_file($_FILES['fotoMat']['tmp_name'], $destino . "/" . $archivo);
 	try{
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -109,7 +109,7 @@ try {
 if($_POST["documentoA"]!=""){
 
 	try {
-		$consultaIdAcudiente=mysqli_query($conexion, "SELECT mat_acudiente FROM academico_matriculas WHERE mat_id='".$_POST["id"]."'");
+		$consultaIdAcudiente=mysqli_query($conexion, "SELECT mat_acudiente FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$datosIdAcudiente = mysqli_fetch_array($consultaIdAcudiente, MYSQLI_BOTH);
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
@@ -157,7 +157,7 @@ if($_POST["documentoA"]!=""){
 	}
 
 	try {
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente='".$idAcudiente."' WHERE mat_id='".$_POST["id"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_acudiente='".$idAcudiente."' WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}	
@@ -245,7 +245,7 @@ if(!empty($_POST["idAcudiente2"])){
 		}
 	
 		try {
-			mysqli_query($conexion, "UPDATE academico_matriculas SET mat_acudiente2='".$idAcudiente2."' WHERE mat_id='".$_POST["id"]."'");
+			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_acudiente2='".$idAcudiente2."' WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

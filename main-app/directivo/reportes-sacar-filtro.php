@@ -120,9 +120,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <div class="col-sm-10">
                                                 <?php
                                                 try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
                                                     INNER JOIN usuarios ON uss_id=mat_id_usuario
-                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} ORDER BY mat_primer_apellido");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

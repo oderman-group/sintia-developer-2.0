@@ -17,8 +17,8 @@ if (!empty($_FILES['archivo']['name'])) {
 }
 
 try{
-    mysqli_query($conexion, "UPDATE academico_matriculas SET  mat_soporte_pago='".$archivo."'
-    WHERE mat_id_usuario='" . $_SESSION["id"] . "'");
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET  mat_soporte_pago='".$archivo."'
+    WHERE mat_id_usuario='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

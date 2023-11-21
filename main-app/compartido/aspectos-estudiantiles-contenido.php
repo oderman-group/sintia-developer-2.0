@@ -7,8 +7,8 @@ $datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idR);
 
 $usuarioEstudiante = UsuariosPadre::sesionUsuario($idR);
 
-$agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM academico_matriculas
-WHERE mat_id_usuario='".$idR."'"), MYSQLI_BOTH);
+$agnoNacimiento = mysqli_fetch_array(mysqli_query($conexion, "SELECT YEAR(mat_fecha_nacimiento) FROM ".BD_ACADEMICA.".academico_matriculas
+WHERE mat_id_usuario='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 
 $edad = date("Y") - $agnoNacimiento[0];

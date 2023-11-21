@@ -294,7 +294,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_actividades ac 
 			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=ac.act_id_carga
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
-			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
 			WHERE ac.act_id='".$cDat["corr_actividad"]."' AND ac.institucion={$config['conf_id_institucion']} AND ac.year={$year}");
@@ -370,7 +370,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		if($cDat['corr_tipo']==4){
 			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_cargas 
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
-			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
 			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
 			WHERE car_id='".$cDat["corr_carga"]."'");

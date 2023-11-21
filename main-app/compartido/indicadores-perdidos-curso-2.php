@@ -46,9 +46,9 @@ if (!empty($_REQUEST["curso"])) {
 
 
 
-$matriculadosPorCurso = mysqli_query($conexion,"SELECT * FROM academico_matriculas 
+$matriculadosPorCurso = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_matriculas 
 
-WHERE mat_eliminado=0 $filtro AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
+WHERE mat_eliminado=0 $filtro AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
 GROUP BY mat_id
 
@@ -68,11 +68,12 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 
-    $usr = mysqli_query($conexion,"SELECT * FROM academico_matriculas am
+    $usr = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_matriculas am
 
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 
-INNER JOIN academico_grados ON mat_grado=gra_id WHERE mat_id=" . $matriculadosDatos['mat_id']);
+INNER JOIN academico_grados ON mat_grado=gra_id 
+WHERE mat_id='" . $matriculadosDatos['mat_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
 
     $num_usr = mysqli_num_rows($usr);
 
