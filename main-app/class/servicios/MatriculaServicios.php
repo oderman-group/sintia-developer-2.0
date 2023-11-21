@@ -4,9 +4,9 @@ class MatriculaServicios
 {
     public static function listar($parametrosArray=null)
     {
-      $sqlInicial="SELECT * FROM academico_matriculas";
+      $sqlInicial="SELECT * FROM ".BD_ACADEMICA.".academico_matriculas";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('mat_grado','mat_grupo','mat_tipo_matricula','mat_acudiente');
+        $parametrosValidos=array('mat_grado','mat_grupo','mat_tipo_matricula','mat_acudiente','institucion','year');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $sqlFinal ="";
@@ -16,14 +16,16 @@ class MatriculaServicios
     
     public static function consultar($idDato = 1)
     {
-        return Servicios::getSql("SELECT * FROM academico_matriculas WHERE mat_id=" . $idDato);
+      global $config;
+        return Servicios::getSql("SELECT * FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id='" . $idDato."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     }
 
     public static function listarEstudianteNombre($nombre='')
     {
-      $sqlInicial= "SELECT mat_id,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2 FROM academico_matriculas
+      global $config;
+      $sqlInicial= "SELECT mat_id,mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2 FROM ".BD_ACADEMICA.".academico_matriculas
       WHERE CONCAT(mat_primer_apellido,' ',mat_segundo_apellido,' ',mat_nombres,' ',mat_nombre2) LIKE '%".$nombre."%'"; 	  
-      $sqlFinal ="AND mat_eliminado IN (0) ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
+      $sqlFinal ="AND mat_eliminado IN (0) AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY mat_grado, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
       $sql=$sqlInicial.$sqlFinal;
       return Servicios::SelectSql($sql,'LIMIT 5');         
     }

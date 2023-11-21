@@ -65,17 +65,19 @@ class Boletin {
         int    $periodo      = 0,
         int    $grado      = 0,
         int    $grupo      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM $BD.academico_matriculas
-            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodo."'
-            WHERE  mat_grado='".$grado."' AND mat_grupo='".$grupo."'
-            GROUP BY mat_id 
+            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM ".BD_ACADEMICA.".academico_matriculas mat
+            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."'
+            WHERE  mat.mat_grado='".$grado."' AND mat.mat_grupo='".$grupo."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
+            GROUP BY mat.mat_id 
             ORDER BY prom DESC");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -391,17 +393,19 @@ class Boletin {
 
     public static function obtenerPuestoEstudianteEnInstitucion(
         int    $periodo      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM $BD.academico_matriculas
-            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodo."'
-            WHERE  mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
-            GROUP BY mat_id 
+            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM ".BD_ACADEMICA.".academico_matriculas mat
+            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."'
+            WHERE  mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2)
+            GROUP BY mat.mat_id 
             ORDER BY prom DESC");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

@@ -136,10 +136,10 @@ require_once("../class/Estudiantes.php");
 															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
 															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-															$numReportesDis = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes 
-															INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante AND mat_acudiente='".$_SESSION["id"]."'
-															WHERE dr_aprobacion_acudiente=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-															AND dr_estudiante='".$resultado['mat_id_usuario']."'"));
+															$numReportesDis = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+															INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id_usuario=dr.dr_estudiante AND mat.mat_acudiente='".$_SESSION["id"]."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+															WHERE dr.dr_aprobacion_acudiente=0 AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]}
+															AND dr.dr_estudiante='".$resultado['mat_id_usuario']."'"));
 
 															$iconoReportesDisciplinario = '';
 															if($numReportesDis > 0) {
@@ -213,7 +213,7 @@ require_once("../class/Estudiantes.php");
 																	} else {
 																		$consultaSolicitudes = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
 																		LEFT JOIN usuarios ON uss_id=soli_remitente
-																		LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+																		LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=soli_id_recurso AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 																		WHERE soli_institucion='".$config['conf_id_institucion']."' 
 																		AND soli_year='".$_SESSION["bd"]."' AND soli_id_recurso={$resultado['mat_id']} AND soli_estado!=3");
 																		$solicitudPendiente = mysqli_fetch_array($consultaSolicitudes, MYSQLI_BOTH);

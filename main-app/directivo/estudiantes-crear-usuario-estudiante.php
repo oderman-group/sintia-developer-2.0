@@ -24,7 +24,7 @@ require_once("../class/Estudiantes.php");
 	$idUsuario = mysqli_insert_id($conexion);
 
 	try{
-		mysqli_query($conexion, "UPDATE academico_matriculas SET mat_id_usuario='" . $idUsuario . "' WHERE mat_id='" . $id . "'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_id_usuario='" . $idUsuario . "' WHERE mat_id='" . $id . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

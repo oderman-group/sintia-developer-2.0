@@ -106,12 +106,12 @@ $porcentajeRestante = 100 - $valores[0];
 					if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
 						$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM ".BD_ACADEMICA.".academico_calificaciones aac
 						INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
-						INNER JOIN academico_matriculas ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_id=aac.cal_id_estudiante AND mat_id=matcur_id_matricula
+						INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_eliminado=0 AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_id=aac.cal_id_estudiante AND mat_id=matcur_id_matricula AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 						WHERE aac.cal_id_actividad='".$resultado['act_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 						");
 					} else {
 						$consultaNumEstudiante=mysqli_query($conexion, "SELECT count(*) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-						INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aac.cal_id_estudiante
+						INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aac.cal_id_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 						WHERE aac.cal_id_actividad='".$resultado['act_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 						");
 					}

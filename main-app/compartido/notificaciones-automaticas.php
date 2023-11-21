@@ -21,7 +21,7 @@ if($notificacionID[1]>=$notificacionID[2])
 		//Cuando faltan 2 días
 		if($actividadesDatos[0]==2){
 			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-			INNER JOIN academico_matriculas ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 			WHERE car_id='".$actividadesDatos['tar_id_carga']."'");
 
 			while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
@@ -45,7 +45,7 @@ if($notificacionID[1]>=$notificacionID[2])
 		//Cuando llega el día de enviar la actividad
 		if($actividadesDatos[0]==0){
 			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-			INNER JOIN academico_matriculas ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 			WHERE car_id='".$actividadesDatos['tar_id_carga']."'
 			");
 

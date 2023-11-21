@@ -29,11 +29,13 @@ $grados->execute();
 $num = $grados->rowCount();
 
 //Estudiante
-$estQuery = "SELECT * FROM academico_matriculas
+$estQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
 LEFT JOIN usuarios ON uss_id=mat_acudiente
-WHERE mat_solicitud_inscripcion = :id";
+WHERE mat_solicitud_inscripcion = :id AND mat.institucion= :idInstitucion AND mat.year= :year";
 $est = $conexionPDO->prepare($estQuery);
 $est->bindParam(':id', $id, PDO::PARAM_INT);
+$est->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$est->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
@@ -41,7 +43,7 @@ $datos = $est->fetch();
 //Documentos
 $documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula = :id AND institucion= :idInstitucion AND year= :year";
 $documentos = $conexionPDO->prepare($documentosQuery);
-$documentos->bindParam(':id', $datos['mat_id'], PDO::PARAM_INT);
+$documentos->bindParam(':id', $datos['mat_id'], PDO::PARAM_STR);
 $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
 $documentos->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $documentos->execute();

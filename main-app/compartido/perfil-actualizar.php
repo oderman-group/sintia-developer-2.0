@@ -75,7 +75,7 @@ if ($_POST["tipoUsuario"] == 4) {
 
     //Actualizar matricula a los estudiantes
     try{
-        mysqli_query($conexion, "UPDATE academico_matriculas SET mat_genero='" . $_POST["genero"] . "', mat_fecha_nacimiento='" . $_POST["fechaN"] . "', mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "'");
+        mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_genero='" . $_POST["genero"] . "', mat_fecha_nacimiento='" . $_POST["fechaN"] . "', mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
