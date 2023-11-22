@@ -4,7 +4,7 @@
     try{
         $consulta=mysqli_query($conexion,"SELECT * FROM ".$baseDatosServicios.".reporte_errores
         INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-        LEFT JOIN usuarios ON uss_id=rperr_usuario
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=rperr_usuario AND uss.institucion=rperr_institucion AND uss.year=rperr_year
         WHERE rperr_id=rperr_id $filtro
         ORDER BY rperr_id DESC;");
     } catch (Exception $e) {

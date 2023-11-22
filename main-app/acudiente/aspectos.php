@@ -41,7 +41,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?=$frases[264][$datosUsuarioActual[8]];?></div>
+                            <div class="page-title"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -62,7 +62,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header><?=$frases[264][$datosUsuarioActual[8]];?></header>
+                                <header><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
                                 <form action="aspectos-firmar.php" method="post" enctype="multipart/form-data">
@@ -70,14 +70,14 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
                                     <input type="hidden" name="periodo" value="<?=$periodo;?>">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual[8]];?></label>
+                                        <label class="col-sm-2 control-label"><?=$frases[281][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
                                             <?php if(!empty($aspectos["dn_aspecto_academico"])){ echo $aspectos["dn_aspecto_academico"];} ?>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual[8]];?></label>
+                                        <label class="col-sm-2 control-label"><?=$frases[282][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
                                             <?php if(!empty($aspectos["dn_aspecto_convivencial"])){ echo $aspectos["dn_aspecto_convivencial"];} ?>
                                         </div>

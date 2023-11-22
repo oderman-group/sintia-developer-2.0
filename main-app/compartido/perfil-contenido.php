@@ -3,7 +3,7 @@
                         ?>
                         <div class="col-sm-3">
 							<div class="panel">
-								<header class="panel-heading panel-heading-blue"><?=$frases[219][$datosUsuarioActual[8]];?></header>
+								<header class="panel-heading panel-heading-blue"><?=$frases[219][$datosUsuarioActual['uss_idioma']];?></header>
 								<div class="panel-body">
 									<div class="item">
 	                                    <img src="../files/fotos/<?=$usuarioPerfil['uss_foto'];?>" />
@@ -33,21 +33,21 @@
 							</div>
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?=$frases[10][$datosUsuarioActual[8]];?></header>
+                                    <header><?=$frases[10][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form action="../compartido/perfil-actualizar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="tipoUsuario" value="<?=$usuarioPerfil['uss_tipo'];?>">
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[49][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_id"];?>" name="usuarioID" class="form-control" disabled>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[186][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[186][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_usuario"];?>" name="usuario" class="form-control" disabled>
                                             </div>
@@ -86,7 +86,7 @@
                                         <?php } ?>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?> <mark>(Cuadrada)</mark></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual['uss_idioma']];?> <mark>(Cuadrada)</mark></label>
                                             <div class="col-sm-4">
                                                 <input type="file" name="fotoPerfil" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg" class="form-control">
                                             </div>
@@ -100,7 +100,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_nombre"];?>" name="nombre" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
                                             </div>
@@ -128,28 +128,28 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[181][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[181][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <input type="email" value="<?=$usuarioPerfil["uss_email"];?>" name="email" class="form-control" style="text-transform: lowercase;">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[188][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[188][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_celular"];?>" name="celular" data-mask="(999) 999-9999" class="form-control">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[182][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[182][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_telefono"];?>" name="telefono" class="form-control">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[138][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="genero" required>
                                                     <option value="">Seleccione una opción</option>
@@ -164,7 +164,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[189][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[189][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
                                                 <input class="form-control" size="16" type="text" value="<?=$usuarioPerfil["uss_fecha_nacimiento"];?>">
@@ -185,7 +185,7 @@
                                            </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[190][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[190][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="lNacimiento" required>
                                                     <option value="">Seleccione una opción</option>
@@ -203,7 +203,7 @@
 										
 										<?php if($usuarioPerfil["uss_tipo"]!=4){?>
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[191][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[191][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="nAcademico" required>
                                                     <option value="">Seleccione una opción</option>
@@ -380,7 +380,7 @@
 										?>
 										
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 control-label"><?=$frases[192][$datosUsuarioActual[8]];?></label>
+                                                    <label class="col-sm-2 control-label"><?=$frases[192][$datosUsuarioActual['uss_idioma']];?></label>
                                                     <div class="input-group spinner col-sm-4">
                                                         <span class="input-group-btn">
 														<button class="btn btn-info" data-dir="dwn" type="button">
@@ -398,7 +398,7 @@
 										<?php }?>
 											
 											<div class="form-group row">
-                                                <label class="col-sm-2 control-label">Recibir <?=$frases[218][$datosUsuarioActual[8]];?></label>
+                                                <label class="col-sm-2 control-label">Recibir <?=$frases[218][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="input-group spinner col-sm-10">
 											<label class="switchToggle">
                                                 <input type="checkbox" name="notificaciones" value="1" <?php if($usuarioPerfil["uss_notificacion"]==1){echo "checked";}?>>

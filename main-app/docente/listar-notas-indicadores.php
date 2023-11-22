@@ -43,7 +43,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
                     <th style="width: 50px;">#</th>
 
-                    <th style="width: 400px;"><?= $frases[61][$datosUsuarioActual[8]]; ?></th>
+                    <th style="width: 400px;"><?= $frases[61][$datosUsuarioActual['uss_idioma']]; ?></th>
 
                     <?php
 
@@ -66,7 +66,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
                     <th style="text-align:center; width:60px;">%</th>
 
-                    <th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual[8]]; ?></th>
+                    <th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual['uss_idioma']]; ?></th>
 
                 </tr>
 

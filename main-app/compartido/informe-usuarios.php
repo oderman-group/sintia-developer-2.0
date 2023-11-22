@@ -15,9 +15,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 </div>   
 <?php
 									if(isset($_GET["tipo"]) and $_GET["tipo"]!="" and is_numeric($_GET["tipo"])){
-										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."' ORDER BY uss_nombre";
+										$SQL = "SELECT * FROM ".BD_GENERAL.".usuarios uss INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} ORDER BY uss_nombre";
 									}else{
-										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' ORDER BY uss_nombre, uss_tipo";
+										$SQL = "SELECT * FROM ".BD_GENERAL.".usuarios uss INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} ORDER BY uss_nombre, uss_tipo";
 									}
 									//include("paginacion.php");
 									?>
@@ -38,12 +38,12 @@ include("../../config-general/consulta-usuario-actual.php");?>
   <?php
 									 $consulta = mysqli_query($conexion, $SQL);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-										 if($resultado[5]==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado[5]==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
-                     $consultaClics=mysqli_query($conexion, "SELECT ROUND(((SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado[0]."')/(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones))*100,2)");
+										 if($resultado['uss_estado']==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado['uss_estado']==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
+                     $consultaClics=mysqli_query($conexion, "SELECT ROUND(((SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado['uss_id']."')/(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones))*100,2)");
 										 $clics = mysqli_fetch_array($consultaClics, MYSQLI_BOTH);
-                     $consultaClics2=mysqli_query($conexion, "SELECT (SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado[0]."'),(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones)");
+                     $consultaClics2=mysqli_query($conexion, "SELECT (SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones where hil_usuario='".$resultado['uss_id']."'),(SELECT count(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones)");
 										 $clics2 = mysqli_fetch_array($consultaClics2, MYSQLI_BOTH);
-                     $consultaEntrada=mysqli_query($conexion, "SELECT (DATEDIFF(uss_ultimo_ingreso, now())*-1) FROM usuarios WHERE uss_id='".$resultado[0]."'");
+                     $consultaEntrada=mysqli_query($conexion, "SELECT (DATEDIFF(uss_ultimo_ingreso, now())*-1) FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $entrada = mysqli_fetch_array($consultaEntrada, MYSQLI_BOTH);
 										 if($entrada[0]==0 and $entrada[0]!="") $entradaTexto = "Hoy";
 										 elseif($entrada[0]>0 and $entrada[0]<7) $entradaTexto = "Hace ".$entrada[0]." d&iacute;a(s)";
@@ -51,7 +51,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 elseif($entrada[0]>=31 and $entrada[0]<365) $entradaTexto = "Hace ".round(($entrada[0]/31),0)." mes(es)";
 										 else $entradaTexto = $entrada[0];
 										 
-                     $consultaSalida=mysqli_query($conexion, "SELECT (DATEDIFF(uss_ultima_salida, now())*-1) FROM usuarios WHERE uss_id='".$resultado[0]."'");
+                     $consultaSalida=mysqli_query($conexion, "SELECT (DATEDIFF(uss_ultima_salida, now())*-1) FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $salida = mysqli_fetch_array($consultaSalida, MYSQLI_BOTH);
 										 if($salida[0]==0 and $salida[0]!="") $salidaTexto = "Hoy";
 										 elseif($salida[0]>0 and $salida[0]<7) $salidaTexto = "Hace ".$salida[0]." d&iacute;a(s)";
@@ -59,20 +59,20 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 elseif($salida[0]>=31 and $salida[0]<365) $salidaTexto = "Hace ".round(($salida[0]/31),0)." mes(es)";
 										 else $salidaTexto ="";
 										 
-										 if($resultado[3]==5) $b = "bold"; else $b="";
+										 if($resultado['uss_tipo']==5) $b = "bold"; else $b="";
 										 if($resultado['uss_bloqueado']==1) $c = "#F00"; else $c="";
 				
 									 ?>
   <tr style="font-size:13px;">
-      <td><?=$resultado[0];?></td>
-                                        <td><?=$resultado[1];?></td>
-                                        <td><?=$resultado[4];?></td>
+      <td><?=$resultado['uss_id'];?></td>
+                                        <td><?=$resultado['uss_usuario'];?></td>
+                                        <td><?=$resultado['uss_nombre'];?></td>
                                          <td><?=$resultado["pes_nombre"];?></td>
-                                        <td><img src="../files/fotos/<?=$resultado[6];?>" alt="<?=$resultado[4];?>" height="50" width="50"></td>
-                                        <td><?=$resultado[12];?></td>
-                                        <td><?=$resultado[15];?></td>
-                                        <td><?php //echo $entradaTexto;?><?=$resultado[17];?></td>
-                                        <td><?php //echo $salidaTexto;?><?=$resultado[18];?></td>
+                                        <td><img src="../files/fotos/<?=$resultado[6];?>" alt="<?=$resultado['uss_nombre'];?>" height="50" width="50"></td>
+                                        <td><?=$resultado['uss_email'];?></td>
+                                        <td><?=$resultado['uss_celular'];?></td>
+                                        <td><?php //echo $entradaTexto;?><?=$resultado['uss_ultimo_ingreso'];?></td>
+                                        <td><?php //echo $salidaTexto;?><?=$resultado['uss_ultima_salida'];?></td>
                                         <td><?=$clics[0];?>%</td>
                                         <td><?=$clics2[0]." de ".$clics2[1];?></td> 
 </tr>

@@ -9,20 +9,20 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?=$frases[96][$datosUsuarioActual[8]];?></header>
+                                    <header><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/reportes-guardar.php" method="post" enctype="multipart/form-data">
 
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">  
                                                 <input type="date" class="form-control" name="fecha" required value="<?=date("Y-m-d");?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
 												$datosConsulta = Estudiantes::listarEstudiantesParaDocentes('');
@@ -39,7 +39,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple <?=$disabledPermiso;?>>
 												<?php
@@ -55,9 +55,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 										
-										<?php if($datosUsuarioActual[3]==5){?>
+										<?php if($datosUsuarioActual['uss_tipo']==5){?>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-10">
 													<?php
 													$datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo= ".TIPO_DIRECTIVO.")
@@ -78,7 +78,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<?php }?>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>

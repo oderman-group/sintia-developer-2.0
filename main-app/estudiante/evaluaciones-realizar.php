@@ -168,7 +168,7 @@
                                 <div class="page-title"><?=$evaluacion['eva_nombre'];?></div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
                         </div>
@@ -187,26 +187,26 @@
                                         </div>
                                         <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item">
-                                                <b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+                                                <b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
                                                 <div class="profile-desc-item pull-right"><?=$evaluacion['eva_desde'];?></div>
                                             </li>
                                             <li class="list-group-item">
-                                                <b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+                                                <b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
                                                 <div class="profile-desc-item pull-right"><?=$evaluacion['eva_hasta'];?></div>
                                             </li>
                                         </ul>
                                         <div class="row list-separated profile-stat">
                                             <div class="col-md-4 col-sm-4 col-6">
                                                 <div class="uppercase profile-stat-title"> <?=$cantPreguntas;?> </div>
-                                                <div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual[8]];?> </div>
+                                                <div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?> </div>
                                             </div>
                                             <div class="col-md-4 col-sm-4 col-6">
                                                 <div class="uppercase profile-stat-title" style="color: chartreuse;"> <span id="resp"></span> </div>
-                                                <div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual[8]];?> </div>
+                                                <div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual['uss_idioma']];?> </div>
                                             </div>
                                             <div class="col-md-4 col-sm-4 col-6">
                                                 <div class="uppercase profile-stat-title"> <span id="fin"></span> </div>
-                                                <div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual[8]];?> </div>
+                                                <div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual['uss_idioma']];?> </div>
                                             </div>
                                         </div>
 										
@@ -248,7 +248,7 @@
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
-													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual[8]].".</span>";
+													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual['uss_idioma']].".</span>";
 													continue;
 												}
 											?>
@@ -317,7 +317,7 @@
 											//MOSTRAMOS EL BOTÓN FINALIZAR SÓLO SI HAY PREGUNTAS EN LA EVALUACIÓN
 											if($cantPreguntas>0){
 											?>
-												<div align="right"><button id="btnEvaluacion" class="btn btn-primary" type="submit" onClick="if(!confirm('Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas enviar la evaluación?')){return false;}"><?=$frases[140][$datosUsuarioActual[8]];?></button></div>
+												<div align="right"><button id="btnEvaluacion" class="btn btn-primary" type="submit" onClick="if(!confirm('Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas enviar la evaluación?')){return false;}"><?=$frases[140][$datosUsuarioActual['uss_idioma']];?></button></div>
 											<?php }?>
 
 									</form>
@@ -328,13 +328,13 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[143][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
-											<p><b>1.</b> <?=$frases[147][$datosUsuarioActual[8]];?></p>
+											<p><b>1.</b> <?=$frases[147][$datosUsuarioActual['uss_idioma']];?></p>
 											
-											<p><b>2.</b> <?=$frases[148][$datosUsuarioActual[8]];?></p>
+											<p><b>2.</b> <?=$frases[148][$datosUsuarioActual['uss_idioma']];?></p>
 											
-											<p><b>3.</b> <?=$frases[149][$datosUsuarioActual[8]];?></p>
+											<p><b>3.</b> <?=$frases[149][$datosUsuarioActual['uss_idioma']];?></p>
 											
-											<p><b>4.</b> <?=$frases[161][$datosUsuarioActual[8]];?></p>
+											<p><b>4.</b> <?=$frases[161][$datosUsuarioActual['uss_idioma']];?></p>
 										</div>
 									</div>
 									
@@ -342,9 +342,9 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                         <div class="panel-body">
 											
-												<p><b><?=$frases[141][$datosUsuarioActual[8]];?>:</b> <?=$frases[144][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[141][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[144][$datosUsuarioActual['uss_idioma']];?></p>
 											
-												<p><b><?=$frases[142][$datosUsuarioActual[8]];?>:</b> <?=$frases[145][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[142][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[145][$datosUsuarioActual['uss_idioma']];?></p>
 										</div>
 									</div>
 									

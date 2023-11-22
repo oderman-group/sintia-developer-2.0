@@ -27,7 +27,7 @@ include("modelo/conexion.php");
 
 $variable = 1;
 
-$datosUsuario = Usuarios::datosUsuarioParaRecuperarClave($_POST["Usuario"]);
+$datosUsuario = Usuarios::datosUsuarioParaRecuperarClave($institucion['ins_id'],$_POST["Usuario"]);
 
 
 if(!empty($datosUsuario)){

@@ -102,8 +102,8 @@
                                                 
                                                 FROM $baseDatosSocial.chat  
                                                 
-                                                INNER JOIN usuarios 
-                                                ON(uss_id=chat_destino_usuario)
+                                                INNER JOIN ".BD_GENERAL.".usuarios uss 
+                                                ON (uss_id=chat_destino_usuario) AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
                                                 WHERE ( (chat_remite_usuario = '" . $_SESSION['id'] . "' and chat_remite_institucion= '" . $institucion["ins_id"] . "')
                                                          OR  (chat_destino_usuario = '" . $_SESSION['id'] . "' and chat_destino_institucion= '" . $institucion["ins_id"] . "') ) 
@@ -125,7 +125,7 @@
                                                         $miId = $_SESSION['id'];                                                       
                                                         $ussId = $datosUsurios['chat_remite_usuario'];
                                                         $isntitucion_destino = $datosUsurios['chat_destino_institucion'];
-                                                        $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$isntitucion_remite,$ussId,$isntitucion_destino)as cantidad FROM usuarios WHERE  uss_bloqueado=0 AND uss_id ='" . $ussId . "' ");
+                                                        $consultaUsuario = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado,$baseDatosSocial.cantNoLeidos($miId,$isntitucion_remite,$ussId,$isntitucion_destino)as cantidad FROM ".BD_GENERAL.".usuarios WHERE  uss_bloqueado=0 AND uss_id ='" . $ussId . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ");
                                                         while ($datosUsuarios = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH)) {
                                                             $fotoPerfil = $usuariosClase->verificarFoto($datosUsuarios['uss_foto']);
                                                             $nombre = $datosUsuarios['uss_nombre'];
@@ -209,8 +209,8 @@
                                         <ul class="list-unstyled chat-list mt-2 mb-0" id="listaUsuario">
 
                                             <?php
-                                            $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
-                                                WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' 
+                                            $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios 
+                                                WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
                                                 ORDER BY uss_ultimo_ingreso DESC
                                                 LIMIT 10");
                                             if (mysqli_num_rows($consultaUsuariosOnline) > 0) {
@@ -228,8 +228,8 @@
                                                 <?php
                                                 }
                                             }
-                                            $consultaUsuariosOffline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
-                                                WHERE uss_estado=0 AND uss_bloqueado=0  AND uss_id!='" . $_SESSION['id'] . "'
+                                            $consultaUsuariosOffline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios 
+                                                WHERE uss_estado=0 AND uss_bloqueado=0  AND uss_id!='" . $_SESSION['id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                                 ORDER BY uss_ultima_salida DESC
                                                 LIMIT 5");
                                             if (mysqli_num_rows($consultaUsuariosOffline) > 0) {

@@ -24,11 +24,11 @@
 
 								//DOCENTES
 
-								if($datosUsuarioActual[3] == TIPO_DOCENTE){?>
+								if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -46,9 +46,9 @@
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
-										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -76,7 +76,7 @@
 
 									<?php
 
-									if($datosUsuarioActual[3]!=4){
+									if($datosUsuarioActual['uss_tipo']!=4){
 
 									?>
 
@@ -236,7 +236,7 @@
 
 									//ESTUDIANTES
 
-									if($datosUsuarioActual[3]==4){
+									if($datosUsuarioActual['uss_tipo']==4){
 
 										include("filtro-cargas.php");
 
@@ -416,7 +416,7 @@
 
 												<?php
 
-													if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_sin_nota_numerica']==1){}else{
+													if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) and $config['conf_sin_nota_numerica']==1){}else{
 
 													?>
 

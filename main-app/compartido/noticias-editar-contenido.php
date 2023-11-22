@@ -14,21 +14,21 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                         <div class="col-sm-9">
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?=$frases[217][$datosUsuarioActual[8]];?></header>
+                                    <header><?=$frases[217][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/noticias-actualizar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="idR" value="<?=$idR;?>">
                                         
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[127][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[127][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <input type="text" name="titulo" class="form-control" value="<?=$datosConsulta['not_titulo'];?>">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <textarea name="contenido" id="editor1" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosConsulta['not_descripcion'];?></textarea>
                                             </div>
@@ -44,7 +44,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[211][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[211][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-6">
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
@@ -63,14 +63,14 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[213][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[213][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <input type="text" name="urlImagen" class="form-control" value="<?=$datosConsulta['not_url_imagen'];?>">
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[214][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[214][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-6">
                                                 <input type="text" name="video" class="form-control" value="<?=$datosConsulta['not_video_url'];?>">
                                             </div>
@@ -82,7 +82,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[224][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[224][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
 												$datosConsultaBD = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_categorias
@@ -109,7 +109,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[128][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[128][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-6">
                                                 <input type="file" name="archivo" class="form-control">
                                             </div>
@@ -144,7 +144,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 										<h4 align="center" style="font-weight: bold;">FILTROS</h4>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select id="multiple" class="form-control select2-multiple" multiple name="destinatarios[]">
                                                     <?php
@@ -165,7 +165,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-												<label class="col-sm-2 control-label"><?=$frases[5][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-2 control-label"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-10">
 													<select id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
 													<?php

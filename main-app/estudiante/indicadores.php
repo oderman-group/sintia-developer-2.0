@@ -118,8 +118,8 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 												<thead>
 													<tr>
 														<th>#</th>
-														<th><?= $frases[49][$datosUsuarioActual[8]]; ?></th>
-														<th><?= $frases[50][$datosUsuarioActual[8]]; ?></th>
+														<th><?= $frases[49][$datosUsuarioActual['uss_idioma']]; ?></th>
+														<th><?= $frases[50][$datosUsuarioActual['uss_idioma']]; ?></th>
 														<th align="center">%<br>Total</th>
 														<th align="center">%<br>Actual</th>
 														<th align="center" title="Nota según el porcentaje actual registrado.">Nota</th>

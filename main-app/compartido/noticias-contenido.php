@@ -70,7 +70,7 @@
             <div class="col-md-4 col-lg-6">
                 <div class="card card-box">
                     <div class="card-head">
-                        <header><?=$frases[168][$datosUsuarioActual[8]];?></header>
+                        <header><?=$frases[168][$datosUsuarioActual['uss_idioma']];?></header>
                     </div>
                         <?php
                         $fotoUsrActual = $usuariosClase->verificarFoto($datosUsuarioActual['uss_foto']);
@@ -81,7 +81,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-12" data-hint="Realiza una publicación rápida, con solo texto.">
                                     <textarea id="contenido" name="contenido" class="form-control" rows="3"
-                                        placeholder="<?=$frases[169][$datosUsuarioActual[8]];?>"
+                                        placeholder="<?=$frases[169][$datosUsuarioActual['uss_idioma']];?>"
                                         style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"
                                         required></textarea>
                                 </div>
@@ -94,7 +94,7 @@
                                         class="btn deepPink-bgcolor"
                                         onClick="crearNoticia()"
                                     >
-                                        <?=$frases[170][$datosUsuarioActual[8]];?>
+                                        <?=$frases[170][$datosUsuarioActual['uss_idioma']];?>
                                     </button>
                                 </div>
                             </div>
@@ -119,9 +119,9 @@
 											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
-											LEFT JOIN usuarios ON uss_id=not_usuario
+											LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=not_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
-											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
+											AND (not_para LIKE '%".$datosUsuarioActual['uss_tipo']."%' OR not_usuario='".$_SESSION["id"]."')
 											AND not_year='" . $_SESSION["bd"] . "' AND (not_institucion='".$config['conf_id_institucion']."' OR not_global = 'SI')
 											$filtro
 											ORDER BY not_id DESC
@@ -133,7 +133,7 @@
 												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones
-												INNER JOIN usuarios ON uss_id=npr_usuario
+												INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=npr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 												WHERE npr_noticia='".$resultado[0]."'
 												ORDER BY npr_id DESC
 												");
@@ -141,7 +141,7 @@
 												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones 
 												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
-												if($datosUsuarioActual[3]==4){
+												if($datosUsuarioActual['uss_tipo']==4){
 													include("verificar-usuario.php");
 													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
 													$notCursoNum = mysqli_num_rows($noticiasCursos);
@@ -173,7 +173,7 @@
                             <div class="card-head">
                                 <header><?=$resultado['not_titulo'];?></header>
 
-                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==5){?>
+                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual['uss_tipo']==1 || $datosUsuarioActual['uss_tipo']==5){?>
 
                                     <button id="panel-<?=$resultado['not_id'];?>"
                                         class="mdl-button mdl-js-button mdl-button--icon pull-right"
@@ -191,7 +191,7 @@
                                         name="../compartido/noticias-gestionar.php?e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                         onClick="ocultarNoticia(this)"
                                         >
-                                        <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
+                                        <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual['uss_idioma']];?></a>
                                     </li>
                                     <li class="mdl-menu__item">
                                     <a
@@ -200,21 +200,21 @@
                                     name="../compartido/noticias-gestionar.php?e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                     onClick="ocultarNoticia(this)"
                                     >
-                                        <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?>
+                                        <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual['uss_idioma']];?>
                                     </a>
                                     </li>
                                     
-                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1){?>
+                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual['uss_tipo']==1){?>
                                         <li class="mdl-menu__item"><a
                                                 href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
-                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
+                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a>
                                         </li>
                                         
                                         <li class="mdl-menu__item"><a href="javascript:void(0);" title="<?=$objetoEnviar;?>"
                                                 id="<?=base64_encode($resultado['not_id']);?>"
                                                 name="../compartido/noticias-gestionar.php?e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                                 onClick="deseaEliminar(this)"><i
-                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
+                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
                                         </li>
                                     <?php }?>
 

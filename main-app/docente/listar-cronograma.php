@@ -49,11 +49,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-                            <th><?=$frases[50][$datosUsuarioActual[8]];?></th>
-                            <th><?=$frases[51][$datosUsuarioActual[8]];?></th>
-                            <th><?=$frases[244][$datosUsuarioActual[8]];?></th>
-                            <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                            <th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+                            <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                            <th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
+                            <th><?=$frases[244][$datosUsuarioActual['uss_idioma']];?></th>
+                            <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                         </tr>
                     </thead>
                     <tbody>

@@ -3,7 +3,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="navbar-collapse" id="navbarSupportedContent">
-  <a data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)." data-toggle="modal" data-target="#ModalSintia" class="btn deepPink-bgcolor"><?=$frases[263][$datosUsuarioActual[8]];?>  <i class="fa fa-plus"></i></a>
+  <a data-hint="Agrega una nueva publicación que tenga más contenido (Imagen, video, etc.)." data-toggle="modal" data-target="#ModalSintia" class="btn deepPink-bgcolor"><?=$frases[263][$datosUsuarioActual['uss_idioma']];?>  <i class="fa fa-plus"></i></a>
   <?php $idModal="ModalSintia"; $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
   <ul class="navbar-nav mr-auto">
     
@@ -14,9 +14,9 @@
             <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" data-hint="Se mostrarán todas tus publicaciones que estén ocultas." href="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(1)?>"><?=$frases[135][$datosUsuarioActual[8]];?></a>
-          <a class="dropdown-item" data-hint="Se ocultarán todas tus publicaciones que estén siendo mostradas." href="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(0)?>"><?=$frases[136][$datosUsuarioActual[8]];?></a>
-          <a class="dropdown-item" data-hint="Se eliminarán todas tus publicaciones realizadas." href="#" name="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(2)?>" onClick="deseaEliminar(this)"><?=$frases[137][$datosUsuarioActual[8]];?></a>
+          <a class="dropdown-item" data-hint="Se mostrarán todas tus publicaciones que estén ocultas." href="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(1)?>"><?=$frases[135][$datosUsuarioActual['uss_idioma']];?></a>
+          <a class="dropdown-item" data-hint="Se ocultarán todas tus publicaciones que estén siendo mostradas." href="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(0)?>"><?=$frases[136][$datosUsuarioActual['uss_idioma']];?></a>
+          <a class="dropdown-item" data-hint="Se eliminarán todas tus publicaciones realizadas." href="#" name="../compartido/noticias-gestionar-noticia.php?e=<?=base64_encode(2)?>" onClick="deseaEliminar(this)"><?=$frases[137][$datosUsuarioActual['uss_idioma']];?></a>
         </div>
       </li>
 

@@ -73,7 +73,7 @@ include("../compartido/head.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Académicos</th>
 														<th>Convivenciales</th>
                                                     </tr>

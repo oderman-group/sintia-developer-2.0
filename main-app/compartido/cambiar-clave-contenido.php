@@ -15,7 +15,7 @@
     <?php include("../../config-general/mensajes-informativos.php"); ?>
     <div class="card card-box">
         <div class="card-head">
-            <header><?=$frases[253][$datosUsuarioActual[8]];?></header>
+            <header><?=$frases[253][$datosUsuarioActual['uss_idioma']];?></header>
         </div>
         <div class="card-body " id="bar-parent6">
             <form action="../compartido/clave-actualizar.php" method="post" enctype="multipart/form-data">

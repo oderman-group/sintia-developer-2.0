@@ -12,7 +12,7 @@ mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".seguridad_historial
 
 
 
-mysqli_query($conexion, "UPDATE usuarios SET uss_estado=0, uss_ultima_salida=now() WHERE uss_id='".$_SESSION["id"]."'");
+mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=0, uss_ultima_salida=now() WHERE uss_id='".$_SESSION["id"]."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 setcookie("carga","",time()-3600);
 setcookie("periodo","",time()-3600);
 setcookie("cargaE","",time()-3600);

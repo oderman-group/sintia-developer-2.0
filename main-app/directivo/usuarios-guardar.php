@@ -11,6 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 include("../compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 $consultaUsuarioA = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario = '" . $_POST["usuario"] . "'");
 
@@ -30,9 +31,10 @@ if($validarClave!=true){
     exit();
 }
 
+$idRegistro=Utilidades::generateCode("USS");
 try{
-    mysqli_query($conexion, "INSERT INTO usuarios (uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tema_sidebar,
-    uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES(
+    mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios (uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tema_sidebar,
+    uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, institucion, year)VALUES('".$idRegistro."', 
         '" . $_POST["usuario"] . "',
         SHA1('" . $_POST["clave"] . "'),
         " . $_POST["tipoUsuario"] . ",
@@ -57,9 +59,8 @@ try{
         '" . $_POST["apellido1"] . "',
         '" . $_POST["apellido2"] . "',
         '" . $_POST["nombre2"] . "',
-        '" . $_POST["documento"] . "'
+        '" . $_POST["documento"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
         )");
-    $idRegistro = mysqli_insert_id($conexion);
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

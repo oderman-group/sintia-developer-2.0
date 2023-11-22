@@ -20,7 +20,7 @@ $num = $grados->rowCount();
 
 //Estudiante
 $estQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-LEFT JOIN usuarios ON uss_id=mat.mat_acudiente
+LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_acudiente AND uss.institucion= :idInstitucion AND uss.year= :year
 WHERE mat.mat_solicitud_inscripcion = :id AND mat.institucion= :idInstitucion AND mat.year= :year";
 $est = $pdoI->prepare($estQuery);
 $est->bindParam(':id', $id, PDO::PARAM_INT);
@@ -40,16 +40,20 @@ $documentos->execute();
 $datosDocumentos = $documentos->fetch();
 
 //Padre
-$padreQuery = "SELECT * FROM usuarios WHERE uss_id = :id";
+$padreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";
 $padre = $pdoI->prepare($padreQuery);
-$padre->bindParam(':id', $datos['mat_padre'], PDO::PARAM_INT);
+$padre->bindParam(':id', $datos['mat_padre'], PDO::PARAM_STR);
+$padre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+$padre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
 $padre->execute();
 $datosPadre = $padre->fetch();
 
 //Madre
-$madreQuery = "SELECT * FROM usuarios WHERE uss_id = :id";
+$madreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";
 $madre = $pdoI->prepare($madreQuery);
-$madre->bindParam(':id', $datos['mat_madre'], PDO::PARAM_INT);
+$madre->bindParam(':id', $datos['mat_madre'], PDO::PARAM_STR);
+$madre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+$madre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
 $madre->execute();
 $datosMadre = $madre->fetch();
 ?>

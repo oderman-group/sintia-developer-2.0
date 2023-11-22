@@ -58,9 +58,9 @@ $consulta = Estudiantes::listarEstudiantes(0, '', '');
 $conta=1;
 while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 {
-    $consultaDatosA=mysqli_query($conexion, "SELECT * FROM usuarios 
+    $consultaDatosA=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
     LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=uss_tipo_documento
-    WHERE uss_id='".$resultado['mat_acudiente']."'");
+    WHERE uss_id='".$resultado['mat_acudiente']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 
 	$datosA = mysqli_fetch_array($consultaDatosA, MYSQLI_BOTH);
 

@@ -69,12 +69,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Posición</th>
-														<th><?=$frases[93][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[93][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Materias</th>
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
-														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
                                                     </tr>
                                                 </thead>
@@ -104,12 +104,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado['ar_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado['ar_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                         <?php if($numMaterias[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado['ar_id']);?>')">Eliminar</a></li><?php }?>
                                                                     </ul>
                                                                 </div>

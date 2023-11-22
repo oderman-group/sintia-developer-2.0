@@ -90,7 +90,7 @@ $porcentajeRestante = 100 - $valores[0];
             <thead>
                 <tr>
                 <th style="width: 50px;">#</th>
-                <th style="width: 400px;"><?=$frases[61][$datosUsuarioActual[8]];?></th>
+                <th style="width: 400px;"><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
                 <?php
                     $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
@@ -103,7 +103,7 @@ $porcentajeRestante = 100 - $valores[0];
                     }
                 ?>
                 <th style="text-align:center; width:60px;">%</th>
-                <th style="text-align:center; width:60px;"><?=$frases[118][$datosUsuarioActual[8]];?></th>
+                <th style="text-align:center; width:60px;"><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>

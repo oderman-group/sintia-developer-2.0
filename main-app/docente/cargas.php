@@ -220,7 +220,7 @@ $_SESSION["configuracion"] = $config;
 	                        	<h5 <?=$induccionEntrar;?>><a href="cargas-seleccionar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" title="Entrar" style="text-decoration: underline;"><?="[".$rCargas['car_id']."] ".strtoupper($rCargas['mat_nombre']);?></a></h5>
 		                            
 									<p>
-										<span> <b><?=$marcaDG ." ".$marcaMediaTecnica."".$frases[164][$datosUsuarioActual[8]];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
+										<span> <b><?=$marcaDG ." ".$marcaMediaTecnica."".$frases[164][$datosUsuarioActual['uss_idioma']];?>:</b> <?=strtoupper($rCargas['gra_nombre']." ".$rCargas['gru_nombre'])." <b>(".$cantEstudiantes." Est.)</b> ";?></span>
 									</p>
 									
 									

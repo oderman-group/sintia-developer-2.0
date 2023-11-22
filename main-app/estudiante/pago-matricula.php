@@ -33,7 +33,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?=$frases[332][$datosUsuarioActual[8]];?></div>
+                            <div class="page-title"><?=$frases[332][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -45,19 +45,19 @@
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header><?=$frases[332][$datosUsuarioActual[8]];?></header>
+                                <header><?=$frases[332][$datosUsuarioActual['uss_idioma']];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
 
 
-                                <p><?=$frases[340][$datosUsuarioActual[8]];?> <b>$<?= number_format($saldoEC, 0, ",", "."); ?></b></p>
-                                <p><?=$frases[341][$datosUsuarioActual[8]];?>:</p>
+                                <p><?=$frases[340][$datosUsuarioActual['uss_idioma']];?> <b>$<?= number_format($saldoEC, 0, ",", "."); ?></b></p>
+                                <p><?=$frases[341][$datosUsuarioActual['uss_idioma']];?>:</p>
                                 <ol>
-                                    <li><?=$frases[342][$datosUsuarioActual[8]];?>: <a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" style="text-decoration: underline; font-weight: bold;" target="_Blank"><?=$frases[349][$datosUsuarioActual[8]];?></a></li>
-                                    <li><?=$frases[343][$datosUsuarioActual[8]];?> # 00411865393</li>
+                                    <li><?=$frases[342][$datosUsuarioActual['uss_idioma']];?>: <a href="https://www.pagosvirtualesavvillas.com.co/personal/pagos/22" style="text-decoration: underline; font-weight: bold;" target="_Blank"><?=$frases[349][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                    <li><?=$frases[343][$datosUsuarioActual['uss_idioma']];?> # 00411865393</li>
                                 </ol>
                                 <p>&nbsp;</p>
-                                <p style="font-weight: bold;"><?=$frases[344][$datosUsuarioActual[8]];?></p>
+                                <p style="font-weight: bold;"><?=$frases[344][$datosUsuarioActual['uss_idioma']];?></p>
 
 
 
@@ -65,7 +65,7 @@
                                 <form action="../compartido/guardar-pago-matricula.php" method="post" enctype="multipart/form-data">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual[8]];?></label>
+                                        <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-4">
                                             <input type="file" name="archivo" class="form-control">
                                         </div>
@@ -77,7 +77,7 @@
 
 
                                     <?php if ($datosEstudianteActual["mat_actualizar_datos"] == 1 and $datosEstudianteActual["mat_pago_matricula"] == '0') { ?>
-                                        <input type="submit" class="btn btn-primary" value="<?=$frases[350][$datosUsuarioActual[8]];?>">&nbsp;
+                                        <input type="submit" class="btn btn-primary" value="<?=$frases[350][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
                                     <?php } ?>
 
                                 </form>
@@ -86,11 +86,11 @@
 
 
                                 <p><br /><br />&nbsp;</p>
-                                <p><?=$frases[346][$datosUsuarioActual[8]];?></p>
-                                <p><?=$frases[347][$datosUsuarioActual[8]];?></p>
+                                <p><?=$frases[346][$datosUsuarioActual['uss_idioma']];?></p>
+                                <p><?=$frases[347][$datosUsuarioActual['uss_idioma']];?></p>
                                 <hr>
 
-                                <h3 align="center"><?=$frases[348][$datosUsuarioActual[8]];?></h3>
+                                <h3 align="center"><?=$frases[348][$datosUsuarioActual['uss_idioma']];?></h3>
                                 <p align="center">
                                     <img src="../files/imagencostosicolven2022.jpeg">
                                 </p>

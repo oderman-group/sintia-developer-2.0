@@ -66,7 +66,7 @@ if (!empty($_GET["busqueda"])) {
                     ?>
                         <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?cat=<?= base64_encode($cate[0]); ?>" <?= $estiloResaltado; ?>><span><?= strtoupper($cate['catp_nombre']); ?></span></a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual[8]]); ?></a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual['uss_idioma']]); ?></a>
                 </div>
             </li>
         </ul>

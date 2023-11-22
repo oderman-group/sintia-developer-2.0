@@ -7,9 +7,9 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
-          <b><?= strtoupper($frases[116][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
-          <b><?= strtoupper($frases[26][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
-          <b><?= strtoupper($frases[27][$datosUsuarioActual[8]]); ?>: </b> <?= $periodoConsultaActual; ?>
+          <b><?= strtoupper($frases[116][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
+          <b><?= strtoupper($frases[26][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
+          <b><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= $periodoConsultaActual; ?>
           <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">

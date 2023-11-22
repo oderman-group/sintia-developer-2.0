@@ -27,7 +27,7 @@ if(!validarClave($_POST["claveNueva"])){
 }
 
 try{
-	mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1('" . $_POST["claveNueva"] . "') WHERE uss_id='" . $_SESSION["id"] . "'");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_clave=SHA1('" . $_POST["claveNueva"] . "') WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

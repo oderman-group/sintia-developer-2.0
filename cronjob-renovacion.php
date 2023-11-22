@@ -51,7 +51,7 @@ while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH))
 
     //CONSULTAMOS DIRECTIVOS ACTIVOS DE LA INSTITUCION
     $conexionUsuarios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $datosInstituciones['ins_bd']."_".date("Y"));
-    $directivosConsulta = mysqli_query($conexionUsuarios, "SELECT * FROM usuarios WHERE uss_tipo=5 AND uss_estado=1 AND uss_permiso1=".CODE_PRIMARY_MANAGER);
+    $directivosConsulta = mysqli_query($conexionUsuarios, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 AND uss_estado=1 AND uss_permiso1='".CODE_PRIMARY_MANAGER."' AND institucion={$datosInstituciones['ins_id']} AND year='".date('Y')."'");
     
     //CICLO PARA ENVIAR CORREO A DIRECTIVOS
     while($datosDirectivos=mysqli_fetch_array($directivosConsulta, MYSQLI_BOTH)){
@@ -65,7 +65,7 @@ while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH))
       $asunto = 'NOTIFICACIÓN DE VENCIMIENTO DE LICENCIA';
       $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-1.php';
       
-      EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute);
+      EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,NULL,NULL);
 
     }
 

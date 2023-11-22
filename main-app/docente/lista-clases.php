@@ -57,7 +57,7 @@ require_once("../class/Estudiantes.php");
                     <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
                     <th>Fecha</th>
                     <th>#EC/#ET</th>
-                    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>

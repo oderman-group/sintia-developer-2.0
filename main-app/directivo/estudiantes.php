@@ -112,13 +112,13 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
-														<th><?=$frases[246][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[241][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[26][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Usuario</th>
 														<th>Acudiente</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -210,13 +210,13 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 
 														<td>
 															<div class="btn-group">
-																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> matrícula</a></li>
+																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> matrícula</a></li>
 																		
 																		<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
 																			<li><a href="javascript:void(0);" 
@@ -232,7 +232,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																		<?php }?>
 
 																		<?php if(!empty($resultado['uss_id'])) {?>
-																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> usuario</a></li>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> usuario</a></li>
 																		<?php }?>
 
 																		

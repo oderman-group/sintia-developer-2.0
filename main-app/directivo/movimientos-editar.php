@@ -48,7 +48,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Movimientos</li>
                             </ol>
                         </div>
@@ -59,7 +59,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -147,9 +147,9 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
                                                     INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-                                                    WHERE uss_id='".$resultado['fcu_usuario']."'");
+                                                    WHERE uss_id='".$resultado['fcu_usuario']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

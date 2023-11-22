@@ -8,7 +8,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php"); 
 
-$year=date("Y");
+$year=$_SESSION["bd"];
 if(!empty($_GET['year'])){
     $year=$_GET['year'];
 }
@@ -52,10 +52,10 @@ $BD=$datosInstitucion["ins_bd"]."_".$year;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?= $frases[17][$datosUsuarioActual[8]]; ?> Institucional de <b><?=$datosInstitucion['ins_siglas'];?></b> (<?=$year;?>)</div>
+                            <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Institucional de <b><?=$datosInstitucion['ins_siglas'];?></b> (<?=$year;?>)</div>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li class="active"><?= $frases[17][$datosUsuarioActual[8]]; ?> Institucional de <b><?=$datosInstitucion['ins_siglas'];?></b></li>
+                            <li class="active"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> Institucional de <b><?=$datosInstitucion['ins_siglas'];?></b></li>
                         </ol>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ $BD=$datosInstitucion["ins_bd"]."_".$year;
                                             <div class="col-sm-4">
                                                 <?php
                                                 try{
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0 AND institucion={$datosInstitucion["ins_id"]} AND year={$year}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
@@ -231,7 +231,7 @@ $BD=$datosInstitucion["ins_bd"]."_".$year;
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0 AND institucion={$datosInstitucion["ins_id"]} AND year={$year}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -258,7 +258,7 @@ $BD=$datosInstitucion["ins_bd"]."_".$year;
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0 AND institucion={$datosInstitucion["ins_id"]} AND year={$year}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -285,7 +285,7 @@ $BD=$datosInstitucion["ins_bd"]."_".$year;
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 and uss_bloqueado=0 AND institucion={$datosInstitucion["ins_id"]} AND year={$year}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
