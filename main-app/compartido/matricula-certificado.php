@@ -177,7 +177,7 @@ $modulo = 1;
 
                 $notaFinal=$nota;
                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota,$inicio);
                     $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                 }
 
@@ -232,7 +232,7 @@ $modulo = 1;
 
                 $notaFinal=$nota;
                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota,$inicio);
                     $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                 }
 
@@ -347,7 +347,7 @@ $modulo = 1;
 
                 $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
 
-                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
@@ -391,7 +391,7 @@ $modulo = 1;
                             if(!empty($notasPeriodo[0])){
                                 $notasPeriodoFinal=$notasPeriodo[0];
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
                                     $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                                 }
                             }
@@ -466,7 +466,7 @@ $modulo = 1;
                             if(!empty($notasPeriodo[0])){
                                 $notasPeriodoFinal=$notasPeriodo[0];
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0]);
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
                                     $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                                 }
                             }

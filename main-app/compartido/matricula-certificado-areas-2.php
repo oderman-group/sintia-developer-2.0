@@ -357,7 +357,7 @@ while($i<=$restaAgnos){
 
 									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
-									INNER JOIN ".BD_ACADEMICA.".academico_materias ON mat_id=car_materia
+									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
 									WHERE niv.niv_cod_estudiante='".$_POST["id"]."' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 

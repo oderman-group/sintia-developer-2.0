@@ -360,7 +360,7 @@ include("../compartido/head-informes.php") ?>
 
 									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
 
-									INNER JOIN ".BD_ACADEMICA." am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
+									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
 									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
