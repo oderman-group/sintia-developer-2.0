@@ -95,7 +95,7 @@ if($extension == 'xlsx'){
 							if($tipoMovimiento == 1){
 								$tipo = 3;
 								try{
-									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
+									mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}
@@ -103,7 +103,7 @@ if($extension == 'xlsx'){
 							}else{
 								$tipo = 4;
 								try{
-									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
+									mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}

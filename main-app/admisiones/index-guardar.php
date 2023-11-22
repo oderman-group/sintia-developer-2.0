@@ -2,6 +2,7 @@
 include("bd-conexion.php");
 include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
@@ -10,9 +11,11 @@ if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
 $year=$datosConfig["cfgi_year_inscripcion"];
 
 //DATOS SECRETARIA(O)
-$ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
+$ussQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :idSecretaria AND institucion= :idInstitucion AND year= :year";
 $uss = $pdoI->prepare($ussQuery);
-$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_INT);
+$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_STR);
+$uss->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+$uss->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
 $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
@@ -59,59 +62,74 @@ if ($newId > 0) {
     //Guardar información en SINTIA COLEGIOS
 
     //Estudiante
-    $estuQuery = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_permiso1, uss_foto, uss_portada, uss_idioma, uss_tema, uss_tipo_documento, uss_apellido1)VALUES(:ussDocumento, SHA1('12345678'), 4, :ussNombres, 0, 0, 'default.png', 'default.png', 1, 'green', :ussTipoDocumento, :ussApellido1)";
+    $estuQuery = "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_permiso1, uss_foto, uss_portada, uss_idioma, uss_tema, uss_tipo_documento, uss_apellido1, institucion, year)VALUES(:codigo, :ussDocumento, SHA1('12345678'), 4, :ussNombres, 0, 0, 'default.png', 'default.png', 1, 'green', :ussTipoDocumento, :ussApellido1, :idInstitucion, :year)";
+    $estuId=Utilidades::generateCode("USS");
     $estu = $pdoI->prepare($estuQuery);
+    $estu->bindParam(':codigo', $estuId, PDO::PARAM_STR);
     $estu->bindParam(':ussDocumento', $_POST['documento'], PDO::PARAM_STR);
     $estu->bindParam(':ussNombres', $_POST['nombreEstudiante'], PDO::PARAM_STR);
     $estu->bindParam(':ussTipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
     $estu->bindParam(':ussApellido1', $_POST['apellido1'], PDO::PARAM_STR);
+    $estu->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $estu->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $estu->execute();
-    $estuId = $pdoI->lastInsertId();
 
     //Acudiente
-    $acudienteQuery = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_email, uss_celular)VALUES(:usuario, SHA1('12345678'), 3, :nombre, :email, :celular)";
+    $acudienteQuery = "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_email, uss_celular, institucion, year)VALUES(:codigo, :usuario, SHA1('12345678'), 3, :nombre, :email, :celular, :idInstitucion, :year)";
+    $acuId=Utilidades::generateCode("USS");
     $acudiente = $pdoI->prepare($acudienteQuery);
+    $acudiente->bindParam(':codigo', $acuId, PDO::PARAM_STR);
     $acudiente->bindParam(':usuario', $_POST['documentoAcudiente'], PDO::PARAM_STR);
     $acudiente->bindParam(':nombre', $_POST['nombreAcudiente'], PDO::PARAM_STR);
     $acudiente->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
     $acudiente->bindParam(':celular', $_POST['celular'], PDO::PARAM_STR);
+    $acudiente->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $acudiente->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $acudiente->execute();
-    $acuId = $pdoI->lastInsertId();
 
     //Padre
-    $padreQuery = "INSERT INTO usuarios(uss_tipo)VALUES(3)";
+    $padreQuery = "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_tipo, institucion, year)VALUES(:codigo, 3, :idInstitucion, :year)";
+    $padreId=Utilidades::generateCode("USS");
     $padre = $pdoI->prepare($padreQuery);
+    $padre->bindParam(':codigo', $padreId, PDO::PARAM_STR);
+    $padre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $padre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $padre->execute();
-    $padreId = $pdoI->lastInsertId();
 
     //Madre
-    $madreQuery = "INSERT INTO usuarios(uss_tipo)VALUES(3)";
+    $madreQuery = "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_tipo, institucion, year)VALUES(:codigo, 3, :idInstitucion, :year)";
+    $madreId=Utilidades::generateCode("USS");
     $madre = $pdoI->prepare($madreQuery);
+    $madre->bindParam(':codigo', $madreId, PDO::PARAM_STR);
+    $madre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $madre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $madre->execute();
-    $madreId = $pdoI->lastInsertId();
 
     //Matriculas
-    $matriculasQuery = "INSERT INTO academico_matriculas(mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo)VALUES(:tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1)";
+    $matriculasQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo, institucion, year)VALUES(:codigo, :tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1, :idInstitucion, :year)";
+    $codigoMAT=Utilidades::generateCode("MAT");
     $matriculas = $pdoI->prepare($matriculasQuery);
+    $matriculas->bindParam(':codigo', $codigoMAT, PDO::PARAM_STR);
     $matriculas->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
     $matriculas->bindParam(':documento', $_POST['documento'], PDO::PARAM_STR);
     $matriculas->bindParam(':solicitud', $newId, PDO::PARAM_INT);
-    $matriculas->bindParam(':idUss', $estuId, PDO::PARAM_INT);
+    $matriculas->bindParam(':idUss', $estuId, PDO::PARAM_STR);
     $matriculas->bindParam(':apellido1', $_POST['apellido1'], PDO::PARAM_STR);
     $matriculas->bindParam(':nombres', $_POST['nombreEstudiante'], PDO::PARAM_STR);
-    $matriculas->bindParam(':acudiente', $acuId, PDO::PARAM_INT);
-    $matriculas->bindParam(':padre', $padreId, PDO::PARAM_INT);
-    $matriculas->bindParam(':madre', $madreId, PDO::PARAM_INT);
+    $matriculas->bindParam(':acudiente', $acuId, PDO::PARAM_STR);
+    $matriculas->bindParam(':padre', $padreId, PDO::PARAM_STR);
+    $matriculas->bindParam(':madre', $madreId, PDO::PARAM_STR);
     $matriculas->bindParam(':grado', $_POST['grado'], PDO::PARAM_INT);
+    $matriculas->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
+    $matriculas->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $matriculas->execute();
-    $matId = $pdoI->lastInsertId();
 
     //Documentos
     $documentosQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_documentos(matd_id, matd_matricula, institucion, year)VALUES(:codigo, :matricula, :idInstitucion, :year)";
-    $codigo = "MTD".$newId.strtotime("now");
+    $codigo=Utilidades::generateCode("MTD");
     $documentos = $pdoI->prepare($documentosQuery);
     $documentos->bindParam(':codigo', $codigo, PDO::PARAM_STR);
-    $documentos->bindParam(':matricula', $matId, PDO::PARAM_INT);
+    $documentos->bindParam(':matricula', $codigoMAT, PDO::PARAM_STR);
     $documentos->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
     $documentos->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
     $documentos->execute();

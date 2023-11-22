@@ -43,7 +43,7 @@ require_once("../class/Estudiantes.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="informes-todos.php" onClick="deseaRegresar(this)"><?=$frases[252][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="informes-todos.php" onClick="deseaRegresar(this)"><?=$frases[252][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Informes Boletines</li>
                             </ol>
                         </div>
@@ -63,8 +63,8 @@ require_once("../class/Estudiantes.php");
                                             <div class="col-sm-8">
 												<?php
                                                 try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."'
+                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                                     ORDER BY gra_vocal");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
@@ -76,7 +76,7 @@ require_once("../class/Estudiantes.php");
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$disabled = '';
 														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gra_id'];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -159,8 +159,8 @@ require_once("../class/Estudiantes.php");
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $grados = mysqli_query($conexion, "SELECT * FROM academico_grados
-                                                        WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' ORDER BY gra_vocal");
+                                                        $grados = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+                                                        WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_vocal");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }

@@ -1,8 +1,8 @@
 <?php
 include("bd-conexion.php");
 
-$gradosConsulta = "SELECT * FROM academico_grados
-WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."'";
+$gradosConsulta = "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$datosConfig['conf_id_institucion']} AND year={$datosConfig["conf_agno"]}";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();

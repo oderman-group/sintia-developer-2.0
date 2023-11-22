@@ -30,7 +30,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
@@ -44,7 +44,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								
 								<div class="col-md-4 col-lg-3">
 														
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[106][$datosUsuarioActual['uss_idioma']];?> </header>
                                         <div class="panel-body">
@@ -76,7 +76,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											try{
 												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-												INNER JOIN academico_grados ON gra_id=car_curso
+												INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 												WHERE car_docente='".$datosCargaActual['car_docente']."'
 												ORDER BY car_posicion_docente, car_curso, car_grupo, am.mat_nombre");
@@ -125,14 +125,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Indicador</th>
 														<th>Valor</th>
 														<th>Periodo</th>
 														<th>Creado</th>
 														<th>#ACTV</th>
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
@@ -142,7 +142,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc.ipc_periodo='".$periodoConsultaActual."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-														INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+														INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 														WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]} $filtro
 														ORDER BY ipc.ipc_periodo");
 													} catch (Exception $e) {
@@ -153,7 +153,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 $sumaPorcentaje = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1");
+															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -173,16 +173,16 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		
-																		<li><a href="cargas-indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="cargas-indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		
-																		<li><a href="javascript:void(0);" name="cargas-indicadores-eliminar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="javascript:void(0);" name="cargas-indicadores-eliminar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	</ul>
 																</div>
 															</td>

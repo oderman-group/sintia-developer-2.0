@@ -14,9 +14,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
-INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-WHERE ind_id='".$idR."'");
+$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+WHERE ai.ind_id='".$idR."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -42,7 +42,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$calificacion['ind_nombre'];?></li>
                             </ol>
                         </div>
@@ -95,7 +95,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 											<p>Puedes cambiar a otro indicador rápidamente para calificar a tus estudiantes o hacer modificaciones de notas.</p>
 											<?php
 											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-											INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+											INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 											WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.ipc_indicador!='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 											ORDER BY ipc.ipc_id DESC
 											");
@@ -138,8 +138,8 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
                                                     <tr>
                                                         <th>#</th>
 														<th>Cod</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?><br>Indicador</th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?><br>Indicador</th>
 														<th>Recup.<br>Indicador</th>
 														<th>DEF.<br>PERIODO <?=$periodoConsultaActual;?></th>
                                                     </tr>
@@ -152,14 +152,14 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$idR."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
+														$consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$idR."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
-														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$idR."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
-														WHERE cal_id_estudiante='".$resultado['mat_id']."'");
+														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_id_tipo='".$idR."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_id_carga='".$cargaConsultaActual."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
+														WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 														$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";

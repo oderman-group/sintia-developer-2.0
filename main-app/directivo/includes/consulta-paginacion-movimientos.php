@@ -3,7 +3,7 @@
     if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
         $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
-        INNER JOIN usuarios ON uss_id=fcu_usuario
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
         WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
         ORDER BY fcu_id");
     } catch (Exception $e) {

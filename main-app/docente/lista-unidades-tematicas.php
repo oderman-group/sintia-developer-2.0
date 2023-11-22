@@ -29,9 +29,9 @@ include("../compartido/head.php");
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th><?= $frases[49][$datosUsuarioActual[8]]; ?></th>
-                        <th><?= $frases[187][$datosUsuarioActual[8]]; ?></th>
-                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                        <th><?= $frases[49][$datosUsuarioActual['uss_idioma']]; ?></th>
+                        <th><?= $frases[187][$datosUsuarioActual['uss_idioma']]; ?></th>
+                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                     </tr>
                 </thead>
                 <tbody>

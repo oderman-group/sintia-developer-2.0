@@ -33,7 +33,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[167][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,13 +45,13 @@
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
 									<form name="formularioGuardar" action="importar-info-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
-										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual[8]];?></p>	
+										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual['uss_idioma']];?></p>	
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></label>
@@ -59,7 +59,7 @@
 												<?php
 												$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-												INNER JOIN academico_grados ON gra_id=car_curso
+												INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 												WHERE car_docente='".$_SESSION["id"]."'
 												ORDER BY car_curso, car_grupo, am.mat_nombre");
@@ -94,7 +94,7 @@
                                             </div>
                                         </div>
 										
-										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual[8]];?></p>	
+										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual['uss_idioma']];?></p>	
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></label>
@@ -163,7 +163,7 @@
 
 										<p><mark><?=$frases[379][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										
-										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual[8]];?>">&nbsp;
+										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
 										
                                     </form>
                                 </div>

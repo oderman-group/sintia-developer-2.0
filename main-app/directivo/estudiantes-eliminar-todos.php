@@ -31,7 +31,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_ausencias");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -41,12 +41,12 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_calificaciones");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_matriculas"); //ELIMINA TODO
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); //ELIMINA TODO
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -81,7 +81,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_tipo=4");
+	mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=4 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

@@ -27,7 +27,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$datosConsulta['form_nombre'];?></li>
                             </ol>
                         </div>
@@ -90,7 +90,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 															  <p><?=$resultado['eva_descripcion'];?></p>
 															  
 															  <p>
-																  <b><?=$frases[139][$datosUsuarioActual[8]];?>:</b> <?=$cantPreguntas;?>
+																  <b><?=$frases[139][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$cantPreguntas;?>
 															  </p>
 															  
 															  <p> 

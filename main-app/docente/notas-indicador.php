@@ -102,12 +102,12 @@ include("../compartido/head.php");
 
 														<th style="width: 50px;">#</th>
 
-														<th style="width: 400px;"><?= $frases[61][$datosUsuarioActual[8]]; ?></th>
+														<th style="width: 400px;"><?= $frases[61][$datosUsuarioActual['uss_idioma']]; ?></th>
 
 														<?php
 
 														$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-														INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+														INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 														WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 														while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
@@ -125,7 +125,7 @@ include("../compartido/head.php");
 
 														<th style="text-align:center; width:60px;">%</th>
 
-														<th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual[8]]; ?></th>
+														<th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual['uss_idioma']]; ?></th>
 
 													</tr>
 
@@ -180,15 +180,15 @@ include("../compartido/head.php");
 															<?php
 
 															$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-															INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+															INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 															WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 															while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
 																//LAS CALIFICACIONES
-																$consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM academico_calificaciones
-																INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $rA['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
-																WHERE cal_id_estudiante=" . $resultado['mat_id']);
+																$consultaSumaNotas=mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+																INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='" . $rA['ipc_indicador'] . "' AND aa.act_periodo='" . $periodoConsultaActual . "' AND aa.act_id_carga='" . $cargaConsultaActual . "' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
+																WHERE aac.cal_id_estudiante='" . $resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 																$sumaNotas = mysqli_fetch_array($consultaSumaNotas, MYSQLI_BOTH);
 
 																$notasResultado = round($sumaNotas[0] / ($rA['ipc_valor'] / 100), $config['conf_decimales_notas']);

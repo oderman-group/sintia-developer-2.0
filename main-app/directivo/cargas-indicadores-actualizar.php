@@ -29,7 +29,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	$porcentajeRestante = ($porcentajeRestante + $_POST["valorIndicador"]);
 
 	try{
-		mysqli_query($conexion, "UPDATE academico_indicadores SET ind_nombre='" . $_POST["contenido"] . "' WHERE ind_id='" . $_POST["idInd"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores SET ind_nombre='" . $_POST["contenido"] . "' WHERE ind_id='" . $_POST["idInd"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}

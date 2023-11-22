@@ -3,7 +3,7 @@ session_start();
 include("../modelo/conexion.php");
 $datosUnicosInstitucion=$_SESSION["datosUnicosInstitucion"];
 $mensajesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails 
-INNER JOIN usuarios ON uss_id=ema_de
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_de AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]}
 WHERE ema_para='".$_SESSION["id"]."' AND ema_visto=0 ORDER BY ema_id DESC");
 $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 ?>

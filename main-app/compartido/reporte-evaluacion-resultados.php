@@ -5,8 +5,8 @@ include("../../config-general/consulta-usuario-actual.php");?>
 <?php
 $consultaDatosGenerales=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_evaluacion_asignar 
 INNER JOIN ".$baseDatosServicios.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion='".$config['conf_id_institucion']."' AND evag_year='".$_SESSION["bd"]."'
-INNER JOIN usuarios ON uss_id=epag_usuario
-INNER JOIN academico_grados ON gra_id=epag_curso
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=epag_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=epag_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=epag_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 WHERE epag_id='".$_GET["a"]."'");
 $datosGenerales = mysqli_fetch_array($consultaDatosGenerales, MYSQLI_BOTH);
@@ -44,7 +44,7 @@ $datosGenerales = mysqli_fetch_array($consultaDatosGenerales, MYSQLI_BOTH);
 <?php
 $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_resultados
 INNER JOIN ".$baseDatosServicios.".general_preguntas ON pregg_id=resg_id_pregunta
-INNER JOIN academico_matriculas ON mat_id=resg_id_estudiante
+INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=resg_id_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 WHERE resg_id_asignacion='".$_GET["a"]."'");
 $consultaNumPregunta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_preguntas WHERE pregg_id_evaluacion='".$datosGenerales['epag_id_evaluacion']."'");
 $preguntasNum = mysqli_num_rows($consultaNumPregunta);

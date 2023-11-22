@@ -3,8 +3,9 @@
 									
                        		<div class="row">
 											<?php
-											$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+											$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
 											INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+											WHERE uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 											ORDER BY uss_nombre
 											LIMIT 0,100
 											");

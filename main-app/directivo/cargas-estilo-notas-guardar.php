@@ -9,6 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$codigo=Utilidades::generateCode("CAT");
 
 	if (trim($_POST["nombre"]) == "") {
 		include("../compartido/guardar-historial-acciones.php");
@@ -17,11 +19,11 @@ include("../compartido/historial-acciones-guardar.php");
 		exit();
 	}
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_categorias_notas (catn_nombre)VALUES('" . $_POST["nombre"] . "')");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_categorias_notas (catn_id, catn_nombre, institucion, year)VALUES('".$codigo."', '" . $_POST["nombre"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '"</script>';
+	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas.php"</script>';
 	exit();

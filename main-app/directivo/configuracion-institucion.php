@@ -35,10 +35,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> de la Institucion</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de la Institucion</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> de la Institucion</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de la Institucion</li>
                             </ol>
                         </div>
                     </div>

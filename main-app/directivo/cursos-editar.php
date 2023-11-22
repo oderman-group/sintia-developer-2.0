@@ -67,7 +67,7 @@ if(!Modulos::validarPermisoEdicion()){
                     
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+                                <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 <div class="panel-body">
                                 
                                     <form name="formularioGuardar" action="cursos-actualizar.php" method="post">
@@ -166,9 +166,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
-					                                        if($resultadoCurso["gra_grado_siguiente"]==$opcionesDatos[0]){$select='selected';}
+					                                        if($resultadoCurso["gra_grado_siguiente"]==$opcionesDatos['gra_id']){$select='selected';}
                                                     ?>
-                                                        <option value="<?=$opcionesDatos[0];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                        <option value="<?=$opcionesDatos['gra_id'];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>
@@ -185,9 +185,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <?php
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                             $select='';
-					                                        if($resultadoCurso["gra_grado_anterior"]==$opcionesDatos[0]){$select='selected';}
+					                                        if($resultadoCurso["gra_grado_anterior"]==$opcionesDatos['gra_id']){$select='selected';}
                                                     ?>
-                                                        <option value="<?=$opcionesDatos[0];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                        <option value="<?=$opcionesDatos['gra_id'];?>" <?=$select; ?>><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>
@@ -205,7 +205,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
-                                        <?php if($datosUsuarioActual[3]==1) {?>
+                                        <?php if($datosUsuarioActual['uss_tipo']==1) {?>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-2">

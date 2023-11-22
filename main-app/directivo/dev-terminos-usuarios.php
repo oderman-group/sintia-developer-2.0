@@ -108,7 +108,7 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                                         if($resultado['ttpxu_id_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

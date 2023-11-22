@@ -91,7 +91,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 											<div class="form-group">
 												<div class="offset-md-3 col-md-9">
 													<button type="submit" class="btn btn-info">Comentar</button>
-													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 												</div>
 											</div>
 										</form>
@@ -105,16 +105,16 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 											$filtro = '';
 											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
 									
-											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios
-											INNER JOIN usuarios ON uss_id=com_id_estudiante
-											WHERE com_id_foro='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
+											INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+											WHERE com_id_foro='".$idR."' AND com.institucion={$config['conf_id_institucion']} AND com.year={$_SESSION["bd"]}
 											$filtro
 											ORDER BY com_id DESC
 											");
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
-												INNER JOIN usuarios ON uss_id=fore.fore_id_estudiante
+												INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fore.fore_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 												WHERE fore.fore_id_comentario='".$resultado['com_id']."' AND fore.institucion={$config['conf_id_institucion']} AND fore.year={$_SESSION["bd"]}
 												ORDER BY fore.fore_id ASC
 												");
@@ -137,7 +137,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 																	</button>
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['com_id'];?>">
-																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>

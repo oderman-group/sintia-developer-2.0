@@ -22,7 +22,7 @@ if (!empty($_FILES['foto']['name'])) {
 	$foto = $_POST['fotoA'];
 }
 
-$sql = "UPDATE academico_matriculas SET 
+$sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET 
 mat_primer_apellido = :apellido1, 
 mat_segundo_apellido = :apellido2, 
 mat_nombres = :nombre, 
@@ -41,10 +41,10 @@ mat_lugar_colegio_procedencia = :iLugarProcedencia,
 mat_lugar_expedicion = :lugarExp,
 mat_motivo_retiro_anterior = :motivoRetiro,
 mat_foto = :foto
-WHERE mat_id = :idMatricula";
+WHERE mat_id = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $stmt = $conexionPDO->prepare($sql);
 
-$stmt->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_INT);
+$stmt->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_STR);
 $stmt->bindParam(':apellido1', $_POST['primerApellidos'], PDO::PARAM_STR);
 $stmt->bindParam(':apellido2', $_POST['segundoApellidos'], PDO::PARAM_STR);
 $stmt->bindParam(':nombre', $_POST['nombre'], PDO::PARAM_STR);
@@ -63,6 +63,8 @@ $stmt->bindParam(':iLugarProcedencia', $_POST['lugar'], PDO::PARAM_STR);
 $stmt->bindParam(':lugarExp', $_POST['LugarExp'], PDO::PARAM_STR);
 $stmt->bindParam(':motivoRetiro', $_POST['motivo'], PDO::PARAM_STR);
 $stmt->bindParam(':foto', $foto, PDO::PARAM_STR);
+$stmt->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$stmt->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 
 $stmt->execute();
 $filasAfectadas = $stmt->rowCount();
@@ -179,7 +181,7 @@ matd_certificados = :certificado
 WHERE matd_matricula = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $documentos = $conexionPDO->prepare($documentosQuery);
 
-$documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_INT);
+$documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_STR);
 $documentos->bindParam(':pazysalvo', $pazysalvo, PDO::PARAM_STR);
 $documentos->bindParam(':observador', $observador, PDO::PARAM_STR);
 $documentos->bindParam(':eps', $eps, PDO::PARAM_STR);
@@ -196,7 +198,7 @@ $filasAfectadasDoc = $documentos->rowCount();
 
 
 //Acudiente
-$acudienteQuery = "UPDATE usuarios SET
+$acudienteQuery = "UPDATE ".BD_GENERAL.".usuarios SET
 uss_usuario = :usuarioAcudiente, 
 uss_clave = SHA1('12345678'), 
 uss_nombre = :nombreAcudiente, 
@@ -206,10 +208,10 @@ uss_direccion = :dirAcudiente,
 uss_email = :emailAcudiente,
 uss_religion = :religionAcudiente,
 uss_parentezco = :parentescoAcudiente
-WHERE uss_id = :acudiente";
+WHERE uss_id = :acudiente AND institucion= :idInstitucion AND year= :year";
 $acudiente = $conexionPDO->prepare($acudienteQuery);
 
-$acudiente->bindParam(':acudiente', $_POST['idAcudiente'], PDO::PARAM_INT);
+$acudiente->bindParam(':acudiente', $_POST['idAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':usuarioAcudiente', $_POST['documentoAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':nombreAcudiente', $_POST['nombreAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':telefonoAcudiente', $_POST['telfonoAcudiente'], PDO::PARAM_STR);
@@ -218,12 +220,14 @@ $acudiente->bindParam(':dirAcudiente', $_POST['direccionAcudiente'], PDO::PARAM_
 $acudiente->bindParam(':emailAcudiente', $_POST['emailAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':religionAcudiente', $_POST['religionAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':parentescoAcudiente', $_POST['parentesco'], PDO::PARAM_STR);
+$acudiente->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$acudiente->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 
 $acudiente->execute();
 $filasAfectadasAcu = $acudiente->rowCount();
 
 //Padre
-$padreQuery = "UPDATE usuarios SET
+$padreQuery = "UPDATE ".BD_GENERAL.".usuarios SET
 uss_usuario = :usuariopadre, 
 uss_clave = SHA1('12345678'), 
 uss_nombre = :nombrepadre, 
@@ -234,10 +238,10 @@ uss_email = :emailpadre,
 uss_ocupacion = :ocupacionpadre,
 uss_religion = :religionpadre,
 uss_tipo_documento = :tipodocpadre
-WHERE uss_id = :padre";
+WHERE uss_id = :padre AND institucion= :idInstitucion AND year= :year";
 $padre = $conexionPDO->prepare($padreQuery);
 
-$padre->bindParam(':padre', $_POST['idPadre'], PDO::PARAM_INT);
+$padre->bindParam(':padre', $_POST['idPadre'], PDO::PARAM_STR);
 $padre->bindParam(':usuariopadre', $_POST['documentoPadre'], PDO::PARAM_STR);
 $padre->bindParam(':nombrepadre', $_POST['nombrePadre'], PDO::PARAM_STR);
 $padre->bindParam(':telefonopadre', $_POST['telfonoPadre'], PDO::PARAM_STR);
@@ -247,13 +251,15 @@ $padre->bindParam(':emailpadre', $_POST['emailPadre'], PDO::PARAM_STR);
 $padre->bindParam(':ocupacionpadre', $_POST['ocupacionPadre'], PDO::PARAM_STR);
 $padre->bindParam(':religionpadre', $_POST['religionPadre'], PDO::PARAM_STR);
 $padre->bindParam(':tipodocpadre', $_POST['tipoDocumentoPadre'], PDO::PARAM_STR);
+$padre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$padre->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 
 $padre->execute();
 $filasAfectadasPad = $padre->rowCount();
 
 
 //Madre
-$madreQuery = "UPDATE usuarios SET
+$madreQuery = "UPDATE ".BD_GENERAL.".usuarios SET
 uss_usuario = :usuariomadre, 
 uss_clave = SHA1('12345678'), 
 uss_nombre = :nombremadre, 
@@ -264,10 +270,10 @@ uss_email = :emailmadre,
 uss_ocupacion = :ocupacionmadre,
 uss_religion = :religionmadre,
 uss_tipo_documento = :tipodocmadre
-WHERE uss_id = :madre";
+WHERE uss_id = :madre AND institucion= :idInstitucion AND year= :year";
 $madre = $conexionPDO->prepare($madreQuery);
 
-$madre->bindParam(':madre', $_POST['idMadre'], PDO::PARAM_INT);
+$madre->bindParam(':madre', $_POST['idMadre'], PDO::PARAM_STR);
 $madre->bindParam(':usuariomadre', $_POST['documentoMadre'], PDO::PARAM_STR);
 $madre->bindParam(':nombremadre', $_POST['nombreMadre'], PDO::PARAM_STR);
 $madre->bindParam(':telefonomadre', $_POST['telfonoMadre'], PDO::PARAM_STR);
@@ -277,6 +283,8 @@ $madre->bindParam(':emailmadre', $_POST['emailMadre'], PDO::PARAM_STR);
 $madre->bindParam(':ocupacionmadre', $_POST['ocupacionMadre'], PDO::PARAM_STR);
 $madre->bindParam(':religionmadre', $_POST['religionMadre'], PDO::PARAM_STR);
 $madre->bindParam(':tipodocmadre', $_POST['tipoDocumentoMadre'], PDO::PARAM_STR);
+$madre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$madre->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 
 $madre->execute();
 $filasAfectadasMad = $madre->rowCount();

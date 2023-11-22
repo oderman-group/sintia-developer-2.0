@@ -108,7 +108,7 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                                                         if($resultado['cxu_id_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

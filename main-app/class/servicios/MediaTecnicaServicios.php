@@ -19,11 +19,11 @@ class MediaTecnicaServicios extends Servicios
     {
       global $baseDatosServicios, $config;
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
-      INNER JOIN academico_matriculas ON matcur_id_matricula=mat_id
+      INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
       INNER JOIN academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
       INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-      INNER JOIN academico_grados ON gra_id=car_curso
-	    INNER JOIN usuarios ON uss_id=car_docente
+      INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+	    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
       ";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
@@ -34,16 +34,21 @@ class MediaTecnicaServicios extends Servicios
       return Servicios::SelectSql($sql);         
     }
     
-    public static function listarEstudiantes($parametrosArray=null,string $BD    = '')
+    public static function listarEstudiantes(
+      $parametrosArray=null,
+      string $BD    = '',
+      string $yearBd    = ''
+    )
     {
       global $baseDatosServicios, $config;
+      $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
       
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
-      LEFT JOIN ".$BD."academico_matriculas ON matcur_id_matricula=mat_id
-			LEFT JOIN ".$BD."academico_grados ON gra_id=matcur_id_curso
-      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-			LEFT JOIN ".$BD."usuarios ON uss_id=mat_id_usuario
-      LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat_genero			
+      LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
+			LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
+			LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
+      LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero			
       ";
       if($parametrosArray && count($parametrosArray)>0){
         $grupo="";
@@ -137,7 +142,7 @@ class MediaTecnicaServicios extends Servicios
 
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
-            INNER JOIN academico_matriculas ON mat_id=matcur_id_matricula
+            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=matcur_id_matricula AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
             WHERE matcur_id_matricula='".$estudiante."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -167,15 +172,15 @@ class MediaTecnicaServicios extends Servicios
               WHEN 5 THEN 'En inscripción' 
             END AS estado
             FROM $baseDatosServicios.mediatecnica_matriculas_cursos mt 
-            INNER JOIN academico_matriculas am ON mt.matcur_id_matricula=am.mat_id
+            INNER JOIN ".BD_ACADEMICA.".academico_matriculas am ON mt.matcur_id_matricula=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
             INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON mt.matcur_id_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
-            INNER JOIN academico_grados agr ON agr.gra_id=mt.matcur_id_curso
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=mt.matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
             INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
             INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
             INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion
             INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
             INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
-            INNER JOIN usuarios u ON u.uss_id=am.mat_acudiente or am.mat_acudiente is null
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
             WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."' AND $filtro
             GROUP BY mat_id
             ORDER BY mat_primer_apellido,mat_estado_matricula;");

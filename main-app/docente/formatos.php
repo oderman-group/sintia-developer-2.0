@@ -52,7 +52,7 @@
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 														<div class="btn-group">
-															<a href="formatos-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor"><?=$frases[231][$datosUsuarioActual[8]];?> <i class="fa fa-plus"></i></a>
+															<a href="formatos-agregar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" id="addRow" class="btn deepPink-bgcolor"><?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i></a>
 														</div>
 												</div>
 											</div>
@@ -76,12 +76,12 @@
 														  <div class="panel-body">
 															  
 															  <p>
-																  <b><?=$frases[222][$datosUsuarioActual[8]];?>:</b> <?=$cantCategorias;?>
+																  <b><?=$frases[222][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$cantCategorias;?>
 															  </p>
 															  
 															  <p> 
-																  <a class="btn" href="formatos-categorias.php?idF=<?=$resultado['form_id'];?>"><i class="fa fa-list"></i> <?=$frases[222][$datosUsuarioActual[8]];?></a>
-																  <a class="btn" href="monitoreos-realizar.php?idF=<?=$resultado['form_id'];?>"><i class="fa fa-check-square-o"></i> <?=$frases[225][$datosUsuarioActual[8]];?></a>
+																  <a class="btn" href="formatos-categorias.php?idF=<?=$resultado['form_id'];?>"><i class="fa fa-list"></i> <?=$frases[222][$datosUsuarioActual['uss_idioma']];?></a>
+																  <a class="btn" href="monitoreos-realizar.php?idF=<?=$resultado['form_id'];?>"><i class="fa fa-check-square-o"></i> <?=$frases[225][$datosUsuarioActual['uss_idioma']];?></a>
 																  <a class="btn blue" href="formatos-editar.php?idR=<?=$resultado['form_id'];?>"><i class="fa fa-edit"></i></a>
 																  <a class="btn red" href="#" name="guardar.php?get=30&idR=<?=$resultado['form_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 															  </p>

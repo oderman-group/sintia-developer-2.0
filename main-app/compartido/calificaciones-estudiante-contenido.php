@@ -24,11 +24,11 @@
 
 								//DOCENTES
 
-								if($datosUsuarioActual[3] == TIPO_DOCENTE){?>
+								if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -46,9 +46,9 @@
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
-										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -76,7 +76,7 @@
 
 									<?php
 
-									if($datosUsuarioActual[3]!=4){
+									if($datosUsuarioActual['uss_tipo']!=4){
 
 									?>
 
@@ -236,7 +236,7 @@
 
 									//ESTUDIANTES
 
-									if($datosUsuarioActual[3]==4){
+									if($datosUsuarioActual['uss_tipo']==4){
 
 										include("filtro-cargas.php");
 
@@ -310,11 +310,11 @@
 
 													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".base64_decode($_GET["indicador"])."'";}
 
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
 
 													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'
 
-													 AND act_registrada=1 AND act_estado=1 $filtro
+													 AND act_registrada=1 AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 
 													 ");
 
@@ -327,34 +327,34 @@
 													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
-														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
+														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-														$porNuevo = ($resultado[3] / 100);
+														$porNuevo = ($resultado['act_valor'] / 100);
 
 														$acumulaValor = ($acumulaValor + $porNuevo);
 
 														$notaMultiplicada=0;
 														$nota3="";
 														$nota4="";
-														if(!empty($nota[3])){
-															$nota3=$nota[3];
-															$nota4=$nota[4];
-															$notaMultiplicada = ($nota[3] * $porNuevo);
+														if(!empty($nota['cal_nota'])){
+															$nota3=$nota['cal_nota'];
+															$nota4=$nota['cal_observaciones'];
+															$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
-														$porcentajeActualActividad +=$resultado[3];
+														$porcentajeActualActividad +=$resultado['act_valor'];
 
 														//COLOR DE CADA NOTA
 
-														if(!empty($nota[3]) && $nota[3]<$config[5]) $colorNota = $config[6];
+														if(!empty($nota['cal_nota']) && $nota['cal_nota']<$config[5]) $colorNota = $config[6];
 
 														else $colorNota = $config[7];
 
-														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores 
-															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-															WHERE ind_id='".$resultado['act_id_tipo']."'
+														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai 
+															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+															WHERE ai.ind_id='".$resultado['act_id_tipo']."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 															"), MYSQLI_BOTH); 
 
 															$notaFinal=$nota3;
@@ -371,16 +371,16 @@
 
                                                         <td><?=$contReg;?></td>
 
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['act_id'];?></td>
 
 														<td>
-															<?=$resultado[1];?><br>
+															<?=$resultado['act_descripcion'];?><br>
 															<span style="font-size: 10px; color: blue;"><b>INDICADOR:</b> <?=$indicadorName['ind_nombre']." (".$indicadorName['ipc_valor']."%)";?></span>
 														</td>
 
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['act_fecha'];?></td>
 
-														<td><?=$resultado[3];?>%</td>
+														<td><?=$resultado['act_valor'];?>%</td>
 
 														<td style="color:<?=$colorNota;?>"><?=$notaFinal;?></td>
 
@@ -416,7 +416,7 @@
 
 												<?php
 
-													if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_sin_nota_numerica']==1){}else{
+													if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) and $config['conf_sin_nota_numerica']==1){}else{
 
 													?>
 

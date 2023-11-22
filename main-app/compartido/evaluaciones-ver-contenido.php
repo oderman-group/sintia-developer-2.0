@@ -62,18 +62,18 @@
                             </div>
                             <?php 
 							//ESTUDIANTES
-							if($datosUsuarioActual[3]==4){?>
+							if($datosUsuarioActual['uss_tipo']==4){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
 							<?php }?>
 							
 							<?php 
 							//DOCENTES
-							if($datosUsuarioActual[3]==2){?>
+							if($datosUsuarioActual['uss_tipo']==2){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 								<li class="active"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></li>
                             </ol>
@@ -87,13 +87,13 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
-												<p><?=$frases[155][$datosUsuarioActual[8]];?></p>
+												<p><?=$frases[155][$datosUsuarioActual['uss_idioma']];?></p>
 												<p>
-													<b><?=$frases[141][$datosUsuarioActual[8]];?>:</b> <?=$frases[144][$datosUsuarioActual[8]];?>
+													<b><?=$frases[141][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[144][$datosUsuarioActual['uss_idioma']];?>
 												</p>
 											
 												<p>
-													<b><?=$frases[142][$datosUsuarioActual[8]];?>:</b> <?=$frases[145][$datosUsuarioActual[8]];?>
+													<b><?=$frases[142][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[145][$datosUsuarioActual['uss_idioma']];?>
 												</p>
 										</div>
 									</div>
@@ -101,7 +101,7 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
-											<p><?=$frases[159][$datosUsuarioActual[8]];?></p>
+											<p><?=$frases[159][$datosUsuarioActual['uss_idioma']];?></p>
 											<?php
 											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
 											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
@@ -145,7 +145,7 @@
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
-													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual[8]].".</span>";
+													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual['uss_idioma']].".</span>";
 													continue;
 												}
 												
@@ -231,7 +231,7 @@
 									</form>
 								
 									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[160][$datosUsuarioActual[8]];?> </header>
+										<header class="panel-heading panel-heading-purple"><?=$frases[160][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<p>Este gráfico muestra cuántos estudiantes, de los que ya finalizaron la evaluación, respondieron correcta o incorrectamente cada pregunta.</p>
 											<canvas id="myChart" width="400" height="400"></canvas>
@@ -302,11 +302,11 @@
 												</div>
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_desde'];?></div>
 													</li>
 													<li class="list-group-item">
-														<b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_hasta'];?></div>
 													</li>
 												</ul>
@@ -314,30 +314,30 @@
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$cantPreguntas;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title" style="color: chartreuse;"> <span id="resp"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <span id="fin"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$respuestasEvaluacion[0];?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[156][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[156][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$respuestasEvaluacion[1];?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[157][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[157][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title" <?=$title;?> <?=$style;?>> <?=$notaFinal;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[108][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[108][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 

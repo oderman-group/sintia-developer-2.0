@@ -56,7 +56,7 @@ $datosCategorias = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                     <div class="col-sm-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-categorias-productos-actualizar.php" method="post" enctype="multipart/form-data">

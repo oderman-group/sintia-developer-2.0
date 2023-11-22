@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 try{
     $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
-    INNER JOIN academico_indicadores ON ind_id=aic.ipc_indicador
+    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
     WHERE aic.ipc_carga='".$cargaConsultaActual."' AND aic.ipc_periodo='".$periodoConsultaActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
@@ -67,12 +67,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Agregar <?=$frases[63][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title">Agregar <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Agregar <?=$frases[63][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Agregar <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -82,7 +82,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    

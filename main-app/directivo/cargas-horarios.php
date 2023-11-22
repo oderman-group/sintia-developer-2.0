@@ -29,7 +29,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Horarios</li>
                             </ol>
                         </div>
@@ -111,7 +111,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>

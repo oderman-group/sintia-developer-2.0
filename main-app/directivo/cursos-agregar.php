@@ -57,7 +57,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -83,7 +83,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>"><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gra_id'];?>"><?=strtoupper($opcionesDatos['gra_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>

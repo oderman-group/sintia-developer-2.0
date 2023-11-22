@@ -1,8 +1,8 @@
 <?php
 //CALCULO DEFINITIVA
 
-$consultaD = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."'");
+$consultaD = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$carga."' AND act_registrada=1 AND act_estado=1 AND act_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 
 
@@ -21,17 +21,17 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 	while($resultadoD = mysqli_fetch_array($consultaD, MYSQLI_BOTH)){
 
-		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultadoD[0]."' AND cal_id_estudiante='".$estudiante."'"), MYSQLI_BOTH);
+		$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultadoD['act_id']."' AND cal_id_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 		
 
-		if(isset($nota[3])&&$nota[3]!=""){
+		if(isset($nota['cal_nota'])&&$nota['cal_nota']!=""){
 
-			$porNuevo = ($resultadoD[3] / 100);
+			$porNuevo = ($resultadoD['act_valor'] / 100);
 
 			$acumulaValor = ($acumulaValor + $porNuevo);
 
-			$notaMultiplicada = ($nota[3] * $porNuevo);
+			$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 
 			$sumaNota = ($sumaNota + $notaMultiplicada);
 

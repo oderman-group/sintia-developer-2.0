@@ -57,7 +57,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -93,7 +93,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
                                                     try{
-                                                        $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
+                                                        $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }

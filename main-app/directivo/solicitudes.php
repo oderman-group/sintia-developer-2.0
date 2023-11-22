@@ -69,8 +69,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 include("includes/consulta-paginacion-solicitudes.php");
                                                 try{
                                                     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
-                                                    LEFT JOIN usuarios ON uss_id=soli_remitente
-                                                    LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+                                                    LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=soli_remitente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+                                                    LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=soli_id_recurso AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                                                     WHERE soli_institucion='".$config['conf_id_institucion']."' 
                                                     AND soli_year='".$_SESSION["bd"]."' $filtro
                                                     LIMIT $inicio,$registros");

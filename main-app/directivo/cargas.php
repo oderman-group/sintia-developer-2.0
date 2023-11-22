@@ -93,14 +93,14 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Docente</th>
 														<th>Curso</th>
 														<th>Asignatura</th>
 														<th>I.H</th>
 														<th>Periodo Actual</th>
                                         				<th style="text-align:center;">NOTAS<br>Declaradas - Registradas</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -108,10 +108,10 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													include("includes/consulta-paginacion-cargas.php");	
 													try{										       
 														$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
-														INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
+														INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
 														LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 														LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-														LEFT JOIN usuarios ON uss_id=car_docente
+														LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 														WHERE car_id=car_id $filtro
 														ORDER BY car_id
 														LIMIT $inicio,$registros;");
@@ -172,23 +172,23 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														
 														<td>
 															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu" style="z-index: 9000;">
 																		<?php if(Modulos::validarPermisoEdicion()){?>
-																			<li><a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
 																				<li>
-																				    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cargas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')"><?=$frases[174][$datosUsuarioActual[8]];?></a>
+																				    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cargas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
 																				</li>
 																			<?php }?>
 																	  		<li>
 																			    <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>')">Ver como docente</a>
 																			<?php }?>
 																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado[0]);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
-																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado[0]);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado[0]);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	  <li><a href="cargas-indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&docente=<?=base64_encode($resultado['car_docente']);?>">Indicadores</a></li>
 																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla</a></li>
 																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla con notas</a></li>

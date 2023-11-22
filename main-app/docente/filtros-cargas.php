@@ -1,5 +1,5 @@
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual[8]];?></p>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
+									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual['uss_idioma']];?></p>
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[106][$datosUsuarioActual['uss_idioma']];?> </header>
@@ -36,7 +36,7 @@
 											<?php
 											$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 											INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-											INNER JOIN academico_grados ON gra_id=car_curso
+											INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 											INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 											WHERE car_docente='".$_SESSION["id"]."'
 											ORDER BY car_posicion_docente, car_curso, car_grupo, am.mat_nombre

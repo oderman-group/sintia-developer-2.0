@@ -12,9 +12,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-INNER JOIN academico_indicadores ON ind_id=act_id_tipo
-WHERE act_id='".$idR."' AND act_estado=1");
+$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades aa 
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+WHERE aa.act_id='".$idR."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 
@@ -66,7 +66,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 							<ol class="breadcrumb page-breadcrumb pull-right">
 
-                                <li><a class="parent-item" href="calificaciones.php"><?=$frases[6][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="calificaciones.php"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
                                 <li class="active"><?=$calificacion['act_descripcion'];?></li>
 
@@ -170,9 +170,8 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 											<?php
 
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividades 
-
-											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$idR."'
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
+											WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND act_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
 											ORDER BY act_id DESC
 
@@ -262,9 +261,9 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
                                                         <th>#</th>
 
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
 
 														<?php if($config['conf_forma_mostrar_notas'] == CUALITATIVA){	?>
 															<th>Nota<br>Cualitativa</th>
@@ -272,7 +271,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														<th>Recup.</th>
 
-														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
 
                                                     </tr>
 
@@ -294,10 +293,10 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 														 if($calificacion['act_registrada']==1){
 
 															 //Consulta de calificaciones si ya la tienen puestas.
-															$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$idR."'");
+															$consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante=".$resultado['mat_id']." AND cal_id_actividad='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
-															 if(!empty($notas[3]) && $notas[3]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[3]) && $notas[3]>=$config[5]) $colorNota = $config[7];
+															 if(!empty($notas['cal_nota']) && $notas['cal_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['cal_nota']) && $notas['cal_nota']>=$config[5]) $colorNota = $config[7];
 
 														 }
 

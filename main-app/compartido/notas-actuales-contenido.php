@@ -28,7 +28,7 @@
 									</div>
 									
 									<?php
-									if($datosUsuarioActual[3]!=4){
+									if($datosUsuarioActual['uss_tipo']!=4){
 									?>
 
 									<div class="panel">
@@ -88,7 +88,7 @@
 													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 													WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, academico_grados, usuarios WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 														
 														//DEFINITIVAS
@@ -122,7 +122,7 @@
 														
 														<td style="text-align:center;">
 															<div class="btn-group">
-																	  <button type="button" class="btn btn-danger"><?=$frases[88][$datosUsuarioActual[8]];?></button>
+																	  <button type="button" class="btn btn-danger"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></button>
 																	  <button type="button" class="btn btn-danger dropdown-toggle m-r-20" data-toggle="dropdown">
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>

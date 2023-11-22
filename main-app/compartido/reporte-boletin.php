@@ -86,7 +86,7 @@ $cont=1;
 $contador = 0;  //para que solo halla un while en area
 $totalDefini=0;
 $materiasPerdidas=0;
-$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM academico_areas, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (ar_id=am.mat_area AND am.at_id=car_materia) AND (car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") AND ar_id=am.mat_area AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} GROUP BY ar_id ORDER BY ar_posicion");
+$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (a.ar_id=am.mat_area AND am.at_id=car_materia) AND (car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") AND a.ar_id=am.mat_area AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} GROUP BY a.ar_id ORDER BY a.ar_posicion");
 
 $ii = 1;
 while($fila_mat=mysqli_fetch_array($materia, MYSQLI_BOTH)){
@@ -96,7 +96,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td class="area" id="<?=$fila_mat[0]?>" colspan="9" style="font-size:10px; font-weight:bold;"><?php if(strtoupper(substr($fila_mat[1],0,4))=='ESPA') echo "ESPA&Ntilde;OL"; else echo strtoupper($fila_mat[1]);?></td>
     </tr>
 <?php 
-	$consulta = mysqli_query($conexion, "SELECT  mat_nombre, mat_area, mat_id, car_id FROM academico_areas, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (ar_id=am.mat_area AND am.mat_id=car_materia)AND(car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") and ar_id=am.mat_area and am.mat_area=".$fila_mat[4]." AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
+	$consulta = mysqli_query($conexion, "SELECT mat_nombre, mat_area, mat_id, car_id FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (a.ar_id=am.mat_area AND am.mat_id=car_materia)AND(car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") and a.ar_id=am.mat_area and am.mat_area=".$fila_mat[4]." AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}");
 	
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
@@ -177,7 +177,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center"><?php if($aus[0]>0){ echo $aus[0]."/".$fila_mat[3];} else{ echo "0.0/".$fila_mat[3];};?></td>
 	</tr>
 <?php
-  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ind_id=aic.ipc_indicador AND aic.ipc_periodo='".$periodoActual."' AND aic.ipc_carga='".$fila[3]."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
+  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM ".BD_ACADEMICA.".academico_indicadores ai, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ai.ind_id=aic.ipc_indicador AND aic.ipc_periodo='".$periodoActual."' AND aic.ipc_carga='".$fila[3]."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]} AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}");
 	$num = mysqli_num_rows($consulta);
 	if ($num>0) // si tiene indicadores 
 	{
@@ -198,7 +198,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 <?php 
 		$ind ++;
 		$a = $_GET['id'];
-		$reg = mysqli_query($conexion, "SELECT * FROM academico_calificaciones, academico_actividades WHERE cal_id_actividad in(SELECT act_id FROM academico_actividades WHERE act_id_carga=".$fila[3]." and act_id_tipo=".$indicador[0]." and act_periodo=".$periodoActual.") and cal_id_estudiante=".$_GET['id']." and cal_id_actividad=act_id");
+		$reg = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones aac, ".BD_ACADEMICA.".academico_actividades aa WHERE aac.cal_id_actividad in(SELECT act_id FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$fila[3]."' and act_id_tipo='".$indicador[0]."' and act_periodo=".$periodoActual." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}) and aac.cal_id_estudiante=".$_GET['id']." and aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}");
 		$num = mysqli_num_rows($reg);
     	$contador = 0;
 		while ($nota = mysqli_fetch_array($reg, MYSQLI_BOTH)){ //While de notas
@@ -208,7 +208,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
            </tr> 
 <?php
 		  //Todo este codigo es para sacar el resultado de cada indicador
-		   $array[$contador] = $nota[1];
+		   $array[$contador] = $nota['cal_id'];
 		   $contador++;
 		} //End while notas 
 		if ($num>0)

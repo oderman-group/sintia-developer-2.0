@@ -23,7 +23,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                             <option value=""></option>
                             <?php
                             try {
-                                $c_cursos = mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM academico_grados ORDER BY gra_codigo;");
+                                $c_cursos = mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_codigo;");
                             } catch (Exception $e) {
                                 include("../compartido/error-catch-to-report.php");
                             }

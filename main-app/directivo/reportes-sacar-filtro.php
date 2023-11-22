@@ -35,7 +35,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class="pull-left">
-                                <div class="page-title"><?=$frases[249][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[249][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,7 +45,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                         <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?=$frases[249][$datosUsuarioActual[8]];?></header>
+                                    <header><?=$frases[249][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
                                     <form class="form-horizontal" action="../compartido/reporte-disciplina-sacar.php" method="post" enctype="multipart/form-data" target="_blank">
@@ -53,12 +53,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[26][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[26][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
                                                 try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-                                                    WHERE gra_estado=1");
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -75,7 +74,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[250][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[250][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
                                                 try{
@@ -116,13 +115,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<hr>
 										<h4 style="color: darkblue;">Filtros Opcionales</h4>
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
                                                 try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-                                                    INNER JOIN usuarios ON uss_id=mat_id_usuario
-                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+                                                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} ORDER BY mat_primer_apellido");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -139,7 +138,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select name="falta" class="form-control select2">
 													<option value="">Seleccione una opción</option>
@@ -161,7 +160,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										
 										
 										<div class="form-group row">
-												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-10">
 													<?php
                                                     $datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo = ".TIPO_DIRECTIVO.")

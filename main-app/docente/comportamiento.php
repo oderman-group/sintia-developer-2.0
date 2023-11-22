@@ -38,7 +38,7 @@ include("../compartido/head.php");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[234][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -80,9 +80,9 @@ include("../compartido/head.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 														<th>Guardar</th>
 														<?php }?>

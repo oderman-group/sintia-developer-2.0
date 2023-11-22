@@ -55,7 +55,7 @@ if (!empty($_GET['busqueda'])) {
         <input type="hidden" name="falta" value="<?= base64_decode($_GET['falta']); ?>"/>
       <?php
         }
-        if($datosUsuarioActual[3]!=5 and !empty($_GET["fest"])){
+        if($datosUsuarioActual['uss_tipo']!=5 and !empty($_GET["fest"])){
       ?>
         <input type="hidden" name="fest" value="<?= base64_decode($_GET['fest']); ?>"/>
       <?php

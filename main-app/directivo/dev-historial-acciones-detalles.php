@@ -24,9 +24,9 @@ $BD=$datosHistorial["ins_bd"]."_".$agnoBD;
 $responsable="";
 if($datosHistorial['hil_usuario']!=0){
     try{
-        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios 
+        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-        WHERE uss_id='".$datosHistorial['hil_usuario']."'");
+        WHERE uss_id='".$datosHistorial['hil_usuario']."' AND institucion={$datosHistorial['ins_id']} AND year={$agnoBD}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
@@ -37,9 +37,9 @@ if($datosHistorial['hil_usuario']!=0){
 $ussAutologin="NO";
 if($datosHistorial['hil_usuario_autologin']!=0){
     try{
-        $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios 
+        $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-        WHERE uss_id='".$datosHistorial['hil_usuario_autologin']."'");
+        WHERE uss_id='".$datosHistorial['hil_usuario_autologin']."' AND institucion={$datosHistorial['ins_id']} AND year={$agnoBD}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }

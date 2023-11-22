@@ -44,8 +44,8 @@
                             </div>
                             <ul class="list-unstyled chat-list mt-2 mb-0" id="contenedorOriginial">
                                 <?php
-                                $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
-                                        WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' 
+                                $consultaUsuariosOnline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios 
+                                        WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='" . $_SESSION['id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
                                         ORDER BY uss_ultimo_ingreso DESC
                                         LIMIT 10");
                                 if (mysqli_num_rows($consultaUsuariosOnline) > 0) {
@@ -63,9 +63,9 @@
                                     <?php
                                     }
                                 }
-                                $consultaUsuariosOffline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios 
+                                $consultaUsuariosOffline = mysqli_query($conexion, "SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios 
                                         WHERE uss_estado=0 AND uss_bloqueado=0 
-                                        AND uss_id!='" . $_SESSION['id'] . "' 
+                                        AND uss_id!='" . $_SESSION['id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
                                         ORDER BY uss_ultima_salida DESC
                                         LIMIT 5");
                                 if (mysqli_num_rows($consultaUsuariosOffline) > 0) {

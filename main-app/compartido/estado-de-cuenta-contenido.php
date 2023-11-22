@@ -62,10 +62,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[162][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[53][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[52][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[162][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

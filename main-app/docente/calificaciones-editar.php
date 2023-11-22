@@ -9,14 +9,14 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificacion=mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id='".$idR."' AND act_estado=1");
+$consultaCalificacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id='".$idR."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificacion, MYSQLI_BOTH);
 
 $consultaValor=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValor, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
@@ -50,12 +50,12 @@ $porcentajeRestante = 100 - $valores[0];
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -70,8 +70,8 @@ $porcentajeRestante = 100 - $valores[0];
 								<header class="panel-heading panel-heading-purple"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?> </header>
 								<div class="panel-body">
 										<?php
-										$enComun = mysqli_query($conexion, "SELECT * FROM academico_actividades
-										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$idR."' AND act_estado=1
+										$enComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades
+										WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_id!='".$idR."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 										");
 										while($regComun = mysqli_fetch_array($enComun, MYSQLI_BOTH)){
 										?>
@@ -86,7 +86,7 @@ $porcentajeRestante = 100 - $valores[0];
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -114,7 +114,7 @@ $porcentajeRestante = 100 - $valores[0];
                                             <div class="col-sm-10">
 												<?php
 												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>

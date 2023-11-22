@@ -5,7 +5,7 @@ class Grados {
 
     public static function listarGrados($estado = 1,$tipo =null){
         
-        global $conexion, $arregloModulos;
+        global $conexion, $arregloModulos, $config;
         
         $resultado = [];
         $filtro="";
@@ -18,8 +18,8 @@ class Grados {
         }
          
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_grados
-            WHERE gra_estado IN (1, '".$estado."') 
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+            WHERE gra_estado IN (1, '".$estado."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
             ".$filtro."
             ORDER BY gra_vocal
             ");
@@ -33,12 +33,12 @@ class Grados {
 
     public static function obtenerDatosGrados($grado = 0){
         
-        global $conexion;
+        global $conexion, $config;
         
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM academico_grados WHERE gra_id=$grado");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id={$grado} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();

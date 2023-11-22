@@ -74,22 +74,22 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
             <thead>
                 <tr>
                     <th>#</th>
-                    <th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[50][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[52][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
                     
                     <?php if($datosCargaActual['car_saberes_indicador']==1){?>
                         <th>Tipo evaluación</th>
                     <?php }?>
                     
-                    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                     $saberes = array("","Saber saber (55%)","Saber hacer (35%)","Saber ser (10%)");
                     $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-                    INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
                     WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
                     $contReg = 1; 
                     $porcentajeActual = 0;

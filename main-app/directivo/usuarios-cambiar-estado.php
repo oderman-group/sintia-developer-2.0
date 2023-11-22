@@ -12,7 +12,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 if (base64_decode($_GET["lock"]) == 1) $estado = 0;
 else $estado = 1;
 try{
-    mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='" . $estado . "' WHERE uss_id='" . base64_decode($_GET["idR"]) . "'");
+    mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado='" . $estado . "' WHERE uss_id='" . base64_decode($_GET["idR"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

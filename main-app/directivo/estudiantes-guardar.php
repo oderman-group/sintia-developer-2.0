@@ -3,6 +3,7 @@ include("session.php");
 require_once("../class/Estudiantes.php");
 require_once "../class/Modulos.php";
 require_once("../class/servicios/MediaTecnicaServicios.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0192';
@@ -88,9 +89,10 @@ if ($acudienteNum > 0) {
 	if(empty($_POST["tipoSangre"]))     $_POST["tipoSangre"]    = '';
 	if(empty($_POST["eps"]))       		$_POST["eps"]       	= 126;
 	
+	$idAcudiente=Utilidades::generateCode("USS");
 	//CREAMOS AL ACUDIENTE
 	try{
-		mysqli_query($conexion, "INSERT INTO usuarios(
+		mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, 
 			uss_usuario, 
 			uss_clave, 
 			uss_tipo, 
@@ -113,8 +115,8 @@ if ($acudienteNum > 0) {
 			uss_documento, 
 			uss_tema_sidebar,
 			uss_tema_header,
-			uss_tema_logo
-			)VALUES(
+			uss_tema_logo, institucion, year
+			)VALUES('".$idAcudiente."', 
 			'".$_POST["documentoA"]."',
 			'".$clavePorDefectoUsuarios."',
 			3,
@@ -137,18 +139,17 @@ if ($acudienteNum > 0) {
 			'".	$_POST["documentoA"]."',
 			'cyan-sidebar-color',
 			'header-indigo',
-			'logo-indigo'
+			'logo-indigo', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
 			)");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	
-	$idAcudiente = mysqli_insert_id($conexion);
 }
 
+$idEstudianteU=Utilidades::generateCode("USS");
 //INSERTAMOS EL USUARIO ESTUDIANTE
 try{
-	mysqli_query($conexion, "INSERT INTO usuarios(
+	mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, 
 		uss_usuario, 
 		uss_clave, 
 		uss_tipo, 
@@ -170,8 +171,8 @@ try{
 		uss_documento, 
 		uss_tema_sidebar,
 		uss_tema_header,
-		uss_tema_logo
-		)VALUES(
+		uss_tema_logo, institucion, year
+		)VALUES('".$idEstudianteU."', 
 		'".	$_POST["nDoc"]."',
 		'".$clavePorDefectoUsuarios."',
 		4,
@@ -193,9 +194,8 @@ try{
 		'".	$_POST["nDoc"]."',
 		'cyan-sidebar-color',
 		'header-indigo',
-		'logo-indigo'
+		'logo-indigo', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
 		)");
-		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

@@ -9,7 +9,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 $consultaIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 WHERE ipc.ipc_id='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 $indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
@@ -53,12 +53,12 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="indicadores.php" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="indicadores.php" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -74,7 +74,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 								<div class="panel-body">
 										<?php
 										$indicadoresEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-										INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+										INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 										WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.ipc_id!='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 										");
 										while($indComun = mysqli_fetch_array($indicadoresEnComun, MYSQLI_BOTH)){
@@ -90,7 +90,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    

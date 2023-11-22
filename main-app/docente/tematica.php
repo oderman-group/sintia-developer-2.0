@@ -5,7 +5,7 @@
 <?php //include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaTematica=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_carga='".$cargaConsultaActual."' AND ind_periodo='".$periodoConsultaActual."' AND ind_tematica=1");
+$consultaTematica=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_carga='".$cargaConsultaActual."' AND ind_periodo='".$periodoConsultaActual."' AND ind_tematica=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $tematica = mysqli_fetch_array($consultaTematica, MYSQLI_BOTH);
 ?>
 
@@ -37,7 +37,7 @@ $tematica = mysqli_fetch_array($consultaTematica, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[251][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[251][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>

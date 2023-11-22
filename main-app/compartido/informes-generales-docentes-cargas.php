@@ -10,8 +10,8 @@ if(!empty($_GET["grado"])){$filtro .=" AND car_curso='".$_GET["grado"]."'";}
 if(!empty($_GET["asignatura"])){$filtro .=" AND car_materia='".$_GET["asignatura"]."'";}
 
 $consulta = mysqli_query($conexion, "SELECT car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, car_director_grupo, car_ih FROM academico_cargas
-INNER JOIN usuarios ON uss_id=car_docente
-INNER JOIN academico_grados ON gra_id=car_curso
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 WHERE car_id=car_id $filtro

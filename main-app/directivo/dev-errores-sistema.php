@@ -84,7 +84,7 @@ $Plataforma = new Plataforma;
                                                         <th>Error</th>
                                                         <th>Responsable</th>
                                                         <th>Institución</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -94,7 +94,7 @@ $Plataforma = new Plataforma;
                                                     try{
                                                         $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
                                                         INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                        LEFT JOIN usuarios ON uss_id=rperr_usuario
+                                                        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=rperr_usuario AND uss.institucion=rperr_institucion AND uss.year=rperr_year
                                                         WHERE rperr_id=rperr_id $filtro
                                                         ORDER BY rperr_id DESC
                                                         LIMIT $inicio,$registros;");
@@ -124,7 +124,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $resultado['ins_siglas']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>

@@ -69,15 +69,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[73][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
 															<th>Valor(%)</th>
 														<?php }?>	
-														<th><?=$frases[93][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[93][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Cargas</th>
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
@@ -87,7 +87,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";}
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
-														INNER JOIN academico_areas ON ar_id=am.mat_area
+														INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
 														WHERE am.mat_id=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} $filtro");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
@@ -114,12 +114,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<?php if(Modulos::validarPermisoEdicion()){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php if($numeros[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado['mat_id']);?>')">Eliminar</a></li><?php } ?>
 																	</ul>
 																</div>

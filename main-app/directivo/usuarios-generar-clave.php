@@ -15,7 +15,7 @@ while ($contUsuarios < $numUsuarios) {
         }
         
         try{
-            mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1('".$_POST["clave"]."') WHERE uss_tipo='".$_POST["usuario"][$contUsuarios]."'");
+            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_clave=SHA1('".$_POST["clave"]."') WHERE uss_tipo='".$_POST["usuario"][$contUsuarios]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -23,7 +23,7 @@ while ($contUsuarios < $numUsuarios) {
     }elseif($_POST["tipo"]==2){
 
         try{
-            mysqli_query($conexion, "UPDATE usuarios SET uss_clave=SHA1(uss_usuario) WHERE uss_tipo='".$_POST["usuario"][$contUsuarios]."'");
+            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_clave=SHA1(uss_usuario) WHERE uss_tipo='".$_POST["usuario"][$contUsuarios]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

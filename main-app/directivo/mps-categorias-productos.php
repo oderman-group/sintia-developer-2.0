@@ -67,7 +67,7 @@ $Plataforma = new Plataforma;
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Nombre</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -94,7 +94,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $resultado['catp_nombre']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>

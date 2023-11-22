@@ -172,7 +172,7 @@ if($datosUsuarioActual['uss_preguntar_animo']==1){
 										<div class="form-group">
 											<div class="offset-md-3 col-md-9">
 												<button type="submit" class="btn btn-info">Enviar ahora</button>
-												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 											</div>
 										</div>
 									</form>

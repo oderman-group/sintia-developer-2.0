@@ -55,7 +55,7 @@ if (empty($_POST["tipoNegocio"])) $_POST["tipoNegocio"] = '0';
 //Si es estudiante
 if ($_POST["tipoUsuario"] == 4) {
     try{
-        mysqli_query($conexion, "UPDATE usuarios SET 
+        mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
         uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
         uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
         uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
@@ -68,20 +68,20 @@ if ($_POST["tipoUsuario"] == 4) {
         uss_mostrar_edad='" . $mostrarEdad . "',
         uss_ultima_actualizacion=now()
 
-        WHERE uss_id='" . $_SESSION["id"] . "'");
+        WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
 
     //Actualizar matricula a los estudiantes
     try{
-        mysqli_query($conexion, "UPDATE academico_matriculas SET mat_genero='" . $_POST["genero"] . "', mat_fecha_nacimiento='" . $_POST["fechaN"] . "', mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "'");
+        mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_genero='" . $_POST["genero"] . "', mat_fecha_nacimiento='" . $_POST["fechaN"] . "', mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
 } else {
     try{
-        mysqli_query($conexion, "UPDATE usuarios SET 
+        mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
         uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
         uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
         uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
@@ -108,7 +108,7 @@ if ($_POST["tipoUsuario"] == 4) {
         uss_sitio_web_negocio='" . mysqli_real_escape_string($conexion,$_POST["web"]) . "',
         uss_ultima_actualizacion=now()
 
-        WHERE uss_id='" . $_SESSION["id"] . "'");
+        WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
@@ -122,7 +122,7 @@ if (!empty($_FILES['firmaDigital']['name'])) {
     $destino = "../files/fotos";
     move_uploaded_file($_FILES['firmaDigital']['tmp_name'], $destino . "/" . $archivo);
     try{
-        mysqli_query($conexion, "UPDATE usuarios SET uss_firma='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+        mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_firma='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
@@ -136,7 +136,7 @@ if (!empty($_FILES['fotoPerfil']['name'])) {
     $destino = "../files/fotos";
     move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $destino . "/" . $archivo);
     try{
-        mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "'");
+        mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }

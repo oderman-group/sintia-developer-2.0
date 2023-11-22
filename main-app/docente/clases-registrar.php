@@ -18,7 +18,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
-  var codNota = <?=$idR;?>;	 
+  var codNota = '<?=$idR;?>';	 
   var nota = enviada.value;
   var codEst = enviada.id;
   var nombreEst = enviada.alt;
@@ -65,7 +65,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$datosConsulta['cls_tema'];?></li>
                             </ol>
                         </div>
@@ -122,8 +122,8 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[30][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[30][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -134,7 +134,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado['mat_id']." AND aus_id_clase='".$idR."'");
+															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_estudiante=".$resultado['mat_id']." AND aus_id_clase='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														 }
 													 ?>

@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(!empty($_REQUEST["year"])){
 $year=$_REQUEST["year"];
 }
@@ -23,9 +23,9 @@ $filtro = '';
 if(!empty($_REQUEST["tipoEstudiantes"]) && $_REQUEST["tipoEstudiantes"]!=0){$filtro .= " AND mat_estado_matricula='".$_REQUEST["tipoEstudiantes"]."'";}
 
 try {
-	$consulta = mysqli_query($conexion,"SELECT * FROM ".$BD.".academico_matriculas
-	INNER JOIN ".$BD.".academico_grados ON gra_id=mat_grado
-	WHERE mat_eliminado=0 $filtro
+	$consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+	INNER JOIN ".BD_ACADEMICA.".academico_grados ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
+	WHERE mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro
 	ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
@@ -33,8 +33,8 @@ try {
 
 	while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 		try{
-			mysqli_query($conexion,"UPDATE ".$BD.".academico_matriculas SET mat_folio='".$folio."' 
-			WHERE mat_id='".$datos['mat_id']."'");
+			mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_folio='".$folio."' 
+			WHERE mat_id='".$datos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

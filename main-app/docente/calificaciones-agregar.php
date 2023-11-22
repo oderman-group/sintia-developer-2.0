@@ -6,10 +6,10 @@
 <?php include("../compartido/head.php");?>
 <?php
 $consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
@@ -58,12 +58,12 @@ if(
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ if(
                         <div class="col-sm-12">
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -99,12 +99,12 @@ if(
 											
 											<?php 
 											if($datosCargaActual['car_indicador_automatico']==1){
-												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_definitivo=1");
+												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
 												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador AND ind_definitivo=1
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.ind_definitivo=1 AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
@@ -124,7 +124,7 @@ if(
                                             <div class="col-sm-10">
 												<?php
 												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>

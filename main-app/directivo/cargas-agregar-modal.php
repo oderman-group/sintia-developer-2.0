@@ -15,7 +15,7 @@ if (!Modulos::validarPermisoEdicion()) {
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 <div class="panel">
-    <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+    <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
     <div class="panel-body">
 
 
@@ -46,7 +46,7 @@ if (!Modulos::validarPermisoEdicion()) {
                 <div class="col-sm-8">
                     <?php
                     try {
-                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
+                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_vocal");
                     } catch (Exception $e) {
                         include("../compartido/error-catch-to-report.php");
                     }
@@ -58,7 +58,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             $disabled = '';
                             if ($opcionesDatos['gra_estado'] == '0') $disabled = 'disabled';
                         ?>
-                            <option value="<?= $opcionesDatos[0]; ?>" <?= $disabled; ?>><?= $opcionesDatos['gra_id'] . ". " . strtoupper($opcionesDatos['gra_nombre']); ?></option>
+                            <option value="<?= $opcionesDatos['gra_id']; ?>" <?= $disabled; ?>><?= $opcionesDatos['gra_id'] . ". " . strtoupper($opcionesDatos['gra_nombre']); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -91,7 +91,7 @@ if (!Modulos::validarPermisoEdicion()) {
                     <?php
                     try {
                         $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
-                                                    INNER JOIN academico_areas ON ar_id=am.mat_area
+                                                    INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
                                                     WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
                                                     ORDER BY am.mat_nombre");
                     } catch (Exception $e) {

@@ -63,15 +63,13 @@
                                         if ($numDatos<=0) {
                                             $dato = 3;
                                             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias 
-                                            WHERE mat_nombre LIKE '%".$_GET["query"]."%' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
-                                            OR mat_siglas LIKE '%".$_GET["query"]."%'");
+                                            WHERE mat_nombre LIKE '%".$_GET["query"]."%' OR mat_siglas LIKE '%".$_GET["query"]."%' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                         }
                                         $numDatos=mysqli_num_rows($consulta);
                                         if ($numDatos<=0) {
                                             $dato = 4;
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM academico_grados 
-                                            WHERE gra_nombre LIKE '%".$_GET["query"]."%' 
-                                            OR gra_codigo LIKE '%".$_GET["query"]."%'");
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
+                                            WHERE gra_nombre LIKE '%".$_GET["query"]."%' OR gra_codigo LIKE '%".$_GET["query"]."%' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                         }
                                     }
                                     

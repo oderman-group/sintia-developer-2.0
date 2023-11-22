@@ -2,6 +2,7 @@
 include("session.php");
 require_once("../class/Usuarios.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require '../../librerias/Excel/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -39,7 +40,7 @@ if($extension == 'xlsx'){
 				'M'   => '126', 'F' => '127'
 			];
 			$estratosArray = array("", 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125);
-			$sql = "INSERT INTO academico_matriculas(mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_id_usuario, mat_acudiente, mat_documento, mat_tipo_documento, mat_grupo, mat_direccion, mat_genero, mat_fecha_nacimiento, mat_barrio, mat_celular, mat_email, mat_estrato, mat_tipo_sangre, mat_eps, mat_nombre2) VALUES";
+			$sql = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_id_usuario, mat_acudiente, mat_documento, mat_tipo_documento, mat_grupo, mat_direccion, mat_genero, mat_fecha_nacimiento, mat_barrio, mat_celular, mat_email, mat_estrato, mat_tipo_sangre, mat_eps, mat_nombre2, institucion, year) VALUES";
 			
 			$estudiantesCreados      = array();
 			$estudiantesActualizados = array();
@@ -71,12 +72,12 @@ if($extension == 'xlsx'){
 						$idAcudiente = $datosAcudienteExistente['uss_id'];
 						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 					} else {
+						$idAcudiente=Utilidades::generateCode("USS");
 						try{
-							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
+							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year) VALUES ('".$idAcudiente."', '".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
-						$idAcudiente = mysqli_insert_id($conexion);
 						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 					}
 				} else {
@@ -125,8 +126,8 @@ if($extension == 'xlsx'){
 				$grado = "";
 				if(!empty($arrayIndividual['mat_grado'])) {
 					try{
-						$consulta= mysqli_query($conexion, "SELECT * FROM academico_grados 
-						WHERE gra_nombre='".$arrayIndividual['mat_grado']."'");
+						$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
+						WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 					} catch (Exception $e) {
 						include("../compartido/error-catch-to-report.php");
 					}
@@ -222,8 +223,8 @@ if($extension == 'xlsx'){
 
 							//Actualizamos el acudiente y los datos del formulario
 							try{
-								mysqli_query($conexion, "UPDATE academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
-								WHERE mat_id='".$datosEstudianteExistente['mat_id']."'");
+								mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
+								WHERE mat_id='".$datosEstudianteExistente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 							} catch (Exception $e) {
 								include("../compartido/error-catch-to-report.php");
 							}
@@ -278,15 +279,16 @@ if($extension == 'xlsx'){
 
 						$arrayTodos[$f] = $arrayIndividual;
 
+						$idUsuarioEstudiante=Utilidades::generateCode("USS");
 						try{
-							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
+							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento, institucion, year) VALUES ('".$idUsuarioEstudiante."', '".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
 
-						$idUsuarioEstudiante = mysqli_insert_id($conexion);
+						$codigoMAT=Utilidades::generateCode("MAT");
 
-						$sql .= "('".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."'),";
+						$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$estudiantesCreados["FILA_".$f] = $arrayIndividual['mat_documento'];
 

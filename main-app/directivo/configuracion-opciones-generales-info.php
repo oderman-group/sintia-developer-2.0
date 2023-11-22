@@ -49,7 +49,7 @@ include("../compartido/head.php");
                         <div class="col-sm-12">
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
                                     <form action="configuracion-opciones-generales-guardar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 										

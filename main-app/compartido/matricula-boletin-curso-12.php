@@ -207,11 +207,11 @@
                             break;
                     }
                     $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
-                    INNER join $BD.academico_areas ON ar_id = am.mat_area
+                    INNER join ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
                     INNER JOIN $BD.academico_cargas on car_materia = am.mat_id and car_curso = $gradoActual AND car_grupo = $grupoActual
                     WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
                     GROUP by am.mat_area
-                    ORDER BY ar_posicion");
+                    ORDER BY a.ar_posicion");
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
                     $sumaPromedioGeneralPeriodo1=0;
@@ -226,7 +226,7 @@
                         bol_nota * (mat_valor/100) AS notaArea
                         FROM $BD.academico_cargas
                         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-                        INNER JOIN $BD.academico_areas ON ar_id = am.mat_area
+                        INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
                         INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo =".$periodoActual." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
                         WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND am.mat_area = ".$datosAreas['ar_id']."");
                         $notaArea=0;
@@ -573,7 +573,7 @@
             <?php
             $conCargasDos = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
 	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	        INNER JOIN $BD.usuarios ON uss_id=car_docente
+	        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
 	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
@@ -586,8 +586,8 @@
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.".BD_ACADEMICA.".academico_indicadores_carga aic
-		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+		                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
 		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>

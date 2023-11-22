@@ -86,14 +86,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Fecha</th>
 														<th>Detalle</th>
 														<th>Valor</th>
 														<th>Tipo</th>
 														<th>Usuario</th>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
-															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
@@ -103,7 +103,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
-														INNER JOIN usuarios ON uss_id=fcu_usuario
+														INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 														WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 														ORDER BY fcu_id
 														LIMIT $inicio,$registros");
@@ -134,13 +134,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
-																			<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="movimientos-editar.php?idU=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
 																		<?php if($resultado['fcu_anulado']!=1 && Modulos::validarSubRol(['DT0089'])){?>
 																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>

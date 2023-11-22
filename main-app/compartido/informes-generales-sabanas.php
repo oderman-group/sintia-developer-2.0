@@ -23,7 +23,7 @@ $cursoActual=GradoServicios::consultarCurso($curso);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);	
 
 $num_asg=mysqli_num_rows($asig);
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$curso."' AND gru.gru_id='".$grupo."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$curso."' AND gru.gru_id='".$grupo."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
 
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
@@ -135,7 +135,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   
 <?php
 $puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM academico_boletin
-INNER JOIN academico_matriculas ON mat_id=bol_estudiante
+INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
 INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."'
 WHERE bol_periodo='".$per."'
 GROUP BY bol_estudiante

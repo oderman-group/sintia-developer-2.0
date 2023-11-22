@@ -54,7 +54,7 @@ try{
 	die();
 }
 
-$dbNameInstitucion = !empty($BD_ADMISIONES_MOCK) ? $BD_ADMISIONES_MOCK : '';
+$dbNameInstitucion = !empty($BD_ADMISIONES_MOCK) ? $BD_ADMISIONES_MOCK : $baseDatosServicios;
 
 try{
 	$pdoI = new PDO('mysql:host='.$server.';dbname='.$dbNameInstitucion, $user, $pass);

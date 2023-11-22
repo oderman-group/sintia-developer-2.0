@@ -18,15 +18,15 @@
 										$estadisticasCargas = mysqli_fetch_array($consultaEstadisticaCarga, MYSQLI_BOTH);
 										?>
 									
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
 											try{
-												$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-												WHERE gra_estado=1
+												$cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+												WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												ORDER BY gra_vocal
 												");
 											} catch (Exception $e) {

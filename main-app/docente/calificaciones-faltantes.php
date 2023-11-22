@@ -7,10 +7,10 @@ include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 
 $consultaValores = mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
@@ -73,20 +73,20 @@ include("../compartido/sintia-funciones-js.php");
 		<thead>
 			<tr>
 				<th style="width: 50px;">#</th>
-				<th style="width: 400px;"><?= $frases[61][$datosUsuarioActual[8]]; ?></th>
+				<th style="width: 400px;"><?= $frases[61][$datosUsuarioActual['uss_idioma']]; ?></th>
 				<?php
-				$cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND act_periodo='" . $periodoConsultaActual . "'");
+				$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND act_periodo='" . $periodoConsultaActual . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
-					echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR=' . base64_encode($rA[0]) . '" title="' . $rA[1] . '">' . $rA[0] . '<br>
-														' . $rA[1] . '<br>
-														(' . $rA[3] . '%)</a><br>
-														<a href="#" name="calificaciones-eliminar.php?idR=' . base64_encode($rA[0]) . '&idIndicador=' . base64_encode($rA['act_id_tipo']) . '&carga=' . base64_encode($cargaConsultaActual) . '&periodo=' . base64_encode($periodoConsultaActual) . '" onClick="deseaEliminar(this)" ' . $deleteOculto . '><i class="fa fa-times"></i></a><br>
-														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" name="'.$rA[0].'" onChange="notasMasiva(this)" ' . $habilitado . '>
+					echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR=' . base64_encode($rA['act_id']) . '" title="' . $rA['act_descripcion'] . '">' . $rA['act_id'] . '<br>
+														' . $rA['act_descripcion'] . '<br>
+														(' . $rA['act_valor'] . '%)</a><br>
+														<a href="#" name="calificaciones-eliminar.php?idR=' . base64_encode($rA['act_id']) . '&idIndicador=' . base64_encode($rA['act_id_tipo']) . '&carga=' . base64_encode($cargaConsultaActual) . '&periodo=' . base64_encode($periodoConsultaActual) . '" onClick="deseaEliminar(this)" ' . $deleteOculto . '><i class="fa fa-times"></i></a><br>
+														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" name="'.$rA['act_id'].'" onChange="notasMasiva(this)" ' . $habilitado . '>
 														</th>';
 				}
 				?>
 				<th style="text-align:center; width:60px;">%</th>
-				<th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual[8]]; ?></th>
+				<th style="text-align:center; width:60px;"><?= $frases[118][$datosUsuarioActual['uss_idioma']]; ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -119,26 +119,26 @@ include("../compartido/sintia-funciones-js.php");
 					</td>
 
 					<?php
-					$cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND act_periodo='" . $periodoConsultaActual . "'");
+					$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND act_periodo='" . $periodoConsultaActual . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 					while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 						//LAS CALIFICACIONES
-						$consultaNotasResultados = mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=" . $resultado['mat_id'] . " AND cal_id_actividad=" . $rA[0]);
+						$consultaNotasResultados = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='" . $resultado['mat_id'] . "' AND cal_id_actividad='" . $rA['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 
 						$arrayEnviar = [
 							"tipo"=>5, 
 							"descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
-							"idInput"=>$resultado[0]."-".$rA[0]
+							"idInput"=>$resultado['mat_id']."-".$rA['act_id']
 						];
 						$arrayDatos = json_encode($arrayEnviar);
 						$objetoEnviar = htmlentities($arrayDatos);
 					?>
 						<td style="text-align:center;">
-							<input size="5" maxlength="3" name="<?= $notasResultado[3] ?>" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" value="<?php if (!empty($notasResultado[3])) { echo $notasResultado[3]; } ?>" alt="<?= $resultado['mat_nombres']; ?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if ($notasResultado[3] < $config[5] and $notasResultado[3] != "") echo $config[6]; elseif ($notasResultado[3] >= $config[5]) echo $config[7]; else echo "black"; ?>;" <?= $habilitado; ?>>
-							<?php if (!empty($notasResultado[3])) { ?>
+							<input size="5" maxlength="3" name="<?= $notasResultado['cal_nota'] ?>" id="<?= $resultado['mat_id']; ?>" title="<?=$rA['act_id'];?>" value="<?php if (!empty($notasResultado['cal_nota'])) { echo $notasResultado['cal_nota']; } ?>" alt="<?= $resultado['mat_nombres']; ?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if ($notasResultado['cal_nota'] < $config[5] and $notasResultado['cal_nota'] != "") echo $config[6]; elseif ($notasResultado['cal_nota'] >= $config[5]) echo $config[7]; else echo "black"; ?>;" <?= $habilitado; ?>>
+							<?php if (!empty($notasResultado['cal_nota'])) { ?>
 								<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $notasResultado['cal_id']; ?>" name="calificaciones-nota-eliminar.php?id=<?= base64_encode($notasResultado['cal_id']); ?>" onClick="deseaEliminar(this)" <?= $deleteOculto; ?>><i class="fa fa-times"></i></a>
-								<?php if ($notasResultado[3] < $config[5]) { ?>
-									<br><br><input size="5" maxlength="3" id="<?= $resultado['mat_id']; ?>" title="<?=$rA[0];?>" alt="<?= $resultado['mat_nombres']; ?>" name="<?= $notasResultado[3]; ?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?= $habilitado; ?>>
+								<?php if ($notasResultado['cal_nota'] < $config[5]) { ?>
+									<br><br><input size="5" maxlength="3" id="<?= $resultado['mat_id']; ?>" title="<?=$rA['act_id'];?>" alt="<?= $resultado['mat_nombres']; ?>" name="<?= $notasResultado['cal_nota']; ?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?= $habilitado; ?>>
 								<?php } ?>
 							<?php } ?>
 

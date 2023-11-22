@@ -1,8 +1,8 @@
 <?php 
 include("session.php");
 try{
-    $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM academico_matriculas
-    WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0");
+    $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM ".BD_ACADEMICA.".academico_matriculas
+    WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

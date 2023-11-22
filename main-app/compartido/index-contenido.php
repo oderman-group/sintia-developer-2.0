@@ -123,7 +123,7 @@
 										<div class="form-group">
 											<div class="offset-md-3 col-md-9">
 												<button type="button" onClick="insertarFirebase()" class="btn btn-info">Enviar ahora</button>
-												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 											</div>
 										</div>
 									</form>
@@ -169,7 +169,7 @@
 						
 						<!-- Activity feed start -->
 						<div class="col-sm-7" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
-							<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
+							<?php if($datosUsuarioActual['uss_tipo']==2 or $datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){?>
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>
 

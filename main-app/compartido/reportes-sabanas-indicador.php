@@ -25,7 +25,7 @@ $cursoActual=GradoServicios::consultarCurso($curso);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);
 $num_asg = mysqli_num_rows($asig);
 
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='" . $curso . "' AND gru.gru_id='" . $grupo . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='" . $curso . "' AND gru.gru_id='" . $grupo . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 
@@ -71,7 +71,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
 			while ($car = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 				$activivdades = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc.
-				INNER JOIN academico_indicadores ON ind_id=ipc.ipc_indicador
+				INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 				WHERE ipc.ipc_carga='" . $car['car_id'] . "' AND ipc.ipc_periodo='" . $per . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 
 				$activivdadesNum = mysqli_num_rows($activivdades);
@@ -114,7 +114,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					}
 					while ($act = mysqli_fetch_array($activivdades, MYSQLI_BOTH)) {
 						//Consulta de recuperaciones si ya la tienen puestas.
-						$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila['mat_id'] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $per . "' AND rind_carga='" . $mat1['car_id'] . "'");
+						$consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante=" . $fila['mat_id'] . " AND rind_indicador='" . $act['ipc_indicador'] . "' AND rind_periodo='" . $per . "' AND rind_carga='" . $mat1['car_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
 						$notaRecuperacion = 0;

@@ -59,10 +59,10 @@
         <div class="form">
             <img src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>" class="imgroundcorners" />
             <h3><?=$datosUsuarioActual['uss_nombre'];?></h3>
-            <p><?=$frases[151][$datosUsuarioActual[8]];?></p>
-			<input type="password" name="claveE" placeholder="<?=$frases[152][$datosUsuarioActual[8]];?>" required autocomplete="off" autofocus />
-            <button type="submit"><?=$frases[150][$datosUsuarioActual[8]];?></button>
-            <div class="newaccount"><a href="javascript:void(0)"><?=$frases[153][$datosUsuarioActual[8]];?></a>
+            <p><?=$frases[151][$datosUsuarioActual['uss_idioma']];?></p>
+			<input type="password" name="claveE" placeholder="<?=$frases[152][$datosUsuarioActual['uss_idioma']];?>" required autocomplete="off" autofocus />
+            <button type="submit"><?=$frases[150][$datosUsuarioActual['uss_idioma']];?></button>
+            <div class="newaccount"><a href="javascript:void(0)"><?=$frases[153][$datosUsuarioActual['uss_idioma']];?></a>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <?php
-if($datosUsuarioActual[3]==4){
+if($datosUsuarioActual['uss_tipo']==4){
 	$usuarioEstudianteConsultaActual = $_SESSION["id"];
 }else{
 	$usrEstud="";

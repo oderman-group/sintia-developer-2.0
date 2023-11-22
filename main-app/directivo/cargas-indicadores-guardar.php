@@ -35,12 +35,13 @@ if ($sumaIndicadores[2] >= $datosCargaActual['car_maximos_indicadores']) {
 }
 
 
+$codigoAI=Utilidades::generateCode("IND");
 try{
-    mysqli_query($conexion, "INSERT INTO academico_indicadores(ind_nombre, ind_obligatorio, ind_publico) VALUES('" . $_POST["contenido"] . "', '" . $_POST["creado"] . "', 0)");
+    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('".$codigoAI."', '" . $_POST["contenido"] . "', '" . $_POST["creado"] . "', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
-$idRegistro = mysqli_insert_id($conexion);
+
 $codigo=Utilidades::generateCode("IPC");
 //Si decide poner los valores porcentuales de los indicadores de forma manual
 if ($datosCargaActual['car_valor_indicador'] == 1) {
@@ -58,7 +59,7 @@ if ($datosCargaActual['car_valor_indicador'] == 1) {
     }
     try{
         mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_evaluacion, institucion, year)
-        VALUES('".$codigo."', '" . $cargaConsultaActual . "', '" . $idRegistro . "', '" . $_POST["valor"] . "', '" . $periodoConsultaActual . "', 1, '" . $_POST["saberes"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        VALUES('".$codigo."', '" . $cargaConsultaActual . "', '" . $codigoAI . "', '" . $_POST["valor"] . "', '" . $periodoConsultaActual . "', 1, '" . $_POST["saberes"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
@@ -68,7 +69,7 @@ else {
     $valorIgualIndicador = ($porcentajePermitido / ($sumaIndicadores[2] + 1));
     try{
         mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_periodo, ipc_creado, ipc_evaluacion, institucion, year)
-        VALUES('".$codigo."', '" . $cargaConsultaActual . "', '" . $idRegistro . "', '" . $periodoConsultaActual . "', 1, '" . $_POST["saberes"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        VALUES('".$codigo."', '" . $cargaConsultaActual . "', '" . $codigoAI . "', '" . $periodoConsultaActual . "', 1, '" . $_POST["saberes"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
@@ -92,8 +93,8 @@ if ($datosCargaActual['car_configuracion'] == 0) {
     //Actualizamos todas las actividades por cada indicador
     while ($indicadoresDatos = mysqli_fetch_array($indicadoresConsultaActualizado, MYSQLI_BOTH)) {
         try{
-            $consultaNumActividades=mysqli_query($conexion, "SELECT * FROM academico_actividades 
-            WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1");
+            $consultaNumActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
+            WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -102,8 +103,8 @@ if ($datosCargaActual['car_configuracion'] == 0) {
         if ($actividadesNum > 0) {
             $valorIgualActividad = ($indicadoresDatos['ipc_valor'] / $actividadesNum);
             try{
-                mysqli_query($conexion, "UPDATE academico_actividades SET act_valor='" . $valorIgualActividad . "' 
-                WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor='" . $valorIgualActividad . "' 
+                WHERE act_id_tipo='" . $indicadoresDatos['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }

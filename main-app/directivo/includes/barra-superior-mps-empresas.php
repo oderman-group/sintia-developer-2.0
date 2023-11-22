@@ -45,7 +45,7 @@ if (!empty($_GET["insti"])) {
                     ?>
                         <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($insti); ?>&cat=<?= base64_encode($cate[0]); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><span><?= strtoupper($cate['svcat_nombre']); ?></span></a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual[8]]); ?></a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual['uss_idioma']]); ?></a>
                 </div>
             </li>
             
@@ -65,7 +65,7 @@ if (!empty($_GET["insti"])) {
                     ?>
                         <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($instit[0]); ?>&cat=<?= base64_encode($cat); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><span><?= strtoupper($instit['ins_siglas']); ?></span></a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual[8]]); ?></a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual['uss_idioma']]); ?></a>
                 </div>
             </li>
 

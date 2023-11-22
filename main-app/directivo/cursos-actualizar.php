@@ -28,7 +28,7 @@ if(empty($_POST["tipoG"])) {$_POST["tipoG"] = GRADO_GRUPAL;}
 if(empty($_POST["estado"])){$_POST["estado"]=1;}
 
 try{
-	mysqli_query($conexion, "UPDATE academico_grados SET 
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET 
 	gra_codigo='" . $_POST["codigoC"] . "', 
 	gra_nombre='" . $_POST["nombreC"] . "', 
 	gra_formato_boletin='" . $_POST["formatoB"] . "', 
@@ -41,7 +41,7 @@ try{
 	gra_nivel='" . $_POST["nivel"] . "', 
 	gra_estado='" . $_POST["estado"] . "',
 	gra_tipo='" . $_POST["tipoG"] . "'
-	WHERE gra_id='" . $_POST["id_curso"] . "'");
+	WHERE gra_id='" . $_POST["id_curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

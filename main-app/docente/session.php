@@ -13,7 +13,7 @@ else
 	require_once(ROOT_PATH."/config-general/consulta-usuario-actual.php");
 	require_once(ROOT_PATH."/config-general/verificar-usuario-bloqueado.php");
 	
-	if($datosUsuarioActual[3] != TIPO_DOCENTE)
+	if($datosUsuarioActual['uss_tipo'] != TIPO_DOCENTE)
 	{
 		include("../compartido/sintia-funciones.php");
 		$destinos = validarUsuarioActual($datosUsuarioActual);

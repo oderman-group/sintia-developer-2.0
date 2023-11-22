@@ -73,8 +73,8 @@ if($config['conf_activar_encuesta']==1){
 						<?php
 						$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 						INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-						INNER JOIN academico_grados ON gra_id=car_curso
-						INNER JOIN usuarios ON uss_id=car_docente
+						INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+						INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 						WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
 				$nCargas = mysqli_num_rows($cCargas);
 				$mensajeCargas = new Cargas;

@@ -43,9 +43,10 @@ include("../../config-general/consulta-usuario-actual.php");
             $modalidadEstudio = array("", "Virtual", "Presencial- alternancia");
             $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
             $cont = 1;
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  LEFT JOIN academico_grados ON gra_id=mat_grado
-  WHERE  mat_eliminado=0 ORDER BY mat_primer_apellido, mat_segundo_apellido");
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+            WHERE  mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} 
+            ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido");
             while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                 $colorProceso = 'tomato';
                 if ($resultado["mat_iniciar_proceso"] == 1) {

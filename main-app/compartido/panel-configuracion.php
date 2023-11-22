@@ -30,9 +30,9 @@
 	                                    </li>
 										-->
 										<?php
-										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM usuarios 
+										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
 										INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-										WHERE uss_estado=1 AND uss_bloqueado=0
+										WHERE uss_estado=1 AND uss_bloqueado=0 AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 										AND YEAR(uss_ultimo_ingreso)='".date("Y")."' AND MONTH(uss_ultimo_ingreso)='".date("m")."'
 										ORDER BY uss_nombre
 										LIMIT 0, 800");

@@ -50,11 +50,11 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</li>
                             </ol>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                                 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -154,15 +154,15 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
                                                         try{
-                                                            $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                            $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         while($opcionesGeneralesDatos = mysqli_fetch_array($opcionesGeneralesConsulta, MYSQLI_BOTH)){
-                                                            if($cfg[22]==$opcionesGeneralesDatos[0])
-                                                                echo '<option value="'.$opcionesGeneralesDatos[0].'" selected>'.$opcionesGeneralesDatos[1].'</option>';
+                                                            if($cfg[22]==$opcionesGeneralesDatos['catn_id'])
+                                                                echo '<option value="'.$opcionesGeneralesDatos['catn_id'].'" selected>'.$opcionesGeneralesDatos['catn_nombre'].'</option>';
                                                             else
-                                                                echo '<option value="'.$opcionesGeneralesDatos[0].'">'.$opcionesGeneralesDatos[1].'</option>';	
+                                                                echo '<option value="'.$opcionesGeneralesDatos['catn_id'].'">'.$opcionesGeneralesDatos['catn_nombre'].'</option>';	
                                                         }
                                                     ?>
                                                 </select>

@@ -39,7 +39,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[216][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[216][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
@@ -60,7 +60,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 									}
 									?>
 									
-									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<?php
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
@@ -75,7 +75,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 									}
 								}
 								?>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[216][$datosUsuarioActual[8]];?></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[216][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>

@@ -7,9 +7,9 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
-          <b><?= strtoupper($frases[116][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
-          <b><?= strtoupper($frases[26][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
-          <b><?= strtoupper($frases[27][$datosUsuarioActual[8]]); ?>: </b> <?= $periodoConsultaActual; ?>
+          <b><?= strtoupper($frases[116][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
+          <b><?= strtoupper($frases[26][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
+          <b><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= $periodoConsultaActual; ?>
           <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -60,7 +60,7 @@
           <?php
           $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
 											INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-											INNER JOIN academico_grados ON gra_id=car_curso {$filtroMT}
+											INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
 											INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 											WHERE car_docente='" . $_SESSION["id"] . "'
 											ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre

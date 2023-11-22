@@ -59,7 +59,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$actividad['tar_titulo'];?></li>
                             </ol>
                         </div>
@@ -71,7 +71,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 
                                 <div class="card">
                                     <div class="card-head card-topline-aqua">
-                                        <header><?=$frases[119][$datosUsuarioActual[8]];?></header>
+                                        <header><?=$frases[119][$datosUsuarioActual['uss_idioma']];?></header>
                                     </div>
                                     <div class="card-body no-padding height-9">
                                         <div class="work-monitor work-progress">
@@ -119,8 +119,8 @@ $porcentajeRestante = round($porcentajeRestante,2);
 					                            <!-- Nav tabs -->
 					                            <div class="p-rl-20">
 						                            <ul class="nav customtab nav-tabs" role="tablist">
-						                                <li class="nav-item"><a href="#tab1" class="nav-link active"  data-toggle="tab" ><?=$frases[196][$datosUsuarioActual[8]];?></a></li>
-						                                <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab"><?=$frases[197][$datosUsuarioActual[8]];?></a></li>
+						                                <li class="nav-item"><a href="#tab1" class="nav-link active"  data-toggle="tab" ><?=$frases[196][$datosUsuarioActual['uss_idioma']];?></a></li>
+						                                <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab"><?=$frases[197][$datosUsuarioActual['uss_idioma']];?></a></li>
 						                            </ul>
 					                            </div>
 					                            <!-- Tab panes -->
@@ -128,15 +128,15 @@ $porcentajeRestante = round($porcentajeRestante,2);
 					                                <div class="tab-pane active fontawesome-demo" id="tab1">
 															<div id="biography" >
 							                                    <div class="row">
-							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[127][$datosUsuarioActual[8]];?></strong>
+							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[127][$datosUsuarioActual['uss_idioma']];?></strong>
 							                                            <br>
 							                                            <p class="text-muted"><?=$actividad['tar_titulo'];?></p>
 							                                        </div>
-							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[130][$datosUsuarioActual[8]];?></strong>
+							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[130][$datosUsuarioActual['uss_idioma']];?></strong>
 							                                            <br>
 							                                            <p class="text-muted"><?=$actividad['tar_fecha_disponible'];?></p>
 							                                        </div>
-							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[131][$datosUsuarioActual[8]];?></strong>
+							                                        <div class="col-md-3 col-6 b-r"> <strong><?=$frases[131][$datosUsuarioActual['uss_idioma']];?></strong>
 							                                            <br>
 							                                            <p class="text-muted"><?=$actividad['tar_fecha_entrega'];?></p>
 							                                        </div>
@@ -146,11 +146,11 @@ $porcentajeRestante = round($porcentajeRestante,2);
 							                                        </div>
 							                                    </div>
 
-							                                    <h4 class="font-bold"><?=$frases[50][$datosUsuarioActual[8]];?></h4>
+							                                    <h4 class="font-bold"><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></h4>
 																<hr>
 							                                    <p><?=$actividad['tar_descripcion'];?></p>
 							                                    <br>
-							                                    <h4 class="font-bold"><?=$frases[198][$datosUsuarioActual[8]];?></h4>
+							                                    <h4 class="font-bold"><?=$frases[198][$datosUsuarioActual['uss_idioma']];?></h4>
 							                                    <hr>
 							                                    <ul>
 							                                        <?php if(!empty($actividad['tar_archivo'])  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
@@ -166,12 +166,12 @@ $porcentajeRestante = round($porcentajeRestante,2);
 		                                                    <div class="row">
 		                                                        <div class="full-width p-rl-20">
 		                                                            <div class="panel">
-																		<p><?=$frases[199][$datosUsuarioActual[8]];?></p>
+																		<p><?=$frases[199][$datosUsuarioActual['uss_idioma']];?></p>
 		                                                                <?php if($fechas[1]<=0 or $actividad['tar_impedir_retrasos']==0){?>
 																		<form id="form_subir" action="actividades-enviar.php" method="post" enctype="multipart/form-data">
 																			<input type="hidden" name="idR" value="<?=$idR;?>">
 		                                                                    
-																			<p><textarea class="form-control border border-primary" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual[8]];?>"></textarea></p>
+																			<p><textarea class="form-control border border-primary" name="comentario" rows="2" placeholder="<?=$frases[204][$datosUsuarioActual['uss_idioma']];?>"></textarea></p>
 																			
 																			<h4><mark>Puedes subir hasta 3 archivos si es necesario.</mark></h4>
 																			<p>
@@ -196,7 +196,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																				</div>
 																			</p>
 																			
-																			<p><input type="submit" class="btn btn-info" value="<?=$frases[197][$datosUsuarioActual[8]];?>"></p>
+																			<p><input type="submit" class="btn btn-info" value="<?=$frases[197][$datosUsuarioActual['uss_idioma']];?>"></p>
 																			
 		                                                                </form>
 																		<?php }else{
@@ -208,31 +208,31 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																	if(!empty($enviada[0])){
 																	?>
 																		<div class="panel">
-																			<h4 class="font-bold"><?=$frases[200][$datosUsuarioActual[8]];?></h4>
+																			<h4 class="font-bold"><?=$frases[200][$datosUsuarioActual['uss_idioma']];?></h4>
 																			<hr>
-																			<p><?=$frases[203][$datosUsuarioActual[8]];?></p>
+																			<p><?=$frases[203][$datosUsuarioActual['uss_idioma']];?></p>
 																			
-																			<p><b><?=$frases[202][$datosUsuarioActual[8]];?>:</b> <?=$enviada['ent_fecha'];?> </p>
+																			<p><b><?=$frases[202][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$enviada['ent_fecha'];?> </p>
 																			
 																			<?php if(!empty($enviada['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
-																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 1:</b> 
+																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 1:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a>
 																			</p>
 																			<?php }?>
 																			
 																			<?php if(!empty($enviada['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
-																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 2:</b> 
+																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 2:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo2'];?>" target="_blank"><?=$enviada['ent_archivo2'];?> </a>
 																			</p>
 																			<?php }?>
 																			
 																			<?php if(!empty($enviada['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
-																			<p><b><?=$frases[128][$datosUsuarioActual[8]];?> 3:</b> 
+																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 3:</b> 
 																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo3'];?>" target="_blank"><?=$enviada['ent_archivo3'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<p><b><?=$frases[201][$datosUsuarioActual[8]];?>:</b><br> <?=$enviada['ent_comentario'];?> </p>
+																			<p><b><?=$frases[201][$datosUsuarioActual['uss_idioma']];?>:</b><br> <?=$enviada['ent_comentario'];?> </p>
 																		</div>
 																	<?php }?>
 																	
