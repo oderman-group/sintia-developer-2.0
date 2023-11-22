@@ -48,23 +48,23 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 $n = 0;
 										 for($i=1; $i<=$config[19]; $i++){
 										 	//LAS CALIFICACIONES
-										 	$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$_GET["estudiante"]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);
+										 	$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_GET["estudiante"]."' AND bol_carga='".$rCargas[0]."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 	$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 											$numN = mysqli_num_rows($notasConsulta);
 											if($numN){
 												$n++;
-												$definitiva += $notasResultado[4];
+												$definitiva += $notasResultado['bol_nota'];
 											}
-											if($notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7];
+											if($notasResultado['bol_nota']<$config[5] and $notasResultado['bol_nota']!="")$color = $config[6]; elseif($notasResultado['bol_nota']>=$config[5]) $color = $config[7];
 											if($notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n</span>'; elseif($notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; else $tipo='';
 											
 										?>
                                         	<td style="text-align:center; color:<?=$color;?>;">
-												<?=$notasResultado[4]."<br>".$tipo;?>
+												<?=$notasResultado['bol_nota']."<br>".$tipo;?>
                                             </td>
                                         <?php		
 										 }
-											$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$_GET["estudiante"]." AND niv_id_asg='".$rCargas[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+											$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$_GET["estudiante"]."' AND niv_id_asg='".$rCargas[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											
 											$numN = mysqli_num_rows($consultaN);
 											$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);

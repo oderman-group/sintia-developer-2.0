@@ -81,12 +81,12 @@ include("../compartido/head-informes.php") ?>
                                             $defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
+												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-												if (!empty($boletin[4])) {
-													if ($boletin[4] < $config[5]) $color = $config[6];
-													elseif ($boletin[4] >= $config[5]) $color = $config[7];
-													$defPorMateria += $boletin[4];
+												if (!empty($boletin['bol_nota'])) {
+													if ($boletin['bol_nota'] < $config[5]) $color = $config[6];
+													elseif ($boletin['bol_nota'] >= $config[5]) $color = $config[7];
+													$defPorMateria += $boletin['bol_nota'];
 												}
 												$p++;
                                             }

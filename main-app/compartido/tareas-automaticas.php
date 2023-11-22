@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 //PARA DOCENTES
 //Generar informes
 $cargasConsulta = mysqli_query($conexion, "SELECT DATEDIFF(car_fecha_generar_informe_auto, now()), car_id, car_periodo, car_curso, car_grupo, car_docente FROM academico_cargas
@@ -10,7 +11,7 @@ WHERE car_fecha_generar_informe_auto IS NOT NULL AND car_fecha_generar_informe_a
 while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 	if($cargasDatos[0]==0){
 		
-		mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_carga=".$cargasDatos['car_id']." AND bol_periodo='".$cargasDatos['car_periodo']."'");
+		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$cargasDatos['car_id']."' AND bol_periodo='".$cargasDatos['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		
 		$filtroAdicional= "AND mat_grado='".$cargasDatos["car_curso"]."' AND mat_grupo='".$cargasDatos["car_grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
@@ -21,10 +22,10 @@ while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 			//DEFINITIVAS
 			$carga = $cargasDatos['car_id'];
 			$periodo = $cargasDatos['car_periodo'];
-			$estudiante = $resultado[0];
+			$estudiante = $resultado['mat_id'];
 			include("../definitivas.php");	
 			if($porcentajeActual<96){
-				mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_carga=".$cargasDatos['car_id']." AND bol_periodo='".$cargasDatos['car_periodo']."'");
+				mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$cargasDatos['car_id']."' AND bol_periodo='".$cargasDatos['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				
 				
 				if($porcentajeActual>0){
@@ -38,9 +39,10 @@ while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 				continue;
 			}
 			if($pararProceso==2){
+				$codigoBOL=Utilidades::generateCode("BOL");
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN	
-				mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo)
-				VALUES('".$cargasDatos['car_id']."','".$resultado[0]."','".$cargasDatos['car_periodo']."','".$definitiva."',1)");	
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, institucion, year)
+				VALUES('".$codigoBOL."', '".$cargasDatos['car_id']."','".$resultado['mat_id']."','".$cargasDatos['car_periodo']."','".$definitiva."',1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 				
 			}
 		}

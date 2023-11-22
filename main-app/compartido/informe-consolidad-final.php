@@ -107,21 +107,21 @@ include("../compartido/head-informes.php") ?>
 											$defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".$BD.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
+												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-												if(!empty($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(!empty($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
+												if(!empty($boletin['bol_nota']) and $boletin['bol_nota']<$config[5] and $boletin['bol_nota']!="")$color = $config[6]; elseif(!empty($boletin['bol_nota']) and $boletin['bol_nota']>=$config[5]) $color = $config[7];
 												
 												$notaBoletinFinal="";
 												$title='';
-												if(!empty($boletin[4])){
-													$notaBoletinFinal=$boletin[4];
+												if(!empty($boletin['bol_nota'])){
+													$notaBoletinFinal=$boletin['bol_nota'];
 													if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-														$title='title="Nota Cuantitativa: '.$boletin[4].'"';
-														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $boletin[4], $BD);
+														$title='title="Nota Cuantitativa: '.$boletin['bol_nota'].'"';
+														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $boletin['bol_nota'], $BD);
 														$notaBoletinFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 													}
 
-													$defPorMateria += ($boletin[4]*$porcPeriodo[$p]);
+													$defPorMateria += ($boletin['bol_nota']*$porcPeriodo[$p]);
 												}
 												//DEFINITIVA DE CADA PERIODO
 											?>	

@@ -63,8 +63,8 @@ class Boletin {
 
     public static function obtenerPuestoYpromedioEstudiante(
         int    $periodo      = 0,
-        int    $grado      = 0,
-        int    $grupo      = 0,
+        string    $grado      = "",
+        string    $grupo      = "",
         string $BD    = '',
         string $yearBd    = ''
     )
@@ -75,7 +75,7 @@ class Boletin {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."'
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
             WHERE  mat.mat_grado='".$grado."' AND mat.mat_grupo='".$grupo."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
             GROUP BY mat.mat_id 
             ORDER BY prom DESC");
@@ -88,8 +88,8 @@ class Boletin {
     }
 
     public static function obtenerAreasDelEstudiante(
-        int    $grado      = 0,
-        int    $grupo      = 0,
+        string    $grado      = "",
+        string    $grupo      = "",
         string $BD    = '',
         string $yearBd    = ''
     )
@@ -127,7 +127,7 @@ class Boletin {
             $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,car_id,car_ih FROM ".BD_ACADEMICA.".academico_materias am
             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
-            INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
             WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
             GROUP BY ar_id;");
         } catch (Exception $e) {
@@ -141,15 +141,17 @@ class Boletin {
     public static function obtenerPromedioPorTodosLosPeriodos(
         int    $estudiante      = 0,
         int    $periodo      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 2) as promedio FROM $BD.academico_boletin 
-            WHERE bol_estudiante='" . $estudiante . "' AND bol_periodo='" . $periodo . "'");
+            $resultado = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 2) as promedio FROM ".BD_ACADEMICA.".academico_boletin 
+            WHERE bol_estudiante='" . $estudiante . "' AND bol_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
@@ -224,14 +226,16 @@ class Boletin {
         int    $carga      = 0,
         int    $periodo      = 0,
         int    $estudiante      = 0,
-        string $BD    = ''
+        string $BD    = '',
+        string $yearBd    = ''
     )
     {
-        global $conexion;
+        global $conexion, $config;
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin WHERE bol_carga='" . $carga . "' AND bol_periodo='" . $periodo . "' AND bol_estudiante='" . $estudiante . "'");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='" . $carga . "' AND bol_periodo='" . $periodo . "' AND bol_estudiante='" . $estudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
@@ -243,7 +247,7 @@ class Boletin {
     public static function obtenerDefinitivaYnombrePorMateria(
         int    $estudiante      = 0,
         int    $area      = 0,
-        string    $condicion      = '',
+        string $condicion      = '',
         string $BD    = '',
         string $yearBd    = ''
     )
@@ -256,7 +260,7 @@ class Boletin {
             $resultado = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_area,mat_valor,mat_id,car_id,car_docente,car_ih,car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
-            INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
             WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
             GROUP BY mat_id
             ORDER BY mat_id;");
@@ -269,8 +273,8 @@ class Boletin {
     }
 
     public static function obtenerDefinitivaPorPeriodo(
-        int    $estudiante      = 0,
-        int    $area      = 0,
+        string    $estudiante      = "",
+        string    $area      = "",
         string    $condicion      = '',
         string $BD    = '',
         string $yearBd    = ''
@@ -284,8 +288,8 @@ class Boletin {
             $resultado = mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
             INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
-            INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
-            WHERE bol_estudiante='" . $estudiante . "' and a.ar_id=" . $area . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year=$year}
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+            WHERE bol_estudiante='" . $estudiante . "' and a.ar_id='" . $area . "' and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
             ORDER BY mat_id,bol_periodo
             ;");
         } catch (Exception $e) {
@@ -403,7 +407,7 @@ class Boletin {
 
         try {
             $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN $BD.academico_boletin ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."'
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
             WHERE  mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2)
             GROUP BY mat.mat_id 
             ORDER BY prom DESC");

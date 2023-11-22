@@ -152,8 +152,8 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                     $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM ".BD_ACADEMICA.".academico_materias am
                     INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
                     INNER JOIN academico_cargas on car_materia = am.mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
-                    LEFT JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
-                    AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                    LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+                    WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
                     ORDER BY am.mat_id;");
                     $numNotas = mysqli_num_rows($consultaNotaMaterias);
                     if($numNotas>0){

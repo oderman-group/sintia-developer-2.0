@@ -130,12 +130,12 @@ require_once("../class/Estudiantes.php");
 
                                 <optgroup label="<?= $grado['gra_nombre']; ?>">
                                     <?php
-                                    $filtro = ' AND mat_grado=' . $grado['gra_id'];
+                                    $filtro = ' AND mat_grado="' . $grado['gra_id'].'"';
                                     $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                     while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
                                     ?>
 
-                                        <option value="<?= $opcionesDatos[0]; ?>">
+                                        <option value="<?= $opcionesDatos['mat_id']; ?>">
                                             <?= "[" . $opcionesDatos['mat_id'] . "] " . strtoupper($opcionesDatos['mat_primer_apellido'] . " " . $opcionesDatos['mat_segundo_apellido'] . " " . $opcionesDatos['mat_nombres'] . " " . $opcionesDatos['mat_nombre2']); ?>
                                             - <?= strtoupper($opcionesDatos['gra_nombre'] . " " . $opcionesDatos['gru_nombre']); ?>
                                         </option>
