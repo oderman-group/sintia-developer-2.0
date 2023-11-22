@@ -29,6 +29,12 @@ try {
 			Si necesita ayuda urgente, comuniquese con el personal encargado de la plataforma y reporte los siguientes datos:<br>
 			<b>ID del reporte del error:</b> <?=$idReporteError;?>.<br>
 			<b>Número del error:</b> <?=$numError;?>.
+			<?php if($datosUsuarioActual['uss_tipo'] == TIPO_DEV){?>
+				<hr>
+				<b>Detalle del error:</b> <?=$detalleError;?><br>
+				<b>Linea del error:</b> <?=$lineaError;?><br>
+				<b>Error trace:</b> <?=$e->getTraceAsString();?><br>
+			<?php }?>
 		</p>
 		
 		<p>
