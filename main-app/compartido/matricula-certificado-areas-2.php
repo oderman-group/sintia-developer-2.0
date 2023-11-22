@@ -182,7 +182,7 @@ while($i<=$restaAgnos){
 
 				//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
 
-				$consultaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga IN(".$mate.")");
+				$consultaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga IN(".$mate.") AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                 $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = round($boletin[0],1);
@@ -209,7 +209,7 @@ while($i<=$restaAgnos){
 			$materiasDA = mysqli_query($conexion, "SELECT car_id, am.mat_nombre, ipc.ipc_intensidad FROM ".BD_ACADEMICA.".academico_materias am, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE am.mat_area='".$cargas["ar_id"]."' AND am.mat_id=car_materia AND car_curso='".$matricula["gra_id"]."' AND car_grupo='".$matricula["gru_id"]."' AND ipc.ipc_curso='".$matricula["mat_grado"]."' AND ipc.ipc_materia=am.mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$inicio} AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}");
 			
 			while($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)){
-				$consultaNotaDefMateria=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$mda["car_id"]."'");
+				$consultaNotaDefMateria=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$mda["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$notaDefMateria = mysqli_fetch_array($consultaNotaDefMateria, MYSQLI_BOTH);
 				$notaDefMateria = round($notaDefMateria[0],1);
 				for($n=0; $n<=5; $n++){
@@ -281,7 +281,7 @@ while($i<=$restaAgnos){
 
 				//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
 
-				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga IN(" . $mate . ")");
+				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga IN(" . $mate . ") AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 				$nota = round($boletin[0], 1);
@@ -309,7 +309,7 @@ while($i<=$restaAgnos){
 				$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM ".BD_ACADEMICA.".academico_materias am, academico_cargas, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE am.mat_area='" . $cargas["ar_id"] . "' AND am.mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=am.mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$inicio} AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}");
 
 				while ($mda = mysqli_fetch_array($materiasDA, MYSQLI_BOTH)) {
-					$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "'");
+					$consultaNotaDefMateria = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $mda["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$notaDefMateria = mysqli_fetch_array($consultaNotaDefMateria, MYSQLI_BOTH);
 					$notaDefMateria = round($notaDefMateria[0], 1);
 					for ($n = 0; $n <= 5; $n++) {
@@ -386,7 +386,7 @@ while($i<=$restaAgnos){
 				$vectorMP = array();
 				while($cargasC=mysqli_fetch_array($cargasAcademicasC, MYSQLI_BOTH)){	
 					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-					$consultaBoletinC=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargasC["car_id"]."'");
+					$consultaBoletinC=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargasC["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$boletinC = mysqli_fetch_array($consultaBoletinC, MYSQLI_BOTH);
 					$notaC = round($boletinC[0],1);
 					if($notaC<$config[5]){
@@ -467,7 +467,7 @@ while($i<=$restaAgnos){
 
                 //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-				$consunltaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."'");
+				$consunltaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                 $boletin = mysqli_fetch_array($consunltaBoletin, MYSQLI_BOTH);
 
                 $nota = round($boletin[0],1);
@@ -491,7 +491,7 @@ while($i<=$restaAgnos){
 
                     while($p<=$config[19]){
 
-						$consultaNotasPeriodo=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND bol_periodo='".$p."'");
+						$consultaNotasPeriodo=mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                         $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
 
 						$notasPeriodoFinal='';
@@ -542,7 +542,7 @@ while($i<=$restaAgnos){
 
 				//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 				$nota = round($boletin[0], 1);
@@ -566,7 +566,7 @@ while($i<=$restaAgnos){
 
 					while ($p <= $config[19]) {
 
-						$consultaNotasPeriodo = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+						$consultaNotasPeriodo = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 						$notasPeriodo = mysqli_fetch_array($consultaNotasPeriodo, MYSQLI_BOTH);
 
 						$notasPeriodoFinal='';

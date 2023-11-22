@@ -44,7 +44,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 $contp = 1;
 $puestoCurso = 0;
 $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM ".BD_ACADEMICA.".academico_matriculas mat
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."'
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
 WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} GROUP BY mat_id ORDER BY prom DESC");	
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
@@ -159,8 +159,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		$promedioArea = 0;
 		while($asignatura = mysqli_fetch_array($asignaturas, MYSQLI_BOTH)){
 
-			$consultaDatosBoletinArea=mysqli_query($conexion, "SELECT * FROM academico_boletin
-			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
+			$consultaDatosBoletinArea=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
+			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 			$datosBoletinArea = mysqli_fetch_array($consultaDatosBoletinArea, MYSQLI_BOTH);
 			
 			$promedioArea += $datosBoletinArea['bol_nota'];
@@ -191,9 +191,9 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 
-		$consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
+		$consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
         INNER JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
-        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
+        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 		
 		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
@@ -211,8 +211,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		WHERE rind.rind_carga='".$datosCargas['car_id']."' AND rind.rind_estudiante='".$datosUsr['mat_id']."' AND rind.rind_nota>rind.rind_nota_original AND rind.institucion={$config['conf_id_institucion']} AND rind.year={$year}
 		");
 		
-		$consultaAcumulado=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),1) FROM $BD.academico_boletin
-        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."'");
+		$consultaAcumulado=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),1) FROM ".BD_ACADEMICA.".academico_boletin
+        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$acumulado = mysqli_fetch_array($consultaAcumulado, MYSQLI_BOTH);
 		
 		$consultaAcumuladoDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
@@ -311,8 +311,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         	<td style="text-align:left;">PROMEDIO/TOTAL</td>
             <td>-</td> 
             <?php 
-				$consultaPromedioPeriodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) as promedio FROM $BD.academico_boletin 
-                WHERE bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."'");
+				$consultaPromedioPeriodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) as promedio FROM ".BD_ACADEMICA.".academico_boletin 
+                WHERE bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodos, MYSQLI_BOTH);
 				
 				$consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 

@@ -65,9 +65,9 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $nombreMayor = "";
   while($fila = mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
-  		$cuentaest = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-		WHERE bol_estudiante=".$fila['mat_id']." 
-		AND bol_periodo=".$_REQUEST["per"]." 
+  		$cuentaest = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+		WHERE bol_estudiante='".$fila['mat_id']."' 
+		AND bol_periodo='".$_REQUEST["per"]."' AND institucion={$config['conf_id_institucion']} AND year={$year} 
 		GROUP BY bol_carga");
 		// $numero = mysqli_num_rows($cuentaest);
 		$def = '0.0';
@@ -88,14 +88,14 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 					if($config['conf_id_institucion']!=23){
-						$notas = mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-						WHERE bol_estudiante=" . $fila['mat_id'] . " 
-						AND bol_carga=" . $mat1[0] . " 
-						AND bol_periodo=" . $_REQUEST["per"]);
+						$notas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+						WHERE bol_estudiante='" . $fila['mat_id'] . "' 
+						AND bol_carga='" . $mat1[0] . "' 
+						AND bol_periodo='" . $_REQUEST["per"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 
 						$nota = mysqli_fetch_array($notas, MYSQLI_BOTH);
-						if(!empty($nota[4])){
-							$defini = $nota[4];
+						if(!empty($nota['bol_nota'])){
+							$defini = $nota['bol_nota'];
 						}
 					}else{
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO

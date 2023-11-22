@@ -169,7 +169,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 															//Color nota
 															if(!empty($notaRecuperacion) && $notaRecuperacion<$config[5]) $colorNota = $config[6]; elseif(!empty($notaRecuperacion) && $notaRecuperacion>=$config[5]) $colorNota = $config[7];
 														}
-														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$periodoConsultaActual);
+														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notasResultado = mysqli_fetch_array($consultaNotasResultado, MYSQLI_BOTH);
 														 
 														if(!empty($notaIndicador[0]) && $notaIndicador[0]<$config[5])$color = $config[6]; elseif(!empty($notaIndicador[0]) && $notaIndicador[0]>=$config[5]) $color = $config[7]; 
@@ -230,16 +230,16 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 														
 														<td>
 															<?php
-																if(!empty($notasResultado[4])){
+																if(!empty($notasResultado['bol_nota'])){
 														 
-																	if($notasResultado[4]<$config[5])$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7]; 
+																	if($notasResultado['bol_nota']<$config[5])$color = $config[6]; elseif($notasResultado['bol_nota']>=$config[5]) $color = $config[7]; 
 
-																	$notasResultadoFinal=$notasResultado[4];
+																	$notasResultadoFinal=$notasResultado['bol_nota'];
 																	$atributosA='style="text-decoration:underline; color:'.$color.';"';
 																	if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-																		$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado[4].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+																		$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
 
-																		$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[4]);
+																		$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
 																		$notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 																	}
 															?>

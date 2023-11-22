@@ -135,14 +135,14 @@ $numero_periodos=$config["conf_periodo"];
 $consulta_notdef_area=mysqli_query($conexion,"SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
 INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 WHERE bol_estudiante='".$matriculadosDatos[0]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 GROUP BY ar_id;");
 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 $consulta_a_mat=mysqli_query($conexion,"SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM ".BD_ACADEMICA.".academico_materias am
 INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 WHERE bol_estudiante='".$matriculadosDatos[0]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 GROUP BY mat_id
 ORDER BY mat_id;");
@@ -150,7 +150,7 @@ ORDER BY mat_id;");
 $consulta_a_mat_per=mysqli_query($conexion,"SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
 INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
 INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 WHERE bol_estudiante='".$matriculadosDatos[0]."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 ORDER BY mat_id,bol_periodo
 ;");
@@ -223,8 +223,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
             <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;">&raquo;<?php echo $fila2["mat_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php for($l=1;$l<=$numero_periodos;$l++){ 
-	//$numNotaDelEstudiante = mysqli_num_rows(mysqli_query($conexion,"SELECT count(bol_nota) FROM academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos[0]."' AND bol_periodo='".$l."'"));
-	$notaDelEstudiante = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos[0]."' AND bol_periodo='".$l."'"), MYSQLI_BOTH);
+	$notaDelEstudiante = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos[0]."' AND bol_periodo='".$l."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 

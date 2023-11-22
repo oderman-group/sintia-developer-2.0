@@ -20,8 +20,8 @@ try{
 		$cargasConsultaNuevo = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH);		
         if(!is_null($cargasConsultaNuevo)){
 			try{
-				mysqli_query($conexion, "UPDATE academico_boletin SET bol_carga='" . $cargasConsultaNuevo["car_id"] . "' 
-				WHERE bol_carga='" . $cargasDatos["car_id"] . "' AND bol_estudiante='" . $_POST["estudiante"] . "'");
+				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_carga='" . $cargasConsultaNuevo["car_id"] . "' 
+				WHERE bol_carga='" . $cargasDatos["car_id"] . "' AND bol_estudiante='" . $_POST["estudiante"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}

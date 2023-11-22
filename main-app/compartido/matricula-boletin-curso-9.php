@@ -110,8 +110,8 @@ $contador_periodos=0;
 		WHERE aic.ipc_carga='".$cargas['car_id']."' AND aic.ipc_periodo='".$periodoActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
 		");
 		
-		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
+		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
+		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 		
 		$colorFondo = '#FFF;';

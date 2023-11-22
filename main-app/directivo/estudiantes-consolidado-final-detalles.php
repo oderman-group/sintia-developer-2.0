@@ -199,27 +199,27 @@ if(!Modulos::validarPermisoEdicion()){
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
 														while($p<=$config[19]){
-															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."'");
+															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-															if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
-															if(isset($boletin[4])){
-																$defPorMateria += $boletin[4];
+															if(isset($boletin['bol_nota']) and $boletin['bol_nota']<$config[5] and $boletin['bol_nota']!="")$color = $config[6]; elseif(isset($boletin['bol_nota']) and $boletin['bol_nota']>=$config[5]) $color = $config[7];
+															if(isset($boletin['bol_nota'])){
+																$defPorMateria += $boletin['bol_nota'];
 															}
-															if(isset($boletin[5]) and $boletin[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
-															elseif(isset($boletin[5]) and $boletin[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
-															elseif(isset($boletin[5]) and $boletin[5]==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
-															elseif(isset($boletin[5]) and $boletin[5]==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
+															if(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
 															
 															else $tipo='';
 															//DEFINITIVA DE CADA PERIODO
 															
 															$disabled = "";
-															if((isset($boletin[4]) and ($boletin[4]!="" or $carga['car_periodo']<=$p)) and $config['conf_editar_definitivas_consolidado']!=true){
+															if((isset($boletin['bol_nota']) and ($boletin['bol_nota']!="" or $carga['car_periodo']<=$p)) and $config['conf_editar_definitivas_consolidado']!=true){
 																$disabled = "disabled";
 															}
 														?>	
 															<td style="text-align:center;">
-																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia['mat_nombre'];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
+																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin['bol_nota'])){ echo $boletin['bol_nota'];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia['mat_nombre'];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
 															</td>
 														<?php
 															$p++;

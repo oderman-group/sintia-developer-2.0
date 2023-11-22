@@ -98,27 +98,27 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                     $decimal = $porcentaje/100;
                                     
                                 //LAS CALIFICACIONES
-                                $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+                                $notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 $notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
                                 $numN = mysqli_num_rows($notasConsulta);
                                 if($numN){
                                     $n++;
-                                    $definitiva += $notasResultado[4]*$decimal;
+                                    $definitiva += $notasResultado['bol_nota']*$decimal;
                                     $sumaPorcentaje += $decimal;
                                 }
-                                if(isset($notasResultado) && $notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado[4]>=$config[5]) $color = $config[7];
+                                if(isset($notasResultado) && $notasResultado['bol_nota']<$config[5] and $notasResultado['bol_nota']!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado['bol_nota']>=$config[5]) $color = $config[7];
 
                                 $notasResultadoFinal="";
                                 $notasAnteriorFinal="";
                                 $atributosA='';
                                 if(!empty($notasResultado)){
-                                    $notasResultadoFinal=$notasResultado[4];
+                                    $notasResultadoFinal=$notasResultado['bol_nota'];
                                     $notasAnteriorFinal=$notasResultado['bol_nota_anterior'];
                                     $atributosA='style="text-decoration:underline; color:'.$color.';"';
                                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                        $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado[4].'" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado[4].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+                                        $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado['bol_nota'].'" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
                 
-                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[4]);
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
                                         $notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                 
                                         $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota_anterior']);
@@ -126,10 +126,10 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                     }
                                 }
                                     
-                                if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasAnteriorFinal.')</span>';}
-                                elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasAnteriorFinal.')</span>';}
-                                    elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasAnteriorFinal.')</span>';}
-                                elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+                                if(isset($notasResultado) && $notasResultado['bol_tipo']==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasAnteriorFinal.')</span>';}
+                                elseif(isset($notasResultado) && $notasResultado['bol_tipo']==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasAnteriorFinal.')</span>';}
+                                    elseif(isset($notasResultado) && $notasResultado['bol_tipo']==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasAnteriorFinal.')</span>';}
+                                elseif(isset($notasResultado) && $notasResultado['bol_tipo']==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
                                     else $tipo='';
 
 
@@ -137,9 +137,9 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                 <td style="text-align:center;">
                                     <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$notasResultadoFinal?></a><br><?=$tipo;?><br>
 
-                                    <?php if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5]){?>
-                                        <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
-                                        <span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
+                                    <?php if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5]){?>
+                                        <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
+                                        <span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado['bol_observaciones'])) echo $notasResultado['bol_observaciones'];?></span>
                                     <?php }?>
 
                                 </td>

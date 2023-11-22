@@ -145,7 +145,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
       <?php
         $acomuladoNota=0;
         for($i=1;$i<=4;$i++){
-          $consultaNotas=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga='".$resultadoCargas['car_id']."' AND bol_estudiante='".$e['mat_id']."' AND bol_periodo='".$i."'");
+          $consultaNotas=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$resultadoCargas['car_id']."' AND bol_estudiante='".$e['mat_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
           $nota=mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
           $notaEstudiante="";

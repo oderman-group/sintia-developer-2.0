@@ -141,24 +141,24 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
-															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$datosEstudianteActual[0]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);
+															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual[0]."' AND bol_carga='".$rCargas[0]."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;
-																$definitiva += $notasResultado[4]*$decimal;
+																$definitiva += $notasResultado['bol_nota']*$decimal;
 																$sumaPorcentaje += $decimal;
 															}
-															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
-															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5])$color = $config[6]; elseif(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']>=$config[5]) $color = $config[7];
+															if(!empty($notasResultado['bol_tipo']) && $notasResultado['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado['bol_tipo']) && $notasResultado['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
 															$usrEstud="";
 															if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 
 															$notaFinal="";
-															if(!empty($notasResultado[4])) {
-																$notaFinal=$notasResultado[4];
+															if(!empty($notasResultado['bol_nota'])) {
+																$notaFinal=$notasResultado['bol_nota'];
 																if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-																	$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado[4]);
+																	$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
 																	$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 																}
 															}

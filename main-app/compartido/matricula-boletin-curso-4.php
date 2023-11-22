@@ -254,7 +254,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
@@ -268,7 +268,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
@@ -284,7 +284,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN $BD.academico_cargas ac ON ac.car_materia=am.mat_id
 
-				INNER JOIN $BD.academico_boletin ab ON ab.bol_carga=ac.car_id
+				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=ac.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
 
 				WHERE bol_estudiante='" . $matriculadosDatos[0] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
@@ -360,14 +360,14 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         mysqli_data_seek($consulta_a_mat_per, 0);
 
-                        $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
+                        $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
                         LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
-                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$periodoActual."'");
+                        WHERE bol_carga='".$fila2["car_id"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
                         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 
 
-                        $consultaNotaFinal=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS def FROM academico_boletin 
-                        WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_carga='".$fila2["car_id"]."'");
+                        $consultaNotaFinal=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS def FROM ".BD_ACADEMICA.".academico_boletin 
+                        WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_carga='".$fila2["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $notaFinal = mysqli_fetch_array($consultaNotaFinal, MYSQLI_BOTH);
 
 
@@ -476,9 +476,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         <?php
 
-                        $consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
+                        $consultaObservacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
 
-						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $periodoActual . "' AND bol_estudiante='" . $matriculadosDatos[0] . "'");
+						WHERE bol_carga='" . $fila2["car_id"] . "' AND bol_periodo='" . $periodoActual . "' AND bol_estudiante='" . $matriculadosDatos[0] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 
                         if (!empty($observacion['bol_observaciones_boletin'])) {

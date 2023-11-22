@@ -49,8 +49,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 												
 												try{
-													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'");
+													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

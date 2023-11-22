@@ -163,7 +163,7 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
@@ -218,7 +218,7 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
@@ -357,7 +357,7 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
@@ -384,7 +384,7 @@ $modulo = 1;
 
                         while ($p <= $config[19]) {
 
-                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                             $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
 
                             $notasPeriodoFinal='';
@@ -432,7 +432,7 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
@@ -459,7 +459,7 @@ $modulo = 1;
 
                         while ($p <= $config[19]) {
 
-                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                             $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
 
                             $notasPeriodoFinal='';

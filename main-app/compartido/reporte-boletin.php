@@ -101,7 +101,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
 		$periodo=$fila_mat[7]-1; //asperiodo
-		$datos=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND  bol_periodo=".$periodoActual);//asmat
+		$datos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND  bol_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");//asmat
 		
 		$dato=mysqli_fetch_array($datos, MYSQLI_BOTH);
 		$numero=mysqli_num_rows($datos);
@@ -119,11 +119,11 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		while($per<=4){
 			
 			//============================ NOTA DE CADA UNO DE LOS PERIODOS  POR SEPARADO =====================================================
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
 			//============================ FIN DE LAS NOTAS POR SEPARADO ======================================================================	
 ?>
-			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota[4]; $defini = $defini + $nota[4]; $prome = $nota[4];?></td>
+			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota['bol_nota']; $defini = $defini + $nota['bol_nota']; $prome = $nota['bol_nota'];?></td>
 <?php 
 			$vectorT[$fila[1]][$per] = $prome;
 			
@@ -163,7 +163,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center" style="font-weight:bold; font-size:11px; border:groove;"><?php echo $defini." ".$msjH;?></td>	
 <?php 
 		$definitiva=substr($definitiva,0,3);
-		$final=$dato[4];
+		$final=$dato['bol_nota'];
 ?>
 		<td align="center" style="font-weight:bold; font-size:11px; border:groove;">
 <?php

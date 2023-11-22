@@ -227,7 +227,7 @@
                         FROM $BD.academico_cargas
                         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
                         INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-                        INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo =".$periodoActual." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
+                        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo ='".$periodoActual."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
                         WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND am.mat_area = ".$datosAreas['ar_id']."");
                         $notaArea=0;
                         $notaAreasPeriodos=0;
@@ -268,7 +268,7 @@
                                         $notaMateriasPeriodosTotal=0;
                                         for($i=1;$i<=$periodoActual;$i++){
                                             if($i!=$periodoActual){
-                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga=".$datosMaterias['car_id']." AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."");
+                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                                                 $datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
                                                 $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
@@ -341,7 +341,7 @@
                                         SUM(bol_nota * (mat_valor/100)) AS notaArea
                                         FROM academico_cargas
                                         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-                                        INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
+                                        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
                                         WHERE am.mat_area = ".$datosAreas['ar_id']."
                                         GROUP BY am.mat_area");
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
