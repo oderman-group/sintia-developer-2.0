@@ -31,9 +31,9 @@ class UsuariosPadre {
         $tableName = BDT_GeneralPerfiles::getTableName();        
         while($yearStart <= $yearEnd){
             $instYear =$_SESSION["inst"] ."_". $yearStart;            
-            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios 
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
             INNER JOIN ".$baseDatosServicios.".{$tableName} ON pes_id=uss_tipo
-            WHERE uss_usuario LIKE '".$usuario."%'");
+            WHERE uss_usuario LIKE '".$usuario."%' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$yearStart}");
             if($consultaUsuarioAuto->num_rows>0){               
                 while($fila=$consultaUsuarioAuto->fetch_assoc()){
                     $fila["anio"]=$yearStart;
@@ -61,7 +61,7 @@ class UsuariosPadre {
         global $conexion;
 
         try{
-            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$idUsuario."' {$filtroAdicional}");
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$idUsuario."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]} {$filtroAdicional}");
             $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
@@ -71,10 +71,10 @@ class UsuariosPadre {
         return $datosUsuarioAuto;
     }
 
-    public static function sesionUsuarioAnio($usuario,$instYear)
+    public static function sesionUsuarioAnio($usuario,$year)
     {
         global $conexion;
-        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios WHERE uss_usuario='".$usuario."' limit 1");
+        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_usuario='".$usuario."' AND institucion={$_SESSION["idInstitucion"]} AND year={$year} limit 1");
         $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
         return $datosUsuarioAuto;
     }
@@ -113,31 +113,30 @@ class UsuariosPadre {
                 while($yearStart <= $yearEnd){	
                     if ($_SESSION["bd"] == $yearStart) {			
                         if($get == 5) {
-                            mysqli_query($conexion, "UPDATE usuarios SET 
+                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
                             uss_tema_header='" . $_GET["temaHeader"] . "', 
                             uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
                             uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                         }
                         else {
-                            mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                         }
                     } else {
                         $usuarioSession = $_SESSION["datosUsuario"];
-                        $instYear = $_SESSION["inst"] ."_". $yearStart;
-                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $instYear);
+                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $yearStart);
                         if($usauriosOtrosAnios) {
                             if($get == 5) {
-                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET 
+                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
                                 uss_tema_header='" . $_GET["temaHeader"] . "', 
                                 uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
                                 uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                             }
                             else {
-                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'"); 
+                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}"); 
                             }
                         }
                         
@@ -148,13 +147,18 @@ class UsuariosPadre {
         }        	
     }
 
-    public static function listarUsuariosCompartir($nombre='',$BD='')
+    public static function listarUsuariosCompartir(
+        $nombre='',
+        $BD='',
+        string $yearBd    = ''
+    )
     {
-        global $conexion,$baseDatosServicios;
+        global $conexion,$baseDatosServicios, $config;
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".$BD.".usuarios 
+        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".BD_GENERAL.".usuarios uss 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
+        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year} ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
 
         return $consulta;         
     }
@@ -174,9 +178,9 @@ class UsuariosPadre {
         global $conexion, $baseDatosServicios;
 
         try{
-            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM usuarios 
+            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
             INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-            WHERE uss_id=uss_id {$filtroBusqueda}");
+            WHERE uss_id=uss_id AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]} {$filtroBusqueda}");
             return $consultaUsuario;
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");

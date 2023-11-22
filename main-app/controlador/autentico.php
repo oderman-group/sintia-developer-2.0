@@ -13,6 +13,7 @@ $yearStart = $yearArray[0];
 $yearEnd = $yearArray[1];
 
 $_SESSION["inst"] = $institucion['ins_bd'];
+$_SESSION["idInstitucion"] = $institucion['ins_id'];
 
 if( !empty($institucion['ins_year_default']) && is_numeric($institucion['ins_year_default']) ) {
 	$_SESSION["bd"] = $institucion['ins_year_default'];
@@ -27,8 +28,8 @@ require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
 
 
-$rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
+$rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
+WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND institucion={$institucion['ins_id']} AND year={$_SESSION["bd"]}");
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
@@ -56,7 +57,7 @@ if($num>0)
 	$URLdefault = 'noticias.php';
 	if($_POST["urlDefault"]!=""){$URLdefault = $_POST["urlDefault"];}	
 	
-	switch($fila[3]){
+	switch($fila['uss_tipo']){
 		case 1:
 			$url = '../directivo/'.$URLdefault;
 		break;
@@ -105,14 +106,14 @@ if($num>0)
 	$_SESSION["modulos"] = $arregloModulos;
 
 	//INICIO SESION
-	$_SESSION["id"] = $fila[0];
+	$_SESSION["id"] = $fila['uss_id'];
 	$_SESSION["datosUsuario"] = $fila;
 
 	include("navegador.php");
 
 	$urlActual = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
-	mysqli_query($conexion, "UPDATE usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila[0]."'");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +132,7 @@ if($num>0)
 			.then((response) => response.json())
 			.then((jsonResponse) => {
 				var countryCity = jsonResponse.city + ' | ' + jsonResponse.country + ' | ' + jsonResponse.region + ' | ' + jsonResponse.postal;
-				var usuario=<?=$fila[0];?>;
+				var usuario='<?=$fila['uss_id'];?>';
 				var urlActual = "<?=$urlActual;?>";
 				var idPaginaInterna = "<?=$idPaginaInterna;?>";
 				var institucion = <?=$institucion['ins_id'];?>;
@@ -202,7 +203,7 @@ if($num>0)
 <?php
 	exit();
 }else{
-	mysqli_query($conexion, "UPDATE usuarios SET uss_intentos_fallidos=uss_intentos_fallidos+1 WHERE uss_id='".$usrE['uss_id']."'");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_intentos_fallidos=uss_intentos_fallidos+1 WHERE uss_id='".$usrE['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion, uif_year)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."', '".$_SESSION["bd"]."')");

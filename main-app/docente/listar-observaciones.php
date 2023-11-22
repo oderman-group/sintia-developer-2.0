@@ -39,9 +39,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                 <tr>
                     <th>#</th>
                     <th>ID</th>
-                    <th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
                     <th>DEF</th>
-                    <th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>

@@ -37,12 +37,12 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[225][$datosUsuarioActual[8]];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></div>
+                                <div class="page-title"><?=$frases[225][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[225][$datosUsuarioActual[8]];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></li>
+                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[225][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></li>
                             </ol>
                         </div>
                     </div>
@@ -77,7 +77,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 								<div class="col-md-8 col-lg-9">
 									
 									<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -122,8 +122,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[139][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

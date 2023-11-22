@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN usuarios ON uss_id=car_responsable WHERE car_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -49,12 +49,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[12][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[12][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[12][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[12][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -65,7 +65,7 @@ if(!Modulos::validarPermisoEdicion()){
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    

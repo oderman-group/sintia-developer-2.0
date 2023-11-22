@@ -35,22 +35,22 @@
 									<?php if(!empty($_GET["req"]) && $_GET["req"]==1){?>
 										<div class="card card-topline-red">
 											<div class="card-head">
-												<header><?=$frases[287][$datosUsuarioActual[8]];?></header>
+												<header><?=$frases[287][$datosUsuarioActual['uss_idioma']];?></header>
 											</div>
 											<div class="card-body">
-												<p><?=$frases[288][$datosUsuarioActual[8]];?></p>
+												<p><?=$frases[288][$datosUsuarioActual['uss_idioma']];?></p>
 												<form class="form-horizontal" action="reportes-disciplinarios-firmar.php" method="post">
 													<input type="hidden" name="id" value="<?=base64_decode($_GET["id"]);?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
-															<textarea name="comentario" class="form-control" rows="3" placeholder="<?=$frases[290][$datosUsuarioActual[8]];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+															<textarea name="comentario" class="form-control" rows="3" placeholder="<?=$frases[290][$datosUsuarioActual['uss_idioma']];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 														</div>
 													</div>
 
 													<div class="form-group">
 														<div class="offset-md-3 col-md-9">
-															<button type="submit" class="btn btn-info"><?=$frases[289][$datosUsuarioActual[8]];?></button>
-															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+															<button type="submit" class="btn btn-info"><?=$frases[289][$datosUsuarioActual['uss_idioma']];?></button>
+															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 														</div>
 													</div>
 												</form>
@@ -73,7 +73,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[222][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></th>
@@ -91,11 +91,11 @@
 													 $filtro = '';
 													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
 													 INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
 													 INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
-													 INNER JOIN usuarios ON uss_id=dr_usuario
-													 WHERE dr_estudiante='".$usrEstud."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+													 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+													 WHERE dr_estudiante='".$usrEstud."' AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]}
 													 $filtro
 													 ");
 													 $contReg = 1;

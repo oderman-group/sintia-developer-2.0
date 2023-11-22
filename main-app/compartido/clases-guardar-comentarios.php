@@ -17,7 +17,7 @@ try{
 try{
     $datos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases cls
     INNER JOIN academico_cargas ON car_id=cls.cls_id_carga
-    INNER JOIN usuarios ON uss_id=car_docente
+    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
     WHERE cls.cls_id='" . $_POST["idClase"] . "' AND cls.cls_estado=1 AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");

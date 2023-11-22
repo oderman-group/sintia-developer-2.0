@@ -122,7 +122,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<th>Nombre</th>
 														<th>Tipo</th>
 														<th>Último ingreso</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
 
@@ -131,9 +131,9 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 												<?php
 													include("includes/consulta-paginacion-usuarios.php");	
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM usuarios
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
 														INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-														WHERE uss_id!={$_SESSION["id"]} $filtro
+														WHERE uss_id!={$_SESSION["id"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} $filtro
 														ORDER BY uss_id
 														LIMIT $inicio,$registros;");
 													} catch (Exception $e) {
@@ -193,8 +193,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 
 														try{
 															$consultaUsuariosRepetidos = mysqli_query($conexion, "SELECT count(uss_usuario) as rep 
-															FROM usuarios 
-															WHERE uss_usuario='".$resultado['uss_usuario']."'
+															FROM ".BD_GENERAL.".usuarios 
+															WHERE uss_usuario='".$resultado['uss_usuario']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 															GROUP BY uss_usuario
 															");
 														} catch (Exception $e) {

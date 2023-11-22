@@ -74,15 +74,15 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
             <thead>
                 <tr>
                     <th>#</th>
-                    <th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[50][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[52][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
                     
                     <?php if($datosCargaActual['car_saberes_indicador']==1){?>
                         <th>Tipo evaluación</th>
                     <?php }?>
                     
-                    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>

@@ -52,7 +52,7 @@ $idE="";
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
                         </div>
@@ -75,11 +75,11 @@ $idE="";
 												</div>
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_desde'];?></div>
 													</li>
 													<li class="list-group-item">
-														<b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_hasta'];?></div>
 													</li>
 												</ul>
@@ -87,15 +87,15 @@ $idE="";
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$cantPreguntas;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title" style="color: chartreuse;"> <span id="resp"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <span id="fin"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 
@@ -194,7 +194,7 @@ $idE="";
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Inicio</th>
 														<th>Fin</th>
 														<th>Tiempo</th>

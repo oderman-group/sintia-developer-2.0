@@ -66,7 +66,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 							<ol class="breadcrumb page-breadcrumb pull-right">
 
-                                <li><a class="parent-item" href="calificaciones.php"><?=$frases[6][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="calificaciones.php"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
                                 <li class="active"><?=$calificacion['act_descripcion'];?></li>
 
@@ -261,9 +261,9 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
                                                         <th>#</th>
 
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
 
 														<?php if($config['conf_forma_mostrar_notas'] == CUALITATIVA){	?>
 															<th>Nota<br>Cualitativa</th>
@@ -271,7 +271,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														<th>Recup.</th>
 
-														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
 
                                                     </tr>
 

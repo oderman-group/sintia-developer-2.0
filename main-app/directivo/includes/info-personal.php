@@ -11,7 +11,7 @@
 										<?php }?>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="file" name="fotoMat" class="form-control" accept=".png, .jpg, .jpeg" <?=$disabledPermiso;?> onChange="validarPesoArchivo(this)">
                                                 <span style="color: #6017dc;">La foto debe estar en formato JPG, JPEG o PNG.</span>

@@ -12,9 +12,11 @@ include(ROOT_PATH.'/main-app/admisiones/php-funciones.php');
 require_once(ROOT_PATH.'/main-app/class/EnviarEmail.php');
 
 //DATOS SECRETARIA(O)
-$ussQuery = "SELECT * FROM usuarios WHERE uss_id = :idSecretaria";
+$ussQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :idSecretaria AND institucion= :idInstitucion AND year= :year";
 $uss = $conexionPDO->prepare($ussQuery);
-$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_INT);
+$uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_STR);
+$uss->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$uss->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);

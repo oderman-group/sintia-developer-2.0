@@ -61,7 +61,7 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                     <div class="col-sm-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-productos-actualizar.php" method="post" enctype="multipart/form-data">

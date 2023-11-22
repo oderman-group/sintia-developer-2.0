@@ -34,7 +34,7 @@ require_once("../class/SubRoles.php");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[10][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[10][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>

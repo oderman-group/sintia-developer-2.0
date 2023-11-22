@@ -120,14 +120,14 @@
 															  <p><?=$resultado['eva_descripcion'];?></p>
 															  
 															  <p>
-																  <b><?=$frases[139][$datosUsuarioActual[8]];?>:</b> <?=$cantPreguntas;?><br>
-																  <b><?=$frases[130][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_desde'];?><br>
-																  <b><?=$frases[131][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_hasta'];?>
+																  <b><?=$frases[139][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$cantPreguntas;?><br>
+																  <b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_desde'];?><br>
+																  <b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_hasta'];?>
 															  </p>
 															  
 															  <p>
 																  <?php if(empty($datosTerminada[0])){?>
-																  	<a class="btn red" href="<?=$ulrEva;?>?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[129][$datosUsuarioActual[8]]);?></a>
+																  	<a class="btn red" href="<?=$ulrEva;?>?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[129][$datosUsuarioActual['uss_idioma']]);?></a>
 																  <?php }else{?>
 																  <hr>
 															  		<h4>RESULTADOS</h4>
@@ -137,7 +137,7 @@
 															  		<b>Preguntas incorrectas:</b> <?=$respuestasEvaluacion[1];?><br>
 															  		<b>Preguntas sin contestar:</b> <?=$respuestasEvaluacion[2];?><br>
 															  
-															  		<p><a class="btn blue" href="evaluaciones-ver.php?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[154][$datosUsuarioActual[8]]);?></a></p>
+															  		<p><a class="btn blue" href="evaluaciones-ver.php?idE=<?=base64_encode($resultado['eva_id']);?>"><?=strtoupper($frases[154][$datosUsuarioActual['uss_idioma']]);?></a></p>
 															  
 																  <?php }?>
 															  </p>

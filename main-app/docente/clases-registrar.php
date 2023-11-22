@@ -65,7 +65,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$datosConsulta['cls_tema'];?></li>
                             </ol>
                         </div>
@@ -122,8 +122,8 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[30][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[30][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

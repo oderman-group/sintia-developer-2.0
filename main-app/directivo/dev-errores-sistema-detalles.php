@@ -23,9 +23,9 @@ $BD=$datosReportes["ins_bd"]."_".$agnoBD;
 $responsable="";
 if(!empty($datosReportes['rperr_usuario'])){
     try{
-        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios 
+        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-        WHERE uss_id='".$datosReportes['rperr_usuario']."'");
+        WHERE uss_id='".$datosReportes['rperr_usuario']."' AND institucion={$datosReportes['ins_id']} AND year={$agnoBD}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }

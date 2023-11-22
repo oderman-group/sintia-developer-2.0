@@ -2,9 +2,9 @@
     $nombrePagina="usuarios.php";
     if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
-        $consulta = mysqli_query($conexion, "SELECT * FROM usuarios
+        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-        WHERE uss_id=uss_id $filtro
+        WHERE uss_id=uss_id AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} $filtro
         ORDER BY uss_id");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");

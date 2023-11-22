@@ -78,9 +78,9 @@
 															  <p><?=$resultado['eva_descripcion'];?></p>
 															  
 															  <p>
-																  <b><?=$frases[139][$datosUsuarioActual[8]];?>:</b> <?=$cantPreguntas;?><br>
-																  <b><?=$frases[130][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_desde'];?><br>
-																  <b><?=$frases[131][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_hasta'];?>
+																  <b><?=$frases[139][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$cantPreguntas;?><br>
+																  <b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_desde'];?><br>
+																  <b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_hasta'];?>
 															  </p>
 															  
 															  <?php

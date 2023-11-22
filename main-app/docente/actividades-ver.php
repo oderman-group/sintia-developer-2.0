@@ -37,7 +37,7 @@ if($fechas[0]>0){
                                 <div class="page-title"><?=$actividad['tar_titulo'];?></div>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$actividad['tar_titulo'];?></li>
                             </ol>
                         </div>

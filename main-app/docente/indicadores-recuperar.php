@@ -42,7 +42,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$calificacion['ind_nombre'];?></li>
                             </ol>
                         </div>
@@ -138,8 +138,8 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
                                                     <tr>
                                                         <th>#</th>
 														<th>Cod</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?><br>Indicador</th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?><br>Indicador</th>
 														<th>Recup.<br>Indicador</th>
 														<th>DEF.<br>PERIODO <?=$periodoConsultaActual;?></th>
                                                     </tr>

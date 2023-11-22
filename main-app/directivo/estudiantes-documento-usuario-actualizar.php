@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario=(SELECT mat_documento FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id_usuario=uss_id AND mat_documento!='' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}) WHERE uss_tipo=4");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_usuario=(SELECT mat_documento FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id_usuario=uss_id AND mat_documento!='' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}) WHERE uss_tipo=4 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

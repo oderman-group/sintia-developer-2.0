@@ -23,7 +23,7 @@ class MediaTecnicaServicios extends Servicios
       INNER JOIN academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
       INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
       INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
-	    INNER JOIN usuarios ON uss_id=car_docente
+	    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
       ";
       if($parametrosArray && count($parametrosArray)>0){
         $parametrosValidos=array('matcur_id_matricula','matcur_id_curso','matcur_id_institucion','matcur_years');
@@ -47,7 +47,7 @@ class MediaTecnicaServicios extends Servicios
       LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
 			LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
       LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
-			LEFT JOIN ".$BD."usuarios ON uss_id=mat.mat_id_usuario
+			LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
       LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero			
       ";
       if($parametrosArray && count($parametrosArray)>0){
@@ -180,7 +180,7 @@ class MediaTecnicaServicios extends Servicios
             INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion
             INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
             INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
-            INNER JOIN usuarios u ON u.uss_id=am.mat_acudiente or am.mat_acudiente is null
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
             WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."' AND $filtro
             GROUP BY mat_id
             ORDER BY mat_primer_apellido,mat_estado_matricula;");

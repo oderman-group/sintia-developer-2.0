@@ -13,7 +13,7 @@ else
 	require_once(ROOT_PATH."/config-general/consulta-usuario-actual.php");
 	require_once(ROOT_PATH."/config-general/verificar-usuario-bloqueado.php");
 
-	if($datosUsuarioActual[3] != TIPO_DIRECTIVO && $datosUsuarioActual[3] != TIPO_DEV && !strpos($_SERVER['PHP_SELF'], 'page-info.php'))
+	if($datosUsuarioActual['uss_tipo'] != TIPO_DIRECTIVO && $datosUsuarioActual['uss_tipo'] != TIPO_DEV && !strpos($_SERVER['PHP_SELF'], 'page-info.php'))
 	{
 		if(isset($_SESSION["yearAnterior"])){
 			$_SESSION["cambioYear"]=$_SESSION["bd"];

@@ -7,8 +7,8 @@ include("../compartido/sintia-funciones.php");
 $usuariosClase = new Usuarios();
 
 
-$consultaUsuariosOnline = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' LIMIT 10");
-$consultaUsuariosOfline = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM usuarios WHERE uss_estado=0 AND uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' LIMIT 5");
+$consultaUsuariosOnline = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} LIMIT 10");
+$consultaUsuariosOfline = mysqli_query($conexion,"SELECT uss_id, uss_nombre, uss_apellido1, uss_foto, uss_estado FROM ".BD_GENERAL.".usuarios WHERE uss_estado=0 AND uss_bloqueado=0 AND uss_id!='".$_SESSION['id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} LIMIT 5");
 
 $resultadosOnline = array();
 $resultadosOfline = array();

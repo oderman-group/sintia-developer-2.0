@@ -50,11 +50,11 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</li>
                             </ol>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                                 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    

@@ -21,8 +21,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[218][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[218][$datosUsuarioActual['uss_idioma']];?></th>
 														<th></th>
                                                     </tr>
                                                 </thead>

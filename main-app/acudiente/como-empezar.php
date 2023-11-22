@@ -34,10 +34,10 @@
 								
 								<div class="col-md-7">
 									<div class="panel">
-										<header class="panel-heading panel-heading-blue"><?=$frases[357][$datosUsuarioActual[8]];?></header>
+										<header class="panel-heading panel-heading-blue"><?=$frases[357][$datosUsuarioActual['uss_idioma']];?></header>
 										<div class="panel-body">
-                                            <p><?=$frases[362][$datosUsuarioActual[8]];?><br>
-                                                <mark><?=$frases[356][$datosUsuarioActual[8]];?> -> <?=$frases[71][$datosUsuarioActual[8]];?></mark>
+                                            <p><?=$frases[362][$datosUsuarioActual['uss_idioma']];?><br>
+                                                <mark><?=$frases[356][$datosUsuarioActual['uss_idioma']];?> -> <?=$frases[71][$datosUsuarioActual['uss_idioma']];?></mark>
                                             </p>
                                             
 										</div>
@@ -46,7 +46,7 @@
 
                                 <div class="col-md-5">
 									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[361][$datosUsuarioActual[8]];?></header>
+										<header class="panel-heading panel-heading-purple"><?=$frases[361][$datosUsuarioActual['uss_idioma']];?></header>
 										<div class="panel-body">
                                             <div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/aedb7a503ce940b68e5bb74874f5cbb8" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 										</div>

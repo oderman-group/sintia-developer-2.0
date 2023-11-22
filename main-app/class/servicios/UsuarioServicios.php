@@ -4,9 +4,9 @@ class UsuarioServicios
 {
     public static function listar($parametrosArray=null)
     {
-      $sqlInicial="SELECT * FROM usuarios";
+      $sqlInicial="SELECT * FROM ".BD_GENERAL.".usuarios";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('uss_tipo','uss_nombre');
+        $parametrosValidos=array('uss_tipo','uss_nombre','institucion','year');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $sqlFinal =" ORDER BY gra_vocal";
@@ -16,7 +16,7 @@ class UsuarioServicios
     
     public static function consultar($idDato = 1)
     {
-        return Servicios::getSql("SELECT * FROM usuarios WHERE uss_id=" . $idDato);
+        return Servicios::getSql("SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='" . $idDato."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
     }
 
     public static function listarUsuariosEstudiante($parametrosArray=null)

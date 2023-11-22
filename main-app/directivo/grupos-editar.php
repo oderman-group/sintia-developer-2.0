@@ -48,7 +48,7 @@ if(!Modulos::validarPermisoEdicion()){
                             <div class="col-md-12">
                                 <?php include("../../config-general/mensajes-informativos.php"); ?>
                                 <div class="panel">
-                                    <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                                    <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                                     <div class="panel-body">
                                         <form name="formularioGuardar" action="grupos-actualizar.php" method="post">
                                         <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">                                        

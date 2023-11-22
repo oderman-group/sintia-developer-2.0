@@ -42,12 +42,12 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 				<div class="page-bar">
 					<div class="page-title-breadcrumb">
 						<div class=" pull-left">
-							<div class="page-title"><?= $frases[165][$datosUsuarioActual[8]]; ?> <?= $frases[374][$datosUsuarioActual[8]]; ?></div>
+							<div class="page-title"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></div>
 							<?php include("../compartido/texto-manual-ayuda.php"); ?>
 						</div>
 						<ol class="breadcrumb page-breadcrumb pull-right">
-							<li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual[8]]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-							<li class="active"><?= $frases[165][$datosUsuarioActual[8]]; ?> <?= $frases[374][$datosUsuarioActual[8]]; ?></li>
+							<li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+							<li class="active"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></li>
 						</ol>
 					</div>
 				</div>
@@ -55,7 +55,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 					<div class="col-sm-3">
 						<?php include("info-carga-actual.php"); ?>
 						<div class="panel">
-							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual[8]]; ?> </header>
+							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?> </header>
 							<div class="panel-body">
 								<?php
 								$unidadesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
@@ -69,7 +69,7 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 					</div>
 					<div class="col-sm-9">
 						<div class="panel">
-							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
 							<div class="panel-body">
 								<form name="formularioGuardar" action="unidades-actualizar.php?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" method="post">
 									<input type="hidden" value="<?= $datosUnidad['id_nuevo']; ?>" name="idR">

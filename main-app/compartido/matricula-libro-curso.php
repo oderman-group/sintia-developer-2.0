@@ -495,7 +495,7 @@ if($periodoActual==4){
 	<tr>
 		<td align="center">
 			<?php
-				$consultaRector= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$informacion_inst["info_rector"]."'");
+				$consultaRector= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$informacion_inst["info_rector"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$rector = mysqli_fetch_array($consultaRector, MYSQLI_BOTH);
 				// $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
@@ -514,7 +514,7 @@ if($periodoActual==4){
 		</td>
 		<td align="center">
 			<?php
-				$consultaSecretario= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$informacion_inst["info_secretaria_academica"]."'");
+				$consultaSecretario= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$informacion_inst["info_secretaria_academica"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$secretario = mysqli_fetch_array($consultaSecretario, MYSQLI_BOTH);
 				// $secretario = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
 				$nombreScretario = UsuariosPadre::nombreCompletoDelUsuario($secretario);

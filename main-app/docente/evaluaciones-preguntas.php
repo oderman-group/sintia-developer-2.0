@@ -116,7 +116,7 @@ function mostrarNuevaRespuesta(datos){
                                 <div class="page-title"><?=$evaluacion['eva_nombre'];?></div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
                         </div>
@@ -129,9 +129,9 @@ function mostrarNuevaRespuesta(datos){
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
-												<p><b><?=$frases[141][$datosUsuarioActual[8]];?>:</b> <?=$frases[144][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[141][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[144][$datosUsuarioActual['uss_idioma']];?></p>
 											
-												<p><b><?=$frases[142][$datosUsuarioActual[8]];?>:</b> <?=$frases[145][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[142][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[145][$datosUsuarioActual['uss_idioma']];?></p>
 											
 												<p><b>Respuesta correcta:</b> Haciendo click sobre el icono <i class="fa fa-exchange"></i> al lado de la respuesta para marcarlas como correctas o incorrectas. De color verde se resalatan las correctas y de color rojo las incorrectas.</p>
 										</div>

@@ -5,9 +5,9 @@ include("../compartido/sintia-funciones.php");
 //Instancia de Clases generales
 $usuariosClase = new Usuarios();
 
-										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM usuarios 
+										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
 										INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-										WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='".$_POST["usuario"]."' 
+										WHERE uss_estado=1 AND uss_bloqueado=0 AND uss_id!='".$_POST["usuario"]."' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]} 
 										AND YEAR(uss_ultimo_ingreso)='".date("Y")."' AND MONTH(uss_ultimo_ingreso)='".date("m")."' AND DAY(uss_ultimo_ingreso)='".date("d")."'
 										ORDER BY uss_nombre
 										LIMIT 0, 200");

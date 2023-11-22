@@ -25,7 +25,7 @@
 									}
 									?>
 									
-									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<?php
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
@@ -66,11 +66,11 @@
 													<input type="text" name="busqueda" class="form-control" value="<?php if(!empty($_GET["busqueda"])){ echo $_GET["busqueda"];}?>" placeholder="Búsqueda...">
 												</div>
 												<div class="col-sm-4">
-													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual[8]];?>">
+													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual['uss_idioma']];?>">
 												</div>
 											</div>
 											</form>
-											<?php if(!empty($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual[8]];?></a></div><?php }?>
+											<?php if(!empty($_GET["busqueda"])){?><div align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=$frases[230][$datosUsuarioActual['uss_idioma']];?></a></div><?php }?>
 										</div>
 									</div>
                         </div>
@@ -78,15 +78,15 @@
                         <div class="col-sm-9">
 							
 							<?php $carpeta=""; if(!empty($idFolderCarpetaActual) && is_numeric($idFolderCarpetaActual)){ $carpeta=$idFolderCarpetaActual; ?>
-								<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
+								<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual['uss_idioma']];?></a>
 							<?php }?>
 							
-							<a href="cargas-carpetas-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carpeta=<?=base64_encode($carpeta);?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual[8]];?></a>
+							<a href="cargas-carpetas-agregar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carpeta=<?=base64_encode($carpeta);?>" class="btn btn-pink"><i class="fa fa-plus-circle"></i><?=$frases[231][$datosUsuarioActual['uss_idioma']];?></a>
 							<p>&nbsp;</p>
                        	 	<!-- start widget -->
 							<div class="state-overview">
 									
-									<h3 style="color: black;"><i class="fa fa-folder"></i> <?=strtoupper($frases[232][$datosUsuarioActual[8]]);?></h3>
+									<h3 style="color: black;"><i class="fa fa-folder"></i> <?=strtoupper($frases[232][$datosUsuarioActual['uss_idioma']]);?></h3>
 									<div class="row">
 										<?php
 										$filtro = '';
@@ -164,7 +164,7 @@
 									  </div>
 								
 								
-									<h3 style="color: black;"><i class="fa fa-share-alt-square"></i> <?=strtoupper($frases[233][$datosUsuarioActual[8]]);?></h3>
+									<h3 style="color: black;"><i class="fa fa-share-alt-square"></i> <?=strtoupper($frases[233][$datosUsuarioActual['uss_idioma']]);?></h3>
 									<div class="row">
 										
 										<?php

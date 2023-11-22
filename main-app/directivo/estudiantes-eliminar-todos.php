@@ -81,7 +81,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_tipo=4");
+	mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=4 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

@@ -25,7 +25,7 @@
 										<div class="form-group">
 											<div class="offset-md-3 col-md-9">
 												<button type="submit" class="btn btn-info">Enviar ahora</button>
-												<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+												<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 											</div>
 										</div>
 									</form>

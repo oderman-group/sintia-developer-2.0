@@ -72,12 +72,12 @@ if($extension == 'xlsx'){
 						$idAcudiente = $datosAcudienteExistente['uss_id'];
 						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 					} else {
+						$idAcudiente=Utilidades::generateCode("USS");
 						try{
-							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma) VALUES ('".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1)");
+							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year) VALUES ('".$idAcudiente."', '".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
-						$idAcudiente = mysqli_insert_id($conexion);
 						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 					}
 				} else {
@@ -279,13 +279,13 @@ if($extension == 'xlsx'){
 
 						$arrayTodos[$f] = $arrayIndividual;
 
+						$idUsuarioEstudiante=Utilidades::generateCode("USS");
 						try{
-							mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento) VALUES ('".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."')");
+							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento, institucion, year) VALUES ('".$idUsuarioEstudiante."', '".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
 
-						$idUsuarioEstudiante = mysqli_insert_id($conexion);
 						$codigoMAT=Utilidades::generateCode("MAT");
 
 						$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";

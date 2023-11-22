@@ -89,7 +89,7 @@ $porcentajeRestante = 100 - $valores[0];
 					<?php }?>
 					
 					<th>#EC/#ET</th>
-					<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+					<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 				</tr>
 			</thead>
 			<tbody>

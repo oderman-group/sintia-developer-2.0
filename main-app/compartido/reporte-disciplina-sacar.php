@@ -67,7 +67,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
       INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id_usuario=dr_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtroMat
       LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
       LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-      INNER JOIN usuarios ON uss_id=dr_usuario
+      INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
       WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");
     }else{
@@ -78,7 +78,7 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
       INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula=mat_id AND matcur_id_curso='" . $_POST["grado"] . "'
       LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
       LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-      INNER JOIN usuarios ON uss_id=dr_usuario
+      INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
       WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
       ");
     }

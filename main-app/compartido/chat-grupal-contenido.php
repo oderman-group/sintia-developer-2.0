@@ -17,11 +17,11 @@ require_once("../class/Estudiantes.php");
 								<div class="col-md-4 col-lg-3">
 									<?php 
 									//DOCENTES
-									if($datosUsuarioActual[3]==2){
+									if($datosUsuarioActual['uss_tipo']==2){
 										include("info-carga-actual.php");
 									}
 									//ESTUDIANTES
-									if($datosUsuarioActual[3]==4){
+									if($datosUsuarioActual['uss_tipo']==4){
 										include("filtro-cargas.php");
 									}
 									?>
@@ -84,7 +84,7 @@ require_once("../class/Estudiantes.php");
 											<div class="form-group">
 												<div class="offset-md-3 col-md-9">
 													<button type="submit" class="btn btn-info">Enviar</button>
-													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 												</div>
 											</div>
 										</form>
@@ -121,7 +121,7 @@ require_once("../class/Estudiantes.php");
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['chatg_id'];?>">
 																	   <?=$href='../compartido/guardar.php?get=18&idR='.$resultado['chatg_id'];?>
-																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>

@@ -85,11 +85,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[127][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[128][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[127][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[128][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,7 +105,7 @@
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['tar_id'];?></td>
 														<td><?=$resultado['tar_titulo'];?></td>
-														<td><?=$frases[125][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual[8]];?>: <?=$resultado['tar_fecha_entrega'];?></td>
+														<td><?=$frases[125][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_entrega'];?></td>
 														
                                                         
                                                         <td>
@@ -125,7 +125,7 @@
                                                         </td>
 
 
-														<td><a href="actividades-ver.php?idR=<?=base64_encode($resultado['tar_id']);?>"><?=$frases[154][$datosUsuarioActual[8]];?></a></td>
+														<td><a href="actividades-ver.php?idR=<?=base64_encode($resultado['tar_id']);?>"><?=$frases[154][$datosUsuarioActual['uss_idioma']];?></a></td>
                                                     </tr>
 													<?php 
 														 $contReg++;

@@ -87,7 +87,7 @@ $Plataforma = new Plataforma;
                                                         <th>Tiempo de carga</th>
                                                         <th>Institución</th>
                                                         <th>Autologin</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -113,7 +113,7 @@ $Plataforma = new Plataforma;
                                                         if($resultado['hil_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['hil_usuario']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -126,7 +126,7 @@ $Plataforma = new Plataforma;
                                                         if($resultado['hil_usuario_autologin']!=0){
 
                                                             try{
-                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
+                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -147,7 +147,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $ussAutologin; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>

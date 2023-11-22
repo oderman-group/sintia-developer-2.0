@@ -215,7 +215,7 @@ function validarClave($clave) {
 
 
 function validarUsuarioActual($datosUsuarioActual) {
-	switch ($datosUsuarioActual[3]) {
+	switch ($datosUsuarioActual['uss_tipo']) {
 		case 5:
 			$destinos = "../directivo/";
 			break;

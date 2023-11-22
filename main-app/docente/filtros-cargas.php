@@ -1,5 +1,5 @@
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual[8]];?></p>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
+									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual['uss_idioma']];?></p>
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[106][$datosUsuarioActual['uss_idioma']];?> </header>

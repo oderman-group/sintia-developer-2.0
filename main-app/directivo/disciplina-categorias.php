@@ -69,7 +69,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Categoría</th>
 														<th>Faltas</th>
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
-														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
                                                     </tr>
                                                 </thead>
@@ -106,13 +106,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                             <td>
                                                                 <?php if(Modulos::validarSubRol(['DT0070', 'DT0159'])) {?>
                                                                     <div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                        <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
                                                                         <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                             <i class="fa fa-angle-down"></i>
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">
                                                                             <?php if(Modulos::validarSubRol(['DT0070'])) {?>
-                                                                                <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                                <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                             <?php }?>
                                                                             
                                                                             <?php if(Modulos::validarSubRol(['DT0159'])) {?>

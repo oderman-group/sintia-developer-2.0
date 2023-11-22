@@ -167,7 +167,7 @@ class SysJobs {
         $andParametros=empty($parametrosBusqueda["parametros"])?" ":"AND job_parametros='".$parametrosBusqueda["parametros"]."'";
        
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
-        LEFT JOIN usuarios  ON uss_id = job_responsable
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=job_id_institucion AND uss_id = job_responsable AND uss.year={$parametrosBusqueda["agno"]}
         LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
         WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
         AND job_responsable ='".$parametrosBusqueda["responsable"]."'

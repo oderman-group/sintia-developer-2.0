@@ -50,12 +50,12 @@ include("../compartido/head.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[241][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[118][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -92,7 +92,7 @@ include("../compartido/head.php");
 														<td>
 														<?php if($datosCargaActual['car_director_grupo']==1 || empty($_SESSION['admin']) ){?>
 															<div class="btn-group">
-																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>

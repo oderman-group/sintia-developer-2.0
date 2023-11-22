@@ -1,5 +1,5 @@
 <div class="panel">
-    <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+    <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
     <div class="panel-body">
         <form name="formularioGuardar" action="usuarios-update.php" method="post" enctype="multipart/form-data">
 
@@ -17,7 +17,7 @@
             <?php }?>
             
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
+                <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual['uss_idioma']];?></label>
                 <div class="col-sm-4">
                     <input type="file" name="fotoUss" onChange="validarPesoArchivo(this)" class="form-control" accept=".png, .jpg, .jpeg" <?=$disabledPermiso;?>>
                     <span style="color: #6017dc;">La foto debe estar en formato JPG, JPEG o PNG.</span>

@@ -8,7 +8,7 @@ $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
 $datosConsulta = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
-INNER JOIN usuarios ON uss_id=ema_de
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_de AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 WHERE ema_id='".$idR."' $filtro"), MYSQLI_BOTH);
 
 

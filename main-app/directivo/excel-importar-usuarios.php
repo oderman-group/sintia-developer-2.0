@@ -2,6 +2,7 @@
 include("session.php");
 require_once("../class/Usuarios.php");
 require '../../librerias/Excel/vendor/autoload.php';
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -41,8 +42,8 @@ if($extension == 'xlsx'){
 				'M'   => '126', 'F' => '127'
 			];
 
-			$sql = "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tema_sidebar,
-			uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento) VALUES";
+			$sql = "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_email, uss_celular, uss_genero, uss_foto, uss_portada, uss_idioma, uss_tema, uss_permiso1, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tema_sidebar,
+			uss_tema_header, uss_tema_logo, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, institucion, year) VALUES";
 			
 			$usuariosCreados      = array();
 			$usuariosActualizados = array();
@@ -127,8 +128,8 @@ if($extension == 'xlsx'){
 
 							//Actualizamos el acudiente y los datos del formulario
 							try{
-								mysqli_query($conexion, "UPDATE usuarios SET uss_tipo=uss_tipo $camposActualizar
-								WHERE uss_id='".$datosUsuariosExistente['uss_id']."'");
+								mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_tipo=uss_tipo $camposActualizar
+								WHERE uss_id='".$datosUsuariosExistente['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 							} catch (Exception $e) {
 								include("../compartido/error-catch-to-report.php");
 							}
@@ -142,7 +143,8 @@ if($extension == 'xlsx'){
 
 					} else {
 
-						$sql .= "('".$arrayIndividual['uss_documento']."', '".$clavePorDefectoUsuarios."', '".$tipoUsuario."', '".$arrayIndividual['uss_nombre']."', 0, '".$arrayIndividual['uss_email']."', '".$arrayIndividual['uss_celular']."', '".$genero."', 'default.png', 'default.png', 1, 'green', 1, 0, now(), '".$_SESSION["id"]."', 0, 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', '".$tipoDocumento."', '".$arrayIndividual['uss_apellido1']."', '".$arrayIndividual['uss_apellido2']."', '".$arrayIndividual['uss_nombre2']."', '".$arrayIndividual['uss_documento']."'),";
+						$idUsuarioEstudiante=Utilidades::generateCode("USS");
+						$sql .= "('".$idUsuarioEstudiante."', '".$arrayIndividual['uss_documento']."', '".$clavePorDefectoUsuarios."', '".$tipoUsuario."', '".$arrayIndividual['uss_nombre']."', 0, '".$arrayIndividual['uss_email']."', '".$arrayIndividual['uss_celular']."', '".$genero."', 'default.png', 'default.png', 1, 'green', 1, 0, now(), '".$_SESSION["id"]."', 0, 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', '".$tipoDocumento."', '".$arrayIndividual['uss_apellido1']."', '".$arrayIndividual['uss_apellido2']."', '".$arrayIndividual['uss_nombre2']."', '".$arrayIndividual['uss_documento']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$usuariosCreados["FILA_".$f] = $arrayIndividual['uss_documento'];
 

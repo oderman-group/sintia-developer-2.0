@@ -61,7 +61,7 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                     <div class="col-sm-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-empresas-actualizar.php" method="post" enctype="multipart/form-data">

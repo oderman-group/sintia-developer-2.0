@@ -26,7 +26,7 @@ if (!empty($_FILES['fotoUss']['name'])) {
 	$destino = "../files/fotos";
 	move_uploaded_file($_FILES['fotoUss']['tmp_name'], $destino . "/" . $archivo);
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -39,7 +39,7 @@ if (!empty($_FILES['fotoUss']['name'])) {
 	}
 }
 try{
-	mysqli_query($conexion, "UPDATE usuarios SET 
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
 	uss_usuario=           '" . $_POST["usuario"] . "', 
 	uss_tipo=              " . $_POST["tipoUsuario"] . ", 
 	uss_nombre=            '" . $_POST["nombre"] . "',
@@ -58,7 +58,7 @@ try{
 	uss_documento=         '" . $_POST["documento"] . "',
 
 	uss_ultima_actualizacion=now()
-	WHERE uss_id='" . $_POST["idR"] . "'");
+	WHERE uss_id='" . $_POST["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -72,8 +72,8 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 	}
 
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_clave= SHA1('" . $_POST["clave"] . "')
-		WHERE uss_id='" . $_POST["idR"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_clave= SHA1('" . $_POST["clave"] . "')
+		WHERE uss_id='" . $_POST["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

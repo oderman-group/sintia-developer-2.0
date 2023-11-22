@@ -2,6 +2,7 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0174';
@@ -80,7 +81,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 		include("../compartido/error-catch-to-report.php");
 	}
 	try{
-		mysqli_query($conexion, "UPDATE usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "'");
+		mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_foto='" . $archivo . "' WHERE uss_id='" . $_POST["idU"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -100,7 +101,7 @@ if ($esMediaTecnica) {
 }
 
 try {
-	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }	
@@ -128,7 +129,7 @@ if($_POST["documentoA"]!=""){
 
 	if(!empty($acudiente)){
 		try {
-			mysqli_query($conexion, "UPDATE usuarios SET 
+			mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
 			uss_usuario   		 = '".$_POST["documentoA"]."', 
 			uss_nombre    		 = '".$_POST["nombreA"]."', 
 			uss_email     		 = '".$_POST["email"]."', 
@@ -142,18 +143,18 @@ if($_POST["documentoA"]!=""){
 			uss_apellido2		 = '".$_POST["apellido2A"]."', 
 			uss_nombre2			 = '".$_POST["nombre2A"]."', 
 			uss_documento		 = '".$_POST["documentoA"]."' 
-			WHERE uss_id='".$acudiente['uss_id']."'");
+			WHERE uss_id='".$acudiente['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 		$idAcudiente = $acudiente['uss_id'];
 	}else{
+		$idAcudiente=Utilidades::generateCode("USS");
 		try {
-			mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_idioma, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, uss_tema_sidebar, uss_tema_header, uss_tema_logo)VALUES('".$_POST["documentoA"]."', '".$clavePorDefectoUsuarios."', 3, '".$_POST["nombreA"]."', 0, '".$_POST["ocupacionA"]."', '".$_POST["email"]."', '".$_POST["fechaNA"]."', 0, '".$_POST["generoA"]."', '".$_POST["celular"]."', 'default.png', 1, '".$_POST["tipoDAcudiente"]."', '".$_POST["lugardA"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A"]."', '".$_POST["apellido2A"]."', '".$_POST["nombre2A"]."', '".	$_POST["documentoA"]."', 'cyan-sidebar-color', 'header-indigo', 'logo-indigo')");
+			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_idioma, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, uss_tema_sidebar, uss_tema_header, uss_tema_logo, institucion, year)VALUES('".$idAcudiente."', '".$_POST["documentoA"]."', '".$clavePorDefectoUsuarios."', 3, '".$_POST["nombreA"]."', 0, '".$_POST["ocupacionA"]."', '".$_POST["email"]."', '".$_POST["fechaNA"]."', 0, '".$_POST["generoA"]."', '".$_POST["celular"]."', 'default.png', 1, '".$_POST["tipoDAcudiente"]."', '".$_POST["lugardA"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A"]."', '".$_POST["apellido2A"]."', '".$_POST["nombre2A"]."', '".	$_POST["documentoA"]."', 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-		$idAcudiente = mysqli_insert_id($conexion);
 	}
 
 	try {
@@ -181,7 +182,7 @@ if($_POST["documentoA"]!=""){
 if(!empty($_POST["idAcudiente2"])){
 
 	try {
-		mysqli_query($conexion, "UPDATE usuarios SET 
+		mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
 		uss_usuario='".$_POST["documentoA2"]."', 
 		uss_nombre='".$_POST["nombreA2"]."', 
 		uss_email='".$_POST["email"]."', 
@@ -194,7 +195,7 @@ if(!empty($_POST["idAcudiente2"])){
 		uss_apellido2='".$_POST["apellido2A2"]."', 
 		uss_nombre2='".$_POST["nombre2A2"]."', 
 		uss_documento= '".$_POST["documentoA2"]."' 
-		WHERE uss_id='".$_POST["idAcudiente2"]."'");
+		WHERE uss_id='".$_POST["idAcudiente2"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}	
@@ -217,7 +218,7 @@ if(!empty($_POST["idAcudiente2"])){
 			}
 
 			try {
-				mysqli_query($conexion, "UPDATE usuarios SET 
+				mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
 				uss_usuario='".$_POST["documentoA2"]."', 
 				uss_nombre='".$_POST["nombreA2"]."', 
 				uss_email='".$_POST["email"]."', 
@@ -230,18 +231,18 @@ if(!empty($_POST["idAcudiente2"])){
 				uss_apellido2='".$_POST["apellido2A2"]."', 
 				uss_nombre2='".$_POST["nombre2A2"]."', 
 				uss_documento= '".$_POST["documentoA2"]."' 
-				WHERE uss_id='".$acudiente2['uss_id']."'");
+				WHERE uss_id='".$acudiente2['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
 			$idAcudiente2 = $acudiente2['uss_id'];
 		}else{
+			$idAcudiente2=Utilidades::generateCode("USS");
 			try {
-				mysqli_query($conexion, "INSERT INTO usuarios(uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento)VALUES('".$_POST["documentoA2"]."','".$clavePorDefectoUsuarios."',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."','".$_POST["documentoA2"]."')");
+				mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, institucion, year)VALUES('".$idAcudiente2."', '".$_POST["documentoA2"]."','".$clavePorDefectoUsuarios."',3,'".$_POST["nombreA2"]."',0,'".$_POST["ocupacionA2"]."','".$_POST["email"]."',0,'".$_POST["generoA2"]."','".$_POST["celular"]."', 'default.png', 'default.png', 1, 'green', '".$_POST["lugardA2"]."', '".$_POST["direccion"]."', '".$_POST["apellido1A2"]."', '".$_POST["apellido2A2"]."', '".$_POST["nombre2A2"]."','".$_POST["documentoA2"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
-			$idAcudiente2 = mysqli_insert_id($conexion);
 		}
 	
 		try {

@@ -42,7 +42,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)"><?=$frases[78][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php?cantidad=10" onClick="deseaRegresar(this)"><?=$frases[78][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Importar estudiantes desde Excel</li>
                             </ol>
                         </div>
@@ -74,7 +74,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                             <div class="col-sm-12">
                                     <?php include("../../config-general/mensajes-informativos.php"); ?>
                                     <div class="panel">
-                                        <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+                                        <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                         <div class="panel-body">
 
                                     
