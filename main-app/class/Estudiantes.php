@@ -400,7 +400,7 @@ class Estudiantes {
     }
 
     public static function obtenerDatosEstudiantesParaBoletin(
-        int    $estudiante      = 0,
+        string $estudiante      = "",
         string $BD    = '',
         string $yearBd    = ''
     )
