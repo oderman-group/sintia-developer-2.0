@@ -102,9 +102,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													include("includes/consulta-paginacion-movimientos.php");
 													
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fc
 														INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-														WHERE fcu_id=fcu_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
+														WHERE fcu_id=fcu_id AND fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]} $filtro
 														ORDER BY fcu_id
 														LIMIT $inicio,$registros");
 													} catch (Exception $e) {
