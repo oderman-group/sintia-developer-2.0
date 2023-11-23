@@ -11,7 +11,7 @@
 									
 									<?php
 									try{
-										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM academico_cargas)");
+										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 									} catch (Exception $e) {
 										include("../compartido/error-catch-to-report.php");
 									}
@@ -34,7 +34,7 @@
 											}
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												try{
-													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
+													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso['gra_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -93,7 +93,7 @@
 											ORDER BY uss_nombre");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_docente='".$docente['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -138,7 +138,7 @@
 											}
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$docente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

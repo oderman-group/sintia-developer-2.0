@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once("../class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0183';
@@ -28,12 +29,12 @@ while ($contCurso < $numCurso) {
             $existeCarga = CargaAcademica::validarExistenciaCarga($_POST["docente"], $_POST["curso"][$contCurso], $_POST["grupo"][$contGrupo], $_POST["asignatura"][$contAsignatura]);
 
             if(!$existeCarga) {
+                $idInsercion=Utilidades::generateCode("CAR");
                 try{
-                    mysqli_query($conexion, "INSERT INTO academico_cargas (car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable, car_maximos_indicadores, car_maximas_calificaciones, car_configuracion, car_valor_indicador, car_permiso2, car_indicador_automatico, car_observaciones_boletin, car_posicion_docente)VALUES('" . $_POST["docente"] . "', '" . $_POST["curso"][$contCurso] . "', '" . $_POST["grupo"][$contGrupo] . "','" . $_POST["asignatura"][$contAsignatura] . "', '" . $_POST["periodo"] . "', 1, 1, '" . $_POST["dg"] . "', '" . $_POST["ih"] . "', now(), '" . $_SESSION["id"] . "', '" . $_POST["maxIndicadores"] . "', '" . $_POST["maxActividades"] . "', '" . $_POST["valorActividades"] . "', '" . $_POST["valorIndicadores"] . "', '" . $_POST["permiso2"] . "', '" . $_POST["indicadorAutomatico"] . "', 0, 1)");
+                    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_cargas (car_id, car_docente, car_curso, car_grupo, car_materia, car_periodo, car_activa, car_permiso1, car_director_grupo, car_ih, car_fecha_creada, car_responsable, car_maximos_indicadores, car_maximas_calificaciones, car_configuracion, car_valor_indicador, car_permiso2, car_indicador_automatico, car_observaciones_boletin, car_posicion_docente, institucion, year)VALUES('".$idInsercion."', '" . $_POST["docente"] . "', '" . $_POST["curso"][$contCurso] . "', '" . $_POST["grupo"][$contGrupo] . "','" . $_POST["asignatura"][$contAsignatura] . "', '" . $_POST["periodo"] . "', 1, 1, '" . $_POST["dg"] . "', '" . $_POST["ih"] . "', now(), '" . $_SESSION["id"] . "', '" . $_POST["maxIndicadores"] . "', '" . $_POST["maxActividades"] . "', '" . $_POST["valorActividades"] . "', '" . $_POST["valorIndicadores"] . "', '" . $_POST["permiso2"] . "', '" . $_POST["indicadorAutomatico"] . "', 0, 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
                 } catch (Exception $e) {
                     include("../compartido/error-catch-to-report.php");
                 }
-                $idInsercion = mysqli_insert_id($conexion);
                 $cargasCreadas ++;
             } else {
                 $cargasNoCreadas ++;

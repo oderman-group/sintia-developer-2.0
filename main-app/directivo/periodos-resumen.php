@@ -201,7 +201,7 @@ function niv(enviada){
 															 
 															//LAS CALIFICACIONES
 															try{
-																$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+																$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -209,24 +209,24 @@ function niv(enviada){
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;
-																$definitiva += $notasResultado[4]*$decimal;
+																$definitiva += $notasResultado['bol_nota']*$decimal;
 															}
-															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
+															if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5])$color = $config[6]; elseif(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']>=$config[5]) $color = $config[7];
 															 
-															if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
-															elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
-															 elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
-															elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+															if(isset($notasResultado) && $notasResultado['bol_tipo']==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado['bol_tipo']==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
+															 elseif(isset($notasResultado) && $notasResultado['bol_tipo']==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
+															elseif(isset($notasResultado) && $notasResultado['bol_tipo']==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
 															 else $tipo='';
 															$notaPeriodo="";
-															if(!empty($notasResultado[4]))$notaPeriodo=$notasResultado[4];
+															if(!empty($notasResultado['bol_nota']))$notaPeriodo=$notasResultado['bol_nota'];
 
 
 														?>
 															<td style="text-align:center;">
 																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo?></a><br><?=$tipo;?><br>
 																<?php if(Modulos::validarPermisoEdicion()){?>
-																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?php if(!empty($notasResultado[4])) echo $notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
+																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?php if(!empty($notasResultado['bol_nota'])) echo $notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
 																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
 																<?php }?>
 															</td>

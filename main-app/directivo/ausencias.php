@@ -49,8 +49,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 												
 												try{
-													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'");
+													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -92,9 +92,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<div class="panel-body">
 											<?php
 											try{
-												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+												$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-												WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+												WHERE car_curso='".$datosEstudianteActual['mat_grupo']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}

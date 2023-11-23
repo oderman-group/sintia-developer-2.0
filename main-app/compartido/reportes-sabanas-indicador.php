@@ -48,10 +48,10 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			<td align="center" rowspan="2">Estudiante</td>
 			<!--<td align="center">Gru</td>-->
 			<?php
-			$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
+			$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso=" . $curso . "'AND car_grupo='" . $grupo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 				
-				$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+				$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 
 				$consultaActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -68,7 +68,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 
 		<tr style="font-weight:bold; font-size:12px; height:30px; background:#6017dc; color:white;">
 			<?php
-			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
+			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $curso . "' AND car_grupo='" . $grupo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			while ($car = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 				$activivdades = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc.
 				INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
@@ -102,7 +102,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 										else echo "B"; ?></td> -->
 				<?php
 				$suma = 0;
-				$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=" . $curso . " AND car_grupo='" . $grupo . "'");
+				$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $curso . "' AND car_grupo='" . $grupo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 

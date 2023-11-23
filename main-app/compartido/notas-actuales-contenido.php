@@ -85,15 +85,15 @@
 															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
 														}
 													}
-													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-													WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
+													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
+													WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 														
 														//DEFINITIVAS
-														$carga = $rCargas[0];
-														$periodo = $rCargas[5];
+														$carga = $rCargas['car_id'];
+														$periodo = $rCargas['car_periodo'];
 														$estudiante = $datosEstudianteActual['mat_id'];
 														include("../definitivas.php");
 														if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';}
@@ -106,17 +106,17 @@
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td style="text-align:center;"><?=$rCargas[0];?></td>
+														<td style="text-align:center;"><?=$rCargas['car_id'];?></td>
 														<td><?=$rDatos[1];?></td>
-														<td style="text-align:center;"><?=$rCargas[5];?></td>
+														<td style="text-align:center;"><?=$rCargas['car_periodo'];?></td>
 														
 														<?php if($config['conf_sin_nota_numerica']!=1){?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitivaFinal;?></a>
+															<a href="calificaciones.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$colorNota;?>; text-decoration:underline;"><?=$definitivaFinal;?></a>
 														</td>
 														<?php }else{?>
 														<td style="text-align:center;">
-															<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="text-decoration:underline;"><?=$frases[39][$datosUsuarioActual['uss_idioma']];?></a>
+															<a href="calificaciones.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="text-decoration:underline;"><?=$frases[39][$datosUsuarioActual['uss_idioma']];?></a>
 														</td>
 														<?php }?>
 														
@@ -127,7 +127,7 @@
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>
 																	  <ul class="dropdown-menu" role="menu">
-																		  <li><a href="cronograma-actividades.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>&usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		  <li><a href="cronograma-actividades.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>&usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	  </ul>
 																  </div>
 														</td>

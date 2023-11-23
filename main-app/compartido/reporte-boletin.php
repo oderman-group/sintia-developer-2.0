@@ -23,7 +23,7 @@ if(empty($datosUsr))
 	exit();
 }
 //=============================== MATERIAS DEL ESTUDIANTE =================
-$mat=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$datosUsr[6]." AND car_grupo='".$datosUsr[7]."' ORDER BY car_materia");
+$mat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY car_materia");
 
 $num_mat=mysqli_num_rows($mat);
 if($num_mat==0)
@@ -86,7 +86,7 @@ $cont=1;
 $contador = 0;  //para que solo halla un while en area
 $totalDefini=0;
 $materiasPerdidas=0;
-$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (a.ar_id=am.mat_area AND am.at_id=car_materia) AND (car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") AND a.ar_id=am.mat_area AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} GROUP BY a.ar_id ORDER BY a.ar_posicion");
+$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas car WHERE (a.ar_id=am.mat_area AND am.at_id=car_materia) AND (car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."') AND a.ar_id=am.mat_area AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} GROUP BY a.ar_id ORDER BY a.ar_posicion");
 
 $ii = 1;
 while($fila_mat=mysqli_fetch_array($materia, MYSQLI_BOTH)){
@@ -96,12 +96,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td class="area" id="<?=$fila_mat[0]?>" colspan="9" style="font-size:10px; font-weight:bold;"><?php if(strtoupper(substr($fila_mat[1],0,4))=='ESPA') echo "ESPA&Ntilde;OL"; else echo strtoupper($fila_mat[1]);?></td>
     </tr>
 <?php 
-	$consulta = mysqli_query($conexion, "SELECT mat_nombre, mat_area, mat_id, car_id FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, academico_cargas WHERE (a.ar_id=am.mat_area AND am.mat_id=car_materia)AND(car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") and a.ar_id=am.mat_area and am.mat_area=".$fila_mat[4]." AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}");
+	$consulta = mysqli_query($conexion, "SELECT mat_nombre, mat_area, mat_id, car_id FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas WHERE (a.ar_id=am.mat_area AND am.mat_id=car_materia)AND(car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."') and a.ar_id=am.mat_area and am.mat_area='".$fila_mat[4]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 	
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
 		$periodo=$fila_mat[7]-1; //asperiodo
-		$datos=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND  bol_periodo=".$periodoActual);//asmat
+		$datos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND  bol_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");//asmat
 		
 		$dato=mysqli_fetch_array($datos, MYSQLI_BOTH);
 		$numero=mysqli_num_rows($datos);
@@ -119,11 +119,11 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		while($per<=4){
 			
 			//============================ NOTA DE CADA UNO DE LOS PERIODOS  POR SEPARADO =====================================================
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
 			//============================ FIN DE LAS NOTAS POR SEPARADO ======================================================================	
 ?>
-			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota[4]; $defini = $defini + $nota[4]; $prome = $nota[4];?></td>
+			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota['bol_nota']; $defini = $defini + $nota['bol_nota']; $prome = $nota['bol_nota'];?></td>
 <?php 
 			$vectorT[$fila[1]][$per] = $prome;
 			
@@ -163,7 +163,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center" style="font-weight:bold; font-size:11px; border:groove;"><?php echo $defini." ".$msjH;?></td>	
 <?php 
 		$definitiva=substr($definitiva,0,3);
-		$final=$dato[4];
+		$final=$dato['bol_nota'];
 ?>
 		<td align="center" style="font-weight:bold; font-size:11px; border:groove;">
 <?php

@@ -37,7 +37,7 @@ if(is_numeric($cargaE)){
 if($config['conf_activar_encuesta']==1){
 	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
 	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
-	if($respuesta==0 and $datosEstudianteActual[6]!=11){
+	if($respuesta==0 and $datosEstudianteActual['mat_grado']!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();	
 	}
@@ -71,11 +71,11 @@ if($config['conf_activar_encuesta']==1){
                     </div>
                    
 						<?php
-						$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+						$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 						INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 						INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 						INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-						WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+						WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 				$nCargas = mysqli_num_rows($cCargas);
 				$mensajeCargas = new Cargas;
 				$mensajeCargas->verificarNumCargas($nCargas, $datosUsuarioActual['uss_idioma']);
@@ -96,17 +96,17 @@ if($config['conf_activar_encuesta']==1){
 										$ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
 										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso 
-										WHERE carpa_id_carga='".$rCargas[0]."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+										WHERE carpa_id_carga='".$rCargas['car_id']."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 										if(!empty($cargaHistorial['carpa_id'])){
 											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 										}
-										if(!empty($_COOKIE["cargaE"]) && $rCargas[0]==$_COOKIE["cargaE"]){
+										if(!empty($_COOKIE["cargaE"]) && $rCargas['car_id']==$_COOKIE["cargaE"]){
 											$fondoCargaActual = 'cornsilk';
 										}
 										//DEFINITIVAS
-										$carga = $rCargas[0];
+										$carga = $rCargas['car_id'];
 										$periodo = $rCargas['car_periodo'];
-										$estudiante = $datosEstudianteActual[0];
+										$estudiante = $datosEstudianteActual['mat_id'];
 										include("../definitivas.php");
 
 										$definitivaFinal=$definitiva;
@@ -119,10 +119,10 @@ if($config['conf_activar_encuesta']==1){
 							
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+									<a href="cargas.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
 								</div>
 	                        	<div class="course-box">
-	                        	<h4><a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h4><a href="cargas.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
 		                            <div class="text-muted">
 										<span class="m-r-10" style="font-size: 10px;"><?=$ultimoAcceso;?></span> 
 										
@@ -133,7 +133,7 @@ if($config['conf_activar_encuesta']==1){
 		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></span></p>
 									
 									<!--
-		                            <a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
+		                            <a href="cargas.php?carga=<?=$rCargas['car_id'];?>&periodo=<?=$rCargas['car_periodo'];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
 									-->
 									
 	                        	</div>

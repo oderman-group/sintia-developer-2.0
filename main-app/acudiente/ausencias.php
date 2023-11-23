@@ -39,8 +39,8 @@
 												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												"), MYSQLI_BOTH);
 												
-												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
+												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
 												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
@@ -77,9 +77,9 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+											$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 											INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion={$config['conf_id_institucion']} AND mate.year={$_SESSION["bd"]}
-											WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+											WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 											$nCargas = mysqli_num_rows($cCargas);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';

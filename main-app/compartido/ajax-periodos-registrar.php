@@ -3,7 +3,8 @@ session_start();
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
-$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
 <?php
@@ -13,18 +14,19 @@ if(trim($_POST["nota"])==""){
 }
 if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
 include("../modelo/conexion.php");
-$consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$_POST["codEst"]." AND bol_carga=".$_POST["carga"]." AND bol_periodo=".$_POST["per"]);
+$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["codEst"]."' AND bol_carga='".$_POST["carga"]."' AND bol_periodo='".$_POST["per"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 $num = mysqli_num_rows($consulta);
 $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 //echo $num; exit();
 if($num==0){
-	mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_id='".$rB[0]."'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_id='".$rB['bol_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
-	mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_observaciones)VALUES('".$_POST["carga"]."','".$_POST["codEst"]."','".$_POST["per"]."','".$_POST["nota"]."',1, 'Colocada desde la parte Directiva.')");
+	$codigoBOL=Utilidades::generateCode("BOL");
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_observaciones, institucion, year)VALUES('".$codigoBOL."', '".$_POST["carga"]."','".$_POST["codEst"]."','".$_POST["per"]."','".$_POST["nota"]."',1, 'Colocada desde la parte Directiva.', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	
 }else{
-	mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada desde la parte Directiva', bol_tipo=1 WHERE bol_id=".$rB[0]);
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada desde la parte Directiva', bol_tipo=1 WHERE bol_id='".$rB['bol_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
 }	
 
@@ -37,7 +39,7 @@ if($num==0){
 		
 		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
-		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual[0]."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
+		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual['car_id']."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 
 		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable[1]);
