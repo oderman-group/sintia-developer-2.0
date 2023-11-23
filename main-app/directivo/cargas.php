@@ -107,12 +107,12 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													<?php
 													include("includes/consulta-paginacion-cargas.php");	
 													try{										       
-														$busqueda=mysqli_query($conexion,"SELECT * FROM academico_cargas
+														$busqueda=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 														INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
 														LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 														LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 														LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-														WHERE car_id=car_id $filtro
+														WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} $filtro
 														ORDER BY car_id
 														LIMIT $inicio,$registros;");
 													} catch (Exception $e) {
@@ -122,7 +122,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 													 while ($resultado = mysqli_fetch_array($busqueda, MYSQLI_BOTH)){
 
 														//Para calcular el porcentaje de actividades en las cargas
-														$cargaSP = $resultado[0];
+														$cargaSP = $resultado['car_id'];
 														$periodoSP = $resultado['car_periodo'];
 														include("../suma-porcentajes.php");
 
@@ -167,7 +167,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?="[".$resultado['mat_id']."] ".strtoupper($resultado['mat_nombre'])." (".$resultado['mat_valor']."%)";?></td>
 														<td><?=$resultado['car_ih'];?></td>
 														<td><?=$resultado['car_periodo'];?></td>
-                                        				<td><a href="../compartido/reporte-notas.php?carga=<?=base64_encode($resultado[0]);?>&per=<?=base64_encode($resultado['car_periodo']);?>&grado=<?=base64_encode($resultado["car_curso"]);?>&grupo=<?=base64_encode($resultado["car_grupo"]);?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Calificaciones"><?=$spcd[0];?>%&nbsp;&nbsp;-&nbsp;&nbsp;<?=$spcr[0];?>%</a></td>
+                                        				<td><a href="../compartido/reporte-notas.php?carga=<?=base64_encode($resultado['car_id']);?>&per=<?=base64_encode($resultado['car_periodo']);?>&grado=<?=base64_encode($resultado["car_curso"]);?>&grupo=<?=base64_encode($resultado["car_grupo"]);?>" target="_blank" style="text-decoration:underline; color:#00F;" title="Calificaciones"><?=$spcd[0];?>%&nbsp;&nbsp;-&nbsp;&nbsp;<?=$spcr[0];?>%</a></td>
 
 														
 														<td>
@@ -181,14 +181,14 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																			<li><a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
 																				<li>
-																				    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cargas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
+																				    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cargas-eliminar.php?id=<?=base64_encode($resultado['car_id']);?>')"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
 																				</li>
 																			<?php }?>
 																	  		<li>
 																			    <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>')">Ver como docente</a>
 																			<?php }?>
-																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado[0]);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
-																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado[0]);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado['car_id']);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
+																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado['car_id']);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	  <li><a href="cargas-indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&docente=<?=base64_encode($resultado['car_docente']);?>">Indicadores</a></li>
 																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla</a></li>
 																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla con notas</a></li>

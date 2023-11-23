@@ -95,7 +95,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM academico_cargas WHERE car_materia='".$resultado['mat_id']."'");
+															$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}

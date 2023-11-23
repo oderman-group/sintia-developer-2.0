@@ -89,9 +89,9 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
         	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat['mat_siglas']);?></td>      
@@ -106,23 +106,23 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila[0]."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} GROUP BY bol_carga");
+  		$cuentaest=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} GROUP BY bol_carga");
 		$numero=mysqli_num_rows($cuentaest);
 		$def='0.0';
 		
   ?>
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
-      <td align="center"> <?php echo $fila[0];?></td>
+      <td align="center"> <?php echo $fila['mat_id'];?></td>
       <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1 = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-    WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
+    WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila[0]."' AND bol_carga='".$mat1[0]."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_carga='".$mat1['car_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
       $defini = 0;
       if(!empty($nota['bol_nota'])){$defini = $nota['bol_nota'];$suma=($suma+$defini);}
@@ -130,7 +130,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 		?>
         	<td align="center" style="color:<?=$color;?>; width: 50px;">
            
-           <input style="text-align:center; width:40px; color:<?=$color;?>;" value="<?php if(!empty($nota['bol_nota'])){ echo $nota['bol_nota'];}?>" name="<?=$mat1[0];?>" id="<?=$fila[0];?>" onChange="def(this)" alt="<?=$per;?>">
+           <input style="text-align:center; width:40px; color:<?=$color;?>;" value="<?php if(!empty($nota['bol_nota'])){ echo $nota['bol_nota'];}?>" name="<?=$mat1['car_id'];?>" id="<?=$fila['mat_id'];?>" onChange="def(this)" alt="<?=$per;?>">
 
           </td>
           <?php
@@ -141,7 +141,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                 $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
               }
           ?>
-        	  <td align="center" style="font-weight:bold; color:<?=$color;?>; width: 50px;" id="CU<?=$fila[0].$mat1[0];?>"><?=$notaFinal?></td>
+        	  <td align="center" style="font-weight:bold; color:<?=$color;?>; width: 50px;" id="CU<?=$fila['mat_id'].$mat1['car_id'];?>"><?=$notaFinal?></td>
   		<?php
             }
 		}
@@ -151,7 +151,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
-		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
+		$grupo1[$cont] = $nombre;
       $defFinal= "";
       if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
           $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def);

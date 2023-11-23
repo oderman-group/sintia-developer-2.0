@@ -154,7 +154,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	 
 		 	
 }
-mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
+mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $lineaError = __LINE__;
 include("../compartido/reporte-errores.php");
 

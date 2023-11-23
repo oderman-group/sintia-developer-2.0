@@ -129,10 +129,10 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     <?php
 	$materiasPerdidas = 0;
 	$colspan = 2 + (2 * $periodoActual);
-	$conAreas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+	$conAreas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
+	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
 	GROUP BY am.mat_area
 	ORDER BY ar_posicion
 	");
@@ -149,9 +149,9 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		
 		<?php
 		$contador=1;
-		$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+		$conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$datosAreas['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
+		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
 		");
 		while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 		?>

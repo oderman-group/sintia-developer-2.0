@@ -148,6 +148,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Este estudiante ya existe en el año <b>'.base64_decode($_GET['yearPasar']).'</b>.';
             break;
 
+            case 'ER_DT_20':
+                $tipo = 'danger';
+                $mensaje = 'Ya existe una carga con esta misma información, verifica la información suministrada y vuelve a intentarlo.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -73,6 +73,10 @@ if(!Modulos::validarPermisoEdicion()){
 
 										<input type="hidden" value="<?=$datosEditar['car_id'];?>" name="idR">
 										<input type="hidden" value="<?=$datosEditar['car_periodo'];?>" name="periodoActual">
+										<input type="hidden" value="<?=$datosEditar['car_docente'];?>" name="docenteActual">
+										<input type="hidden" value="<?=$datosEditar['car_curso'];?>" name="cursoActual">
+										<input type="hidden" value="<?=$datosEditar['car_grupo'];?>" name="grupoActual">
+										<input type="hidden" value="<?=$datosEditar['car_materia'];?>" name="asignaturaActual">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
@@ -93,10 +97,10 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_docente']) $select = 'selected';
+														if($opcionesDatos['uss_id']==$datosEditar['car_docente']) $select = 'selected';
 														if($opcionesDatos['uss_bloqueado']==1) $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
+                                                    	<option value="<?=$opcionesDatos['uss_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -118,7 +122,7 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_curso']) $select = 'selected';
+														if($opcionesDatos['gra_id']==$datosEditar['car_curso']) $select = 'selected';
 														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
 													?>
                                                     	<option value="<?=$opcionesDatos['gra_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
@@ -168,7 +172,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['car_materia']) $select = 'selected';
+														if($opcionesDatos['mat_id']==$datosEditar['car_materia']) $select = 'selected';
 													?>
                                                     	<option value="<?=$opcionesDatos['mat_id'];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
@@ -184,7 +188,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													$p = 1;
 													while($p<=$config[19]){
-														if($p==$datosEditar[5])
+														if($p==$datosEditar['car_periodo'])
 															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
 														else
 															echo '<option value="'.$p.'">Periodo '.$p.'</option>';	

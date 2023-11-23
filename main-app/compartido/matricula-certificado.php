@@ -149,13 +149,13 @@ $modulo = 1;
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
 
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 $materiasPerdidas = 0;
 
@@ -204,13 +204,13 @@ $modulo = 1;
                         if(!empty($datosEstudianteActualMT)){
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS DE MT
 
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 $materiasPerdidas = 0;
 
@@ -266,7 +266,7 @@ $modulo = 1;
 
             $nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
 
-									INNER JOIN academico_cargas ON car_id=niv.niv_id_asg
+									INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=niv.niv_id_asg AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}
 
 									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
@@ -345,13 +345,13 @@ $modulo = 1;
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
 
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
@@ -420,13 +420,13 @@ $modulo = 1;
                         if(!empty($datosEstudianteActualMT)){
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
                                             INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "'");
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 

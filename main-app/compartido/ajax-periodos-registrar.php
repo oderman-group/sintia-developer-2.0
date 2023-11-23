@@ -4,7 +4,7 @@ include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1");
+$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
 ?>
 <?php
@@ -39,7 +39,7 @@ if($num==0){
 		
 		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
-		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM academico_cargas, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual[0]."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}");
+		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual['car_id']."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 
 		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable[1]);

@@ -19,8 +19,8 @@ $_SESSION["configuracion"] = $config;
     </p>
         
         <?php
-        $docentesProgreso = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-        WHERE car_docente={$_GET["docente"]}
+        $docentesProgreso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
+        WHERE car_docente={$_GET["docente"]} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
         ORDER BY car_periodo");
         $profes = array();
         $profesNombre = array();
