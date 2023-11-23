@@ -3,12 +3,12 @@ $registros_por_pagina = 10;
 $limite_inferior = 0;
 
 try{
-    $sql = "SELECT COUNT(*) AS total FROM academico_cargas
+    $sql = "SELECT COUNT(*) AS total FROM ".BD_ACADEMICA.".academico_cargas car
     INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
     INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-    WHERE car_id=car_id";
+    WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}";
     $resultado = $conexion->query($sql);
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
@@ -38,12 +38,12 @@ if ($pagina_actual == 1) {
 
 // Consultar los datos de la tabla
 try{
-    $sql = "SELECT * FROM academico_cargas
+    $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
     INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
     INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
     INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-    WHERE car_id=car_id LIMIT $limite_inferior, $registros_por_pagina";
+    WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} LIMIT $limite_inferior, $registros_por_pagina";
     $resultado = $conexion->query($sql);
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");

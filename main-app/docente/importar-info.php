@@ -57,11 +57,11 @@
                                             <label class="col-sm-2 control-label"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+												$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 												INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-												WHERE car_docente='".$_SESSION["id"]."'
+												WHERE car_docente='".$_SESSION["id"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
 												ORDER BY car_curso, car_grupo, am.mat_nombre");
 												?>
                                                 <select class="form-control  select2" name="cargaImportar" required>

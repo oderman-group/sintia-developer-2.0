@@ -15,9 +15,9 @@ switch($_POST["documento"]){
 
 $datos = Estudiantes::obtenerDatosEstudiante($_POST["estudiante"]);
 
-$consultaDg=mysqli_query($conexion, "SELECT * FROM academico_cargas
-INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente
-WHERE car_curso='".$datos['mat_grado']."' AND car_grupo='".$datos['mat_grupo']."' AND car_director_grupo=1 AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+$consultaDg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+WHERE car_curso='".$datos['mat_grado']."' AND car_grupo='".$datos['mat_grupo']."' AND car_director_grupo=1 AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 $dg = mysqli_fetch_array($consultaDg, MYSQLI_BOTH);
 
 $acudiente2 = UsuariosPadre::sesionUsuario($datos["mat_acudiente2"]);

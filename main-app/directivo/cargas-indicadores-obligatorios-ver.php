@@ -117,14 +117,14 @@ if(!Modulos::validarPermisoEdicion()){
                                                     }
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
                                                         try{
-                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c['gra_id']." AND car_materia=".$m['mat_id']."");
+                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$c['gra_id']."' AND car_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
-                                                        if(!empty($carga[0])){
+                                                        if(!empty($carga['car_id'])){
                                                             try{
-                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$carga[0]."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$carga['car_id']."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -132,20 +132,20 @@ if(!Modulos::validarPermisoEdicion()){
                                                         }
                                                         
                                                         try{
-                                                            $cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$c['gra_id']." AND car_materia=".$m['mat_id']."");
+                                                            $cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$c['gra_id']."' AND car_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         $indCreados=0;
                                                         while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
                                                             try{
-                                                                $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                $consultaNumIpcC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$cgs['car_id']."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
                                                             $ipcC = mysqli_num_rows($consultaNumIpcC);
                                                             try{
-                                                                $consultaCalC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cgs[0]."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                $consultaCalC=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cgs['car_id']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

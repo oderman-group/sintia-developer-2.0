@@ -5,8 +5,8 @@ $idPaginaInterna = 'CM0058';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 try{
-    mysqli_query($conexion, "UPDATE academico_cargas SET car_posicion_docente='" . $_GET["posicionNueva"] . "' 
-    WHERE car_id='" . $_GET["idCarga"] . "'");
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_posicion_docente='" . $_GET["posicionNueva"] . "' 
+    WHERE car_id='" . $_GET["idCarga"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
     include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
     exit();

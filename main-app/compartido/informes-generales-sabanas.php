@@ -55,9 +55,9 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."' AND car_activa=1");
+		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
         	<td align="center"><?=strtoupper($Mat['mat_siglas']);?></td>      
@@ -71,9 +71,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $mayor=0;
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
-    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);	  
-  	// $cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila['mat_id']." AND bol_periodo=".$_GET["per"]." GROUP BY bol_carga");
-		// $numero=mysqli_num_rows($cuentaest);
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
 		
   ?>
   <tr style="font-size:13px;">
@@ -83,19 +81,19 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."' AND car_activa=1");
+		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$numero=mysqli_num_rows($materias1);
 		$def='0.0';
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila['mat_id']." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_carga='".$mat1['car_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
       $defini = 0;
-      if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
+      if(!empty($nota['bol_nota'])){$defini = $nota['bol_nota'];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
 
       $notaEstudiante="";
-      if(!empty($nota[4])){
-        $notaEstudiante=$nota[4];
+      if(!empty($nota['bol_nota'])){
+        $notaEstudiante=$nota['bol_nota'];
       }
 
       $notaEstudianteFinal=$notaEstudiante;
@@ -134,10 +132,10 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   </table>
   
 <?php
-$puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM academico_boletin
+$puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM ".BD_ACADEMICA.".academico_boletin bol
 INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
-INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."'
-WHERE bol_periodo='".$per."'
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+WHERE bol_periodo='".$per."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 GROUP BY bol_estudiante
 ORDER BY suma DESC
 ");

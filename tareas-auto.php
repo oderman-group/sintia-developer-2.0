@@ -293,7 +293,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		if($cDat['corr_tipo']==1 or $cDat['corr_tipo']==2 or $cDat['corr_tipo']==3){
 			
 			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_actividades ac 
-			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=ac.act_id_carga
+			INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=ac.act_id_carga AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion={$cProg['corr_institucion']} AND uss.year={$year}
@@ -369,12 +369,12 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		
 		//Del tipo 4
 		if($cDat['corr_tipo']==4){
-			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_cargas 
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
 			INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion={$cProg['corr_institucion']} AND uss.year={$year}
 			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
-			WHERE car_id='".$cDat["corr_carga"]."'");
+			WHERE car_id='".$cDat["corr_carga"]."' AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
 			$consultaDocentes=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");

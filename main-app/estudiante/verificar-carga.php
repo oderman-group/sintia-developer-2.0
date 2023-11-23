@@ -30,11 +30,11 @@ if($cargaHnum==0){
 	WHERE carpa_id_carga='".$cargaConsultaActual."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 }
 
-$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 LEFT JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula='".$datosEstudianteActual['mat_id']."'
-WHERE car_id='".$cargaConsultaActual."' AND (car_curso='".$datosEstudianteActual[6]."' OR car_curso=matcur_id_curso) AND (car_grupo='".$datosEstudianteActual[7]."' OR car_grupo=matcur_id_grupo) AND car_activa=1");
+WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (car_curso='".$datosEstudianteActual['mat_grado']."' OR car_curso=matcur_id_curso) AND (car_grupo='".$datosEstudianteActual['mat_grupo']."' OR car_grupo=matcur_id_grupo) AND car_activa=1");
 
 $numCargaActual = mysqli_num_rows($consultaCargaActual);
 $datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
@@ -56,7 +56,7 @@ if($numCargaActual==0)
 if($config['conf_activar_encuesta']==1){
 	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
 	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
-	if($respuesta==0 and $datosEstudianteActual[6]!=11){
+	if($respuesta==0 and $datosEstudianteActual['mat_grado']!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();	
 	}

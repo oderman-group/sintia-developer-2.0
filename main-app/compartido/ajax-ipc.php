@@ -12,7 +12,7 @@ mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso
 
 mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '".$_POST["curso"]."','".$_POST["materia"]."','".$_POST["ih"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 
-mysqli_query($conexion, "UPDATE academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."'");
+mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 ?>
 	<script type="text/javascript">

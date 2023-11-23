@@ -6,7 +6,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Boletin.php");
 $Plataforma = new Plataforma;
 
-$year = $agnoBD;
+$year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
     $year = base64_decode($_GET["year"]);
 }
@@ -51,7 +51,7 @@ if (!empty($_REQUEST["grupo"])) {
     $filtro .= " AND mat_grupo='" . base64_decode($_REQUEST["grupo"]) . "'";
 }
 $contadorEstudiantes=0;
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD,$year);
 $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
     //contador materias
@@ -59,7 +59,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $contadorIndicadores = 0;
     $materiasPerdidas = 0;
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-    $consultaEstudiantes = Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+    $consultaEstudiantes = Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD,$year);
     $numEstudiantes = mysqli_num_rows($consultaEstudiantes);
     $datosEstudiantes = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH);
     //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
@@ -75,7 +75,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $contadorPeriodos = 0;
     $contp = 1;
     $puestoCurso = 0;
-    $puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD);
+    $puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD,$year);
     
     while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
         if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -102,7 +102,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <body style="font-family:Arial;">
         <?php
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-        $consultaAreaEstudiante = Boletin::obtenerAreasDelEstudiante($matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD);
+        $consultaAreaEstudiante = Boletin::obtenerAreasDelEstudiante($matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $BD,$year);
         ?>
         <div align="center" style="margin-bottom:20px;">
             <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="50"><br>
@@ -128,7 +128,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <td width="20%" align="center" rowspan="2">AREAS/ ASIGNATURAS</td>
                     <td width="2%" align="center" rowspan="2">I.H</td>
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="2%" align="center" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $matriculadosDatos[0]; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
+                        <td width="2%" align="center" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $matriculadosDatos['mat_id']; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
                     <?php } ?>
                     <td width="3%" colspan="3" align="center">Acumulado</td>
                 </tr>
@@ -169,16 +169,16 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         break;
                 }
                 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-                $consultanombrePromedioArea = Boletin::obtenerDatosDelArea($matriculadosDatos[0], $area["ar_id"], $condicion, $BD);
+                $consultanombrePromedioArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD,$year);
 
                 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
-                $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos[0], $area["ar_id"], $condicion, $BD);
+                $consultaDefinitivaNombreMateria = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD,$year);
 
                 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
-                $consultaDefinitivaPeriodo = Boletin::obtenerDefinitivaPorPeriodo($matriculadosDatos[0], $area["ar_id"], $condicion, $BD);
+                $consultaDefinitivaPeriodo = Boletin::obtenerDefinitivaPorPeriodo($matriculadosDatos['mat_id'], $area["ar_id"], $condicion, $BD,$year);
                 
                 //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA
-                $consultaMateriaIndicadores = Boletin::obtenerIndicadoresPorMateria($datosEstudiantes["mat_grado"], $datosEstudiantes["mat_grupo"], $area["ar_id"], $condicion, $matriculadosDatos[0], $condicion2, $BD);
+                $consultaMateriaIndicadores = Boletin::obtenerIndicadoresPorMateria($datosEstudiantes["mat_grado"], $datosEstudiantes["mat_grupo"], $area["ar_id"], $condicion, $matriculadosDatos['mat_id'], $condicion2, $BD,$year);
 
                 $numIndicadores = mysqli_num_rows($consultaMateriaIndicadores);
                 $resultadoNotaArea = mysqli_fetch_array($consultanombrePromedioArea, MYSQLI_BOTH);
@@ -200,7 +200,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         $ausPer4=0;
                         for($j = 1; $j <= $periodoActual; $j++){
         
-                            $consultaDatosAusencias= Boletin::obtenerDatosAusencias($datosEstudiantes['gra_id'], $materia['mat_id'], $j, $datosEstudiantes['mat_id'], $BD);
+                            $consultaDatosAusencias= Boletin::obtenerDatosAusencias($datosEstudiantes['gra_id'], $materia['mat_id'], $j, $datosEstudiantes['mat_id'], $BD,$year);
                             $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
         
                             if($datosAusencias['sumAus']>0){
@@ -234,7 +234,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 for ($j = 1; $j <= $periodoActual; $j++) {
 
                                     //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
-                                    $consultaNotaMateriaIndicadoresxPeriodo = Boletin::obtenerIndicadoresDeMateriaPorPeriodo($datosEstudiantes["mat_grado"], $datosEstudiantes["mat_grupo"], $area["ar_id"], $j, $matriculadosDatos[0], $BD);
+                                    $consultaNotaMateriaIndicadoresxPeriodo = Boletin::obtenerIndicadoresDeMateriaPorPeriodo($datosEstudiantes["mat_grado"], $datosEstudiantes["mat_grupo"], $area["ar_id"], $j, $matriculadosDatos['mat_id'], $BD,$year);
 
                                     $numIndicadoresPorPeriodo=mysqli_num_rows($consultaNotaMateriaIndicadoresxPeriodo);
                                     $sumaNotaEstudiante=0;
@@ -254,7 +254,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     
                                     $notaEstudiante= Boletin::agregarDecimales($notaEstudiante);
 
-                                    $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante, $BD);
+                                    $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante,$year);
                                     $desempenoNotaPFinal= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
 
                                     $promedioMateria += $notaEstudiante;
@@ -267,7 +267,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 $promedioMateria = round($promedioMateria / ($j - 1), 2);
                                 $promedioMateriaFinal = $promedioMateria;
 
-                                $consultaNivelacion = Boletin::obtenerNivelaciones($materia['car_id'], $matriculadosDatos['mat_id'], $BD);
+                                $consultaNivelacion = Boletin::obtenerNivelaciones($materia['car_id'], $matriculadosDatos['mat_id'], $BD,$year);
                                 $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
         
                                 // SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -281,7 +281,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 
                                 $promedioMateriaFinal= Boletin::agregarDecimales($promedioMateriaFinal);
 
-                                $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $BD);
+                                $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal,$year);
                                 $promediosMateriaEstiloNotaFinal= !empty($promediosMateriaEstiloNota['notip_nombre']) ? $promediosMateriaEstiloNota['notip_nombre'] : "";
                             ?>
                             <td align="center" style=" font-size:12px;"><?=$promedioMateriaFinal;?></td>
@@ -303,7 +303,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                             $desempeno='';
                                             if ($j == $periodoActual) {
 
-                                                $consultaRecuperacionIndicador = Boletin::obtenerRecuperacionPorIndicador($matriculadosDatos[0], $materia["car_id"], $j, $indicadores["ind_id"], $BD);
+                                                $consultaRecuperacionIndicador = Boletin::obtenerRecuperacionPorIndicador($matriculadosDatos['mat_id'], $materia["car_id"], $j, $indicadores["ind_id"], $BD,$year);
                                                 $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 
                                                 $notaIndicador = round($indicadores["nota"], 2);
@@ -314,7 +314,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 
                                                 $notaIndicador= Boletin::agregarDecimales($notaIndicador);
 
-                                                $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador, $BD);
+                                                $desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador,$year);
                                                 $desempeno= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
                                             }
                                         ?>
@@ -331,7 +331,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 } //fin if
                             }
                         }
-                        $consultaObsevacion=Boletin::obtenerObservaciones($materia["car_id"], $periodoActual, $matriculadosDatos[0], $BD);
+                        $consultaObsevacion=Boletin::obtenerObservaciones($materia["car_id"], $periodoActual, $matriculadosDatos['mat_id'], $BD,$year);
                         $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
                         if ($observacion['bol_observaciones_boletin'] != "") {
                             ?>
@@ -366,7 +366,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     $promediosPeriodos = ($sumaNota/($contador-1));
                     $promediosPeriodos = round($promediosPeriodos, 2);
 
-                    $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos, $BD);
+                    $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos,$year);
                     $promediosEstiloNotaFinal= !empty($promediosEstiloNota['notip_nombre']) ? $promediosEstiloNota['notip_nombre'] : "";
                 ?>
 
@@ -378,7 +378,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                     $promedioFinal = round($promedioFinal/$periodoActual,2);
 
-                    $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $BD);
+                    $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal,$year);
                     $promedioFinalEstiloNotaFinal= !empty($promedioFinalEstiloNota['notip_nombre']) ? $promedioFinalEstiloNota['notip_nombre'] : "";
                 ?>
                 <td style=" font-size:12px;"><?=$promedioFinal;?></td>
@@ -415,7 +415,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             <tr>
                 <td style=" font-size:12px;">Tabla de desempeño:</td>
                 <?php
-                    $consulta = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $BD);
+                    $consulta = Boletin::listarTipoDeNotas($config["conf_notas_categoria"],$year);
                     while($estiloNota = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                 ?>
                     <td align="center" style="font-size:12px;"><?=$estiloNota['notip_nombre'].": ".$estiloNota['notip_desde']." - ".$estiloNota['notip_hasta'];?></td>
@@ -426,7 +426,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         </table>
         <p>&nbsp;</p>
         <?php
-        $cndisciplina = Boletin::obtenerNotaDisciplina($matriculadosDatos[0], $condicion, $BD);
+        $cndisciplina = Boletin::obtenerNotaDisciplina($matriculadosDatos['mat_id'], $condicion, $BD);
         if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
@@ -440,7 +440,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 <?php
                 while ($rndisciplina = mysqli_fetch_array($cndisciplina, MYSQLI_BOTH)) {
 
-                    $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisciplina["dn_nota"], $BD);
+                    $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisciplina["dn_nota"],$year);
                     $desempenoNDFinal= !empty($desempenoND['notip_nombre']) ? $desempenoND['notip_nombre'] : "";
                 ?>
                     <tr align="center" style=" font-size:12px;">

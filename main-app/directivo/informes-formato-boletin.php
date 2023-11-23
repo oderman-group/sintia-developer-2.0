@@ -33,7 +33,7 @@
     $boletin = mysqli_fetch_array($consulta, MYSQLI_BOTH);
     $numDatos=mysqli_num_rows($consulta);
 
-    $ruta="informes-boletines.php?error=".base64_encode('ER_DT_9');
+    $ruta="informes-todos.php?error=ER_DT_9";
     if($numDatos>0){
         $ruta="../compartido/matricula-boletin-curso-".$boletin['gra_formato_boletin'].".php?id=".$id."&periodo=".$periodo."&curso=".$curso."&grupo=".$grupo."&year=".base64_encode($year);
     }
