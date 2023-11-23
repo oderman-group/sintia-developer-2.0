@@ -62,7 +62,7 @@
                             </div>
                             <?php 
 							//ESTUDIANTES
-							if($datosUsuarioActual['uss_tipo']==4){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
@@ -71,7 +71,7 @@
 							
 							<?php 
 							//DOCENTES
-							if($datosUsuarioActual['uss_tipo']==2){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>

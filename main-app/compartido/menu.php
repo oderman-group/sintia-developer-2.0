@@ -5,7 +5,7 @@
 				
 						<?php
 						//Mostrar a los directivos si tiene deuda
-						if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
+						if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO){
 						?>
 							<div class="mt-4 p-1" style="background-color: yellow;">
 								<p>
@@ -40,7 +40,7 @@
 	                        </li>
 							
 							<?php
-								if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1 || $datosUsuarioActual['uss_tipo']==3 || $datosUsuarioActual['uss_tipo']==4){
+								if($datosUsuarioActual['uss_tipo']!=TIPO_DOCENTE){
 							?>
 							<li class="nav-item">
 							<a href="como-empezar.php" class="nav-link nav-toggle">
@@ -80,7 +80,7 @@
 							
 							<?php 
 								//MENÚ DIRECTIVOS
-								if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){							
+								if($datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo']==TIPO_DEV){							
 								
 								//MÓDULO ACADÉMICO
 								if(!empty($arregloModulos) && array_key_exists(1, $arregloModulos)){
@@ -369,7 +369,7 @@
 							
 							<?php 
 							//MENÚ DOCENTES
-							if($datosUsuarioActual['uss_tipo']==2){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 							
 							<li class="nav-item" data-step="13" data-intro="<b>Cargas académicas:</b> Aquí encontrarás las cargas académicas que los directivos te han asignado para trabajar. Debes seleccionar una carga primero, antes de empezar a llenar cualquier información como calificaciones, actividades, foros, etc." data-position='right' data-scrollTo='tooltip'>
 	                            <a href="cargas.php" class="nav-link nav-toggle"> <i class="material-icons">class</i>
