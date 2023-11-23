@@ -17,6 +17,7 @@
 			OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
 			OR fcu_detalle LIKE '%".$busqueda."%' 
 			OR fcu_observaciones LIKE '%".$busqueda."%'
+			OR fcu_id LIKE '%".$busqueda."%'
 		)";
 	}
 	$usuario = '';
