@@ -50,7 +50,7 @@ while($datosInstituciones=mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH))
     if($dfDias==1){$falta="1 dia";}
 
     //CONSULTAMOS DIRECTIVOS ACTIVOS DE LA INSTITUCION
-    $conexionUsuarios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $datosInstituciones['ins_bd']."_".date("Y"));
+    $conexionUsuarios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, BD_ADMIN);
     $directivosConsulta = mysqli_query($conexionUsuarios, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 AND uss_estado=1 AND uss_permiso1='".CODE_PRIMARY_MANAGER."' AND institucion={$datosInstituciones['ins_id']} AND year='".date('Y')."'");
     
     //CICLO PARA ENVIAR CORREO A DIRECTIVOS
