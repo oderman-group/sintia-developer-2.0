@@ -182,7 +182,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														$mostrarNumCargas = '';
 														if( $resultado['uss_tipo'] == TIPO_DOCENTE ) {
 															try{
-																$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_docente='".$resultado['uss_id']."'");
+																$consultaNumCarga=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_docente='".$resultado['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}

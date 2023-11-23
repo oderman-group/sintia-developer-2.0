@@ -142,19 +142,19 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     <?php
 	//AREAS
 	$contador=1;
-	$areas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+	$areas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'
+	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
 	GROUP BY am.mat_area
 	");
 	
 	while($area = mysqli_fetch_array($areas, MYSQLI_BOTH)){
 		//OBTENER EL PROMEDIO POR AREA
-		$asignaturas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+		$asignaturas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 		INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
+		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
 		$a = 0;
 		$promedioArea = 0;
 		while($asignatura = mysqli_fetch_array($asignaturas, MYSQLI_BOTH)){
@@ -185,10 +185,10 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         </tr>
 	<?php 
 	//ASIGNATURAS
-	$conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
+	$conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."'");
+	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 
 		$consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 

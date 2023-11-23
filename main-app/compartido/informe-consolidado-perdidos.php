@@ -34,11 +34,11 @@ include("../compartido/head-informes.php") ?>
 			$consultaCurso = Grados::obtenerDatosGrados($curso);
 			$datosCurso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 
-			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1");
+			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 			$numCargasPorCurso = mysqli_num_rows($cargas); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-				$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+				$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 			?>
             <th style="font-size:9px; text-align:center; border:groove;" width="5%"><?=$materia['mat_nombre'];?></th>
@@ -60,17 +60,17 @@ include("../compartido/head-informes.php") ?>
             <td style="font-size:9px;"><?=$resultado[1];?></td>
             <td style="font-size:9px;"><?=$nombreCompleto?></td>
             <?php
-			$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1"); 
+			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 				//PRUEBA CONSULTA PHP 8
-				$consultaMaterias= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga[4]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+				$consultaMaterias= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
 				$p = 1;
 				$porcPeriodo = array("",0.25,0.25,0.25,0.25);
 				$defPorMateria = 0;
 				//PERIODOS DE CADA MATERIA
 				while($p<=$config[19]){
-					$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+					$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga['car_id']."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 					if(!empty($boletin['bol_nota']) && $boletin['bol_nota']<$config[5]){$color = $config[6];} elseif(!empty($boletin['bol_nota']) && $boletin['bol_nota']>=$config[5]) {$color = $config[7];}
 					//$defPorMateria += $boletin['bol_nota'];

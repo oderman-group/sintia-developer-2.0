@@ -20,7 +20,7 @@ class MediaTecnicaServicios extends Servicios
       global $baseDatosServicios, $config;
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
       INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
-      INNER JOIN academico_cargas ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo
+      INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
       INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
       INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 	    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}

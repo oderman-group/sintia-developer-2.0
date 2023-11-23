@@ -110,15 +110,15 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
 														}
 													}
-													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE (car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."')".$filtroOr);
+													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 													?>
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td style="text-align:center;"><?=$rCargas[0];?></td>
+														<td style="text-align:center;"><?=$rCargas['car_id'];?></td>
 														<td><?=$rDatos[1];?></td>
 
 														<?php
@@ -141,7 +141,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
-															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual[0]."' AND bol_carga='".$rCargas[0]."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$rCargas['car_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
@@ -165,7 +165,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?=$notaFinal."<br>".$tipo;?></a>
+																<a href="calificaciones.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?=$notaFinal."<br>".$tipo;?></a>
 															</td>
 														<?php		
 														 }
@@ -173,7 +173,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															if(!empty($sumaPorcentaje)){
 																$definitiva = ($definitiva / $sumaPorcentaje);
 															}
-															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual[0]." AND niv_id_asg='".$rCargas[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual['mat_id']." AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);

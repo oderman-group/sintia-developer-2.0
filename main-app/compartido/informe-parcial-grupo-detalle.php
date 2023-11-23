@@ -50,17 +50,17 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
                                     <!-- BEGIN -->
                                     <tbody>
                                     <?php
-									$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
+									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
 									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 									INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 									INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."'){$filtroOR}");
+									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."') AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} {$filtroOR}");
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 										//DEFINITIVAS
-										$carga = $rCargas[0];
+										$carga = $rCargas['car_id'];
 										$periodo = $config[2];
 										$estudiante = $matriculadosDatos['mat_id'];
 										include("../definitivas.php");
@@ -75,7 +75,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
                     }
 									?>
                                     <tr id="data1" class="odd gradeX">
-                                        <td style="text-align:center;"><?=$rCargas[0];?></td>
+                                        <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
                                         <td><?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></td>
                                         <td><?=$rCargas['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>

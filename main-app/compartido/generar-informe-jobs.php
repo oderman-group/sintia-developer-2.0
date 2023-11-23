@@ -184,10 +184,10 @@ $mensaje="";
 		}
     
 	
-		mysqli_query($conexion, "UPDATE academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."'");
-		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM academico_cargas ac
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-		WHERE  car_id='".$carga."'"));
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
+		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$anio}
+		WHERE  car_id='".$carga."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$anio}"));
 		$respuesta ="
 		<h4>Resumen del proceso:</h4>
 		- Total estudiantes calificados: {$numEstudiantes}<br><br>

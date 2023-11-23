@@ -15,7 +15,7 @@ if(empty($_POST["fechaInforme"])) $_POST["fechaInforme"] = '2000-12-31';
 if(empty($_POST["posicion"])) $_POST["posicion"] = '0';
 
 try{
-	mysqli_query($conexion, "UPDATE academico_cargas SET car_valor_indicador='".$_POST["indicadores"]."', car_configuracion='".$_POST["calificaciones"]."', car_fecha_generar_informe_auto='".$_POST["fechaInforme"]."', car_posicion_docente='".$_POST["posicion"]."' WHERE car_id='".$cargaConsultaActual."'");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_valor_indicador='".$_POST["indicadores"]."', car_configuracion='".$_POST["calificaciones"]."', car_fecha_generar_informe_auto='".$_POST["fechaInforme"]."', car_posicion_docente='".$_POST["posicion"]."' WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
