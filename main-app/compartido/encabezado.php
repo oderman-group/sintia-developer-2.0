@@ -5,7 +5,7 @@ if(isset($_GET["idNotify"]) and is_numeric($_GET["idNotify"])){
 	include("../compartido/reporte-errores.php");
 }
 $institucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-WHERE ins_bd='".$_SESSION["inst"]."' AND ins_enviroment='".ENVIROMENT."'");
+WHERE ins_id='".$_SESSION["idInstitucion"]."' AND ins_enviroment='".ENVIROMENT."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $institucionNombre = $institucion['ins_siglas'];
@@ -186,7 +186,7 @@ $institucionNombre = $institucion['ins_siglas'];
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li><a href="perfil.php"><i class="icon-user"></i><?=$frases[256][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                <?php if($datosUsuarioActual['uss_tipo'] == 4 && $config['conf_cambiar_clave_estudiantes'] == 'NO') { }else{?>
+                                <?php if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE && $config['conf_cambiar_clave_estudiantes'] == 'NO') { }else{?>
                                     <li><a href="cambiar-clave.php"><i class="icon-lock"></i><?=$frases[253][$datosUsuarioActual['uss_idioma']];?></a></li>
                                 <?php }?>
 								

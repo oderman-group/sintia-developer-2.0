@@ -79,7 +79,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
 												$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 												
-												if(empty($ingresoClase[0])){continue;}
+												if(empty($ingresoClase['hil_id'])){continue;}
 											?>
 											<li class="list-group-item">
 												<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
@@ -102,7 +102,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 									<?php 
 									if(!empty($datosConsultaBD['cls_meeting']) and !empty($datosConsultaBD['cls_clave_docente']) and !empty($datosConsultaBD['cls_clave_estudiante'])){
 										
-										if($datosUsuarioActual['uss_tipo']==2){
+										if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){
 											$nombreSala = trim($datosCargaActual['mat_nombre'])."_".trim($datosCargaActual['gra_nombre'])."_".trim($datosCargaActual['gru_nombre']);
 									?>
 										
@@ -118,7 +118,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										
 									<?php 
 										}
-										if($datosUsuarioActual['uss_tipo']==4){
+										if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){
 									?>
 								
 											<input id="meetingID" name="meetingID" value="<?=$datosConsultaBD['cls_meeting'];?>" type="hidden">
@@ -139,7 +139,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="card-head">
 											<header><?=$datosConsultaBD['cls_tema'];?></header>
 											
-											<?php if($datosUsuarioActual['uss_tipo']==2){?>
+											<?php if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 												<button id ="panel-p"  class = "mdl-button mdl-js-button mdl-button--icon pull-right">
 													<i class = "material-icons">more_vert</i>
 												</button>

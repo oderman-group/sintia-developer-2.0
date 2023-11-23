@@ -60,7 +60,7 @@
 																	<br>
 																	--- --- ---
 																	<p>    Cordialmente, </p>
-																	<small><b><?=strtoupper($datosUsuarioActual[4].' '.$datosUsuarioActual["uss_nombre2"].' '.$datosUsuarioActual["uss_apellido1"].' '.$datosUsuarioActual["uss_apellido2"]);?></b></small>
+																	<small><b><?=strtoupper($datosUsuarioActual['uss_nombre'].' '.$datosUsuarioActual["uss_nombre2"].' '.$datosUsuarioActual["uss_apellido1"].' '.$datosUsuarioActual["uss_apellido2"]);?></b></small>
 																</textarea>
 		                                                    </div>
 															

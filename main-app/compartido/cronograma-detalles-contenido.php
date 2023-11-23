@@ -13,11 +13,11 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <?php if($datosUsuarioActual['uss_tipo']==4){?>
+                                <?php if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){?>
 									<li><a class="parent-item" href="cronograma-calendario.php"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 								<?php }?>
 								
-								<?php if($datosUsuarioActual['uss_tipo']==3){?>
+								<?php if($datosUsuarioActual['uss_tipo']==TIPO_ACUDIENTE){?>
 									<li><a class="parent-item" href="notas-actuales.php?usrEstud=<?=$_GET["usrEstud"];?>">Defintivas actuales</a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<li><a class="parent-item" href="cronograma-actividades.php?carga=<?=$_GET["carga"];?>&periodo=<?=$_GET["periodo"];?>&usrEstud=<?=$_GET["usrEstud"];?>"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 								<?php }?>
@@ -61,11 +61,11 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 													</div>
 											</div>
 
-										<?php if($datosUsuarioActual['uss_tipo']==4){?>
+										<?php if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){?>
 										<a href="cronograma-calendario.php" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php }?>
 										
-										<?php if($datosUsuarioActual['uss_tipo']==3){?>
+										<?php if($datosUsuarioActual['uss_tipo']==TIPO_ACUDIENTE){?>
 										<a href="cronograma-actividades.php?carga=<?=$_GET["carga"];?>&periodo=<?=$_GET["periodo"];?>&usrEstud=<?=$_GET["usrEstud"];?>" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php }?>
                                 </div>

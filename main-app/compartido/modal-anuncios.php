@@ -197,7 +197,7 @@ if($datosUsuarioActual['uss_preguntar_animo']==1){
 
 <?php
 //Mostrar a los directivos si tiene deuda
-if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
+if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO){
 ?>
 <div class="modal fade" id="modalDeuda" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
 	   <div class="modal-dialog"  style="max-width: 1350px!important;">

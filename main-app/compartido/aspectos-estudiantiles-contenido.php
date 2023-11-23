@@ -30,12 +30,12 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                     <div class="row">
                         <div class="col-sm-12">
 
-                            <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
+                            <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO or $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){?>
                                 <a href="reportes-lista.php?est=<?=$_GET["idR"];?>&fest=<?=base64_encode(1);?>" class="btn btn-danger" target="_blank"><?=strtoupper($frases[248][$datosUsuarioActual['uss_idioma']]);?></a>
                             <?php }?>
                             
 
-                            <?php if($datosUsuarioActual['uss_tipo'] == 5){?>
+                            <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO){?>
 
                                 <a href="estudiantes-editar.php?idR=<?=$_GET["idR"];?>" class="btn btn-info" target="_blank"><?=strtoupper($frases[291][$datosUsuarioActual['uss_idioma']]);?></a>
 
@@ -124,7 +124,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                             </div>
 
 
-                           <?php if($datosUsuarioActual['uss_tipo'] == 5 or $datosUsuarioActual['uss_tipo'] == 2){?>
+                           <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO or $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){?>
                             <div class="card card-box">
                                 <div class="card-head">
                                     <header><?=$frases[292][$datosUsuarioActual['uss_idioma']];?></header>
@@ -274,7 +274,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                                 <td><?php if(!empty($aspectos['dn_aspecto_academico'])){ echo $aspectos['dn_aspecto_academico'];}?></td>
                                                 <td><?php if(!empty($aspectos['dn_aspecto_convivencial'])){ echo $aspectos['dn_aspecto_convivencial'];}?></td>
                                                 <td>
-                                                    <?php if($datosUsuarioActual['uss_tipo'] == 5 && !empty($aspectos)){
+                                                    <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !empty($aspectos)){
                                                         $href='../compartido/aspectos-estudiantiles-eliminar-docentes.php?idA='.$aspectos['dn_id'].'&idR='.$_GET["idR"];?>
                                                         <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>
                                                     <?php }?>
@@ -344,7 +344,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                     <td><?=$aspectos['mata_tratamiento'];?></td>
 
                                     <td>
-                                                            <?php if($aspectos['mata_aprobacion_acudiente']==0 and $datosUsuarioActual['uss_tipo'] == 3){?> 
+                                                            <?php if($aspectos['mata_aprobacion_acudiente']==0 and $datosUsuarioActual['uss_tipo'] == TIPO_ACUDIENTE){?> 
                                                                 <a href="#reportes-disciplinarios.php?usrEstud=<?=$_GET["usrEstud"];?>&req=1&id=<?=$aspectos['dr_id'];?>">Firmar</a>
                                                             <?php } else{?>
                                                                 <i class="fa fa-check-circle" title="<?=$aspectos['mata_aprobacion_acudiente_fecha'];?>"></i>
@@ -352,7 +352,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                     </td>
 
                                     <td>
-                                        <?php if($datosUsuarioActual['uss_tipo'] == 5){
+                                        <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO){
                                             $href='../compartido/aspectos-estudiantiles-eliminar.php?idA='.$aspectos['mata_id'].'&idR='.$_GET["idR"];
                                             ?>
                                             <a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','<?= $href ?>')" class="btn btn-danger">X</a>

@@ -169,7 +169,7 @@
 						
 						<!-- Activity feed start -->
 						<div class="col-sm-7" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
-							<?php if($datosUsuarioActual['uss_tipo']==2 or $datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){?>
+							<?php if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE or $datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo']==TIPO_DEV){?>
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>
 

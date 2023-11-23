@@ -1,5 +1,6 @@
 <?php
 	require_once(ROOT_PATH."/main-app/class/Boletin.php");
+	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -76,7 +77,7 @@
 
 									<?php
 
-									if($datosUsuarioActual['uss_tipo']!=4){
+									if($datosUsuarioActual['uss_tipo']!=TIPO_ESTUDIANTE){
 
 									?>
 
@@ -96,7 +97,7 @@
 
 														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
 
-														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
+														<div class="profile-desc-item pull-right"><?=Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);;?></div>
 
 													</li>
 
@@ -236,7 +237,7 @@
 
 									//ESTUDIANTES
 
-									if($datosUsuarioActual['uss_tipo']==4){
+									if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){
 
 										include("filtro-cargas.php");
 
@@ -328,7 +329,7 @@
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
 														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
-														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 														$porNuevo = ($resultado['act_valor'] / 100);
 
@@ -400,7 +401,7 @@
 
 														$periodo = $periodoConsultaActual;
 
-														$estudiante = $datosEstudianteActual[0];
+														$estudiante = $datosEstudianteActual['mat_id'];
 
 														include("../definitivas.php");
 
@@ -416,7 +417,7 @@
 
 												<?php
 
-													if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) and $config['conf_sin_nota_numerica']==1){}else{
+													if(($datosUsuarioActual['uss_tipo']==TIPO_ACUDIENTE or $datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE) and $config['conf_sin_nota_numerica']==1){}else{
 
 													?>
 
