@@ -113,7 +113,7 @@ if($num>0)
 
 	$urlActual = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
-	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 ?>
 <!DOCTYPE html>
 <html lang="en">
