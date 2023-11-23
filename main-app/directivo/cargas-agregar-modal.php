@@ -34,7 +34,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             $disabled = '';
                             if ($opcionesDatos['uss_bloqueado'] == 1) $disabled = 'disabled';
                         ?>
-                            <option value="<?= $opcionesDatos[0]; ?>" <?= $disabled; ?>><?= $opcionesDatos['uss_usuario'] . " - " . UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos); ?></option>
+                            <option value="<?= $opcionesDatos['uss_id']; ?>" <?= $disabled; ?>><?= $opcionesDatos['uss_usuario'] . " - " . UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos); ?></option>
                         <?php } ?>
                     </select>
                     <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>

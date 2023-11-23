@@ -97,10 +97,10 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_docente']) $select = 'selected';
+														if($opcionesDatos['uss_id']==$datosEditar['car_docente']) $select = 'selected';
 														if($opcionesDatos['uss_bloqueado']==1) $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
+                                                    	<option value="<?=$opcionesDatos['uss_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -122,7 +122,7 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_curso']) $select = 'selected';
+														if($opcionesDatos['gra_id']==$datosEditar['car_curso']) $select = 'selected';
 														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
 													?>
                                                     	<option value="<?=$opcionesDatos['gra_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
@@ -172,7 +172,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['car_materia']) $select = 'selected';
+														if($opcionesDatos['mat_id']==$datosEditar['car_materia']) $select = 'selected';
 													?>
                                                     	<option value="<?=$opcionesDatos['mat_id'];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
