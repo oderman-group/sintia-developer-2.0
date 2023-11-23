@@ -61,7 +61,7 @@
 														<?php
 														while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$datos[0];?>" <?php if($datos[0]==$idFolderCarpetaActual){echo "selected";}?>><?=$datos['fold_nombre']?></option>
+															<option value="<?=$datos['fold_id'];?>" <?php if($datos['fold_id']==$idFolderCarpetaActual){echo "selected";}?>><?=$datos['fold_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>

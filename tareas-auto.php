@@ -305,7 +305,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
-			if($datosRelacionados[0]!=""){
+			if(!empty($datosRelacionados[0])){
 				if($cDat['corr_tipo']==1){
 					$contenidoMsj .= '
 						<h3 align="center">REGISTRO DE NOTA</h3>
@@ -381,7 +381,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
-			if($datosRelacionados[0]!=""){
+			if(!empty($datosRelacionados[0])){
 
 				$contenidoMsj .= '
 					<h3 align="center">RECUPERACIÓN DE PERIODO</h3>
@@ -414,7 +414,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		<b>TOTAL NOVEDADES:</b> '.$novedades.'
 	';
 
-	if($acudiente['uss_email']!=""){
+	if(!empty($acudiente['uss_email'])){
 		$mensajesEnviados++;
 
 		$data = [

@@ -31,9 +31,9 @@ if (!empty($_GET["busqueda"])) {
                     $categorias = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".categorias_productos");
                     while ($cate = mysqli_fetch_array($categorias, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if (!empty($_GET["cat"]) && $cat==$cate[0]){ $estiloResaltado = 'style="color: orange;"';}
+                        if (!empty($_GET["cat"]) && $cat==$cate['catp_id']){ $estiloResaltado = 'style="color: orange;"';}
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?cat=<?= base64_encode($cate[0]); ?>" <?= $estiloResaltado; ?>><span><?= strtoupper($cate['catp_nombre']); ?></span></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?cat=<?= base64_encode($cate['catp_id']); ?>" <?= $estiloResaltado; ?>><span><?= strtoupper($cate['catp_nombre']); ?></span></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;"><?= strtoupper($frases[180][$datosUsuarioActual['uss_idioma']]); ?></a>
                 </div>

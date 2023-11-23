@@ -4,7 +4,7 @@
 
 						<?php 
 							//DOCENTES
-							if($datosUsuarioActual['uss_tipo']==2){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 							<?php include("info-carga-actual.php");?>
 						<?php }?>
 							
@@ -97,7 +97,7 @@
 														<?php
 														while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$datos[0];?>" <?php if($datos[0]==$datosConsulta['fold_padre']){echo "selected";}?>><?=$datos['fold_nombre']?></option>
+															<option value="<?=$datos['fold_id'];?>" <?php if($datos['fold_id']==$datosConsulta['fold_padre']){echo "selected";}?>><?=$datos['fold_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>

@@ -37,7 +37,7 @@
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	
-													    <option value="<?=$infoDatos[0];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
+													    <option value="<?=$infoDatos['svcat_id'];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
 													<?php }?>	
 													</select>
 													<span style="color: navy;">Seleccione al menos un sector.</span>
