@@ -74,19 +74,19 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 													</tr>
 													<tr>
 														<td colspan="2"></td>
-														<td><strong><?=number_format($e[12],0,".",".");?></strong></td>
+														<td><strong><?=number_format($e['mat_documento'],0,".",".");?></strong></td>
 													</tr>
 													<tr class="info">
 														<td colspan="2"></td>
-														<td><?=$e[15];?></strong></td>
+														<td><?=$e['mat_direccion'];?></strong></td>
 													</tr>
 													<tr>
 														<td colspan="2"></td>
-														<td><?=$e[17];?></td>
+														<td><?=$e['mat_telefono'];?></td>
 													</tr>
 													<tr>
 														<td colspan="2"></td>
-														<td><?=$e[9];?></td>
+														<td><?=$e['mat_fecha_nacimiento'];?></td>
 													</tr>
 												</tbody>
                                             </table>
@@ -112,12 +112,12 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 													?>		
 															<!-- BEGIN PRODUCT INFO -->
 															<tr>
-															<td><?=$resultado[0];?></td>
-															<td><?=$resultado[1];?></td>
-															<td><?=$resultado[2];?></td>
+															<td><?=$resultado['fcu_id'];?></td>
+															<td><?=$resultado['fcu_fecha'];?></td>
+															<td><?=$resultado['fcu_detalle'];?></td>
 															<td><?php if(!empty($resultado['fcu_valor'])) echo "$".number_format($resultado['fcu_valor'],2,".",",");?></td>
 															<td><a href="javascript:void(0);" 
-															onClick="sweetConfirmacion('Alerta!','Desea anular este movimiento?','question','movimientos-anular.php?idR=<?=base64_encode($resultado[0]);?>&id=<?=$_GET["id"];?>')"
+															onClick="sweetConfirmacion('Alerta!','Desea anular este movimiento?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=$_GET["id"];?>')"
 															><img src="../files/iconos/1363803022_001_052.png"></a></td>
 															</tr>
 															<!-- END PRODUCT INFO -->

@@ -64,7 +64,7 @@
 													<?php
 													while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$datos[0];?>"><?=$datos['catp_nombre']?></option>
+                                                    	<option value="<?=$datos['catp_id'];?>"><?=$datos['catp_nombre']?></option>
 													<?php }?>
                                                 </select>
                                             </div>

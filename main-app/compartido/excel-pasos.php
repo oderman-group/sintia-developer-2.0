@@ -59,8 +59,8 @@ include("../../config-general/consulta-usuario-actual.php");
                 }
             ?>
                 <tr>
-                    <td><?= $resultado[12]; ?></td>
-                    <td><?= strtoupper($resultado[3] . " " . $resultado[4] . " " . $resultado[5]); ?></td>
+                    <td><?= $resultado['mat_documento']; ?></td>
+                    <td><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres']); ?></td>
                     <td><?= $resultado["gra_nombre"]; ?></td>
                     <td align="center" bgcolor="<?= $colorProceso; ?>"><?= $iniciaProceso[$resultado["mat_iniciar_proceso"]]; ?></td>
                     <td align="center"><?= $estadoProceso[$resultado["mat_actualizar_datos"]]; ?></td>

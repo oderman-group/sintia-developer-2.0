@@ -201,14 +201,14 @@ $(document).ready(function() {
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														if(
-														($opcionesDatos[0] == TIPO_DEV || $opcionesDatos[0] == TIPO_ESTUDIANTE ) 
+														($opcionesDatos['pes_id'] == TIPO_DEV || $opcionesDatos['pes_id'] == TIPO_ESTUDIANTE ) 
 														&& $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO) {
                                                             continue;
                                                         }
 														$select = '';
-														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
+														if($opcionesDatos['pes_id']==$datosUsuario['tipoUsuario']) $select = 'selected';
 													?>
-                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?>>
+                                                <option value="<?=$opcionesDatos['pes_id'];?>" <?=$select;?>>
                                                     <?=$opcionesDatos['pes_nombre'];?></option>
                                                 <?php }?>
                                             </select>
@@ -250,10 +250,10 @@ $(document).ready(function() {
                                             <select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                    if($o[0]==$datosUsuario['tipoD'])
-                                                    echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+                                                    if($o['ogen_id']==$datosUsuario['tipoD'])
+                                                    echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
                                                 else
-                                                    echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+                                                    echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
                                                 }?>
                                             </select>
                                         </div>

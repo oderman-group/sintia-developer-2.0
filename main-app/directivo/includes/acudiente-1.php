@@ -96,7 +96,7 @@
 													<select class="form-control" name="generoA" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$acudiente[16])
+															if($o[0]==$acudiente['uss_genero'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	

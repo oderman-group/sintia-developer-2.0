@@ -105,9 +105,9 @@ if($config['conf_id_institucion'] == ICOLVEN){
                                                     $opcionesG = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".opciones_generales WHERE ogen_grupo=3");
                                                     while ($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)) {
                                                     ?>
-						                                <option value="<?= $opg[0]; ?>" <?php if ($opg[0] == $datosEstudianteActual["mat_estrato"]) {
+						                                <option value="<?= $opg['ogen_id']; ?>" <?php if ($opg['ogen_id'] == $datosEstudianteActual["mat_estrato"]) {
                                                                                             echo "selected";
-                                                                                        } ?>><?= $opg[1]; ?></option>
+                                                                                        } ?>><?= $opg['ogen_nombre']; ?></option>
 						                            <?php } ?>
 						                        </select>
 						                    </div>

@@ -77,7 +77,7 @@ include("../compartido/head-informes.php") ?>
   border-color:#41c4c4;
   ">
       <td><?=$resultado['mat_id'];?></td>
-      <td><?=$resultado[12];?></td>
+      <td><?=$resultado['mat_documento'];?></td>
       <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>

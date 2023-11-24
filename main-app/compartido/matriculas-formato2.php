@@ -30,15 +30,15 @@ include("../head.php");
  <table width="100%" cellpadding="3" cellspacing="0" border="1" rules="groups" align="center" style="font-size:12px;">
     
     <tr>
-    	<td>Fecha Matricula:&nbsp;<b><?=$resultado[2];?></b></td>
-        <td>C&oacute;digo Estudiante:&nbsp;<b><?=$resultado[1];?></b></td>
-        <td>No. Documento:&nbsp;<b><?=$resultado[12];?></b></td>
+    	<td>Fecha Matricula:&nbsp;<b><?=$resultado['mat_fecha'];?></b></td>
+        <td>C&oacute;digo Estudiante:&nbsp;<b><?=$resultado['mat_matricula'];?></b></td>
+        <td>No. Documento:&nbsp;<b><?=$resultado['mat_documento'];?></b></td>
         <td>No. Matrícula:&nbsp;<b><?=$resultado['mat_numero_matricula'];?></b></td>
         <td>Folio:&nbsp;<b><?=$resultado['mat_folio'];?></b></td>
     </tr>
     
     <tr>
-        <td>Apellidos:&nbsp;<b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
+        <td>Apellidos:&nbsp;<b><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']);?></b></td>
         <td>Nombres:&nbsp;<b><?=strtoupper($resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></b></td>
         <td>Curso:&nbsp;<b><?=$resultado['gra_nombre'];?></b></td>
         <td colspan="2">Grupo:&nbsp;<b><?=$resultado['gru_nombre'];?></b></td>
@@ -74,7 +74,7 @@ else{
 ?> 
   <span style="font-size:10px;">
  	Url: <b>http://plataformasintia.com/icolven/</b><br>
-    Usuario: <b><?=$resultado[1];?></b><br>
+    Usuario: <b><?=$resultado['mat_documento'];?></b><br>
     Contrase&ntilde;a: <b><?=$msj;?></b><br>
  </span> 
 <br> 

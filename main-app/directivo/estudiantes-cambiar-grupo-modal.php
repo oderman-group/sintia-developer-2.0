@@ -37,7 +37,7 @@ require_once("../class/Estudiantes.php");
 
 
             <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-                <input type="hidden" value="<?= $e[0]; ?>" name="estudiante">
+                <input type="hidden" value="<?= $e['mat_id']; ?>" name="estudiante">
 
 
                 <div class="form-group row">
@@ -80,7 +80,7 @@ require_once("../class/Estudiantes.php");
                             <option value="0"></option>
                             <?php
                             while ($c = mysqli_fetch_array($consulta_cargas, MYSQLI_BOTH)) {
-                                if ($c["gru_id"] == $e[7])
+                                if ($c["gru_id"] == $e['mat_grupo'])
                                     echo '<option value="' . $c["gru_id"] . '" selected style="color:blue; font-weight:bold;">Actual: ' . $c["gru_nombre"] . '</option>';
                                 else
                                     echo '<option value="' . $c["gru_id"] . '">' . $c["gru_nombre"] . '</option>';

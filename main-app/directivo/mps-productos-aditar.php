@@ -140,11 +140,11 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos WHERE catp_eliminado!=1");
                                                     while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                         $selected='';
-                                                        if($datos[0]==$infoDatos['prod_categoria']){
+                                                        if($datos['catp_id']==$infoDatos['prod_categoria']){
                                                             $selected='selected';
                                                         }
                                                 ?>
-                                                    <option value="<?=$datos[0];?>" <?=$selected?>><?=$datos['catp_nombre']?></option>
+                                                    <option value="<?=$datos['catp_id'];?>" <?=$selected?>><?=$datos['catp_nombre']?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
@@ -159,11 +159,11 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_eliminado!=1");
                                                     while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                         $selected='';
-                                                        if($datos[0]==$infoDatos['prod_empresa']){
+                                                        if($datos['emp_id']==$infoDatos['prod_empresa']){
                                                             $selected='selected';
                                                         }
                                                 ?>
-                                                    <option value="<?=$datos[0];?>" <?=$selected?>><?=$datos['emp_nombre']?></option>
+                                                    <option value="<?=$datos['emp_id'];?>" <?=$selected?>><?=$datos['emp_nombre']?></option>
                                                 <?php }?>
                                             </select>
                                         </div>

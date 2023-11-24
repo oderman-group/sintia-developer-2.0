@@ -137,7 +137,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
 														$nombreAcudiente = '';
-														if (isset($acudiente[0])) {
+														if (isset($acudiente['uss_id'])) {
 															$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente); 
 															$idAcudiente = $acudiente['uss_id'];
 														}
@@ -204,7 +204,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?=$resultado['uss_usuario'];?></td>
 														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
 														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
-															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente[0]);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
+															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente['uss_id']);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
 

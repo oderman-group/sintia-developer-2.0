@@ -378,7 +378,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 select.appendChild(option<?=$cont?>);
 
                                                                 // Establecer la opción que estará seleccionada por defecto (por ejemplo, Opción 2)
-                                                                if (grupoEstu == <?=$rv[0]?>) {
+                                                                if (grupoEstu == <?=$rv['gru_id']?>) {
                                                                     option<?=$cont?>.selected = true;
                                                                 }
                                                         <?php

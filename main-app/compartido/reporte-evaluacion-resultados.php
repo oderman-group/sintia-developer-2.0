@@ -98,7 +98,7 @@ while($preg = mysqli_fetch_array($preguntas, MYSQLI_BOTH)){
         <td>Cant.</td>
     </tr>
 <?php	
-	$rpp = mysqli_query($conexion, "SELECT resg_id_respuesta, count(resg_id_respuesta) as cant FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_pregunta='".$preg[0]."' AND resg_id_asignacion='".$_GET["a"]."' group by resg_id_respuesta");
+	$rpp = mysqli_query($conexion, "SELECT resg_id_respuesta, count(resg_id_respuesta) as cant FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_pregunta='".$preg['pregg_id']."' AND resg_id_asignacion='".$_GET["a"]."' group by resg_id_respuesta");
 	while($rppD = mysqli_fetch_array($rpp, MYSQLI_BOTH)){
     $consultaRespuesta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_respuestas WHERE resg_id='".$rppD['resg_id_respuesta']."'");
 		$respuesta = mysqli_fetch_array($consultaRespuesta, MYSQLI_BOTH);

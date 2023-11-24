@@ -36,16 +36,16 @@ require_once("../class/UsuariosPadre.php");
                     $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
 									?>
   <tr style="font-size:13px;">
-      <td><?=$resultado[0];?></td>
+      <td><?=$resultado['fcu_id'];?></td>
                                         <td><?=$nombreCompleto;?></td>
-                                        <td><?=$resultado[1];?></td>
-                                        <td><?=$resultado[2];?></td>
+                                        <td><?=$resultado['fcu_fecha'];?></td>
+                                        <td><?=$resultado['fcu_detalle'];?></td>
                                         <td>$<?=number_format($resultado['fcu_valor'],2,",",".");?></td>
                                         <td><?=$tipoEstadoFinanzas[$resultado['fcu_tipo']];?></td>
                                         <td><?=$formasPagoFinanzas[$resultado['fcu_forma_pago']];?></td>
                                         
                                         <td><?=$resultado['fcu_observaciones'];?></td>
-                                        <td><?=$resultado['fcu_cerrado'];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado[4]);?></td>
+                                        <td><?=$resultado['fcu_cerrado'];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado['uss_nombre']);?></td>
 </tr>
   <?php
   $cont++;

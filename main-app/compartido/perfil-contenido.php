@@ -157,7 +157,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_genero"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_genero"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -211,7 +211,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=7");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_nivel_academico"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_nivel_academico"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -227,7 +227,7 @@
 													");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_profesion"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['catp_id'];?>" <?php if($opg['catp_id']==$usuarioPerfil["uss_profesion"]){echo "selected";}?>><?=$opg['catp_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -253,7 +253,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=9");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estado_laboral"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_estado_laboral"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -272,7 +272,7 @@
 														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=10");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_tipo_negocio"]){echo "selected";}?>><?=$opg[1];?></option>
+															<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_tipo_negocio"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -297,7 +297,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_religion"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_religion"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -312,7 +312,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=8");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estado_civil"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_estado_civil"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -334,7 +334,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_estrato"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_estrato"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -349,7 +349,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=12");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_tipo_vivienda"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_tipo_vivienda"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -364,7 +364,7 @@
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=13");
 													while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 													?>
-														<option value="<?=$opg[0];?>" <?php if($opg[0]==$usuarioPerfil["uss_medio_transporte"]){echo "selected";}?>><?=$opg[1];?></option>
+														<option value="<?=$opg['ogen_id'];?>" <?php if($opg['ogen_id']==$usuarioPerfil["uss_medio_transporte"]){echo "selected";}?>><?=$opg['ogen_nombre'];?></option>
 													<?php }?>
                                                 </select>
                                             </div>

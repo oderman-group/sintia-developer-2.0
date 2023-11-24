@@ -71,7 +71,7 @@ $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 //PREGUNTAMOS SI EL ACUDIENTE EXISTE
 if ($acudienteNum > 0) {	
-	$idAcudiente = $acudienteDatos[0];
+	$idAcudiente = $acudienteDatos['uss_id'];
 } else {
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){

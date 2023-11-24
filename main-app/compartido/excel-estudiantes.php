@@ -73,7 +73,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             <td align="center"><?=$resultado['gra_nombre'];?></td>
             <td align="center"><?=$resultado['gru_nombre'];?></td>
             <td align="center"><?=$estadoM;?></td>
-            <td align="center"><?=$resultado[9];?></td>
+            <td align="center"><?=$resultado['mat_fecha_nacimiento'];?></td>
             <td align="center"><?php
             if(!empty($resultado['mat_lugar_nacimiento'])){
                 $lugarNacimiento = is_numeric($resultado['mat_lugar_nacimiento']) ?  $resultado['ciu_nombre']
@@ -84,17 +84,17 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             ?></td>
             <td align="center"><?=$resultado['ogen_nombre'];?></td>
             <td align="center"><?=$resultado['mat_documento'];?></td>
-            <td align="center"><?=$resultado[13];?></td>
-            <td align="center"><?=$resultado[15];?></td>
-            <td align="center"><?=$resultado[16];?></td>
-            <td align="center"><?=$resultado[17];?></td>
+            <td align="center"><?=$resultado['mat_lugar_expedicion'];?></td>
+            <td align="center"><?=$resultado['mat_direccion'];?></td>
+            <td align="center"><?=$resultado['mat_barrio'];?></td>
+            <td align="center"><?=$resultado['mat_telefono'];?></td>
             <td><?php
             if(!empty($resultado['mat_email'])){ 
                 echo strtolower($resultado['mat_email']);
             }    
             ?></td>
-			<td align="center"><?=$resultado[34];?></td>
-            <td align="center"><?=$resultado[35];?></td>
+			<td align="center"><?=$resultado['mat_folio'];?></td>
+            <td align="center"><?=$resultado['mat_codigo_tesoreria'];?></td>
             <td align="center"><?=$resultado['mat_numero_matricula'];?></td>
 
             <td><?=$datosA['ogen_nombre'];?></td>

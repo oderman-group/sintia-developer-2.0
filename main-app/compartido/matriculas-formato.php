@@ -183,7 +183,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
                                     <b>Codigo: </b>
                                   </td>
                                   <td width="380">
-                                    <div style="margin:0 0 0 10px"><?=$resultado[1];?></div>
+                                    <div style="margin:0 0 0 10px"><?=$resultado['mat_matricula'];?></div>
                                   </td>
                                 </tr>
                                 <tr style="background:#ffd300;" height="40">
@@ -200,7 +200,7 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric($_GET["ref"]) or $_SE
                                     <b>Documento: </b>
                                   </td>
                                   <td width="380">
-                                    <div style="margin:0 0 0 10px"><?=$resultado[12];?></div>
+                                    <div style="margin:0 0 0 10px"><?=$resultado['mat_documento'];?></div>
                                   </td>
                                 </tr>
                                

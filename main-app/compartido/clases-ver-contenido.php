@@ -64,9 +64,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<ul class="list-group list-group-unbordered">
 											<?php
 											$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
-											$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-											$cursoActual=GradoServicios::consultarCurso($datosCargaActual[2]);
-											$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$datosCargaActual[3]);
+											$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+											$cursoActual=GradoServicios::consultarCurso($datosCargaActual['car_curso']);
+											$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$datosCargaActual['car_grupo']);
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);

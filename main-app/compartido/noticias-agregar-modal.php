@@ -127,9 +127,9 @@
                                         include("../compartido/error-catch-to-report.php");
                                     }
                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                        if($opcionesDatos[0] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
+                                        if($opcionesDatos['pes_id'] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
                                 ?>
-                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['pes_nombre'];?></option>
+                                    <option value="<?=$opcionesDatos['pes_id'];?>"><?=$opcionesDatos['pes_nombre'];?></option>
                                 <?php }?>
                             </select>
                         </div>

@@ -1,5 +1,5 @@
 <?php
-if($datosUsuarioActual['uss_tipo']==5){
+if($datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO){
 	//Consultas a la BD
 	$contrato= mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".contratos WHERE cont_id=1");
 	$datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);

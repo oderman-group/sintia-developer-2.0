@@ -87,8 +87,8 @@ include("../compartido/head.php");
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
                                                          WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-                                                        if(!empty($notas[4])){
-                                                            if($notas[4]<$config[5] and $notas[4]!="") $colorNota = $config[6]; elseif($notas[4]>=$config[5]) $colorNota = $config[7];
+                                                        if(!empty($notas['dn_nota'])){
+                                                            if($notas['dn_nota']<$config[5] and $notas['dn_nota']!="") $colorNota = $config[6]; elseif($notas['dn_nota']>=$config[5]) $colorNota = $config[7];
                                                         }
 														
 														

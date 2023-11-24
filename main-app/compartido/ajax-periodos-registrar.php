@@ -34,15 +34,15 @@ if($num==0){
 	if($_POST["nota"]>$config[5]){
 		$consultaUsuarioResponsable=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$usuarioResponsable = mysqli_fetch_array($consultaUsuarioResponsable, MYSQLI_BOTH);
-		if($usuarioResponsable[1]=="") $usuarioResponsable[1]=0;
-		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia, alr_institucion, alr_year)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable[1]."',now(),0,1,2,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
+		if($usuarioResponsable['upe_id_usuario']=="") $usuarioResponsable['upe_id_usuario']=0;
+		mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".general_alertas(alr_nombre, alr_descripcion, alr_tipo, alr_usuario, alr_fecha_envio, alr_vista, alr_categoria, alr_importancia, alr_institucion, alr_year)VALUES('Recuperación de periodo','El estudiante ".$_POST["codEst"]." ha obtenido una nota de recuperacion de ".$_POST["nota"]."',1,'".$usuarioResponsable['upe_id_usuario']."',now(),0,1,2,'" . $config['conf_id_institucion'] . "','" . $_SESSION["bd"] . "')");
 		
 		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual['car_id']."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 
-		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable[1]);
+		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable['upe_id_usuario']);
 		//include("../compartido/email-alertas.php");
 		$fin =  '<html><body>';
 						$fin .= '
@@ -97,7 +97,7 @@ if($num==0){
 				
 						$sfrom="notificacion@plataformasintia.com"; //LA CUETA DEL QUE ENVIA EL MENSAJE
 				
-						$sdestinatario="notificacion@plataformasintia.com,".$acudiente[12]; //CUENTA DEL QUE RECIBE EL MENSAJE
+						$sdestinatario="notificacion@plataformasintia.com,".$acudiente['uss_email']; //CUENTA DEL QUE RECIBE EL MENSAJE
 				
 						$ssubject="FELICITACIONES: RECUPERACION DE PERIODO!"; //ASUNTO DEL MENSAJE 
 				

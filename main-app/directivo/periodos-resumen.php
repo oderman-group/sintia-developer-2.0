@@ -227,7 +227,7 @@ function niv(enviada){
 																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notaPeriodo?></a><br><?=$tipo;?><br>
 																<?php if(Modulos::validarPermisoEdicion()){?>
 																	<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?php if(!empty($notasResultado['bol_nota'])) echo $notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;" <?=$disabledPermiso;?>><br>
-																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
+																	<span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado['bol_observaciones'])) echo $notasResultado['bol_observaciones'];?></span>
 																<?php }?>
 															</td>
 														<?php		
@@ -282,7 +282,7 @@ function niv(enviada){
 															if($n==$datosCargaActual['gra_periodos']) $e = ''; else $e = 'disabled';
 															?>
 															<?php if(Modulos::validarPermisoEdicion()){?>
-																<input size="5" name="<?=$i?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
+																<input size="5" name="<?=$i?>" id="<?=$resultado['mat_id'];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 															<?php }?>
 														</td>
                                                     </tr>

@@ -46,11 +46,11 @@
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['alr_id'];?></td>
 														<td>
 															<a href="<?=$resultado['alr_url_acceso'];?>">
-																<span style="font-weight: bold;"><?=$resultado[1];?></span><br>
-																<span style="font-size: 12px;"><?=$resultado[2];?></span><br>
+																<span style="font-weight: bold;"><?=$resultado['alr_nombre'];?></span><br>
+																<span style="font-size: 12px;"><?=$resultado['alr_descripcion'];?></span><br>
 																<span style="font-size: 10px; color: slategrey;"><?="<b>".$msjFecha."</b> - ".$resultado['alr_fecha_envio'];?></span>
 															</a>	
 														</td>

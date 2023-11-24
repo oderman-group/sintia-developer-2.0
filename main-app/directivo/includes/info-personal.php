@@ -22,12 +22,12 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Código del Sistema</label>
 												<div class="col-sm-2">
-													<input type="text" name="matricula" class="form-control" readonly autocomplete="off" value="<?=$datosEstudianteActual[1];?>"  <?=$disabledPermiso;?>>
+													<input type="text" name="matricula" class="form-control" readonly autocomplete="off" value="<?=$datosEstudianteActual['mat_matricula'];?>"  <?=$disabledPermiso;?>>
 												</div>
 												
 												<label class="col-sm-2 control-label">Fecha de Matr&iacute;cula</label>
 												<div class="col-sm-2">
-													<input type="text" name="fechaMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[2];?>" disabled>
+													<input type="text" name="fechaMatricula" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_fecha'];?>" disabled>
 												</div>
 											</div>
 											
@@ -53,7 +53,7 @@
 													<select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosEstudianteActual[11])
+															if($o[0]==$datosEstudianteActual['mat_tipo_documento'])
 															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 														else
 															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
@@ -63,7 +63,7 @@
 												
 												<label class="col-sm-2 control-label">Número de documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nDoc" id="nDoc" required class="form-control" autocomplete="off" onChange="validarEstudiante(this)" value="<?=$datosEstudianteActual[12];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="nDoc" id="nDoc" required class="form-control" autocomplete="off" onChange="validarEstudiante(this)" value="<?=$datosEstudianteActual['mat_documento'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>	
 												
@@ -92,31 +92,31 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Folio</label>
 												<div class="col-sm-2">
-													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[34];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="folio" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_folio'];?>" <?=$disabledPermiso;?>>
 												</div>
 												
 												<label class="col-sm-2 control-label">Codigo Tesoreria</label>
 												<div class="col-sm-2">
-													<input type="text" name="codTesoreria" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[35];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="codTesoreria" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_codigo_tesoreria'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer apellido <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="apellido1" id="apellido1" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[3];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="apellido1" id="apellido1" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_primer_apellido'];?>" <?=$disabledPermiso;?>>
 												</div>
 												
 												<label class="col-sm-2 control-label">Segundo apellido</label>
 												<div class="col-sm-2">
-													<input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[4];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_segundo_apellido'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
 												<div class="col-sm-2">
-													<input type="text" name="nombres" id="nombres" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[5];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="nombres" id="nombres" required class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_nombres'];?>" <?=$disabledPermiso;?>>
 												</div>
 
 												<label class="col-sm-2 control-label">Otro Nombre</label>
@@ -189,7 +189,7 @@
 													<select class="form-control  select2" name="genero" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosEstudianteActual[8])
+															if($o[0]==$datosEstudianteActual['mat_genero'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
@@ -217,8 +217,8 @@
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="inclusion" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
-														<option value="1"<?php if ($datosEstudianteActual[37]==1){echo "selected";}?>>Si</option>
-														<option value="0"<?php if ($datosEstudianteActual[37]==0){echo "selected";}?>>No</option>
+														<option value="1"<?php if ($datosEstudianteActual['mat_inclusion']==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosEstudianteActual['mat_inclusion']==0){echo "selected";}?>>No</option>
 													</select>
 												</div>
 												
@@ -234,7 +234,7 @@
 													<select class="form-control  select2" name="religion" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosEstudianteActual[14])
+															if($o[0]==$datosEstudianteActual['mat_religion'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
@@ -248,8 +248,8 @@
 												<div class="col-sm-2">
 													<select class="form-control  select2" name="extran"  onChange="mostrar(this)" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
-														<option value="1"<?php if ($datosEstudianteActual[39]==1){echo "selected";}?>>Si</option>
-														<option value="0"<?php if ($datosEstudianteActual[39]==0){echo "selected";}?>>No</option>
+														<option value="1"<?php if ($datosEstudianteActual['mat_extranjero']==1){echo "selected";}?>>Si</option>
+														<option value="0"<?php if ($datosEstudianteActual['mat_extranjero']==0){echo "selected";}?>>No</option>
 													</select>
 												</div>
 											</div>
@@ -257,10 +257,10 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
 												<div class="col-sm-4">
-													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual[15];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_barrio'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-4">
-													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosEstudianteActual[16];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosEstudianteActual['mat_barrio'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
@@ -304,7 +304,7 @@
 													<select class="form-control  select2" name="estrato" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosEstudianteActual[19])
+															if($o[0]==$datosEstudianteActual['mat_estrato'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
@@ -316,10 +316,10 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
 												<div class="col-sm-2">
-													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosEstudianteActual[17];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosEstudianteActual['mat_telefono'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosEstudianteActual[18];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosEstudianteActual['mat_celular'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
 													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off" value="<?=$datosEstudianteActual['mat_celular2'];?>" <?=$disabledPermiso;?>>

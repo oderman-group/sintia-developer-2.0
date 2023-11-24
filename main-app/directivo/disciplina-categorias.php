@@ -116,7 +116,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                             <?php }?>
                                                                             
                                                                             <?php if(Modulos::validarSubRol(['DT0159'])) {?>
-                                                                                <li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
+                                                                                <li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado['dcat_id']);?>')">Eliminar</a></li>
                                                                             <?php }?>
                                                                         </ul>
                                                                     </div>
