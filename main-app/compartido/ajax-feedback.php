@@ -12,7 +12,7 @@ $respuesta = [
 
 try {
     // Preparar la consulta SQL
-    $sql = "INSERT INTO {$baseDatosServicios}.{$tableName}(fcls_id_clase, fcls_id_institucion, fcls_usuario, fcls_comentario, fcls_star) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
+    $sql = "INSERT INTO ".BD_ACADEMICA.".{$tableName}(fcls_id_clase, fcls_id_institucion, fcls_usuario, fcls_comentario, fcls_star) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE
 	fcls_comentario = VALUES(fcls_comentario),
 	fcls_star = VALUES(fcls_star)";
     
