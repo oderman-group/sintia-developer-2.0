@@ -289,8 +289,9 @@ class AjaxCalificaciones {
         $numD = mysqli_num_rows($consultaNumD);
 
         if($numD==0){
+            $idInsercion=Utilidades::generateCode("DN");
             try{
-                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$codEstudiante."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -336,8 +337,9 @@ class AjaxCalificaciones {
         $numD = mysqli_num_rows($consultaNumD);
 
         if($numD==0){
+            $idInsercion=Utilidades::generateCode("DN");
             try{
-                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".mysqli_real_escape_string($conexion,$observacion)."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$codEstudiante."','".$carga."','".mysqli_real_escape_string($conexion,$observacion)."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -386,9 +388,10 @@ class AjaxCalificaciones {
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
+                $idInsercion=Utilidades::generateCode("DN");
                 $accionBD = 1;
                 $datosDelete .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
-                $datosInsert .="('".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
+                $datosInsert .="('" .$idInsercion . "', '".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
             }else{
                 $accionBD = 2;
                 $datosUpdate .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
@@ -402,7 +405,7 @@ class AjaxCalificaciones {
             mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (".$datosDelete.")");
             
             
-            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES
             ".$datosInsert."
             ");
                 
@@ -599,7 +602,8 @@ class AjaxCalificaciones {
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 	
         if($numD==0){
-            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_academico, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$aspectoAcademico."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            $idInsercion=Utilidades::generateCode("DN");
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_aspecto_academico, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$codEstudiante."','".$carga."','".$aspectoAcademico."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         }else{
             mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_aspecto_academico='".$aspectoAcademico."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         }
@@ -633,7 +637,8 @@ class AjaxCalificaciones {
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 	
         if($numD==0){
-            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_aspecto_convivencial, dn_periodo, institucion, year)VALUES('".$codEstudiante."','".$carga."','".$aspectoConvivencial."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            $idInsercion=Utilidades::generateCode("DN");
+            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_aspecto_convivencial, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$codEstudiante."','".$carga."','".$aspectoConvivencial."', '".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         }else{
             mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_aspecto_convivencial='".$aspectoConvivencial."', dn_fecha_aspecto=now() WHERE dn_cod_estudiante='".$codEstudiante."'  AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         }

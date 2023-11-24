@@ -3,6 +3,7 @@ include("session.php");
 require_once("../class/Usuarios.php");
 require_once("../class/Estudiantes.php");
 require '../../librerias/Excel/vendor/autoload.php';
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -33,7 +34,7 @@ if($extension == 'xlsx'){
 			$arrayTodos = [];
 			$claves_validar = array('fcu_usuario', 'fcu_valor', 'fcu_tipo');
 			$tiposMovimientos = ['DEUDA'   => '1', 'A FAVOR'   => '2'];
-			$sql = "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, institucion, year)VALUES";
+			$sql = "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_id, fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, institucion, year)VALUES";
 			
 			$movimientosCreados     = array();
 			$movimientosNoCreados   = array();
@@ -110,7 +111,8 @@ if($extension == 'xlsx'){
 							}
 						}
 
-						$sql .="(now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
+						$idInsercion=Utilidades::generateCode("FCU");
+						$sql .="('" .$idInsercion . "', now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$movimientosCreados["FILA_".$f] = $arrayIndividual['fcu_usuario'];
 					} else {

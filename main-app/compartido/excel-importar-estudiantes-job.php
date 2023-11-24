@@ -227,8 +227,9 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 							} catch (Exception $e) {
 								SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 							}
+							$idInsercion=Utilidades::generateCode("UPE");
 							try{
-								mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."', {$config['conf_id_institucion']}, {$anio})");
+								mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."', {$config['conf_id_institucion']}, {$anio})");
 							} catch (Exception $e) {
 								SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 							}
