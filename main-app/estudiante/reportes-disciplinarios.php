@@ -62,11 +62,11 @@
 													 $filtro = '';
 													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
 													 INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
 													 INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
 													 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-													 WHERE dr_estudiante='".$datosEstudianteActual['mat_id_usuario']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+													 WHERE dr_estudiante='".$datosEstudianteActual['mat_id_usuario']."' AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]}
 													 $filtro
 													 ");
 													 $contReg = 1;
