@@ -2,7 +2,7 @@
     $nombrePagina="solicitudes.php";
     if(empty($_REQUEST["nume"])){$_REQUEST["nume"] = base64_encode(1);}
     try{
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
+        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".general_solicitudes 
         LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=soli_remitente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
         LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=soli_id_recurso AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
         WHERE soli_institucion='".$config['conf_id_institucion']."' 
