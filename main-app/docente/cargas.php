@@ -95,7 +95,7 @@ $_SESSION["configuracion"] = $config;
 										$seleccionado=false;
 
 										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if(!empty($_COOKIE["carga"]) && $rCargas[0]==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
+										if(!empty($_COOKIE["carga"]) && $rCargas['car_id']==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
 										
 										$cargaSP = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];

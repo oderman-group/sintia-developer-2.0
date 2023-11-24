@@ -110,7 +110,7 @@ if(
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
 
 												//Si no existe el indicador definitivo en la carga lo asociamos.
-												if(!empty($indicadorDefitnivo[0]) && $indicadorDefitnivo[0]==""){
+												if(!empty($indicadorDefitnivo[0])){
 													require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 													$codigo=Utilidades::generateCode("IPC");
 
@@ -153,7 +153,7 @@ if(
 													<?php
 													while($evidenciasDatos = mysqli_fetch_array($evidenciasConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$evidenciasDatos[0];?>"><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
+                                                    	<option value="<?=$evidenciasDatos['evid_id'];?>"><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
 													<?php }?>
                                                 </select>
                                             </div>

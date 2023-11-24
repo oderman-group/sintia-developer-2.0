@@ -49,13 +49,13 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
 											<?php
-                                                if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta[7])){
+                                                if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta['not_imagen'])){
                                                 $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                 $arrayDatos = json_encode($arrayEnviar);
                                                 $objetoEnviar = htmlentities($arrayDatos);
                                             ?>
 												<div class="item col-sm-4" id="reg<?=$datosConsulta['not_id']?>">
-													<img src="../files/publicaciones/<?=$datosConsulta[7];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
+													<img src="../files/publicaciones/<?=$datosConsulta['not_imagen'];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
 													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$datosConsulta['not_id'];?>" name="../compartido/noticias-eliminar-imagen.php?idR=<?=base64_encode($datosConsulta['not_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 												</div>
 												<p>&nbsp;</p>
@@ -155,10 +155,10 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                            if($opcionesDatos[0] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
-                                                            $selected=($destinatarios!="" && in_array($opcionesDatos[0], $destinatarios)) ? "selected" : "";
+                                                            if($opcionesDatos['pes_id'] == TIPO_DEV && $datosUsuarioActual['uss_tipo']!=TIPO_DEV){continue;}
+                                                            $selected=($destinatarios!="" && in_array($opcionesDatos['pes_id'], $destinatarios)) ? "selected" : "";
                                                     ?>
-                                                        <option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['pes_nombre'];?></option>
+                                                        <option value="<?=$opcionesDatos['pes_id'];?>" <?=$selected;?>><?=$opcionesDatos['pes_nombre'];?></option>
                                                     <?php }?>	
                                                 </select>
                                             </div>

@@ -95,7 +95,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             <td width="2%" rowspan="2">I.H.</td>
             
             <?php  for($j=1;$j<=$periodoActual;$j++){ ?>
-                <td width="3%" colspan="3"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$datosUsr[0];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j?></a></td>
+                <td width="3%" colspan="3"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$datosUsr['mat_id'];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j?></a></td>
             <?php }?>
             <td width="3%" colspan="3">Final</td>
         </tr> 

@@ -21,7 +21,7 @@ include("head.php");
   $filtroAdicional= "AND mat_grado='".base64_decode($_REQUEST["curso"])."'";
   $curso = Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
   while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-  $resultado = Estudiantes::obtenerDatosEstudiante($c[0]);
+  $resultado = Estudiantes::obtenerDatosEstudiante($c['mat_id']);
   $consultaTipo=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
@@ -39,22 +39,22 @@ include("head.php");
  <table width="100%" cellpadding="3" cellspacing="0" border="1" rules="groups" align="center" style="font-size:12px;">
     
     <tr>
-    	<td>Fecha Matricula:&nbsp;<b><?=$resultado[2];?></b></td>
-        <td>C&oacute;digo Estudiante:&nbsp;<b><?=$resultado[1];?></b></td>
-        <td>No. Documento:&nbsp;<b><?=$resultado[12];?></b></td>
+    	<td>Fecha Matricula:&nbsp;<b><?=$resultado['mat_fecha'];?></b></td>
+        <td>C&oacute;digo Estudiante:&nbsp;<b><?=$resultado['mat_matricula'];?></b></td>
+        <td>No. Documento:&nbsp;<b><?=$resultado['mat_documento'];?></b></td>
         <td>No. Matrícula:&nbsp;<b><?=$resultado['mat_numero_matricula'];?></b></td>
         <td>Folio:&nbsp;<b><?=$resultado['mat_folio'];?></b></td>
     </tr>
     
     <tr>
-        <td>Apellidos:&nbsp;<b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
-        <td>Nombres:&nbsp;<b><?=strtoupper($resultado[5]." ".$resultado[77]);?></b></td>
+        <td>Apellidos:&nbsp;<b><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']);?></b></td>
+        <td>Nombres:&nbsp;<b><?=strtoupper($resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></b></td>
         <td>Curso:&nbsp;<b><?=$resultado['gra_nombre'];?></b></td>
         <td colspan="2">Grupo:&nbsp;<b><?=$resultado['gru_nombre'];?></b></td>
     </tr>
     
     <tr>
-        <td colspan="3">Tipo Estudiante:&nbsp;<b><?=$tipo[1];?></b></td>
+        <td colspan="3">Tipo Estudiante:&nbsp;<b><?=$tipo['ogen_nombre'];?></b></td>
         <td>Fecha Nacimiento:&nbsp;<b><?=$resultado['mat_fecha_nacimiento'];?></b></td>
         <td>Genero:&nbsp;<b><?=$resultado['ogen_nombre'];?></b></td>
     </tr>

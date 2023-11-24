@@ -56,7 +56,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 												$definitiva += $notasResultado['bol_nota'];
 											}
 											if($notasResultado['bol_nota']<$config[5] and $notasResultado['bol_nota']!="")$color = $config[6]; elseif($notasResultado['bol_nota']>=$config[5]) $color = $config[7];
-											if($notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n</span>'; elseif($notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; else $tipo='';
+											if($notasResultado['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n</span>'; elseif($notasResultado['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; else $tipo='';
 											
 										?>
                                         	<td style="text-align:center; color:<?=$color;?>;">

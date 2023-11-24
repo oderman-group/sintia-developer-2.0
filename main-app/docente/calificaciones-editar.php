@@ -144,9 +144,9 @@ $porcentajeRestante = 100 - $valores[0];
 													<?php
 													while($evidenciasDatos = mysqli_fetch_array($evidenciasConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($evidenciasDatos[0]==$calificacion['act_id_evidencia']) $select = 'selected';
+														if($evidenciasDatos['evid_id']==$calificacion['act_id_evidencia']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$evidenciasDatos[0];?>" <?=$select;?>><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
+                                                    	<option value="<?=$evidenciasDatos['evid_id'];?>" <?=$select;?>><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
 													<?php }?>
                                                 </select>
                                             </div>

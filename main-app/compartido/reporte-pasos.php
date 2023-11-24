@@ -129,8 +129,8 @@ include("../compartido/head_informes.php");
     ?>
       <tr style="font-size:13px;">
         <td><?= $resultado['mat_id']; ?></td>
-        <td><?= $resultado[12]; ?></td>
-        <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?></a></td>
+        <td><?= $resultado['mat_documento']; ?></td>
+        <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado['mat_id']; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?></a></td>
         <td><?= $resultado["gra_nombre"]; ?></td>
         <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $iniciaProceso[$resultado["mat_iniciar_proceso"]]; ?></td>
         <td align="center"><?= $estadoProceso[$resultado["mat_actualizar_datos"]]; ?></td>

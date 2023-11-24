@@ -203,7 +203,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                 <?php
                                 if($n==$datosCargaActual['gra_periodos'] and $definitiva<$config[5]) $e = ''; else $e = 'disabled';
                                 ?>
-                                <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
+                                <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
                             </td>
                         </tr>
                         <?php

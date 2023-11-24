@@ -130,20 +130,20 @@
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$colorFondo = 'style="background: #FFF;"';
-												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
+												if($resultado['not_estado']==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones
 												INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=npr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-												WHERE npr_noticia='".$resultado[0]."'
+												WHERE npr_noticia='".$resultado['not_id']."'
 												ORDER BY npr_id DESC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
 												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones 
-												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
+												WHERE npr_noticia='".$resultado['not_id']."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
 												if($datosUsuarioActual['uss_tipo']==4){
 													include("verificar-usuario.php");
-													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
+													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado['not_id']."'");
 													$notCursoNum = mysqli_num_rows($noticiasCursos);
 													if($notCursoNum>0){
 														$noticiaPermitida=0;
@@ -265,8 +265,8 @@
 
                             <div class="panel-body">
                                 <p><?=$resultado['not_descripcion'];?></p>
-                                <?php if($resultado[7]!="" and file_exists('../files/publicaciones/'.$resultado[7])){?>
-                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado[7];?>"
+                                <?php if($resultado['not_imagen']!="" and file_exists('../files/publicaciones/'.$resultado['not_imagen'])){?>
+                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado['not_imagen'];?>"
                                             alt="<?=$resultado['not_titulo'];?>"></ah>
                                 </div>
                                 <p>&nbsp;</p>

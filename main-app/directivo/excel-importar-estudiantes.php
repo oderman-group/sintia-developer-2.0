@@ -238,8 +238,9 @@ if($extension == 'xlsx'){
 									include("../compartido/error-catch-to-report.php");
 								}
 
+								$idInsercion=Utilidades::generateCode("UPE");
 								try{
-									mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+									mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$datosEstudianteExistente['mat_id']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}

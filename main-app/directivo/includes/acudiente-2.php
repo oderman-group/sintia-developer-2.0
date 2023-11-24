@@ -97,7 +97,7 @@ $acudiente2 = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente
 		<select class="form-control" name="generoA2" <?=$disabledPermiso;?>>
 			<option value="">Seleccione una opción</option>
 			<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-				if($o[0]==$acudiente2[16])
+				if($o[0]==$acudiente2['uss_genero'])
 					echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 				else
 					echo '<option value="'.$o[0].'">'.$o[1].'</option>';	

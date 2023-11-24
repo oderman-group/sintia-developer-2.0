@@ -71,7 +71,7 @@ $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 //PREGUNTAMOS SI EL ACUDIENTE EXISTE
 if ($acudienteNum > 0) {	
-	$idAcudiente = $acudienteDatos[0];
+	$idAcudiente = $acudienteDatos['uss_id'];
 } else {
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
@@ -211,8 +211,9 @@ if ($_POST["tipoMatricula"]==GRADO_INDIVIDUAL && !empty($_POST["cursosAdicionale
 		include("../compartido/error-catch-to-report.php");
 	}
 }
+$idInsercion=Utilidades::generateCode("UPE");
 try{
-	mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('".$idAcudiente."', '".$idEstudiante."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+	mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$idEstudiante."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

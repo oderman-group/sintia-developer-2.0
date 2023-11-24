@@ -77,7 +77,7 @@ include("../compartido/head.php");
                                                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>
 													<tr>
-                                                        <td><?=$resultado[0];?></td>
+                                                        <td><?=$resultado['ogen_id'];?></td>
                                                         <td><?=$resultado["ogen_nombre"];?></td>
                                                         <td><?=$opcionesGenerales[$resultado['ogen_grupo']]?></td>
 														<td>

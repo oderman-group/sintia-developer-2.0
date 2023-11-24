@@ -140,7 +140,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
       <tr style="font-size:10px; height:25px;">
         <td align="center" width="2%"><?= $n; ?></td>
-        <td align="center" width="5%"><?= $e[0]; ?></td>
+        <td align="center" width="5%"><?= $e['mat_id']; ?></td>
         <td width="20%"><?= Estudiantes::NombreCompletoDelEstudiante($e)?></td>
       <?php
         $acomuladoNota=0;

@@ -73,7 +73,7 @@ $numero_periodos=$config["conf_periodo"];
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
     <tr>
     	<td>C&oacute;digo: <b><?=$datos_usr["mat_matricula"];?></b></td>
-        <td>Nombre: <b><?=strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"]);?></b></td>   
+        <td>Nombre: <b><?=strtoupper($datos_usr['mat_primer_apellido']." ".$datos_usr['mat_segundo_apellido']." ".$datos_usr["mat_nombres"]);?></b></td>   
     </tr>
     
     <tr>
@@ -227,10 +227,10 @@ for($l=1;$l<=$numero_periodos;$l++){
 	   if($total_promedio2<$config[5]){
 			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$_GET["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		   $nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
-		   if($nivelaciones[3]<$config[5]){
+		   if($nivelaciones['niv_definitiva']<$config[5]){
 				$materiasPerdidas++;
 			}else{
-				$total_promedio2 = $nivelaciones[3];
+				$total_promedio2 = $nivelaciones['niv_definitiva'];
 				$msj='Niv';
 			}
 		   
@@ -384,11 +384,11 @@ $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 <?php 
 if($periodoActual==4){
 	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr['mat_primer_apellido']." ".$datos_usr['mat_segundo_apellido']." ".$datos_usr["mat_nombres"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 	elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr['mat_primer_apellido']." ".$datos_usr['mat_segundo_apellido']." ".$datos_usr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr['mat_primer_apellido']." ".$datos_usr['mat_segundo_apellido']." ".$datos_usr["mat_nombres"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 }
 ?>
 

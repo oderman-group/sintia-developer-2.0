@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0058';
@@ -10,13 +11,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 
+$idRegistro=Utilidades::generateCode("DCT");
 try{
-    mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disciplina_categorias(dcat_nombre, dcat_institucion, dcat_year)
-    VALUES('" . $_POST["categoria"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+    mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disciplina_categorias(dcat_id, dcat_nombre, dcat_institucion, dcat_year)
+    VALUES('" .$idRegistro . "', '" . $_POST["categoria"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
-$idRegistro=mysqli_insert_id($conexion);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="disciplina-categorias.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';

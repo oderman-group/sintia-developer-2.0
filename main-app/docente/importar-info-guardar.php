@@ -266,13 +266,14 @@ if(!empty($_POST["cronograma"])){
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-		$datosInsert .="('".$calImpDatos['cro_tema']."', '".$calImpDatos['cro_fecha']."', '".$cargaConsultaActual."', '".$calImpDatos['cro_recursos']."', '".$periodoConsultaActual."', '".$calImpDatos['cro_color']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
+		$idInsercion=Utilidades::generateCode("CRO");
+		$datosInsert .="('" .$idInsercion . "', '".$calImpDatos['cro_tema']."', '".$calImpDatos['cro_fecha']."', '".$cargaConsultaActual."', '".$calImpDatos['cro_recursos']."', '".$periodoConsultaActual."', '".$calImpDatos['cro_color']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 	}
 
 	if(!empty($datosInsert)){
 		$datosInsert = substr($datosInsert,0,-1);
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_cronograma(cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color, institucion, year)VALUES $datosInsert");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_cronograma(cro_id, cro_tema, cro_fecha, cro_id_carga, cro_recursos, cro_periodo, cro_color, institucion, year)VALUES $datosInsert");
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}

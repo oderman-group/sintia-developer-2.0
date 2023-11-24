@@ -15,7 +15,7 @@ if($num==0){
 	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_registro=now() WHERE cls_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
 }else{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_ausencias SET aus_ausencias='".$_POST["nota"]."' WHERE aus_id='".$rC[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_ausencias SET aus_ausencias='".$_POST["nota"]."' WHERE aus_id='".$rC['aus_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
 	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_modificacion=now() WHERE cls_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	

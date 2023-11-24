@@ -41,7 +41,7 @@ include("head.php");
     	<td align="right">Folio:</td> 
         <td><b><?=$resultado['mat_folio'];?></b></td>
         <td align="right">Fecha:</td> 
-        <td><b><?=$resultado[2];?></b></td>
+        <td><b><?=$resultado['mat_fecha'];?></b></td>
     </tr> 
 </table> 
 
@@ -52,7 +52,7 @@ include("head.php");
     	<td>NOMBRE:</td> 
         <td><b><?=strtoupper($resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></b></td>
         <td>APELLIDOS:</td> 
-        <td><b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
+        <td><b><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']);?></b></td>
         <td>SEXO:</td> 
         <td><b><?=$resultado['ogen_nombre'];?></b></td>
     </tr>
@@ -73,7 +73,7 @@ include("head.php");
     
     <tr>
     	<td>NUIP:</td> 
-        <td><b><?=$resultado[12];?></b></td>
+        <td><b><?=$resultado['mat_documento'];?></b></td>
         <td colspan="2"><b><?=$resultado['mat_lugar_expedicion'];?></b></td> 
         <td colspan="2">&nbsp;</td>
     </tr>

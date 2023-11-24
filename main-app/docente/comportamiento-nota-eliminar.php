@@ -9,7 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
 try{
-    mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota=NULL WHERE id_nuevo=".base64_decode($_GET["id"]));
+    mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota=NULL WHERE dn_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

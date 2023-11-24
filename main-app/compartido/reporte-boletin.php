@@ -31,11 +31,11 @@ if($num_mat==0)
 	header("Location:cargas.php");
 	exit();
 }
-if($asg[2]<6)
+if($asg['car_curso']<6)
 	$tipo="EDUCACION BASICA PRIMARIA";
-elseif($asg[2]>=6 and $asg[2]<=9)
+elseif($asg['car_curso']>=6 and $asg['car_curso']<=9)
 	$tipo="EDUCACION BASICA SECUNDARIA";
-elseif($asg[2]>9 and $asg[2]<=11)
+elseif($asg['car_curso']>9 and $asg['car_curso']<=11)
 	$tipo="EDUCACION MEDIA";
 ?>
 <title>Informe Acad&eacute;mico</title>
@@ -325,11 +325,11 @@ $ii++;
 <?php 
 if($periodoActual==4){
 	if($materiasPerdidas>=3)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 	elseif($materiasPerdidas<3 and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 ?>
 	<!--Materias Perdidas = --><?php //echo $materiasPerdidas;?>
 <?php
@@ -375,7 +375,7 @@ $(function () {
                 margin: [ 50, 50, 100, 80]
             },
             title: {
-                text: '<?=strtoupper($datosUsr[4]);?> - Promedio por periodos'
+                text: '<?=strtoupper($datosUsr['mat_segundo_apellido']);?> - Promedio por periodos'
             },
             xAxis: {
                 categories: [

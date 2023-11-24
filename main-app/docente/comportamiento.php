@@ -96,7 +96,7 @@ include("../compartido/head.php");
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-														if(!empty($notas[4]) && $notas[4]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[4]) && $notas[4]>=$config[5]) $colorNota = $config[7];
+														if(!empty($notas['dn_nota']) && $notas['dn_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['dn_nota']) && $notas['dn_nota']>=$config[5]) $colorNota = $config[7];
 
 														$observacion="";
 														if(!empty($notas['dn_observacion'])){
@@ -117,7 +117,7 @@ include("../compartido/head.php");
 														<td width="15%">
 															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['dn_nota'])){ echo $notas['dn_nota'];}?>" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasDisciplina(this)" tabindex="<?=$contReg;?>">
 															<?php if(!empty($notas['dn_nota'])){?>
-															<a href="#" name="comportamiento-nota-eliminar.php?id=<?=base64_encode($notas['id_nuevo']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="comportamiento-nota-eliminar.php?id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														<td width="50%">

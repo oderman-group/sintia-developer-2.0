@@ -24,14 +24,14 @@ $nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($resultado);
         </tr>
         
         <tr>
-            <td align="center" colspan="2"><img src="../files/fotos/<?=$resultado[20];?>" width="150" height="150" alt="Plataforma SINTIA"></td>
+            <td align="center" colspan="2"><img src="../files/fotos/<?=$resultado['mat_foto'];?>" width="150" height="150" alt="Plataforma SINTIA"></td>
         </tr>
         
         <tr>
             <td align="center" colspan="2"><?=$nombreCompleto?></td>
         </tr>
         <tr>
-            <td align="center" colspan="2"><b>IDENTIFICACIÓN</b><br><?=number_format($resultado[12],0,",",".");?></td>
+            <td align="center" colspan="2"><b>IDENTIFICACIÓN</b><br><?=number_format($resultado['mat_documento'],0,",",".");?></td>
         </tr>
         <tr>
             <td align="center"><b>Grado:</b> <?=$resultado["gra_nombre"];?></td>

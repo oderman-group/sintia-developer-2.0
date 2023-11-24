@@ -71,8 +71,8 @@ if(!empty($_GET["busqueda"])){
         <tr style="border-color:<?=$Plataforma->colorDos;?>;">
 
           <td><?= $resultado['mat_id']; ?></td>
-          <td><?= $resultado[12]; ?></td>
-          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
+          <td><?= $resultado['mat_documento']; ?></td>
+          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado['mat_id']; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
           <td><?= $resultado["gra_nombre"]; ?></td>
           <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $resultado["mat_informe_parcial"]; ?></td>
           <td align="center"><?= $resultado["mat_informe_parcial_fecha"]; ?></td>

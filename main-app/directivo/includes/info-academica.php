@@ -10,7 +10,7 @@
 													<select class="form-control" name="grado" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
-															if($rv['gra_id']==$datosEstudianteActual[6])
+															if($rv['gra_id']==$datosEstudianteActual['mat_grado'])
 																echo '<option value="'.$rv['gra_id'].'" selected>'.$rv['gra_nombre'].'</option>';
 															else
 																echo '<option value="'.$rv['gra_id'].'">'.$rv['gra_nombre'].'</option>';	
@@ -27,7 +27,7 @@
 													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 													<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
-														if($rv[0]==$datosEstudianteActual[7])
+														if($rv[0]==$datosEstudianteActual['mat_grupo'])
 															echo '<option value="'.$rv[0].'" selected>'.$rv[1].'</option>';
 														else
 															echo '<option value="'.$rv[0].'">'.$rv[1].'</option>';	
@@ -45,7 +45,7 @@
 													<select class="form-control" name="tipoEst" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosEstudianteActual[21])
+															if($o[0]==$datosEstudianteActual['mat_tipo'])
 																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
 															else
 																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	

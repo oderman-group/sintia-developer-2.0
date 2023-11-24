@@ -179,7 +179,7 @@ if(!empty($_POST['carga'])){
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 															$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 															try{
-																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$resultado[0]."' AND dn_id_carga='".$carga."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$consultaRnDisiplina=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_id_carga='".$carga."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															} catch (Exception $e) {
 																include("../compartido/error-catch-to-report.php");
 															}
@@ -187,18 +187,18 @@ if(!empty($_POST['carga'])){
 															//LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
 														?>
 														<tr id="data1">
-															<td style="text-align:center;"><?=$resultado[0];?></td>
+															<td style="text-align:center;"><?=$resultado['mat_id'];?></td>
 															<td><?=$nombre?></td>
 															<td style="text-align: center;">
-																<input size="5" maxlength="3" name="" id="" value="<?php if(!empty($rndisiplina["dn_nota"])) echo $rndisiplina["dn_nota"];?>" onChange="notas(value,'<?=$resultado[0]?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
+																<input size="5" maxlength="3" name="" id="" value="<?php if(!empty($rndisiplina["dn_nota"])) echo $rndisiplina["dn_nota"];?>" onChange="notas(value,'<?=$resultado['mat_id']?>','')" style="font-size: 13px; text-align: center;" <?=$disabledPermiso;?>>
 
-																<?php if(!empty($rndisiplina[4]) && Modulos::validarPermisoEdicion()){?>
-																	<a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina[0]);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>')">X</a>
+																<?php if(!empty($rndisiplina['dn_nota']) && Modulos::validarPermisoEdicion()){?>
+																	<a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','cargas-comportamiento-eliminar.php?id=<?=base64_encode($rndisiplina['dn_id']);?>&periodo=<?=base64_encode($periodo);?>&carga=<?=base64_encode($carga);?>&grado=<?=base64_encode($grado);?>&grupo=<?=base64_encode($grupo);?>')">X</a>
 																	<?php }?>
 
 															</td>
 															<td style="text-align:center;">
-																<textarea name="" id="" onChange="notas('','<?=$resultado[0]?>',value)" rows="2" cols="50" <?=$disabledPermiso;?>><?php if(!empty($rndisiplina["dn_observacion"])) echo $rndisiplina["dn_observacion"];?></textarea>
+																<textarea name="" id="" onChange="notas('','<?=$resultado['mat_id']?>',value)" rows="2" cols="50" <?=$disabledPermiso;?>><?php if(!empty($rndisiplina["dn_observacion"])) echo $rndisiplina["dn_observacion"];?></textarea>
 															</td>
 														</tr>
 														<?php 

@@ -36,7 +36,7 @@
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 				
 				if($nume==0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=203";</script>';
@@ -45,7 +45,7 @@
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
 				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
-				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 					exit();
@@ -75,7 +75,7 @@
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-								<li class="active"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></li>
+								<li class="active"><?=strtoupper($datosEstudianteActual['mat_primer_apellido']." ".$datosEstudianteActual['mat_segundo_apellido']." ".$datosEstudianteActual['mat_nombres']);?></li>
                             </ol>
 							<?php }?>
                         </div>
@@ -110,7 +110,7 @@
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual[0]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 												
 												if($nume==0){continue;}
 											?>
@@ -175,9 +175,9 @@
 													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados
 													WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													"), MYSQLI_BOTH);
-													if(!empty($compararRespuestas[0])) $cheked = 'checked'; else $cheked = '';
+													if(!empty($compararRespuestas['res_id'])) $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
-													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas[0])){
+													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas['res_id'])){
 														$puntosSumados += $preguntas['preg_valor'];
 													}
 											?>

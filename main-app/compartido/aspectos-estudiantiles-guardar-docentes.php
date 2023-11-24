@@ -4,6 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0017';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 $usuariosClase = new Usuarios;
 
 //CONSUTLAR CARGA PARA DIRECTOR DE GRUPO
@@ -29,8 +30,9 @@ if($numD==0){
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }
     
+    $idInsercion=Utilidades::generateCode("DN");
     try{
-        mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_cod_estudiante, dn_aspecto_academico, dn_aspecto_convivencial, dn_periodo, dn_id_carga, institucion, year)VALUES('".$_POST["estudiante"]."','".$_POST["academicos"]."','".$_POST["convivenciales"]."', '".$_POST["periodo"]."', '".$carga['car_id']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_aspecto_academico, dn_aspecto_convivencial, dn_periodo, dn_id_carga, institucion, year)VALUES('" .$idInsercion . "', '".$_POST["estudiante"]."','".$_POST["academicos"]."','".$_POST["convivenciales"]."', '".$_POST["periodo"]."', '".$carga['car_id']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
     } catch (Exception $e) {
         include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
     }

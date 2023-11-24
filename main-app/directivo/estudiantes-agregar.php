@@ -157,10 +157,10 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoD'])
-															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoD'])
+															echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 														else
-															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+															echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -281,10 +281,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['genero'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['genero'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -323,10 +323,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['religion'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['religion'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -386,10 +386,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<?php
 															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['estrato'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['estrato'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -466,10 +466,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoE'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoE'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -573,10 +573,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoDocA'])
-															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoDocA'])
+															echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 														else
-															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+															echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -663,10 +663,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<?php
 										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['generoA'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['generoA'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>

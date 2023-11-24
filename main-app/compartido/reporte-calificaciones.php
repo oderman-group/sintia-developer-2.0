@@ -37,7 +37,7 @@ if(!empty($_GET["idActividad"])){ $idActividad=base64_decode($_GET["idActividad"
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                         $nombre =Estudiantes::NombreCompletoDelEstudiante($resultado);
 										 //LAS CALIFICACIONES A MODIFICAR Y LAS OBSERVACIONES
-										 $notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado[0]."' AND cal_id_actividad='".$idActividad."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+										 $notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$idActividad."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 
                                         $notasResultadoFinal="";
@@ -50,7 +50,7 @@ if(!empty($_GET["idActividad"])){ $idActividad=base64_decode($_GET["idActividad"
                                         }
 									 ?>
   <tr style="font-size:13px;">
-      <td class="center"><?=$resultado[0];?></td>
+      <td class="center"><?=$resultado['mat_id'];?></td>
                                         <td><?=$nombre?></td>
                                         <td class="center" style="font-size: 13px; text-align: center; color:<?php if(!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota']<$config[5]){ echo $config[6]; }elseif(!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota']>=$config[5]){ echo $config[7]; }else{ echo "black";}?>"><?=$notasResultadoFinal;?></td>
                                         <td class="center"><?php if(!empty($notasResultado['cal_observaciones'])){ echo $notasResultado['cal_observaciones'];}?></td>

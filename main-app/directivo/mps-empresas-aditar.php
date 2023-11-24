@@ -123,13 +123,13 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                                             <?php
                                             $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
                                             while($inforDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-                                                $consultaCat = mysqli_query($conexion, "SELECT excat_id FROM ".$baseDatosMarketPlace.".empresas_categorias WHERE excat_empresa='".$_GET["idR"]."' AND excat_categoria='".$inforDatos[0]."'");
+                                                $consultaCat = mysqli_query($conexion, "SELECT excat_id FROM ".$baseDatosMarketPlace.".empresas_categorias WHERE excat_empresa='".$_GET["idR"]."' AND excat_categoria='".$inforDatos['svcat_id']."'");
                                                 $selected='';
                                                 if(mysqli_num_rows($consultaCat)>0){
                                                     $selected='selected';
                                                 }
                                             ?>	
-                                                <option value="<?=$inforDatos[0];?>" <?=$selected?>><?=strtoupper($inforDatos['svcat_nombre']);?></option>
+                                                <option value="<?=$inforDatos['svcat_id'];?>" <?=$selected?>><?=strtoupper($inforDatos['svcat_nombre']);?></option>
                                             <?php }?>	
                                             </select>
                                             <span style="color: navy;">Seleccione al menos un sector.</span>
@@ -152,11 +152,11 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                                                 $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado=1 AND ins_enviroment='".ENVIROMENT."'");
                                                 while($inforDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
                                                     $selected='';
-                                                    if($inforDatos[0]==$infoDatos['emp_institucion']){
+                                                    if($inforDatos['ins_id']==$infoDatos['emp_institucion']){
                                                         $selected='selected';
                                                     }
                                                 ?>	
-                                                    <option value="<?=$inforDatos[0];?>" <?=$selected?>><?=strtoupper($inforDatos['ins_nombre']);?></option>
+                                                    <option value="<?=$inforDatos['ins_id'];?>" <?=$selected?>><?=strtoupper($inforDatos['ins_nombre']);?></option>
                                                 <?php }?>	
                                             </select>
                                         </div>
