@@ -19,8 +19,6 @@ try{
 }
 $datosHistorial = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
-$BD=$datosHistorial["ins_bd"]."_".$agnoBD;
-
 $responsable="";
 if($datosHistorial['hil_usuario']!=0){
     try{

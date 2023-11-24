@@ -18,8 +18,6 @@ try{
 }
 $datosReportes = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
-$BD=$datosReportes["ins_bd"]."_".$agnoBD;
-
 $responsable="";
 if(!empty($datosReportes['rperr_usuario'])){
     try{

@@ -73,10 +73,7 @@ include("../compartido/head-informes.php") ?>
 	$inicio = $_POST["desde"];
 
 	$grados = "";
-	while ($i <= $restaAgnos) {
-
-	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
-	
+	while ($i <= $restaAgnos) {	
 	
 	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
@@ -117,8 +114,6 @@ include("../compartido/head-informes.php") ?>
 
 	while ($i <= $restaAgnos) {
 
-		mysqli_select_db($conexion, $config['conf_base_datos'] . "_" . $inicio);
-
 	//SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
 	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
@@ -131,7 +126,7 @@ include("../compartido/head-informes.php") ?>
 
 
 		<?php
-		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_base_datos='" . $_SESSION["inst"] . "' AND conf_agno='" . $_SESSION["bd"] . "'");
+		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_id_institucion='" . $_SESSION["idInstitucion"] . "' AND conf_agno='" . $_SESSION["bd"] . "'");
 		$configAA = mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
 		if ($inicio < $config[1] and $configAA[2] < 5) { ?>
 

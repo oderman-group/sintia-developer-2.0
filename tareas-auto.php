@@ -241,9 +241,6 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=4 AND corr_estado=0)");
 	$numeros = mysqli_fetch_array($consultaNumeros, MYSQLI_BOTH);
 	
-	
-	$institucionAgno = $cProg['ins_bd']."_".date("Y");
-	
 	$consultaAcudiente=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$cProg['corr_usuario']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
 	

@@ -78,7 +78,7 @@ class SubRoles {
      *
      * @return String // se retorna el id del registro ingresado    */
     public static function crearRolesUsuario($idUsuario,array $subRoles= []){
-        global $conexion, $baseDatosServicios,$config;;
+        global $conexion, $baseDatosServicios,$config;
         $idRegistro = -1;        
         try {
             foreach ($subRoles as $subrol ) {

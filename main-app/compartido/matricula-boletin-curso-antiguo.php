@@ -5,7 +5,6 @@ $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=$_GET["year"];
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 
@@ -34,7 +33,7 @@ if($periodoActual==4) $periodoActuales = "Final";?>
 <?php
 $filtro = " AND mat_grado='".$_REQUEST["curso"]."'";
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
 
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 
@@ -47,7 +46,7 @@ $contador_indicadores=0;
 $materiasPerdidas=0;
 
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
 $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
 $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 $num_usr=mysqli_num_rows($usr);

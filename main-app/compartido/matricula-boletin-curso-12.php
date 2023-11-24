@@ -13,7 +13,6 @@
     if(isset($_REQUEST["year"])){
     $year=base64_decode($_REQUEST["year"]);
     }
-    $BD=$_SESSION["inst"]."_".$year;
 
     $modulo = 1;
 
@@ -54,7 +53,7 @@
     if(!empty($_REQUEST["grupo"])){
         $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
     }
-    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD,$year);
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
     if ($numeroEstudiantes == 0) {
     ?>
@@ -248,7 +247,7 @@
                             }
 
                             //AUSENCIAS EN ESTA MATERIA
-                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $BD,$year);
+                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $year);
                             $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
                             $ausencia="";
 
@@ -486,12 +485,12 @@
                 <?php
                     if(empty($_REQUEST["curso"])){
                         $filtro = " AND mat_grado='" . $gradoActual . "' AND mat_grupo='".$grupoActual."'";
-                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $BD,$year);
+                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
                         $numeroEstudiantes = mysqli_num_rows($matriculadosDelCurso);
                     }
                     //Buscamos Puesto del estudiante en el curso
                     $puestoEstudiantesCurso = 0;
-                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual, $BD);
+                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual,$year);
                     
                     while($puestoCurso = mysqli_fetch_array($puestosCursos, MYSQLI_BOTH)){
                         if($puestoCurso['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -500,11 +499,11 @@
                     }
                     
                     //Buscamos Puesto del estudiante en la institución
-                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $BD,$year);
+                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $year);
                     $numeroEstudiantesInstitucion = mysqli_num_rows($matriculadosDeLaInstitucion);
 
                     $puestoEstudiantesInstitucion = 0;
-                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $BD,$year);
+                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $year);
                     
                     while($puestoInstitucion = mysqli_fetch_array($puestosInstitucion, MYSQLI_BOTH)){
                         if($puestoInstitucion['bol_estudiante']==$matriculadosDatos['mat_id']){

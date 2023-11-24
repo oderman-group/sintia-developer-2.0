@@ -13,7 +13,6 @@ require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
-$db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 ?>
 	<!-- data tables -->

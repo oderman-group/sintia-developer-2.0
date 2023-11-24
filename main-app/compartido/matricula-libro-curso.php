@@ -21,8 +21,6 @@ $year=$_SESSION["bd"];
 if(isset($_POST["year"])){
 $year=$_POST["year"];
 }
-$BD=$_SESSION["inst"]."_".$year;
-$bdConsulta = $BD.".";
 //CONSULTA ESTUDIANTES MATRICULADOS
 $curso='';
 if(isset($_POST["curso"])){
@@ -42,14 +40,14 @@ if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"].
 <?php
 
 $cursoActual=GradoServicios::consultarCurso($curso);
-$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,$bdConsulta,$grupo);
+$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,$grupo,$year);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $contPeriodos=0;
 $contadorIndicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
 $numUsr=mysqli_num_rows($usr);
 if($numUsr==0)
 {

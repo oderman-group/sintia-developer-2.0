@@ -360,7 +360,6 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												<input type="hidden" name="id" value="14">
 												<input type="hidden" name="idClase" value="<?=$idR;?>">
 												<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
-												<input type="hidden" name="bdConsulta" value="<?=$_SESSION["inst"];?>">
 												<input type="hidden" name="agnoConsulta" value="<?=$_SESSION["bd"];?>">
 												
 												<input type="hidden" name="envia" id="envia">

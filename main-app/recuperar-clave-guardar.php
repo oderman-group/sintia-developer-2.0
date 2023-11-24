@@ -15,7 +15,7 @@ $yearArray = explode(",", $institucion['ins_years']);
 $yearStart = $yearArray[0];
 $yearEnd = $yearArray[1];
 
-$_SESSION["inst"] = $institucion['ins_bd'];
+$_SESSION["idInstitucion"] = $institucion['ins_id'];
 
 if(isset($yearEnd) and is_numeric($yearEnd)){
 	$_SESSION["bd"] = $yearEnd;
@@ -34,7 +34,6 @@ if(!empty($datosUsuario)){
 
 	$data = [
 		'institucion_id'   => $institucion['ins_id'],
-		'institucion_bd'   => $institucion['ins_bd'],
 		'institucion_agno' => $_SESSION["bd"],
 		'usuario_id'       => $datosUsuario['uss_id'],
 		'usuario_email'    => $datosUsuario['uss_email'],

@@ -6,8 +6,7 @@
     if(isset($_POST["year"])){
     $year=$_POST["year"];
     }
-    $BD=$_SESSION["inst"]."_".$year;
-
+    
     $curso="";
     if(isset($_POST["curso"])){$curso=base64_encode($_POST["curso"]);}
     $grupo="";
@@ -27,7 +26,7 @@
     }
 
     if(isset($_POST["estudiante"]) AND $_POST["estudiante"]!=""){
-    $consulta =Estudiantes::obtenerDatosEstudiantesParaBoletin($_POST["estudiante"],$BD,$year);
+    $consulta =Estudiantes::obtenerDatosEstudiantesParaBoletin($_POST["estudiante"],$year);
     }
 
     $boletin = mysqli_fetch_array($consulta, MYSQLI_BOTH);

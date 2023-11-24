@@ -9,7 +9,6 @@ $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 
@@ -50,7 +49,7 @@ if(!empty($_REQUEST["grupo"])){
     $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
 }
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD,$year);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro,$year);
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
 
     //contador materias
@@ -62,7 +61,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $materiasPerdidas = 0;
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD,$year);
+    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
     $num_usr = mysqli_num_rows($usr);
 
     $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);

@@ -8,12 +8,8 @@ require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $year = $_SESSION["bd"];
-$BD   = $_SESSION["inst"]."_".$agnoBD;
-$bdConsulta = "";
 if(!empty($_REQUEST["agno"])){
 	$year = $_REQUEST["agno"];
-	$BD   = $_SESSION["inst"]."_".$_REQUEST["agno"];
-	$bdConsulta = $BD.".";
 }
 
 $cursoV = '';
@@ -90,7 +86,7 @@ include("../compartido/head-informes.php") ?>
 									 	$filtroAdicional= "AND mat_grado='".$cursoV."' AND mat_grupo='".$grupoV."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 									 }
 									 $cursoActual=GradoServicios::consultarCurso($cursoV);
-									 $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta);
+									 $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$year);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									 $defPorEstudiante = 0;
 									 ?>
@@ -117,7 +113,7 @@ include("../compartido/head-informes.php") ?>
 													$notaBoletinFinal=$boletin['bol_nota'];
 													if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 														$title='title="Nota Cuantitativa: '.$boletin['bol_nota'].'"';
-														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $boletin['bol_nota'], $BD);
+														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $boletin['bol_nota'],$year);
 														$notaBoletinFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 													}
 
@@ -137,7 +133,7 @@ include("../compartido/head-informes.php") ?>
 												$title='';
 												if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 													$title='title="Nota Cuantitativa: '.$defPorMateria.'"';
-													$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $defPorMateria, $BD);
+													$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $defPorMateria,$year);
 													$defPorMateriaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 												}
 											?>

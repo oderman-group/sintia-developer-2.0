@@ -9,7 +9,6 @@ $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 if(empty($_GET["periodo"])){
@@ -28,7 +27,7 @@ if(!empty($_GET["id"])){$filtro .= " AND mat_id='".base64_decode($_GET["id"])."'
 if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".base64_decode($_REQUEST["curso"])."'";}
 if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";}
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD,$year);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
 $numMatriculados = mysqli_num_rows($matriculadosPorCurso);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 	//contadores
@@ -50,7 +49,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	$contp ++;
 }
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$BD,$year);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
 $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
 $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 ?>

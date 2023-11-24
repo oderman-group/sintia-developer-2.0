@@ -36,7 +36,6 @@ class MediaTecnicaServicios extends Servicios
     
     public static function listarEstudiantes(
       $parametrosArray=null,
-      string $BD    = '',
       string $yearBd    = ''
     )
     {
