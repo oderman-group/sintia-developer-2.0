@@ -124,7 +124,7 @@ try {
 
         //CONSULTAMOS SI LA INSTITUCIÓN TIENE EL MODULO DE INSCRIPCIÓNES ACTIVO
 		try{
-			$consultaModuloInscripcion = mysqli_query($conexion, "SELECT ipmod_modulo FROM ".BD_ADMIN.".instituciones_modulos WHERE ipmod_institucion='".$idInsti."' AND ipmod_modulo=8");
+			$consultaModuloInscripcion = mysqli_query($conexion, "SELECT ipmod_modulo FROM ".BD_ADMIN.".instituciones_modulos WHERE ipmod_institucion='".$idInsti."' AND ipmod_modulo=".MODULO_ADMISIONES."");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
