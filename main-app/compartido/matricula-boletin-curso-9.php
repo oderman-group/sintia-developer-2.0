@@ -107,11 +107,11 @@ $contador_periodos=0;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga
 		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$cargas['car_id']."' AND ipc_periodo='".$_GET["periodo"]."'
+		WHERE ipc_carga='".$cargas['car_id']."' AND ipc_periodo='".$periodoActual."'
 		");
 		
 		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
+		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."'");
 		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
 		
 		$colorFondo = '#FFF;';
@@ -129,7 +129,7 @@ $contador_periodos=0;
 			<hr>
 			<h5 align="center">Observaciones</h5>
 			<p style="margin-left: 5px;">
-				<?=$observacion['bol_observaciones_boletin'];?>
+				<?=$observacion['bol_observaciones_boletin'] ?? "";?>
 			</p>
 		</td>
 		<td width="2%" align="center"><?=$cargas['car_ih'];?></td>
@@ -139,7 +139,7 @@ $contador_periodos=0;
 	<p>&nbsp;</p>
 <?php 
 $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota 
-WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$_GET["periodo"]."'
+WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo<='".$periodoActual."'
 GROUP BY dn_cod_estudiante, dn_periodo
 ORDER BY dn_id
 ");
