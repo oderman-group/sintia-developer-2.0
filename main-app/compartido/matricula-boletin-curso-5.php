@@ -43,7 +43,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 $contp = 1;
 $puestoCurso = 0;
 $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$_GET["periodo"]."'
+INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."'
 WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' GROUP BY mat_id ORDER BY prom DESC");	
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){$puestoCurso = $contp;}
@@ -159,7 +159,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		while($asignatura = mysqli_fetch_array($asignaturas, MYSQLI_BOTH)){
 
 			$consultaDatosBoletinArea=mysqli_query($conexion, "SELECT * FROM academico_boletin
-			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$_GET["periodo"]."'");
+			WHERE bol_carga='".$asignatura['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
 			$datosBoletinArea = mysqli_fetch_array($consultaDatosBoletinArea, MYSQLI_BOTH);
 			
 			$promedioArea += $datosBoletinArea['bol_nota'];
@@ -186,17 +186,17 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
 		$consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
         INNER JOIN $BD.academico_notas_tipos ON notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$_GET["periodo"]."'");
+        WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."'");
         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 		
 		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM $BD.academico_clases 
         INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='".$datosUsr['mat_id']."'
-        WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$_GET["periodo"]."'");
+        WHERE cls_id_carga='".$datosCargas['car_id']."' AND cls_periodo='".$periodoActual."'");
 		$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 		
 		$indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
 		INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$_GET["periodo"]."'");
+		WHERE ipc_carga='".$datosCargas['car_id']."' AND ipc_periodo='".$periodoActual."'");
 		
 		//INDICADORES PERDIDOS DEL PERIODO ANTERIOR
 		$indicadoresPeridos = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_recuperacion
@@ -233,7 +233,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						WHERE cal_id_estudiante='".$datosUsr['mat_id']."'");
 						$notaIndicadorPA = mysqli_fetch_array($consultaNotaIndicadorPA, MYSQLI_BOTH);
 						
-						if($indicadorP['rind_periodo'] == $_GET["periodo"]){
+						if($indicadorP['rind_periodo'] == $periodoActual){
 							continue;
 						}
 					?>
@@ -249,7 +249,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					//INDICADORES
 					while($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
 						$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM $BD.academico_calificaciones
-						INNER JOIN $BD.academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='".$indicador['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$_GET["periodo"]."' AND act_estado=1
+						INNER JOIN $BD.academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='".$indicador['ipc_indicador']."' AND act_id_carga='".$datosCargas['car_id']."' AND act_periodo='".$periodoActual."' AND act_estado=1
 						WHERE cal_id_estudiante='".$datosUsr['mat_id']."'");
 						$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 					?>
