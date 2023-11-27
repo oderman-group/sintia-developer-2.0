@@ -96,13 +96,13 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                         </button>
                                         ';
                                         $texto="
-                                            La año <b>$year</b> está disponible.<br><br>
+                                            El año <b>$year</b> está disponible.<br><br>
                                             Desea continuar?
                                         ";
                                         if($numInstituciones>0){
                                             $boton='';
                                             $texto="
-                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con la año <b>$year</b>.<br>
+                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con el año <b>$year</b>.<br>
                                                 Por favor, confirmar los datos ingresados para poder continuar.
                                             ";
                                         }
