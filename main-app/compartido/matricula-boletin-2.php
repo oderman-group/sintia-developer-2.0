@@ -5,7 +5,6 @@ $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=$_GET["year"];
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 if($_GET["periodo"]==""){
@@ -25,7 +24,7 @@ $cont_periodos=0;
 $contador_indicadores=0;
 $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($_GET["id"],$BD);
+$usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($_GET["id"],$year);
 $num_usr=mysqli_num_rows($usr);
 $datos_usr=mysqli_fetch_array($usr, MYSQLI_BOTH);
 if($num_usr==0)

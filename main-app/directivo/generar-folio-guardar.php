@@ -14,7 +14,6 @@ $year=$_SESSION["bd"];
 if(!empty($_REQUEST["year"])){
 $year=$_REQUEST["year"];
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $folio=1;
 if(!empty($_REQUEST["numFolio"])){$folio=$_REQUEST["numFolio"];}

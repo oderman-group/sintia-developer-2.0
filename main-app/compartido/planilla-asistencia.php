@@ -13,10 +13,8 @@ require_once("../class/Estudiantes.php");
 <body style="font-family:Arial;">
 <?php
   $year=$_SESSION["bd"];
-  $BD=$_SESSION["inst"]."_".$_SESSION["bd"];
   if(isset($_POST["agno"])){
     $year=$_POST["agno"];
-    $BD=$_SESSION["inst"]."_".$_POST["agno"];
   }
 
 $consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$_REQUEST["grado"]."' AND gru.gru_id='".$_REQUEST["grupo"]."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}");
@@ -70,7 +68,7 @@ include("../compartido/head-informes.php") ?>
     ";
   }
   $cont=1;
-  $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $BD);
+  $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $adicional, $year);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   ?>
   <tr style="

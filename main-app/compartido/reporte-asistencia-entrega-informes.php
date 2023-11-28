@@ -11,8 +11,6 @@ $year = $_SESSION["bd"];
 if (isset($_REQUEST["year"])) {
     $year = $_REQUEST["year"];
 }
-$BD = $_SESSION["inst"] . "_" . $year;
-$bdConsulta = $BD.".";
 
 if (empty($_REQUEST["periodo"])) {
     $periodoActual = 1;
@@ -139,7 +137,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         $cont = 1;
         $filtroAdicional = $adicional . " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
         $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
-        $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta,$grupo);
+        $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo,$year);
         $numE = mysqli_num_rows($consulta);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
@@ -166,7 +164,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                                 $diseñoCelda='';
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                                     $diseñoCelda='class="vertical" title="Nota Cuantitativa: '.$notaMateria.'"';
-                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $year);
                                     $notaMateriaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                                 }
 

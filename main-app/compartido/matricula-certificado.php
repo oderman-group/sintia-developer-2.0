@@ -76,8 +76,6 @@ $modulo = 1;
     $grados = "";
 
     while ($i <= $restaAgnos) {
-
-	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
 	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	
@@ -116,8 +114,6 @@ $modulo = 1;
     $inicio = $_POST["desde"];
 
     while ($i <= $restaAgnos) {
-
-	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
 	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
     ?>

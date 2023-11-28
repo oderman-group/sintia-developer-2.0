@@ -50,7 +50,6 @@ class Estudiantes {
         string $filtroAdicional = '', 
         string $filtroLimite    = 'LIMIT 0, 2000',
         $cursoActual=null,
-        string $BD    = '',
         $grupoActual=1,
         string $yearBd    = ''
     )
@@ -80,7 +79,7 @@ class Estudiantes {
                     'limite'=>$filtroLimite,
                     'arreglo'=>false
                 ];
-                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros,$BD);
+                $resultado = MediaTecnicaServicios::listarEstudiantes($parametros,$year);
             }
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -296,7 +295,6 @@ class Estudiantes {
     public static function listarEstudiantesParaPlanillas(
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -376,7 +374,6 @@ class Estudiantes {
 
     public static function estudiantesMatriculados(
         string    $filtro      = '',
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -401,7 +398,6 @@ class Estudiantes {
 
     public static function obtenerDatosEstudiantesParaBoletin(
         string $estudiante      = "",
-        string $BD    = '',
         string $yearBd    = ''
     )
     {

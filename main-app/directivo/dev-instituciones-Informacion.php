@@ -20,8 +20,6 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $datosInstitucion = mysqli_fetch_array($consultaInformacion, MYSQLI_BOTH);
-
-$BD=$datosInstitucion["ins_bd"]."_".$year;
 ?>
 
 <!-- steps -->

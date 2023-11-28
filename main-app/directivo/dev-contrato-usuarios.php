@@ -102,8 +102,6 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
                                                         $responsable="";
                                                         if($resultado['cxu_id_usuario']!=0){
 

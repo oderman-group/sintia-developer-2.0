@@ -54,7 +54,7 @@ if(isset($_GET['yearN'])){
 }
 
 try{
-    $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+    $institucionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones 
     WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");

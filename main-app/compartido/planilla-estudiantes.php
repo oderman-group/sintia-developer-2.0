@@ -10,12 +10,8 @@ require_once("../class/Estudiantes.php");
 <body style="font-family:Arial;">
 <?php
   $year=$_SESSION["bd"];
-  $BD=$_SESSION["inst"]."_".$_SESSION["bd"];
-  $bdConsulta='';
   if(isset($_REQUEST["agno"])){
     $year=$_REQUEST["agno"];
-    $BD=$_SESSION["inst"]."_".$_REQUEST["agno"];
-    $bdConsulta=$BD.'.';
 	}
 	if((!empty($_REQUEST["grado"]) && is_numeric($_REQUEST["grado"])) && (!empty($_REQUEST["grupo"]) && is_numeric($_REQUEST["grupo"]))){
     $consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$_REQUEST["grado"]."' AND gru.gru_id='".$_REQUEST["grupo"]."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}");
@@ -65,7 +61,7 @@ include("../compartido/head-informes.php") ?>
 	}
   $cont=1;
   $filtroAdicional= $adicional." AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-  $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$grados,$bdConsulta,$grupo);
+  $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$grados,$grupo,$year);
   $numE=mysqli_num_rows($consulta);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);

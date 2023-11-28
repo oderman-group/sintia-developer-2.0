@@ -9,12 +9,10 @@ $year=$_SESSION["bd"];
 if(isset($_POST["year"])){
 	$year=$_POST["year"];
 }
-$BD = $_SESSION["inst"] . "_" . $year;
-$bdConsulta = $BD.".";
 
 $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
-$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$bdConsulta);	
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$year);	
 $num_asg = mysqli_num_rows($asig);
 $consultaGrados = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru 
 WHERE gra_id='" . $_REQUEST["curso"] . "' AND gru.gru_id='" . $_REQUEST["grupo"] . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}");
@@ -136,7 +134,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 					$title='';
 					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 						$title='title="Nota Cuantitativa: '.$notaFinal.'"';
-						$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaFinal, $BD);
+						$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaFinal, $year);
 						$notaFinalTotal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 					}
 				?>
@@ -160,7 +158,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				$title='';
 				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 					$title='title="Nota Cuantitativa: '.$def.'"';
-					$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def, $BD);
+					$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def, $year);
 					$defTotal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 				}
 				?>
@@ -218,7 +216,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				$title='';
 				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 					$title='title="Nota Cuantitativa: '.$val.'"';
-					$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $val, $BD);
+					$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $val, $year);
 					$valTotal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 				}
 		?>

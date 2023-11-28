@@ -2,7 +2,6 @@
 include("session.php");
 $instiConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST['insti']."'");
 $insti = mysqli_fetch_array($instiConsulta, MYSQLI_BOTH);
-$bd=$insti['ins_bd'].'_'.date('Y');
 $year= date('Y');
 ?>
 <!--select2-->

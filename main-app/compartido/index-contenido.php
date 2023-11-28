@@ -109,7 +109,6 @@
 										<input type="hidden" name="usuario" value="<?=$datosUsuarioActual['uss_nombre'];?>">
 										<input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
 										
-										<input type="hidden" id="institucionSug" value="<?=$_SESSION["inst"];?>">
 										<input type="hidden" id="usuarioSug" value="<?=$datosUsuarioActual['uss_id'];?>">
 										<input type="hidden" id="usuarioNombreSug" value="<?=$datosUsuarioActual['uss_nombre'];?>">
 										<input type="hidden" id="tipoUsuarioSug" value="<?=$datosUsuarioActual['uss_tipo'];?>">

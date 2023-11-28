@@ -6,7 +6,7 @@ include("../compartido/head.php");
 
 //CONSULTA EXISTENCIA DE LA INSTITUCIÓN
 try{
-    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
+    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

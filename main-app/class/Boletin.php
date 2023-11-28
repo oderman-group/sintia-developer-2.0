@@ -65,7 +65,6 @@ class Boletin {
         int    $periodo      = 0,
         string    $grado      = "",
         string    $grupo      = "",
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -90,7 +89,6 @@ class Boletin {
     public static function obtenerAreasDelEstudiante(
         string    $grado      = "",
         string    $grupo      = "",
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -113,10 +111,9 @@ class Boletin {
     }
 
     public static function obtenerDatosDelArea(
-        int    $estudiante      = 0,
-        int    $area      = 0,
+        string    $estudiante      = '',
+        string    $area      = '',
         string    $condicion      = '',
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -164,7 +161,6 @@ class Boletin {
     public static function obtenerNivelaciones(
         $carga,
         $estudiante,
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -201,11 +197,10 @@ class Boletin {
     }
 
     public static function obtenerRecuperacionPorIndicador(
-        int    $estudiante      = 0,
-        int    $carga      = 0,
+        string    $estudiante      = '',
+        string    $carga      = '',
         int    $periodo      = 0,
-        int    $indicador      = 0,
-        string $BD    = '',
+        string    $indicador      = '',
         string $yearBd    = ''
     )
     {
@@ -224,10 +219,9 @@ class Boletin {
     }
 
     public static function obtenerObservaciones(
-        int    $carga      = 0,
+        string    $carga      = '',
         int    $periodo      = 0,
-        int    $estudiante      = 0,
-        string $BD    = '',
+        string    $estudiante      = '',
         string $yearBd    = ''
     )
     {
@@ -246,10 +240,9 @@ class Boletin {
     }
 
     public static function obtenerDefinitivaYnombrePorMateria(
-        int    $estudiante      = 0,
-        int    $area      = 0,
+        string    $estudiante      = '',
+        string    $area      = '',
         string $condicion      = '',
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -277,7 +270,6 @@ class Boletin {
         string    $estudiante      = "",
         string    $area      = "",
         string    $condicion      = '',
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -308,7 +300,6 @@ class Boletin {
         string    $condicion      = '',
         string    $estudiante      = "",
         string    $condicion2      = '',
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -341,7 +332,6 @@ class Boletin {
         string    $materia      = "",
         int    $periodo      = 0,
         string    $estudiante      = "",
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -368,7 +358,6 @@ class Boletin {
         string    $area      = "",
         int    $periodo      = 0,
         string    $estudiante      = "",
-        string $BD    = '',
         string $yearBd    = ''
     )
     {
@@ -398,7 +387,6 @@ class Boletin {
 
     public static function obtenerPuestoEstudianteEnInstitucion(
         int    $periodo      = 0,
-        string $BD    = '',
         string $yearBd    = ''
     )
     {

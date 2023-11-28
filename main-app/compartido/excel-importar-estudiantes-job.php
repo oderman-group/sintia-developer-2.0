@@ -28,19 +28,15 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 	$finalizado = false;
 	$parametros = json_decode($resultadoJobs["job_parametros"], true);
 	$institucionId = $resultadoJobs["job_id_institucion"];
-	$institucionBd = $resultadoJobs["ins_bd"];
 	$anio = $resultadoJobs["job_year"];
-	$institucionBdAnio = $resultadoJobs["ins_bd"]."_".$anio;
 	$intento = intval($resultadoJobs["job_intentos"]);
 
 	$nombreArchivo= $parametros["nombreArchivo"];
 	$filaFinal=$parametros["filaFinal"];
 	$actualizarCampo=$parametros["actualizarCampo"];
 
-	mysqli_select_db($conexion,$institucionBdAnio);
-
 	if(empty($config)){
-		$configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$institucionBd."' AND conf_agno='".$anio."'");
+		$configConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".configuracion WHERE conf_id_institucion='".$institucionId."' AND conf_agno='".$anio."'");
 		$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
 	}
 	try{

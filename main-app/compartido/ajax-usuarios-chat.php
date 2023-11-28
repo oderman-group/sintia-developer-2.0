@@ -13,7 +13,7 @@ $usuariosClase = new Usuarios();
 										LIMIT 0, 200");
 										while($datosChat = mysqli_fetch_array($datosConsultaChat, MYSQLI_BOTH)){
 											
-											$consultaSinLeer=mysqli_query($conexion, "SELECT * FROM mobiliar_sintia_social.chat 
+											$consultaSinLeer=mysqli_query($conexion, "SELECT * FROM ".BD_SOCIAL.".chat 
 											WHERE chat_destino_usuario='".$_POST["usuario"]."' AND chat_remite_usuario='".$datosChat["uss_id"]."'
 											AND chat_remite_institucion='".$_POST["institucion"]."' AND chat_destino_institucion='".$_POST["institucion"]."' AND chat_visto='0'");
 											$sinLeer = mysqli_num_rows($consultaSinLeer);

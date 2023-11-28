@@ -21,7 +21,7 @@ if($nueva==0){//PARA ANTIGUAS
     $idInsti = $_POST['idInsti'];//LE MODIFICAMOS EL VALOR SOLO CUANDO LA INSTITUCION ES ANTIGUA
     
     try{
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
+        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones 
         WHERE ins_id = ".$idInsti." AND ins_enviroment='".ENVIROMENT."'");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");

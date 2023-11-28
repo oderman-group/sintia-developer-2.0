@@ -107,8 +107,6 @@ $Plataforma = new Plataforma;
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
                                                         $responsable="";
                                                         if($resultado['hil_usuario']!=0){
 
