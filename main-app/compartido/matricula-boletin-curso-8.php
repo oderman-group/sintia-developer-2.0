@@ -55,7 +55,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $contp = 1;
     $puestoCurso = 0;
     $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='" . $_GET["periodo"] . "'
+INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='" . $periodoActual . "'
 WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $matriculadosDatos['mat_grupo'] . "' GROUP BY mat_id ORDER BY prom DESC");
     while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
         if ($puesto['bol_estudiante'] == $matriculadosDatos['mat_id']) {
@@ -349,7 +349,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
 
                 <?php 
                 $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                WHERE dn_cod_estudiante='".$datosUsr[0]."' AND dn_periodo<='".$_GET["periodo"]."'");
+                WHERE dn_cod_estudiante='".$datosUsr[0]."' AND dn_periodo<='".$periodoActual."'");
                 while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
                 ?>
 
@@ -426,7 +426,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             //INDICADORES
                             $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
 		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $_GET["periodo"] . "'");
+		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    
