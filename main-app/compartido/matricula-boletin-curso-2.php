@@ -443,7 +443,7 @@ if($numIndicadores>0){
 	<!-- observaciones de la asignatura-->
 	<?php
 	$consultaObservaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
-	WHERE bol_carga='".$fila2["car_id"]."' AND bol_periodo='".$_GET["periodo"]."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+	WHERE bol_carga='".$fila2["car_id"]."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 	$observacion = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
 	if(!empty($observacion['bol_observaciones_boletin'])){
 	?>

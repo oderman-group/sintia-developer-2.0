@@ -128,7 +128,7 @@ $contador_periodos=0;
 			<hr>
 			<h5 align="center">Observaciones</h5>
 			<p style="margin-left: 5px;">
-				<?=$observacion['bol_observaciones_boletin'];?>
+				<?=$observacion['bol_observaciones_boletin'] ?? "";?>
 			</p>
 		</td>
 		<td width="2%" align="center"><?=$cargas['car_ih'];?></td>
