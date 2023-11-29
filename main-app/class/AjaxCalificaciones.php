@@ -167,7 +167,7 @@ class AjaxCalificaciones {
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
-                $codigo=Utilidades::generateCode("CAL");
+                $codigo=Utilidades::generateCode("CAL".$estudiantes['mat_id']);
                 $insertBD = 1;
                 $datosDelete .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
                 $datosInsert .="('".$codigo."', '".$estudiantes['mat_id']."','".$nota."','".$codNota."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
