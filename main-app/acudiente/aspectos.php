@@ -50,11 +50,11 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
 
                     <?php
                     $aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
-                    WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+                    WHERE dn_cod_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
                        
                     if(!empty($aspectos[0])){
                         mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_ultima_lectura=now()
-                        WHERE dn_cod_estudiante=" . $datosEstudianteActual['mat_id'] . " AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                        WHERE dn_cod_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND dn_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     }   
                     
                     ?>
