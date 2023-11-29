@@ -103,7 +103,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 		INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
 
-		WHERE  car_curso='" . $idCurso . "' AND car_grupo='" . $idGrupo . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} 
+		WHERE  car_curso=''" . $idCurso . "'' AND car_grupo='" . $idGrupo . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} 
         GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
         //$numero_periodos=$config["conf_periodos_maximos"];
@@ -205,7 +205,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 
-				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id='" . $fila["ar_id"] . "' and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 
 				GROUP BY ar_id;");
 
@@ -219,7 +219,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 
-				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id='" . $fila["ar_id"] . "' and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 
 				GROUP BY mat_id
 
@@ -235,7 +235,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 
-				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id=" . $fila["ar_id"] . " and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+				WHERE bol_estudiante='" . $matriculadosDatos['mat_id'] . "' and a.ar_id='" . $fila["ar_id"] . "' and bol_periodo in (" . $condicion . ") AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 
 				ORDER BY mat_id,bol_periodo
 
@@ -261,7 +261,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 				INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 
-				WHERE car_curso=" . $idCurso . "  and car_grupo=" . $idGrupo . " and mat_area=" . $fila["ar_id"] . " AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos['mat_id'] . "' and act_periodo=" . $condicion2 . " AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+				WHERE car_curso='" . $idCurso . "'  and car_grupo=" . $idGrupo . " and mat_area='" . $fila["ar_id"] . "' AND ipc_periodo in (" . $condicion . ") AND cal_id_estudiante='" . $matriculadosDatos['mat_id'] . "' and act_periodo=" . $condicion2 . " AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 
 				group by act_id_tipo, act_id_carga
 
