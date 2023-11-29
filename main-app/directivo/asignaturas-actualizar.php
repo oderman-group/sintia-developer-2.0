@@ -18,7 +18,7 @@ if(trim($_POST["codigoM"])=="" or trim($_POST["nombreM"])=="" or trim($_POST["si
 
 if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
 try{
-    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_materias SET mat_codigo='".$_POST["codigoM"]."', mat_nombre='".$_POST["nombreM"]."', mat_siglas='".$_POST["siglasM"]."', mat_area=".$_POST["areaM"].", mat_oficial=1, mat_valor='".$_POST["porcenAsigna"]."' WHERE mat_id='".$_POST["idM"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_materias SET mat_codigo='".$_POST["codigoM"]."', mat_nombre='".$_POST["nombreM"]."', mat_siglas='".$_POST["siglasM"]."', mat_area='".$_POST["areaM"]."', mat_oficial=1, mat_valor='".$_POST["porcenAsigna"]."' WHERE mat_id='".$_POST["idM"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

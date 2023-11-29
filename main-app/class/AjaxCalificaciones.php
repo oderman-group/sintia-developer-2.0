@@ -10,9 +10,9 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string    $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $codNota
+     * @param string    $codNota
      * @param double    $nota
      * @param double    $notaAnterior
      * 
@@ -27,7 +27,7 @@ class AjaxCalificaciones {
         if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
 
         try{
-            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad={$codNota} AND cal_id_estudiante={$codEstudiante} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='{$codNota}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -37,13 +37,13 @@ class AjaxCalificaciones {
             $codigo=Utilidades::generateCode("CAL");
             
             try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', {$codEstudiante},{$nota},{$codNota}, now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '{$codEstudiante}',{$nota},'{$codNota}', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
             
             try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id={$codNota} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='{$codNota}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -52,13 +52,13 @@ class AjaxCalificaciones {
             if($notaAnterior==""){$notaAnterior = "0.0";}
             
             try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota={$nota}, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior={$notaAnterior}, cal_tipo=1 WHERE cal_id_actividad={$codNota} AND cal_id_estudiante={$codEstudiante} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota={$nota}, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior={$notaAnterior}, cal_tipo=1 WHERE cal_id_actividad='{$codNota}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
             
             try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id={$codNota} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='{$codNota}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
@@ -74,9 +74,9 @@ class AjaxCalificaciones {
      * Este metodo sirve para registrar las observaciones de un estudiante
      * 
      * @param mysqli    $conexion 
-     * @param int       $codEstudiante 
+     * @param string       $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $codObservacion
+     * @param string       $codObservacion
      * @param string    $observacion
      * 
      * @return array // se retorna mensaje de confirmación
@@ -90,7 +90,7 @@ class AjaxCalificaciones {
         }
 
         try{
-            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad={$codObservacion} AND cal_id_estudiante={$codEstudiante} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='{$codObservacion}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -136,7 +136,7 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $datosCargaActual
-     * @param int       $codNota
+     * @param string    $codNota
      * @param string    $nota
      * 
      * @return array // se retorna mensaje de confirmación
@@ -226,9 +226,9 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string    $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $codNota
+     * @param string    $codNota
      * @param double    $nota
      * @param double    $notaAnterior
      * 
@@ -265,9 +265,9 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string    $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $carga
+     * @param string       $carga
      * @param double    $nota
      * @param int       $periodo
      * 
@@ -313,9 +313,9 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string       $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $carga
+     * @param string       $carga
      * @param double    $observacion
      * @param int       $periodo
      * 
@@ -362,7 +362,7 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $datosCargaActual
-     * @param int       $carga
+     * @param string       $carga
      * @param int       $periodo
      * @param string    $nota
      * 
@@ -427,9 +427,9 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string       $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $carga
+     * @param string       $carga
      * @param double    $observacion
      * @param int       $periodo
      * 
@@ -477,11 +477,11 @@ class AjaxCalificaciones {
      * 
      * @param mysqli    $conexion 
      * @param array     $config 
-     * @param int       $codEstudiante 
+     * @param string       $codEstudiante 
      * @param string    $nombreEst 
-     * @param int       $carga
+     * @param string       $carga
      * @param int       $periodo
-     * @param int       $codNota
+     * @param string       $codNota
      * @param double    $nota
      * @param double    $notaAnterior
      * 
@@ -582,8 +582,8 @@ class AjaxCalificaciones {
      * Este metodo sirve para registrar los aspectos academicos de los estudiantes
      * 
      * @param mysqli    $conexion 
-     * @param int       $codEstudiante 
-     * @param int       $carga
+     * @param string       $codEstudiante 
+     * @param string       $carga
      * @param int       $periodo
      * @param double    $aspectoAcademico
      * 
@@ -617,8 +617,8 @@ class AjaxCalificaciones {
      * Este metodo sirve para registrar los aspectos convivencial de los estudiantes
      * 
      * @param mysqli    $conexion 
-     * @param int       $codEstudiante 
-     * @param int       $carga
+     * @param string       $codEstudiante 
+     * @param string       $carga
      * @param int       $periodo
      * @param double    $aspectoConvivencial
      * 

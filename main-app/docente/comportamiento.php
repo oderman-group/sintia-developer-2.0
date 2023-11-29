@@ -94,7 +94,7 @@ include("../compartido/head.php");
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante=".$resultado['mat_id']." AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														if(!empty($notas['dn_nota']) && $notas['dn_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['dn_nota']) && $notas['dn_nota']>=$config[5]) $colorNota = $config[7];
 
