@@ -23,6 +23,10 @@ $institucionId = $resultadoJobs["job_id_institucion"];
 $anio = $resultadoJobs["job_year"];
 $intento = intval($resultadoJobs["job_intentos"]);
 
+$_SESSION["id"]=$resultadoJobs["job_responsable"];
+$_SESSION["bd"]=$resultadoJobs["job_year"];
+$_SESSION["idInstitucion"]=$resultadoJobs["job_id_institucion"];
+
 $grado =$parametros["grado"];
 $grupo =$parametros["grupo"];
 $carga = $parametros["carga"];
