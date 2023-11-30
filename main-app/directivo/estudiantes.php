@@ -262,18 +262,23 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																		<?php }?>
 
 																	<?php }?>
-
-																	<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
-																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
-																	<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
-																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
-																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	
-																	<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>	
+																	<?php if(!empty($resultado['mat_grado']) && !empty($resultado['mat_grupo'])) {?>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
+																		<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
+																		<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
+																	<?php }?>
+
+																	<?php if(!empty($resultado['mat_matricula'])) {?>
+																		<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
+																	<?php }?>
+																	
+																	<?php if($config['conf_id_institucion'] == ICOLVEN && !empty($resultado['mat_codigo_tesoreria'])){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
 
 																	<?php if(!empty($resultado['uss_usuario'])) {?>
+																		<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
 																		<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
 																		<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
 																	<?php }?>
