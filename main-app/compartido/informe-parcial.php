@@ -89,12 +89,12 @@ if(isset($_GET["periodo"])){
                                    <?php 
 								   		$promedioG += $definitiva;
 								   }
-								   		if($nn>0){
+								   		if($materiasDividir>0){
 											$promedioG = round(($promedioG / $materiasDividir),1);
 										}	
                     //MEDIA TECNICA
                     if (array_key_exists(10, $_SESSION["modulos"])){
-                      $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$_GET["estudiante"]);
+                      $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$estudiante);
                       while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
                         if(!empty($datosEstudianteActualMT)){
                           $cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActualMT['matcur_id_curso']."' AND car_grupo='".$datosEstudianteActualMT['matcur_id_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -105,7 +105,7 @@ if(isset($_GET["periodo"])){
                             //DEFINITIVAS
                             $carga = $rCargas['car_id'];
                             $periodo = $cPeriodo;
-                            $estudiante = $_GET["estudiante"];
+                            $estudiante = $estudiante;
                             include("../definitivas.php");
 														$definitivaFinal=$definitiva;
 														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
