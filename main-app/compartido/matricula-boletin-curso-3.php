@@ -611,7 +611,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <?php
 
-        $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos['mat_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$year} AND dn_periodo in(" . $condicion . ");");
+        $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $matriculadosDatos['mat_id'] . "' AND dn_periodo in(" . $condicion . ") AND institucion={$config['conf_id_institucion']} AND year={$year}");
 
         if (@mysqli_num_rows($cndisiplina) > 0) {
 
