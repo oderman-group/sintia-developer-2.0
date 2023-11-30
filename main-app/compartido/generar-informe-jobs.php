@@ -23,6 +23,10 @@ $institucionId = $resultadoJobs["job_id_institucion"];
 $anio = $resultadoJobs["job_year"];
 $intento = intval($resultadoJobs["job_intentos"]);
 
+$_SESSION["id"]=$resultadoJobs["job_responsable"];
+$_SESSION["bd"]=$resultadoJobs["job_year"];
+$_SESSION["idInstitucion"]=$resultadoJobs["job_id_institucion"];
+
 $grado =$parametros["grado"];
 $grupo =$parametros["grupo"];
 $carga = $parametros["carga"];
@@ -42,7 +46,7 @@ if(empty($config)){
 //Consultamos los estudiantes del grado y grupo
 $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $cursoActual=GradoServicios::consultarCurso($grado);
-$consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$grupo);
+$consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo,$anio);
 $numEstudiantes=0;
 $finalizado = true;
 $erroresNumero=0;
@@ -172,7 +176,7 @@ $mensaje="";
 				WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");			
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
 				$codigoBOL=Utilidades::generateCode("BOL");
-				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_idbol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");	
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");	
 					
 			}
 			

@@ -99,10 +99,11 @@ class Estudiantes {
 
         try {
             $sqlString= "SELECT *, sum(act_valor) as acumulado FROM ".BD_ACADEMICA.".academico_matriculas mat
+            LEFT JOIN ".BD_ADMIN.".mediatecnica_matriculas_cursos mt on matcur_id_matricula=mat_id AND matcur_id_institucion={$config['conf_id_institucion']} AND matcur_years={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_cargas car on car_id='".$carga."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_calificaciones aac on aac.cal_id_estudiante=mat.mat_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} 
             LEFT JOIN ".BD_ACADEMICA.".academico_actividades aa on aa.act_id=aac.cal_id_actividad and aa.act_id_carga=car_id and aa.act_periodo='".$periodo."' and aa.act_registrada=1 and aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-            WHERE mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND mat.mat_grado=car_curso AND mat.mat_grupo=car_grupo AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+            WHERE mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND (mat.mat_grado=car_curso OR matcur_id_curso=car_curso) AND (mat.mat_grupo=car_grupo OR matcur_id_grupo=car_grupo) AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
             GROUP BY mat.mat_id
             HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
