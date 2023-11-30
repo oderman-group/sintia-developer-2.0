@@ -73,7 +73,7 @@ $inicio = $_POST["desde"];
 $grados = "";
 while($i<=$restaAgnos){
 	
-	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	
 	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "PREESCOLAR"; $horasT = 25;}	
@@ -115,7 +115,7 @@ $inicio = $_POST["desde"];
 while($i<=$restaAgnos){
 
 	//SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
-	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 
 ?>
 

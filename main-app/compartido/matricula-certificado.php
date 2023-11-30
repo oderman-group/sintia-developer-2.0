@@ -76,7 +76,7 @@ $modulo = 1;
     $grados = "";
 
     while ($i <= $restaAgnos) {
-	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	
 	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
@@ -114,7 +114,7 @@ $modulo = 1;
     $inicio = $_POST["desde"];
 
     while ($i <= $restaAgnos) {
-	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 
     ?>
 
@@ -181,7 +181,7 @@ $modulo = 1;
 
                     <tr>
 
-                        <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
+                        <td><?= $cargas["car_id"] .") -". strtoupper($cargas["mat_nombre"]); ?></td>
 
                         <td><?= $notaFinal; ?></td>
 
