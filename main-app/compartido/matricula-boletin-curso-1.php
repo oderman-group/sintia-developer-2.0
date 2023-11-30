@@ -456,7 +456,7 @@ $desempenoND = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <td><?=$desempenoND['notip_nombre']?></td>
+        <td><?=$desempenoND['notip_nombre'] ?? ""?></td>
         <td><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
 <?php }?>

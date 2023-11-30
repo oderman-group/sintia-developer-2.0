@@ -331,7 +331,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 if ($numfilas_not_area > 0) {
 
                     $consultaSumaValorMateria=mysqli_query($conexion, "SELECT SUM(mat_valor) FROM ".BD_ACADEMICA.".academico_materias am
-                    INNER JOIN ".BD_ACADEMICA.".academico_cargas ON car_materia=am.mat_id AND car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_materia=am.mat_id AND car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
                     WHERE am.mat_area='".$resultado_not_area["ar_id"]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}");
                     $sumaValorMaterias = mysqli_fetch_array($consultaSumaValorMateria, MYSQLI_BOTH); 
 
