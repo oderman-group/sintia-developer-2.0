@@ -133,7 +133,7 @@ Firma Del Padre Y/O Acudiente
                                   
                                     
  <?php }?>
- <?php include("../compartido/footer-informes.php") ?>;	
+ <?php include("../compartido/footer-informes.php") ?>	
 </body>
 
 </html>

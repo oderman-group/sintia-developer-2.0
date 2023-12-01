@@ -210,7 +210,7 @@ $numE=mysqli_num_rows($consultaMatriculaEst);
   ?>
   </table>
 
-  <?php include("../compartido/footer-informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>
 </body>
 </html>
 

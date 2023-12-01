@@ -116,5 +116,5 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
   </table>
   </center>
 </body>
-<?php include("../compartido/footer-informes.php") ?>;
+<?php include("../compartido/footer-informes.php") ?>
 </html>

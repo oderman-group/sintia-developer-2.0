@@ -542,7 +542,7 @@ $modulo = 1;
 
 
 
-    <?php include("../compartido/footer-informes.php") ?>;
+    <?php include("../compartido/footer-informes.php") ?>
 
 
 

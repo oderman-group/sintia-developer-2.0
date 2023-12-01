@@ -81,7 +81,7 @@ include("../compartido/head-informes.php") ?>
   ?>
   </table>
   Total Estudiantes:<?=$numE;?>
-  <?php include("../compartido/footer-informes.php") ?>;
+  <?php include("../compartido/footer-informes.php") ?>
 </body>
 <script type="application/javascript">
 print();
