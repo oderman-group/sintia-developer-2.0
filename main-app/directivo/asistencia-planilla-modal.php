@@ -64,6 +64,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                     <select class="form-control  select2" name="agno" required>
                         <option value="">Seleccione una opción</option>
                         <?php
+                        $yearStart = $yearArray[0];
                         while ($yearStart <= $yearEnd) {
                             if ($_SESSION["bd"] == $yearStart)
                                 echo "<option value='" . $yearStart . "' selected style='color:blue;'>" . $yearStart . "</option>";
