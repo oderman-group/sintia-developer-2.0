@@ -173,23 +173,27 @@ function verCuentaBancaria() {
     `;
 }
 
-function cambiarPosicion(idCarga, posicionNueva) {
-	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva, {
+function cambiarPosicion(idCarga, posicionNueva, docente) {
+	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva+'&docente='+docente, {
 		method: 'GET'
 	})
 	.then(response => response.text()) // Convertir la respuesta a texto
 	.then(data => {
-		$.toast({
 
-			heading: 'Proceso completado', 
-			text: 'Se ha guardado la nueva posición para la carga.', 
-			position: 'top-left',
-			loaderBg:'#26c281', 
-			icon: 'success', 
-			hideAfter: 3000, 
-			stack: 6
+        if(data == 1) {
+            $.toast({
 
-		});
+                heading: 'Proceso completado', 
+                text: 'Se ha guardado la nueva posición '+posicionNueva+' para la carga '+idCarga, 
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg:'#26c281', 
+                icon: 'success', 
+                hideAfter: 5000, 
+                stack: 6
+
+            });
+        }
 	})
 	.catch(error => {
 		// Manejar errores
