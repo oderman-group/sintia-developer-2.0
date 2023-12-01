@@ -42,7 +42,7 @@ include("../compartido/head-informes.php") ?>
   //ESTUDIANTES ACTUALES
   $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
   $cursoActual=GradoServicios::consultarCurso($grado);
-  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$grupo);
+  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo);
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
   $cont=1;
   $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$carga."' AND act_estado=1 AND act_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");

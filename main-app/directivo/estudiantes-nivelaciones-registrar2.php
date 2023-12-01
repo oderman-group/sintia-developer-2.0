@@ -225,7 +225,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 								<tbody>
 									<?php
 									$filtroAdicional = "AND mat_grado='" . $_REQUEST['curso'] . "' AND mat_grupo='" . $_REQUEST['grupo'] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$curso,"",$_REQUEST["grupo"]);
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$curso,$_REQUEST["grupo"]);
 									while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 										$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
 										$defPorEstudiante = 0;

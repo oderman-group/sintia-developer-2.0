@@ -50,14 +50,14 @@ include("../compartido/head-informes.php") ?>
         </tr>
         <?php
 		$filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$datosCurso,"",$grupo);
+		$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$datosCurso,$grupo);
 		while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 		$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 		$defPorEstudiante = 0;
 		$materiasPerdidas = 0;	 
 		?>
         <tr style="border-color:<?=$Plataforma->colorDos;?>;">
-            <td style="font-size:9px;"><?=$resultado[1];?></td>
+            <td style="font-size:9px;"><?=$resultado['mat_id'];?></td>
             <td style="font-size:9px;"><?=$nombreCompleto?></td>
             <?php
 			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 

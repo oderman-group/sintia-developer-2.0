@@ -166,7 +166,7 @@ if(!Modulos::validarPermisoEdicion()){
 													$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 												}
 												$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
-												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
+												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);
 												while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);	
 												$defPorEstudiante = 0;

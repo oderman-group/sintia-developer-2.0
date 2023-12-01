@@ -20,7 +20,7 @@ include("../compartido/head-informes.php") ?>
 <?php
 $filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
-$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"",$_REQUEST["grupo"]);
+$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$_REQUEST["grupo"]);
 
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);

@@ -64,7 +64,7 @@ include("../compartido/head-informes.php") ?>
 										$filtroAdicional= "AND mat_grado='".$cursoV."' AND mat_grupo='".$grupoV."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 									}
 									$cursoActual=GradoServicios::consultarCurso($cursoV);
-									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,"");
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 									$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 									 $defPorEstudiante = 0;

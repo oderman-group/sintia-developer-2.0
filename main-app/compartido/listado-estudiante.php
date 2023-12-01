@@ -46,7 +46,7 @@ include("../compartido/head-informes.php") ?>
 
   $cont=1;
   $cursoActual=GradoServicios::consultarCurso($_REQUEST["grado"]);
-  $consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,"",$idGrupo);
+  $consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,$idGrupo);
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
 	$acudiente = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
