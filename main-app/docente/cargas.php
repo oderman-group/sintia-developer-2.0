@@ -294,12 +294,12 @@ let draggedItem = null;
 let fromIndex, toIndex;
 let idCarga;
 let target;
+let docente = <?=$_SESSION["id"];?>;
 
 sortableContainer.addEventListener("dragstart", (e) => {
     draggedItem = e.target;
     fromIndex = Array.from(sortableContainer.children).indexOf(draggedItem);
 	idCarga = e.target.id.split('-')[1];
-	console.log('dragstart...');
 	
 	target = e.target;
 
@@ -313,7 +313,6 @@ sortableContainer.addEventListener("dragover", (e) => {
     if (targetItem.classList.contains("sortable-item")) {
         toIndex = Array.from(sortableContainer.children).indexOf(targetItem);
     }
-	console.log('dragover...');
 });
 
 sortableContainer.addEventListener("drop", (e) => {
@@ -330,17 +329,13 @@ sortableContainer.addEventListener("drop", (e) => {
 	target.style.backgroundColor = "initial";
 	target.style.transition = "initial";
 
-	console.log('drop...');
-	console.log(fromIndex, idCarga);
-	console.log(toIndex);
-
 	if(typeof toIndex === undefined) {
 		toIndex = 1;
 	} else {
 		toIndex ++;
 	}
 
-	cambiarPosicion(idCarga, toIndex);
+	cambiarPosicion(idCarga, toIndex, docente);
 });
 
 // Prevenir eventos por defecto
