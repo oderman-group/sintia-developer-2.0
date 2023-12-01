@@ -604,7 +604,7 @@ if($periodoActual==4){
 ?>
 
 
-<?php include("../compartido/footer-informes.php") ?>;
+<?php include("../compartido/footer-informes.php") ?>
 				                   
 <!-- 
 <div align="center" style="font-size:10px; margin-top:10px;">

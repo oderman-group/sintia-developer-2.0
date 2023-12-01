@@ -235,7 +235,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 	</table>
 
 
-	<?php include("../compartido/footer-informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>
 </body>
 
 </html>

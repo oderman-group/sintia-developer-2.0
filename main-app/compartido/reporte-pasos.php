@@ -21,7 +21,7 @@ if(!empty($_GET["busqueda"])){
   $filtro .= " AND mat_nombres LIKE '%" . $busqueda . "%' OR mat_primer_apellido LIKE '%" . $busqueda . "%' OR mat_documento LIKE '%" . $busqueda . "%'";
 }
 $nombreInforme =  "INFORME DE MATRÍCULAS<br>PASO A PASO";
-include("../compartido/head_informes.php");
+include("../compartido/head-informes.php");
 ?>
   <div align="center" style="margin-bottom:20px;">
       <p class="mb-2 mt-2">
@@ -161,7 +161,7 @@ include("../compartido/head_informes.php");
     ?>
   </table>
   </center>
-  <?php include("../compartido/footer-informes.php") ?>;	
+  <?php include("../compartido/footer-informes.php") ?>	
   
   </div>
 

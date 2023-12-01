@@ -70,7 +70,7 @@ include("../compartido/head-informes.php") ?>
   }//Fin mientras que
   ?>
   </table>
-	<?php include("../compartido/footer-informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>
 	 
 
 </body>

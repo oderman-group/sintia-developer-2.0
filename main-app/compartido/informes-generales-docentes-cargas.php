@@ -66,7 +66,7 @@ include("../compartido/head-informes.php") ?>
 			?>  
 		</table>
 	</div>
-	<?php include("../compartido/footer-informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>
 
 </div>	
 

@@ -80,7 +80,7 @@ if(!empty($_GET["busqueda"])){
       ?>
     </table>
 
-    <?php include("../compartido/footer-informes.php") ?>;
+    <?php include("../compartido/footer-informes.php") ?>
 
   </div>
 
