@@ -79,9 +79,9 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				$suma = 0;
 				$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_REQUEST["curso"] . "' AND car_grupo='" . $_REQUEST["grupo"] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 
-				$defini = 0;
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
+					$defini = 0;
 					if($config['conf_id_institucion']!=23){
 						$notas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
 						WHERE bol_estudiante='" . $fila['mat_id'] . "' 
