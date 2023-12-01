@@ -126,7 +126,7 @@ include("../compartido/head-informes.php") ?>
 
 
 		<?php
-		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_id_institucion='" . $_SESSION["idInstitucion"] . "' AND conf_agno='" . $_SESSION["bd"] . "'");
+		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_id_institucion='" . $_SESSION["idInstitucion"] . "' AND conf_agno='" . $inicio . "'");
 		$configAA = mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
 		if ($inicio < $config[1] and $configAA[2] < 5) { ?>
 
@@ -156,7 +156,7 @@ include("../compartido/head-informes.php") ?>
 
 
 				$materiasPerdidas = 0;
-
+				$horasT = 0;
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 					//CONSULTAMOS LAS MATERIAS DEL AREA
@@ -202,6 +202,7 @@ include("../compartido/head-informes.php") ?>
 					</tr>
 
 					<?php
+					$horasT += $cargas["car_ih"];
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
 					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_intensidad_curso ipc WHERE am.mat_area='" . $cargas["ar_id"] . "' AND am.mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc.ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc.ipc_materia=am.mat_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$inicio} AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio} AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
@@ -463,6 +464,8 @@ include("../compartido/head-informes.php") ?>
                                             WHERE car_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
 
+				$materiasPerdidas = 0;
+				$horasT = 0;
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -471,6 +474,10 @@ include("../compartido/head-informes.php") ?>
 					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 					$nota = round($boletin[0], 1);
+					
+					if ($nota < $config[5]) {
+						$materiasPerdidas++;
+					}
 
 					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
@@ -484,6 +491,7 @@ include("../compartido/head-informes.php") ?>
 						<td><?= $cargas["car_ih"]; ?></td>
 
 						<?php
+						$horasT += $cargas["car_ih"];
 
 						$p = 1;
 
@@ -600,6 +608,15 @@ include("../compartido/head-informes.php") ?>
 
 			</table>
 
+            <?php
+			$msj='';
+            if ($materiasPerdidas == 0)
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            else
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            ?>
+			<div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:20px;"><?= $msj; ?></div>
+
 
 
 		<?php } ?>
@@ -651,7 +668,7 @@ include("../compartido/head-informes.php") ?>
 		</tr>
 
 	</table>
-	<?php include("footer-informes.php") ?>;
+	<?php include("footer-informes.php") ?>
 
 
 </body>

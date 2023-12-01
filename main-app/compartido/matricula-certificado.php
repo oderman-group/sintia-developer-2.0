@@ -155,6 +155,7 @@ $modulo = 1;
 
                 $materiasPerdidas = 0;
 
+				$horasT = 0;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -190,6 +191,7 @@ $modulo = 1;
                     </tr>
 
                 <?php
+                $horasT += $cargas["car_ih"];
 
                 }
 
@@ -349,6 +351,8 @@ $modulo = 1;
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
+                $materiasPerdidas = 0;
+                $horasT = 0;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -360,6 +364,10 @@ $modulo = 1;
                 if(!empty($boletin[0])){
                     $nota = round($boletin[0],1);
                 }
+                
+				if ($nota < $config[5]) {
+					$materiasPerdidas++;
+				}
 
                     $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
@@ -374,6 +382,7 @@ $modulo = 1;
 
                         <?php
 
+                        $horasT += $cargas["car_ih"];
                         $p = 1;
 
                         //PERIODOS
@@ -489,6 +498,14 @@ $modulo = 1;
 
 
             </table>
+            <?php
+            $msj='';
+            if ($materiasPerdidas == 0)
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            else
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            ?>
+            <div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:20px;"><?= $msj; ?></div>
 
 
 
@@ -515,7 +532,7 @@ $modulo = 1;
 
     <p>&nbsp;</p>
 
-    PLAN DE ESTUDIOS: Ley 115 de Educación, artículo 23, Decreto 1860 de 1994. Decreto 1290 de 2009 y Decreto 3055 del 12 de diciembre de 2002. Intensidad horaria 35 horas semanales de 55 minutos.<br>
+    PLAN DE ESTUDIOS: Ley 115 de Educación, artículo 23, Decreto 1860 de 1994. Decreto 1290 de 2009 y Decreto 3055 del 12 de diciembre de 2002. Intensidad horaria <?= $horasT; ?> horas semanales de 55 minutos.<br>
 
     Se expide el presente certificado en Medellín el <?= date("d"); ?> de <?= date("M"); ?> de <?= date("Y"); ?>.
 
