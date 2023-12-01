@@ -153,6 +153,7 @@ $modulo = 1;
 
                 $materiasPerdidas = 0;
 
+				$horasT = 0;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -183,6 +184,7 @@ $modulo = 1;
                     </tr>
 
                 <?php
+                $horasT += $cargas["car_ih"];
 
                 }
 
@@ -287,6 +289,7 @@ $modulo = 1;
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
+                $horasT = 0;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -312,6 +315,7 @@ $modulo = 1;
 
                         <?php
 
+                        $horasT += $cargas["car_ih"];
                         $p = 1;
 
                         //PERIODOS
@@ -369,7 +373,7 @@ $modulo = 1;
 
     <p>&nbsp;</p>
 
-    PLAN DE ESTUDIOS: Ley 115 de Educación, artículo 23, Decreto 1860 de 1994. Decreto 1290 de 2009 y Decreto 3055 del 12 de diciembre de 2002. Intensidad horaria 35 horas semanales de 55 minutos.<br>
+    PLAN DE ESTUDIOS: Ley 115 de Educación, artículo 23, Decreto 1860 de 1994. Decreto 1290 de 2009 y Decreto 3055 del 12 de diciembre de 2002. Intensidad horaria <?= $horasT; ?> horas semanales de 55 minutos.<br>
 
     Se expide el presente certificado en Medellín el <?= date("d"); ?> de <?= date("M"); ?> de <?= date("Y"); ?>.
 

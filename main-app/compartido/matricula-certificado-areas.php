@@ -159,7 +159,7 @@ include("../compartido/head-informes.php") ?>
 
 
 				$materiasPerdidas = 0;
-
+				$horasT = 0;
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 					//CONSULTAMOS LAS MATERIAS DEL AREA
@@ -205,6 +205,7 @@ include("../compartido/head-informes.php") ?>
 					</tr>
 
 					<?php
+					$horasT += $cargas["car_ih"];
 					//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 
 					$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='" . $cargas["ar_id"] . "' AND mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND ipc_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND ipc_materia=mat_id");
@@ -368,6 +369,7 @@ include("../compartido/head-informes.php") ?>
                                             WHERE car_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
 
+				$horasT = 0;
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -389,6 +391,7 @@ include("../compartido/head-informes.php") ?>
 						<td><?= $cargas["car_ih"]; ?></td>
 
 						<?php
+						$horasT += $cargas["car_ih"];
 
 						$p = 1;
 

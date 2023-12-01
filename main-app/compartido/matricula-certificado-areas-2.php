@@ -163,6 +163,7 @@ while($i<=$restaAgnos){
 
             $materiasPerdidas = 0;
 
+			$horasT = 0;
             while($cargas=mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)){	
 
                 //CONSULTAMOS LAS MATERIAS DEL AREA
@@ -204,6 +205,7 @@ while($i<=$restaAgnos){
             </tr>
             
             <?php
+			$horasT += $cargas["car_ih"];
 			//INCLUIR LA MATERIA, LA DEFINITIVA Y LA I.H POR CADA ÁREA
 			$materiasDA = mysqli_query($conexion, "SELECT car_id, mat_nombre, ipc_intensidad FROM academico_materias, academico_cargas, academico_intensidad_curso WHERE mat_area='".$cargas["ar_id"]."' AND mat_id=car_materia AND car_curso='".$matricula["gra_id"]."' AND car_grupo='".$matricula["gru_id"]."' AND ipc_curso='".$matricula["mat_grado"]."' AND ipc_materia=mat_id");
 			
@@ -364,6 +366,7 @@ while($i<=$restaAgnos){
 
                                             WHERE car_curso='".$matricula["mat_grado"]."' AND car_grupo='".$matricula["mat_grupo"]."'");
 
+			$horasT = 0;
 			while($cargas=mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)){	
 
                 //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -387,6 +390,7 @@ while($i<=$restaAgnos){
 				<?php
 
                     $p = 1;
+					$horasT += $cargas["car_ih"];
 
                     //PERIODOS
 
