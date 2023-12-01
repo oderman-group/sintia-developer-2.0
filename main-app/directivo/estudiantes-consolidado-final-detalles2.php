@@ -236,7 +236,7 @@ if (!Modulos::validarPermisoEdicion()) {
 								<tbody>
 									<?php
 									$filtro = " AND mat_grado='" . $_POST["curso"] . "' AND mat_grupo='" . $_POST["grupo"] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$curso,"",$_POST["grupo"]);
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$curso,$_POST["grupo"]);
 									//PRIMER PUESTO
 									$primerPuestoNota = 0;
 									$primerPuestoNombre = '';

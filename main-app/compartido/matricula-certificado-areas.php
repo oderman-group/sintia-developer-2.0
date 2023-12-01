@@ -75,7 +75,7 @@ include("../compartido/head-informes.php") ?>
 	$grados = "";
 	while ($i <= $restaAgnos) {	
 	
-	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	
 	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
@@ -115,7 +115,7 @@ include("../compartido/head-informes.php") ?>
 	while ($i <= $restaAgnos) {
 
 	//SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
-	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 
 	?>
 		<p align="center" style="font-weight:bold;">
