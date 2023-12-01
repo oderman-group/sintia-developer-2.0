@@ -52,7 +52,7 @@ if(!empty($_GET["busqueda"])){
         <th>Estado</th>
       </tr>
       <?php
-      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
+      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado", "En Inscripción");
       $cont = 1;
 
       $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
