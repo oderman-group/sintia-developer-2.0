@@ -42,7 +42,7 @@ require_once("../class/UsuariosPadre.php");
                                         <td><?=$resultado['fcu_detalle'];?></td>
                                         <td>$<?=number_format($resultado['fcu_valor'],2,",",".");?></td>
                                         <td><?=$tipoEstadoFinanzas[$resultado['fcu_tipo']];?></td>
-                                        <td><?=$formasPagoFinanzas[$resultado['fcu_forma_pago']];?></td>
+                                        <td><?=$formasPagoFinanzas[$resultado['fcu_forma_pago']] ?? "N/A";?></td>
                                         
                                         <td><?=$resultado['fcu_observaciones'];?></td>
                                         <td><?=$resultado['fcu_cerrado'];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado['uss_nombre']);?></td>
