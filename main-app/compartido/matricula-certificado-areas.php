@@ -129,7 +129,7 @@ include("../compartido/head-informes.php") ?>
 
 
 		<?php
-		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_base_datos='" . $_SESSION["inst"] . "' AND conf_agno='" . $_SESSION["bd"] . "'");
+		$consultaConfig = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".configuracion WHERE conf_base_datos='" . $_SESSION["inst"] . "' AND conf_agno='" . $inicio . "'");
 		$configAA = mysqli_fetch_array($consultaConfig, MYSQLI_BOTH);
 		if ($inicio <= $config[1] and $configAA[2] == 5) { ?>
 
@@ -310,11 +310,11 @@ include("../compartido/head-informes.php") ?>
 				}
 			}
 			if ($materiasPerdidas == 0 or $niveladas >= $materiasPerdidas)
-				$msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["matri_solo_nombre"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+				$msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 			/*elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
                 $msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datos_usr[3]." ".$datos_usr[4]." ".$datos_usr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";*/
 			else
-				$msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["matri_solo_nombre"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+				$msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 			?>
 
 			<br>
@@ -369,6 +369,7 @@ include("../compartido/head-informes.php") ?>
                                             WHERE car_curso='" . Utilidades::getToString($matricula["mat_grado"]) . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
 
+				$materiasPerdidas = 0;
 				$horasT = 0;
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
@@ -378,6 +379,10 @@ include("../compartido/head-informes.php") ?>
 					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 					$nota = round($boletin[0], 1);
+
+                    if ($nota < $config[5]) {
+                        $materiasPerdidas++;
+                    }
 
 					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
 					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
@@ -424,6 +429,15 @@ include("../compartido/head-informes.php") ?>
 
 
 			</table>
+
+            <?php
+			$msj='';
+            if ($materiasPerdidas == 0)
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            else
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            ?>
+			<div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:20px;"><?= $msj; ?></div>
 
 
 
@@ -476,7 +490,7 @@ include("../compartido/head-informes.php") ?>
 		</tr>
 
 	</table>
-	<?php include("../compartido/footer_informes.php") ?>;
+	<?php include("../compartido/footer-informes.php") ?>
 
 
 </body>

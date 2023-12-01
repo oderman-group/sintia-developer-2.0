@@ -230,11 +230,11 @@ $modulo = 1;
 
             if ($materiasPerdidas == 0)
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
             else
 
-                $msj = "<center>EL (LA) ESTUDIANTE " . strtoupper($datos_usr[3] . " " . $datos_usr[4] . " " . $datos_usr["mat_nombres"]) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 
             ?>
 
@@ -289,6 +289,7 @@ $modulo = 1;
 
                                             WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
 
+                $materiasPerdidas = 0;
                 $horasT = 0;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
@@ -300,6 +301,10 @@ $modulo = 1;
                 $nota = 0;
                 if(!empty($boletin[0])){
                     $nota = round($boletin[0],1);
+                }
+
+                if ($nota < $config[5]) {
+                    $materiasPerdidas++;
                 }
 
                     $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
@@ -347,6 +352,14 @@ $modulo = 1;
 
 
             </table>
+            <?php
+            $msj='';
+            if ($materiasPerdidas == 0)
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            else
+                $msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+            ?>
+            <div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:20px;"><?= $msj; ?></div>
 
 
 
