@@ -8,7 +8,7 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("PC_");
+$codigo=Utilidades::generateCode("PC");
 
 $archivoSubido = new Archivos;
 
