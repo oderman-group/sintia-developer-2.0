@@ -11,7 +11,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
-}?>
+}
+
+try{
+    $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE ar_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
+$rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -59,14 +67,6 @@ if(!Modulos::validarPermisoEdicion()){
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
-                                    <?php 
-                                    try{
-                                        $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE ar_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-                                    } catch (Exception $e) {
-                                        include("../compartido/error-catch-to-report.php");
-                                    }
-                                    $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
-                                    ?>
 									<form name="formularioGuardar" action="areas-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idA">
 										
@@ -88,7 +88,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 }
 												?>
                                                 <select class="form-control  select2" name="posicionA" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opci n</option>
+                                                    <option value="">Seleccione una opción</option>
 													<?php
                                                     $cont=0;
                                                     while($rPos=mysqli_fetch_array($cPosicionA, MYSQLI_BOTH)){
