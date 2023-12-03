@@ -76,7 +76,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $idE . "' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -86,7 +86,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_usuario='" . $idU . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
