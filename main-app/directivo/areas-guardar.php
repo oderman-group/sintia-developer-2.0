@@ -18,7 +18,7 @@ include("../compartido/historial-acciones-guardar.php");
 		exit();
 	}
 
-	$codigo=Utilidades::generateCode("AR_");
+	$codigo=Utilidades::generateCode("AR");
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_areas (ar_id, ar_nombre,ar_posicion, institucion, year)VALUES('".$codigo."', '".$_POST["nombreA"]."',".$_POST["posicionA"].", {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
 	} catch (Exception $e) {
