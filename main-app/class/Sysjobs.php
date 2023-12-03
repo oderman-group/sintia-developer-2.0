@@ -30,7 +30,7 @@ class SysJobs {
                 break;
 
                 case JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL:
-                    $msj = ' Los estudiantes ya se est&acute;n subiendo a la plataforma.';
+                    $msj = ' Los estudiantes ya se est&aacute;n subiendo a la plataforma.';
                 break;
 
                 default:
@@ -40,7 +40,7 @@ class SysJobs {
             
 
             $idRegistro =self::crear($tipo,$prioridad,$parametros,$msj);
-            $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
+            $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro.". Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
         }else{
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
             $idRegistro = $jobsEncontrado["job_id"];           
@@ -52,7 +52,7 @@ class SysJobs {
                     "mensaje" => 'La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; nuevamente.'
                 );
                 self::actualizar($datos);
-                $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
+                $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
             }else{
                 $mensaje="Proceso ".$tipo." con el c&oacute;digo ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];               
             }
