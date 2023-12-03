@@ -328,7 +328,7 @@
 							<?php }?>
 
 							<?php
-								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION && $datosUsuarioActual['uss_tipo'] == TIPO_DEV){
+								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION && $datosUsuarioActual['uss_tipo'] == TIPO_DEV && ($_SESSION["idInstitucion"] == DEVELOPER_PROD || $_SESSION["idInstitucion"] == DEVELOPER) ){
 							?>
 								<li  <?php agregarClass(MENU_PADRE,["DV0038","DV0039"]) ?> >
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-database"></i>
