@@ -33,5 +33,5 @@
     $idRegistro = mysqli_insert_id($conexion);
     
     include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="mps-productos.php?success=SC_DT_1&id='.$idRegistro.'";</script>';
+	echo '<script type="text/javascript">window.location.href="mps-productos.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
     exit();

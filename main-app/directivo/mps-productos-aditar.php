@@ -6,7 +6,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try {
-    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . $_GET["idR"] . "'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . base64_decode($_GET["idR"]) . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -65,7 +65,7 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-productos-actualizar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+                                    <input type="hidden" value="<?=base64_decode($_GET["idR"]);?>" name="idR">
 										
                                     <div class="form-group row">
                                         <div class="col-sm-4" style="margin: 0 auto 10px">
