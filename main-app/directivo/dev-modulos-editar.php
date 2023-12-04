@@ -10,7 +10,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try{
-    $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id=".$_GET["id"].";");
+    $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".modulos WHERE mod_id=".base64_decode($_GET["id"]).";");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -66,7 +66,7 @@ $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
                                    
 									<form name="formularioGuardar" action="dev-modulos-actualizar.php" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="id" value="<?=$_GET["id"]?>">
+                                        <input type="hidden" name="id" value="<?=base64_decode($_GET["id"])?>">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Modulo<span style="color: red;">(*)</span></label>

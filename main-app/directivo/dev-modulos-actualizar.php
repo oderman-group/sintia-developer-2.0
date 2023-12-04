@@ -18,5 +18,5 @@ try{
 }
 	include("../compartido/guardar-historial-acciones.php");
 
-    echo '<script type="text/javascript">window.location.href="dev-modulos.php?success=SC_DT_2&id='.$_POST["id"].'";</script>';
+    echo '<script type="text/javascript">window.location.href="dev-modulos.php?success=SC_DT_2&id='.base64_encode($_POST["id"]).'";</script>';
 	exit();

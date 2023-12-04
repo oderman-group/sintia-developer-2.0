@@ -44,11 +44,15 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["modPadre"])) {
-                                    $filtro .= " AND mod_padre='" . $_GET["modPadre"] . "'";
+                                $modPadre = '';
+                                $estado = '';
+                                if (!empty($_GET["modPadre"])) {
+                                    $modPadre = base64_decode($_GET["modPadre"]);
+                                    $filtro .= " AND mod_padre='" . $modPadre . "'";
                                 }
-                                if (is_numeric($_GET["estado"])) {
-                                    $filtro .= " AND mod_estado='" . $_GET["estado"] . "'";
+                                if (!empty($_GET["estado"])) {
+                                    $estado = base64_decode($_GET["estado"]);
+                                    $filtro .= " AND mod_estado='" . $estado . "'";
                                 }
                             ?>
 
@@ -123,7 +127,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['mod_id']; ?></td>
                                                             <td><?= $resultado['mod_nombre']; ?></td>
-                                                            <td><?= $modPadre['mod_nombre']; ?></td>
+                                                            <td><?= $modPadre['mod_nombre'] ?? ""; ?></td>
                                                             <td><?= $estado; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
@@ -132,7 +136,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-modulos-editar.php?id=<?= $resultado['mod_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-modulos-editar.php?id=<?= base64_encode($resultado['mod_id']); ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

@@ -1,4 +1,5 @@
 <?php
+$busqueda = "";
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -29,9 +30,9 @@ if (isset($_GET['busqueda'])) {
                     }
                     while ($datosFiltro = mysqli_fetch_array($consultaFiltro, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosFiltro['mod_id'] == $_GET["modPadre"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosFiltro['mod_id'] == $modPadre) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?modPadre=<?= $datosFiltro['mod_id']; ?>&estado=<?= $_GET["estado"]; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?modPadre=<?= base64_encode($datosFiltro['mod_id']); ?>&estado=<?= base64_encode($estado); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -43,8 +44,8 @@ if (isset($_GET['busqueda'])) {
                     <span class="fa fa-angle-down"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=1&modPadre=<?= $_GET["modPadre"]; ?>">Activo</a>
-                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=0&modPadre=<?= $_GET["modPadre"]; ?>">Inactivo</a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=<?=base64_encode(1)?>&modPadre=<?= base64_encode($modPadre); ?>&busqueda=<?= $busqueda; ?>">Activo</a>
+                    <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?estado=<?=base64_encode(0)?>&modPadre=<?= base64_encode($modPadre); ?>&busqueda=<?= $busqueda; ?>">Inactivo</a>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
             </li>
@@ -52,19 +53,9 @@ if (isset($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <?php
-                if (!empty($_GET['modPadre'])){
-            ?>
-                <input type="hidden" name="modPadre" value="<?= $_GET['modPadre']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['estado'])){
-            ?>
-                <input type="hidden" name="estado" value="<?= $_GET['estado']; ?>"/>
-            <?php
-                }
-            ?>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+                <input type="hidden" name="modPadre" value="<?= base64_encode($modPadre); ?>"/>
+                <input type="hidden" name="estado" value="<?= base64_encode($estado); ?>"/>
+            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>
 
