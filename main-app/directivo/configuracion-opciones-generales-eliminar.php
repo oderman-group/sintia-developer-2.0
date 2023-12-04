@@ -8,7 +8,7 @@ $idPaginaInterna = 'DV0041';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='" . $_GET["idogen"] . "'");
+	mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='" . base64_decode($_GET["idogen"]) . "'");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

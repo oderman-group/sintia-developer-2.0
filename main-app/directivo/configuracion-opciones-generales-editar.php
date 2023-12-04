@@ -54,14 +54,14 @@ include("../compartido/head.php");
 
                                     <?php
                                         try{
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
+                                            $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".base64_decode($_GET["idogen"])."'");
                                         } catch (Exception $e) {
                                             include("../compartido/error-catch-to-report.php");
                                         }
                                         $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);	
                                     ?>
                                     <form action="configuracion-opciones-generales-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-                                    <input type="hidden" name="idogen" value="<?=$_GET["idogen"]?>">
+                                    <input type="hidden" name="idogen" value="<?=base64_decode($_GET["idogen"])?>">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
