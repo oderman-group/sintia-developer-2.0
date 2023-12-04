@@ -59,7 +59,7 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="col-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                     </div>
-                    <?php $acudienteActual = UsuarioServicios::consultar($_GET['id']); ?>
+                    <?php $acudienteActual = UsuarioServicios::consultar(base64_decode($_GET['id'])); ?>
                     <div class="col-sm-3">
                         <div class="panel">
                             <header class="panel-heading panel-heading-purple"><b>Datos del acudiente</b></header>
@@ -81,12 +81,12 @@ if(!Modulos::validarPermisoEdicion()){
                             <header class="panel-heading panel-heading-purple"><b>Acudidos</b></header>
                             <div class="panel-body">
                                 <form name="formularioGuardar" action="usuarios-acudidos-actualizar.php" method="post">
-                                    <input type="hidden" value="<?=$_GET['id'];?>" name="id">
+                                    <input type="hidden" value="<?=base64_decode($_GET['id']);?>" name="id">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label"><b>Estudiantes: </b></label>
                                         <div class="col-sm-10">
                                             <?php
-                                            $parametros = array("upe_id_usuario"=>$acudienteActual["uss_id"]);
+                                            $parametros = array("upe_id_usuario"=>$acudienteActual["uss_id"],"institucion"=>$config['conf_id_institucion'],"year"=>$_SESSION["bd"]);
                                             $listaAcudidos = UsuarioServicios::listarUsuariosEstudiante($parametros);
                                             ?>
                                             <select id="select_estudiante" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
@@ -110,7 +110,7 @@ if(!Modulos::validarPermisoEdicion()){
 									</button>
                                     <?php }?>
                                     
-                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="usuarios.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>
