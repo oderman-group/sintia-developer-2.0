@@ -115,9 +115,9 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_14':
                 $tipo = 'danger';
-                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . $_GET["nombrePagina"] . '</b>.<br>
+                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . base64_decode($_GET["nombrePagina"]) . '</b>.<br>
                 ¿Desea mostrar toda la información de la pagina?<br>
-                <a href="dev-paginas-editar.php?idP=' . $_GET["id"] . '" id="addRow" class="btn deepPink-bgcolor">
+                <a href="dev-paginas-editar.php?idP=' . base64_decode($_GET["id"]) . '" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>';
             break;
