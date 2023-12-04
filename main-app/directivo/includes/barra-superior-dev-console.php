@@ -13,11 +13,11 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <?php $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"'; ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=1" <?php if ($carpeta==1){ echo $estiloResaltado;} ?>>Directivo</a>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=2" <?php if ($carpeta==2){ echo $estiloResaltado;} ?>>Docente</a>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=3" <?php if ($carpeta==3){ echo $estiloResaltado;} ?>>Estudiante</a>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=4" <?php if ($carpeta==4){ echo $estiloResaltado;} ?>>Acudiente</a>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=5" <?php if ($carpeta==5){ echo $estiloResaltado;} ?>>Compartido</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=<?=base64_encode(1)?>" <?php if ($carpeta==1){ echo $estiloResaltado;} ?>>Directivo</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=<?=base64_encode(2)?>" <?php if ($carpeta==2){ echo $estiloResaltado;} ?>>Docente</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=<?=base64_encode(3)?>" <?php if ($carpeta==3){ echo $estiloResaltado;} ?>>Estudiante</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=<?=base64_encode(4)?>" <?php if ($carpeta==4){ echo $estiloResaltado;} ?>>Acudiente</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carpeta=<?=base64_encode(5)?>" <?php if ($carpeta==5){ echo $estiloResaltado;} ?>>Compartido</a>
         </div>
       </li>
     </ul>
