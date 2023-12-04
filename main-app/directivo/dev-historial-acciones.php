@@ -41,18 +41,22 @@ $Plataforma = new Plataforma;
                             <?php
                                 $instID=$config['conf_id_institucion'];
                                 if (!empty($_GET["insti"])) {
-                                    $instID=$_GET["insti"];
+                                    $instID=base64_decode($_GET["insti"]);
                                 }
                                 $mes=date("m");
                                 if (!empty($_GET["mes"])) {
-                                    $mes=$_GET["mes"];
+                                    $mes=base64_decode($_GET["mes"]);
                                 } 
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
                                 } 
                                 $filtro = '';
+                                $desde='';
+                                $hasta='';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+                                    $desde=$_GET["desde"];
+                                    $hasta=$_GET["hasta"];
                                     $filtro .= " AND (hil_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR hil_fecha LIKE '%" . $_GET["hasta"] . "%')";
                                 }                        
                             ?>
@@ -150,7 +154,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= $resultado['hil_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= base64_encode($resultado['hil_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
