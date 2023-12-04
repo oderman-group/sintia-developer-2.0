@@ -124,8 +124,8 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="mps-empresas-aditar.php?idR=<?= $resultado['emp_id']; ?>">Editar</a></li>
-                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['emp_id']; ?>" name="mps-empresas-eliminar.php?idR=<?= $resultado['emp_id']; ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                        <li><a href="mps-empresas-aditar.php?idR=<?= base64_encode($resultado['emp_id']); ?>">Editar</a></li>
+                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['emp_id']; ?>" name="mps-empresas-eliminar.php?idR=<?= base64_encode($resultado['emp_id']); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

@@ -6,13 +6,13 @@ $idPaginaInterna = 'DV0060';
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".empresas SET emp_eliminado=1 WHERE emp_id='".$_GET["idR"]."'");
+    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".empresas SET emp_eliminado=1 WHERE emp_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
 try{
-    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".productos SET prod_estado=1 WHERE prod_empresa='".$_GET["idR"]."'");
+    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".productos SET prod_estado=1 WHERE prod_empresa='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
