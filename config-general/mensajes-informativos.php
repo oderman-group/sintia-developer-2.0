@@ -123,7 +123,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             break;
             case 'ER_DT_15':
                 $tipo = 'danger';
-                $mensaje = $_GET["msj"];
+                $mensaje = base64_decode($_GET["msj"]);
             break;
 
             case 'ER_DT_16':
