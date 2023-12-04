@@ -29,11 +29,11 @@ class CargaAcademica {
      * los almacena en sesion
      * 
      * @param string $carga
-     * @param int $sesion
+     * @param string $sesion
      * 
      * @return array
      */
-    public static function cargasDatosEnSesion(string $carga, Int $sesion): array 
+    public static function cargasDatosEnSesion(string $carga, string $sesion): array 
     {
         global $conexion, $filtroMT, $config;
 

@@ -20,7 +20,7 @@ include("../compartido/guardar-historial-acciones.php");
 switch (base64_decode($_GET['tipe'])) {
 	case 2:
 		$url = '../docente/cargas.php';
-		if(isset($_GET['carga']) && is_numeric(base64_decode($_GET['carga']))){
+		if(isset($_GET['carga'])){
 			$url = '../docente/cargas-seleccionar.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"];
 		}
 	break;

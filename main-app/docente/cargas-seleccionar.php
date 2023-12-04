@@ -8,7 +8,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $carga = base64_decode($_GET["carga"]);
 $periodo = base64_decode($_GET["periodo"]);
 
-if(is_numeric($carga)){
+if(!empty($carga)){
     setcookie("carga",$carga);
     setcookie("periodo",$periodo);
     
