@@ -44,14 +44,22 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["insti"])) {
-                                    $filtro .= " AND rperr_institucion='" . $_GET["insti"] . "'";
+                                $insti='';
+                                if (!empty($_GET["insti"])) {
+                                    $insti=base64_decode($_GET["insti"]);
+                                    $filtro .= " AND rperr_institucion='" . $insti . "'";
                                 }
+                                $desde='';
+                                $hasta='';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
-                                    $filtro .= " AND (rperr_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR rperr_fecha LIKE '%" . $_GET["hasta"] . "%')";
+                                    $desde=$_GET["desde"];
+                                    $hasta=$_GET["hasta"];
+                                    $filtro .= " AND (rperr_fecha BETWEEN '" . $desde . "' AND '" . $hasta . "' OR rperr_fecha LIKE '%" . $hasta . "%')";
                                 }
+                                $year='';
                                 if (!empty($_GET["year"])) {
-                                    $filtro .= " AND YEAR(rperr_fecha) =".$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
+                                    $filtro .= " AND YEAR(rperr_fecha) =".$year;
                                 }       
                             ?>
 
@@ -107,7 +115,7 @@ $Plataforma = new Plataforma;
                                                         $responsable=UsuariosPadre::nombreCompletoDelUsuario($resultado);
                                                         
                                                         $ussAutologin="NO";
-                                                        if($resultado['hil_usuario_autologin']!=0){
+                                                        if(!empty($resultado['hil_usuario_autologin']) && $resultado['hil_usuario_autologin']!=0){
 
                                                             $datosUssAutologin = UsuariosPadre::sesionUsuario($resultado['hil_usuario_autologin']);
                                                             $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
@@ -129,7 +137,7 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-errores-sistema-detalles.php?id=<?= $resultado['rperr_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-errores-sistema-detalles.php?id=<?= base64_encode($resultado['rperr_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

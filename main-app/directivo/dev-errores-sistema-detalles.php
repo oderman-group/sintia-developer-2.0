@@ -12,7 +12,7 @@ include("../compartido/head.php");
 try{
     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-    WHERE rperr_id='".$_GET['id']."'");
+    WHERE rperr_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -27,8 +27,11 @@ if(!empty($datosReportes['rperr_usuario'])){
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
-    $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
-    $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    $numDatosResponsable=mysqli_num_rows($consultaResponsable);
+    if($numDatosResponsable>0){
+        $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
+        $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    }
 }
 ?>
 
