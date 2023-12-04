@@ -23,7 +23,7 @@ if(isset($yearEnd) and is_numeric($yearEnd)){
 	$_SESSION["bd"] = date("Y");
 }
 
-include("modelo/conexion.php");
+include(ROOT_PATH."/conexion.php");
 
 $variable = 1;
 
