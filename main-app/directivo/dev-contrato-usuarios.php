@@ -46,13 +46,19 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                             <?php
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
                                 } 
                                 $filtro = '';
+                                $insti = '';
                                 if (!empty($_GET["insti"])) {
+                                    $insti = base64_decode($_GET['insti']);
                                     $filtro .= " AND ins_id='" . $_GET["insti"] . "'";
                                 }
+                                $desde = '';
+                                $hasta = '';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+                                    $desde = $_GET['desde'];
+                                    $hasta = $_GET['hasta'];
                                     $filtro .= " AND (cxu_fecha_aceptacion BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR cxu_fecha_aceptacion LIKE '%" . $_GET["hasta"] . "%')";
                                 }                        
                             ?>

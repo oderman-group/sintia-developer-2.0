@@ -19,5 +19,5 @@
 	}
     
     include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="dev-contratos.php?success=SC_DT_2&id=1";</script>';
+	echo '<script type="text/javascript">window.location.href="dev-contratos.php?success=SC_DT_2&id='.base64_encode(1).'";</script>';
     exit();
