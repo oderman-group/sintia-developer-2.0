@@ -1,4 +1,5 @@
 <?php
+$busqueda = "";
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -34,9 +35,9 @@ if (isset($_GET['busqueda'])) {
                     }
                     while ($datosInsti = mysqli_fetch_array($instituciones, MYSQLI_BOTH)) {
                         $estiloResaltado = '';
-                        if ($datosInsti['plns_id'] == $_GET["plan"]) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
+                        if ($datosInsti['plns_id'] == $plan) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?plan=<?= $datosInsti['plns_id']; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['plns_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?plan=<?= base64_encode($datosInsti['plns_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['plns_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -45,14 +46,8 @@ if (isset($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <?php
-                if (!empty($_GET['plan'])){
-            ?>
-                <input type="hidden" name="plan" value="<?= $_GET['plan']; ?>"/>
-            <?php
-                }
-            ?>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+            <input type="hidden" name="plan" value="<?= base64_encode($plan); ?>"/>
+            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>
 
