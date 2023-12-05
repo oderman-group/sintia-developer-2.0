@@ -47,7 +47,7 @@ $Plataforma = new Plataforma;
                                 <?php
                                     $carpeta=1;
                                     if(!empty($_GET['carpeta'])){
-                                        $carpeta=$_GET['carpeta'];
+                                        $carpeta=base64_decode($_GET['carpeta']);
                                     }
                                     include("includes/barra-superior-dev-console.php");
                                 ?>

@@ -84,8 +84,8 @@ include("../compartido/head.php");
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-terminos-editar.php?id=<?= $datosTerminos['ttp_id']; ?>">Editar</a></li>
-                                                                        <li><a href="dev-terminos-usuarios.php?id=<?= $datosTerminos['ttp_id']; ?>">Usuarios que aceptaron</a></li>
+                                                                        <li><a href="dev-terminos-editar.php?id=<?= base64_encode($datosTerminos['ttp_id']); ?>">Editar</a></li>
+                                                                        <li><a href="dev-terminos-usuarios.php?id=<?= base64_encode($datosTerminos['ttp_id']); ?>">Usuarios que aceptaron</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

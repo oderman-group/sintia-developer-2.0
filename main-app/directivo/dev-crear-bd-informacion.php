@@ -14,7 +14,7 @@ $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
 
 $insBD=!empty($_POST['ins_bd']) ? $_POST['ins_bd'] : "";
-$variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins_bd='.$insBD.'&yearA='.$_POST['yearA'].'&siglasBD='.$_POST['siglasBD'].'&nombreInsti='.$_POST['nombreInsti'].'&siglasInst='.$_POST['siglasInst'].'&yearN='.$_POST['yearN'];
+$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']);
 ?>
 </head>
 

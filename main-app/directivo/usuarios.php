@@ -280,7 +280,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		?>
 																		
 																		<?php if($resultado['uss_tipo'] == TIPO_ACUDIENTE){?>
-																			<li><a href="usuarios-acudidos.php?id=<?=$resultado['uss_id'];?>">Acudidos</a></li>
+																			<li><a href="usuarios-acudidos.php?id=<?=base64_encode($resultado['uss_id']);?>">Acudidos</a></li>
 																		<?php }?>
 
 																		<?php if( (!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) ){?>

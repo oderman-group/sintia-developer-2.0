@@ -72,8 +72,10 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (!empty($_GET["plan"]) && is_numeric($_GET["plan"])) {
-                                    $filtro .= " AND ins_id_plan='" . $_GET["plan"] . "'";
+                                $plan = '';
+                                if (!empty($_GET["plan"])) {
+                                    $plan = base64_decode($_GET["plan"]);
+                                    $filtro .= " AND ins_id_plan='" . $plan . "'";
                                 }                    
                             ?>
 
@@ -168,9 +170,9 @@ $Plataforma = new Plataforma;
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-instituciones-editar.php?id=<?= $resultado['ins_id']; ?>">Editar</a></li>
-                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= $resultado['ins_id']; ?>">Configuración</a></li>
-                                                                        <li><a href="dev-instituciones-Informacion.php?id=<?= $resultado['ins_id']; ?>">Información</a></li>
+                                                                        <li><a href="dev-instituciones-editar.php?id=<?= base64_encode($resultado['ins_id']); ?>">Editar</a></li>
+                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Configuración</a></li>
+                                                                        <li><a href="dev-instituciones-Informacion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Información</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

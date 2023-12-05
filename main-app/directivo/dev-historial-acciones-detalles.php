@@ -13,7 +13,7 @@ try{
     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones
     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=hil_institucion AND ins_enviroment='".ENVIROMENT."'
     LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo
-    WHERE hil_id='".$_GET['id']."'");
+    WHERE hil_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -28,10 +28,13 @@ if($datosHistorial['hil_usuario']!=0){
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
-    $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
-    $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    $numDatosResponsable=mysqli_num_rows($consultaResponsable);
+    if($numDatosResponsable>0){
+        $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
+        $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    }
 }
-                
+
 $ussAutologin="NO";
 if($datosHistorial['hil_usuario_autologin']!=0){
     try{
@@ -41,8 +44,12 @@ if($datosHistorial['hil_usuario_autologin']!=0){
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
-    $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
-    $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin)."(".$datosUssAutologin['pes_nombre'].")";
+    $numUssAutologin=mysqli_num_rows($consultaUssAutologin);
+    $ussAutologin="Usuario no encontrado";
+    if($numUssAutologin>0){
+        $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
+        $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin)."(".$datosUssAutologin['pes_nombre'].")";
+    }
 }
 ?>
 

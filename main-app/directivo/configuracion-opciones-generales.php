@@ -87,9 +87,9 @@ include("../compartido/head.php");
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="configuracion-opciones-generales-editar.php?idogen=<?=$resultado["ogen_id"];?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
+																	  <li><a href="configuracion-opciones-generales-editar.php?idogen=<?=base64_encode($resultado["ogen_id"]);?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
 																	  <li>
-                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','configuracion-opciones-generales-eliminar.php?idogen=<?=$resultado["ogen_id"];?>')">Eliminar</a>  
+                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','configuracion-opciones-generales-eliminar.php?idogen=<?=base64_encode($resultado["ogen_id"]);?>')">Eliminar</a>  
                                                                      </li>
 																  </ul>
 															</div>
