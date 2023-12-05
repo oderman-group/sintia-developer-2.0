@@ -64,7 +64,7 @@ LIMIT ".$empezar.",1
 </style>
 <script>
 	// socket en la espera de una notificacion general
-	var id_usuario = <?php echo $idSession ?>;
+	var id_usuario = '<?php echo $idSession ?>';
 	var institucion_actual = <?php echo $institucion["ins_id"] ?>;
 	socket.on("notificacion_sala_" + id_usuario+"_inst_"+institucion_actual, (data) => {
 		let div_notificacion = document.getElementById('div_notificacion');

@@ -19,7 +19,7 @@ $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 		var socket = io(urlApi, {
 			transports: ['websocket', 'polling', 'flashsocket']
 		});
-		var chat_remite_usuario = <?php echo $idSession ?>;
+		var chat_remite_usuario = '<?=$idSession ?>';
 		socket.emit('join', "sala_" + chat_remite_usuario);
 		
 	</script>

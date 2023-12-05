@@ -384,7 +384,7 @@ window.onload = notificaciones();
 
 function mensajes(){
 
-	var usuario = <?=$_SESSION["id"];?>;
+	var usuario = '<?=$_SESSION["id"];?>';
 
 	var consulta = 2;
 
