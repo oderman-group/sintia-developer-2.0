@@ -8,7 +8,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 require_once("../class/Solicitudes.php");
-$solicitudActual = Solicitudes::consultar($_GET["id"]);
+$solicitudActual = Solicitudes::consultar(base64_decode($_GET["id"]));
 
 
 ?>

@@ -37,5 +37,5 @@ while ($contador < $numero) {
 }
 include("../compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="usuarios-acudidos.php?id='.$_POST["id"].'&success=SC_DT_2";</script>';
+echo '<script type="text/javascript">window.location.href="usuarios-acudidos.php?id='.base64_encode($_POST["id"]).'&success=SC_DT_2";</script>';
 exit();

@@ -29,5 +29,5 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="dev-instituciones-Informacion.php?success=SC_DT_2&id='.$_POST["id"].'&year='.$_POST["year"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="dev-instituciones-Informacion.php?success=SC_DT_2&id='.base64_encode($_POST["id"]).'&year='.base64_encode($_POST["year"]).'";</script>';
 	exit();

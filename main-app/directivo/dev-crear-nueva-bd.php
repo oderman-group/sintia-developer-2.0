@@ -24,33 +24,33 @@ if(isset($_GET['tipoInsti'])){
 
     $displayNueva= 'block';
     $displayAntigua= 'none';
-    if($_GET['tipoInsti']==0){
+    if(base64_decode($_GET['tipoInsti'])==0){
         $displayNueva= 'none';
         $displayAntigua= 'block';
     }
 
-	$datosNuevaBD['tipoInsti'] = $_GET['tipoInsti'];
+	$datosNuevaBD['tipoInsti'] = base64_decode($_GET['tipoInsti']);
 }
 if(isset($_GET['idInsti'])){
-	$datosNuevaBD['idInsti'] = $_GET['idInsti'];
+	$datosNuevaBD['idInsti'] = base64_decode($_GET['idInsti']);
 }
 if(isset($_GET['ins_bd'])){
-	$datosNuevaBD['ins_bd'] = $_GET['ins_bd'];
+	$datosNuevaBD['ins_bd'] = base64_decode($_GET['ins_bd']);
 }
 if(isset($_GET['yearA'])){
-	$datosNuevaBD['yearA'] = $_GET['yearA'];
+	$datosNuevaBD['yearA'] = base64_decode($_GET['yearA']);
 }
 if(isset($_GET['siglasBD'])){
-	$datosNuevaBD['siglasBD'] = $_GET['siglasBD'];
+	$datosNuevaBD['siglasBD'] = base64_decode($_GET['siglasBD']);
 }
 if(isset($_GET['nombreInsti'])){
-	$datosNuevaBD['nombreInsti'] = $_GET['nombreInsti'];
+	$datosNuevaBD['nombreInsti'] = base64_decode($_GET['nombreInsti']);
 }
 if(isset($_GET['siglasInst'])){
-	$datosNuevaBD['siglasInst'] = $_GET['siglasInst'];
+	$datosNuevaBD['siglasInst'] = base64_decode($_GET['siglasInst']);
 }
 if(isset($_GET['yearN'])){
-	$datosNuevaBD['yearN'] = $_GET['yearN'];
+	$datosNuevaBD['yearN'] = base64_decode($_GET['yearN']);
 }
 
 try{

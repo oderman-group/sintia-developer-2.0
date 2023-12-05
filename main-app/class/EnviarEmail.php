@@ -131,7 +131,7 @@ class EnviarEmail {
         $url=$_SERVER["HTTP_REFERER"];
         $pos = strpos($url, "?");
         $simbolConcatenar=$pos===false?"?":"&";
-        $url=$url.$simbolConcatenar.'error=ER_DT_15&msj='.$msj;
+        $url=$url.$simbolConcatenar.'error=ER_DT_15&msj='.base64_encode($msj);
         echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
         exit();      
     }

@@ -6,7 +6,7 @@ $idPaginaInterna = 'DV0048';
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".categorias_productos SET catp_eliminado=1 WHERE catp_id='".$_GET["idR"]."'");
+    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".categorias_productos SET catp_eliminado=1 WHERE catp_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

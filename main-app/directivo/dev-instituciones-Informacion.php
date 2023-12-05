@@ -10,12 +10,12 @@ include("../compartido/head.php");
 
 $year=$_SESSION["bd"];
 if(!empty($_GET['year'])){
-    $year=$_GET['year'];
+    $year=base64_decode($_GET['year']);
 }
 try{
-    $consultaInformacion = mysqli_query($conexion, "SELECT general_informacion.*, ins_siglas, ins_years, ins_bd FROM " . $baseDatosServicios . ".general_informacion 
+    $consultaInformacion = mysqli_query($conexion, "SELECT general_informacion.*, ins_siglas, ins_years, ins_id FROM " . $baseDatosServicios . ".general_informacion 
     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=info_institucion
-    WHERE info_institucion='" . $_GET["id"] . "' AND info_year='" . $year . "'");
+    WHERE info_institucion='" . base64_decode($_GET["id"]) . "' AND info_year='" . $year . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -73,7 +73,7 @@ $datosInstitucion = mysqli_fetch_array($consultaInformacion, MYSQLI_BOTH);
                             </div>
                             <div class="card-body">
                                 <form name="example_advanced_form" id="example-advanced-form" action="dev-instituciones-Informacion-actualizar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="<?= $_GET["id"] ?>">
+                                    <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">
                                     <h3>Información Basica</h3>
                                     <fieldset>
                                         <?php

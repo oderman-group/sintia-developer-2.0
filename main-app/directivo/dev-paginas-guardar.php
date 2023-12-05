@@ -23,7 +23,7 @@
     if($numIdPaginas>0){
         $datosPaginas=mysqli_fetch_array($verificar, MYSQLI_BOTH);
         include("../compartido/guardar-historial-acciones.php");
-        echo '<script type="text/javascript">window.location.href="dev-paginas-agregar.php?error=ER_DT_14&id='.$datosPaginas['pagp_id'].'&nombrePagina='.$datosPaginas['pagp_pagina'].'";</script>';
+        echo '<script type="text/javascript">window.location.href="dev-paginas-agregar.php?error=ER_DT_14&id='.base64_encode($datosPaginas['pagp_id']).'&nombrePagina='.base64_encode($datosPaginas['pagp_pagina']).'";</script>';
         exit();
     }
 

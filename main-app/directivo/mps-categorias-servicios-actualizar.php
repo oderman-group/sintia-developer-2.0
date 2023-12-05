@@ -8,7 +8,7 @@
     //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
     if(empty($_POST["nombre"])){
         include("../compartido/guardar-historial-acciones.php");
-        echo '<script type="text/javascript">window.location.href="mps-categorias-servicios-aditar.php?error=ER_DT_4&idR='.$_POST["idR"].'";</script>';
+        echo '<script type="text/javascript">window.location.href="mps-categorias-servicios-aditar.php?error=ER_DT_4&idR='.base64_encode($_POST["idR"]).'";</script>';
         exit();
     }
 
@@ -19,5 +19,5 @@
 	}
     
     include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="mps-categorias-servicios.php?success=SC_DT_2&id='.$_POST["idR"].'";</script>';
+	echo '<script type="text/javascript">window.location.href="mps-categorias-servicios.php?success=SC_DT_2&id='.base64_encode($_POST["idR"]).'";</script>';
     exit();

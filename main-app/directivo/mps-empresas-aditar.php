@@ -6,7 +6,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try {
-    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".empresas WHERE emp_id='" . $_GET["idR"] . "'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".empresas WHERE emp_id='" . base64_decode($_GET["idR"]) . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -65,7 +65,7 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-empresas-actualizar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+                                    <input type="hidden" value="<?=base64_decode($_GET["idR"]);?>" name="idR">
 										
                                     <div class="form-group row">
                                         <div class="col-sm-4" style="margin: 0 auto 10px">
@@ -123,7 +123,7 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                                             <?php
                                             $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
                                             while($inforDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
-                                                $consultaCat = mysqli_query($conexion, "SELECT excat_id FROM ".$baseDatosMarketPlace.".empresas_categorias WHERE excat_empresa='".$_GET["idR"]."' AND excat_categoria='".$inforDatos['svcat_id']."'");
+                                                $consultaCat = mysqli_query($conexion, "SELECT excat_id FROM ".$baseDatosMarketPlace.".empresas_categorias WHERE excat_empresa='".base64_decode($_GET["idR"])."' AND excat_categoria='".$inforDatos['svcat_id']."'");
                                                 $selected='';
                                                 if(mysqli_num_rows($consultaCat)>0){
                                                     $selected='selected';

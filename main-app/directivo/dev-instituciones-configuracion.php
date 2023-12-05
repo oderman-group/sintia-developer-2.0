@@ -10,12 +10,12 @@ include("../compartido/head.php");
 
 $year = date("Y");
 if (!empty($_GET['year'])) {
-    $year = $_GET['year'];
+    $year = base64_decode($_GET['year']);
 }
 try{
     $consultaConfiguracion = mysqli_query($conexion, "SELECT configuracion.*, ins_siglas, ins_years FROM " . $baseDatosServicios . ".configuracion 
     INNER JOIN " . $baseDatosServicios . ".instituciones ON ins_id=conf_id_institucion
-    WHERE conf_id_institucion='" . $_GET["id"] . "' AND conf_agno='" . $year . "'");
+    WHERE conf_id_institucion='" . base64_decode($_GET["id"]) . "' AND conf_agno='" . $year . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -73,7 +73,7 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
 
 
                                 <form name="formularioGuardar" action="dev-instituciones-configuracion-actualizar.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $_GET["id"] ?>">
+                                    <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Año Actual</label>

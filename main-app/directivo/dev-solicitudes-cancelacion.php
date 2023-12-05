@@ -90,7 +90,7 @@ include("../compartido/head.php");
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-solicitudes-cancelacion-detalle.php?id=<?= $resultado['solcan_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-solicitudes-cancelacion-detalle.php?id=<?= base64_encode($resultado['solcan_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
