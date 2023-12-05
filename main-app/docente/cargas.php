@@ -294,7 +294,7 @@ let draggedItem = null;
 let fromIndex, toIndex;
 let idCarga;
 let target;
-let docente = <?=$_SESSION["id"];?>;
+let docente = '<?=$_SESSION["id"];?>';
 
 sortableContainer.addEventListener("dragstart", (e) => {
     draggedItem = e.target;
