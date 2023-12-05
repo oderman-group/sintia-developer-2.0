@@ -15,6 +15,7 @@ $yearArray = explode(",", $institucion['ins_years']);
 $yearStart = $yearArray[0];
 $yearEnd = $yearArray[1];
 
+$_SESSION["inst"] = $institucion['ins_bd'];
 $_SESSION["idInstitucion"] = $institucion['ins_id'];
 
 if(isset($yearEnd) and is_numeric($yearEnd)){

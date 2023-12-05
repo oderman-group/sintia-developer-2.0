@@ -284,7 +284,7 @@
         </div>
         <script>
             // Datos del usuario  remitente
-            var chat_remite_usuario = <?php echo $idSession ?>;
+            var chat_remite_usuario = '<?= $idSession ?>';
             var remite_foto_url_uss = "<?php echo $fotoPerfilUsr ?>";
             var remite_nombre_uss = "<?php echo $datosUsuarioActual["uss_nombre"] . " " . $datosUsuarioActual["uss_apellido1"] ?>";           
             var institucion_actual = <?php echo $institucion["ins_id"] ?>;

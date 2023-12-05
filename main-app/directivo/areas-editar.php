@@ -90,18 +90,21 @@ $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                                 <select class="form-control  select2" name="posicionA" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
+                                                    $numDatos=mysqli_num_rows($cPosicionA);
                                                     $cont=0;
                                                     while($rPos=mysqli_fetch_array($cPosicionA, MYSQLI_BOTH)){
                                                         $cont++;
                                                         $posciones[$cont]=$rPos["ar_posicion"];
-                                                        }
+                                                    }
                                                     $cond=0;
                                                     $exist=0;
                                                     for($i=1;$i<=(20+$cond);$i++){
-                                                        for($j=0;$j<=count($posciones);$j++){
-                                                            if($i==$posciones[$j]){
-                                                                $exist=1;
-                                                            } 
+                                                        if($numDatos>0){
+                                                            for($j=0;$j<=count($posciones);$j++){
+                                                                if($i==$posciones[$j]){
+                                                                    $exist=1;
+                                                                } 
+                                                            }
                                                         }
                                                         if($exist!=1){
                                                             if($rCargas["ar_posicion"]==$i){

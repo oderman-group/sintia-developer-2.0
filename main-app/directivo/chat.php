@@ -105,7 +105,7 @@
             var socket = io(urlApi, {
                 transports: ['websocket', 'polling', 'flashsocket']
             });
-            var chat_remite_usuario = <?php echo $idSession ?>;
+            var chat_remite_usuario = '<?php echo $idSession ?>';
             var chat_destino_usuario = "";
             var foto_url_uss = "<?php echo $datosUsuarioActual["uss_foto"] ?>";
             var nombre_uss = "<?php echo $datosUsuarioActual["uss_nombre"] . " " . $datosUsuarioActual["uss_apellido1"] ?>";

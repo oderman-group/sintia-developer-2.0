@@ -23,6 +23,18 @@
 															<label>Para:</label>
 		                                                    <div class="form-group">
 																<select id="select_usuario" class="form-control select2-multiple" multiple name="para[]" required>
+																	<?php
+																		if(!empty($_GET['para'])){
+																			$filtro=" AND uss_id='".base64_decode($_GET['para'])."'";
+																			$lista=UsuariosPadre::obtenerTodosLosDatosDeUsuarios($filtro);
+																			while($dato=mysqli_fetch_array($lista, MYSQLI_BOTH)){
+																				$nombre=UsuariosPadre::nombreCompletoDelUsuario($dato)." - ".$dato["pes_nombre"];
+																	?>
+																		<option value="<?=$dato["uss_id"];?>" selected><?=$nombre;?></option>
+																	<?php
+																			}
+																		}
+																	?>
 																</select>
 		                                                    </div>
 															<script>

@@ -72,7 +72,6 @@ class Usuarios {
     public static function guardarRegistroRestaruracion($data)
     {
         global $conexion, $baseDatosServicios;
-        $BD = $data['institucion_bd']."_".$data['institucion_agno'];
 
         try {
             mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".restaurar_clave(resc_id_usuario, resc_fec_solicitud, resc_id_institucion, resc_clave_generada) VALUES('".$data['usuario_id']."', now(), '".$data['institucion_id']."', '".sha1($data['nueva_clave'])."')");

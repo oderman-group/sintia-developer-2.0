@@ -12,8 +12,8 @@ function posicion ($conexion, $config, $idRegistro, $posicionInicial, $docente) 
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
         INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-        WHERE car_id <> {$idRegistro} AND car_posicion_docente >= {$posicionInicial}
-        AND car_docente = {$docente}  AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+        WHERE car_id <> '{$idRegistro}' AND car_posicion_docente >= {$posicionInicial}
+        AND car_docente = '{$docente}'  AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
         ORDER BY CAST(car_posicion_docente AS SIGNED)
         ");
         $registro = mysqli_fetch_array($consulta, MYSQLI_BOTH);

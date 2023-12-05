@@ -29,11 +29,11 @@ class CargaAcademica {
      * los almacena en sesion
      * 
      * @param string $carga
-     * @param int $sesion
+     * @param string $sesion
      * 
      * @return array
      */
-    public static function cargasDatosEnSesion(string $carga, Int $sesion): array 
+    public static function cargasDatosEnSesion(string $carga, string $sesion): array 
     {
         global $conexion, $filtroMT, $config;
 
@@ -147,7 +147,7 @@ class CargaAcademica {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE car_id={$idCarga} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
+            WHERE car_id='{$idCarga}' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
             $result = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
