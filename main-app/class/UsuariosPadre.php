@@ -179,7 +179,7 @@ class UsuariosPadre {
         try{
             $consultaUsuario = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
             INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-            WHERE uss_id=uss_id AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]} {$filtroBusqueda}");
+            WHERE uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]} {$filtroBusqueda}");
             return $consultaUsuario;
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
