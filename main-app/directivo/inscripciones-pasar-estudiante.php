@@ -5,7 +5,7 @@ require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
-if (!empty($configAdmisiones["cfgi_year_inscripcion"]) && $configAdmisiones["cfgi_year_inscripcion"]==$yearEnd) {
+if (!empty($configAdmisiones["cfgi_year_inscripcion"]) && $configAdmisiones["cfgi_year_inscripcion"]!=$yearEnd) {
 	echo '<script type="text/javascript">window.location.href="inscripciones.php?error=ER_DT_18&yearPasar='.base64_encode($configAdmisiones["cfgi_year_inscripcion"]).'";</script>';
 	exit;
 }
