@@ -15,7 +15,7 @@ $_SESSION["configuracion"] = $config;
     <?php	
         $paginasMasVisitadasConsulta = mysqli_query($conexion, "SELECT count(*) as visitas, pagp_pagina, pagp_ruta FROM ".$baseDatosServicios.".seguridad_historial_acciones
         INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo AND pagp_navegable = 1
-        WHERE hil_usuario = ".$datosUsuarioActual['uss_id']." AND hil_institucion = ".$config['conf_id_institucion']."
+        WHERE hil_usuario = '".$datosUsuarioActual['uss_id']."' AND hil_institucion = ".$config['conf_id_institucion']."
         GROUP BY hil_titulo
         ORDER BY count(*) DESC
         LIMIT 5");										 
