@@ -97,7 +97,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0123'])){?>
 															<a href="usuarios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -261,9 +261,12 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		
 																		<?php
 																		if(($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula)) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
+																			if(Modulos::validarSubRol(['DT0124'])) {
 																		?>
-																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
-																		<?php }?>
+																				<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
+																		<?php }
+																		}
+																		?>
 																			
 
 																		<?php 
@@ -279,7 +282,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		}
 																		?>
 																		
-																		<?php if($resultado['uss_tipo'] == TIPO_ACUDIENTE){?>
+																		<?php if($resultado['uss_tipo'] == TIPO_ACUDIENTE && Modulos::validarSubRol(['DT0137'])){?>
 																			<li><a href="usuarios-acudidos.php?id=<?=base64_encode($resultado['uss_id']);?>">Acudidos</a></li>
 																		<?php }?>
 
