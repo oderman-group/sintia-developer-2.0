@@ -4,7 +4,7 @@ if(!empty($_GET["carga"])){ $carga=base64_decode($_GET["carga"]);}
 $periodo="";
 if(!empty($_GET["periodo"])){ $periodo=base64_decode($_GET["periodo"]);}
 
-if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or !is_numeric($periodo)){
+if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($periodo)){
 	if(!empty($_COOKIE["cargaE"]) and !empty($_COOKIE["periodoE"])){
 		$cargaConsultaActual = $_COOKIE["cargaE"];
 		$periodoConsultaActual = $_COOKIE["periodoE"];
@@ -36,7 +36,7 @@ $consultaCargaActual = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".a
 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 LEFT JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula='".$datosEstudianteActual['mat_id']."'
-WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (car_curso='".$datosEstudianteActual['mat_grado']."' OR car_curso=matcur_id_curso) AND (car_grupo='".$datosEstudianteActual['mat_grupo']."' OR car_grupo=matcur_id_grupo) AND car_activa=1");
+WHERE car_id='".$cargaConsultaActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} AND (car_curso='".$datosEstudianteActual['mat_grado']."' OR car_curso=matcur_id_curso) AND (car_grupo='".$datosEstudianteActual['mat_grupo']."' OR car_grupo=matcur_id_grupo) AND car_activa=1");
 
 $numCargaActual = mysqli_num_rows($consultaCargaActual);
 $datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
