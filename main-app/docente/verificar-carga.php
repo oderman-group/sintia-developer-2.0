@@ -6,7 +6,7 @@ if(!empty($_GET["periodo"])){ $periodo=base64_decode($_GET["periodo"]);}
 
 //SELECCIONAR UNA CARGA - DEBE ESTAR ARRIBA POR LAS COOKIES QUE CREA.
 if(isset($_GET["get"]) && base64_decode($_GET["get"])==100){
-	if(is_numeric($carga) and is_numeric($periodo)){
+	if(is_numeric($periodo)){
 		setcookie("carga",$carga);
 		setcookie("periodo",$periodo);
 		require_once("../class/CargaAcademica.php");
@@ -16,7 +16,7 @@ if(isset($_GET["get"]) && base64_decode($_GET["get"])==100){
 	}
 }
 
-if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($carga) or !is_numeric($periodo)){
+if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($periodo)){
 	if($_COOKIE["carga"]!="" and $_COOKIE["periodo"]!=""){
 		$cargaConsultaActual = $_COOKIE["carga"];
 		$periodoConsultaActual = $_COOKIE["periodo"];
