@@ -147,9 +147,12 @@
             <?php
             $readOnly = '';
             $leyenda = '';
-            if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE){
+            if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE && Modulos::validarSubRol(['DT0078'])){
                 $readOnly='readonly'; 
                 $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idUsuario='.base64_encode($datosEditar['uss_id']).'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
+            } else {
+                $readOnly='readonly'; 
+                $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula.';
             }
             ?>
             
