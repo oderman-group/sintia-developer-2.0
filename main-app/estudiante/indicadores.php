@@ -146,7 +146,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 
 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$notas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante=".$datosEstudianteActual['mat_id']." AND rind_indicador='".$resultado['ipc_indicador']."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														$notas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='".$datosEstudianteActual['mat_id']."' AND rind_indicador='".$resultado['ipc_indicador']."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
