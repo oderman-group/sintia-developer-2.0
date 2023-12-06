@@ -35,30 +35,39 @@ if($num == 0){
 	require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 	$codigo=Utilidades::generateCode("ENT");
 
+	$archivo = "";
+	$pesoMB1 = "";
 	if(!empty($_FILES['file']['name'])){
 		$nombreInputFile = 'file';
 		$archivoSubido->validarArchivo($_FILES['file']['size'], $_FILES['file']['name']);
-		$extension = end(explode(".", $_FILES['file']['name']));
+		$explode=explode(".", $_FILES['file']['name']);
+		$extension = end($explode);
 		$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file1_').".".$extension;
 		@unlink($destino."/".$archivo);
 		$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile);
 		$pesoMB1 = round($_FILES['file']['size']/1048576,2);
 	}
 
+	$archivo2 = "";
+	$pesoMB2 = "";
 	if(!empty($_FILES['file2']['name'])){
 		$nombreInputFile = 'file2';
 		$archivoSubido->validarArchivo($_FILES['file2']['size'], $_FILES['file2']['name']);
-		$extension2 = end(explode(".", $_FILES['file2']['name']));
+		$explode2=explode(".", $_FILES['file2']['name']);
+		$extension2 = end($explode2);
 		$archivo2 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file2_').".".$extension2;
 		@unlink($destino."/".$archivo2);
 		$archivoSubido->subirArchivo($destino, $archivo2, $nombreInputFile);
 		$pesoMB2 = round($_FILES['file2']['size']/1048576,2);
 	}
 
+	$archivo3 = "";
+	$pesoMB3 = "";
 	if(!empty($_FILES['file3']['name'])){
 		$nombreInputFile = 'file3';
 		$archivoSubido->validarArchivo($_FILES['file3']['size'], $_FILES['file3']['name']);
-		$extension3 = end(explode(".", $_FILES['file3']['name']));
+		$explode3=explode(".", $_FILES['file3']['name']);
+		$extension3 = end($explode3);
 		$archivo3 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file3_').".".$extension3;
 		@unlink($destino."/".$archivo3);
 		$archivoSubido->subirArchivo($destino, $archivo3, $nombreInputFile); 
@@ -72,7 +81,7 @@ if($num == 0){
 	}
 
 	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas_entregas (ent_id, ent_id_estudiante, ent_id_actividad, ent_archivo, ent_fecha, ent_comentario, ent_archivo2, ent_archivo3, ent_peso1, ent_peso2, ent_peso3, institucion, year) VALUES('".$codigo."', ".$datosEstudianteActual['mat_id'].", '".$_POST["idR"]."', '".$archivo."', now(), '".mysqli_real_escape_string($conexion,$_POST["comentario"])."', '".$archivo2."', '".$archivo3."', '".$pesoMB1."', '".$pesoMB2."', '".$pesoMB3."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas_entregas (ent_id, ent_id_estudiante, ent_id_actividad, ent_archivo, ent_fecha, ent_comentario, ent_archivo2, ent_archivo3, ent_peso1, ent_peso2, ent_peso3, institucion, year) VALUES('".$codigo."', '".$datosEstudianteActual['mat_id']."', '".$_POST["idR"]."', '".$archivo."', now(), '".mysqli_real_escape_string($conexion,$_POST["comentario"])."', '".$archivo2."', '".$archivo3."', '".$pesoMB1."', '".$pesoMB2."', '".$pesoMB3."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
@@ -81,7 +90,8 @@ if($num == 0){
 	if(!empty($_FILES['file']['name'])){
 		$nombreInputFile = 'file';
 		$archivoSubido->validarArchivo($_FILES['file']['size'], $_FILES['file']['name']);
-		$extension = end(explode(".", $_FILES['file']['name']));
+		$explode=explode(".", $_FILES['file']['name']);
+		$extension = end($explode);
 		$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file1_').".".$extension;
 		@unlink($destino."/".$archivo);
 		$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile);
@@ -96,7 +106,8 @@ if($num == 0){
 	if(!empty($_FILES['file2']['name'])){
 		$nombreInputFile = 'file2';
 		$archivoSubido->validarArchivo($_FILES['file2']['size'], $_FILES['file2']['name']);
-		$extension2 = end(explode(".", $_FILES['file2']['name']));
+		$explode2=explode(".", $_FILES['file2']['name']);
+		$extension2 = end($explode2);
 		$archivo2 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file2_').".".$extension2;
 		@unlink($destino."/".$archivo2);
 		$archivoSubido->subirArchivo($destino, $archivo2, $nombreInputFile);
@@ -110,7 +121,8 @@ if($num == 0){
 	if(!empty($_FILES['file3']['name'])){
 		$nombreInputFile = 'file3';
 		$archivoSubido->validarArchivo($_FILES['file3']['size'], $_FILES['file3']['name']);
-		$extension3 = end(explode(".", $_FILES['file3']['name']));
+		$explode3=explode(".", $_FILES['file3']['name']);
+		$extension3 = end($explode3);
 		$archivo3 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file3_').".".$extension3;
 		@unlink($destino."/".$archivo3);
 		$archivoSubido->subirArchivo($destino, $archivo3, $nombreInputFile);

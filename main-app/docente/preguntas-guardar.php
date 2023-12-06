@@ -39,7 +39,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		$cont=1;
 		$datosInsert = '';
 		while($cont<=4){
-			$codigoR=Utilidades::generateCode("RES");
+			$code=strtotime("now");
+			$codigoR=Utilidades::generateCode("RES".$code.$cont);
 			if(!empty(trim($_POST["r$cont"]))){
 				if(empty($_POST["c$cont"])){$_POST["c$cont"]=0;}
 				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["r$cont"])."','".$_POST["c$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
@@ -61,7 +62,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		$cont=1;
 		$datosInsert = '';
 		while($cont<=2){
-			$codigoR=Utilidades::generateCode("RES");
+			$code=strtotime("now");
+			$codigoR=Utilidades::generateCode("RES".$code.$cont);
 			if(!empty(trim($_POST["rv$cont"]))){
 				if(empty($_POST["cv$cont"])){$_POST["cv$cont"]=0;}
 				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["rv$cont"])."','".$_POST["cv$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
@@ -80,7 +82,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	}
 
 	if($_POST["opcionR"]==3){
-		$codigoR=Utilidades::generateCode("RES");
+		$code=strtotime("now");
+		$codigoR=Utilidades::generateCode("RES".$code.$cont);
 		$datosInsert .="('".$codigoR."', 'Adjuntar un archivo','0','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 		if(!empty($datosInsert)){
 			$datosInsert = substr($datosInsert,0,-1);
@@ -112,7 +115,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	}
 
 	while($respuestasPreguntaDatos = mysqli_fetch_array($respuestasPreguntaConsulta, MYSQLI_BOTH)){
-		$codigoR=Utilidades::generateCode("RES");
+		$code=strtotime("now");
+		$codigoR=Utilidades::generateCode("RES".$code.$codigo);
 		try{
 			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES('".$codigoR."', '".$respuestasPreguntaDatos['resp_descripcion']."', '".$respuestasPreguntaDatos['resp_correcta']."', '".$codigo."', '".$respuestasPreguntaDatos['resp_imagen']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
