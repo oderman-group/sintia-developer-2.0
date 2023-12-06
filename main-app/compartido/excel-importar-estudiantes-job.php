@@ -261,7 +261,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					}
 					$arrayTodos[$f] = $arrayIndividual;
 
-					$idUsuarioEstudiante=Utilidades::generateCode("USS");
+					$code=strtotime("now");
+					$idUsuarioEstudiante=Utilidades::generateCode("USS".$code);
 					try{
 						$responsableRegistro = 0;
 						if(!empty($_SESSION["id"])) {

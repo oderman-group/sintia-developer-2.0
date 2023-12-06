@@ -1,6 +1,6 @@
 <?php include("session.php");?>
 <?php
-$_SESSION["bd"] = date("Y");
+// $_SESSION["bd"] = date("Y");
 ?>
 <?php include("verificar-usuario.php");?>
 <?php include("verificar-sanciones.php");?>
@@ -17,7 +17,7 @@ if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
 $periodoE="";
 if(!empty($_GET["periodo"])){ $periodoE=base64_decode($_GET["periodo"]);}
 
-if(is_numeric($cargaE)){
+if(!empty($cargaE)){
 	setcookie("cargaE",$cargaE);
 	setcookie("periodoE",$periodoE);
 	

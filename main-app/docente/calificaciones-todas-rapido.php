@@ -141,7 +141,7 @@ th {
 															}
 														?>
 															<td style="text-align:center;">
-															<input size="5" maxlength="3" step="<?=$rA['act_id'];?>" name="<?=$notasResultado['cal_nota']?>" id="<?=$resultado['mat_id'];?>" title="<?=$rA['act_id'];?>" value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
+															<input size="5" maxlength="3" step="<?=$rA['act_id'];?>" name="<?=$notasResultado['cal_nota']?>" id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" title="<?=$rA['act_id'];?>" value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
                         									<br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
 															<?php if(!empty($notasResultado['cal_nota'])){?>
 																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>

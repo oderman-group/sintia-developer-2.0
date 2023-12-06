@@ -173,7 +173,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															if(!empty($sumaPorcentaje)){
 																$definitiva = ($definitiva / $sumaPorcentaje);
 															}
-															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual['mat_id']." AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$datosEstudianteActual['mat_id']."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);

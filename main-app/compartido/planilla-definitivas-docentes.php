@@ -2,6 +2,8 @@
 include("../docente/session.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -18,8 +20,12 @@ if(!empty($_GET["per"])) {
 $filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 
-$grados = mysqli_fetch_array($asig, MYSQLI_BOTH);		
-$num_asg=mysqli_num_rows($asig);
+
+$consultaCurso = Grados::obtenerDatosGrados($curso);
+$datosCurso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+$consultaGrupo = Grupos::obtenerDatosGrupos($grupo);
+$datosGrupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+
 $colspan=1;
 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
   $colspan=2;
@@ -72,7 +78,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 <div align="center" style="margin-bottom:20px;">
     <?=$informacion_inst["info_nombre"]?><br>
     PERIODO: <?=$per;?></br>
-    <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
+    <b><?=strtoupper($datosCurso["gra_nombre"]." ".$datosGrupo["gru_nombre"]);?></b><br>
 </div>  
 <div style="margin: 10px;">
 
@@ -152,7 +158,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
 		$grupo1[$cont] = $nombre;
-      $defFinal= "";
+      $defFinal= $def;
       if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
           $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def);
           $defFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "Bajo";

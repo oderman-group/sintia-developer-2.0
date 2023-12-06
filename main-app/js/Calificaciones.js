@@ -73,7 +73,9 @@ function notasGuardar(enviada){
 
 	var nota = enviada.value;
 	var notaAnterior = enviada.name;	
-	var codEst = enviada.id;
+    var input = enviada.id;
+    var split = enviada.id.split('-');
+	var codEst = split[0];
 	var codNota = enviada.title;	 
 	var nombreEst = enviada.alt;
 
@@ -82,7 +84,7 @@ function notasGuardar(enviada){
 		return false;
 	}
 
-	aplicarColorNota(nota, codEst);
+	aplicarColorNota(nota, input);
 
     notaCualitativa(nota,codEst,carga);
 

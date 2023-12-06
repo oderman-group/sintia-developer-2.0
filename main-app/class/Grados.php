@@ -31,14 +31,14 @@ class Grados {
         return $resultado;
     }
 
-    public static function obtenerDatosGrados($grado = 0){
+    public static function obtenerDatosGrados($grado = ''){
         
         global $conexion, $config;
         
         $resultado = [];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id={$grado} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='{$grado}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();

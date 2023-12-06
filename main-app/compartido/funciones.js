@@ -227,7 +227,7 @@ function deseaEliminar(dato) {
 
                 if (typeof varObjet !== "undefined") {
                     var input = document.getElementById(parseInt(varObjet.idInput));
-                    if (varObjet.tipo === 5) {
+                    if (varObjet.tipo === 2 || varObjet.tipo === 5) {
                         var input = document.getElementById(varObjet.idInput);
                     }
                 }
