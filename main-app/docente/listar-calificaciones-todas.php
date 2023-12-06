@@ -154,7 +154,7 @@ $porcentajeRestante = 100 - $valores[0];
                             $estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                         }	
                         ?>
-                        <input size="5" maxlength="3" step="<?=$rA['act_id'];?>" title="<?=$rA['act_id']?>" id="<?=$resultado['mat_id'];?>" value="<?php if(isset($notasResultado)) echo $notasResultado['cal_nota'];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado['cal_nota'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$disabledNotas;?>>
+                        <input size="5" maxlength="3" step="<?=$rA['act_id'];?>" title="<?=$rA['act_id']?>" id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" value="<?php if(isset($notasResultado)) echo $notasResultado['cal_nota'];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado['cal_nota'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$disabledNotas;?>>
                         <br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>;"><?=$estiloNotaFinal?></span>
                             
                         <?php
