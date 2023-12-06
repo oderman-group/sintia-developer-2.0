@@ -62,7 +62,7 @@ include("../compartido/head.php");
                                     <div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if( Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0206']) ){?>
 															<a href="sub-roles-agregar.php" id="addRow" class="btn deepPink-bgcolor">
                                                             <?=$frases[231][$datosUsuarioActual['uss_idioma']];?><i class="fa fa-plus"></i>
 															</a>
@@ -113,7 +113,9 @@ include("../compartido/head.php");
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
+                                                                    <?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0205']) ) {?>
                                                                         <li><a href="sub-roles-editar.php?id=<?= base64_encode($resultado['subr_id']);?>"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?></a></li>
+                                                                    <?php }?>
                                                                     </ul>
                                                                     
                                                                 </div>

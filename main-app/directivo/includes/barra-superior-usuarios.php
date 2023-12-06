@@ -51,9 +51,21 @@ if (isset($_GET['busqueda'])) {
           onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los docentes?','question','usuarios-desbloquear.php?tipo=<?=base64_encode(2)?>')"
           >Desbloquear docentes</a>
           <a>&nbsp;</a>
-          <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
-          <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
+          <?php 
+          if(Modulos::validarPermisoEdicion()) {
+            if(Modulos::validarSubRol(['DT0125']) ) {?>
+              <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
+          <?php 
+            } 
+            if(Modulos::validarSubRol(['DT0144']) ) {?>
+              <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
+          <?php 
+            } 
+          }
+          ?>
+          <?php if(Modulos::validarSubRol(['DT0201']) ) {?>
           <a class="dropdown-item" href="usuarios-anios.php">Consultar todos los años</a>
+          <?php }?>
         </div>
       </li>
 
