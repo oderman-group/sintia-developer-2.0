@@ -258,8 +258,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											var star = starSplit[1];
 											var panel = document.getElementById("feedbackPanel");
 											var comment = document.getElementById("feedbackContent");
-											var claseId = <?= $idR; ?>;
-											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
+											var claseId = '<?= $idR; ?>';
+											var usuarioActual = '<?= $datosUsuarioActual['uss_id']; ?>';
 
 											datos = "claseId="+claseId+
 													"&usuarioActual="+usuarioActual+
@@ -296,7 +296,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										
 										function guardar(){
 											idClase='<?=$idR;?>';
-											sesionUsuario=<?=$_SESSION["id"];?>;
+											sesionUsuario='<?=$_SESSION["id"];?>';
 											contenido=document.getElementById("contenido").value;
 											btn=document.getElementById("btnEnviar");
 											if(validar()){
@@ -331,8 +331,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										function consultarPreguntas(){
 
 											var claseId = '<?= $idR; ?>';
-											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
-											var usuario = <?= $usuario; ?>;
+											var usuarioActual = '<?= $datosUsuarioActual['uss_id']; ?>';
+											var usuario = '<?= $usuario; ?>';
 											datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;
 												$.ajax({
 												type: "POST",

@@ -103,7 +103,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 		INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
 
-		WHERE  car_curso=''" . $idCurso . "'' AND car_grupo='" . $idGrupo . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} 
+		WHERE  car_curso='" . $idCurso . "' AND car_grupo='" . $idGrupo . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} 
         GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 
         //$numero_periodos=$config["conf_periodos_maximos"];
