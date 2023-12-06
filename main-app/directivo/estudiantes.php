@@ -246,9 +246,12 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																		}
 																		?>
 																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#retirarModal<?=$resultado['mat_id'];?>"><?=$retirarRestaurar?></a></li>
-																		<li><a href="javascript:void(0);"
-																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
-																		>Reservar cupo</a></li>
+																		<?php if( !empty($resultado['mat_grado']) && !empty($resultado['mat_grupo']) ) {?>
+																			<li><a href="javascript:void(0);"
+																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
+																			>Reservar cupo</a></li>
+																		<?php }?>
+
 																		 <li><a href="javascript:void(0);" 
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
 																		>Eliminar</a></li>
