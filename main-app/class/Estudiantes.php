@@ -608,7 +608,7 @@ class Estudiantes {
                 :fNac, :apellido1, :apellido2, 
                 :nombres, :grado, :grupo,
                 :tipoEst, '".$procedencia."', :lugarD,
-                ".$idAcudiente.", :matestM, '".$idEstudianteU."', 
+                '".$idAcudiente."', :matestM, '".$idEstudianteU."', 
                 :folio, :codTesoreria, :va_matricula, 
                 :inclusion, :extran, :tipoSangre, 
                 :eps, :celular2, :ciudadR, 
