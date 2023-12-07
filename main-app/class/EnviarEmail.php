@@ -1,6 +1,5 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -163,6 +162,7 @@ class EnviarEmail {
         
         $adjunto=$mail->attachmentExists();
         try{
+            $bodySanitizado = mysqli_real_escape_string($conexion, $body);
             $sql="INSERT INTO ".$baseDatosServicios.".historial_correos_enviados(
                 hisco_fecha,
                 hisco_remitente,
@@ -179,7 +179,7 @@ class EnviarEmail {
                 '".$remitente."',
                 '".$destinatario."',
                 '".$asunto."',
-                '".$body."',
+                '".$bodySanitizado."',
                 '".$adjunto."',
                 '".$_SERVER["HTTP_REFERER"]."',
                 '".$estado."',
