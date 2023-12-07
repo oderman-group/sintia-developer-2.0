@@ -124,36 +124,6 @@ class Usuarios{
 
 
 
-class BaseDatos {
-
-	
-
-	function eliminarPorId($tabla, $clave, $id, $urlRetorno){
-
-		include('../modelo/conexion.php');
-
-		
-
-		mysqli_query($conexion, "DELETE FROM ".$tabla." WHERE ".$clave."='".$id."'");
-
-		$lineaError = __LINE__;
-
-		include("../compartido/reporte-errores.php");
-
-		echo '<script type="text/javascript">window.location.href="'.$urlRetorno.'";</script>';
-
-		exit();
-
-	}
-
-
-
-	
-
-}
-
-
-
 class Cargas {
 
 	
