@@ -13,7 +13,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 
-$datosEditar = UsuariosPadre::sesionUsuario($id, " AND uss_id!={$_SESSION["id"]}");
+$datosEditar = UsuariosPadre::sesionUsuario($id, " AND uss_id!='{$_SESSION["id"]}'");
 
 if( empty($datosEditar) ){
 	echo '<script type="text/javascript">window.location.href="usuarios.php?error=ER_DT_16";</script>';

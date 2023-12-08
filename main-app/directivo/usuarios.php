@@ -133,7 +133,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													try{
 														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
 														INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-														WHERE uss_id!={$_SESSION["id"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} $filtro
+														WHERE uss_id!='{$_SESSION["id"]}' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} $filtro
 														ORDER BY uss_id
 														LIMIT $inicio,$registros;");
 													} catch (Exception $e) {
