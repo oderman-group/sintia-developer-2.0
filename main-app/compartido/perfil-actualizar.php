@@ -34,9 +34,6 @@ if ($_POST["tipoUsuario"] != 4) {
     if (empty($_POST["tipoVivienda"])) {
         $mensaje .= '- Tipo de vivienda donde reside<br>';
     }
-    if (empty($_POST["medioTransporte"])) {
-        $mensaje .= '- Medio de transporte usual<br>';
-    }
 
     if (!empty($mensaje)) {
         echo "Faltan los siguientes datos por diligenciar: <br>" . $mensaje . "<br>

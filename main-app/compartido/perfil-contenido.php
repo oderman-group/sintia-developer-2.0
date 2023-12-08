@@ -100,7 +100,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[187][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_nombre"];?>" name="nombre" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
                                             </div>
@@ -114,7 +114,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Primer Apellido</label>
+                                            <label class="col-sm-2 control-label">Primer Apellido <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_apellido1"];?>" name="apellido1" class="form-control" <?php if($usuarioPerfil['uss_tipo']==4) echo "readonly"; else echo "required";?> style="text-transform: uppercase;">
                                             </div>
@@ -149,7 +149,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[138][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="genero" required>
                                                     <option value="">Seleccione una opción</option>
@@ -164,7 +164,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[189][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[189][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <div class="input-group date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
                                                 <input class="form-control" size="16" type="text" value="<?=$usuarioPerfil["uss_fecha_nacimiento"];?>">
@@ -185,7 +185,7 @@
                                            </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[190][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[190][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="lNacimiento" required>
                                                     <option value="">Seleccione una opción</option>
@@ -203,7 +203,7 @@
 										
 										<?php if($usuarioPerfil["uss_tipo"]!=4){?>
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[191][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[191][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="nAcademico" required>
                                                     <option value="">Seleccione una opción</option>
@@ -218,7 +218,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Área de desempeño</label>
+                                            <label class="col-sm-2 control-label">Área de desempeño <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="profesion" required>
                                                     <option value="">Seleccione una opción</option>
@@ -236,16 +236,28 @@
 										<script type="application/javascript">
 											function empresario(datos){
 												var eLaboral = datos.value;
+                                                var empresarioDiv = document.getElementById("empresario");
+                                                var camposEmpresario = empresarioDiv.querySelectorAll("select");
+
 												if(eLaboral == 165){
-													document.getElementById("empresario").style.display="block";
+													empresarioDiv.style.visibility="visible";
+                                                    // Hacer que los campos sean requeridos
+                                                    camposEmpresario.forEach(function(campo) {
+                                                        campo.required = true;
+                                                    });
 												}else{
-													document.getElementById("empresario").style.display="none";
-												}
+													empresarioDiv.style.visibility="hidden";
+
+                                                    // Hacer que los campos sean requeridos
+                                                    camposEmpresario.forEach(function(campo) {
+                                                        campo.required = false;
+                                                    });
+                                                }
 											}
 										</script>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estado laboral</label>
+                                            <label class="col-sm-2 control-label">Estado laboral <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="eLaboral" required onChange="empresario(this)">
                                                     <option value="">Seleccione una opción</option>
@@ -260,11 +272,11 @@
                                         </div>
 										
 										
-										<div id="empresario" style="display: block; border: thin; border-style: solid; border-color: blueviolet; padding: 5px; margin: 10px;">
+										<div id="empresario" style="visibility:visible; border: thin; border-style: solid; border-color: blueviolet; padding: 5px; margin: 10px;">
 											<p style="color: tomato;">En caso de que sea dueño de negocio, llene esta información.</p>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Tipo de negocio</label>
+												<label class="col-sm-2 control-label">Tipo de negocio <span style="color: red;">(*)</span></label>
 												<div class="col-sm-10">
 													<select class="form-control  select2" name="tipoNegocio">
 														<option value="">Seleccione una opción</option>
@@ -289,7 +301,7 @@
 										
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Religión</label>
+                                            <label class="col-sm-2 control-label">Religión <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="religion" required>
                                                     <option value="">Seleccione una opción</option>
@@ -304,7 +316,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estado civil</label>
+                                            <label class="col-sm-2 control-label">Estado civil <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="eCivil" required>
                                                     <option value="">Seleccione una opción</option>
@@ -319,14 +331,14 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Direccion</label>
+                                            <label class="col-sm-2 control-label">Direccion <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
                                                 <input type="text" value="<?=$usuarioPerfil["uss_direccion"];?>" name="direccion" class="form-control" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estrato</label>
+                                            <label class="col-sm-2 control-label">Estrato <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="estrato" required>
                                                     <option value="">Seleccione una opción</option>
@@ -341,7 +353,7 @@
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Tipo de vivienda</label>
+                                            <label class="col-sm-2 control-label">Tipo de vivienda <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="tipoVivienda" required>
                                                     <option value="">Seleccione una opción</option>
@@ -358,7 +370,7 @@
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Medio de transporte usual</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control  select2" name="medioTransporte" required>
+                                                <select class="form-control  select2" name="medioTransporte">
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=13");
@@ -414,10 +426,10 @@
                                             </div>
                                         </div>
 
-												
+										<a href="#" name="index.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
                                     </form>
                                 </div>
                             </div>
