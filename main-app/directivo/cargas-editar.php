@@ -9,7 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -19,6 +20,7 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 ?>
 
 	<!--bootstrap -->
@@ -60,7 +62,7 @@ if(!Modulos::validarPermisoEdicion()){
                     </div>
                     <div class="row">
 						
-                        <div class="col-sm-12">
+                        <div class="col-sm-8">
 
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
@@ -80,7 +82,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
-											<div class="col-sm-2">
+											<div class="col-sm-4">
 												<input type="text" name="idCarga" class="form-control" value="<?=$datosEditar['car_id'];?>" readonly>
 											</div>
 										</div>
@@ -329,7 +331,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Responsable</label>
 											<div class="col-sm-4">
-												<input type="text" name="responsable" class="form-control" value="<?=strtoupper($datosEditar['uss_nombre']);?>" readonly>
+												<input type="text" name="responsable" class="form-control" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosEditar);?>" readonly>
 											</div>
 										</div>
 										
@@ -359,6 +361,39 @@ if(!Modulos::validarPermisoEdicion()){
                                 </div>
                             </div>
                         </div>
+
+						<div class="col-sm-4">
+							<div class="panel">
+								<header class="panel-heading panel-heading-purple">Cargas relacionadas</header>
+								<div class="panel-body">
+									<p>&nbsp;</p>
+									<ul class="list-group list-group-unbordered">
+										<?php
+										$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+										INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+										INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+										INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
+										INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+										WHERE car.institucion={$config['conf_id_institucion']} 
+										AND car.year={$_SESSION["bd"]} 
+										AND (car_docente='{$datosEditar["car_docente"]}' OR car_curso='{$datosEditar["car_curso"]}')
+										ORDER BY car_docente
+										");
+										while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+											$resaltaItem = $Plataforma->colorDos;
+											if($resultado['car_id']==base64_decode($_GET["idR"])){$resaltaItem = $Plataforma->colorUno;}
+
+										?>
+										<li class="list-group-item">
+											<a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado['gra_nombre']." ".$resultado['gru_nombre']." - ".$resultado['mat_nombre']." - ".UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a> 
+											<div class="profile-desc-item pull-right">&nbsp;</div>
+										</li>
+										<?php }?>
+									</ul>
+
+								</div>
+							</div>
+						</div>
 						
                     </div>
 
