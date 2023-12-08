@@ -150,7 +150,7 @@
             if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE && Modulos::validarSubRol(['DT0078'])){
                 $readOnly='readonly'; 
                 $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idUsuario='.base64_encode($datosEditar['uss_id']).'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
-            } else {
+            } elseif($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE) {
                 $readOnly='readonly'; 
                 $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula.';
             }
@@ -321,14 +321,13 @@
                 </div>
             </div>
 
-
+            <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
             <?php if(Modulos::validarPermisoEdicion()){?>
                 <button type="submit" class="btn  btn-info">
 										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
 									</button>
             <?php }?>
             
-            <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
         </form>
     </div>
 </div>
