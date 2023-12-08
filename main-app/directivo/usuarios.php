@@ -230,7 +230,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 													<tr id="reg<?=$resultado['uss_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td>
-															<?php if(Modulos::validarPermisoEdicion()){?>
+															<?php if( Modulos::validarPermisoEdicion() && ($resultado['uss_tipo'] != TIPO_DIRECTIVO || $resultado['uss_permiso1'] != CODE_PRIMARY_MANAGER)){?>
 																<div class="input-group spinner col-sm-10">
 																	<label class="switchToggle">
 																		<input type="checkbox" id="<?=$resultado['uss_id'];?>" name="bloqueado" value="1" onChange="guardarAjax(this)" <?=$cheked;?> <?=$disabledPermiso;?>>
@@ -261,7 +261,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		
 																		<?php
 																		if(($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula)) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
-																			if(Modulos::validarSubRol(['DT0124'])) {
+																			if( Modulos::validarSubRol(['DT0124']) && ($resultado['uss_tipo'] != TIPO_DIRECTIVO || $resultado['uss_permiso1'] != CODE_PRIMARY_MANAGER) ) {
 																		?>
 																				<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>">Editar</a></li>
 																		<?php }
