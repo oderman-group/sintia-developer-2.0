@@ -125,17 +125,17 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 </thead>
                                                 <tbody>
 													<?php
-													$keys = $redis->keys("MATRI:*");
+													$keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
 													if (empty($keys) || !empty($filtro)) { // Si $keys esta vacia es por que no se a creado esa KEY en redis aun, entonces entra a este condicional y la crea, El !empty($filtro) se añadio a la validación para que tambien entrara cuando se filtra por algo pero cuando se quitan los filtros sigo cargando lo que se filtro, toca buscar la forma de que al quitar los filtros vuelva a cargar todo
 														// $redis->flushDB(); // se borra la KEY MATRI para cuando entraba con filtros
 														$consulta = Estudiantes::listarEstudiantes(0, $filtro, '',$cursoActual);
 
 														if (mysqli_num_rows($consulta) > 0) {
 															while($matData = mysqli_fetch_assoc($consulta)){
-																$redis->set("MATRI:".$matData['mat_id'], json_encode($matData));
+																$redis->set("MATRI_".$_SESSION['inst'].":".$matData['mat_id'], json_encode($matData));
 															}
 														}
-														$keys = $redis->keys("MATRI:*");
+														$keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
 													}
 													include("includes/consulta-paginacion-estudiantes.php");
 													$matKeys = array_slice($keys, $inicio, $registros);
