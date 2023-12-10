@@ -1,5 +1,23 @@
 <?php
 class Utilidades {
+
+    /**
+     * Obtiene una representación de cadena de un valor.
+     *
+     * Verifica si el valor proporcionado no es nulo y devuelve el valor como una cadena.
+     * En caso de que el valor sea nulo, devuelve una cadena vacía.
+     *
+     * @param mixed $valor - El valor que se desea convertir a cadena.
+     *
+     * @return string - Representación de cadena del valor o cadena vacía si el valor es nulo.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para obtener la representación de cadena de un valor
+     * $resultado = getToString($miVariable);
+     * // $resultado contendrá la representación de cadena de $miVariable o una cadena vacía si $miVariable es nulo.
+     * ```
+     */
     public static  function getToString($valor)
     {   
         // validammos que las variables no sean null 
