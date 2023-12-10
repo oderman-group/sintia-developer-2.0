@@ -32,13 +32,13 @@
   $cursoActual = '';
   if (!empty($_GET['curso'])) {
       $curso = base64_decode($_GET['curso']);
-      $filtro .= " AND mat_grado='".$curso."'";
+      $filtro .= "Curso";
       $cursoActual=GradoServicios::consultarCurso($curso);
   }
   $estadoM = '';
   if (!empty($_GET['estadoM'])) {
       $estadoM = base64_decode($_GET['estadoM']);
-      $filtro .= " AND mat_estado_matricula='".$estadoM."'";
+      $filtro .= "Estado Matricula";
   }
 ?>
 
