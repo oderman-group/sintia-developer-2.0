@@ -125,22 +125,22 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 </thead>
                                                 <tbody>
 													<?php
-													include("includes/consulta-paginacion-estudiantes.php");
-													$matKeys = $redis->keys("MATRI:*");
-													if (empty($matKeys) || !empty($filtro)) { // Si $matKeys esta vacia es por que no se a creado esa KEY en redes aun entonces entra a este condicional y la crea, El !empty($filtro) se añadio a la validación para que tambien entrara cuando se filtra por algo pero cuando se quitan los filtros sigo cargando lo que se filtro, toca buscar la forma de que al quitar los filtros vuelva a cargar todo
-														// $redis->flushDB(); // se borra la KEY MATRI par4a cuando entraba con filtros
-														$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-														$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
+													$keys = $redis->keys("MATRI:*");
+													if (empty($keys) || !empty($filtro)) { // Si $keys esta vacia es por que no se a creado esa KEY en redis aun, entonces entra a este condicional y la crea, El !empty($filtro) se añadio a la validación para que tambien entrara cuando se filtra por algo pero cuando se quitan los filtros sigo cargando lo que se filtro, toca buscar la forma de que al quitar los filtros vuelva a cargar todo
+														// $redis->flushDB(); // se borra la KEY MATRI para cuando entraba con filtros
+														$consulta = Estudiantes::listarEstudiantes(0, $filtro, '',$cursoActual);
 
 														if (mysqli_num_rows($consulta) > 0) {
 															while($matData = mysqli_fetch_assoc($consulta)){
 																$redis->set("MATRI:".$matData['mat_id'], json_encode($matData));
 															}
 														}
-														$matKeys = $redis->keys("MATRI:*");
+														$keys = $redis->keys("MATRI:*");
 													}
-													$contReg = 1;
+													include("includes/consulta-paginacion-estudiantes.php");
+													$matKeys = array_slice($keys, $inicio, $registros);
 
+													$contReg = 1;
 													foreach ($matKeys as $matKey){
 													$matData = $redis->get($matKey);
 													$resultado = json_decode($matData, true);
