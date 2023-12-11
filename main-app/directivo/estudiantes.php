@@ -125,47 +125,6 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 </thead>
                                                 <tbody>
 													<?php
-													$keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
-													if (empty($keys)) {
-														$consulta = Estudiantes::listarEstudiantes(0, '', '',$cursoActual);
-
-														if (mysqli_num_rows($consulta) > 0) {
-															while($matData = mysqli_fetch_assoc($consulta)){
-																$redis->set("MATRI_".$_SESSION['inst'].":".$matData['mat_id'], json_encode($matData));
-															}
-														}
-														$keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
-													}
-													
-													if (!empty($_GET['curso'])) {
-														// Filtra las claves según los criterios
-														$keys = array_filter($keys, function ($key) use ($redis, $curso) {
-															$matData = $redis->get($key);
-															$resultado = json_decode($matData, true);
-
-															return $resultado['mat_grado'] == $curso;
-														});
-													}
-													
-													if (!empty($_GET['curso']) || !empty($_GET['estadoM'])) {
-														// Filtra las claves según los criterios
-														$keys = array_filter($keys, function ($key) use ($redis, $curso, $estadoM) {
-															$matData = $redis->get($key);
-															$resultado = json_decode($matData, true);
-
-															if (!empty($curso) && !empty($estadoM)) {
-																return $resultado['mat_grado'] == $curso && $resultado['mat_estado_matricula'] == $estadoM;
-															}
-
-															if (!empty($curso) && empty($estadoM)) {
-																return $resultado['mat_grado'] == $curso;
-															}
-
-															if (empty($curso) && !empty($estadoM)) {
-																return $resultado['mat_estado_matricula'] == $estadoM;
-															}
-														});
-													}
 													include("includes/consulta-paginacion-estudiantes.php");
 													$matKeys = array_slice($keys, $inicio, $registros);
 
