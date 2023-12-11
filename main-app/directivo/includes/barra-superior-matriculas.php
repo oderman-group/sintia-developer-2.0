@@ -28,17 +28,48 @@
       )";
       
   }
+
   $curso = '';
   $cursoActual = '';
   if (!empty($_GET['curso'])) {
       $curso = base64_decode($_GET['curso']);
-      $filtro .= "Curso";
       $cursoActual=GradoServicios::consultarCurso($curso);
   }
+  
+  $keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
+  if (empty($keys)) {
+      $consulta = Estudiantes::listarEstudiantes(0, $filtro, '',$cursoActual);
+
+      if (mysqli_num_rows($consulta) > 0) {
+          while($matData = mysqli_fetch_assoc($consulta)){
+              $redis->set("MATRI_".$_SESSION['inst'].":".$matData['mat_id'], json_encode($matData));
+          }
+      }
+      $keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
+  }
+  
   $estadoM = '';
-  if (!empty($_GET['estadoM'])) {
-      $estadoM = base64_decode($_GET['estadoM']);
-      $filtro .= "Estado Matricula";
+  if (!empty($_GET['curso']) || !empty($_GET['estadoM'])) {
+      if (!empty($_GET['estadoM'])) {
+          $estadoM = base64_decode($_GET['estadoM']);
+      }
+      // Filtra las claves según los criterios
+      $keys = array_filter($keys, function ($key) use ($redis, $curso, $estadoM) {
+          $matData = $redis->get($key);
+          $resultado = json_decode($matData, true);
+
+          if (!empty($curso) && !empty($estadoM)) {
+              return $resultado['mat_grado'] == $curso && $resultado['mat_estado_matricula'] == $estadoM;
+          }
+
+          if (!empty($curso) && empty($estadoM)) {
+              return $resultado['mat_grado'] == $curso;
+          }
+
+          if (empty($curso) && !empty($estadoM)) {
+              return $resultado['mat_estado_matricula'] == $estadoM;
+          }
+      });
   }
 ?>
 
@@ -124,7 +155,7 @@
         </div>
       </li>
 
-      <?php if (!empty($filtro)) { ?>
+      <?php if (!empty($filtro) || !empty($curso) || !empty($estadoM)) { ?>
           <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
 
           <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
