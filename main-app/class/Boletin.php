@@ -3,13 +3,16 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 
 class Boletin {
 
-    public static function listarTiposUsuarios()
-    {
-
-        
-
-    }
-
+    /**
+    * Devuelve una lista de tipos de notas basados en la categoría proporcionada y el año académico seleccionado.
+    *
+    * @param string $categoria La categoría de notas para la cual se desean listar los tipos.
+    * @param string $yearBd (Opcional) El año académico para el cual se desean listar los tipos de notas. Si no se proporciona, se utiliza el año académico actual de la sesión.
+    *
+    * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene la información de los tipos de notas.
+    *
+    * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+    */
     public static function listarTipoDeNotas($categoria, string $yearBd    = ''){
         global $conexion, $config;
         $resultado = [];
@@ -27,6 +30,21 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Agrega decimales a una nota si es necesario.
+     *
+     * @param string $nota La nota a la cual se le agregarán decimales.
+     *
+     * @return string La nota modificada con decimales.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $notaOriginal = "9";
+     * $notaConDecimales = agregarDecimales($notaOriginal);
+     * echo $notaConDecimales; // Salida: "9.00"
+     * ```
+     */
     public static function agregarDecimales($nota){
         
     
@@ -43,6 +61,26 @@ class Boletin {
         return $nota;
     }
 
+    /**
+     * Obtiene los datos asociados a un tipo de notas basados en la categoría y la nota proporcionadas.
+     *
+     * @param string $categoria La categoría de notas para la cual se desea obtener información.
+     * @param string $nota La nota para la cual se desea obtener información.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return array Un array asociativo que contiene los datos del tipo de notas, o un array vacío si no se encuentra ningún tipo de notas que coincida con la categoría y la nota proporcionadas.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $categoriaEjemplo = "categoria_ejemplo";
+     * $notaEjemplo = "8";
+     * $datosTipoNotas = obtenerDatosTipoDeNotas($categoriaEjemplo, $notaEjemplo, "2023");
+     * print_r($datosTipoNotas);
+     * ```
+     */
     public static function obtenerDatosTipoDeNotas($categoria, $nota, string $yearBd    = ''){
         global $conexion, $config;
         $resultado = [];
@@ -61,11 +99,36 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene el puesto y el promedio de estudiantes en un grado y grupo específicos para un periodo académico determinado.
+     *
+     * @param int    $periodo El periodo académico para el cual se desea obtener el puesto y el promedio.
+     * @param string $grado El grado del estudiante.
+     * @param string $grupo El grupo al que pertenece el estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener el puesto y el promedio. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene información sobre el puesto y el promedio de los estudiantes.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $periodoEjemplo = 1;
+     * $gradoEjemplo = "10";
+     * $grupoEjemplo = "A";
+     * $resultadosEstudiantes = obtenerPuestoYpromedioEstudiante($periodoEjemplo, $gradoEjemplo, $grupoEjemplo, "2023");
+     * while ($estudiante = mysqli_fetch_assoc($resultadosEstudiantes)) {
+     *     // Procesar información de cada estudiante
+     *     echo "Matrícula: ".$estudiante['mat_id']." - Puesto: ".$estudiante['puesto']." - Promedio: ".$estudiante['prom']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerPuestoYpromedioEstudiante(
-        int    $periodo      = 0,
-        string    $grado      = "",
-        string    $grupo      = "",
-        string $yearBd    = ''
+        int    $periodo = 0,
+        string $grado   = "",
+        string $grupo   = "",
+        string $yearBd  = ''
     )
     {
         global $conexion, $config;
@@ -86,6 +149,18 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene las áreas asociadas a un estudiante en un grado y grupo específicos.
+     *
+     * @param string $grado El grado del estudiante.
+     * @param string $grupo El grupo al que pertenece el estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener las áreas. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene información sobre las áreas asociadas al estudiante.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     */
     public static function obtenerAreasDelEstudiante(
         string    $grado      = "",
         string    $grupo      = "",
@@ -110,6 +185,19 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene datos asociados a un área específica para un estudiante y condiciones de periodo determinadas.
+     *
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $area La identificación del área para la cual se desean obtener datos.
+     * @param string $condicion Una cadena que representa las condiciones del periodo académico (ej. "1,2,3").
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener datos. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene información sobre el promedio y otras estadísticas del área.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     */
     public static function obtenerDatosDelArea(
         string    $estudiante      = '',
         string    $area      = '',
@@ -136,11 +224,23 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene el promedio de notas de un estudiante para un periodo académico específico.
+     *
+     * @param int    $estudiante La identificación del estudiante.
+     * @param int    $periodo El periodo académico para el cual se desea obtener el promedio.
+     * @param string $BD (Opcional) El nombre de la base de datos específica a la que se va a realizar la consulta. Si no se proporciona, se utiliza la base de datos por defecto.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener el promedio. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene el promedio de notas del estudiante para el periodo académico especificado.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     */
     public static function obtenerPromedioPorTodosLosPeriodos(
-        int    $estudiante      = 0,
-        int    $periodo      = 0,
-        string $BD    = '',
-        string $yearBd    = ''
+        string $estudiante = '',
+        int    $periodo    = 0,
+        string $yearBd     = ''
     )
     {
         global $conexion, $config;
@@ -158,6 +258,18 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene información sobre nivelaciones de un estudiante para una carga académica específica.
+     *
+     * @param string $carga La identificación de la carga académica.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener información de nivelaciones. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene información sobre las nivelaciones del estudiante para la carga académica especificada.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     */
     public static function obtenerNivelaciones(
         $carga,
         $estudiante,
@@ -178,6 +290,28 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene las notas de disciplina de un estudiante para periodos académicos específicos.
+     *
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $condicion Una cadena que representa las condiciones de los periodos académicos (ej. "1,2,3").
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene las notas de disciplina del estudiante para los periodos académicos especificados.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $condicionEjemplo = "1,2,3";
+     * $resultadosDisciplina = obtenerNotaDisciplina($estudianteEjemplo, $condicionEjemplo);
+     * while ($notaDisciplina = mysqli_fetch_assoc($resultadosDisciplina)) {
+     *     // Procesar información de cada nota de disciplina
+     *     echo "ID de Nota de Disciplina: ".$notaDisciplina['dn_id']." - Fecha: ".$notaDisciplina['dn_fecha']." - Descripción: ".$notaDisciplina['dn_descripcion']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerNotaDisciplina(
         $estudiante,
         $condicion
@@ -196,6 +330,33 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene información sobre recuperaciones de un estudiante para un indicador específico, en una carga académica y periodo determinados.
+     *
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $carga La identificación de la carga académica.
+     * @param int    $periodo El periodo académico para el cual se desea obtener información de recuperación.
+     * @param string $indicador El indicador específico para el cual se desean obtener datos de recuperación.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener información de recuperación. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene información sobre las recuperaciones del estudiante para el indicador, carga académica y periodo especificados.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $cargaEjemplo = "ID_CARGA";
+     * $periodoEjemplo = 1;
+     * $indicadorEjemplo = "INDICADOR";
+     * $resultadosRecuperacion = obtenerRecuperacionPorIndicador($estudianteEjemplo, $cargaEjemplo, $periodoEjemplo, $indicadorEjemplo, "2023");
+     * while ($recuperacion = mysqli_fetch_assoc($resultadosRecuperacion)) {
+     *     // Procesar información de cada recuperación
+     *     echo "ID de Recuperación: ".$recuperacion['rind_id']." - Fecha: ".$recuperacion['rind_fecha']." - Descripción: ".$recuperacion['rind_descripcion']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerRecuperacionPorIndicador(
         string    $estudiante      = '',
         string    $carga      = '',
@@ -218,6 +379,31 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene las observaciones de un estudiante para una carga académica y periodo específicos.
+     *
+     * @param string $carga La identificación de la carga académica.
+     * @param int    $periodo El periodo académico para el cual se desea obtener observaciones.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener observaciones. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene las observaciones del estudiante para la carga académica y periodo especificados.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $cargaEjemplo = "ID_CARGA";
+     * $periodoEjemplo = 1;
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $resultadosObservaciones = obtenerObservaciones($cargaEjemplo, $periodoEjemplo, $estudianteEjemplo, "2023");
+     * while ($observacion = mysqli_fetch_assoc($resultadosObservaciones)) {
+     *     // Procesar información de cada observación
+     *     echo "ID de Observación: ".$observacion['bol_id']." - Fecha: ".$observacion['bol_fecha']." - Descripción: ".$observacion['bol_observacion']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerObservaciones(
         string    $carga      = '',
         int    $periodo      = 0,
@@ -239,11 +425,36 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene la nota definitiva y nombre de una materia para un estudiante en un área y periodos académicos específicos.
+     *
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $area La identificación del área.
+     * @param string $condicion Una cadena que representa las condiciones de los periodos académicos (ej. "1,2,3").
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene la nota definitiva y nombre de la materia para el estudiante en el área y periodos especificados.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $areaEjemplo = "ID_AREA";
+     * $condicionEjemplo = "1,2,3";
+     * $resultadosDefinitiva = obtenerDefinitivaYnombrePorMateria($estudianteEjemplo, $areaEjemplo, $condicionEjemplo, "2023");
+     * while ($definitiva = mysqli_fetch_assoc($resultadosDefinitiva)) {
+     *     // Procesar información de cada materia y su nota definitiva
+     *     echo "Materia: ".$definitiva['mat_nombre']." - Nota Definitiva: ".$definitiva['suma']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerDefinitivaYnombrePorMateria(
-        string    $estudiante      = '',
-        string    $area      = '',
-        string $condicion      = '',
-        string $yearBd    = ''
+        string $estudiante = '',
+        string $area       = '',
+        string $condicion  = '',
+        string $yearBd     = ''
     )
     {
         global $conexion, $config;
@@ -266,6 +477,31 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene las notas y periodos de una materia para un estudiante en un área y periodos académicos específicos.
+     *
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $area La identificación del área.
+     * @param string $condicion Una cadena que representa las condiciones de los periodos académicos (ej. "1,2,3").
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene las notas y periodos de una materia para el estudiante en el área y periodos especificados.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $areaEjemplo = "ID_AREA";
+     * $condicionEjemplo = "1,2,3";
+     * $resultadosDefinitivaPorPeriodo = obtenerDefinitivaPorPeriodo($estudianteEjemplo, $areaEjemplo, $condicionEjemplo, "2023");
+     * while ($definitivaPeriodo = mysqli_fetch_assoc($resultadosDefinitivaPorPeriodo)) {
+     *     // Procesar información de cada materia, nota y periodo
+     *     echo "Materia: ".$definitivaPeriodo['mat_nombre']." - Nota: ".$definitivaPeriodo['bol_nota']." - Periodo: ".$definitivaPeriodo['bol_periodo']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerDefinitivaPorPeriodo(
         string    $estudiante      = "",
         string    $area      = "",
@@ -293,6 +529,37 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene los indicadores y notas asociados a una materia y estudiante específicos, considerando un área, grados, grupos y condiciones de periodo académico.
+     *
+     * @param string $grado El identificador del grado.
+     * @param string $grupo El identificador del grupo.
+     * @param string $area El identificador del área.
+     * @param string $condicion Una cadena que representa las condiciones de los periodos académicos para los indicadores (ej. "1,2,3").
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $condicion2 Una cadena que representa las condiciones de los periodos académicos para las actividades (ej. "1,2,3").
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene los indicadores, notas y periodos asociados a una materia y estudiante específicos.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $gradoEjemplo = "GRADO_EJEMPLO";
+     * $grupoEjemplo = "GRUPO_EJEMPLO";
+     * $areaEjemplo = "AREA_EJEMPLO";
+     * $condicionEjemplo = "1,2,3";
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $condicion2Ejemplo = "1,2,3";
+     * $resultadosIndicadores = obtenerIndicadoresPorMateria($gradoEjemplo, $grupoEjemplo, $areaEjemplo, $condicionEjemplo, $estudianteEjemplo, $condicion2Ejemplo, "2023");
+     * while ($indicador = mysqli_fetch_assoc($resultadosIndicadores)) {
+     *     // Procesar información de cada indicador, nota y periodo
+     *     echo "Materia: ".$indicador['mat_nombre']." - Indicador: ".$indicador['ind_nombre']." - Nota: ".$indicador['nota']." - Periodo: ".$indicador['ipc_periodo']."<br>";
+     * }
+     * ```
+     */
     public static function obtenerIndicadoresPorMateria(
         string    $grado      = "",
         string    $grupo      = "",
@@ -327,6 +594,31 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene la cantidad total de ausencias de un estudiante en una materia y periodo académico específicos.
+     *
+     * @param string $grado El identificador del grado.
+     * @param string $materia El identificador de la materia.
+     * @param int $periodo El número de periodo académico.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene la cantidad total de ausencias de un estudiante en una materia y periodo académico específicos.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $gradoEjemplo = "GRADO_EJEMPLO";
+     * $materiaEjemplo = "MATERIA_EJEMPLO";
+     * $periodoEjemplo = 1;
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $resultadosAusencias = obtenerDatosAusencias($gradoEjemplo, $materiaEjemplo, $periodoEjemplo, $estudianteEjemplo, "2023");
+     * $ausencias = mysqli_fetch_assoc($resultadosAusencias);
+     * echo "Total de Ausencias: " . $ausencias['sumAus'];
+     * ```
+     */
     public static function obtenerDatosAusencias(
         string    $grado      = "",
         string    $materia      = "",
@@ -352,6 +644,34 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene los indicadores de una materia específica para un periodo académico determinado.
+     *
+     * @param string $grado El identificador del grado.
+     * @param string $grupo El identificador del grupo.
+     * @param string $area El identificador del área.
+     * @param int $periodo El número de periodo académico.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene los indicadores de una materia específica para un periodo académico determinado.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $gradoEjemplo = "GRADO_EJEMPLO";
+     * $grupoEjemplo = "GRUPO_EJEMPLO";
+     * $areaEjemplo = "AREA_EJEMPLO";
+     * $periodoEjemplo = 1;
+     * $estudianteEjemplo = "ID_ESTUDIANTE";
+     * $resultadosIndicadores = obtenerIndicadoresDeMateriaPorPeriodo($gradoEjemplo, $grupoEjemplo, $areaEjemplo, $periodoEjemplo, $estudianteEjemplo, "2023");
+     * while ($row = mysqli_fetch_assoc($resultadosIndicadores)) {
+     *     echo "Materia: " . $row['mat_nombre'] . ", Indicador: " . $row['ind_nombre'] . ", Nota: " . $row['nota'] . "\n";
+     * }
+     * ```
+     */
     public static function obtenerIndicadoresDeMateriaPorPeriodo(
         string    $grado      = "",
         string    $grupo      = "",
@@ -385,6 +705,26 @@ class Boletin {
         return $resultado;
     }
 
+    /**
+     * Obtiene el puesto del estudiante en la institución para un periodo académico determinado.
+     *
+     * @param int $periodo El número de periodo académico.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener la información. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene el puesto del estudiante en la institución para un periodo académico determinado.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $periodoEjemplo = 1;
+     * $resultadosPuesto = obtenerPuestoEstudianteEnInstitucion($periodoEjemplo, "2023");
+     * while ($row = mysqli_fetch_assoc($resultadosPuesto)) {
+     *     echo "Estudiante: " . $row['mat_nombres'] . ", Puesto: " . $row['puesto'] . "\n";
+     * }
+     * ```
+     */
     public static function obtenerPuestoEstudianteEnInstitucion(
         int    $periodo      = 0,
         string $yearBd    = ''

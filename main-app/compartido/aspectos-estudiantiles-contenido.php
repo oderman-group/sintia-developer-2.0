@@ -26,7 +26,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("../../config-general/mensajes-informativos.php"); ?>
                     <div class="row">
                         <div class="col-sm-12">
 
@@ -260,7 +260,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
 
 
                                     <table width="100%">
-                                            <tr style="font-weight: bold;">
+                                            <tr style="font-weight: bold; font-size:large;">
                                                 <td colspan="2" align="center"><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$p;?></td>
                                             </tr>
 
@@ -287,7 +287,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                                                 <tfoot>
                                                     <tr style="font-weight: bold;">
                                                         <td align="right"><?=strtoupper($frases[308][$datosUsuarioActual['uss_idioma']]);?>: </td>
-                                                        <td><?=$estadoAgno[$datosEditar['mat_estado_agno']];?></td>
+                                                        <td><?php if(!empty($datosEditar['mat_estado_agno'])) echo $estadoAgno[$datosEditar['mat_estado_agno']];?></td>
                                                     </tr>  
                                                 </tfoot>
 

@@ -12,7 +12,7 @@ try{
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
-$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'aspectos-estudiantiles.php?idR='.$_POST["idR"]);
+$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'aspectos-estudiantiles.php?idR='.$_GET["idR"]."&success=SC_DT_3&id=".base64_encode($_GET["idA"]));
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';

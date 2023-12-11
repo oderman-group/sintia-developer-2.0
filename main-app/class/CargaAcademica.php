@@ -1,6 +1,33 @@
 <?php
 class CargaAcademica {
 
+    /**
+     * Valida la existencia de una carga académica para un docente en un curso, grupo y asignatura específicos.
+     *
+     * @param string $docente El identificador del docente.
+     * @param string $curso El nivel o curso académico.
+     * @param string $grupo El grupo al que pertenece la carga académica.
+     * @param string $asignatura El identificador de la asignatura o materia.
+     *
+     * @return bool Devuelve `true` si existe una carga académica que cumple con los parámetros proporcionados, de lo contrario, devuelve `false`.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $docenteEjemplo = "ID_DOCENTE";
+     * $cursoEjemplo = "10";
+     * $grupoEjemplo = "A";
+     * $asignaturaEjemplo = "ID_ASIGNATURA";
+     * $existeCarga = validarExistenciaCarga($docenteEjemplo, $cursoEjemplo, $grupoEjemplo, $asignaturaEjemplo);
+     * if ($existeCarga) {
+     *     echo "La carga académica existe para el docente en el curso, grupo y asignatura especificados.\n";
+     * } else {
+     *     echo "No existe carga académica para el docente en el curso, grupo y asignatura especificados.\n";
+     * }
+     * ```
+     */
     public static function validarExistenciaCarga($docente, $curso, $grupo, $asignatura)
     {
 

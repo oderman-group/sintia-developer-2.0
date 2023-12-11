@@ -3,6 +3,18 @@ class BDT_Tablas {
 
     public static $tableName;
 
+    /**
+     * Obtiene el nombre de la tabla asociada a la clase.
+     *
+     * @return string - Nombre de la tabla asociada a la clase.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para obtener el nombre de la tabla asociada a la clase
+     * $tableName = MiClase::getTableName();
+     * // $tableName contendrá el nombre de la tabla asociada a la clase MiClase.
+     * ```
+     */
     public static function getTableName() {
         return static::$tableName;
     }

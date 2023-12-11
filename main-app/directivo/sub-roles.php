@@ -80,11 +80,12 @@ include("../compartido/head.php");
                                                         <th>#</th>
                                                         <th>Cod</th>
                                                         <th>Sub rol</th>
-                                                        <th  style="text-align: center;"><?=$frases[372][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th  style="text-align: center;"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th  style="text-align: center;"><?=$frases[371][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <th  style="text-align: center;"><?=$frases[373][$datosUsuarioActual['uss_idioma']];?></th>
-                                                        <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
+                                                        <?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0205']) ) {?>
+                                                            <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
+                                                        <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -98,7 +99,6 @@ include("../compartido/head.php");
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['subr_id']; ?></td>
                                                             <td><?= $resultado['subr_nombre']; ?></td>
-                                                            <td><?= $resultado['ins_nombre']; ?></td>
                                                             <td  style="text-align: center;"><?php if(!empty($subRol['usuarios']) && $subRol['usuarios']!=null){
                                                                     echo count($subRol['usuarios']);
                                                                   }else{echo 0;}?></td>
@@ -106,6 +106,7 @@ include("../compartido/head.php");
                                                                     echo count($subRol['paginas']);
                                                                   }else{echo 0;}?></td>
                                                             <td style="text-align: center;"><?= $resultado['subr_year']; ?></td>
+                                                            <?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0205']) ) {?>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
@@ -113,13 +114,14 @@ include("../compartido/head.php");
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                    <?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0205']) ) {?>
+                                                                    <?php if( Modulos::validarSubRol(['DT0205']) ) {?>
                                                                         <li><a href="sub-roles-editar.php?id=<?= base64_encode($resultado['subr_id']);?>"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?></a></li>
                                                                     <?php }?>
                                                                     </ul>
                                                                     
                                                                 </div>
                                                             </td>
+                                                            <?php }?>
                                                         </tr>
                                                     <?php $contReg++;
                                                     } ?>

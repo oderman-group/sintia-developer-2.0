@@ -10,11 +10,12 @@ $usuariosClase = new Usuarios;
 $idInsercion=Utilidades::generateCode("MATA");
 try{
     mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".matriculas_aspectos(mata_id, mata_estudiante, mata_usuario, mata_fecha_evento, mata_aspectos_positivos, mata_aspectos_mejorar, mata_tratamiento, mata_descripcion, mata_periodo, institucion, year)VALUES('" .$idInsercion . "', '" . $_POST["estudiante"] . "', '" . $_SESSION['id'] . "', '" . $_POST["fecha"] . "', '" . $_POST["positivos"] . "', '" . $_POST["mejorar"] . "', '" . $_POST["tratamiento"] . "', '" . $_POST["descripcion"] . "', '" . $_POST["periodo"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+    $idRegistro = mysqli_insert_id($conexion);
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
-$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'aspectos-estudiantiles.php?idR='.$_POST["idR"]);
+$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'aspectos-estudiantiles.php?idR='.$_POST["idR"]."&success=SC_DT_1&id=".base64_encode($idRegistro));
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';

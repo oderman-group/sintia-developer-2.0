@@ -2,6 +2,27 @@
 
 class Modulos {
 
+    /**
+     * Verifica los permisos de acceso a una página interna según el ID de la página.
+     *
+     * @param string $idPaginaInterna - El ID de la página interna a verificar.
+     *
+     * @return bool - Devuelve true si el usuario tiene permisos para acceder a la página, de lo contrario, devuelve false.
+     *
+     * @throws Exception - Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para verificar permisos de acceso a una página interna
+     * $idPagina = 'D0001'; // ID de la página interna a verificar
+     * $permisos = verificarPermisosPaginas($idPagina);
+     * if ($permisos) {
+     *     echo "El usuario tiene permisos para acceder a la página.";
+     * } else {
+     *     echo "El usuario no tiene permisos para acceder a la página.";
+     * }
+     * ```
+     */
     public static function verificarPermisosPaginas($idPaginaInterna): bool
     {
 
@@ -13,6 +34,21 @@ class Modulos {
 
     }
 
+    /**
+     * Verifica si el usuario actual tiene permisos de desarrollador.
+     *
+     * @global array $datosUsuarioActual - Los datos del usuario actual.
+     *
+     * @throws Exception - Redirige a la página de información con el mensaje de error 301 si el usuario no tiene permisos de desarrollador.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para verificar permisos de desarrollador
+     * verificarPermisoDev();
+     * // El código siguiente a esta llamada solo se ejecutará si el usuario tiene permisos de desarrollador.
+     * echo "El usuario tiene permisos de desarrollador.";
+     * ```
+     */
     public static function verificarPermisoDev(){
 
         global $datosUsuarioActual;
@@ -22,7 +58,22 @@ class Modulos {
             exit();	
         }
     }
-    /* Esta función Válida los permisos del un directivo especial */
+
+    /**
+     * Verifica si el usuario actual tiene permisos de directivo especial.
+     *
+     * @global array $datosUsuarioActual - Los datos del usuario actual.
+     *
+     * @throws Exception - Redirige a la página de información con el mensaje de error 301 si el usuario no tiene permisos de directivo especial.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para verificar permisos de directivo especial
+     * verificarPermisoDirectivoEspecial();
+     * // El código siguiente a esta llamada solo se ejecutará si el usuario tiene permisos de directivo especial.
+     * echo "El usuario tiene permisos de directivo especial.";
+     * ```
+     */
     public static function verificarPermisoDirectivoEspecial(){
 
         global $datosUsuarioActual;
@@ -33,6 +84,29 @@ class Modulos {
         }
     }
 
+    /**
+     * Verifica si los módulos de una institución están habilitados.
+     *
+     * @global mysqli $conexion - La conexión a la base de datos.
+     * @global string $baseDatosServicios - El nombre de la base de datos de servicios.
+     *
+     * @param int $idInstitucion - El ID de la institución.
+     * @param int $idModulos - El ID del módulo.
+     *
+     * @return bool - Devuelve `true` si los módulos de la institución están habilitados, de lo contrario, devuelve `false`.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para verificar módulos de una institución
+     * $idInstitucion = 1;
+     * $idModulo = 2;
+     * if (verificarModulosDeInstitucion($idInstitucion, $idModulo)) {
+     *     echo "Los módulos de la institución están habilitados.";
+     * } else {
+     *     echo "Los módulos de la institución no están habilitados.";
+     * }
+     * ```
+     */
     public static function verificarModulosDeInstitucion($idInstitucion,$idModulos)
     {
         global $conexion, $baseDatosServicios;
@@ -46,6 +120,20 @@ class Modulos {
         return true;
     }
 
+    /**
+     * Valida el acceso directo a las páginas.
+     *
+     * Verifica si la página ha sido accedida directamente o a través de un enlace.
+     * Si la página se accede directamente, redirige a una página de información.
+     *
+     * @return void - No devuelve ningún valor. Si la página se accede directamente, redirige a otra página.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para validar el acceso directo a las páginas
+     * validarAccesoDirectoPaginas();
+     * ```
+     */
     public static function validarAccesoDirectoPaginas(){
         if($_SERVER['HTTP_REFERER']==""){
             echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
@@ -53,6 +141,26 @@ class Modulos {
         }
     }
 
+    /**
+     * Valida el permiso de edición en años anteriores.
+     *
+     * Verifica si está permitida la edición en años anteriores según la configuración del sistema.
+     * Devuelve true si está permitida y false si no lo está.
+     *
+     * @global array $config - Configuración del sistema.
+     *
+     * @return bool - Devuelve true si está permitida la edición en años anteriores, false si no lo está.
+     *
+     * @example
+     * ```php
+     * Ejemplo de uso para validar el permiso de edición en años anteriores
+     * if (validarPermisoEdicion()) {
+     *      Realizar acciones permitidas
+     * } else {
+     *     Mostrar mensaje de error o realizar acciones cuando no está permitida la edición
+     * }
+     * ```
+     */
     public static function validarPermisoEdicion(){
         global $config;
 
