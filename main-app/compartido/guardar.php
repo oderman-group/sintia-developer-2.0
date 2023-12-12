@@ -292,6 +292,13 @@ if (!empty($_POST["id"])) {
 
 		if (empty($_POST["tipoNegocio"])) $_POST["tipoNegocio"] = '0';
 
+		$fechaNacimiento="";
+		$fechaNacimientoM="";
+		if(!empty($_POST["fechaN"])){
+			$fechaNacimiento="uss_fecha_nacimiento='" . $_POST["fechaN"] . "', ";
+			$fechaNacimientoM="mat_fecha_nacimiento='" . $_POST["fechaN"] . "', ";
+		}
+
 		//Si es estudiante
 		if ($_POST["tipoUsuario"] == 4) {
 			try{
@@ -302,6 +309,7 @@ if (!empty($_POST["id"])) {
 				uss_apellido2='" . strtoupper($_POST["apellido2"]) . "', 
 				uss_email='" . strtolower($_POST["email"]) . "', 
 				uss_celular='" . $_POST["celular"] . "', 
+				{$fechaNacimiento}
 				uss_lugar_nacimiento='" . $_POST["lNacimiento"] . "', 
 				uss_telefono='" . $_POST["telefono"] . "', 
 				uss_notificacion='" . $notificaciones . "', 
@@ -315,7 +323,7 @@ if (!empty($_POST["id"])) {
 
 			//Actualizar matricula a los estudiantes
 			try{
-				mysqli_query($conexion, "UPDATE academico_matriculas SET mat_genero='" . $_POST["genero"] . "', mat_fecha_nacimiento='" . $_POST["fechaN"] . "', mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "'");
+				mysqli_query($conexion, "UPDATE academico_matriculas SET mat_genero='" . $_POST["genero"] . "', {$fechaNacimientoM} mat_celular='" . $_POST["celular"] . "', mat_lugar_nacimiento='" . $_POST["lNacimiento"] . "', mat_telefono='" . $_POST["telefono"] . "' WHERE mat_id_usuario='" . $_SESSION["id"] . "'");
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
