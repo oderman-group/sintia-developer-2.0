@@ -35,11 +35,16 @@
       $curso = base64_decode($_GET['curso']);
       $cursoActual=GradoServicios::consultarCurso($curso);
   }
-  
-  $keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
-  if (empty($keys)) {
-      $consulta = Estudiantes::listarEstudiantes(0, $filtro, '',$cursoActual);
 
+  $quitarFiltro = '';
+  if (!empty($_GET['quitar'])) {
+      $quitarFiltro = base64_decode($_GET['quitar']);
+  }
+
+  $keys = $redis->keys("MATRI_".$_SESSION['inst'].":*");
+  if (empty($keys) || (!empty($_GET['busqueda']) && $quitarFiltro==0) || (empty($_GET['busqueda']) && !empty($_GET['quitar']) && $quitarFiltro==1)) {
+      $redis->flushDB();
+      $consulta = Estudiantes::listarEstudiantes(0, $filtro, '',$cursoActual);
       if (mysqli_num_rows($consulta) > 0) {
           while($matData = mysqli_fetch_assoc($consulta)){
               $redis->set("MATRI_".$_SESSION['inst'].":".$matData['mat_id'], json_encode($matData));
@@ -155,10 +160,14 @@
         </div>
       </li>
 
-      <?php if (!empty($filtro) || !empty($curso) || !empty($estadoM)) { ?>
+      <?php 
+          if (!empty($filtro) || !empty($curso) || !empty($estadoM)){
+            $quitar='';
+            if (!empty($filtro)){ $quitar='?quitar='.base64_encode(1); }
+      ?>
           <li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:<?= $Plataforma->colorUno; ?>;">|</a></li>
 
-          <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF']; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
+          <li class="nav-item"> <a class="nav-link" href="<?= $_SERVER['PHP_SELF'].$quitar; ?>" style="color:<?= $Plataforma->colorUno; ?>;">Quitar filtros</a></li>
       <?php } ?>
 
     </ul>
@@ -166,6 +175,7 @@
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
         <input type="hidden" name="curso" value="<?=base64_encode($curso);?>"/>
         <input type="hidden" name="estadoM" value="<?=base64_encode($estadoM);?>"/>
+        <input type="hidden" name="quitar" value="<?=base64_encode(0);?>"/>
         <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
       <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
     </form>
