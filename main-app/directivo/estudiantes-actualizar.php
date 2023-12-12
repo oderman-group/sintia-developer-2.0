@@ -44,8 +44,10 @@ if($config['conf_id_institucion'] == ICOLVEN){
 	require_once("apis-sion-modify-student.php");
 }
 $fechaNacimiento="";
+$fechaNacimientoU="";
 if(!empty($_POST["fNac"])){
 	$fechaNacimiento="mat_fecha_nacimiento='" . $_POST["fNac"] . "', ";
+	$fechaNacimientoU="uss_fecha_nacimiento='" . $_POST["fNac"] . "', ";
 }
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
@@ -81,7 +83,7 @@ if (!empty($_FILES['fotoMat']['name'])) {
 Estudiantes::actualizarEstudiantes($conexionPDO, $_POST, $fechaNacimiento, $procedencia, $pasosMatricula);
 
 try {
-	mysqli_query($conexion, "UPDATE usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
+	mysqli_query($conexion, "UPDATE usuarios SET {$fechaNacimientoU} uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }	
