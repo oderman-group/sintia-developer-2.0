@@ -70,9 +70,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
+                                                        <?php if(Modulos::validarSubRol(['DT0038'])){?>
 														<a href="cargas-indicadores-obligatorios-agregar.php" id="addRow" class="btn deepPink-bgcolor">
 															Agregar nuevo <i class="fa fa-plus"></i>
 														</a>
+                                                        <?php }?>
 													</div>
 												</div>
 											</div>
@@ -106,19 +108,25 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$resultado['ind_nombre'];?></td>
                                                         <td><?=$resultado['ind_valor'];?></td>														
 														<td>
+                                                            <?php if(Modulos::validarSubRol(['DT0037','DT0157','DT0036'])){?>
 															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado['ind_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                        							  <li>
-                                                                      <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado['ind_id']);?>')">Eliminar</a>    
-                                                                      </li>	
-																	  <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado['ind_id']);?>&indNombre=<?=base64_encode($resultado['ind_nombre']);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
-																  </ul>
-															  </div>
+                                                                <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
+                                                                <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+                                                                    <i class="fa fa-angle-down"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <?php if(Modulos::validarSubRol(['DT0037'])){?>
+                                                                    <li><a href="cargas-indicadores-obligatorios-editar.php?id=<?=base64_encode($resultado['ind_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                                                    <li>
+                                                                    <?php } if(Modulos::validarSubRol(['DT0157'])){?>
+                                                                    <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-indicadores-obligatorios-eliminar.php?idN=<?=base64_encode($resultado['ind_id']);?>')">Eliminar</a>    
+                                                                    </li>	
+                                                                    <?php } if(Modulos::validarSubRol(['DT0036'])){?>
+                                                                    <li><a href="cargas-indicadores-obligatorios-ver.php?ind=<?=base64_encode($resultado['ind_id']);?>&indNombre=<?=base64_encode($resultado['ind_nombre']);?>" title="Grados por asignaturas">Grados por asignaturas</a></li>
+                                                                    <?php }?>
+                                                                </ul>
+                                                            </div>
+                                                            <?php }?>
 														</td>
                                                     </tr>
 													<?php 
