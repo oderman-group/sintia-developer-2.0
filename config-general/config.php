@@ -6,6 +6,8 @@ require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Modulos.php");
 
+$arregloModulos = $_SESSION["modulos"];
+
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;
 $config = $_SESSION["configuracion"];
