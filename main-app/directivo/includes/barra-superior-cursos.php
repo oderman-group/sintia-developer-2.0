@@ -7,16 +7,20 @@
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 
-      <?php if(Modulos::validarPermisoEdicion()){?>
+      <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0063','DT0210','DT0211'])){?>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
               Más opciones
             <span class="fa fa-angle-down"></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <?php if(Modulos::validarSubRol(['DT0063'])){?>
             <a class="dropdown-item" href="cursos-intensidad.php">I.H por curso</a>
+            <?php } if(Modulos::validarSubRol(['DT0210'])){?>
             <a class="dropdown-item" href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-matricula.php')">Poner en $0 la matricula</a>
+            <?php } if(Modulos::validarSubRol(['DT0211'])){?>
             <a class="dropdown-item" href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta acción?','question','cursos-cambiar-pension.php')">Poner en $0 la pensión</a>
+            <?php }?>
           <div class="dropdown-divider"></div>
           </div>
         </li>
