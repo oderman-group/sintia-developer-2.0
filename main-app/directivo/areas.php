@@ -51,7 +51,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-                                                        <?php if (Modulos::validarPermisoEdicion()) { ?>
+                                                        <?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0019'])) { ?>
                                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAreaModal" class="btn deepPink-bgcolor">
                                                             Agregar nuevo <i class="fa fa-plus"></i>
                                                         </a>
@@ -99,9 +99,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado['ar_id'];?></td>
 														<td><?=$resultado['ar_posicion'];?></td>
 														<td><?=$resultado['ar_nombre'];?></td>
-														<td><a href="asignaturas.php?area=<?=base64_encode($resultado['ar_id']);?>" style="text-decoration: underline;"><?=$numMaterias[0];?></a></td>
+														<?php 
+															$materias=$numMaterias[0];
+															if(Modulos::validarSubRol(['DT0020'])){
+																$materias='<a href=""asignaturas.php?area='.base64_encode($resultado['ar_id']).'" style="text-decoration: underline;">'.$numMaterias[0].'</a>';
+															}
+														?>
+														<td><?=$materias?></td>
 														
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0018','DT0150'])){?>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -109,8 +115,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="areas-editar.php?id=<?=base64_encode($resultado['ar_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                                                        <?php if($numMaterias[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado['ar_id']);?>')">Eliminar</a></li><?php }?>
+																		<?php if(Modulos::validarSubRol(['DT0018'])){?>
+                                                                            <li><a href="areas-editar.php?id=<?=base64_encode($resultado['ar_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                                                        <?php } if($numMaterias[0]==0 && Modulos::validarSubRol(['DT0150'])){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta area?','question','areas-eliminar.php?id=<?=base64_encode($resultado['ar_id']);?>')">Eliminar</a></li><?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>
