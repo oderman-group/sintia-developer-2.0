@@ -291,7 +291,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 																		<?php }?>
 																	<?php }?>
 																	  
-																	<?php if($resultado['uss_tipo'] == TIPO_DOCENTE && $numCarga > 0){?>
+																	<?php if($resultado['uss_tipo'] == TIPO_DOCENTE && $numCarga > 0 && Modulos::validarSubRol(['DT0239'])){?>
 																		<li><a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($resultado['uss_id']);?>" target="_blank">Planillas de las cargas</a></li>
 																	<?php }?>
 
