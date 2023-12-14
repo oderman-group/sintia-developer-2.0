@@ -50,46 +50,62 @@
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
  
+      <?php if(Modulos::validarSubRol(['DT0002'])){?>
       <li class="nav-item"> <a class="nav-link" href="estudiantes-promedios.php" style="color:<?=$Plataforma->colorUno;?>;">Promedios estudiantiles</a></li>
+      <?php }?>
 
+      <?php if(Modulos::validarSubRol(['DT0077','DT0080','DT0075'])){?>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Menú matrículas
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <?php if(Modulos::validarSubRol(['DT0077'])){?>
         <a class="dropdown-item" href="estudiantes-importar-excel.php">Importar matrículas desde Excel</a>
+        <?php } if(Modulos::validarSubRol(['DT0080'])){?>
         <a class="dropdown-item" href="estudiantes-consolidado-final.php">Consolidado final</a>
+        <?php } if(Modulos::validarSubRol(['DT0075'])){?>
         <a class="dropdown-item" href="estudiantes-nivelaciones.php">Nivelaciones</a>
+        <?php }?>
         </div>
       </li>
+      <?php }?>
 
+      <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0212','DT0213','DT0214','DT0215','DT0175','DT0216','DT0149'])){?>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
             Más opciones
 		  <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <?php if(Modulos::validarPermisoEdicion()){?>
+          <?php if(Modulos::validarSubRol(['DT0212'])){?>
           <a class="dropdown-item" href="javascript:void(0);"
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matricular-todos.php')">Matricular a todos</a>
+          <?php } if(Modulos::validarSubRol(['DT0213'])){?>
           <a class="dropdown-item" href="javascript:void(0);"
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-matriculas-cancelar.php')">Cancelar a todos</a>
+          <?php } if(Modulos::validarSubRol(['DT0214'])){?>
           <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-grupoa-todos.php')">Asignar a todos al grupo A</a>
+          <?php } if(Modulos::validarSubRol(['DT0215'])){?>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Esta opción removerá a todos lo estudiantes que no estén en estado Matriculado, desea continuar?','question','estudiantes-inactivos-remover.php')"
           >Remover estudiantes Inactivos este año</a></a>
+          <?php } if(Modulos::validarSubRol(['DT0175'])){?>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-documento-usuario-actualizar.php')">Colocar documento como usuario de acceso</a>
+          <?php } if(Modulos::validarSubRol(['DT0216'])){?>
           <a class="dropdown-item" href="javascript:void(0);" 
           onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-crear-usuarios.php')">Verificar y generar credenciales a estudiantes</a>
-        <?php }?>
-        <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
+          <?php } if(Modulos::validarSubRol(['DT0149'])){?>
+          <a class="dropdown-item" href="filtro-general-folio.php">Generar Folios</a>
+          <?php }?>
         </div>
       </li>
+      <?php }?>
 
       <li class="nav-item"> <a class="nav-link" href="javascript:void(0);">|</a></li>
 

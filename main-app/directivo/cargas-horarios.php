@@ -55,7 +55,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0043'])){?>
 															<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -72,7 +72,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Día</th>
 														<th>Desde</th>
 														<th>Hasta</th>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0042','DT0156'])){?>
 															<th>Acciones</th>
 														<?php }?>
                                                     </tr>
@@ -108,7 +108,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$dia;?></td>
 														<td><?=$resultado['hor_desde'];?></td>
 														<td><?=$resultado['hor_hasta'];?></td>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0042','DT0156'])){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -116,8 +116,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
+																		<?php if(Modulos::validarSubRol(['DT0042'])){?>
 																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado['id_nuevo']);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0156'])){?>
 																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado['id_nuevo']);?>&idC=<?=base64_encode($resultado['hor_id_carga']);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+                                                        				<?php }?>
 																	</ul>
 																</div>
 															</td>

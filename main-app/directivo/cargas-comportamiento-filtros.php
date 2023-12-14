@@ -173,7 +173,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
                                     </div>
                                     
-                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                    <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051'])){?>
                                         <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     <?php }?>
                                     

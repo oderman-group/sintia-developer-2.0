@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0172'])){?>
 															<a href="javascript:void(0);" class="btn btn-danger" 
 															onClick="sweetConfirmacion('Alerta!','A continuación se buscará la intensidad horaria de los cursos y materias registrados en las cargas académicas para llenar esta tabla. Desea continuar?','question','cursos-actualizar-cargas.php')"
 															>

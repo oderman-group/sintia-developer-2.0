@@ -12,7 +12,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div class="btn-group">
-                    <?php if (Modulos::validarPermisoEdicion()) { ?>
+                    <?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0196'])) { ?>
                         <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevoGrupoModal" class="btn deepPink-bgcolor">
                             Agregar nuevo <i class="fa fa-plus"></i>
                         </a>
@@ -51,7 +51,7 @@
                             <td><?= $resultado["gru_id"]; ?></td>
                             <td><?= $resultado["gru_codigo"]; ?></td>
                             <td><?= $resultado['gru_nombre']; ?></td>
-                            <?php if (Modulos::validarPermisoEdicion()) { ?>
+                            <?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0197'])) { ?>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>

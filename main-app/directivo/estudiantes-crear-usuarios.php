@@ -1,5 +1,14 @@
 <?php
 include("session.php");
+
+Modulos::validarAccesoDirectoPaginas();
+$idPaginaInterna = 'DT0216';
+
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}
+include("../compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
@@ -28,5 +37,6 @@ while ($est = mysqli_fetch_array($estud, MYSQLI_BOTH)) {
 		}
 	}
 }
+include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';
 exit();

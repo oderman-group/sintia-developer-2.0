@@ -51,7 +51,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if (Modulos::validarPermisoEdicion()) { ?>
+														<?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0022'])) { ?>
                                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAsigModal" class="btn deepPink-bgcolor">
 														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
                                                         </a>
@@ -109,9 +109,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<td><?=$resultado['mat_valor'];?></td>
 														<?php }?>	
 														<td><?=$resultado['ar_nombre'];?></td>
-														<td><a href="cargas.php?asignatura=<?=base64_encode($resultado['mat_id']);?>" style="text-decoration: underline;"><?=$numeros[0];?></a></td>
+														<?php 
+															$cargas=$numeros[0];
+															if(Modulos::validarSubRol(['DT0032'])){
+																$cargas='<a href="cargas.php?asignatura='.base64_encode($resultado['mat_id']).'" style="text-decoration: underline;">'.$numeros[0].'</a>';
+															}
+														?>
+														<td><?=$cargas?></td>
 														
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0021','DT0151'])){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -119,8 +125,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-																		<?php if($numeros[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado['mat_id']);?>')">Eliminar</a></li><?php } ?>
+																		<?php if(Modulos::validarSubRol(['DT0021'])){?>
+																			<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if($numeros[0]==0 && Modulos::validarSubRol(['DT0151'])){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado['mat_id']);?>')">Eliminar</a></li><?php } ?>
 																	</ul>
 																</div>
 															</td>

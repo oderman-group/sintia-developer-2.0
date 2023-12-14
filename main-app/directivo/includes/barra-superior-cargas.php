@@ -25,18 +25,23 @@ if (!empty($_GET['busqueda'])) {
     <div class="navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <?php if(Modulos::validarPermisoEdicion()){?>
+            <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0035','DT0142','DT0033','DT0044'])){?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
                         Más opciones
                         <span class="fa fa-angle-down"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <?php if(Modulos::validarSubRol(['DT0035'])){?>
                         <a class="dropdown-item" href="cargas-indicadores-obligatorios.php">Indicadores obligatorios</a>
+                        <?php } if(Modulos::validarSubRol(['DT0142'])){?>
                         <a class="dropdown-item" href="cargas-comportamiento-filtros.php">Notas de Comportamiento</a>
                         <div class="dropdown-divider"></div>
+                        <?php } if(Modulos::validarSubRol(['DT0033'])){?>
                         <a class="dropdown-item" href="javascript:void(0);"  data-toggle="modal" data-target="#modalTranferirCargas"  >Transferir cargas</a>
+                        <?php } if(Modulos::validarSubRol(['DT0044'])){?>
                         <a class="dropdown-item" href="cargas-estilo-notas.php">Estilo de notas</a>
+                        <?php }?>
 
                     </div>
                 </li>
