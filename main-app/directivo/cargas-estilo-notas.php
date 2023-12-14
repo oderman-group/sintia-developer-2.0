@@ -52,7 +52,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0048'])){?>
                                                             <a href="cargas-estilo-notas-agregar.php" id="addRow" class="btn deepPink-bgcolor">
                                                                 Agregar nuevo <i class="fa fa-plus"></i>
                                                             </a>
@@ -68,7 +68,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>#</th>
 														<th>C&oacute;digo</th>
 														<th>Nombre</th>
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0045','DT0154'])){?>
 														    <th>Acciones</th>
                                                         <?php }?>
                                                     </tr>
@@ -87,7 +87,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado["catn_id"];?></td>
 														<td><?=$resultado["catn_nombre"];?></td>	
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>													
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0045','DT0154'])){?>													
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -95,10 +95,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
+																		<?php if(Modulos::validarSubRol(['DT0045'])){?>
                                                                         <li><a href="cargas-estilo-notas-especifica.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0154'])){?>
                                                                         <li>
                                                                             <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-eliminar.php?idR=<?=base64_encode($resultado["catn_id"]);?>')">Eliminar</a>                                                                            
                                                                         </li>
+                                                                        <?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

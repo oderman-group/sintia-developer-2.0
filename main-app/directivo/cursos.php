@@ -57,7 +57,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0065'])){?>
 															<a href="javascript:void(0);"  data-toggle="modal" data-target="#nuevoCursoModal"  class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -114,10 +114,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																  </button>
 																  <ul class="dropdown-menu" role="menu">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
+																		<?php if(Modulos::validarSubRol(['DT0064'])){?>
 																		<li><a href="cursos-editar.php?id=<?=base64_encode($resultado['gra_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0158'])){?>
 																		<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas eliminar este curso?','question','cursos-eliminar.php?id=<?=base64_encode($resultado['gra_id']);?>')">Eliminar</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0145'])){?>
 																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
-																	<?php }?>
+																	<?php }}?>
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
 																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
 																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>

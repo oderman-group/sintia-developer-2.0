@@ -75,7 +75,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if (Modulos::validarPermisoEdicion()) { ?>
+														<?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0052'])) { ?>
                                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaCargModal" class="btn deepPink-bgcolor">
 														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
                                                         </a>
@@ -177,21 +177,25 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																	  <i class="fa fa-angle-down"></i>
 																  </button>
 																  <ul class="dropdown-menu" role="menu" style="z-index: 9000;">
-																		<?php if(Modulos::validarPermisoEdicion()){?>
+																		<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0049','DT0148','DT0129'])){?>
+																			<?php if(Modulos::validarSubRol(['DT0049'])){?>
 																			<li><a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-																			<?php if($config['conf_permiso_eliminar_cargas'] == 'SI'){?>
+																			<?php } if($config['conf_permiso_eliminar_cargas'] == 'SI' && Modulos::validarSubRol(['DT0148'])){?>
 																				<li>
 																				    <a href="javascript:void(0);" title="Eliminar" onClick="sweetConfirmacion('Alerta!','Deseas eliminar esta accion?','question','cargas-eliminar.php?id=<?=base64_encode($resultado['car_id']);?>')"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
 																				</li>
-																			<?php }?>
+																			<?php } if(Modulos::validarSubRol(['DT0129'])){?>
 																	  		<li>
 																			    <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?=base64_encode($resultado['car_docente']);?>&tipe=<?=base64_encode(2)?>&carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>')">Ver como docente</a>
-																			<?php }?>
-																	  <li><a href="cargas-horarios.php?id=<?=base64_encode($resultado['car_id']);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
-																	  <li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado['car_id']);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
-																	  <li><a href="cargas-indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&docente=<?=base64_encode($resultado['car_docente']);?>">Indicadores</a></li>
-																	  <li><a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla</a></li>
-																	  <li><a href="../compartido/planilla-docentes-notas.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla con notas</a></li>
+																		<?php }} if(Modulos::validarSubRol(['DT0041'])){?>
+																		<li><a href="cargas-horarios.php?id=<?=base64_encode($resultado['car_id']);?>" title="Ingresar horarios">Ingresar Horarios</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0111'])){?>
+																		<li><a href="periodos-resumen.php?carga=<?=base64_encode($resultado['car_id']);?>" title="Resumen Periodos"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0034'])){?>
+																		<li><a href="cargas-indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&docente=<?=base64_encode($resultado['car_docente']);?>">Indicadores</a></li>
+                                                        				<?php }?>
+																		<li><a href="../compartido/planilla-docentes.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla</a></li>
+																		<li><a href="../compartido/planilla-docentes-notas.php?carga=<?=base64_encode($resultado['car_id']);?>" target="_blank">Ver Planilla con notas</a></li>
 																  </ul>
 															  </div>
 														</td>

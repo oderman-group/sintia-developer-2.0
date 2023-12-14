@@ -97,7 +97,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </select>
                                             </div>
                                         </div>
-                                        <input type="submit" class="btn btn-primary" value="Generar Planilla">
+
+                                        <?php if(Modulos::validarSubRol(['DT0076'])){?>
+                                        <input type="submit" class="btn btn-primary" value="Generar Planilla">&nbsp;
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0047'])){?>
                                                             <a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
                                                                 Agregar nuevo <i class="fa fa-plus"></i>
                                                             </a>
@@ -71,7 +71,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>Nombre</th>
                                                         <th>Nota desde</th>
                                                         <th>Nota hasta</th>
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0046','DT0155'])){?>
 														    <th>Acciones</th>
                                                         <?php }?>
                                                     </tr>
@@ -92,7 +92,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$resultado["notip_nombre"];?></td>
                                                         <td><?=$resultado["notip_desde"];?></td>
                                                         <td><?=$resultado["notip_hasta"];?></td>
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>														
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0046','DT0155'])){?>														
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -100,10 +100,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
+																		<?php if(Modulos::validarSubRol(['DT0046'])){?>
                                                                         <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0155'])){?>
                                                                         <li>
                                                                         <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>')">Eliminar</a>    
-                                                                       </li>
+                                                                        </li>
+                                                                        <?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

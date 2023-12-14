@@ -131,7 +131,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Periodo</th>
 														<th>Creado</th>
 														<th>#ACTV</th>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0040','DT0039','DT0087'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
@@ -170,7 +170,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td align="center"><?=$sino[$resultado['ipc_creado']];?></td>
 														<td align="center"><?=$numActividades;?></td>
 														
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0040','DT0039','DT0087'])){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -178,11 +178,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
+																		<?php if(Modulos::validarSubRol(['DT0040'])){?>
 																		<li><a href="cargas-indicadores-agregar.php?carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[231][$datosUsuarioActual['uss_idioma']];?></a></li>
-																		
+																		<?php } if(Modulos::validarSubRol(['DT0039'])){?>
 																		<li><a href="cargas-indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-																		
+																		<?php } if(Modulos::validarSubRol(['DT0087'])){?>
 																		<li><a href="javascript:void(0);" name="cargas-indicadores-eliminar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=$_GET["carga"];?>&periodo=<?=base64_encode($resultado['ipc_periodo']);?>&docente=<?=$_GET["docente"];?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                                        				<?php }?>
 																	</ul>
 																</div>
 															</td>
