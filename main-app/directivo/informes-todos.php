@@ -203,15 +203,20 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								</div>
 								<?php }?>
 								
+								<?php if(Modulos::validarSubRol(['DT0245','DT0246'])){?>
 								<div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-green">INFORMES ADMINISTRATIVOS</header>
 										<div class="panel-body">
+											<?php if(Modulos::validarSubRol(['DT0245'])){?>
                                             <p><a href="../compartido/informe-usuarios-repetidos.php" target="_blank">1. Informe usuarios repetidos</a></p>
+											<?php } if(Modulos::validarSubRol(['DT0246'])){?>
                                             <p><a href="../compartido/informe-estudiantes-sin-usuarios.php" target="_blank">2. Informe estudiantes sin usuario</a></p>
+											<?php }?>
 										</div>
                                 	</div>
 								</div>
+								<?php }?>
                             </div>
                         </div>
                     </div>
