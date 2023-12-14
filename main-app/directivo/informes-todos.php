@@ -170,15 +170,24 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								</div>
 								<?php }?>
 
+								<?php if(Modulos::validarSubRol(['DT0116','DT0242'])){?>
                                 <div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-red">INFORMES DISCPLINARIOS</header>
 										<div class="panel-body">
+											<?php if(Modulos::validarSubRol(['DT0116'])){?>
 											<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalInfDist1" >1. Sacar reportes</a></p>
+											<?php 
+												$idModal = "modalInfDist1"; $contenido = "reportes-sacar-filtro-modal.php";  include("../compartido/contenido-modal.php");
+												}
+												if(Modulos::validarSubRol(['DT0242'])){
+											?>
 											<p><a href="../compartido/reporte-ver-observador.php" target="_blank">2. Reporte vista observador</a></p>
+											<?php }?>
 										</div>
                                 	</div>
 								</div>
+								<?php }?>
 								
 								<div class="col-md-4">
 									<div class="panel">
@@ -204,30 +213,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     </div>
                 </div>
             </div>
-			 <!-- comienzan los modal -->
-			<?php $idModal = "modal1"; $contenido = "informes-boletines-modal.php";  include("../compartido/contenido-modal.php");?> 
-			<?php $idModal = "modal2"; $contenido  = "estudiantes-certificados-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal3"; $contenido  = "consolidado-perdidos-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal4"; $contenido  = "informe-libro-cursos-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal5"; $contenido  = "informe-estudiantes-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal6"; $contenido  = "informe-parcial-grupo-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal8"; $contenido  = "consolidado-final-filtro-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal9"; $contenido  = "estudiantes-planilla-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal10"; $contenido = "reportes-academicos-consultas-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modal12"; $contenido = "asistencia-entrega-informes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-
-			<?php $idModal = "modalCont2"; $contenido = "informe-reporte-sabana-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont4"; $contenido = "asistencia-planilla-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont5"; $contenido = "planilla-docentes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-			<?php $idModal = "modalCont6"; $contenido = "notas-registradas-informes-filtros-modal.php";  include("../compartido/contenido-modal.php");?>
-			<!-- modal informe disciplinario -->
-			<?php $idModal = "modalInfDist1"; $contenido = "reportes-sacar-filtro-modal.php";  include("../compartido/contenido-modal.php");?>
-			
-			 <!-- terminan  los modal -->
-			
-
-            <!-- end page content -->
-             <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
