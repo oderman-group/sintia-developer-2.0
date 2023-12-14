@@ -19,7 +19,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Curso</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="cursosR">
+                        <select class="form-control  select2" style="width: 100%;" name="cursosR">
                             <option value=""></option>
                             <?php
                             try {
@@ -38,7 +38,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Grupos</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="gruposR">
+                        <select class="form-control  select2" style="width: 100%;" name="gruposR">
                             <option value=""></option>
                             <?php
                             try {
@@ -57,7 +57,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estado</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="estadoR">
+                        <select class="form-control  select2" style="width: 100%;" name="estadoR">
                             <option value=""></option>
                             <option value="1">Matriculado</option>
                             <option value="2">Asistente</option>
@@ -71,7 +71,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Tipo de estudiante</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="tipoR">
+                        <select class="form-control  select2" style="width: 100%;" name="tipoR">
                             <option value=""></option>
                             <?php
                             try {
@@ -90,7 +90,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Acudiente</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="acudienteR">
+                        <select class="form-control  select2" style="width: 100%;" name="acudienteR">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
@@ -101,7 +101,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estudiante de Inclusión</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="inclu">
+                        <select class="form-control  select2" style="width: 100%;" name="inclu">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
@@ -112,7 +112,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estudiante Extranjero</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="extra">
+                        <select class="form-control  select2" style="width: 100%;" name="extra">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
@@ -123,7 +123,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Foto</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="fotoR">
+                        <select class="form-control  select2" style="width: 100%;" name="fotoR">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
@@ -134,7 +134,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Genero</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="generoR">
+                        <select class="form-control  select2" style="width: 100%;" name="generoR">
                             <option value=""></option>
                             <?php
                             try {
@@ -153,7 +153,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Religi&oacute;n</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="religionR">
+                        <select class="form-control  select2" style="width: 100%;" name="religionR">
                             <option value=""></option>
                             <?php
                             try {
@@ -172,7 +172,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estrato</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="estratoE">
+                        <select class="form-control  select2" style="width: 100%;" name="estratoE">
                             <option value=""></option>
                             <?php
                             try {
@@ -191,7 +191,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Tipo de documento</label>
                     <div class="col-sm-10">
-                        <select class="form-control  select2" name="tdocumentoR">
+                        <select class="form-control  select2" style="width: 100%;" name="tdocumentoR">
                             <option value=""></option>
                             <?php
                             try {
