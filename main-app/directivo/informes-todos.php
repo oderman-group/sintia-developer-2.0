@@ -159,6 +159,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 							<h4>OTROS INFORMES</h4>
 							<div class="row">
+								<?php if(Modulos::validarSubRol(['DT0240'])){?>
                                 <div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-green">INFORMES FINANCIEROS</header>
@@ -167,6 +168,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										</div>
                                 	</div>
 								</div>
+								<?php }?>
 
                                 <div class="col-md-4">
 									<div class="panel">
