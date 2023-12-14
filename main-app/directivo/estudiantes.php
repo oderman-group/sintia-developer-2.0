@@ -267,7 +267,9 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 																	<?php }?>
 																	
 																	<?php if(!empty($resultado['mat_grado']) && !empty($resultado['mat_grupo'])) {?>
+																		<?php if(Modulos::validarSubRol(['DT0224'])){?>
 																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
+                                                        				<?php }?>
 																		<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
 																		<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	<?php }?>

@@ -118,7 +118,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas eliminar este curso?','question','cursos-eliminar.php?id=<?=base64_encode($resultado['gra_id']);?>')">Eliminar</a></li>
 																		<li><a href="cursos-promocionar-estudiantes-detalles.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Promocionar estudiantes">Promocionar estudiantes</a></li>
 																	<?php }?>
+																	<?php if(Modulos::validarSubRol(['DT0224'])){?>
 																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Boletin por curso</a></li>
+                                                        			<?php }?>
 																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
 																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
 																	<li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
