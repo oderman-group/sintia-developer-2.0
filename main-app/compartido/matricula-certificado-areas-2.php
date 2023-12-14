@@ -1,6 +1,13 @@
 <?php
 date_default_timezone_set("America/New_York");//Zona horaria
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0225';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
@@ -674,8 +681,9 @@ Se expide el presente certificado en el Carmen de Chucurí  el <?=date("d");?> d
     SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?=date("l, d-M-Y");?>
 
 </div>
-
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 <script type="application/javascript">
 	print();
 </script>
