@@ -188,16 +188,20 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 	</div>
 								</div>
 								<?php }?>
-								
+								<?php if(Modulos::validarSubRol(['DT0243','DT0244'])){?>
 								<div class="col-md-4">
 									<div class="panel">
 										<header class="panel-heading panel-heading-yellow">EXPORTAR A EXCEL</header>
 										<div class="panel-body">
+											<?php if(Modulos::validarSubRol(['DT0243'])){?>
                                             <p><a href="../compartido/excel-inscripciones.php" target="_blank">1. Exportar inscripciones</a></p>
+											<?php } if(Modulos::validarSubRol(['DT0244'])){?>
                                             <p><a href="../compartido/excel-estudiantes.php" target="_blank">2. Exportar matrículas</a></p>
+											<?php }?>
 										</div>
                                 	</div>
 								</div>
+								<?php }?>
 								
 								<div class="col-md-4">
 									<div class="panel">

@@ -1,11 +1,16 @@
 <?php
+include("session-compartida.php");
+$idPaginaInterna = 'DT0244';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 header("Content-Type: application/vnd.ms-excel");
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 header("content-disposition: attachment;filename=Estudiantes_".date("d/m/Y")."-SINTIA.xls");
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
 $consulta = Estudiantes::listarEstudiantes(0, '', '');
@@ -118,6 +123,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 <?php
 	$conta++;
 }
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>        
     </tbody>
 </table>
