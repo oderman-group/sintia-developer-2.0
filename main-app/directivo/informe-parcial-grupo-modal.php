@@ -19,7 +19,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Curso</label>
                 <div class="col-sm-10">
-                    <select class="form-control  select2" name="curso">
+                    <select class="form-control  select2" style="width: 100%;" name="curso">
                         <option value=""></option>
                         <?php
                         try {
@@ -40,7 +40,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Grupos</label>
                 <div class="col-sm-10">
-                    <select class="form-control  select2" name="grupo">
+                    <select class="form-control  select2" style="width: 100%;" name="grupo">
                         <option value=""></option>
                         <?php
                         try {

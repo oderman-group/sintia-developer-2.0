@@ -1,6 +1,12 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-require_once(ROOT_PATH."/main-app/directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0223';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/compartido/head.php");
 
@@ -69,5 +75,7 @@ ORDER BY mat_id ASC");
     PLATAFORMA EDUCATIVA SINTIA - <?= date("l, d-M-Y"); ?>
   </div>
 </body>
-
+<?php 
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

@@ -1,9 +1,12 @@
 <?php
-session_start();
+include("session-compartida.php");
 $idPaginaInterna = 'DT0146';
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
-<?php
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 $consulta = mysqli_query($conexion, "SELECT GROUP_CONCAT( car_id SEPARATOR ', ')as car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, COUNT(*) as duplicados
 FROM ".BD_ACADEMICA.".academico_cargas car
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
@@ -68,5 +71,7 @@ ORDER BY car_id ASC");
     PLATAFORMA EDUCATIVA SINTIA - <?=date("l, d-M-Y");?>
   </div>
 </body>
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

@@ -25,7 +25,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grado" required>
+                    <select class="form-control  select2" style="width: 100%;" name="grado" required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -46,7 +46,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grupo" required>
+                    <select class="form-control  select2" style="width: 100%;" name="grupo" required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -89,7 +89,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="est">
+                    <select class="form-control  select2" style="width: 100%;" name="est">
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -103,7 +103,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label"><?= $frases[248][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
-                    <select name="falta" class="form-control select2">
+                    <select name="falta" class="form-control select2" style="width: 100%;">
                         <option value="">Seleccione una opción</option>
                         <?php
                         try {
@@ -129,7 +129,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                     $datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo = ".TIPO_DIRECTIVO.")
                     ORDER BY uss_tipo, uss_nombre");
                     ?>
-                    <select class="form-control  select2" name="usuario">
+                    <select class="form-control  select2" style="width: 100%;" name="usuario">
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {

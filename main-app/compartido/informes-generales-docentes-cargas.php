@@ -1,9 +1,12 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("session-compartida.php");
+$idPaginaInterna = 'DT0234';
 
-<?php
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 $filtro = '';
 if(!empty($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}
 if(!empty($_GET["grado"])){$filtro .=" AND car_curso='".$_GET["grado"]."'";}
@@ -66,7 +69,8 @@ include("../compartido/head-informes.php") ?>
 			?>  
 		</table>
 	</div>
-	<?php include("../compartido/footer-informes.php") ?>
+	<?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 
 </div>	
 

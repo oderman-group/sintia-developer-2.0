@@ -1,5 +1,12 @@
 <?php
     include("session.php");
+    $idPaginaInterna = 'DT0224';
+    
+    if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+        echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+        exit();
+    }
+    include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Estudiantes.php");
     
     $year=$_SESSION["bd"];
@@ -36,5 +43,6 @@
     if($numDatos>0){
         $ruta="../compartido/matricula-boletin-curso-".$boletin['gra_formato_boletin'].".php?id=".$id."&periodo=".$periodo."&curso=".$curso."&grupo=".$grupo."&year=".base64_encode($year);
     }
+    include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="'.$ruta.'";</script>';
 	exit();

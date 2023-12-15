@@ -23,7 +23,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grado" required>
+                    <select class="form-control  select2" style="width: 100%;" name="grado" required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
@@ -46,7 +46,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grupo">
+                    <select class="form-control  select2" style="width: 100%;" name="grupo">
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
