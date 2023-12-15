@@ -7,7 +7,7 @@ $datosUsuarioActual['uss_tipo'] == TIPO_DEV
 ) {
 
   $backgroundColor = '#41c4c4';
-  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV ) {
+  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV || isset($_SESSION['devAdmin']) ) {
       $backgroundColor = '#607d8b';
   }
 ?>
@@ -27,7 +27,7 @@ $datosUsuarioActual['uss_tipo'] == TIPO_DEV
   ">
 
 <?php 
-  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV ) {
+  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV && !isset($_SESSION['devAdmin']) ) {
     $archivo = explode("/", $_SERVER['PHP_SELF']);
     $nombre_fichero = $archivo[4];
 
@@ -59,7 +59,12 @@ $datosUsuarioActual['uss_tipo'] == TIPO_DEV
 
 <?php
   /* AUTOLOGIN DE DIRECTIVOS */
-  if( isset($_SESSION['admin']) ){
+  if( isset($_SESSION['devAdmin']) ){?>
+    <b>DEV ADMIN:&nbsp;</b> <?=$_SESSION['devAdmin']; ?>&nbsp;|&nbsp;
+    <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual['uss_id'];?>&nbsp;|&nbsp;
+    <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual['uss_tipo'];?>&nbsp;|&nbsp;
+    <a href="../compartido/return-dev-admin-panel.php" style="color:white; text-decoration:underline;">VOLVER AL DEV PANEL</a>
+  <?php } elseif( isset($_SESSION['admin']) ){?>
 ?>
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual['uss_id'];?>&nbsp;|&nbsp;
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual['uss_tipo'];?>&nbsp;|&nbsp;

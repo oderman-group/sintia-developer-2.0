@@ -173,6 +173,7 @@ $Plataforma = new Plataforma;
                                                                         <li><a href="dev-instituciones-editar.php?id=<?= base64_encode($resultado['ins_id']); ?>">Editar</a></li>
                                                                         <li><a href="dev-instituciones-configuracion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Configuración</a></li>
                                                                         <li><a href="dev-instituciones-Informacion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Información</a></li>
+                                                                        <li><a href="auto-login-dev.php?user=<?=base64_encode(1);?>&idInstitucion=<?=base64_encode($resultado['ins_id']);?>&bd=<?=base64_encode($resultado['ins_bd']);?>&yearDefault=<?=base64_encode($resultado['ins_year_default']);?>">Autologin</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
