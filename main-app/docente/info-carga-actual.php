@@ -41,7 +41,7 @@
 													</li>
 													<li class="list-group-item">
 														<b>D.GRUPO</b> 
-														<div class="profile-desc-item pull-right"><?=$dgArray[$datosCargaActual['car_director_grupo']];?></div>
+														<div class="profile-desc-item pull-right"><?php if( !empty($datosCargaActual['car_director_grupo']) && $datosCargaActual['car_director_grupo']<=1) echo $dgArray[$datosCargaActual['car_director_grupo']];?></div>
 													</li>
 													<!--
 													<li class="list-group-item">
