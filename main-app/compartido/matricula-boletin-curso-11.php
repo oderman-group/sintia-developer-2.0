@@ -249,6 +249,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     $numIndicadoresPorPeriodo=mysqli_num_rows($consultaNotaMateriaIndicadoresxPeriodo);
                                     $sumaNotaEstudiante=0;
                                     while ($datosIndicadores = mysqli_fetch_array($consultaNotaMateriaIndicadoresxPeriodo, MYSQLI_BOTH)) {
+                                        $nota=0;
                                         if ($datosIndicadores["mat_id"] == $materia["mat_id"]) {
                                                 $nota = $datosIndicadores["nota"];
                                         }
