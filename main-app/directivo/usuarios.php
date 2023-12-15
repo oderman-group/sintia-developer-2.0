@@ -271,8 +271,8 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 
 																		<?php 
 																		if( 
-																			( $datosUsuarioActual['uss_tipo'] == TIPO_DEV && $resultado['uss_tipo'] != TIPO_DEV) || 
-																			( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && $resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO && !isset($_SESSION['admin']) ) 
+																			( $datosUsuarioActual['uss_tipo'] == TIPO_DEV && $resultado['uss_tipo'] != TIPO_DEV ) || 
+																			( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && $resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO && !isset($_SESSION['admin']) && !isset($_SESSION['devAdmin']) ) 
 																		) {
 																				if($resultado['uss_tipo'] == TIPO_ESTUDIANTE && !empty($tieneMatricula) || $resultado['uss_tipo'] != TIPO_ESTUDIANTE) {
 																		?>
