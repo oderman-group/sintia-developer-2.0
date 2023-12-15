@@ -251,15 +251,14 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     while ($datosIndicadores = mysqli_fetch_array($consultaNotaMateriaIndicadoresxPeriodo, MYSQLI_BOTH)) {
                                         $nota=0;
                                         if ($datosIndicadores["mat_id"] == $materia["mat_id"]) {
-                                                $nota = $datosIndicadores["nota"];
+                                            $nota = ($datosIndicadores["nota"]*($datosIndicadores["ipc_valor"]/100));
                                         }
-    
                                         $sumaNotaEstudiante += $nota;
                                     }
                                     
                                     $estudianteNota=0;
                                     if($numIndicadoresPorPeriodo!=0){
-                                        $estudianteNota=($sumaNotaEstudiante/$numIndicadoresPorPeriodo);
+                                        $estudianteNota=$sumaNotaEstudiante;
                                     }
                                     $notaEstudiante = round($estudianteNota, 2);
                                     
