@@ -39,6 +39,7 @@ if($_SESSION["inst"]==""){
 
 	// Crear una instancia de PDO
     $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
+	$conexionPDO->exec("SET NAMES 'utf8'");
 
     // Establecer el modo de error PDO a excepciones
     $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
