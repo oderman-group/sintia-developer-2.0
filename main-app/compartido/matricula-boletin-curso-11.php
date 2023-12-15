@@ -154,7 +154,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $ausPer3Total=0;
             $ausPer4Total=0;
             $sumAusenciasTotal=0;
-            $sumaNota = 0;
+            $sumaNotaP1 = 0;
+            $sumaNotaP2 = 0;
+            $sumaNotaP3 = 0;
+            $sumaNotaP4 = 0;
             while ($area = mysqli_fetch_array($consultaAreaEstudiante, MYSQLI_BOTH)) {
                 switch($periodoActual){
                     case 1:
@@ -268,7 +271,20 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     $desempenoNotaPFinal= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
 
                                     $promedioMateria += $notaEstudiante;
-                                    $sumaNota += $notaEstudiante;
+                                    switch($j){
+                                        case 1:
+                                            $sumaNotaP1 += $notaEstudiante;
+                                            break;
+                                        case 2:
+                                            $sumaNotaP2 += $notaEstudiante;
+                                            break;
+                                        case 3:
+                                            $sumaNotaP3 += $notaEstudiante;
+                                            break;
+                                        case 4:
+                                            $sumaNotaP4 += $notaEstudiante;
+                                            break;
+                                    }
                             ?>
                                 <td align="center" style=" font-size:12px;"><?=$notaEstudiante;?></td>
                                 <td align="center" style=" font-size:12px;"><?=$desempenoNotaPFinal;?></td>
@@ -373,7 +389,20 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 <?php
                 $promedioFinal = 0;
                 for ($j = 1; $j <= $periodoActual; $j++) {
-                    $promediosPeriodos = ($sumaNota/($contador-1));
+                    switch($j){
+                        case 1:
+                            $promediosPeriodos = ($sumaNotaP1/($contador-1));
+                            break;
+                        case 2:
+                            $promediosPeriodos = ($sumaNotaP2/($contador-1));
+                            break;
+                        case 3:
+                            $promediosPeriodos = ($sumaNotaP3/($contador-1));
+                            break;
+                        case 4:
+                            $promediosPeriodos = ($sumaNotaP4/($contador-1));
+                            break;
+                    }
                     $promediosPeriodos = round($promediosPeriodos, 2);
 
                     $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos,$year);
