@@ -12,8 +12,7 @@
                                     <header>Contactar con el vendedor</header>
                                 </div>
                                 <div class="card-body" id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="18">
+                                    <form class="form-horizontal" action="../compartido/mensajes-enviar-vendedor.php" method="post">
 										<input type="hidden" id="destinoMarketplace" name="destinoMarketplace">
 										<input type="hidden" id="asuntoMarketplace" name="asuntoMarketplace">
 										
@@ -26,7 +25,7 @@
 										<div class="form-group">
 											<div class="offset-md-3 col-md-9">
 												<button type="submit" class="btn btn-info">Enviar ahora</button>
-												<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+												<button data-dismiss="modal" class="btn btn-danger"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 											</div>
 										</div>
 									</form>

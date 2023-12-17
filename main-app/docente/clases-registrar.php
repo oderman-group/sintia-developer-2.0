@@ -10,7 +10,7 @@ require_once("../class/Estudiantes.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_clases WHERE cls_id='".$idR."' AND cls_estado=1");
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id='".$idR."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
@@ -18,7 +18,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 <script type="application/javascript">
 //CALIFICACIONES	
 function notas(enviada){
-  var codNota = <?=$idR;?>;	 
+  var codNota = '<?=$idR;?>';	 
   var nota = enviada.value;
   var codEst = enviada.id;
   var nombreEst = enviada.alt;
@@ -65,12 +65,12 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="clases.php"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$datosConsulta['cls_tema'];?></li>
                             </ol>
                         </div>
                     </div>
-                    
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
@@ -85,8 +85,8 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 										<div class="panel-body">
 											<p>Puedes cambiar a otra clases rápidamente para registrar la asistencia a tus estudiantes o hacer modificaciones de las mismas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_clases 
-											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$idR."'
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY cls_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
@@ -113,15 +113,6 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 									
 										
                                         <div class="card-body">
-											<!--
-											<div class="row" style="margin-bottom: 10px;">
-												<div class="col-sm-12" align="center">
-													<p style="color: darkblue;">Utilice esta casilla para colocar la misma inasistencia a todos los estudiantes. Esta opción <mark>reemplazará las inasistencias existentes</mark> en esta actividad.</p>
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" onChange="notas(this)">
-												</div>
-											</div>
-											-->
-											
 											
 										<span style="color: blue; font-size: 15px;" id="respRA"></span>
 											
@@ -131,19 +122,19 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[30][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[30][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
 													 $contReg = 1;
+													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 if($datosConsulta['cls_registrada']==1){
 															 //Consulta de calificaciones si ya la tienen puestas.
-															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_ausencias WHERE aus_id_estudiante=".$resultado[0]." AND aus_id_clase='".$idR."'");
+															 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_estudiante='".$resultado['mat_id']."' AND aus_id_clase='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															 $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														 }
 													 ?>
@@ -157,7 +148,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 														<td>
 															<input type="number" style="text-align: center;" size="5" maxlength="3" value="<?=$notas['aus_ausencias'];?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="1" onChange="notas(this)" tabindex="<?=$contReg;?>">
 															<?php if(!empty($notas['aus_ausencias'])){?>
-															<a href="#" name="guardar.php?get=<?=base64_encode(29);?>&id=<?=base64_encode($notas['aus_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="clases-ausencia-eliminar.php?id=<?=base64_encode($notas['aus_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
                                                     </tr>

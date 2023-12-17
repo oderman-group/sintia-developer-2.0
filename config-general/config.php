@@ -1,9 +1,12 @@
 <?php
 $tiempo_inicial = microtime(true);
-require_once("../modelo/conexion.php");
-require_once("../class/Plataforma.php");
-require_once("../class/Utilidades.php");
-require_once("../class/Modulos.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/modelo/conexion.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Modulos.php");
+
+$arregloModulos = $_SESSION["modulos"];
 
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;
@@ -34,3 +37,23 @@ $estadosMatriculasEstudiantes = [
 $clavePorDefectoUsuarios = SHA1('12345678');
 $estadosEtiquetasMatriculas = array("","text-success","text-warning","text-danger","text-warning");
 $opcionesGenerales = array("","T. Documento","Religion","Estratos","Generos","Nuevo/Antiguo","Dias","Nivel Educativo","Estado Civil","Estado Laboral","T. de Empresa","Si/No","T. de Vivienda","T. de Trasporte","T. de Sangre","Boletines");
+
+$fechaDeInicio     = strtotime('2023-04-07 21:00:00');
+$timestampActual   = time();
+$numeroEnteroUnico = $timestampActual - $fechaDeInicio;
+
+$tipoEstadoFinanzas = array("","ABONO","PAGO REALIZADO A TI","COBRO","POR PAGARTE");
+$formasPagoFinanzas = array("N/A","Efectivo","Cheque","T. D&eacute;bito","T. Cr&eacute;dito", "N/A");
+
+$estadosSolicitudes = [
+    1 => 'Pendiente',
+    2 => 'En proceso',
+    3 => 'Aceptada',
+    4 => 'Rechazada'
+];
+
+
+$filtroMT = null;
+if( !array_key_exists(10, $_SESSION["modulos"]) ) { 
+    $filtroMT = " AND gra_tipo ='".GRADO_GRUPAL."'";
+}

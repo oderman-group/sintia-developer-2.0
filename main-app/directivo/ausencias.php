@@ -49,8 +49,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 												
 												try{
-													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'");
+													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -92,9 +92,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<div class="panel-body">
 											<?php
 											try{
-												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
-												WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+												$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+												WHERE car_curso='".$datosEstudianteActual['mat_grupo']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}
@@ -142,8 +142,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													}
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-															WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'");
+															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
+															WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -151,12 +151,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><?=$resultado[1];?></td>
-														<td><?=$resultado[2];?></td>
-														<td><?=$ausencia[3];?></td>
+														<td><?=$resultado['cls_id'];?></td>
+														<td><?=$resultado['cls_tema'];?></td>
+														<td><?=$resultado['cls_fecha'];?></td>
+														<td><?=$ausencia['aus_ausencias'];?></td>
 														<td>
-															<a href="clases-ver.php?idClase=<?=$resultado[0];?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idClase=<?=$resultado['cls_id'];?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

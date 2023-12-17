@@ -22,51 +22,6 @@ include("../compartido/head.php");
 
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-
-<script type="application/javascript">
-//CALIFICACIONES	
-function notas(enviada){
-	var carga = <?=$cargaConsultaActual;?>;
-	var periodo = <?=$periodoConsultaActual;?>; 
-	var nota = enviada.value;
-	var codEst = enviada.id;
-	var nombreEst = enviada.alt;
-	var operacion = enviada.title;
-
-if(operacion == 12){
-	var nameId = enviada.name;
-	var observaciones = document.getElementById(nameId);
-	var nota = [];
-	for (let i = 0; i < observaciones.options.length; i++) {
-		if (observaciones.options[i].selected) {
-			nota.push(observaciones.options[i].value);
-		}
-	}
-}
-
-if(operacion == 1 || operacion == 3 || operacion == 5){
-	if (alertValidarNota(nota)) {
-		return false;
-	}
-}
-
-$('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
-	datos = "nota="+(nota)+
-			"&operacion="+(operacion)+
-			"&nombreEst="+(nombreEst)+
-			"&carga="+(carga)+
-			"&periodo="+(periodo)+
-			"&codEst="+(codEst);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-calificaciones-registrar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respRC').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -83,11 +38,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[234][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
@@ -111,12 +67,12 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12" align="center">
 													<p style="color: darkblue;">Utilice esta casilla para colocar la misma nota a todos los estudiantes. Esta opción <mark>reemplazará las notas existentes</mark> de comportamiento para este periodo.</p>
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="7" onChange="notas(this)">
+													<input type="text" style="text-align: center; font-weight: bold;" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" maxlength="3" size="10" onChange="notasMasivaDisciplina(this)">
 												</div>
 											</div>
 											
 											
-										<span style="color: blue; font-size: 15px;" id="respRC"></span>
+										<span style="color: blue; font-size: 15px;" id="respRCT"></span>
 											
 											
                                         <div class="table-responsive">
@@ -124,9 +80,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 														<th>Guardar</th>
 														<?php }?>
@@ -134,13 +90,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante=".$resultado[0]." AND dn_periodo='".$periodoConsultaActual."'");
+														 $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$resultado['mat_id']."' AND dn_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
-														if(!empty($notas[4]) && $notas[4]<$config[5]) $colorNota = $config[6]; elseif(!empty($notas[4]) && $notas[4]>=$config[5]) $colorNota = $config[7];
+														if(!empty($notas['dn_nota']) && $notas['dn_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['dn_nota']) && $notas['dn_nota']>=$config[5]) $colorNota = $config[7];
 
 														$observacion="";
 														if(!empty($notas['dn_observacion'])){
@@ -159,9 +115,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td width="15%">
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['dn_nota'])){ echo $notas['dn_nota'];}?>" name="N<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="5" onChange="notas(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?php if(!empty($notas['dn_nota'])){ echo $notas['dn_nota'];}?>" name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasDisciplina(this)" tabindex="<?=$contReg;?>">
 															<?php if(!empty($notas['dn_nota'])){?>
-															<a href="#" name="guardar.php?get=<?=base64_encode(31);?>&id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="comportamiento-nota-eliminar.php?id=<?=base64_encode($notas['dn_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
 														</td>
 														<td width="50%">
@@ -189,9 +145,9 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															
 															<p>
 															<?php
-															$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_id_carga='".$cargaConsultaActual."' AND dn_observacion IS NOT NULL");
+															$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_id_carga='".$cargaConsultaActual."' AND dn_observacion IS NOT NULL AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															?>
-															<select class="form-control  select2" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)">
+															<select class="form-control  select2" name="O<?=$contReg;?>" step="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="0" onChange="observacionDisciplina(this)">
 																<option value="">Seleccione una opción</option>
 																<option value="0" selected>--Banco de frases--</option>
 																<?php
@@ -201,13 +157,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 																<?php }?>
 															</select>
 															</p>
-															<textarea rows="7" cols="80" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="6" onChange="notas(this)"><?=$observacion?></textarea>
+															<textarea rows="7" cols="80" name="O<?=$contReg;?>" step="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="0" onChange="observacionDisciplina(this)"><?=$observacion?></textarea>
 
 															<?php }?>
 														</td>
                                                         <?php if($config['conf_observaciones_multiples_comportamiento'] == '1'){?>
 														<td style="text-align: center; padding: 10px;">
-                                                            <button class="btn deepPink-bgcolor" type="submit" name="Ob<?=$resultado['mat_id'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="12" onclick="notas(this)"><i class="fa fa-check"></i></button>
+                                                            <button class="btn deepPink-bgcolor" type="submit" name="Ob<?=$resultado['mat_id'];?>" step="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="1" onclick="observacionDisciplina(this)"><i class="fa fa-check"></i></button>
                                                         </td>
 														<?php }?>
                                                     </tr>

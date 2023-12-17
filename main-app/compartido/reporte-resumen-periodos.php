@@ -34,13 +34,13 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                     <!-- BEGIN -->
                                     <tbody>
                                     <?php
-									$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=5 AND car_grupo=3");
+									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso=5 AND car_grupo=3 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 									?>
                                     <tr id="data1" class="odd gradeX">
-                                        <td style="text-align:center;"><?=$rCargas[0];?></td>
+                                        <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
                                         <td><?=$rDatos[1];?></td>
                                         
 										<?php
@@ -48,23 +48,23 @@ include("../../config-general/consulta-usuario-actual.php");?>
 										 $n = 0;
 										 for($i=1; $i<=$config[19]; $i++){
 										 	//LAS CALIFICACIONES
-										 	$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$_GET["estudiante"]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);
+										 	$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_GET["estudiante"]."' AND bol_carga='".$rCargas['car_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 	$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 											$numN = mysqli_num_rows($notasConsulta);
 											if($numN){
 												$n++;
-												$definitiva += $notasResultado[4];
+												$definitiva += $notasResultado['bol_nota'];
 											}
-											if($notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif($notasResultado[4]>=$config[5]) $color = $config[7];
-											if($notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n</span>'; elseif($notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; else $tipo='';
+											if($notasResultado['bol_nota']<$config[5] and $notasResultado['bol_nota']!="")$color = $config[6]; elseif($notasResultado['bol_nota']>=$config[5]) $color = $config[7];
+											if($notasResultado['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n</span>'; elseif($notasResultado['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; else $tipo='';
 											
 										?>
                                         	<td style="text-align:center; color:<?=$color;?>;">
-												<?=$notasResultado[4]."<br>".$tipo;?>
+												<?=$notasResultado['bol_nota']."<br>".$tipo;?>
                                             </td>
                                         <?php		
 										 }
-											$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$_GET["estudiante"]." AND niv_id_asg=".$rCargas[0]);
+											$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$_GET["estudiante"]."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											
 											$numN = mysqli_num_rows($consultaN);
 											$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -73,7 +73,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
 													$definitiva = round(($definitiva/$n), 1);
 												$tN = '<span style="color:blue; font-size:9px;">Normal</span>';
 											}else{
-												$definitiva = $rN[3];
+												$definitiva = $rN['niv_definitiva'];
 												$tN = '<span style="color:red; font-size:9px;">Nivelada</span>';
 											}
 										 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];

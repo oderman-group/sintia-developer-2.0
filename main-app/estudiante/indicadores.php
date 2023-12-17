@@ -3,7 +3,8 @@
 <?php $idPaginaInterna = 'ES0007'; ?>
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php include("verificar-carga.php"); ?>
-<?php include("../compartido/head.php"); ?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -38,12 +39,16 @@
 										<?php
 										$porcentaje = 0;
 										for ($i = 1; $i <= $datosEstudianteActual['gra_periodos']; $i++) {
-											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "'
+											$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+												WHERE gvp_grado='" . $datosEstudianteActual['mat_grado'] . "' AND gvp_periodo='" . $i . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+													$porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
-											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "'"), MYSQLI_BOTH);
+											$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+												WHERE bol_estudiante='" . $datosEstudianteActual['mat_id'] . "' AND bol_carga='" . $cargaConsultaActual . "' AND bol_periodo='" . $i . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 											$porcentaje =0;
 											if (!empty($notapp[0])){
 												$porcentaje = ($notapp[0] / $config['conf_nota_hasta']) * 100;
@@ -54,14 +59,22 @@
 											else $estiloResaltadoP = '';
 										?>
 											<p>
-												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%)</a>
+												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
-												<?php if (!empty($notapp[0]) and $config['conf_sin_nota_numerica'] != 1) { ?>
+												<?php
+													if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+													$notaPorPeriodo=$notapp[0];
+													if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+														$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+														$notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+													}
+												?>
 													<div class="work-monitor work-progress">
 														<div class="states">
 															<div class="info">
 																<div class="desc pull-left"><b><?= $frases[62][$datosUsuarioActual['uss_idioma']]; ?>:</b>
-																	<?= $notapp[0]; ?>
+																	<?= $notaPorPeriodo; ?>
 																</div>
 																<div class="percent pull-right"><?= $porcentaje; ?>%</div>
 															</div>
@@ -105,8 +118,8 @@
 												<thead>
 													<tr>
 														<th>#</th>
-														<th><?= $frases[49][$datosUsuarioActual[8]]; ?></th>
-														<th><?= $frases[50][$datosUsuarioActual[8]]; ?></th>
+														<th><?= $frases[49][$datosUsuarioActual['uss_idioma']]; ?></th>
+														<th><?= $frases[50][$datosUsuarioActual['uss_idioma']]; ?></th>
 														<th align="center">%<br>Total</th>
 														<th align="center">%<br>Actual</th>
 														<th align="center" title="Nota según el porcentaje actual registrado.">Nota</th>
@@ -115,15 +128,15 @@
 												</thead>
 												<tbody>
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-													 INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-													 WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "'");
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+													 INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+													 WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
 													$contReg = 1;
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-														$sumaNotas = mysqli_fetch_array(mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)), SUM(act_valor) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_id_tipo='" . $resultado['ipc_indicador'] . "' AND act_periodo='" . $periodoConsultaActual . "' AND act_id_carga='" . $cargaConsultaActual . "' AND act_estado=1
-														WHERE cal_id_estudiante=" . $datosEstudianteActual['mat_id']), MYSQLI_BOTH);
+														$sumaNotas = mysqli_fetch_array(mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)), SUM(act_valor) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='" . $resultado['ipc_indicador'] . "' AND aa.act_periodo='" . $periodoConsultaActual . "' AND aa.act_id_carga='" . $cargaConsultaActual . "' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
+														WHERE aac.cal_id_estudiante='" . $datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 														$notasResultado = 0;
 														if(!empty($sumaNotas[1])){
@@ -133,13 +146,13 @@
 
 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$notas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$datosEstudianteActual['mat_id']." AND rind_indicador='".$resultado['ipc_indicador']."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'"), MYSQLI_BOTH);
+														$notas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='".$datosEstudianteActual['mat_id']."' AND rind_indicador='".$resultado['ipc_indicador']."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
-														$notaIndicador = mysqli_fetch_array(mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
-														WHERE cal_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+														$notaIndicador = mysqli_fetch_array(mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_id_tipo='".$resultado['ipc_indicador']."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_id_carga='".$cargaConsultaActual."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
+														WHERE aac.cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";
 														if(!empty($notas['rind_nota']) and $notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){
@@ -147,6 +160,18 @@
 															
 															//Color nota
 															if($notaRecuperacion<$config[5] and $notaRecuperacion!="") $colorNota = $config[6]; elseif($notaRecuperacion>=$config[5]) $colorNota = $config[7];
+														}
+
+														$notaFinal=$notasResultado;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado);
+															$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
+
+														$notaRecuperacionFinal=$notaRecuperacion;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaRecuperacion = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaRecuperacion);
+															$notaRecuperacionFinal= !empty($estiloNotaRecuperacion['notip_nombre']) ? $estiloNotaRecuperacion['notip_nombre'] : "";
 														}
 
 													?>
@@ -160,9 +185,9 @@
 															<td align="center" style="width: 100px; text-align:center; color:<?php if ($notasResultado < $config[5] and $notasResultado != "") echo $config[6];
 																																																																					elseif ($notasResultado >= $config[5]) echo $config[7];
 																																																																					else echo "black"; ?>;">
-																<?= $notasResultado; ?>
+																<?= $notaFinal; ?>
 															</td>
-															<td style="text-align: center; color:<?=$colorNota;?>"><?=$notaRecuperacion;?></td>
+															<td style="text-align: center; color:<?=$colorNota;?>"><?=$notaRecuperacionFinal;?></td>
 														</tr>
 													<?php
 														$contReg++;

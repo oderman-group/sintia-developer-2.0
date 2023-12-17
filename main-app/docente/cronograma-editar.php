@@ -9,7 +9,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_cronograma WHERE cro_id='".$idR."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma WHERE cro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
@@ -41,12 +41,12 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[111][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[111][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -65,12 +65,11 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="15" name="id">
+									<form name="formularioGuardar" action="cronograma-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 
@@ -103,7 +102,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="cronograma-calendario.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

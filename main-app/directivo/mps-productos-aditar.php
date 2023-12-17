@@ -6,7 +6,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try {
-    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . $_GET["idR"] . "'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".productos WHERE prod_id='" . base64_decode($_GET["idR"]) . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -61,11 +61,11 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                     <div class="col-sm-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-productos-actualizar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+                                    <input type="hidden" value="<?=base64_decode($_GET["idR"]);?>" name="idR">
 										
                                     <div class="form-group row">
                                         <div class="col-sm-4" style="margin: 0 auto 10px">
@@ -140,11 +140,11 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".categorias_productos WHERE catp_eliminado!=1");
                                                     while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                         $selected='';
-                                                        if($datos[0]==$infoDatos['prod_categoria']){
+                                                        if($datos['catp_id']==$infoDatos['prod_categoria']){
                                                             $selected='selected';
                                                         }
                                                 ?>
-                                                    <option value="<?=$datos[0];?>" <?=$selected?>><?=$datos['catp_nombre']?></option>
+                                                    <option value="<?=$datos['catp_id'];?>" <?=$selected?>><?=$datos['catp_nombre']?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
@@ -159,11 +159,11 @@ if (!empty($infoDatos['prod_foto']) && file_exists('../files/marketplace/product
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".empresas WHERE emp_eliminado!=1");
                                                     while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                         $selected='';
-                                                        if($datos[0]==$infoDatos['prod_empresa']){
+                                                        if($datos['emp_id']==$infoDatos['prod_empresa']){
                                                             $selected='selected';
                                                         }
                                                 ?>
-                                                    <option value="<?=$datos[0];?>" <?=$selected?>><?=$datos['emp_nombre']?></option>
+                                                    <option value="<?=$datos['emp_id'];?>" <?=$selected?>><?=$datos['emp_nombre']?></option>
                                                 <?php }?>
                                             </select>
                                         </div>

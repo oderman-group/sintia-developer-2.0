@@ -60,15 +60,17 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Remitente</th>
 														<th>Estudiante</th>
 														<th>Mensaje</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
 													</tr>
 												</thead>
                                                 <tbody>
 												<?php
                                                 include("includes/consulta-paginacion-solicitudes.php");
                                                 try{
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_solicitudes 
-                                                    LEFT JOIN usuarios ON uss_id=soli_remitente
-                                                    LEFT JOIN academico_matriculas ON mat_id=soli_id_recurso
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".general_solicitudes 
+                                                    LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=soli_remitente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+                                                    LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=soli_id_recurso AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                                                     WHERE soli_institucion='".$config['conf_id_institucion']."' 
                                                     AND soli_year='".$_SESSION["bd"]."' $filtro
                                                     LIMIT $inicio,$registros");
@@ -83,6 +85,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 													<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 													<td><?=$resultado['soli_mensaje'];?></td>
+                                                    <td id="estado<?=$resultado['soli_id'];?>"><?=$estadosSolicitudes[$resultado['soli_estado']];?></td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-xs btn-info dropdown-toggle center no-margin" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                                                <i class="fa fa-angle-down"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start">
+                                                                <li data-id-estado="2" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">En proceso</a></li>
+                                                                <li data-id-estado="3" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">Aceptar</a></li>
+                                                                <li data-id-estado="4" data-id-registro="<?=$resultado['soli_id'];?>" data-id-recurso="<?=$resultado['soli_id_recurso'];?>" data-id-usuario="<?=$resultado['mat_id_usuario'];?>" onclick="cambiarEstados(this)"><a href="#">Rechazar</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
 												</tr>
 												<?php }?>
                                                 </tbody>

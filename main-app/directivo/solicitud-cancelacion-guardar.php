@@ -14,7 +14,7 @@ include("../compartido/historial-acciones-guardar.php");
 if (empty($_POST["motivoCancelacion"])) {
 	include("../compartido/guardar-historial-acciones.php");
 	$msj = ' Motivo de cancelacion no valido, verificar que el campo este lleno';
-	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' . $msj;;
+	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' . base64_encode($msj);
 	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
 }

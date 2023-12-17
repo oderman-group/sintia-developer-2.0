@@ -198,14 +198,14 @@ if (!Modulos::validarPermisoEdicion()) {
 										<th rowspan="2" class="css_doc"  style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;" width="100px">Doc</th>
 										<th rowspan="2" class="css_nombre" style="font-weight:bold; background:<?= $Plataforma->colorUno; ?>; color:#FFF;" width="400px">Estudiante</th>
 										<?php
-										$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1");
+										$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										//SACAMOS EL NUMERO DE CARGAS O MATERIASQUE TIENE UN CURSO PARAQUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-											$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+											$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 										?>
-											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia[2]; ?></th>
+											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia['mat_nombre']; ?></th>
 										<?php
 										}
 										?>
@@ -215,7 +215,7 @@ if (!Modulos::validarPermisoEdicion()) {
 									<tr>
 										<?php
 
-										$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1");
+										$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 										while ($carga = mysqli_fetch_array($cargas)) {
 											$p = 1;
@@ -236,7 +236,7 @@ if (!Modulos::validarPermisoEdicion()) {
 								<tbody>
 									<?php
 									$filtro = " AND mat_grado='" . $_POST["curso"] . "' AND mat_grupo='" . $_POST["grupo"] . "' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-									$consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+									$consulta =Estudiantes::listarEstudiantesEnGrados($filtro,"",$curso,$_POST["grupo"]);
 									//PRIMER PUESTO
 									$primerPuestoNota = 0;
 									$primerPuestoNombre = '';
@@ -249,48 +249,48 @@ if (!Modulos::validarPermisoEdicion()) {
 										$defPorEstudiante = 0;
 									?>
 										<tr style="border-color:<?= $Plataforma->colorDos; ?>;">
-											<td style="font-size:9px;" scope="row" width="100px"><?= $resultado[12]; ?></td>
+											<td style="font-size:9px;" scope="row" width="100px"><?= $resultado['mat_documento']; ?></td>
 											<td style="font-size:9px;" scope="row" width="400px"><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></td>
 											<?php
-											$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1");
+											$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
 
-												$consultaMateria = mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='" . $carga[4] . "'");
+												$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 												$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 												$p = 1;
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
 												while ($p <= $config[19]) {
-													$consultaBoletin = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='" . $carga[0] . "' AND bol_estudiante='" . $resultado[0] . "' AND bol_periodo='" . $p . "'");
+													$consultaBoletin = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='" . $carga['car_id'] . "' AND bol_estudiante='" . $resultado['mat_id'] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-													if (isset($boletin[4]) and $boletin[4] < $config[5] and $boletin[4] != "") $color = $config[6];
-													elseif (isset($boletin[4]) and $boletin[4] >= $config[5]) $color = $config[7];
-													if (isset($boletin[4])) {
-														$defPorMateria += $boletin[4];
+													if (isset($boletin['bol_nota']) and $boletin['bol_nota'] < $config[5] and $boletin['bol_nota'] != "") $color = $config[6];
+													elseif (isset($boletin['bol_nota']) and $boletin['bol_nota'] >= $config[5]) $color = $config[7];
+													if (isset($boletin['bol_nota'])) {
+														$defPorMateria += $boletin['bol_nota'];
 													}
-													if (isset($boletin[5]) and $boletin[5] == 1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>';
-													elseif (isset($boletin[5]) and $boletin[5] == 2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
-													elseif (isset($boletin[5]) and $boletin[5] == 3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
-													elseif (isset($boletin[5]) and $boletin[5] == 4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
+													if (isset($boletin['bol_tipo']) and $boletin['bol_tipo'] == 1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>';
+													elseif (isset($boletin['bol_tipo']) and $boletin['bol_tipo'] == 2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
+													elseif (isset($boletin['bol_tipo']) and $boletin['bol_tipo'] == 3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
+													elseif (isset($boletin['bol_tipo']) and $boletin['bol_tipo'] == 4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
 
 													else $tipo = '';
 													//DEFINITIVA DE CADA PERIODO
 
 													$disabled = "";
-													if ((isset($boletin[4]) and ($boletin[4] != "" or $carga['car_periodo'] <= $p)) and $config['conf_editar_definitivas_consolidado'] != true) {
+													if ((isset($boletin['bol_nota']) and ($boletin['bol_nota'] != "" or $carga['car_periodo'] <= $p)) and $config['conf_editar_definitivas_consolidado'] != true) {
 														$disabled = "disabled";
 													}
 											?>
 													<td style="text-align:center;" width="30px">
 														<input style="text-align:center; width:30px; 
 																color:<?= $color; ?>" 
-																value="<?php if (isset($boletin[4])) {echo $boletin[4];} ?>" 
-																name="<?= $carga[0]; ?>" id="<?= $resultado[0]; ?>" 
+																value="<?php if (isset($boletin['bol_nota'])) {echo $boletin['bol_nota'];} ?>" 
+																name="<?= $carga['car_id']; ?>" id="<?= $resultado['mat_id']; ?>" 
 																onChange="def(this)" 
 																alt="<?= $p; ?>" 
-																title="Materia: <?= $materia[2]; ?> - Periodo: <?= $p; ?>" 
+																title="Materia: <?= $materia['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
 																<?= $disabled; ?> 
 																<?= $disabledPermiso; ?>
 														/>
@@ -304,11 +304,11 @@ if (!Modulos::validarPermisoEdicion()) {
 												if ($defPorMateria < $config[5] and $defPorMateria != "") $color = $config[6];
 												elseif ($defPorMateria >= $config[5]) $color = $config[7];
 												//CONSULTAR NIVELACIONES
-												$consultaNiv = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado[0] . "' AND niv_id_asg='" . $carga[0] . "'");
+												$consultaNiv = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga['car_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 												$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
-												if (isset($cNiv[3]) and $cNiv[3] > $defPorMateria) {
-													$defPorMateria = $cNiv[3];
+												if (isset($cNiv['niv_definitiva']) and $cNiv['niv_definitiva'] > $defPorMateria) {
+													$defPorMateria = $cNiv['niv_definitiva'];
 													$msj = 'Nivelación';
 												} else {
 													$defPorMateria = $defPorMateria;
@@ -324,7 +324,7 @@ if (!Modulos::validarPermisoEdicion()) {
 													<span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;">
 														<?php if (isset($msj)) {echo $msj;} ?>
 														<br>
-														<?php if (isset($cNiv[5]) and isset($cNiv[6])) {echo "Acta " . $cNiv[5] . " de " . $cNiv[6];} ?>
+														<?php if (isset($cNiv['niv_acta']) and isset($cNiv['niv_fecha_nivelacion'])) {echo "Acta " . $cNiv['niv_acta'] . " de " . $cNiv['niv_fecha_nivelacion'];} ?>
 													</span>
 											    </td>
 											<?php

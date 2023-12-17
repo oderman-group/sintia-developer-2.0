@@ -26,6 +26,8 @@
                             </div>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
                         <div class="col-md-7">
                             <div class="card card-topline-purple">
@@ -66,17 +68,17 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-                                                <th><?=$frases[50][$datosUsuarioActual[8]];?></th>
-                                                <th><?=$frases[51][$datosUsuarioActual[8]];?></th>
-                                                <th><?=$frases[244][$datosUsuarioActual[8]];?></th>
-                                                <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                                                <th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+                                                <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                                                <th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
+                                                <th><?=$frases[244][$datosUsuarioActual['uss_idioma']];?></th>
+                                                <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM academico_cronograma 
-                                                WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."'");
+                                                $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma 
+                                                WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                             $contReg=1; 
                                             while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                 ?>
@@ -102,7 +104,7 @@
                                                             <ul class="dropdown-menu" role="menu">
                                                                 <li><a href="cronograma-editar.php?idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
                                                                 
-                                                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cro_id'];?>" name="guardar.php?get=<?=base64_encode(13);?>&idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cro_id'];?>" name="cronograma-eliminar.php?idR=<?=base64_encode($resultado['cro_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                             </ul>
                                                         </div>
                                                     <?php } ?>
@@ -182,6 +184,9 @@
 	<script src="../../config-general/assets/js/app.js" ></script>
     <script src="../../config-general/assets/js/layout.js" ></script>
 	<script src="../../config-general/assets/js/theme-color.js" ></script>
+	<!-- notifications -->
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
 	<!-- Material -->
 	<script src="../../config-general/assets/plugins/material/material.min.js"></script>
     <!-- end js include path -->

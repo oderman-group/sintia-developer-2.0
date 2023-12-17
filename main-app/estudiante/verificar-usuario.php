@@ -1,11 +1,10 @@
 <?php
-if($datosUsuarioActual[3]==4){
+if($datosUsuarioActual['uss_tipo']==4){
 	$usuarioEstudianteConsultaActual = $_SESSION["id"];
 }else{
 	$usrEstud="";
-	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
-
-	if(is_numeric($usrEstud)){
+	if(!empty($_GET["usrEstud"])){ 
+		$usrEstud=base64_decode($_GET["usrEstud"]);
 		$usuarioEstudianteConsultaActual = $usrEstud;
 	}else{
 		//Redireccionamos

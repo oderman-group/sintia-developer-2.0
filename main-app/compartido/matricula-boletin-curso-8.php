@@ -1,16 +1,20 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0224';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 
-$year=$agnoBD;
+$year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
-$BD=$_SESSION["inst"]."_".$year;
 
 $modulo = 1;
 if (empty($_GET["periodo"])) {
@@ -33,7 +37,7 @@ if (!empty($_REQUEST["curso"])) {
 }
 if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";}
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro,$year);
 $numMatriculados = mysqli_num_rows($matriculadosPorCurso);
 $idDirector="";
 while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
@@ -45,7 +49,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     $contador_periodos = 0;
     $contador_indicadores = 0;
     $materiasPerdidas = 0;
-    if ($matriculadosDatos[0] == "") { ?>
+    if ($matriculadosDatos['mat_id'] == "") { ?>
         <script type="text/javascript">
             window.close();
         </script>
@@ -54,9 +58,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     }
     $contp = 1;
     $puestoCurso = 0;
-    $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM $BD.academico_matriculas
-INNER JOIN $BD.academico_boletin ON bol_estudiante=mat_id AND bol_periodo='" . $periodoActual . "'
-WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $matriculadosDatos['mat_grupo'] . "' GROUP BY mat_id ORDER BY prom DESC");
+    $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM ".BD_ACADEMICA.".academico_matriculas mat
+    INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat_id AND bol_periodo='" . $periodoActual . "' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+    WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $matriculadosDatos['mat_grupo'] . "' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} GROUP BY mat_id ORDER BY prom DESC");
     while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
         if ($puesto['bol_estudiante'] == $matriculadosDatos['mat_id']) {
             $puestoCurso = $contp;
@@ -64,7 +68,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
         $contp++;
     }
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos[0],$BD);
+    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
     $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
     $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     ?>
@@ -123,7 +127,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <td width="2%" rowspan="2">I.H.</td>
 
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $datosUsr[0]; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
+                        <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $datosUsr['mat_id']; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
                     <?php } ?>
                     <td width="3%" colspan="3">Final</td>
                 </tr>
@@ -147,9 +151,9 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             $ausPer3Total=0;
             $ausPer4Total=0;
             $sumAusenciasTotal=0;
-            $conCargas = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	INNER JOIN $BD.academico_materias ON mat_id=car_materia
-	WHERE car_curso='" . $datosUsr['mat_grado'] . "' AND car_grupo='" . $datosUsr['mat_grupo'] . "'");
+            $conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+            WHERE car_curso='" . $datosUsr['mat_grado'] . "' AND car_grupo='" . $datosUsr['mat_grupo'] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
             while ($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
                 //DIRECTOR DE GRUPO
                 if($datosCargas["car_director_grupo"]==1){
@@ -169,10 +173,10 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                 $ausPer4=0;
                 while($j<=$periodoActual){
 
-                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM $BD.academico_ausencias
-                    INNER JOIN $BD.academico_cargas ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$datosCargas['mat_id']."'
-                    INNER JOIN $BD.academico_clases ON cls_id=aus_id_clase AND cls_id_carga=car_id AND cls_periodo='".$j."'
-                    WHERE aus_id_estudiante='".$datosUsr['mat_id']."'");
+                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM ".BD_ACADEMICA.".academico_ausencias aus
+                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$datosCargas['mat_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                    INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus.aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}
+                    WHERE aus.aus_id_estudiante='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}");
                     $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
 
                     if($datosAusencias['sumAus']>0){
@@ -203,9 +207,9 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                         $promedioMateria = 0;
                         for ($j = 1; $j <= $periodoActual; $j++) {
 
-                            $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM $BD.academico_boletin 
-                            LEFT JOIN $BD.academico_notas_tipos ON notip_categoria='" . $config["conf_notas_categoria"] . "' AND bol_nota>=notip_desde AND bol_nota<=notip_hasta
-                            WHERE bol_carga='" . $datosCargas['car_id'] . "' AND bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "'");
+                            $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
+                            LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='" . $config["conf_notas_categoria"] . "' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
+                            WHERE bol_carga='" . $datosCargas['car_id'] . "' AND bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
                             $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 
 
@@ -221,14 +225,19 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             if($notaBoletin == 3){$notaBoletin='3.0';}
                             if($notaBoletin == 4){$notaBoletin='4.0';}
                             if($notaBoletin == 5){$notaBoletin='5.0';}
+
+                            $notaBoletinFinal=$notaBoletin;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                $notaBoletinFinal= !empty($datosBoletin['notip_nombre']) ? $datosBoletin['notip_nombre'] : "";
+                            }
                         ?>
-                            <td align="center"><?= $notaBoletin; ?></td>
+                            <td align="center"><?= $notaBoletinFinal; ?></td>
                             <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
                         <?php
                         }
                         $promedioMateria = round($promedioMateria / ($j - 1), 1);
                         $promedioMateriaFinal = $promedioMateria;
-                        $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM $BD.academico_nivelaciones WHERE niv_id_asg='" . $datosCargas['car_id'] . "' AND niv_cod_estudiante='" . $datosUsr['mat_id'] . "'");
+                        $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='" . $datosCargas['car_id'] . "' AND niv_cod_estudiante='" . $datosUsr['mat_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -240,8 +249,8 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             }
                         }
 
-                        $consultaPromediosMateriaEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promedioMateriaFinal . "'>=notip_desde AND '" . $promedioMateriaFinal . "'<=notip_hasta");
+                        $consultaPromediosMateriaEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promedioMateriaFinal . "'>=notip_desde AND '" . $promedioMateriaFinal . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $promediosMateriaEstiloNota = mysqli_fetch_array($consultaPromediosMateriaEstiloNota, MYSQLI_BOTH);
 
                             if($promedioMateriaFinal == '0'){$promedioMateriaFinal='0.0';}
@@ -251,8 +260,13 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                             if($promedioMateriaFinal == 4){$promedioMateriaFinal='4.0';}
                             if($promedioMateriaFinal == 5){$promedioMateriaFinal='5.0';}
 
+                            $promedioMateriaTotal=$promedioMateriaFinal;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                              $promedioMateriaTotal= !empty($promediosMateriaEstiloNota['notip_nombre']) ? $promediosMateriaEstiloNota['notip_nombre'] : "";
+                            }
+
                         ?>
-                        <td align="center"><?= $promedioMateriaFinal; ?></td>
+                        <td align="center"><?= $promedioMateriaTotal; ?></td>
                         <td align="center"><img src="../files/iconos/<?= $promediosMateriaEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                         <td align="center">&nbsp;</td>
                     </tr>
@@ -274,32 +288,42 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
-                        $consultaPromedioPeriodoTodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 1) as promedio FROM $BD.academico_boletin 
-                        WHERE bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "'");
+                        $consultaPromedioPeriodoTodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 1) as promedio FROM ".BD_ACADEMICA.".academico_boletin 
+                        WHERE bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
 
-                        $consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM $BD.academico_clases 
-                        INNER JOIN $BD.academico_ausencias ON aus_id_clase=cls_id AND aus_id_estudiante='" . $datosUsr['mat_id'] . "'
-                        WHERE cls_periodo='" . $j . "'");
+                        $consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
+                        INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante='" . $datosUsr['mat_id'] . "' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}
+                        WHERE cls.cls_periodo='" . $j . "' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
                         $sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 
-                        $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promediosPeriodos['promedio'] . "'>=notip_desde AND '" . $promediosPeriodos['promedio'] . "'<=notip_hasta");
+                        $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promediosPeriodos['promedio'] . "'>=notip_desde AND '" . $promediosPeriodos['promedio'] . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $promediosEstiloNota = mysqli_fetch_array($consultaPromedioEstiloNota, MYSQLI_BOTH);
+
+                        $promediosPeriodosTotal=$promediosPeriodos['promedio'];
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                          $promediosPeriodosTotal= !empty($promediosEstiloNota['notip_nombre']) ? $promediosEstiloNota['notip_nombre'] : "";
+                        }
                     ?>
 
-                        <td><?= $promediosPeriodos['promedio']; ?></td>
+                        <td><?= $promediosPeriodosTotal; ?></td>
                         <td><img src="../files/iconos/<?= $promediosEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <?php 
                         $promedioFinal +=$promediosPeriodos['promedio'];
                     } 
 
                         $promedioFinal = round($promedioFinal/$periodoActual,2);
-                        $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM $BD.academico_notas_tipos 
-                        WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta");
+                        $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
+                        WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
                         $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
+
+                        $promedioFinalTotal=$promedioFinal;
+                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                          $promedioFinalTotal= !empty($promedioFinalEstiloNota['notip_nombre']) ? $promedioFinalEstiloNota['notip_nombre'] : "";
+                        }
                     ?>
-                    <td><?=$promedioFinal;?></td>
+                    <td><?=$promedioFinalTotal;?></td>
                     <td><img src="../files/iconos/<?= $promedioFinalEstiloNota['notip_imagen']; ?>" width="15" height="15"></td>
                     <td>-</td>
                 </tr>
@@ -348,8 +372,8 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
                 </tr>
 
                 <?php 
-                $cndisiplina = mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                WHERE dn_cod_estudiante='".$datosUsr[0]."' AND dn_periodo<='".$periodoActual."'");
+                $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                WHERE dn_cod_estudiante='".$datosUsr['mat_id']."' AND dn_periodo<='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                 while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
                 ?>
 
@@ -410,23 +434,24 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
             </thead>
 
             <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM academico_cargas
-	        INNER JOIN academico_materias ON mat_id=car_materia
-	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
+            $conCargasDos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+	        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
+	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
                 
             ?>
                 <tbody>
                     <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= $datosCargasDos['uss_nombre']; ?></span></td>
+                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
                         <td>
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
-		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic 
+		                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
+		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    
@@ -457,6 +482,7 @@ WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $m
         <div id="saltoPagina"></div>
     <?php
 } // FIN DE TODOS LOS MATRICULADOS
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
     ?>
 
 

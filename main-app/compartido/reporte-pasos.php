@@ -1,7 +1,13 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("session-compartida.php");
+$idPaginaInterna = 'DT0221';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+?>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
@@ -21,7 +27,7 @@ if(!empty($_GET["busqueda"])){
   $filtro .= " AND mat_nombres LIKE '%" . $busqueda . "%' OR mat_primer_apellido LIKE '%" . $busqueda . "%' OR mat_documento LIKE '%" . $busqueda . "%'";
 }
 $nombreInforme =  "INFORME DE MATRÍCULAS<br>PASO A PASO";
-include("../compartido/head_informes.php");
+include("../compartido/head-informes.php");
 ?>
   <div align="center" style="margin-bottom:20px;">
       <p class="mb-2 mt-2">
@@ -73,10 +79,10 @@ include("../compartido/head_informes.php");
       $ordenado = $_GET["orden"]." DESC";
     }
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-  LEFT JOIN academico_grados ON gra_id=mat_grado
-  WHERE  mat_eliminado=0 $filtro
-  ORDER BY $ordenado");
+    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+    LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+    WHERE mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro
+    ORDER BY $ordenado");
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
       $colorProceso = 'tomato';
       if ($resultado["mat_iniciar_proceso"] == 1) {
@@ -129,8 +135,8 @@ include("../compartido/head_informes.php");
     ?>
       <tr style="font-size:13px;">
         <td><?= $resultado['mat_id']; ?></td>
-        <td><?= $resultado[12]; ?></td>
-        <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?></a></td>
+        <td><?= $resultado['mat_documento']; ?></td>
+        <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado['mat_id']; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']." ".$resultado['mat_nombres']." ".$resultado['mat_nombre2']); ?></a></td>
         <td><?= $resultado["gra_nombre"]; ?></td>
         <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $iniciaProceso[$resultado["mat_iniciar_proceso"]]; ?></td>
         <td align="center"><?= $estadoProceso[$resultado["mat_actualizar_datos"]]; ?></td>
@@ -161,12 +167,14 @@ include("../compartido/head_informes.php");
     ?>
   </table>
   </center>
-  <?php include("../compartido/footer-informes.php") ?>;	
+  <?php include("../compartido/footer-informes.php") ?>	
   
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </body>
-
+<?php 
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

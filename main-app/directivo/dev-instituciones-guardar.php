@@ -1,5 +1,8 @@
 <?php 
 include("session.php");
+require_once '../class/Plataforma.php';
+
+$Plataforma = new Plataforma;
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DV0015';
@@ -41,25 +44,64 @@ try {
 $numModulos = 0;
 if (!empty($_POST["modulos"])) {
 	$numModulos = count($_POST["modulos"]);
-}	
-	try{
-		mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".instituciones_modulos WHERE ipmod_institucion='".$_POST['id']."'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+}
 
-	if($numModulos>0){
-		$contModulos = 0;
-		while ($contModulos < $numModulos) {
+try{
+	mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".instituciones_modulos WHERE ipmod_institucion='".$_POST['id']."'");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+
+if($numModulos>0){
+	$contModulos = 0;
+	while ($contModulos < $numModulos) {
+		if($_POST["modulos"][$contModulos] == MODULO_ADMISIONES) {
+
 			try{
-				mysqli_query($conexion,"INSERT INTO ".$baseDatosServicios.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ('".$_POST['id']."', '".$_POST["modulos"][$contModulos]."')");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			$contModulos++;
+				$colorBG = $Plataforma->colorUno;
+				$yearInscription = $_SESSION["bd"]+1;
+
+				$sql = "INSERT INTO {$baseDatosAdmisiones}.config_instituciones(cfgi_id_institucion,
+				cfgi_year,
+				cfgi_color_barra_superior,
+				cfgi_inscripciones_activas,
+				cfgi_politicas_texto,
+				cfgi_color_texto,
+				cfgi_mostrar_banner,
+				cfgi_year_inscripcion) VALUES (?, ?, ?, '0', 'Loremp ipsum...', 'white', '0', ?) 
+				ON DUPLICATE KEY UPDATE cfgi_year_inscripcion = VALUES(cfgi_year_inscripcion)";
+
+				$stmt = mysqli_prepare($conexion, $sql);
+
+				if (!$stmt) {
+					die("Error al preparar la consulta.");
+				}
+
+				// Vincular los parámetros
+				mysqli_stmt_bind_param($stmt, "iisi", $_POST['id'], $_SESSION["bd"], $colorBG, $yearInscription);
+
+				// Ejecutar la consulta
+				$resultado = mysqli_stmt_execute($stmt);
+
+				if (!$resultado) {
+					die("Error al ejecutar la consulta.");
+				}
+
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+			
 		}
-	}	
-	
-	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="dev-instituciones.php";</script>';
-	exit();
+
+		try{
+			mysqli_query($conexion,"INSERT INTO ".$baseDatosServicios.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ('".$_POST['id']."', '".$_POST["modulos"][$contModulos]."')");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+		$contModulos++;
+	}
+}	
+
+include("../compartido/guardar-historial-acciones.php");
+echo '<script type="text/javascript">window.location.href="dev-instituciones.php";</script>';
+exit();

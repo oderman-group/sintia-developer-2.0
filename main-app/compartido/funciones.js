@@ -160,7 +160,8 @@ function deseaGenerarIndicadores(dato) {
 
 			heading: 'Acción en proceso', 
 			text: 'Estamos creando los indicadores y actividades para ti, te avisaremos encuanto esten creados.', 
-			position: 'mid-center',
+			position: 'bottom-right',
+            showHideTransition: 'slide',
 			loaderBg:'#26c281', 
 			icon: 'warning', 
 			hideAfter: 5000, 
@@ -175,7 +176,8 @@ function deseaGenerarIndicadores(dato) {
 			$.toast({
 
 				heading: 'Acción realizada', text: 'Los indicadores y actividades fueron creados correctamente, racargaremos la página.', 
-				position: 'mid-center',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 5000, 
@@ -225,7 +227,7 @@ function deseaEliminar(dato) {
 
                 if (typeof varObjet !== "undefined") {
                     var input = document.getElementById(parseInt(varObjet.idInput));
-                    if (varObjet.tipo === 5) {
+                    if (varObjet.tipo === 2 || varObjet.tipo === 5) {
                         var input = document.getElementById(varObjet.idInput);
                     }
                 }
@@ -271,7 +273,8 @@ function deseaEliminar(dato) {
                         $.toast({
                             heading: 'Acción realizada',
                             text: 'El registro fue eliminado correctamente.',
-                            position: 'mid-center',
+                            position: 'bottom-right',
+                            showHideTransition: 'slide',
                             loaderBg: '#26c281',
                             icon: 'success',
                             hideAfter: 5000,
@@ -337,7 +340,8 @@ function ocultarNoticia(datos) {
         $.toast({
             heading: 'Acción realizada',
             text: mensaje,
-            position: 'mid-center',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
             loaderBg: '#26c281',
             icon: 'success',
             hideAfter: 5000,
@@ -431,7 +435,8 @@ function crearNoticia() {
         $.toast({
             heading: 'Acción realizada',
             text: 'La noticia se publicado correctamente',
-            position: 'mid-center',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
             loaderBg: '#26c281',
             icon: 'success',
             hideAfter: 5000,
@@ -491,37 +496,44 @@ function cambiarBloqueo(data) {
         estudiantesPorEstadosBloqueo[data.id_estudiante] = data.bloqueado;
     }
 
-    var numero = 17;
     var estadoFinal = estudiantesPorEstadosBloqueo[data.id_estudiante];
-    let datos = "get="+btoa(numero.toString())+
-                "&idR="+btoa(data.id_usuario.toString())+
+    let datos = "&idR="+btoa(data.id_usuario.toString())+
                 "&lock="+btoa(estadoFinal.toString())
                 ;
 
     if(estudiantesPorEstadosBloqueo[data.id_estudiante] == 0) {
-        tr.style.backgroundColor="#ff572238";
         estudiantesPorEstadosBloqueo[data.id_estudiante] = 1;
     } else {
-        tr.style.backgroundColor="";
         estudiantesPorEstadosBloqueo[data.id_estudiante] = 0;
     }
 
     $.ajax({
         type: "GET",
-        url: "guardar.php",
+        url: "usuarios-cambiar-estado.php",
         data: datos,
         success: function(data){
-            var mensaje = 'El estudiante fue desbloqueado.';
+            var mensaje = 'Ocurrió un error inesperado';
+            var icon    = 'error';
             if(data == 1) {
                 mensaje = 'El estudiante fue bloqueado';
+                icon    = 'success';
+                tr.style.backgroundColor="#ff572238";
+            } else if(data == 0) {
+                mensaje = 'El estudiante fue desbloqueado';
+                icon    = 'success';
+                tr.style.backgroundColor="";
+            } else if(data == 2) {
+                mensaje = 'Usted no tiene permisos para esta acción';
+                icon    = 'error';
             }
 
             $.toast({
                 heading: 'Acción realizada',
                 text: mensaje,
-                position: 'mid-center',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
                 loaderBg: '#26c281',
-                icon: 'success',
+                icon: icon,
                 hideAfter: 5000,
                 stack: 6
             });
@@ -565,7 +577,8 @@ function mensajeGenerarInforme(datos){
                     $.toast({
                         heading: 'Acción realizada',
                         text: 'El informe ya se está generando.',
-                        position: 'botom-left',
+                        position: 'bottom-right',
+                        showHideTransition: 'slide',
                         loaderBg: '#26c281',
                         icon: 'success',
                         hideAfter: 5000,
@@ -605,7 +618,8 @@ function mensajeGenerarInforme(datos){
                             $.toast({
                                 heading: 'Acción realizada',
                                 text: 'El informe ya se está generando.',
-                                position: 'botom-left',
+                                position: 'bottom-right',
+                                showHideTransition: 'slide',
                                 loaderBg: '#26c281',
                                 icon: 'success',
                                 hideAfter: 5000,

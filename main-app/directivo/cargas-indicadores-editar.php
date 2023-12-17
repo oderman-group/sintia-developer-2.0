@@ -10,9 +10,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-    INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-    WHERE ipc_id='".base64_decode($_GET["idR"])."'");
+    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+    WHERE aic.ipc_id='".base64_decode($_GET["idR"])."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -20,12 +20,12 @@ $indicador = mysqli_fetch_array($consultaIndicadores, MYSQLI_BOTH);
 
 try{
     $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-    (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-    (SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-    (SELECT count(*) FROM academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+    (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -68,12 +68,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" onClick="deseaRegresar(this)"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -83,12 +83,11 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
-										<input type="hidden" value="56" name="id">
+									<form name="formularioGuardar" action="cargas-indicadores-actualizar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>&docente=<?=$_GET["docente"];?>" method="post">
 										<input type="hidden" value="<?=$indicador['ipc_id'];?>" name="idR">
 										<input type="hidden" value="<?=$indicador['ipc_indicador'];?>" name="idInd">
 										<input type="hidden" value="<?=$indicador['ipc_valor'];?>" name="valorIndicador">
@@ -152,7 +151,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
 										
 										<a href="javascript:void(0);" name="cargas-indicadores.php?carga=<?=$_GET["carga"];?>&docente=<?=$_GET["docente"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>

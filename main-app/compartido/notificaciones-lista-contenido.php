@@ -14,15 +14,15 @@
                                         </div>
                                         <div class="card-body">
 											
-											<a href="#" name="../compartido/guardar.php?get=16" onClick="deseaEliminar(this)" class="btn btn-warning"><i class="fa fa-trash"></i> Eliminar todas las notificaciones</a>
+											<a href="#" name="../compartido/notificaciones-eliminar-todas.php" onClick="deseaEliminar(this)" class="btn btn-warning"><i class="fa fa-trash"></i> Eliminar todas las notificaciones</a>
 											
                                         <div class="table-scrollable">
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[218][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[218][$datosUsuarioActual['uss_idioma']];?></th>
 														<th></th>
                                                     </tr>
                                                 </thead>
@@ -46,17 +46,17 @@
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['alr_id'];?></td>
 														<td>
 															<a href="<?=$resultado['alr_url_acceso'];?>">
-																<span style="font-weight: bold;"><?=$resultado[1];?></span><br>
-																<span style="font-size: 12px;"><?=$resultado[2];?></span><br>
+																<span style="font-weight: bold;"><?=$resultado['alr_nombre'];?></span><br>
+																<span style="font-size: 12px;"><?=$resultado['alr_descripcion'];?></span><br>
 																<span style="font-size: 10px; color: slategrey;"><?="<b>".$msjFecha."</b> - ".$resultado['alr_fecha_envio'];?></span>
 															</a>	
 														</td>
 
 														<td>
-															<a href="#" name="../compartido/guardar.php?get=10&idR=<?=$resultado['alr_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash-o"></i></a>
+															<a href="#" name="../compartido/notificaciones-eliminar.php?idR=<?=$resultado['alr_id'];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash-o"></i></a>
 														</td>
                                                     </tr>
 													<?php 

@@ -1,8 +1,16 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
-require_once("../class/Estudiantes.php");?>
+include("session-compartida.php");
+$idPaginaInterna = 'DT0232';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/MediaTecnicaServicios.php");
+?>
 
 <head>
 	<title>Estudiantes</title>
@@ -13,138 +21,123 @@ require_once("../class/Estudiantes.php");?>
 <?php
 $nombreInforme = "INFORME DE ESTUDIANTES";
 include("../compartido/head-informes.php") ?> 
-    <?php
-  $condicionw="";
-  $condicion="";
-  if($_POST["cursosR"]!=""){
-	  $condicion="gra_id=".$_POST["cursosR"];
-	  }
-	  
-	 if($_POST["gruposR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND gru_id=".$_POST["gruposR"];
-	  }else{
-		  $condicion=$condicion." gru_id=".$_POST["gruposR"];
-		  }
-	  } 
-	  if($_POST["estadoR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_estado_matricula=".$_POST["estadoR"];
-	  }else{
-	  $condicion=$condicion." mat_estado_matricula=".$_POST["estadoR"];  
-		  }
-	  }  
-	  if($_POST["tipoR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND ogen_id=".$_POST["tipoR"];
-	  }else{
-	  $condicion=$condicion." ogen_id=".$_POST["tipoR"];  
-		  }
-	  }
-	  
-	   if($_POST["acudienteR"]!=""){
-	  if($condicion!=""){
-		  if($_POST["acudienteR"]==1){
-			  $condicion=$condicion." AND mat_acudiente IS NOT NULL";
-			  }else{
-				  $condicion=$condicion." AND mat_acudiente IS NULL";
-				  }
-	 
-	  }else{
-	  if($_POST["acudienteR"]==1){
-			  $condicion=$condicion." mat_acudiente IS NOT NULL";
-			  }else{
-				  $condicion=$condicion." mat_acudiente IS NULL";
-				  }
-		  }
-	  }
-	  
-	    if($_POST["fotoR"]!=""){
-	  if($condicion!=""){
-	   if($_POST["fotoR"]==1){
-			  $condicion=$condicion." AND mat_foto IS NOT NULL";
-			  }else{
-				  $condicion=$condicion." AND mat_foto IS NULL";
-				  }
-	  }else{
-	  if($_POST["fotoR"]==1){
-			  $condicion=$condicion." mat_foto IS NOT NULL";
-			  }else{
-				  $condicion=$condicion." mat_foto IS NULL";
-				  }
-		  }
-	  }
-	    if($_POST["inclu"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_inclusion=".$_POST["inclu"];
-	  }else{
-	  $condicion=$condicion." mat_inclusion=".$_POST["inclu"];  
-		  }
-	  }
-	    if($_POST["extra"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_extranjero=".$_POST["extra"];
-	  }else{
-	  $condicion=$condicion." mat_extranjero=".$_POST["extra"];  
-		  }
-	  }
-	    if($_POST["generoR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_genero=".$_POST["generoR"];
-	  }else{
-	  $condicion=$condicion." mat_genero=".$_POST["generoR"];  
-		  }
-	  }
-	  
-	    if($_POST["religionR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_religion=".$_POST["religionR"];
-	  }else{
-	  $condicion=$condicion." mat_religion=".$_POST["religionR"];  
-		  }
-	  }
-	    if($_POST["estratoE"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_estrato=".$_POST["estratoE"];
-	  }else{
-	  $condicion=$condicion." mat_estrato=".$_POST["estratoE"];  
-		  }
-	  }
-	    if($_POST["tdocumentoR"]!=""){
-	  if($condicion!=""){
-	  $condicion=$condicion." AND mat_tipo_documento=".$_POST["tdocumentoR"];
-	  }else{
-	  $condicion=$condicion." mat_tipo_documento=".$_POST["tdocumentoR"];  
-		  }
-	  }
-	  
+<?php
+$condicionw="";
+$condicion="";
+$curso=0;
+if(!empty($_POST["cursosR"])){
+	$curso=1;
+	$cursoActual=GradoServicios::consultarCurso($_REQUEST["cursosR"]);
+	$condicion="gra_id=".$_POST["cursosR"];
+}
+if(!empty($_POST["gruposR"])){
 	if($condicion!=""){
-		$condicionw="WHERE ";
+		$condicion=$condicion." AND gru_id=".$_POST["gruposR"];
+	}else{
+		$condicion=$condicion." gru_id=".$_POST["gruposR"];
+	}
+} 
+if(!empty($_POST["estadoR"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_estado_matricula=".$_POST["estadoR"];
+	}else{
+		$condicion=$condicion." mat_estado_matricula=".$_POST["estadoR"];  
+	}
+}  
+if(!empty($_POST["tipoR"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND ogen_id=".$_POST["tipoR"];
+	}else{
+		$condicion=$condicion." ogen_id=".$_POST["tipoR"];  
+	}
+}
+
+if(!empty($_POST["acudienteR"])){
+	if($condicion!=""){
+		if($_POST["acudienteR"]==1){
+			$condicion=$condicion." AND mat_acudiente IS NOT NULL";
+		}else{
+			$condicion=$condicion." AND mat_acudiente IS NULL";
 		}
-		$c_matricEst=mysqli_query($conexion, "SELECT mat_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_inclusion, mat_extranjero, mat_documento, uss_usuario, uss_email, uss_celular, uss_telefono, gru_nombre, gra_nombre, og.ogen_nombre as Tipo_est, mat_id,
-IF(mat_acudiente is null,'No',uss_nombre) as nom_acudiente,
-IF(mat_foto is null,'No','Si') as foto, 
-og2.ogen_nombre as genero, og3.ogen_nombre as religion, og4.ogen_nombre as estrato, og5.ogen_nombre as tipoDoc,
-CASE mat_estado_matricula 
-	WHEN 1 THEN 'Matriculado' 
-	WHEN 2 THEN 'Asistente' 
-	WHEN 3 THEN 'Cancelado' 
-	WHEN 4 THEN 'No matriculado'
-	WHEN 5 THEN 'En inscripción' 
-END AS estado
-FROM academico_matriculas am 
-INNER JOIN academico_grupos ag ON am.mat_grupo=ag.gru_id
-INNER JOIN academico_grados agr ON agr.gra_id=am.mat_grado
-INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
-INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
-INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion
-INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
-INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
-INNER JOIN usuarios u ON u.uss_id=am.mat_acudiente or am.mat_acudiente is null
-".$condicionw.$condicion."
-GROUP BY mat_id
-ORDER BY mat_primer_apellido,mat_estado_matricula;");
- $numE=mysqli_num_rows($c_matricEst);
+	}else{
+		if($_POST["acudienteR"]==1){
+			$condicion=$condicion." mat_acudiente IS NOT NULL";
+		}else{
+			$condicion=$condicion." mat_acudiente IS NULL";
+		}
+	}
+}
+
+if(!empty($_POST["fotoR"])){
+	if($condicion!=""){
+		if($_POST["fotoR"]==1){
+			$condicion=$condicion." AND mat_foto IS NOT NULL";
+		}else{
+			$condicion=$condicion." AND mat_foto IS NULL";
+		}
+	}else{
+		if($_POST["fotoR"]==1){
+			$condicion=$condicion." mat_foto IS NOT NULL";
+		}else{
+			$condicion=$condicion." mat_foto IS NULL";
+		}
+	}
+}
+if(!empty($_POST["inclu"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_inclusion=".$_POST["inclu"];
+	}else{
+		$condicion=$condicion." mat_inclusion=".$_POST["inclu"];  
+	}
+}
+if(!empty($_POST["extra"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_extranjero=".$_POST["extra"];
+	}else{
+		$condicion=$condicion." mat_extranjero=".$_POST["extra"];  
+	}
+}
+if(!empty($_POST["generoR"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_genero=".$_POST["generoR"];
+	}else{
+		$condicion=$condicion." mat_genero=".$_POST["generoR"];  
+	}
+}
+
+if(!empty($_POST["religionR"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_religion=".$_POST["religionR"];
+	}else{
+		$condicion=$condicion." mat_religion=".$_POST["religionR"];  
+	}
+}
+if(!empty($_POST["estratoE"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_estrato=".$_POST["estratoE"];
+	}else{
+		$condicion=$condicion." mat_estrato=".$_POST["estratoE"];  
+	}
+}
+if(!empty($_POST["tdocumentoR"])){
+	if($condicion!=""){
+		$condicion=$condicion." AND mat_tipo_documento=".$_POST["tdocumentoR"];
+	}else{
+		$condicion=$condicion." mat_tipo_documento=".$_POST["tdocumentoR"];  
+	}
+}
+
+if($condicion!=""){
+	$condicionw="WHERE ";
+}
+if($curso=1 && $cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+	$consultaMatriculaEst=MediaTecnicaServicios::reporteEstadoEstudiantesMT($config,$condicion);
+}else{
+	$where=$condicionw.$condicion;
+	$consultaMatriculaEst=Estudiantes::reporteEstadoEstudiantes($where);
+}
+
+$numE=mysqli_num_rows($consultaMatriculaEst);
  ?>
  <div style="width:100%; margin-left:auto; margin-right:auto;">
  Total Estudiantes: <?=$numE;?>
@@ -173,7 +166,7 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
         <th>Correo</th>
   </tr>
 <?php
- while($resultado=mysqli_fetch_array($c_matricEst, MYSQLI_BOTH)){
+ while($resultado=mysqli_fetch_array($consultaMatriculaEst, MYSQLI_BOTH)){
 	switch ($resultado["mat_inclusion"]) {
     	case 0:
         	$inclusion="No";
@@ -222,7 +215,8 @@ ORDER BY mat_primer_apellido,mat_estado_matricula;");
   ?>
   </table>
 
-  <?php include("../compartido/footer-informes.php") ?>;
+  <?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 </body>
 </html>
 

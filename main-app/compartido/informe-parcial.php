@@ -1,11 +1,22 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0248';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $estudiante="";
 if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);}
+$year=date("Y");
+$cPeriodo=$config[2];
+if(isset($_GET["periodo"])){
+  $cPeriodo=$_GET["periodo"];
+}
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -23,7 +34,7 @@ if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);
 								  ?>
     
     <?=$informacion_inst["info_nombre"]?><br>
-    INFORME PARCIAL - PERIODO: <?php echo $config[2];?><br>
+    INFORME PARCIAL - PERIODO: <?php echo $cPeriodo;?><br>
     <?php echo $config["conf_fecha_parcial"];?><br>
     <?php 
       $tamano='height="100" width="150"';
@@ -52,49 +63,82 @@ if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);
                                     <!-- BEGIN -->
                                     <tbody>
                                     <?php
-									$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
-									    //PLAN DE CLASE
-                        $cPeriodo=$config[2];
-                      if(isset($_GET["periodo"])){
-                        $cPeriodo=$_GET["periodo"];
-                      }
-										$Cpc = mysqli_query($conexion, "SELECT * FROM academico_pclase WHERE pc_id_carga='".$rCargas[0]."' AND pc_periodo='".$cPeriodo."'");
-									    $Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
-									    $Npc = mysqli_num_rows($Cpc);
 										//DEFINITIVAS
-										$carga = $rCargas[0];
-										$periodo = $config[2];
+										$carga = $rCargas['car_id'];
 										$estudiante = $estudiante;
+										$periodo = $cPeriodo;
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
 										if($porcentajeActual>0){$materiasDividir++;}
+
+                    $definitivaFinal=$definitiva;
+                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                      $estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                      $definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+                    }
 									?>
                                     <tr id="data1" class="odd gradeX">
-                                        <td style="text-align:center;"><?=$rCargas[0];?></td>
+                                        <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
                                         <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
                                         <td><?=$rDatos['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
-                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitiva;?></td>
+                                        <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                       </tr>
                                    <?php 
 								   		$promedioG += $definitiva;
 								   }
-								   		if($nn>0){
+								   		if($materiasDividir>0){
 											$promedioG = round(($promedioG / $materiasDividir),1);
 										}	
+                    //MEDIA TECNICA
+                    if (array_key_exists(10, $_SESSION["modulos"])){
+                      $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$estudiante);
+                      while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+                          $cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActualMT['matcur_id_curso']."' AND car_grupo='".$datosEstudianteActualMT['matcur_id_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                          $nCargas = mysqli_num_rows($cCargas);
+                          while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
+                            $cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+                            $rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
+                            //DEFINITIVAS
+                            $carga = $rCargas['car_id'];
+                            $periodo = $cPeriodo;
+                            $estudiante = $estudiante;
+                            include("../definitivas.php");
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
+                    ?>
+                                      <tr id="data1" class="odd gradeX">
+                                          <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
+                                          <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
+                                          <td><?=$rDatos['mat_nombre'];?></td>
+                                          <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
+                                          <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
+                                        </tr>
+                                     <?php
+                     }}}}
+                     $promedioGFinal=$promedioG;
+                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                       $estiloNotaPromedioG = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioG);
+                       $promedioGFinal= !empty($estiloNotaPromedioG['notip_nombre']) ? $estiloNotaPromedioG['notip_nombre'] : "";
+                     }
 								   ?>   
                                     </tbody>
                                     <!-- END -->
                                      <tfoot>
                                       <tr style="font-weight:bold;">
                                         <td colspan="4" style="text-align:right;">PROMEDIO GENERAL</td>
-                                        <td style="text-align:center;"><?php echo $promedioG;?></td>
+                                        <td style="text-align:center;"><?php echo $promedioGFinal;?></td>
                                       </tr>
                                     </tfoot>
                                   </table>
@@ -135,5 +179,8 @@ Firma Del Padre Y/O Acudiente
                                     </div>
  
                   </body>
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 
                   </html>

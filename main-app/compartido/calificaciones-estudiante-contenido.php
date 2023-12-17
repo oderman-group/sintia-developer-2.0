@@ -1,4 +1,6 @@
 <?php
+	require_once(ROOT_PATH."/main-app/class/Boletin.php");
+	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -23,11 +25,11 @@
 
 								//DOCENTES
 
-								if($datosUsuarioActual[3] == TIPO_DOCENTE){?>
+								if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="calificaciones.php?tab=4"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -41,13 +43,13 @@
 
 								//ACUDIENTES
 
-								if($datosUsuarioActual[3]==3){?>
+								if($datosUsuarioActual['uss_tipo'] == TIPO_ACUDIENTE){?>
 
 									<ol class="breadcrumb page-breadcrumb pull-right">
 
-										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="estudiantes.php"><?=$frases[71][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
-										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+										<li><a class="parent-item" href="periodos-resumen.php?usrEstud=<?=base64_encode($usrEstud);?>"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 
 										<li class="active"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
 
@@ -75,7 +77,7 @@
 
 									<?php
 
-									if($datosUsuarioActual[3]!=4){
+									if($datosUsuarioActual['uss_tipo']!=TIPO_ESTUDIANTE){
 
 									?>
 
@@ -95,7 +97,7 @@
 
 														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
 
-														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
+														<div class="profile-desc-item pull-right"><?=Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);;?></div>
 
 													</li>
 
@@ -143,17 +145,21 @@
 
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 
-												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
+												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
 
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
+												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+												  $porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 
 												
 
-												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
+												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
+												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 												if(!empty($notapp[0])){
 													$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
@@ -167,11 +173,19 @@
 
 												<p>
 
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentajeGrado;?>%)</a>
 
 													
 
-													<?php if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){?>
+													<?php
+														if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+														$notaPorPeriodo=$notapp[0];
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+															$notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
+													?>
 
 														<div class="work-monitor work-progress">
 
@@ -179,7 +193,7 @@
 
 																<div class="info">
 
-																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notapp[0];?></div>
+																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notaPorPeriodo;?></div>
 
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 
@@ -223,7 +237,7 @@
 
 									//ESTUDIANTES
 
-									if($datosUsuarioActual[3]==4){
+									if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){
 
 										include("filtro-cargas.php");
 
@@ -297,11 +311,11 @@
 
 													 if(!empty($_GET["indicador"])){$filtro .= " AND act_id_tipo='".base64_decode($_GET["indicador"])."'";}
 
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades 
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
 
 													 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."'
 
-													 AND act_registrada=1 AND act_estado=1 $filtro
+													 AND act_registrada=1 AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 
 													 ");
 
@@ -314,35 +328,41 @@
 													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_calificaciones
-														WHERE cal_id_actividad='".$resultado[0]."' AND cal_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
+														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-														$porNuevo = ($resultado[3] / 100);
+														$porNuevo = ($resultado['act_valor'] / 100);
 
 														$acumulaValor = ($acumulaValor + $porNuevo);
 
 														$notaMultiplicada=0;
 														$nota3="";
 														$nota4="";
-														if(!empty($nota[3])){
-															$nota3=$nota[3];
-															$nota4=$nota[4];
-															$notaMultiplicada = ($nota[3] * $porNuevo);
+														if(!empty($nota['cal_nota'])){
+															$nota3=$nota['cal_nota'];
+															$nota4=$nota['cal_observaciones'];
+															$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);
 														}
 
 														$sumaNota = ($sumaNota + $notaMultiplicada);
-														$porcentajeActualActividad +=$resultado[3];
+														$porcentajeActualActividad +=$resultado['act_valor'];
 
 														//COLOR DE CADA NOTA
 
-														if(!empty($nota[3]) && $nota[3]<$config[5]) $colorNota = $config[6];
+														if(!empty($nota['cal_nota']) && $nota['cal_nota']<$config[5]) $colorNota = $config[6];
 
 														else $colorNota = $config[7];
 
-														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_indicadores 
-															INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
-															WHERE ind_id='".$resultado['act_id_tipo']."'
+														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai 
+															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+															WHERE ai.ind_id='".$resultado['act_id_tipo']."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 															"), MYSQLI_BOTH); 
+
+															$notaFinal=$nota3;
+															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota3);
+																$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+															}
 
 													 ?>
 
@@ -352,18 +372,18 @@
 
                                                         <td><?=$contReg;?></td>
 
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['act_id'];?></td>
 
 														<td>
-															<?=$resultado[1];?><br>
+															<?=$resultado['act_descripcion'];?><br>
 															<span style="font-size: 10px; color: blue;"><b>INDICADOR:</b> <?=$indicadorName['ind_nombre']." (".$indicadorName['ipc_valor']."%)";?></span>
 														</td>
 
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['act_fecha'];?></td>
 
-														<td><?=$resultado[3];?>%</td>
+														<td><?=$resultado['act_valor'];?>%</td>
 
-														<td style="color:<?=$colorNota;?>"><?=$nota3;?></td>
+														<td style="color:<?=$colorNota;?>"><?=$notaFinal;?></td>
 
 														<td><?=$nota4;?></td>
 
@@ -381,9 +401,15 @@
 
 														$periodo = $periodoConsultaActual;
 
-														$estudiante = $datosEstudianteActual[0];
+														$estudiante = $datosEstudianteActual['mat_id'];
 
 														include("../definitivas.php");
+
+														$definitivaFinal=$definitiva;
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+														}
 
 													  ?>
 
@@ -391,7 +417,7 @@
 
 												<?php
 
-													if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_sin_nota_numerica']==1){}else{
+													if(($datosUsuarioActual['uss_tipo']==TIPO_ACUDIENTE or $datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE) and $config['conf_sin_nota_numerica']==1){}else{
 
 													?>
 
@@ -403,7 +429,7 @@
 
 														<td><?=$porcentajeActualActividad;?>%</td>
 
-														<td style="color:<?=$colorDefinitiva;?>"><?=$definitiva;?></td>
+														<td style="color:<?=$colorDefinitiva;?>"><?=$definitivaFinal;?></td>
 
 														<td></td>
 

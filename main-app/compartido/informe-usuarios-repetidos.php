@@ -1,9 +1,17 @@
 <?php
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0245';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-$consulta = mysqli_query($conexion, "SELECT GROUP_CONCAT( uss_id SEPARATOR ', ') as uss_id, uss_usuario, pes_nombre, uss_apellido1, uss_apellido2, uss_nombre2, uss_nombre, COUNT(*) as duplicados FROM usuarios 
+$consulta = mysqli_query($conexion, "SELECT GROUP_CONCAT( uss_id SEPARATOR ', ') as uss_id, uss_usuario, pes_nombre, uss_apellido1, uss_apellido2, uss_nombre2, uss_nombre, COUNT(*) as duplicados FROM ".BD_GENERAL.".usuarios uss 
 INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+WHERE uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 GROUP BY uss_usuario
 HAVING COUNT(*) > 1 
 ORDER BY uss_id ASC");
@@ -59,5 +67,7 @@ ORDER BY uss_id ASC");
     PLATAFORMA EDUCATIVA SINTIA - <?= date("l, d-M-Y"); ?>
   </div>
 </body>
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

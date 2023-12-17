@@ -62,7 +62,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <option value=""></option>
                                                 <?php
                                                 try{
-                                                    $c_cursos=mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM academico_grados ORDER BY gra_codigo;");
+                                                    $c_cursos=mysqli_query($conexion, "SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_codigo;");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
@@ -81,7 +81,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <option value=""></option>
                                                 <?php 
                                                 try{
-                                                    $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM academico_grupos ORDER BY gru_nombre;");
+                                                    $c_grupos=mysqli_query($conexion, "SELECT gru_id, gru_codigo, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gru_nombre;");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }

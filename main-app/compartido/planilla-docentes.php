@@ -1,7 +1,12 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0239';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 
 if(!empty($_GET["carga"])) {
@@ -53,17 +58,17 @@ if(!empty($_GET["periodo"])) {$filtro .= " AND car_periodo='".$_GET["periodo"]."
 
 	
 
-$con = mysqli_query($conexion, "SELECT * FROM academico_cargas
+$con = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
 
-INNER JOIN academico_materias ON mat_id=car_materia 
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} 
 
-INNER JOIN academico_grados ON gra_id=car_curso
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
 
-INNER JOIN academico_grupos ON gru_id=car_grupo
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 
-INNER JOIN usuarios ON uss_id=car_docente AND uss_tipo=2
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss_tipo=2 AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 
-WHERE car_id=car_id $filtro");
+WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} $filtro");
 
 
 
@@ -197,8 +202,7 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
     <td align="center" colspan="7">Inasistencia</td>
 
     <?php
-    $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$rCargas['car_curso']."' AND mat_grupo='".$rCargas['car_grupo']."'";
-    $estudiantes = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+		$estudiantes = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($rCargas);
 
     $n = 1;
 
@@ -214,7 +218,7 @@ while ( $rCargas = mysqli_fetch_array($con, MYSQLI_BOTH) ) {
 
     <td align="center" width="2%"><?=$n;?></td>
 
-    <td align="center" width="5%"><?=$e[0];?></td>
+    <td align="center" width="5%"><?=$e['mat_id'];?></td>
 
     <td width="20%"><?=Estudiantes::NombreCompletoDelEstudiante($e);?></td>
 
@@ -317,5 +321,7 @@ print();
 </script>
 
 </body>
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

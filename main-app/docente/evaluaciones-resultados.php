@@ -6,33 +6,33 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+
+
+$idE="";
+	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
+
+	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+	WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
+
+	
+	//Cantidad de preguntas de la evaluación
+	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
+	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
+	WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
+	ORDER BY preg.preg_id DESC
+	");
+	
+	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
-<?php
-	include("../compartido/body.php");
-
-	$idE="";
-	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-
-	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$idE."' AND eva_estado=1");
-	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
-
-	
-	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$idE."'
-	ORDER BY preg_id DESC
-	");
-	
-	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
-
-	?>
+<?php include("../compartido/body.php");?>
 
 	<input type="hidden" id="idE" name="idE" value="<?=$idE;?>">
     <div class="page-wrapper">
@@ -52,11 +52,12 @@ require_once("../class/Estudiantes.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 
 							<div class="col-md-3">
@@ -74,11 +75,11 @@ require_once("../class/Estudiantes.php");
 												</div>
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_desde'];?></div>
 													</li>
 													<li class="list-group-item">
-														<b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_hasta'];?></div>
 													</li>
 												</ul>
@@ -86,15 +87,15 @@ require_once("../class/Estudiantes.php");
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$cantPreguntas;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title" style="color: chartreuse;"> <span id="resp"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <span id="fin"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 
@@ -107,8 +108,8 @@ require_once("../class/Estudiantes.php");
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -155,15 +156,15 @@ require_once("../class/Estudiantes.php");
 												<label class="col-sm-2 control-label">Actividades</label>
 												<div class="col-sm-10">
 													<?php
-													$actividadesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividades
-													WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND (act_registrada=0 OR act_registrada IS NULL)");
+													$actividadesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades
+													WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (act_registrada=0 OR act_registrada IS NULL)");
 													?>
 													<select class="form-control  select2" name="actividad" required>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($actividadesDatos = mysqli_fetch_array($actividadesConsulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$actividadesDatos[0];?>"><?=$actividadesDatos['act_descripcion']." (".$actividadesDatos['act_valor']."%)"?></option>
+															<option value="<?=$actividadesDatos['act_id'];?>"><?=$actividadesDatos['act_descripcion']." (".$actividadesDatos['act_valor']."%)"?></option>
 														<?php }?>
 													</select>
 												</div>
@@ -193,7 +194,7 @@ require_once("../class/Estudiantes.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Inicio</th>
 														<th>Fin</th>
 														<th>Tiempo</th>
@@ -206,25 +207,27 @@ require_once("../class/Estudiantes.php");
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $consultaDatos1=mysqli_query($conexion, "SELECT epe_inicio, epe_fin, MOD(TIMESTAMPDIFF(MINUTE, epe_inicio, epe_fin),60), MOD(TIMESTAMPDIFF(SECOND, epe_inicio, epe_fin),60) FROM academico_actividad_evaluaciones_estudiantes 
-														 WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$idE."'");
+														 $consultaDatos1=mysqli_query($conexion, "SELECT epe_inicio, epe_fin, MOD(TIMESTAMPDIFF(MINUTE, epe_inicio, epe_fin),60), MOD(TIMESTAMPDIFF(SECOND, epe_inicio, epe_fin),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+														 WHERE epe_id_estudiante='".$resultado['mat_id']."' AND epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														 $datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
 														 $consultaDatos2=mysqli_query($conexion, "SELECT
-														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluacion_preguntas ON evp_id_pregunta=preg_id AND evp_id_evaluacion='".$idE."'),
+														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre ON aca_eva_pre.evp_id_pregunta=preg.preg_id AND aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
  
-														 (SELECT sum(preg_valor) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1),
+														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
 														 
-														 (SELECT count(preg_id) FROM academico_actividad_preguntas
-														 INNER JOIN academico_actividad_evaluaciones_resultados ON res_id_pregunta=preg_id AND res_id_evaluacion='".$idE."' AND res_id_estudiante='".$resultado['mat_id']."'
-														 INNER JOIN academico_actividad_respuestas ON resp_id=res_id_respuesta AND resp_correcta=1)
-														 ");
+														 (SELECT count(preg_id) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
+														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]})");
 														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
 														 
 														 if($datos2[0] > 0){
@@ -237,22 +240,32 @@ require_once("../class/Estudiantes.php");
 														 
 														 //Exportar las notas
 														 if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and !empty($nota)){
+															$codigo=Utilidades::generateCode("CAL");
 															 
-															mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado[0]."'");
+															mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															
 															 
-															mysqli_query($conexion, "INSERT INTO academico_calificaciones(cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones)VALUES('".$resultado[0]."','".$nota."','".$_POST["actividad"]."', now(), 0)");
+															mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '".$resultado['mat_id']."','".$nota."','".$_POST["actividad"]."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 															
 															
 															 //Solo actuliza una vez que la actividad fue registrada.
 															 if($registroNotas<1){
-																mysqli_query($conexion, "UPDATE academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."'");
+																mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																
 															}
 															 
 															 $registroNotas ++;
 															
 														 }
+
+														$notaFinal="";
+														$title='';
+														if(!empty($datos2[1]) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$notaFinal=$nota;
+															$title='title="Nota Cuantitativa: '.$nota.'"';
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+															$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
 													 ?>
 													<tr>
                                                         <td align="center"><?=$contReg;?></td>
@@ -263,7 +276,7 @@ require_once("../class/Estudiantes.php");
 														<td><?php if(!empty($datos2[1])){echo $datos2[2]."/".$cantPreguntas;}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $datos2[1]."/".$datos2[0];}?></td>
 														<td align="center"><?php if(!empty($datos2[1])){echo $porcentaje."%";}?></td>
-														<td style="color: <?=$color;?>;" align="center"><?php if(!empty($datos2[1])){echo $nota;}?></td>
+														<td style="color: <?=$color;?>;" <?=$title;?> align="center"><?=$notaFinal;?></td>
 														<td align="center">
 														<?php if(!empty($datos2[1]) or !empty($datos1['epe_inicio'])){?>
 															
@@ -271,7 +284,7 @@ require_once("../class/Estudiantes.php");
 															<?php 
 																//Si está consultando periodos anteriores y tiene permiso de edición le mostramos opciones de edición. Estas variables vienen de la //pagina verificar-periodos-diferentes.php
 																if($datosHistoricos['eva_periodo']==$periodoConsultaActual or $datosCargaActual['car_permiso2']==1){?>
-																	<a href="#" name="guardar.php?get=<?=base64_encode(28);?>&idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
+																	<a href="#" name="evaluaciones-eliminar-intento.php?idE=<?=$_GET["idE"];?>&idEstudiante=<?=base64_encode($resultado['mat_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-eraser" title="Eliminar esta evaluación."></i></a>
 															<?php }?>
 															
 															

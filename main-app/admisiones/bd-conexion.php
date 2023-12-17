@@ -25,7 +25,7 @@ if(!empty($_REQUEST['idInst'])){
 	$config->execute();
 	$datosConfig = $config->fetch();
 
-	if(empty($datosConfig['conf_base_datos']) || empty($datosConfig['conf_agno'])) {
+	if(empty($datosConfig['conf_id_institucion']) || empty($datosConfig['conf_agno'])) {
 		header("Location:".REDIRECT_ROUTE."/admisiones");
 		exit();
 	}
@@ -39,7 +39,7 @@ if(!empty($_REQUEST['idInst'])){
 	$datosInfo = $info->fetch();
 
 
-	$BD_ADMISIONES_MOCK = $datosConfig['conf_base_datos'].'_'.$datosConfig['conf_agno'];
+	$BD_ADMISIONES_MOCK = $baseDatosServicios;
 
 } else {
 	header("Location:".REDIRECT_ROUTE."/admisiones");
@@ -54,7 +54,7 @@ try{
 	die();
 }
 
-$dbNameInstitucion = !empty($BD_ADMISIONES_MOCK) ? $BD_ADMISIONES_MOCK : '';
+$dbNameInstitucion = !empty($BD_ADMISIONES_MOCK) ? $BD_ADMISIONES_MOCK : $baseDatosServicios;
 
 try{
 	$pdoI = new PDO('mysql:host='.$server.';dbname='.$dbNameInstitucion, $user, $pass);

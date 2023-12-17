@@ -1,5 +1,5 @@
 <div class="panel">
-    <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+    <header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
     <div class="panel-body">
         <form name="formularioGuardar" action="usuarios-update.php" method="post" enctype="multipart/form-data">
 
@@ -17,7 +17,7 @@
             <?php }?>
             
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual[8]];?></label>
+                <label class="col-sm-2 control-label"><?=$frases[219][$datosUsuarioActual['uss_idioma']];?></label>
                 <div class="col-sm-4">
                     <input type="file" name="fotoUss" onChange="validarPesoArchivo(this)" class="form-control" accept=".png, .jpg, .jpeg" <?=$disabledPermiso;?>>
                     <span style="color: #6017dc;">La foto debe estar en formato JPG, JPEG o PNG.</span>
@@ -147,9 +147,12 @@
             <?php
             $readOnly = '';
             $leyenda = '';
-            if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE){
+            if($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE && Modulos::validarSubRol(['DT0078'])){
                 $readOnly='readonly'; 
                 $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula. <a href="estudiantes-editar.php?idUsuario='.base64_encode($datosEditar['uss_id']).'" style="text-decoration:underline;">IR A LA MATRÍCULA</a>';
+            } elseif($datosEditar['uss_tipo'] == TIPO_ESTUDIANTE) {
+                $readOnly='readonly'; 
+                $leyenda = 'El nombre de los estudiantes solo es editable desde la matrícula.';
             }
             ?>
             
@@ -318,12 +321,13 @@
                 </div>
             </div>
 
-
+            <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
             <?php if(Modulos::validarPermisoEdicion()){?>
-                <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
             <?php }?>
             
-            <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
         </form>
     </div>
 </div>

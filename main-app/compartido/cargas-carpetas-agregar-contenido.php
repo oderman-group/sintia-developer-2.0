@@ -1,30 +1,25 @@
+<?php 
+					if($datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE){
+						include("includes/barra-superior-informacion-actual.php"); 
+					}
+					?>
 <div class="row">
 						
-						<div class="col-sm-3">
-						<?php 
-							//DOCENTES
-							if($datosUsuarioActual[3]==2){?>
-							<?php include("info-carga-actual.php");?>
-						<?php }?>
-							
-							<?php include("../compartido/publicidad-lateral.php");?>
-                        </div>
 						
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="../compartido/guardar.php?carga=<?=$cargaConsultaActual;?>&periodo=<?=$periodoConsultaActual;?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="3" name="id">
+									<form name="formularioGuardar" action="../compartido/cargas-carpetas-guardar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$cargaConsultaActual;?>" name="idRecursoP">
 										<input type="hidden" value="2" name="idCategoria">
 
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[53][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<select class="form-control  select2" name="tipo" required onChange="tipoFolder(this)">
 														<option value="">Seleccione una opción</option>
@@ -36,7 +31,7 @@
 											
 											<div id="nombreCarpeta">
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[318][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[318][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<input type="text" name="nombre" class="form-control" autocomplete="off" required>
 												</div>
@@ -46,7 +41,7 @@
 										
 											<div id="archivo" style="display: none;">
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[128][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[128][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<input type="file" name="archivo" class="form-control">
 												</div>
@@ -54,7 +49,7 @@
 											</div>
 										
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[229][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[229][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<?php
 													$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_folders 
@@ -66,14 +61,14 @@
 														<?php
 														while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														?>
-															<option value="<?=$datos[0];?>" <?php if($datos[0]==$idFolderCarpetaActual){echo "selected";}?>><?=$datos['fold_nombre']?></option>
+															<option value="<?=$datos['fold_id'];?>" <?php if($datos['fold_id']==$idFolderCarpetaActual){echo "selected";}?>><?=$datos['fold_nombre']?></option>
 														<?php }?>
 													</select>
 												</div>
 											</div>
 										
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[227][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[227][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<select id="select_usuario" class="form-control select2-multiple" multiple name="compartirCon[]">
 													</select>
@@ -105,7 +100,7 @@
 											</script>
 										
 											<div class="form-group row">
-												<label class="col-sm-3 control-label"><?=$frases[228][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-3 control-label"><?=$frases[228][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-9">
 													<input type="text" name="keyw" class="tags tags-input" data-type="tags" />
 												</div>
@@ -113,18 +108,15 @@
 										
 
 
-										<input type="submit" class="btn btn-primary" value="<?=$frases[41][$datosUsuarioActual[8]];?>">&nbsp;
+											<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual['uss_idioma']];?></a>
+											<button type="submit" class="btn  btn-info">
+												<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+											</button>
 										
-										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual[8]];?></a>
+										
                                     </form>
                                 </div>
                             </div>
-                        </div>
-						
-						<div class="col-sm-3">
-
-						<?php include("../compartido/publicidad-lateral.php");?>
-
                         </div>
 						
                     </div>

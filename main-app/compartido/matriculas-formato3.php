@@ -4,7 +4,14 @@ if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric(base64_decode($_GET["
 	exit();	
 }
 
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0249';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("head.php");
 ?>
@@ -12,10 +19,8 @@ include("head.php");
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
   <?php
   $resultado = Estudiantes::obtenerDatosEstudiante(base64_decode($_GET["ref"]));
-  $consultaAcudiente1=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente']."'");
-  $acudiente1 = mysqli_fetch_array($consultaAcudiente1, MYSQLI_BOTH);
-  $consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['mat_acudiente2']."'");
-  $acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+  $acudiente1 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
+  $acudiente2 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente2']);
   $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
   $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
   ?>
@@ -43,7 +48,7 @@ include("head.php");
     	<td align="right">Folio:</td> 
         <td><b><?=$resultado['mat_folio'];?></b></td>
         <td align="right">Fecha:</td> 
-        <td><b><?=$resultado[2];?></b></td>
+        <td><b><?=$resultado['mat_fecha'];?></b></td>
     </tr> 
 </table> 
 
@@ -54,7 +59,7 @@ include("head.php");
     	<td>NOMBRE:</td> 
         <td><b><?=strtoupper($resultado['mat_nombres']." ".$resultado['mat_nombre2']);?></b></td>
         <td>APELLIDOS:</td> 
-        <td><b><?=strtoupper($resultado[3]." ".$resultado[4]);?></b></td>
+        <td><b><?=strtoupper($resultado['mat_primer_apellido']." ".$resultado['mat_segundo_apellido']);?></b></td>
         <td>SEXO:</td> 
         <td><b><?=$resultado['ogen_nombre'];?></b></td>
     </tr>
@@ -75,7 +80,7 @@ include("head.php");
     
     <tr>
     	<td>NUIP:</td> 
-        <td><b><?=$resultado[12];?></b></td>
+        <td><b><?=$resultado['mat_documento'];?></b></td>
         <td colspan="2"><b><?=$resultado['mat_lugar_expedicion'];?></b></td> 
         <td colspan="2">&nbsp;</td>
     </tr>
@@ -191,8 +196,9 @@ include("head.php");
         <td>__________________________________<br>SECRETARIO(A)</td>
     </tr>  
 </table>
- 
-  
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </body>
 
 </html>

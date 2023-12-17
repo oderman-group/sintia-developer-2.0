@@ -41,18 +41,22 @@ $Plataforma = new Plataforma;
                             <?php
                                 $instID=$config['conf_id_institucion'];
                                 if (!empty($_GET["insti"])) {
-                                    $instID=$_GET["insti"];
+                                    $instID=base64_decode($_GET["insti"]);
                                 }
                                 $mes=date("m");
                                 if (!empty($_GET["mes"])) {
-                                    $mes=$_GET["mes"];
+                                    $mes=base64_decode($_GET["mes"]);
                                 } 
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
                                 } 
                                 $filtro = '';
+                                $desde='';
+                                $hasta='';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+                                    $desde=$_GET["desde"];
+                                    $hasta=$_GET["hasta"];
                                     $filtro .= " AND (hil_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR hil_fecha LIKE '%" . $_GET["hasta"] . "%')";
                                 }                        
                             ?>
@@ -81,12 +85,13 @@ $Plataforma = new Plataforma;
                                                         <th>#</th>
                                                         <th>Cod</th>
                                                         <th>Fecha</th>
+                                                        <th>Cod. Pagina</th>
                                                         <th>Pagina</th>
                                                         <th>Responsable</th>
                                                         <th>Tiempo de carga</th>
                                                         <th>Institución</th>
                                                         <th>Autologin</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]];?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -106,13 +111,11 @@ $Plataforma = new Plataforma;
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
                                                         $responsable="";
                                                         if($resultado['hil_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['hil_usuario']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -125,7 +128,7 @@ $Plataforma = new Plataforma;
                                                         if($resultado['hil_usuario_autologin']!=0){
 
                                                             try{
-                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
+                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }
@@ -138,6 +141,7 @@ $Plataforma = new Plataforma;
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['hil_id']; ?></td>
                                                             <td><?= $resultado['hil_fecha']; ?></td>
+                                                            <td><?= $resultado['pagp_id']; ?></td>
                                                             <td><?= $resultado['pagp_pagina']; ?></td>
                                                             <td><?= $responsable; ?></td>
                                                             <td><?= $resultado['hil_tiempo_carga']; ?></td>
@@ -145,12 +149,12 @@ $Plataforma = new Plataforma;
                                                             <td><?= $ussAutologin; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= $resultado['hil_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-historial-acciones-detalles.php?id=<?= base64_encode($resultado['hil_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

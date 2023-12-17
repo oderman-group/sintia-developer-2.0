@@ -11,12 +11,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-mysqli_query($conexion, "DELETE FROM disciplina_faltas WHERE dfal_id_categoria='".base64_decode($_GET["id"])."'");
+mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_faltas WHERE 
+dfal_id_categoria='".base64_decode($_GET["id"])."' AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-mysqli_query($conexion, "DELETE FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["id"])."'");
+mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_categorias WHERE dcat_id='".base64_decode($_GET["id"])."' AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

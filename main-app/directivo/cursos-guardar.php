@@ -9,6 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$codGRADO=Utilidades::generateCode("GRAD");
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["nombreC"])==""){
@@ -20,15 +22,15 @@ include("../compartido/historial-acciones-guardar.php");
 	if(empty($_POST["valorM"])) {$_POST["valorM"] = '0';}
 	if(empty($_POST["valorP"])) {$_POST["valorP"] = '0';}
 	if(empty($_POST["graSiguiente"])) {$_POST["graSiguiente"] = 1;}
+	if(empty($_POST["tipoG"])){ $_POST["tipoG"]=GRADO_GRUPAL;}
 	$codigoCurso = "GRA".strtotime("now");
 	
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_grados (gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos)VALUES('".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."')");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados (gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos, gra_tipo, institucion, year)VALUES('".$codGRADO."', '".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."', '".$_POST["tipoG"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	$idRegistro=mysqli_insert_id($conexion);
 
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_1&id='.base64_encode($idRegistro).'";</script>';
+	echo '<script type="text/javascript">window.location.href="cursos.php?success=SC_DT_1&id='.base64_encode($codGRADO).'";</script>';
 	exit();	

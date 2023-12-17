@@ -1,21 +1,23 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 try{
-	$cdnota=mysqli_query($conexion, "SELECT * FROM disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
+	$cdnota=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
 if(mysqli_num_rows($cdnota)==0){
+	$idInsercion=Utilidades::generateCode("DN");
 	if(isset($_POST["nota"])){
 		try{
-			mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["nota"]."', now(),'".$_POST["periodo"]."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["nota"]."', now(),'".$_POST["periodo"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 	}else{
 		try{
-			mysqli_query($conexion, "INSERT INTO disiplina_nota(dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo)VALUES('".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["observacion"]."', now(),'".$_POST["periodo"]."')");	
+			mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_observacion, dn_fecha, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$_POST["codEst"]."','".$_POST["carga"]."','".$_POST["observacion"]."', now(),'".$_POST["periodo"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -24,13 +26,13 @@ if(mysqli_num_rows($cdnota)==0){
 }else{
 	if(isset($_POST["nota"])){
 		try{
-			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_nota='".$_POST["nota"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");
+			mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota='".$_POST["nota"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
 	}else{
 		try{
-			mysqli_query($conexion, "UPDATE disiplina_nota SET dn_observacion='".$_POST["observacion"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."';");	
+			mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_observacion='".$_POST["observacion"]."', dn_fecha=now() WHERE dn_cod_estudiante='".$_POST["codEst"]."' AND dn_id_carga='".$_POST["carga"]."' AND dn_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");	
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

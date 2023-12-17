@@ -39,23 +39,22 @@ require_once("../class/Estudiantes.php");
 									<?php if(!empty($_GET["req"]) && $_GET["req"]==1){?>
 										<div class="card card-topline-red">
 											<div class="card-head">
-												<header><?=$frases[269][$datosUsuarioActual[8]];?></header>
+												<header><?=$frases[269][$datosUsuarioActual['uss_idioma']];?></header>
 											</div>
 											<div class="card-body">
-												<p><?=$frases[273][$datosUsuarioActual[8]];?></p>
-												<form class="form-horizontal" action="guardar.php" method="post">
-													<input type="hidden" name="id" value="1">
-													<input type="hidden" name="idRecurso" value="<?=$_GET["idE"];?>">
+												<p><?=$frases[273][$datosUsuarioActual['uss_idioma']];?></p>
+												<form class="form-horizontal" action="solicitud-desbloqueo.php" method="post">
+													<input type="hidden" name="idRecurso" value="<?=base64_decode($_GET["idE"]);?>">
 													<div class="form-group row">
 														<div class="col-sm-12">
-															<textarea name="contenido" class="form-control" rows="3" placeholder="<?=$frases[274][$datosUsuarioActual[8]];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+															<textarea name="contenido" class="form-control" rows="3" placeholder="<?=$frases[274][$datosUsuarioActual['uss_idioma']];?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
 														</div>
 													</div>
 
 													<div class="form-group">
 														<div class="offset-md-3 col-md-9">
-															<button type="submit" class="btn btn-info"><?=$frases[271][$datosUsuarioActual[8]];?></button>
-															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+															<button type="submit" class="btn btn-info"><?=$frases[271][$datosUsuarioActual['uss_idioma']];?></button>
+															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 														</div>
 													</div>
 												</form>
@@ -66,35 +65,34 @@ require_once("../class/Estudiantes.php");
 									<?php if(!empty($_GET["req"]) && $_GET["req"]==2){?>
 										<div class="card card-topline-green">
 											<div class="card-head">
-												<header><?=$frases[277][$datosUsuarioActual[8]];?></header>
+												<header><?=$frases[277][$datosUsuarioActual['uss_idioma']];?></header>
 											</div>
 											<div class="card-body">
-												<p><?=$frases[278][$datosUsuarioActual[8]];?></p>
-												<form name="formularioCupo" class="form-horizontal" action="guardar.php" method="post">
-													<input type="hidden" name="id" value="2">
-													<input type="hidden" name="idEstudiante" value="<?=$_GET["idE"];?>">
+												<p><?=$frases[278][$datosUsuarioActual['uss_idioma']];?></p>
+												<form name="formularioCupo" class="form-horizontal" action="encuesta-reservar-cupo.php" method="post">
+													<input type="hidden" name="idEstudiante" value="<?=base64_decode($_GET["idE"]);?>">
 													
 													<div class="col-sm-12">
-														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /><?=$frases[275][$datosUsuarioActual[8]];?>
+														<input type="radio" name="respuesta" value="1" onClick="cupoNo(1)" /><?=$frases[275][$datosUsuarioActual['uss_idioma']];?>
 													</div>
 													
 													<div class="col-sm-12">
-														<input type="radio" name="respuesta" value="2" onClick="cupoNo(2)" /><?=$frases[276][$datosUsuarioActual[8]];?>
+														<input type="radio" name="respuesta" value="2" onClick="cupoNo(2)" /><?=$frases[276][$datosUsuarioActual['uss_idioma']];?>
 													</div>
 													
 													<div id="motivoNo" style="display: none;">
-													<p><?=$frases[279][$datosUsuarioActual[8]];?></p>
+													<p><?=$frases[279][$datosUsuarioActual['uss_idioma']];?></p>
 													<div class="form-group row">
 														<div class="col-sm-12">
-															<textarea name="motivo" class="form-control" rows="3" placeholder="<?=$frases[280][$datosUsuarioActual[8]];?>..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
+															<textarea name="motivo" class="form-control" rows="3" placeholder="<?=$frases[280][$datosUsuarioActual['uss_idioma']];?>..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required></textarea>
 														</div>
 													</div>
 													</div>	
 
 													<div class="form-group">
 														<div class="offset-md-3 col-md-9">
-															<button type="submit" class="btn btn-info"><?=$frases[272][$datosUsuarioActual[8]];?></button>
-															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+															<button type="submit" class="btn btn-info"><?=$frases[272][$datosUsuarioActual['uss_idioma']];?></button>
+															<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 														</div>
 													</div>
 												</form>
@@ -117,39 +115,50 @@ require_once("../class/Estudiantes.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th><?=$frases[186][$datosUsuarioActual[8]];?></th>
+                                                        <th><?=$frases[186][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>ID Mat.</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[26][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaAcudientes($datosUsuarioActual[0]);
+													 $consulta = Estudiantes::listarEstudiantesParaAcudientes($datosUsuarioActual['uss_id']);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'"), MYSQLI_BOTH);
+														 $genero = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_genero']."'"), MYSQLI_BOTH);
 
-														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-                    										WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo=1"), MYSQLI_BOTH);
+														 $aspectos1 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+                    										WHERE dn_cod_estudiante='" . $resultado['mat_id'] . "' AND dn_periodo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
-															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM disiplina_nota 
-															WHERE dn_cod_estudiante=" . $resultado['mat_id'] . " AND dn_periodo='" . $config['conf_periodo'] . "'"), MYSQLI_BOTH);
+															$aspectos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota 
+															WHERE dn_cod_estudiante='" . $resultado['mat_id'] . "' AND dn_periodo='" . $config['conf_periodo'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+
+															$numReportesDis = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+															INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id_usuario=dr.dr_estudiante AND mat.mat_acudiente='".$_SESSION["id"]."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+															WHERE dr.dr_aprobacion_acudiente=0 AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]}
+															AND dr.dr_estudiante='".$resultado['mat_id_usuario']."'"));
+
+															$iconoReportesDisciplinario = '';
+															if($numReportesDis > 0) {
+																$iconoReportesDisciplinario = '<i class="fa fa-warning text-warning" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Reporte disciplinario pendiente por firmar ('.$numReportesDis.')"></i> ';
+															}
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
                                                         <td><?php echo $resultado['uss_usuario'];?></td>
 														<td><?php echo $resultado['mat_id'];?></td>
-														<td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
+														<td><?=$iconoReportesDisciplinario."".Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
 														<td><?php if(!empty($genero[1])) echo $genero[1];?></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td>
 															<?php 
+															$respuesta =0;
 														 	if($config['conf_activar_encuesta']==1){
 																$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
-																WHERE genc_estudiante='".$resultado['mat_id']."'"));
+																WHERE genc_estudiante='".$resultado['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
 															}
 														 
 														 if($config['conf_activar_encuesta']!=1 or $respuesta>0){	
@@ -157,7 +166,7 @@ require_once("../class/Estudiantes.php");
 																if($resultado['uss_bloqueado']!=1){		
 															?>
 																<div class="btn-group" data-hint="Despliegue el botón de acciones para ver todas las posibilidades por cada uno de sus acudidos.">
-																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>
@@ -167,31 +176,31 @@ require_once("../class/Estudiantes.php");
 																			if(!empty($resultado['mat_id_usuario'])) {
 																				if( $config['conf_calificaciones_acudientes']==1 ){?>
 																					<?php if($config['conf_sin_nota_numerica']!=1){?>
-																							<li><a href="periodos-resumen.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[84][$datosUsuarioActual[8]];?></a></li>
+																							<li><a href="periodos-resumen.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
 																					<?php }?>
-																					<li><a href="notas-actuales.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[242][$datosUsuarioActual[8]];?></a></li>
+																					<li><a href="notas-actuales.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[242][$datosUsuarioActual['uss_idioma']];?></a></li>
 																				<?php }?>
 
-																			<li><a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[105][$datosUsuarioActual[8]];?></a></li>
-																			<li><a href="aspectos.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($config[2]);?>"><?=$frases[264][$datosUsuarioActual[8]];?></a></li>
+																			<li><a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[105][$datosUsuarioActual['uss_idioma']];?></a></li>
+																			<li><a href="aspectos.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($config[2]);?>"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		  <?php }?>
 																		  
 																		<?php 
 																			if($config['conf_permiso_descargar_boletin'] == 1){
 																				if(!empty($aspectos1["dn_aprobado"]) && !empty($aspectos["dn_aprobado"]) && $aspectos1["dn_aprobado"] == 1 and $aspectos["dn_aprobado"] == 1){ 
 																		?>
-																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank" ><?=$frases[267][$datosUsuarioActual[8]];?></a></li>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank" ><?=$frases[267][$datosUsuarioActual['uss_idioma']];?></a></li>
 
 																		<?php
 																				}
 																			}
 
 																		  if($config['conf_informe_parcial']==1){?>
-																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>&acu=1" target="_blank" ><?=$frases[265][$datosUsuarioActual[8]];?></a></li>
+																		  	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>&acu=1" target="_blank" ><?=$frases[265][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		  <?php }
 
 																		  if( $config['conf_ficha_estudiantil']==1 && !empty($resultado['mat_id_usuario']) ){?>
-																		  	<li><a href="ficha-estudiantil.php?idR=<?=base64_encode($resultado["mat_id_usuario"]);?>"><?=$frases[266][$datosUsuarioActual[8]];?></a></li>
+																		  	<li><a href="ficha-estudiantil.php?idR=<?=base64_encode($resultado["mat_id_usuario"]);?>"><?=$frases[266][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		  <?php }?>
 
 																		  <?php if( !isset($_SESSION['admin']) && !empty($resultado['mat_id_usuario']) ){?>
@@ -201,17 +210,31 @@ require_once("../class/Estudiantes.php");
 																	  </ul>
 																  </div>
 															<?php
-																	}else{
-																		echo "
-																		<span style='color:red;'>".$frases[268][$datosUsuarioActual[8]]."</span><br>
-																		<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[269][$datosUsuarioActual[8]]."</a>
-																		";
+																	} else {
+																		$consultaSolicitudes = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".general_solicitudes 
+																		LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=soli_remitente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+																		LEFT JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=soli_id_recurso AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+																		WHERE soli_institucion='".$config['conf_id_institucion']."' 
+																		AND soli_year='".$_SESSION["bd"]."' AND soli_id_recurso={$resultado['mat_id']} AND soli_estado!=3");
+																		$solicitudPendiente = mysqli_fetch_array($consultaSolicitudes, MYSQLI_BOTH);
+																		
+																		if( !empty($solicitudPendiente) ) {
+															?>
+																			<span style='color:darkblue;'>Solicitud de desbloqueo <b><?=$estadosSolicitudes[$solicitudPendiente['soli_estado']];?></b></span>
+															<?php
+
+																		} else {
+																			echo "
+																			<span style='color:red;'>".$frases[268][$datosUsuarioActual['uss_idioma']]."</span><br>
+																			<a href='".$_SERVER['PHP_SELF']."?req=1&idE=".base64_encode($resultado['mat_id'])."&nameE=".base64_encode($resultado['uss_nombre'])."' style='text-decoration:underline;'>".$frases[269][$datosUsuarioActual['uss_idioma']]."</a>
+																			";
+																		}
 																	}	
 																}
 																else{}
 															}else{
 																echo "
-																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".$resultado['mat_id']."&nameE=".$resultado['uss_nombre']."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual[8]]."</a>
+																<a href='".$_SERVER['PHP_SELF']."?req=2&idE=".base64_encode($resultado['mat_id'])."&nameE=".base64_encode($resultado['uss_nombre'])."' style='text-decoration:underline;'>".$frases[270][$datosUsuarioActual['uss_idioma']]."</a>
 																";	
 															}
 															?>

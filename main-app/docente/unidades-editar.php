@@ -9,7 +9,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consulta=mysqli_query($conexion, "SELECT * FROM academico_unidades WHERE uni_id='".$idR."'");
+$consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades WHERE id_nuevo='".$idR."'");
 $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 ?>
 
@@ -42,12 +42,12 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 				<div class="page-bar">
 					<div class="page-title-breadcrumb">
 						<div class=" pull-left">
-							<div class="page-title"><?= $frases[165][$datosUsuarioActual[8]]; ?> <?= $frases[374][$datosUsuarioActual[8]]; ?></div>
+							<div class="page-title"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></div>
 							<?php include("../compartido/texto-manual-ayuda.php"); ?>
 						</div>
 						<ol class="breadcrumb page-breadcrumb pull-right">
-							<li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual[8]]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-							<li class="active"><?= $frases[165][$datosUsuarioActual[8]]; ?> <?= $frases[374][$datosUsuarioActual[8]]; ?></li>
+							<li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+							<li class="active"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?></li>
 						</ol>
 					</div>
 				</div>
@@ -55,11 +55,11 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 					<div class="col-sm-3">
 						<?php include("info-carga-actual.php"); ?>
 						<div class="panel">
-							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual[8]]; ?> </header>
+							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?> </header>
 							<div class="panel-body">
 								<?php
-								$unidadesEnComun = mysqli_query($conexion, "SELECT * FROM academico_unidades 
-										WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND uni_id!='" . $idR . "'");
+								$unidadesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
+										WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND id_nuevo!='" . $idR . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								while ($uniComun = mysqli_fetch_array($unidadesEnComun, MYSQLI_BOTH)) {
 								?>
 									<p><a href="unidades-editar.php?idR=<?= base64_encode($uniComun['uni_id']); ?>"><?= $uniComun['uni_nombre']; ?></a></p>
@@ -69,10 +69,10 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 					</div>
 					<div class="col-sm-9">
 						<div class="panel">
-							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+							<header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
 							<div class="panel-body">
 								<form name="formularioGuardar" action="unidades-actualizar.php?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>" method="post">
-									<input type="hidden" value="<?= $datosUnidad['uni_id']; ?>" name="idR">
+									<input type="hidden" value="<?= $datosUnidad['id_nuevo']; ?>" name="idR">
 
 									<div class="form-group row">
 										<label class="col-sm-2 control-label">Nombre:</label>
@@ -87,7 +87,9 @@ $datosUnidad = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 											<textarea id="editor1" name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosUnidad['uni_descripcion'];?></textarea>
 										</div>
 									</div>
-									<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+									<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 									<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 								</form>

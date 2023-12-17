@@ -1,5 +1,12 @@
 <?php
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0247';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 ?>
 
@@ -43,12 +50,12 @@ $contadorPeriodos=0;
 
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"].";");	
+$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id FROM academico_cargas ac
-INNER JOIN academico_materias am ON am.mat_id=ac.car_materia
-INNER JOIN academico_areas ar ON ar.ar_id= am.mat_area
-WHERE  car_curso=".$datosUsr["mat_grado"]." AND car_grupo=".$datosUsr["mat_grupo"]." GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id FROM ".BD_ACADEMICA.".academico_cargas car
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
+WHERE  car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
  ?>
  <div align="center" style="margin-bottom:20px;">
 <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150" width="250"><br>
@@ -91,33 +98,33 @@ $contfilas=0;
 while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
 $contfilas++;
 //CONSULTA QUE ME EL NOMBRE Y EL PROMEDIO DEL AREA
-$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM academico_materias am
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
-INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1) AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 GROUP BY ar_id;");
 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
-$consultaMat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id FROM academico_materias am
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
-INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+$consultaMat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1) AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 GROUP BY mat_id
 ORDER BY mat_id;");
-$consultaMat2=mysqli_query($conexion, "SELECT mat_id FROM academico_materias am
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
-INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+$consultaMat2=mysqli_query($conexion, "SELECT mat_id FROM ".BD_ACADEMICA.".academico_materias am
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1) AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 GROUP BY mat_id
 ORDER BY mat_id;");
 //CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
-$consultaMatPer=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM academico_materias am
-INNER JOIN academico_areas a ON a.ar_id=am.mat_area
-INNER JOIN academico_cargas ac ON ac.car_materia=am.mat_id
-INNER JOIN academico_boletin ab ON ab.bol_carga=ac.car_id
-WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1)
+$consultaMatPer=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
+WHERE bol_estudiante='".$id."' and a.ar_id=".$fila["ar_id"]." and bol_periodo in (1) AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
 ORDER BY mat_id,bol_periodo
 ;");
 
@@ -139,7 +146,7 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 	   }?></td>
        <td align='center' style='font-size:12px;border-bottom-style:solid;border-bottom-width:2;'><?php echo $totalPromedio;?></td>
         <td  align="center" style="border-bottom-style:solid;border-bottom-width:2;font-size:12px;"><?php //DESEMPEÑO
-		while($r_desempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
+		while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
         if(!empty($rDesempeno["notip_desde"]) && !empty($rDesempeno["notip_hasta"])){
           if($totalPromedio>=$rDesempeno["notip_desde"] && $totalPromedio<=$rDesempeno["notip_hasta"]){
             echo $rDesempeno["notip_nombre"];
@@ -284,6 +291,9 @@ if($numeroFilas==$contfilas && $numMaterias==1){
 </body>
 </html>
 
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 <script>
 print();
 </script>

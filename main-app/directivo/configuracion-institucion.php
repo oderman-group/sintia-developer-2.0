@@ -35,10 +35,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> de la Institucion</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de la Institucion</div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> de la Institucion</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de la Institucion</li>
                             </ol>
                         </div>
                     </div>
@@ -178,11 +178,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <label class="col-sm-2 control-label">Rector(a)</label>
                                             <div class="col-sm-4">
 												<?php
-                                                try{
-                                                    $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
+                                                $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
 												?>
                                                 <select class="form-control" name="rectorI">
                                                     <option value="">Seleccione una opción</option>
@@ -209,11 +205,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <select class="form-control" name="secretarioI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    try{
-                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_secretaria_academica"]==$r["uss_id"]){
                                                     ?>
@@ -236,11 +228,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <select class="form-control" name="coordinadorI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    try{
-                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_coordinador_academico"]==$r["uss_id"]){
                                                     ?>
@@ -263,11 +251,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <select class="form-control" name="tesoreroI">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
-                                                    try{
-                                                        $consulta=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=5 and uss_bloqueado=0");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." and uss_bloqueado=0");
                                                     while($r=mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                     if($datosinf["info_tesorero"]==$r["uss_id"]){
                                                     ?>

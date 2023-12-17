@@ -1,7 +1,12 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0242';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 $filtro = '';
 $busqueda='';
@@ -50,14 +55,16 @@ if(!empty($_GET["busqueda"])){
         <th>Fecha firmado</th>
       </tr>
       <?php
-      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
       $cont = 1;
       $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
       if (!empty($_GET["orden"])) {
         $ordenado = $_GET["orden"] . " DESC";
       }
-
-      $consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+      $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+      INNER JOIN ".BD_DISCIPLINA.".disiplina_nota dn ON dn_cod_estudiante=mat_id AND dn.institucion={$config['conf_id_institucion']} AND dn.year={$_SESSION["bd"]}
+      LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+      WHERE  mat_eliminado=0  AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro
+      ORDER BY $ordenado");
       while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
         $colorProceso = 'tomato';
         if (!empty($resultado["dn_aprobado"]) && $resultado["dn_aprobado"] == 1) {
@@ -67,13 +74,13 @@ if(!empty($_GET["busqueda"])){
        <tr style="border-color:<?=$Plataforma->colorDos;?>;">
 
           <td><?= $resultado['mat_id']; ?></td>
-          <td><?= $resultado[12]; ?></td>
-          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
+          <td><?= $resultado['mat_documento']; ?></td>
+          <td><a href="../directivo/estudiantes-editar.php?id=<?= base64_encode($resultado['mat_id']); ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
           <td><?= $resultado["gra_nombre"]; ?></td>
-          <td align="center"><?= $resultado["dn_periodo"]; ?></td>
-          <td align="center"><?= $resultado["dn_ultima_lectura"]; ?></td>
-          <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $resultado["dn_aprobado"]; ?></td>
-          <td align="center"><?= $resultado["dn_fecha_aprobado"]; ?></td>
+          <td style="text-align:center;"><?php if(!empty($resultado["dn_periodo"])) echo $resultado["dn_periodo"]; ?></td>
+          <td align="center"><?php if(!empty($resultado["dn_ultima_lectura"])) echo $resultado["dn_ultima_lectura"]; ?></td>
+          <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?php  if(!empty($resultado["dn_aprobado"])) echo $resultado["dn_aprobado"]; ?></td>
+          <td align="center"><?php  if(!empty($resultado["dn_fecha_aprobado"])) echo $resultado["dn_fecha_aprobado"]; ?></td>
         </tr>
       <?php
         $cont++;
@@ -81,7 +88,8 @@ if(!empty($_GET["busqueda"])){
       ?>
     </table>
 
-    <?php include("../compartido/footer-informes.php") ?>;
+    <?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 
   </div>
 

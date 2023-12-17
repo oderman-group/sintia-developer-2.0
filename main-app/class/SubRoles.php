@@ -78,7 +78,7 @@ class SubRoles {
      *
      * @return String // se retorna el id del registro ingresado    */
     public static function crearRolesUsuario($idUsuario,array $subRoles= []){
-        global $conexion, $baseDatosServicios,$config;;
+        global $conexion, $baseDatosServicios,$config;
         $idRegistro = -1;        
         try {
             foreach ($subRoles as $subrol ) {
@@ -378,8 +378,8 @@ class SubRoles {
                 $INsubroles=" AND spu_id_sub_rol IN (".implode(",",$subRoles).")";
             }
             $sql="DELETE FROM ".$baseDatosServicios.".sub_roles_usuarios
-            WHERE spu_id_usuario=".$idUsuario.
-            " AND spu_institucion =".$config['conf_id_institucion'].
+            WHERE spu_id_usuario='".$idUsuario.
+            "' AND spu_institucion =".$config['conf_id_institucion'].
             $INsubroles;
             mysqli_query($conexion,$sql);              
             

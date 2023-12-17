@@ -14,19 +14,19 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$actividadesConsulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_entrega, now()), tar_id_carga, tar_titulo, tar_id FROM academico_actividad_tareas
-	WHERE tar_fecha_entrega IS NOT NULL AND tar_fecha_entrega!='0000-00-00'");
+	$actividadesConsulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_entrega, now()), tar_id_carga, tar_titulo, tar_id FROM ".BD_ACADEMICA.".academico_actividad_tareas
+	WHERE tar_fecha_entrega IS NOT NULL AND tar_fecha_entrega!='0000-00-00' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 	while($actividadesDatos = mysqli_fetch_array($actividadesConsulta, MYSQLI_BOTH)){
 		//Cuando faltan 2 días
 		if($actividadesDatos[0]==2){
-			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-			INNER JOIN academico_matriculas ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0
-			WHERE car_id='".$actividadesDatos['tar_id_carga']."'");
+			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+			WHERE car_id='".$actividadesDatos['tar_id_carga']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 
 			while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
-				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas 
-				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."'");
+				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
+				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){
@@ -44,14 +44,14 @@ if($notificacionID[1]>=$notificacionID[2])
 		}
 		//Cuando llega el día de enviar la actividad
 		if($actividadesDatos[0]==0){
-			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-			INNER JOIN academico_matriculas ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0
-			WHERE car_id='".$actividadesDatos['tar_id_carga']."'
+			$cargasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=car_curso AND mat_grupo=car_grupo AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+			WHERE car_id='".$actividadesDatos['tar_id_carga']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
 			");
 
 			while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
-				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas_entregas 
-				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."'");
+				$consultaEntregasDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
+				WHERE ent_id_actividad='".$actividadesDatos['tar_id']."' AND ent_id_estudiante='".$cargasDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$entregasDatos = mysqli_fetch_array($consultaEntregasDatos, MYSQLI_BOTH);
 
 				if($entregasDatos[0]==""){
@@ -84,8 +84,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, YEAR(uss_fecha_nacimiento) AS agno, uss_id FROM usuarios 
-	WHERE MONTH(uss_fecha_nacimiento)='".date("m")."' AND DAY(uss_fecha_nacimiento)='".date("d")."'");
+	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, YEAR(uss_fecha_nacimiento) AS agno, uss_id FROM ".BD_GENERAL.".usuarios 
+	WHERE MONTH(uss_fecha_nacimiento)='".date("m")."' AND DAY(uss_fecha_nacimiento)='".date("d")."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		$edad = date("Y") - $cumple['agno'];
@@ -165,8 +165,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id, uss_foto, uss_notificacion FROM usuarios 
-	WHERE uss_foto='default.png' OR uss_foto=''");
+	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id, uss_foto, uss_notificacion FROM ".BD_GENERAL.".usuarios 
+	WHERE uss_foto='default.png' OR uss_foto='' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		
@@ -198,8 +198,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id FROM usuarios 
-	WHERE uss_ultimo_ingreso IS NULL OR uss_ultimo_ingreso=''");
+	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id FROM ".BD_GENERAL.".usuarios 
+	WHERE uss_ultimo_ingreso IS NULL OR uss_ultimo_ingreso='' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 
@@ -277,8 +277,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	while($fechasE = mysqli_fetch_array($fechasEspeciales, MYSQLI_BOTH)){
 		$filtro = '';
 		if($fechasE['fesp_genero']!="" and $fechasE['fesp_genero']!="0"){$filtro .= " AND uss_genero='".$fechasE['fesp_genero']."'";}
-		$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email FROM usuarios 
-		WHERE uss_id=uss_id $filtro
+		$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email FROM ".BD_GENERAL.".usuarios 
+		WHERE uss_id=uss_id AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} $filtro
 		");
 
 		while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
@@ -356,8 +356,8 @@ if($notificacionID[1]>=$notificacionID[2])
 	
 	$enviosNotf = 0;
 	
-	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id, uss_clave, uss_notificacion FROM usuarios 
-	WHERE (uss_clave='".$clavePorDefectoUsuarios."' OR uss_clave=uss_usuario OR LENGTH(uss_clave)<=4) AND (uss_tipo=2 or uss_tipo=5)");
+	$cumpleU = mysqli_query($conexion, "SELECT uss_nombre, uss_email, uss_id, uss_clave, uss_notificacion FROM ".BD_GENERAL.".usuarios 
+	WHERE (uss_clave='".$clavePorDefectoUsuarios."' OR uss_clave=uss_usuario OR LENGTH(uss_clave)<=4) AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (uss_tipo=2 or uss_tipo=5)");
 
 	while($cumple = mysqli_fetch_array($cumpleU, MYSQLI_BOTH)){
 		

@@ -3,7 +3,9 @@
 		<div class="modal-content shadow" id="contenidoModal<?= $idModal; ?>" style="max-width: 1350px!important;">
 			<?php include($contenido) ?>
 			<div class="modal-footer">
-				<a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+				<a href="#" data-dismiss="modal" class="btn btn-danger">
+				<i class="fa fa fa-window-close"></i> Cerrar
+				</a>
 			</div>
 		</div>
 	</div>

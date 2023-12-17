@@ -9,7 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-	$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_cargas INNER JOIN usuarios ON uss_id=car_responsable WHERE car_id='".base64_decode($_GET["idR"])."'");
+	$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -19,6 +20,7 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 ?>
 
 	<!--bootstrap -->
@@ -49,23 +51,23 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[12][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[12][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[12][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[12][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
 						
-                        <div class="col-sm-12">
+                        <div class="col-sm-8">
 
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -73,10 +75,14 @@ if(!Modulos::validarPermisoEdicion()){
 
 										<input type="hidden" value="<?=$datosEditar['car_id'];?>" name="idR">
 										<input type="hidden" value="<?=$datosEditar['car_periodo'];?>" name="periodoActual">
+										<input type="hidden" value="<?=$datosEditar['car_docente'];?>" name="docenteActual">
+										<input type="hidden" value="<?=$datosEditar['car_curso'];?>" name="cursoActual">
+										<input type="hidden" value="<?=$datosEditar['car_grupo'];?>" name="grupoActual">
+										<input type="hidden" value="<?=$datosEditar['car_materia'];?>" name="asignaturaActual">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>
-											<div class="col-sm-2">
+											<div class="col-sm-4">
 												<input type="text" name="idCarga" class="form-control" value="<?=$datosEditar['car_id'];?>" readonly>
 											</div>
 										</div>
@@ -85,11 +91,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <label class="col-sm-2 control-label">Docente <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
 												<?php
-												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2 ORDER BY uss_nombre");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
+												$opcionesConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=2 ORDER BY uss_nombre");
 												?>
                                                 <select class="form-control  select2" name="docente" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
@@ -97,10 +99,10 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_docente']) $select = 'selected';
+														if($opcionesDatos['uss_id']==$datosEditar['car_docente']) $select = 'selected';
 														if($opcionesDatos['uss_bloqueado']==1) $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
+                                                    	<option value="<?=$opcionesDatos['uss_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['uss_usuario']." - ".UsuariosPadre::nombreCompletoDelUsuario($opcionesDatos);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -111,7 +113,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-8">
 												<?php
 												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_vocal");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -122,10 +124,10 @@ if(!Modulos::validarPermisoEdicion()){
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														$disabled = '';
-														if($opcionesDatos[0]==$datosEditar['car_curso']) $select = 'selected';
+														if($opcionesDatos['gra_id']==$datosEditar['car_curso']) $select = 'selected';
 														if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gra_id'];?>" <?=$select;?> <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -136,7 +138,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-8">
 												<?php
 												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -146,9 +148,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['car_grupo']) $select = 'selected';
+														if($opcionesDatos['gru_id']==$datosEditar['car_grupo']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                    	<option value="<?=$opcionesDatos['gru_id'];?>" <?=$select;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -159,7 +161,10 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-8">
 												<?php
 												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_materias INNER JOIN academico_areas ON ar_id=mat_area ORDER BY mat_nombre");
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am 
+													INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
+													AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+													ORDER BY am.mat_nombre");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -169,9 +174,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
-														if($opcionesDatos[0]==$datosEditar['car_materia']) $select = 'selected';
+														if($opcionesDatos['mat_id']==$datosEditar['car_materia']) $select = 'selected';
 													?>
-                                                    	<option value="<?=$opcionesDatos[0];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
+                                                    	<option value="<?=$opcionesDatos['mat_id'];?>" <?=$select;?>><?=$opcionesDatos['mat_id'].". ".strtoupper($opcionesDatos['mat_nombre']." (".$opcionesDatos['ar_nombre'].")");?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -185,7 +190,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<?php
 													$p = 1;
 													while($p<=$config[19]){
-														if($p==$datosEditar[5])
+														if($p==$datosEditar['car_periodo'])
 															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
 														else
 															echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
@@ -326,7 +331,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Responsable</label>
 											<div class="col-sm-4">
-												<input type="text" name="responsable" class="form-control" value="<?=strtoupper($datosEditar['uss_nombre']);?>" readonly>
+												<input type="text" name="responsable" class="form-control" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosEditar);?>" readonly>
 											</div>
 										</div>
 										
@@ -346,7 +351,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 										<?php if(Modulos::validarPermisoEdicion()){?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+											<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										<?php }?>
 										
 										<a href="javascript:void(0);" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
@@ -354,6 +361,39 @@ if(!Modulos::validarPermisoEdicion()){
                                 </div>
                             </div>
                         </div>
+
+						<div class="col-sm-4">
+							<div class="panel">
+								<header class="panel-heading panel-heading-purple">Cargas relacionadas</header>
+								<div class="panel-body">
+									<p>&nbsp;</p>
+									<ul class="list-group list-group-unbordered">
+										<?php
+										$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+										INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+										INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+										INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
+										INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+										WHERE car.institucion={$config['conf_id_institucion']} 
+										AND car.year={$_SESSION["bd"]} 
+										AND (car_docente='{$datosEditar["car_docente"]}' OR car_curso='{$datosEditar["car_curso"]}')
+										ORDER BY car_docente
+										");
+										while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+											$resaltaItem = $Plataforma->colorDos;
+											if($resultado['car_id']==base64_decode($_GET["idR"])){$resaltaItem = $Plataforma->colorUno;}
+
+										?>
+										<li class="list-group-item">
+											<a href="cargas-editar.php?idR=<?=base64_encode($resultado['car_id']);?>" style="color:<?=$resaltaItem;?>; text-decoration:<?=$tachaItem;?>;"><?=$resultado['gra_nombre']." ".$resultado['gru_nombre']." - ".$resultado['mat_nombre']." - ".UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a> 
+											<div class="profile-desc-item pull-right">&nbsp;</div>
+										</li>
+										<?php }?>
+									</ul>
+
+								</div>
+							</div>
+						</div>
 						
                     </div>
 

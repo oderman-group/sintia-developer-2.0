@@ -179,7 +179,7 @@ $(document).ready(function() {
 
                         <div class="panel">
                             <header class="panel-heading panel-heading-purple">
-                                <?=$frases[119][$datosUsuarioActual[8]];?> </header>
+                                <?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                             <div class="panel-body">
 
 
@@ -201,12 +201,14 @@ $(document).ready(function() {
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														if(
-														($opcionesDatos[0] == 1 || $opcionesDatos[0] == 4 || $opcionesDatos[0] == 6) 
-														and $datosUsuarioActual['uss_tipo'==5]){continue;}
+														($opcionesDatos['pes_id'] == TIPO_DEV || $opcionesDatos['pes_id'] == TIPO_ESTUDIANTE ) 
+														&& $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO) {
+                                                            continue;
+                                                        }
 														$select = '';
-														if($opcionesDatos[0]==$datosUsuario['tipoUsuario']) $select = 'selected';
+														if($opcionesDatos['pes_id']==$datosUsuario['tipoUsuario']) $select = 'selected';
 													?>
-                                                <option value="<?=$opcionesDatos[0];?>" <?=$select;?>>
+                                                <option value="<?=$opcionesDatos['pes_id'];?>" <?=$select;?>>
                                                     <?=$opcionesDatos['pes_nombre'];?></option>
                                                 <?php }?>
                                             </select>
@@ -227,7 +229,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Contraseña <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="clave" class="form-control" required <?=$disabledPermiso;?>>
+                                            <input type="text" name="clave" class="form-control" value="<?=CLAVE_SUGERIDA;?>" required <?=$disabledPermiso;?>>
                                             <i class="fa fa-info"></i> <span style="color: #6017dc;">La contraseña debe ser de 8 caracteres como mínimo y 20 como máximo.</span>
                                         </div>
                                     </div>
@@ -248,10 +250,10 @@ $(document).ready(function() {
                                             <select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                    if($o[0]==$datosUsuario['tipoD'])
-                                                    echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+                                                    if($o['ogen_id']==$datosUsuario['tipoD'])
+                                                    echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
                                                 else
-                                                    echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+                                                    echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
                                                 }?>
                                             </select>
                                         </div>
@@ -335,13 +337,15 @@ $(document).ready(function() {
                                             </select>
                                         </div>
                                     </div>
-
-                                    <?php if(Modulos::validarPermisoEdicion()){?>
-                                        <input type="submit" class="btn btn-primary" id="btnEnviar" value="Guardar cambios">&nbsp;
-                                    <?php }?>
-
                                     <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary"
                                         onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                        <button id="btnEnviar" type="submit" class="btn  btn-info">
+											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										</button>
+                                    <?php }?>
+
+                                    
                                 </form>
                             </div>
                         </div>

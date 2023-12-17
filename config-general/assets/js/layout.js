@@ -341,7 +341,7 @@ var Layout = function () {
                 }
             }
 
-            fetch('../compartido/guardar.php?get=28&tipoMenu='+tipoMenu, {
+            fetch('../compartido/cambiar-menu.php?tipoMenu='+tipoMenu, {
                 method: 'GET'
             })
             .then(response => response.text()) // Convertir la respuesta a texto
@@ -350,11 +350,12 @@ var Layout = function () {
 
                     heading: 'Proceso completado', 
                     text: 'Hemos actualizado tu preferencia para la barra lateral.', 
-                    position: 'top-left',
+                    position: 'bottom-right',
+                    showHideTransition: 'slide',
                     loaderBg:'#26c281', 
                     icon: 'success', 
                     hideAfter: 3000, 
-                    stack: 6
+                    stack: 2
         
                 });
             })

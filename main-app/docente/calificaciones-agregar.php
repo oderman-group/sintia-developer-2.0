@@ -6,10 +6,10 @@
 <?php include("../compartido/head.php");?>
 <?php
 $consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
@@ -58,33 +58,26 @@ if(
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[6][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="calificaciones.php" onClick="deseaRegresar(this)"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[6][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-						<?php include("info-carga-actual.php");?>
-
-                        </div>
-						
-                        <div class="col-sm-9">
-
+                        <div class="col-sm-12">
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="10" name="id">
+									<form name="formularioGuardar" action="calificaciones-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Descripción</label>
@@ -106,19 +99,22 @@ if(
 											
 											<?php 
 											if($datosCargaActual['car_indicador_automatico']==1){
-												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_definitivo=1");
+												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
-												$indicadorAuto = $indDef['ind_id'];
+												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
-												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador AND ind_definitivo=1
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.ind_definitivo=1 AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
 
 												//Si no existe el indicador definitivo en la carga lo asociamos.
-												if($indicadorDefitnivo[0]==""){	
-													mysqli_query($conexion, "INSERT INTO academico_indicadores_carga (ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1)");	
+												if(!empty($indicadorDefitnivo[0])){
+													require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+													$codigo=Utilidades::generateCode("IPC");
+
+													mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga (ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 												}
 											?>
 											<input type="hidden" name="indicador" class="form-control" value="<?=$indicadorAuto;?>">
@@ -127,9 +123,9 @@ if(
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-												INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-												WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'
+												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
@@ -149,7 +145,7 @@ if(
                                             <label class="col-sm-2 control-label">Evidencia</label>
                                             <div class="col-sm-10">
 												<?php
-												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM academico_evidencias
+												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="evidencia" required>
@@ -157,7 +153,7 @@ if(
 													<?php
 													while($evidenciasDatos = mysqli_fetch_array($evidenciasConsulta, MYSQLI_BOTH)){
 													?>
-                                                    	<option value="<?=$evidenciasDatos[0];?>"><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
+                                                    	<option value="<?=$evidenciasDatos['evid_id'];?>"><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
 													<?php }?>
                                                 </select>
                                             </div>
@@ -176,14 +172,16 @@ if(
 												</div>
 											<?php }?>
 
-										
+											<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
-										if($datosCargaActual['car_indicador_automatico']==1 and $indDef['ind_id']==""){echo "No hay indicador definitivo configurado";}else{?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
+											<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										<?php }?>
 										
-										<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>

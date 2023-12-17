@@ -33,7 +33,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[167][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,25 +45,24 @@
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="40" name="id">
+									<form name="formularioGuardar" action="importar-info-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
-										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual[8]];?></p>	
+										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual['uss_idioma']];?></p>	
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
 												<?php
-												$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
-												INNER JOIN academico_grados ON gra_id=car_curso
-												INNER JOIN academico_grupos ON gru_id=car_grupo
-												WHERE car_docente='".$_SESSION["id"]."'
-												ORDER BY car_curso, car_grupo, mat_nombre");
+												$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+												INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+												WHERE car_docente='".$_SESSION["id"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+												ORDER BY car_curso, car_grupo, am.mat_nombre");
 												?>
                                                 <select class="form-control  select2" name="cargaImportar" required>
                                                     <option value="">Seleccione una opción</option>
@@ -95,7 +94,7 @@
                                             </div>
                                         </div>
 										
-										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual[8]];?></p>	
+										<p style="color: darkblue;"><?=$frases[377][$datosUsuarioActual['uss_idioma']];?></p>	
 										
 										<div class="form-group row">
 											<label class="col-sm-2 control-label"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></label>
@@ -116,16 +115,18 @@
 												</label>
 											</div>
 										</div>
-										
-										<div class="form-group row">
-											<label class="col-sm-2 control-label"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></label>
-											<div class="input-group spinner col-sm-10">
-												<label class="switchToggle">
-													<input type="checkbox" name="clases" value="1">
-													<span class="slider red round"></span>
-												</label>
+
+										<?php if(array_key_exists(11, $arregloModulos)){?>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></label>
+												<div class="input-group spinner col-sm-10">
+													<label class="switchToggle">
+														<input type="checkbox" name="clases" value="1">
+														<span class="slider red round"></span>
+													</label>
+												</div>
 											</div>
-										</div>
+										<?php }?>
 										
 										<!--
 										<div class="form-group row">
@@ -162,7 +163,7 @@
 
 										<p><mark><?=$frases[379][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										
-										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual[8]];?>">&nbsp;
+										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
 										
                                     </form>
                                 </div>

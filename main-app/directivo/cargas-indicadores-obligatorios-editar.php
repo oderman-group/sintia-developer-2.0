@@ -55,7 +55,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 	<div class="panel-body">
                                     <?php 
                                     try{
-                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".base64_decode($_GET["id"])."'");
+                                        $consultarCargas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -69,19 +69,21 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombre" class="form-control" value="<?=$rCargas[1];?>">
+                                                <input type="text" name="nombre" class="form-control" value="<?=$rCargas['ind_nombre'];?>">
                                             </div>
                                         </div>	
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Valor</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="valor" class="form-control" value="<?=$rCargas[3];?>">
+                                                <input type="text" name="valor" class="form-control" value="<?=$rCargas['ind_valor'];?>">
                                             </div>
                                             <span style="color:#F06; font-size:11px;">Estos valores m&aacute;s la suma de los indicadores que crear&aacute; el docente debe ser igual a 100.</span>
                                         </div>	
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                     </form>
                                 </div>
                             </div>

@@ -10,7 +10,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try{
-    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -44,16 +44,22 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                     <div class="col-md-12">
                         <div class="row">
                             <?php
-                                $id=$_GET["id"];
+                                $id=base64_decode($_GET["id"]);
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
                                 } 
                                 $filtro = '';
+                                $insti="";
                                 if (!empty($_GET["insti"])) {
-                                    $filtro .= " AND ins_id='" . $_GET["insti"] . "'";
+                                    $insti=base64_decode($_GET["insti"]);
+                                    $filtro .= " AND ins_id='" . $insti . "'";
                                 }
+                                $desde="";
+                                $hasta="";
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+                                    $desde=$_GET["desde"];
+                                    $hasta=$_GET["hasta"];
                                     $filtro .= " AND (ttpxu_fecha_aceptacion BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR ttpxu_fecha_aceptacion LIKE '%" . $_GET["hasta"] . "%')";
                                 }                        
                             ?>
@@ -102,13 +108,11 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
                                                         $responsable="";
                                                         if($resultado['ttpxu_id_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['ttpxu_id_usuario']."' AND institucion={$resultado["ins_id"]} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

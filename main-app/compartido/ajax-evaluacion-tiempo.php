@@ -1,13 +1,13 @@
 <?php
 include("../modelo/conexion.php");
-$consultaHoras=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaHoras=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $horas = mysqli_fetch_array($consultaHoras, MYSQLI_BOTH);
-$consultaMinutos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(MINUTE, NOW(), eva_hasta),60) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaMinutos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(MINUTE, NOW(), eva_hasta),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $minutos = mysqli_fetch_array($consultaMinutos, MYSQLI_BOTH);
-$consultaSegundos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(SECOND, NOW(), eva_hasta),60) FROM academico_actividad_evaluaciones 
-WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1");
+$consultaSegundos=mysqli_query($conexion, "SELECT MOD(TIMESTAMPDIFF(SECOND, NOW(), eva_hasta),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+WHERE eva_id='".$_POST["eva"]."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $segundos = mysqli_fetch_array($consultaSegundos, MYSQLI_BOTH);
 
 if($horas[0]==0){
@@ -32,7 +32,8 @@ if($horas[0]==0 and $minutos[0]==4 and $segundos[0]==59){
     	  $.toast({
     		  	heading: 'Tiempo restante',  
 			  	text: 'Te quedan 5 minutos para finalizar la evaluación y enviarla.',
-			  	position: 'bottom-center',
+			  	position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#FFD913',
 				icon: 'warning',
     		    hideAfter: false
@@ -52,7 +53,8 @@ if($horas[0]==0 and $minutos[0]==1 and $segundos[0]==59){
     	  $.toast({
     		  	heading: 'Tiempo restante',  
 			  	text: 'Te quedan 2 minutos para finalizar la evaluación y enviarla. Te recomendamos rectificar las preguntas rápidamente y enviar la evaluación. La evaluación se enviará automáticamente con las respuestas seleccionadas.',
-			  	position: 'bottom-center',
+			  	position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#FFD913',
 				icon: 'warning',
     		    hideAfter: false

@@ -1,12 +1,14 @@
 <?php
 include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
-$bdDemo="mobiliar_dev_".date("Y");
+$idInstitucion=22;
+$year=date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
 $correosDemo = mysqli_query($conexion,"SELECT DATEDIFF(now(), demo_fecha_ingreso), demo_usuario, uss_nombre, uss_email, uss_ultimo_ingreso FROM demo
-INNER JOIN $bdDemo.usuarios ON uss_id=demo_usuario WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=demo_usuario AND uss.institucion={$idInstitucion} AND uss.year={$year} 
+WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
 
 
 
@@ -239,10 +241,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=4 AND corr_estado=0)");
 	$numeros = mysqli_fetch_array($consultaNumeros, MYSQLI_BOTH);
 	
-	
-	$institucionAgno = $cProg['ins_bd']."_".date("Y");
-	
-	$consultaAcudiente=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$cProg['corr_usuario']."'");
+	$consultaAcudiente=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$cProg['corr_usuario']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
 	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
 	
 	$tituloMsj = "INFORME DIARIO DE SINTIA";
@@ -290,20 +289,20 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		//De los primeros tipos: 1, 2 y 3
 		if($cDat['corr_tipo']==1 or $cDat['corr_tipo']==2 or $cDat['corr_tipo']==3){
 			
-			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_actividades 
-			INNER JOIN ".$institucionAgno.".academico_cargas ON car_id=act_id_carga
-			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
-			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
-			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
-			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE act_id='".$cDat["corr_actividad"]."'");
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_actividades ac 
+			INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=ac.act_id_carga AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}
+			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
+			INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion={$cProg['corr_institucion']} AND uss.year={$year}
+			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
+			WHERE ac.act_id='".$cDat["corr_actividad"]."' AND ac.institucion={$cProg['corr_institucion']} AND ac.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
-			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");
+			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
 			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
-			if($datosRelacionados[0]!=""){
+			if(!empty($datosRelacionados[0])){
 				if($cDat['corr_tipo']==1){
 					$contenidoMsj .= '
 						<h3 align="center">REGISTRO DE NOTA</h3>
@@ -367,19 +366,19 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		
 		//Del tipo 4
 		if($cDat['corr_tipo']==4){
-			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".academico_cargas 
-			INNER JOIN ".$institucionAgno.".academico_materias AS mate ON mate.mat_id=car_materia
-			INNER JOIN ".$institucionAgno.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."'
-			INNER JOIN ".$institucionAgno.".usuarios ON uss_id=mat_acudiente
-			INNER JOIN ".$institucionAgno.".academico_grados AS gra ON gra.gra_id=matri.mat_grado
-			WHERE car_id='".$cDat["corr_carga"]."'");
+			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
+			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
+			INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion={$cProg['corr_institucion']} AND uss.year={$year}
+			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
+			WHERE car_id='".$cDat["corr_carga"]."' AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
-			$consultaDocentes=mysqli_query($conexion,"SELECT * FROM ".$institucionAgno.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."'");
+			$consultaDocentes=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
 			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
 			
 			
-			if($datosRelacionados[0]!=""){
+			if(!empty($datosRelacionados[0])){
 
 				$contenidoMsj .= '
 					<h3 align="center">RECUPERACIÓN DE PERIODO</h3>
@@ -412,7 +411,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		<b>TOTAL NOVEDADES:</b> '.$novedades.'
 	';
 
-	if($acudiente['uss_email']!=""){
+	if(!empty($acudiente['uss_email'])){
 		$mensajesEnviados++;
 
 		$data = [

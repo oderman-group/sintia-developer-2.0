@@ -67,7 +67,7 @@ $Plataforma = new Plataforma;
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Nombre</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -94,13 +94,13 @@ $Plataforma = new Plataforma;
                                                             <td><?= $resultado['svcat_nombre']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="mps-categorias-servicios-aditar.php?idR=<?= $resultado['svcat_id']; ?>">Editar</a></li>
-                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['svcat_id']; ?>" name="mps-categorias-servicios-eliminar.php?idR=<?= $resultado['svcat_id']; ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                        <li><a href="mps-categorias-servicios-aditar.php?idR=<?= base64_encode($resultado['svcat_id']); ?>">Editar</a></li>
+                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['svcat_id']; ?>" name="mps-categorias-servicios-eliminar.php?idR=<?= base64_encode($resultado['svcat_id']); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

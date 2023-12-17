@@ -24,7 +24,7 @@
                             <div class=" pull-left">
                                 <div class="page-title">SINTIA Marketplace</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
-								<p><i class="fa fa-thumbs-o-up"></i> <?=$frases[176][$datosUsuarioActual[8]];?></p>
+								<p><i class="fa fa-thumbs-o-up"></i> <?=$frases[176][$datosUsuarioActual['uss_idioma']];?></p>
                             </div>
                         </div>
                     </div>
@@ -37,8 +37,8 @@
 							 	<div class="panel">
 									<header class="panel-heading panel-heading-green"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                       <div class="panel-body">
-										<p><?=$frases[177][$datosUsuarioActual[8]];?></p>
-									    <p><?=$frases[178][$datosUsuarioActual[8]];?></p>
+										<p><?=$frases[177][$datosUsuarioActual['uss_idioma']];?></p>
+									    <p><?=$frases[178][$datosUsuarioActual['uss_idioma']];?></p>
 									  </div>
 								</div>-->
 							 
@@ -48,7 +48,7 @@
 							 	</p>
 						 	
 							 	<div class="panel" data-hint="Haciendo click sobre cualquier opción se filtrará la información y sólo te aparecerán los servicios de la categoría seleccionada.">
-										<header class="panel-heading panel-heading-purple"><?=$frases[179][$datosUsuarioActual[8]];?></header>
+										<header class="panel-heading panel-heading-purple"><?=$frases[179][$datosUsuarioActual['uss_idioma']];?></header>
 										<div class="panel-body">
 											<?php
 											$categorias = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
@@ -62,7 +62,7 @@
 													</a>
 												</p>
 											<?php }?>
-												<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=strtoupper($frases[180][$datosUsuarioActual[8]]);?></span></a></p>
+												<p align="center"><a href="<?=$_SERVER['PHP_SELF'];?>"><?=strtoupper($frases[180][$datosUsuarioActual['uss_idioma']]);?></span></a></p>
 										</div>
                                     </div>
 					
@@ -96,7 +96,7 @@
 	                        	<h4><?=strtoupper($datosConsulta['emp_nombre']);?></h4>
 		                            <div class="text-muted">
 										<span class="m-r-10" style="font-size: 10px;"><i class="fa <?=$datosConsulta['svcat_icon'];?>"></i> <?=$datosConsulta['svcat_nombre'];?></span> 
-		                            	<?php if($datosConsulta['emp_verificada']==1){?><a class="course-likes m-l-10" style="color: slateblue;" title="<?=$frases[185][$datosUsuarioActual[8]];?>"><i class="fa fa-check-circle"></i></a><?php }?>
+		                            	<?php if($datosConsulta['emp_verificada']==1){?><a class="course-likes m-l-10" style="color: slateblue;" title="<?=$frases[185][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-check-circle"></i></a><?php }?>
 		                            </div>
 									<?php 
 									if(is_numeric($_GET["emp"])){
@@ -114,16 +114,16 @@
 											
 										}
 									?>
-										<p><span><i class="fa fa-envelope-o"></i> <b><?=$frases[181][$datosUsuarioActual[8]];?>:</b> <?=$datosConsulta['emp_email'];?></span></p>
-										<p><span><i class="fa fa-phone"></i> <b><?=$frases[182][$datosUsuarioActual[8]];?>:</b> <?=$datosConsulta['emp_telefono'];?></span></p>
-										<a href="servicios.php" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i> <?=$frases[184][$datosUsuarioActual[8]];?></a>
+										<p><span><i class="fa fa-envelope-o"></i> <b><?=$frases[181][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$datosConsulta['emp_email'];?></span></p>
+										<p><span><i class="fa fa-phone"></i> <b><?=$frases[182][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$datosConsulta['emp_telefono'];?></span></p>
+										<a href="servicios.php" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i> <?=$frases[184][$datosUsuarioActual['uss_idioma']];?></a>
 										<?php if($datosConsulta['emp_web']!=""){?>
-											<a href="<?=$datosConsulta['emp_web'];?>" target="_blank" class="btn btn-primary"><i class="fa fa-globe"></i> <?=$frases[183][$datosUsuarioActual[8]];?></a>
+											<a href="<?=$datosConsulta['emp_web'];?>" target="_blank" class="btn btn-primary"><i class="fa fa-globe"></i> <?=$frases[183][$datosUsuarioActual['uss_idioma']];?></a>
 										<?php }?>
 									<?php }else{?>
-										<p><span><i class="fa fa-envelope-o"></i> <b><?=$frases[181][$datosUsuarioActual[8]];?>:</b> <?=substr($datosConsulta['emp_email'],0,5);?>**@****</span></p>
-										<p><span><i class="fa fa-phone"></i> <b><?=$frases[182][$datosUsuarioActual[8]];?>:</b> <?=substr($datosConsulta['emp_telefono'],0,3);?>*******</span></p>
-										<a href="servicios.php?emp=<?=$datosConsulta['emp_id'];?>" class="btn btn-info"><i class="fa fa-search-plus"></i> <?=$frases[154][$datosUsuarioActual[8]];?></a>
+										<p><span><i class="fa fa-envelope-o"></i> <b><?=$frases[181][$datosUsuarioActual['uss_idioma']];?>:</b> <?=substr($datosConsulta['emp_email'],0,5);?>**@****</span></p>
+										<p><span><i class="fa fa-phone"></i> <b><?=$frases[182][$datosUsuarioActual['uss_idioma']];?>:</b> <?=substr($datosConsulta['emp_telefono'],0,3);?>*******</span></p>
+										<a href="servicios.php?emp=<?=$datosConsulta['emp_id'];?>" class="btn btn-info"><i class="fa fa-search-plus"></i> <?=$frases[154][$datosUsuarioActual['uss_idioma']];?></a>
 									<?php }?>
 									
 		                            

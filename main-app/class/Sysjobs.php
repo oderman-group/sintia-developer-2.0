@@ -1,4 +1,5 @@
 <?php
+require_once 'UsuariosPadre.php';
 class SysJobs {
      /**
      * Esta funci&oacute;n  crea &oacute; actualiza si ya existe un registro, llamando las funcions de crear o  atualizar 
@@ -29,7 +30,7 @@ class SysJobs {
                 break;
 
                 case JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL:
-                    $msj = ' Los estudiantes ya se est&acute;n subiendo a la plataforma.';
+                    $msj = ' Los estudiantes ya se est&aacute;n subiendo a la plataforma.';
                 break;
 
                 default:
@@ -39,7 +40,7 @@ class SysJobs {
             
 
             $idRegistro =self::crear($tipo,$prioridad,$parametros,$msj);
-            $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
+            $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro.". Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
         }else{
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
             $idRegistro = $jobsEncontrado["job_id"];           
@@ -51,7 +52,7 @@ class SysJobs {
                     "mensaje" => 'La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; nuevamente.'
                 );
                 self::actualizar($datos);
-                $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro;
+                $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
             }else{
                 $mensaje="Proceso ".$tipo." con el c&oacute;digo ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];               
             }
@@ -166,7 +167,7 @@ class SysJobs {
         $andParametros=empty($parametrosBusqueda["parametros"])?" ":"AND job_parametros='".$parametrosBusqueda["parametros"]."'";
        
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
-        LEFT JOIN usuarios  ON uss_id = job_responsable
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=job_id_institucion AND uss_id = job_responsable AND uss.year={$parametrosBusqueda["agno"]}
         LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
         WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
         AND job_responsable ='".$parametrosBusqueda["responsable"]."'
@@ -278,8 +279,9 @@ class SysJobs {
             break;
         }   
         try{
-			$remitente = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1"), MYSQLI_BOTH); 
-			$destinatario = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='" . $destinatario . "'"), MYSQLI_BOTH);
+            $remitenteConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1");
+			$remitente = mysqli_fetch_array($remitenteConsulta); 
+			$destinatario = UsuariosPadre::sesionUsuario($destinatario);
             $contenido="<br>Hola, Sr(a) ".$destinatario["uss_nombre"]."<br> 
             ".$asunto."<br> <p>".$contenido."</p>";
 			mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".social_emails(ema_de, ema_para, ema_asunto, ema_contenido, ema_fecha, ema_visto, ema_eliminado_de, ema_eliminado_para, ema_institucion, ema_year)

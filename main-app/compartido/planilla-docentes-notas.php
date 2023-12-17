@@ -1,9 +1,15 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0237';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 ?>
 
 <head>
@@ -44,12 +50,12 @@ require_once("../class/UsuariosPadre.php");
   if (!empty($_REQUEST["periodo"])) {
     $filtro .= " AND car_periodo='" . $_REQUEST["periodo"] . "'";
   }
-  $consultaCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas
-  INNER JOIN academico_materias ON mat_id=car_materia 
-  INNER JOIN academico_grados ON gra_id=car_curso
-  INNER JOIN academico_grupos ON gru_id=car_grupo
-  INNER JOIN usuarios ON uss_id=car_docente AND uss_tipo=2
-  WHERE car_id=car_id $filtro");
+  $consultaCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+  INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} 
+  INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+  INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+  INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss_tipo=2 AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+  WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} $filtro");
 
   while ($resultadoCargas = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH)) {
     $materia=strtoupper($resultadoCargas['mat_nombre']);
@@ -130,8 +136,7 @@ require_once("../class/UsuariosPadre.php");
         <td align="center" colspan="17" width="2%">NOTAS</td>
         <td align="center" colspan="7">Inasistencia</td>
         <?php
-          $filtroDocentesParaListarEstudiantes = " AND mat_grado='" . $resultadoCargas['car_curso'] . "' AND mat_grupo='" . $resultadoCargas['car_grupo'] . "'";
-          $estudiantes = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+          $estudiantes = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($resultadoCargas);
 
           $n = 1;
 
@@ -140,12 +145,12 @@ require_once("../class/UsuariosPadre.php");
 
       <tr style="font-size:10px; height:25px;">
         <td align="center" width="2%"><?= $n; ?></td>
-        <td align="center" width="5%"><?= $e[0]; ?></td>
+        <td align="center" width="5%"><?= $e['mat_id']; ?></td>
         <td width="20%"><?= Estudiantes::NombreCompletoDelEstudiante($e)?></td>
       <?php
         $acomuladoNota=0;
         for($i=1;$i<=4;$i++){
-          $consultaNotas=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga='".$resultadoCargas['car_id']."' AND bol_estudiante='".$e['mat_id']."' AND bol_periodo='".$i."'");
+          $consultaNotas=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$resultadoCargas['car_id']."' AND bol_estudiante='".$e['mat_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
           $nota=mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 
           $notaEstudiante="";
@@ -158,16 +163,32 @@ require_once("../class/UsuariosPadre.php");
           if($notaEstudiante!="" AND $notaEstudiante<$config['conf_nota_minima_aprobar']){
               $estiloNota='style="font-weight:bold; color:#FFF; background:'.$Plataforma->colorDos.';"';
           }
+
+          $notaEstudianteFinal=$notaEstudiante;
+          $title='';
+          if($notaEstudiante!="" && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+            $title='title="Nota Cuantitativa: '.$notaEstudiante.'"';
+            $estiloNotaEstudiante = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante);
+            $notaEstudianteFinal= !empty($estiloNotaEstudiante['notip_nombre']) ? $estiloNotaEstudiante['notip_nombre'] : "";
+          }
       ?>
-        <td align="center" <?=$estiloNota?> width="3%"><?=$notaEstudiante?></td>
+        <td align="center" <?=$estiloNota?> <?=$title;?> width="3%"><?=$notaEstudianteFinal?></td>
       <?php
           // $acomuladoNota+=$notaEstudiante;
         }
         //ACOMULADO PARA LAS MATERIAS
         $totalAcomuladoNota=$acomuladoNota*$acomulado;
         $totalAcomuladoNota= round($totalAcomuladoNota, 1);
+
+        $totalAcomuladoNotaFinal=$totalAcomuladoNota;
+        $title='';
+        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+          $title='title="Nota Cuantitativa: '.$totalAcomuladoNota.'"';
+          $estiloTotalAcomuladoNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $totalAcomuladoNota);
+          $totalAcomuladoNotaFinal= !empty($estiloTotalAcomuladoNota['notip_nombre']) ? $estiloTotalAcomuladoNota['notip_nombre'] : "Bajo";
+        }
       ?>
-        <td align="center" style="background:<?=$Plataforma->colorTres;?>;" width="3%"><?=$totalAcomuladoNota?></td>
+        <td align="center" style="background:<?=$Plataforma->colorTres;?>;" width="3%" <?=$title;?>><?=$totalAcomuladoNotaFinal?></td>
       <?php
         for($i=1;$i<=17;$i++){
       ?>
@@ -219,5 +240,7 @@ require_once("../class/UsuariosPadre.php");
   </script>
 
 </body>
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

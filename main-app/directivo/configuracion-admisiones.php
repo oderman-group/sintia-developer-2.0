@@ -46,11 +46,11 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> de admisiones</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de admisiones</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> de admisiones</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> de admisiones</li>
                             </ol>
                         </div>
                     </div>
@@ -59,7 +59,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                                 
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
+                                <header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> </header>
                                 <div class="panel-body">
 
 									<form name="formularioGuardar" action="configuracion-admisiones-guardar.php" method="post" enctype="multipart/form-data">
@@ -204,7 +204,9 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                            <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
                                     </form>
                                 </div>

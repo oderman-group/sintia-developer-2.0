@@ -50,7 +50,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Falta</th>
 														<th>Tipo</th>
                                                     </tr>
@@ -58,8 +58,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-                                                        WHERE dr_estudiante='".$datosEstudianteActual['mat_id']."'");
+                                                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes
+                                                        WHERE dr_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }

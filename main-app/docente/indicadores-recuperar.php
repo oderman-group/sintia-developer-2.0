@@ -9,88 +9,18 @@ include("verificar-periodos-iguales.php");
 include("../compartido/head.php");
 
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM academico_indicadores
-INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
-WHERE ind_id='".$idR."'");
+$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai
+INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+WHERE ai.ind_id='".$idR."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}");
 $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 ?>
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-<script type="application/javascript">
-//CALIFICACIONES	
-function notas(enviada){
-  var carga = <?=$cargaConsultaActual;?>;	
-  var periodo = <?=$periodoConsultaActual;?>;
-  var codNota = <?=$idR;?>;
-  var valorDecimalIndicador = <?=($calificacion['ipc_valor']/100);?>;
-  
-  var nota = enviada.value;
-  var notaAnterior = enviada.name;	
-  var codEst = enviada.id;
-  var nombreEst = enviada.alt;
-  var operacion = enviada.title;
-	
-  var casilla = document.getElementById(codEst);
- 
-var notaAnteriorTransformada = (notaAnterior/valorDecimalIndicador);
-notaAnteriorTransformada = Math.round(notaAnteriorTransformada * 10) / 10;
-
-if(isNaN(nota)){
-	Swal.fire('Esto no es un valor numérico: '+nota+'. Si estás usando comas, reemplacelas por un punto.'); 
-	casilla.value="";
-	casilla.focus();
-	return false;	
-}	
-	
-if (alertValidarNota(nota)) {
-	casilla.value="";
-	casilla.focus();
-	return false;
-	}
-
-/*
-if(nota<notaAnteriorTransformada){
-   alert(`No es permitido colocar una nota de recuperación menor: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
-	casilla.value="";
-	casilla.focus();
-	return false;
-}*/
-	
-if(nota==notaAnteriorTransformada){
-	Swal.fire(`No es permitido colocar una nota de recuperación igual: ${nota} a la nota anterior: ${notaAnteriorTransformada}.`);
-	casilla.value="";
-	casilla.focus();
-	return false;
-}	
-	
-	
-casilla.disabled="disabled";
-casilla.style.fontWeight="bold";
-		  
-$('#respRC').empty().hide().html("Guardando información, espere por favor...").show(1);
-	datos = "nota="+(nota)+
-			"&codNota="+(codNota)+
-			"&notaAnterior="+(notaAnterior)+
-			"&carga="+(carga)+
-			"&periodo="+(periodo)+
-			"&operacion="+(operacion)+
-			"&nombreEst="+(nombreEst)+
-			"&valorDecimalIndicador="+(valorDecimalIndicador)+
-			"&codEst="+(codEst);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-calificaciones-registrar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respRC').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -112,7 +42,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$calificacion['ind_nombre'];?></li>
                             </ol>
                         </div>
@@ -141,7 +71,7 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 												</thead>
 												<tbody>
 												 <?php
-												 $TablaNotas = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."'");
+												 $TablaNotas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 												 ?>
 												  <tr id="data1" class="odd grade">
@@ -164,10 +94,10 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 										<div class="panel-body">
 											<p>Puedes cambiar a otro indicador rápidamente para calificar a tus estudiantes o hacer modificaciones de notas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga
-											INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-											WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_indicador!='".$idR."'
-											ORDER BY ipc_id DESC
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+											INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+											WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.ipc_indicador!='".$idR."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
+											ORDER BY ipc.ipc_id DESC
 											");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
@@ -208,28 +138,28 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
                                                     <tr>
                                                         <th>#</th>
 														<th>Cod</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?><br>Indicador</th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?><br>Indicador</th>
 														<th>Recup.<br>Indicador</th>
 														<th>DEF.<br>PERIODO <?=$periodoConsultaActual;?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 $colorNota = "black";
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 
 														//Consulta de recuperaciones si ya la tienen puestas.
-														$consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_indicadores_recuperacion WHERE rind_estudiante=".$resultado[0]." AND rind_indicador='".$idR."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."'");
+														$consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='".$resultado['mat_id']."' AND rind_indicador='".$idR."' AND rind_periodo='".$periodoConsultaActual."' AND rind_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
-														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM academico_calificaciones
-														INNER JOIN academico_actividades ON act_id=cal_id_actividad AND act_estado=1 AND act_id_tipo='".$idR."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."'
-														WHERE cal_id_estudiante='".$resultado['mat_id']."'");
+														$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
+														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_id_tipo='".$idR."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_id_carga='".$cargaConsultaActual."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
+														WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}");
 														$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
 														 
 														$notaRecuperacion = "";
@@ -239,14 +169,23 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															//Color nota
 															if(!empty($notaRecuperacion) && $notaRecuperacion<$config[5]) $colorNota = $config[6]; elseif(!empty($notaRecuperacion) && $notaRecuperacion>=$config[5]) $colorNota = $config[7];
 														}
-														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$periodoConsultaActual);
+														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$notasResultado = mysqli_fetch_array($consultaNotasResultado, MYSQLI_BOTH);
 														 
-														if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7]; 
+														if(!empty($notaIndicador[0]) && $notaIndicador[0]<$config[5])$color = $config[6]; elseif(!empty($notaIndicador[0]) && $notaIndicador[0]>=$config[5]) $color = $config[7]; 
 														 
 														 
 														 $colorEstudiante = '#000;';
 														 if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
+
+														$notaIndicadorFinal=$notaIndicador[0];
+														$atributosA='style="text-decoration:underline; color:'.$color.';"';
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$notaIndicador[0].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaIndicador[0]);
+															$notaIndicadorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
 													 ?>
                                                     
 													<tr>
@@ -257,12 +196,13 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														</td>
 														<td>
-															<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>&indicador=<?=$_GET["idR"];?>" style="text-decoration:underline;">
-																<?=$notaIndicador[0];?>
+															<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>&indicador=<?=$_GET["idR"];?>" <?=$atributosA?>>
+																<?=$notaIndicadorFinal;?>
 															</a>	
 														</td>
 														<td>
 															<?php 
+															$estiloNotaRecuperacionFinal="";
 														 	if(empty($notaIndicador[0])){
 																echo "<span title='No hay notas relacionadas este indicador. Revise las actividades.'>-</span>";	
 															}
@@ -272,20 +212,38 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
 															elseif($notaIndicador[0]>=$config[5]){
 																echo "";	
 															}
-															else{	
+															else{
+																if($config['conf_forma_mostrar_notas'] == CUALITATIVA){		
+																	$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaRecuperacion);
+																	$estiloNotaRecuperacionFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+																}	
 															?>
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notaRecuperacion;?>" name="<?=$notas['rind_nota_actual'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="9" onChange="notas(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" size="5" maxlength="3" value="<?=$notaRecuperacion;?>" name="<?=$notas['rind_nota_actual'];?>" step="<?=$cargaConsultaActual;?>-<?=$periodoConsultaActual;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$idR;?>" title="<?=($calificacion['ipc_valor']/100);?>" onChange="recuperarIndicador(this)" tabindex="<?=$contReg;?>">
 															<?php }?>
 															
 															
 															<?php if(!empty($notas['cal_nota'])){?>
-															<a href="#" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
+															<a href="#" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
 															<?php }?>
+															<br><span style="text-decoration:underline; color:<?=$colorNota;?>; margin-left: 15px" id="CU<?=$resultado['mat_id'].$cargaConsultaActual;?>"><?=$estiloNotaRecuperacionFinal?></span>
 														</td>
 														
 														<td>
-															<?php if(!empty($notasResultado[4])){?>
-																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?=$notasResultado[4];?></a>
+															<?php
+																if(!empty($notasResultado['bol_nota'])){
+														 
+																	if($notasResultado['bol_nota']<$config[5])$color = $config[6]; elseif($notasResultado['bol_nota']>=$config[5]) $color = $config[7]; 
+
+																	$notasResultadoFinal=$notasResultado['bol_nota'];
+																	$atributosA='style="text-decoration:underline; color:'.$color.';"';
+																	if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																		$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+
+																		$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
+																		$notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+																	}
+															?>
+																<a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA?>><?=$notasResultadoFinal;?></a>
 															<?php }?>
 														</td>
 														
@@ -337,6 +295,14 @@ $('#respRC').empty().hide().html("Guardando información, espere por favor...").
     <script src="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.js" ></script>
     <script src="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input-init.js" ></script>
     <!-- end js include path -->
+
+	<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

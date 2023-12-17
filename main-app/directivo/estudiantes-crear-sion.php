@@ -2,6 +2,7 @@
     $modulo = 4;
     include("session.php");
     require_once("../class/Estudiantes.php");
+    require_once("../class/UsuariosPadre.php");
 
     $id="";
     if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -12,12 +13,7 @@
     $datosEstudianteActual["mat_ciudad_residencia"]=trim($datosEstudianteActual["mat_ciudad_residencia"]);
     
     //ACUDIENTE
-    try{
-        $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datosEstudianteActual["mat_acudiente"]."'");
-    } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
-    }
-    $acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+    $acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
 
 
     // API CREAR ESTUDIANTE

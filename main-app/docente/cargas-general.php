@@ -51,33 +51,43 @@
 													  
 													<th style="text-align: center;">INDICADORES</th>
 													<th style="text-align: center;">CALIFICACIONES</th>
-													<th style="text-align: center;">EVALUACIONES</th>
-													<th style="text-align: center;">CLASES</th>
-													<th style="text-align: center;">CRONOGRAMA</th>
-													<th style="text-align: center;">FOROS</th>
-													<th style="text-align: center;">TAREAS</th>
+													<?php if(array_key_exists(12, $arregloModulos)){?>
+														<th style="text-align: center;">EVALUACIONES</th>
+													<?php }?>
+													<?php if(array_key_exists(11, $arregloModulos)){?>
+														<th style="text-align: center;">CLASES</th>
+													<?php }?>
+													<?php if(array_key_exists(15, $arregloModulos)){?>
+														<th style="text-align: center;">CRONOGRAMA</th>
+													<?php }?>
+													<?php if(array_key_exists(13, $arregloModulos)){?>
+														<th style="text-align: center;">FOROS</th>
+													<?php }?>
+													<?php if(array_key_exists(14, $arregloModulos)){?>
+														<th style="text-align: center;">TAREAS</th>
+													<?php }?>
 													  
 												  </tr>
 												</thead>
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-													INNER JOIN academico_materias ON mat_id=car_materia
-													INNER JOIN academico_grados ON gra_id=car_curso
-													INNER JOIN academico_grupos ON gru_id=car_grupo
-													WHERE car_docente='".$_SESSION["id"]."'
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+													INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+													INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+													INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+													WHERE car_docente='".$_SESSION["id"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
 													ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre
 													");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultaNumerosCargas=mysqli_query($conexion, "SELECT
-														(SELECT COUNT(ipc_id) FROM academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."'),
-														(SELECT COUNT(act_id) FROM academico_actividades WHERE act_id_carga='".$resultado['car_id']."' AND act_periodo='".$resultado['car_periodo']."' AND act_estado=1),
-														(SELECT COUNT(eva_id) FROM academico_actividad_evaluaciones WHERE eva_id_carga='".$resultado['car_id']."' AND eva_periodo='".$resultado['car_periodo']."' AND eva_estado=1),
-														(SELECT COUNT(cls_id) FROM academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1),
-														(SELECT COUNT(cro_id) FROM academico_cronograma WHERE cro_id_carga='".$resultado['car_id']."' AND cro_periodo='".$resultado['car_periodo']."'),
-														(SELECT COUNT(foro_id) FROM academico_actividad_foro WHERE foro_id_carga='".$resultado['car_id']."' AND foro_periodo='".$resultado['car_periodo']."' AND foro_estado=1),
-														(SELECT COUNT(tar_id) FROM academico_actividad_tareas WHERE tar_id_carga='".$resultado['car_id']."' AND tar_periodo='".$resultado['car_periodo']."' AND tar_estado=1)");
+														(SELECT COUNT(ipc_id) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$resultado['car_id']."' AND ipc_periodo='".$resultado['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(act_id) FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$resultado['car_id']."' AND act_periodo='".$resultado['car_periodo']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(eva_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id_carga='".$resultado['car_id']."' AND eva_periodo='".$resultado['car_periodo']."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(cls_id) FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id_carga='".$resultado['car_id']."' AND cls_periodo='".$resultado['car_periodo']."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(cro_id) FROM ".BD_ACADEMICA.".academico_cronograma WHERE cro_id_carga='".$resultado['car_id']."' AND cro_periodo='".$resultado['car_periodo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(foro_id) FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id_carga='".$resultado['car_id']."' AND foro_periodo='".$resultado['car_periodo']."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+														(SELECT COUNT(tar_id) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id_carga='".$resultado['car_id']."' AND tar_periodo='".$resultado['car_periodo']."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 														$numerosCargas = mysqli_fetch_array($consultaNumerosCargas, MYSQLI_BOTH);
 													?>
                                                     
@@ -87,11 +97,25 @@
 											
 														<td align="center"><a href="indicadores.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[0];?></a></td>
                                         				<td align="center"><a href="calificaciones.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[1];?></a></td>
-														<td align="center"><a href="evaluaciones.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[2];?></a></td>
-                                        				<td align="center"><a href="clases.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[3];?></a></td>
-                                        				<td align="center"><a href="cronograma-calendario.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[4];?></a></td>
-														<td align="center"><a href="foros.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[5];?></a></td>
-                                        				<td align="center"><a href="actividades.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[6];?></a></td>
+														<?php if(array_key_exists(12, $arregloModulos)){?>
+															<td align="center"><a href="evaluaciones.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[2];?></a></td>
+														<?php }?>
+
+														<?php if(array_key_exists(11, $arregloModulos)){?>
+                                        					<td align="center"><a href="clases.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[3];?></a></td>
+														<?php }?>
+
+														<?php if(array_key_exists(15, $arregloModulos)){?>
+                                        					<td align="center"><a href="cronograma-calendario.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[4];?></a></td>
+														<?php }?>
+
+														<?php if(array_key_exists(13, $arregloModulos)){?>
+															<td align="center"><a href="foros.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[5];?></a></td>
+														<?php }?>
+
+														<?php if(array_key_exists(14, $arregloModulos)){?>
+                                        					<td align="center"><a href="actividades.php?carga=<?=base64_encode($resultado['car_id']);?>&periodo=<?=base64_encode($resultado['car_periodo']);?>&get=<?=base64_encode(100);?>" style="text-decoration: underline;"><?=$numerosCargas[6];?></a></td>
+														<?php }?>
                                                     </tr>
 													<?php
 														$contReg++;

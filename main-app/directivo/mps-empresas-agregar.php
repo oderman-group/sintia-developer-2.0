@@ -50,7 +50,7 @@ include("../compartido/head.php");
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
 
@@ -85,7 +85,7 @@ include("../compartido/head.php");
                                             $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
                                             while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
                                             ?>	
-                                                <option value="<?=$infoDatos[0];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
+                                                <option value="<?=$infoDatos['svcat_id'];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
                                             <?php }?>	
                                             </select>
                                             <span style="color: navy;">Seleccione al menos un sector.</span>
@@ -108,7 +108,7 @@ include("../compartido/head.php");
                                                 $infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_estado=1 AND ins_enviroment='".ENVIROMENT."'");
                                                 while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
                                                 ?>	
-                                                    <option value="<?=$infoDatos[0];?>"><?=strtoupper($infoDatos['ins_nombre']);?></option>
+                                                    <option value="<?=$infoDatos['ins_id'];?>"><?=strtoupper($infoDatos['ins_nombre']);?></option>
                                                 <?php }?>	
                                             </select>
                                         </div>

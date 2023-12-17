@@ -1,15 +1,42 @@
 <?php
 class CargaAcademica {
 
+    /**
+     * Valida la existencia de una carga académica para un docente en un curso, grupo y asignatura específicos.
+     *
+     * @param string $docente El identificador del docente.
+     * @param string $curso El nivel o curso académico.
+     * @param string $grupo El grupo al que pertenece la carga académica.
+     * @param string $asignatura El identificador de la asignatura o materia.
+     *
+     * @return bool Devuelve `true` si existe una carga académica que cumple con los parámetros proporcionados, de lo contrario, devuelve `false`.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso
+     * $docenteEjemplo = "ID_DOCENTE";
+     * $cursoEjemplo = "10";
+     * $grupoEjemplo = "A";
+     * $asignaturaEjemplo = "ID_ASIGNATURA";
+     * $existeCarga = validarExistenciaCarga($docenteEjemplo, $cursoEjemplo, $grupoEjemplo, $asignaturaEjemplo);
+     * if ($existeCarga) {
+     *     echo "La carga académica existe para el docente en el curso, grupo y asignatura especificados.\n";
+     * } else {
+     *     echo "No existe carga académica para el docente en el curso, grupo y asignatura especificados.\n";
+     * }
+     * ```
+     */
     public static function validarExistenciaCarga($docente, $curso, $grupo, $asignatura)
     {
 
-        global $conexion;
+        global $conexion, $config;
         $result = false;
 
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_cargas
-            WHERE car_docente='".$docente."' AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_materia='".$asignatura."'
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas
+            WHERE car_docente='".$docente."' AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_materia='".$asignatura."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
             ");
             $num = mysqli_num_rows($consulta);
             if($num > 0) {
@@ -28,22 +55,22 @@ class CargaAcademica {
      * Este función consulta los datos de la carga académica actual y
      * los almacena en sesion
      * 
-     * @param int $carga
-     * @param int $sesion
+     * @param string $carga
+     * @param string $sesion
      * 
      * @return array
      */
-    public static function cargasDatosEnSesion(Int $carga, Int $sesion): array 
+    public static function cargasDatosEnSesion(string $carga, string $sesion): array 
     {
-        global $conexion;
+        global $conexion, $filtroMT, $config;
 
         $infoCargaActual = [];
 		try{
-			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-			INNER JOIN academico_materias ON mat_id=car_materia
-			INNER JOIN academico_grados ON gra_id=car_curso
-			INNER JOIN academico_grupos ON gru_id=car_grupo
-			WHERE car_id='".$carga."' AND car_docente='".$sesion."' AND car_activa=1");
+			$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+			INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+			INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
+			INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+			WHERE car_id='".$carga."' AND car_docente='".$sesion."' AND car_activa=1 AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -131,23 +158,23 @@ class CargaAcademica {
      *
      * Esta función realiza una consulta a la base de datos para obtener información relacionada con una carga académica, como el grado, grupo, materia y docente asociados.
      *
-     * @param int $idCarga - El ID de la carga académica que se desea consultar.
+     * @param string $idCarga - El ID de la carga académica que se desea consultar.
      *
      * @return array - Un array asociativo con los datos relacionados o un array vacío si no se encuentran datos.
      */
     public static function datosRelacionadosCarga($idCarga)
     {
 
-        global $conexion;
+        global $conexion, $config;
         $result = [];
 
         try {
-            $consulta = mysqli_query($conexion,"SELECT * FROM academico_cargas
-            LEFT JOIN academico_grados ON gra_id=car_curso
-            LEFT JOIN academico_grupos ON gru_id=car_grupo
-            LEFT JOIN academico_materias ON mat_id=car_materia
-            LEFT JOIN usuarios ON uss_id=car_docente
-            WHERE car_id={$idCarga}");
+            $consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE car_id='{$idCarga}' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
             $result = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

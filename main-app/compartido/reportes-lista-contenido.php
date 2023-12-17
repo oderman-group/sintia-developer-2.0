@@ -27,7 +27,7 @@
 
 
 									<?php
-									 if($datosUsuarioActual[3]==2 and !isset($_GET["fest"])){?>
+									 if($datosUsuarioActual['uss_tipo']==2 and !isset($_GET["fest"])){?>
 
 									<div class="alert alert-info">
 
@@ -85,26 +85,24 @@
 													if(!empty($_GET["est"])){$filtro .= " AND dr_estudiante='".base64_decode($_GET["est"])."'";}
 													if(!empty($_GET["falta"])){$filtro .= " AND dr_falta='".base64_decode($_GET["falta"])."'";}
 												
-													if($datosUsuarioActual[3]!=5 and !isset($_GET["fest"])){
+													if($datosUsuarioActual['uss_tipo']!=5 and !isset($_GET["fest"])){
 													$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";
 													}
 
 													include("../directivo/includes/consulta-paginacion-reportes-lista.php");
 													
-													$consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-													INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-													INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-													INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante
-													LEFT JOIN academico_grados ON gra_id=mat_grado
-													LEFT JOIN academico_grupos ON gru_id=mat_grupo
-													LEFT JOIN usuarios ON uss_id=dr_usuario
-													WHERE dr_id=dr_id $filtro
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+													INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
+													INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+													INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id_usuario=dr_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+													LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+													LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+													LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+													WHERE dr_id=dr_id AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]} $filtro
 													LIMIT $inicio,$registros");
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-													 	
-													 	
-													 ?>
+													$contReg = 1;
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													?>
                                                     
 													<tr id="reg<?=$resultado['dr_id'];?>">
                                                         <td><?=$contReg;?></td>
@@ -145,24 +143,24 @@
 																		</button>
 																		<ul class="dropdown-menu" role="menu">
 																		<?php if( Modulos::validarSubRol(['DT0025']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(20);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
+																			<li><a href="reportes-firmar-estudiante.php?idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el estudiante</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0056']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(21);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
+																			<li><a href="reportes-firmar-acudiente.php?idR=<?=base64_encode($resultado['dr_id']);?>">Firmar por el acudiente</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0055']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(22);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
+																			<li><a href="reportes-firma-quitar-estudiante.php?idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma estudiante</a></li>
 																		<?php }?>
 
 																		<?php if( Modulos::validarSubRol(['DT0054']) ){?>
-																			<li><a href="../compartido/guardar.php?get=<?=base64_encode(23);?>&idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
+																			<li><a href="reportes-firmar-quitar-acudiente.php?idR=<?=base64_encode($resultado['dr_id']);?>">Quitar firma acudiente</a></li>
 																		<?php }?>
 																			
-																			<?php if( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && Modulos::validarSubRol(['DT0026'])){?>
+																			<?php if( ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) && Modulos::validarSubRol(['DT0026'])){?>
 
-																				<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="../compartido/guardar.php?get=<?=base64_encode(19);?>&idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+																				<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['dr_id'];?>" name="reportes-eliminar.php?idR=<?=base64_encode($resultado['dr_id']);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
 																				
 																			<?php }?>
 

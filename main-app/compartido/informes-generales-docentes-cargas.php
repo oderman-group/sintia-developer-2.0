@@ -1,20 +1,23 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("session-compartida.php");
+$idPaginaInterna = 'DT0234';
 
-<?php
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 $filtro = '';
 if(!empty($_GET["docente"])){$filtro .=" AND car_docente='".$_GET["docente"]."'";}
 if(!empty($_GET["grado"])){$filtro .=" AND car_curso='".$_GET["grado"]."'";}
 if(!empty($_GET["asignatura"])){$filtro .=" AND car_materia='".$_GET["asignatura"]."'";}
 
-$consulta = mysqli_query($conexion, "SELECT car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, car_director_grupo, car_ih FROM academico_cargas
-INNER JOIN usuarios ON uss_id=car_docente
-INNER JOIN academico_grados ON gra_id=car_curso
-INNER JOIN academico_grupos ON gru_id=car_grupo
-INNER JOIN academico_materias ON mat_id=car_materia
-WHERE car_id=car_id $filtro
+$consulta = mysqli_query($conexion, "SELECT car_id, uss_nombre, gra_nombre, gru_nombre, mat_nombre, car_director_grupo, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+WHERE car_id=car_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} $filtro
 GROUP BY car_id
 ORDER BY car_docente");
 ?>
@@ -66,7 +69,8 @@ include("../compartido/head-informes.php") ?>
 			?>  
 		</table>
 	</div>
-	<?php include("../compartido/footer-informes.php") ?>;
+	<?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 
 </div>	
 

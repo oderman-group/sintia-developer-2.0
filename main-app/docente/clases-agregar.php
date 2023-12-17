@@ -42,25 +42,23 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[7][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[7][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?=$frases[7][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[7][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="clases.php" onClick="deseaRegresar(this)"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[7][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
 						<div class="col-sm-3">
 
-
-						<?php include("info-carga-actual.php");?>
-
 							
                             <div class="panel">
-								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 <div class="panel-body">
 									<p><b>Banco de datos:</b> Tienes la opción de usar información que ya existe y así no tengas que escribir todo de nuevo. <mark>Sólo debes usar una de las 2 alternativas:</mark> o llenas la información desde cero o escoges la existente. Si usas las 2, <mark>el banco de datos tendrá prioridad</mark> y esta será lo que el sistema use.<br>
 									<mark> - MIO :</mark> Significa que la información fue creada por ti.
@@ -74,12 +72,11 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="11" name="id">
+									<form id="form_subir" name="formularioGuardar" action="clases-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$config['conf_id_institucion']."".$cargaConsultaActual;?>" name="idMeeting">
 
 
@@ -110,8 +107,8 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 												<label class="col-sm-2 control-label">Unidad</label>
 												<div class="col-sm-10">
 													<?php
-													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM academico_unidades 
-													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1");
+													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
+													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													?>
 													<select class="form-control  select2" name="unidad">
 														<option value="">Seleccione una opción</option>
@@ -228,8 +225,8 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-												WHERE cls_estado=1 AND ((cls_compartir=1 AND cls_id_carga!='".$cargaConsultaActual."') OR (cls_id_carga='".$cargaConsultaActual."' AND cls_periodo!='".$periodoConsultaActual."'))");
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+												WHERE cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND ((cls_compartir=1 AND cls_id_carga!='".$cargaConsultaActual."') OR (cls_id_carga='".$cargaConsultaActual."' AND cls_periodo!='".$periodoConsultaActual."'))");
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>
@@ -246,7 +243,9 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                         </div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="clases.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 									</form>
@@ -281,16 +280,23 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
+
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
 													
 													setTimeout(redirect(), 2000);
 													
 													function redirect(){
-														location.href='clases.php';
+														location.href='clases.php?success=SC_DT_1&id='+respuesta;
 													}
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "clases-guardar.php");
 												peticion.send(new FormData(form));
 
 											}

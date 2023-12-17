@@ -6,7 +6,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try {
-    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".categorias_productos WHERE catp_id='" . $_GET["idR"] . "'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosMarketPlace . ".categorias_productos WHERE catp_id='" . base64_decode($_GET["idR"]) . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -56,11 +56,11 @@ $datosCategorias = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                     <div class="col-sm-12">
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-categorias-productos-actualizar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" value="<?=$_GET["idR"];?>" name="idR">
+                                    <input type="hidden" value="<?=base64_decode($_GET["idR"]);?>" name="idR">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Nombre Categoria<span style="color: red;">(*)</span></label>

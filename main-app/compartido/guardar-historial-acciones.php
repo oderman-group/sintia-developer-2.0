@@ -1,5 +1,4 @@
 <?php
-//include("geoiploc.php");
 $ip=$_SERVER["REMOTE_ADDR"];
 //$paisIP=getCountryFromIP($ip);
 $tiempo_final = microtime(true);

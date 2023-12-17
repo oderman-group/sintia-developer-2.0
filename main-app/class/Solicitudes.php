@@ -34,7 +34,7 @@ class Solicitudes {
         }       
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".solicitud_cancelacion
-            LEFT JOIN usuarios  ON uss_id = solcan_usuario
+            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id = solcan_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = solcan_institucion
             ".$filtrar."            
              ORDER BY solcan_fecha_creacion
@@ -60,7 +60,7 @@ class Solicitudes {
                    
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".solicitud_cancelacion
-            LEFT JOIN usuarios  ON uss_id = solcan_usuario
+            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id = solcan_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = solcan_institucion
             WHERE solcan_id  ='".$id."'         
             ");

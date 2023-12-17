@@ -105,12 +105,10 @@
 											Muchas gracias por enviar tu opinión! La tendremos en cuenta para seguir mejorando.
 										</p>
 									<?php }else{?>
-									<form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="10">
+									<form class="form-horizontal" action="../compartido/enviar-sugerencias-sintia.php" method="post">
 										<input type="hidden" name="usuario" value="<?=$datosUsuarioActual['uss_nombre'];?>">
 										<input type="hidden" name="tipoUsuario" value="<?=$datosUsuarioActual['uss_tipo'];?>">
 										
-										<input type="hidden" id="institucionSug" value="<?=$_SESSION["inst"];?>">
 										<input type="hidden" id="usuarioSug" value="<?=$datosUsuarioActual['uss_id'];?>">
 										<input type="hidden" id="usuarioNombreSug" value="<?=$datosUsuarioActual['uss_nombre'];?>">
 										<input type="hidden" id="tipoUsuarioSug" value="<?=$datosUsuarioActual['uss_tipo'];?>">
@@ -124,7 +122,7 @@
 										<div class="form-group">
 											<div class="offset-md-3 col-md-9">
 												<button type="button" onClick="insertarFirebase()" class="btn btn-info">Enviar ahora</button>
-												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+												<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 											</div>
 										</div>
 									</form>
@@ -170,7 +168,7 @@
 						
 						<!-- Activity feed start -->
 						<div class="col-sm-7" data-hint="Este es tu asistente personal de actividades. Él te ayudará a decidir por donde empezar a hacer las tareas.">
-							<?php if($datosUsuarioActual[3]==2 or $datosUsuarioActual[3]==5 || $datosUsuarioActual[3]==1){?>
+							<?php if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE or $datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo']==TIPO_DEV){?>
 								<?php include("../compartido/progreso-docentes.php");?>
 							<?php }?>
 

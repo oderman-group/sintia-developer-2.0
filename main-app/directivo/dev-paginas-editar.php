@@ -12,14 +12,14 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try{
-    $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".$_GET["idP"]."'");
+    $consulta=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad WHERE pagp_id='".base64_decode($_GET["idP"])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $datosPaginas=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 $disabled='';
-if(!Modulos::validarPaginasHijasSubRol($_GET["idP"])){
+if(!Modulos::validarPaginasHijasSubRol(base64_decode($_GET["idP"]))){
     $disabled='disabled';
 }
 ?>
@@ -94,7 +94,7 @@ if(!Modulos::validarPaginasHijasSubRol($_GET["idP"])){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -164,7 +164,7 @@ if(!Modulos::validarPaginasHijasSubRol($_GET["idP"])){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Ruta Pagina<span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="rutaPagina" class="form-control" onChange="actualizarPagina(this)" alt="<?=$_GET["idP"];?>" id="rutaPagina" value="<?=$datosPaginas['pagp_ruta'];?>" required <?=$disabled;?>>
+                                                <input type="text" name="rutaPagina" class="form-control" onChange="actualizarPagina(this)" alt="<?=base64_decode($_GET["idP"]);?>" id="rutaPagina" value="<?=$datosPaginas['pagp_ruta'];?>" required <?=$disabled;?>>
                                             </div>
                                         </div>
 										

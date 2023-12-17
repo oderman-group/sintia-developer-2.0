@@ -32,7 +32,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[216][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[216][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
@@ -55,7 +55,7 @@
 									}
 									?>
 									
-									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+									<li><a class="parent-item" href="cargas-carpetas.php"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
 									<?php
 									$cont = count($vectorDatos);
 									$cont = $cont - 1;
@@ -70,7 +70,7 @@
 									}
 								}
 								?>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[216][$datosUsuarioActual[8]];?></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[216][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>

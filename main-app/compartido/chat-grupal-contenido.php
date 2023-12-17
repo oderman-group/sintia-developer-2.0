@@ -17,11 +17,11 @@ require_once("../class/Estudiantes.php");
 								<div class="col-md-4 col-lg-3">
 									<?php 
 									//DOCENTES
-									if($datosUsuarioActual[3]==2){
+									if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){
 										include("info-carga-actual.php");
 									}
 									//ESTUDIANTES
-									if($datosUsuarioActual[3]==4){
+									if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){
 										include("filtro-cargas.php");
 									}
 									?>
@@ -33,7 +33,7 @@ require_once("../class/Estudiantes.php");
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+													$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 													$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
 													$contReg = 1;
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -73,7 +73,7 @@ require_once("../class/Estudiantes.php");
 										<div class="card-body " id="bar-parent1">
 										<form class="form-horizontal" action="../compartido/guardar.php" method="post">
 											<input type="hidden" name="id" value="13">
-											<input type="hidden" name="carga" value="<?=$datosCargaActual[0];?>">
+											<input type="hidden" name="carga" value="<?=$datosCargaActual['car_id'];?>">
 											
 											<div class="form-group row">
 												<div class="col-sm-12">
@@ -84,7 +84,7 @@ require_once("../class/Estudiantes.php");
 											<div class="form-group">
 												<div class="offset-md-3 col-md-9">
 													<button type="submit" class="btn btn-info">Enviar</button>
-													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+													<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 												</div>
 											</div>
 										</form>
@@ -99,7 +99,7 @@ require_once("../class/Estudiantes.php");
 											if($_GET["usuario"]){$filtro .= " AND chatg_emisor='".$_GET["usuario"]."'";}
 											$consulta = mysqli_query($conexion, "SELECT * FROM academico_chat_grupal
 											INNER JOIN usuarios ON uss_id=chatg_emisor
-											WHERE chatg_carga='".$datosCargaActual[0]."'
+											WHERE chatg_carga='".$datosCargaActual['car_id']."'
 											$filtro
 											ORDER BY chatg_id DESC
 											");
@@ -121,7 +121,7 @@ require_once("../class/Estudiantes.php");
 																	<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 																	   data-mdl-for="panel-<?=$resultado['chatg_id'];?>">
 																	   <?=$href='../compartido/guardar.php?get=18&idR='.$resultado['chatg_id'];?>
-																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a></li>
+																	   <li class = "mdl-menu__item"><a href="#" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este mensaje?','question','<?= $href ?>')"><i class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	</ul>
 																	<?php }?>
 															</div>

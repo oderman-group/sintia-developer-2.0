@@ -9,6 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+require_once("../class/servicios/UsuarioServicios.php");
+require_once("../class/servicios/MatriculaServicios.php");
 
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
@@ -53,55 +55,91 @@ if(!Modulos::validarPermisoEdicion()){
                             </ol>
                         </div>
                     </div>
-                    <div class="row">
-						
-						<div class="col-sm-3">
+                <div class="row">
+                    <div class="col-12">
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
+                    </div>
+                    <?php $acudienteActual = UsuarioServicios::consultar(base64_decode($_GET['id'])); ?>
+                    <div class="col-sm-3">
+                        <div class="panel">
+                            <header class="panel-heading panel-heading-purple"><b>Datos del acudiente</b></header>
+                            <div class="panel-body">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 control-label "><b>Nombre: </b></label>
+                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::nombres($acudienteActual) ?></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 control-label"><b>Apellido:</b></label>
+                                    <label class="col-sm-9 control-label"><?= UsuarioServicios::apellidos($acudienteActual) ?></label>
+                                </div>
+                            </div>
                         </div>
-						
-                        <div class="col-sm-9">
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
-                            <div class="panel">
-                                <header class="panel-heading panel-heading-purple">Acudidos</header>
-                                <div class="panel-body">
+                    </div>
+
+                    <div class="col-sm-9">
+                        <div class="panel">
+                            <header class="panel-heading panel-heading-purple"><b>Acudidos</b></header>
+                            <div class="panel-body">
                                 <form name="formularioGuardar" action="usuarios-acudidos-actualizar.php" method="post">
-                                    <input type="hidden" value="<?=$_GET['id'];?>" name="id">
+                                    <input type="hidden" value="<?=base64_decode($_GET['id']);?>" name="id">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Estudiantes</label>
-                                        <div class="col-sm-8">
+                                        <label class="col-sm-2 control-label"><b>Estudiantes: </b></label>
+                                        <div class="col-sm-10">
                                             <?php
-                                            $opcionesConsulta = Estudiantes::listarEstudiantes(0,'','LIMIT 0, 10');
+                                            $parametros = array("upe_id_usuario"=>$acudienteActual["uss_id"],"institucion"=>$config['conf_id_institucion'],"year"=>$_SESSION["bd"]);
+                                            $listaAcudidos = UsuarioServicios::listarUsuariosEstudiante($parametros);
                                             ?>
-                                            <select id="multiple" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
+                                            <select id="select_estudiante" class="form-control  select2-multiple" name="acudidos[]" required multiple <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
-                                                while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-                                                    try{
-                                                        $consultaUsuarioAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios_por_estudiantes WHERE upe_id_usuario='".$_GET['id']."' AND upe_id_estudiante='".$opcionesDatos['mat_id']."'");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
-                                                    $num = mysqli_num_rows($consultaUsuarioAcudiente);
-                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);
-                                                    $selected = '';
-                                                    if($opcionesDatos['mat_acudiente']==$_GET['id'] AND $num>0) $selected = 'selected';
-                                                ?>
-                                                    <option value="<?=$opcionesDatos['mat_id'];?>" <?=$selected;?>><?=$nombre;?></option>
-                                                <?php }?>
+                                                foreach($listaAcudidos as $idEstudiante){
+                                                    $matricualaEstudiante=MatriculaServicios::consultar($idEstudiante["upe_id_estudiante"]);
+                                                    if(!is_null($matricualaEstudiante)){
+                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($matricualaEstudiante);
+                                                 ?>
+                                                 <option value="<?= $matricualaEstudiante['mat_id']; ?>" selected><?= $nombre; ?></option>
+                                                 <?php }} ?>
+                                               
                                             </select>
                                         </div>
                                     </div>
                                     
                                     <?php if(Modulos::validarPermisoEdicion()){?>
-                                        <input type="submit" class="btn btn-primary" value="Guardar Cambios">&nbsp;
+                                        <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                     <?php }?>
                                     
-                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10&tipo=3" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                    <a href="javascript:void(0);" name="usuarios.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>
                             </div>
                         </div>
-						
                     </div>
-
+                </div>
+                <script>          
+                    $(document).ready(function() {
+          		        $('#select_estudiante').select2({
+					    placeholder: 'Seleccione el estudiante...',
+					    theme: "bootstrap",
+                        multiple: true,
+                            ajax: {
+                                type: 'GET',
+                                url: 'ajax-listar-estudiantes.php',
+                                processResults: function(data) {
+                                    data = JSON.parse(data);
+                                    return {
+                                        results: $.map(data, function(item) {                                  
+                                            return {
+                                                id: item.value,
+                                                text: item.label
+                                            }
+                                        })
+                                    };
+                                }
+                            }
+				        });
+			        });
+              </script>
                 </div>
                 <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>

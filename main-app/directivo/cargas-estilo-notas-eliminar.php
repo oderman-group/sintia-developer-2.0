@@ -11,12 +11,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-	mysqli_query($conexion, "DELETE FROM academico_notas_tipos WHERE notip_categoria='" . base64_decode($_GET["idR"]) . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . base64_decode($_GET["idR"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-	mysqli_query($conexion, "DELETE FROM academico_categorias_notas WHERE catn_id='" . base64_decode($_GET["idR"]) . "'");
+	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE catn_id='" . base64_decode($_GET["idR"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

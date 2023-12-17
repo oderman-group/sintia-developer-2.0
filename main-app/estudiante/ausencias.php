@@ -2,7 +2,8 @@
 <?php include("verificar-usuario.php");?>
 <?php $idPaginaInterna = 'ES0022';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
+<?php include("verificar-carga.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 <?php //include("verificar-pagina-bloqueada.php");?>
 <?php include("../compartido/head.php");?>
 </head>
@@ -39,12 +40,16 @@
 											<?php
 											$porcentaje = 0;
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
-												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
+												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												"), MYSQLI_BOTH);
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+												  $porcentajeGrado=$periodosCursos['gvp_valor'];
+												}
 												
-												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."'"), MYSQLI_BOTH);
+												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 												$porcentaje=0;
 												if(!empty($notapp[0])){
 													$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
@@ -53,13 +58,21 @@
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%)</a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentajeGrado;?>%)</a>
 													
-													<?php if(!empty($notapp[0])){?>
+													<?php
+														if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+
+														$notaPorPeriodo=$notapp[0];
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+															$notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
+													?>
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notapp[0];?></div>
+																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notaPorPeriodo;?></div>
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 																</div>
 
@@ -110,25 +123,25 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1");
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND cls_disponible=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_ausencias 
-														WHERE aus_id_clase='".$resultado[0]."' AND aus_id_estudiante='".$datosEstudianteActual[0]."'"), MYSQLI_BOTH);
+														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
+														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 														$totalAusencia=0;
-														if(!empty($ausencia[3])){
-															$totalAusencia=$ausencia[3];
+														if(!empty($ausencia['aus_ausencias'])){
+															$totalAusencia=$ausencia['aus_ausencias'];
 														}
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado[0];?></td>
-														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><?=$resultado[1];?></a></td>
-														<td><?=$resultado[2];?></td>
+														<td><?=$resultado['cls_id'];?></td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado[1];?></a></td>
+														<td><?=$resultado['cls_fecha'];?></td>
 														<td><?=$totalAusencia;?></td>
 														<td>
-															<a href="clases-ver.php?idR=<?=base64_encode($resultado[0]);?>"><i class="material-icons">trending_flat</i></a>
+															<a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><i class="material-icons">trending_flat</i></a>
 														</td>
                                                     </tr>
 													<?php 

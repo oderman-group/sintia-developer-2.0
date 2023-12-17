@@ -14,7 +14,7 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 //seleccionamos la base de datos
 if($_SESSION["inst"]==""){
 	session_destroy();
-	header("Location:".REDIRECT_ROUTE."?error=4");
+	header("Location:".REDIRECT_ROUTE."?error=4&ref=".$_SERVER["PHP_SELF"]);
 	exit();
 }else{
 	
@@ -24,15 +24,17 @@ if($_SESSION["inst"]==""){
 		$agnoBD = $_SESSION["bd"];
 	}
 
-	$bdActual = $_SESSION["inst"]."_".$agnoBD;
-	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);
+	/*$bdActual = $_SESSION["inst"]."_".$agnoBD;
+	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);*/
+	$bdActual = $baseDatosServicios;
+	$bdApasar = $baseDatosServicios;
 	require_once ROOT_PATH."/main-app/class/Conexion.php";
 	try{
 
 	//Conexion con el Servidor
 	$conexionInstancia = new Conexion;
 
-	$conexion = $conexionInstancia->conexion($servidorConexion, $usuarioConexion, $claveConexion, $_SESSION["inst"]."_".$agnoBD);
+	$conexion = $conexionInstancia->conexion($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
 	
 	//Conexion con el Servidor PDO
 	$conexionPDO = $conexionInstancia->conexionPDO($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);

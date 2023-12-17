@@ -1,12 +1,17 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php"); ?>
+include("session-compartida.php");
+$idPaginaInterna = 'DT0241';
 
-<?php
-$consultaDatos = mysqli_query($conexion, "SELECT * FROM academico_grados
-LEFT JOIN academico_grupos ON gru_id='" . $_POST["grupo"] . "'
-WHERE gra_id='" . $_POST["grado"] . "'");
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+require_once("../class/Estudiantes.php");
+
+$consultaDatos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra
+LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id='" . $_POST["grupo"] . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+WHERE gra_id='" . $_POST["grado"] . "' AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
 $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 
@@ -54,30 +59,41 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 
     $filtroMat = '';
     if (!empty($_POST["grado"])) {
-      $filtro .= " AND mat_grado='" . $_POST["grado"] . "'";
+      $filtroMat .= " AND mat_grado='" . $_POST["grado"] . "'";
     }
     if (!empty($_POST["grupo"])) {
-      $filtro .= " AND mat_grupo='" . $_POST["grupo"] . "'";
+      $filtroMat .= " AND mat_grupo='" . $_POST["grupo"] . "'";
     }
 
-    //if($datosUsuarioActual[3]!=5){$filtro .= " AND dr_usuario='".$_SESSION["id"]."'";}
-
-    $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-  INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-  INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-  INNER JOIN academico_matriculas ON mat_id_usuario=dr_estudiante $filtroMat
-  LEFT JOIN academico_grados ON gra_id=mat_grado
-  LEFT JOIN academico_grupos ON gru_id=mat_grupo
-  INNER JOIN usuarios ON uss_id=dr_usuario
-  WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' $filtro
-  ");
+    if($datos['gra_tipo']==GRADO_GRUPAL){
+      $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+      INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
+      INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+      INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id_usuario=dr_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtroMat
+      LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+      INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]} $filtro
+      ");
+    }else{
+      $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+      INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
+      INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+      INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id_usuario=dr_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+      INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_matricula=mat_id AND matcur_id_curso='" . $_POST["grado"] . "'
+      LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+      LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+      INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+      WHERE dr_fecha>='" . $_POST["desde"] . "' AND dr_fecha<='" . $_POST["hasta"] . "' AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]} $filtro
+      ");
+    }
     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
     ?>
 
       <tr style="border-color:<?= $Plataforma->colorDos; ?>;">
         <td><?= $cont; ?></td>
         <td><?= $resultado['dr_fecha']; ?></td>
-        <td><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres']); ?></td>
+        <td><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></td>
         <td><?= $resultado['gra_nombre'] . " " . $resultado['gru_nombre']; ?></td>
         <td><?= $resultado['dcat_nombre']; ?></td>
         <td><?= $resultado['dfal_codigo']; ?></td>
@@ -105,5 +121,6 @@ $datos = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
   </table>
   </center>
 </body>
-<?php include("../compartido/footer-informes.php") ?>;
+<?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>
 </html>

@@ -44,11 +44,15 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["modPadre"])) {
-                                    $filtro .= " AND mod_padre='" . $_GET["modPadre"] . "'";
+                                $modPadre = '';
+                                $estado = '';
+                                if (!empty($_GET["modPadre"])) {
+                                    $modPadre = base64_decode($_GET["modPadre"]);
+                                    $filtro .= " AND mod_padre='" . $modPadre . "'";
                                 }
-                                if (is_numeric($_GET["estado"])) {
-                                    $filtro .= " AND mod_estado='" . $_GET["estado"] . "'";
+                                if (!empty($_GET["estado"])) {
+                                    $estado = base64_decode($_GET["estado"]);
+                                    $filtro .= " AND mod_estado='" . $estado . "'";
                                 }
                             ?>
 
@@ -89,7 +93,7 @@ $Plataforma = new Plataforma;
                                                         <th>Nombre</th>
                                                         <th>Modulo Padre</th>
                                                         <th>Estado</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -123,16 +127,16 @@ $Plataforma = new Plataforma;
                                                             <td><?= $contReg; ?></td>
                                                             <td><?= $resultado['mod_id']; ?></td>
                                                             <td><?= $resultado['mod_nombre']; ?></td>
-                                                            <td><?= $modPadre['mod_nombre']; ?></td>
+                                                            <td><?= $modPadre['mod_nombre'] ?? ""; ?></td>
                                                             <td><?= $estado; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-modulos-editar.php?id=<?= $resultado['mod_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-modulos-editar.php?id=<?= base64_encode($resultado['mod_id']); ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

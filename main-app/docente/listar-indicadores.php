@@ -6,12 +6,12 @@ include("verificar-carga.php");
 include("../compartido/head.php");
 
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -74,23 +74,23 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
             <thead>
                 <tr>
                     <th>#</th>
-                    <th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[50][$datosUsuarioActual[8]];?></th>
-                    <th><?=$frases[52][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                    <th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
                     
                     <?php if($datosCargaActual['car_saberes_indicador']==1){?>
                         <th>Tipo evaluación</th>
                     <?php }?>
                     
-                    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                     $saberes = array("","Saber saber (55%)","Saber hacer (35%)","Saber ser (10%)");
-                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga 
-                    INNER JOIN academico_indicadores ON ind_id=ipc_indicador
-                    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."'");
+                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
+                    WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
                     $contReg = 1; 
                     $porcentajeActual = 0;
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -122,7 +122,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
                                     <?php if($resultado['ipc_creado']==1 and ($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1)){?>
                                         <li><a href="indicadores-editar.php?idR=<?=base64_encode($resultado['ipc_id']);?>">Editar</a></li>
                                 
-                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="guardar.php?get=<?=base64_encode(10);?>&idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['ipc_id'];?>" name="indicadores-eliminar.php?idR=<?=base64_encode($resultado['ipc_id']);?>&idIndicador=<?=base64_encode($resultado['ipc_indicador']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                     <?php } ?>
                                     
                                     <?php if($periodoConsultaActual<$datosCargaActual['car_periodo']){?>

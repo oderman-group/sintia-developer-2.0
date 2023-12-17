@@ -33,7 +33,7 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[336][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[336][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
 						<div class="col-sm-9">
 						    <div class="card card-box">
 						        <div class="card-head">
-						            <header><?=$frases[336][$datosUsuarioActual[8]];?></header>
+						            <header><?=$frases[336][$datosUsuarioActual['uss_idioma']];?></header>
 						        </div>
 						        <div class="card-body " id="bar-parent6">
 
@@ -106,11 +106,7 @@
 
 
 
-						            <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-						                <input type="hidden" name="id" value="27">
-
-						                
-
+						            <form action="../compartido/aceptar-comp-convivencia.php" method="post" enctype="multipart/form-data">
 						                <?php if ($datosEstudianteActual["mat_compromiso_academico"] == 1 AND $datosEstudianteActual["mat_compromiso_convivencia"] == '0') { ?>
 						                    <input type="submit" class="btn btn-primary" value="Aceptar y continuar">&nbsp;
 						                <?php }?>

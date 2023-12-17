@@ -29,7 +29,7 @@
     <?php
 	$idE="";
 	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
+	$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 	//Si la evaluación no tiene clave, lo mandamos de una vez a realizarla.
 	if($evaluacion['eva_clave']==""){
 		echo '<script type="text/javascript">window.location.href="evaluaciones-realizar.php?idE='.$_GET["idE"].'";</script>';
@@ -59,10 +59,10 @@
         <div class="form">
             <img src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>" class="imgroundcorners" />
             <h3><?=$datosUsuarioActual['uss_nombre'];?></h3>
-            <p><?=$frases[151][$datosUsuarioActual[8]];?></p>
-			<input type="password" name="claveE" placeholder="<?=$frases[152][$datosUsuarioActual[8]];?>" required autocomplete="off" autofocus />
-            <button type="submit"><?=$frases[150][$datosUsuarioActual[8]];?></button>
-            <div class="newaccount"><a href="javascript:void(0)"><?=$frases[153][$datosUsuarioActual[8]];?></a>
+            <p><?=$frases[151][$datosUsuarioActual['uss_idioma']];?></p>
+			<input type="password" name="claveE" placeholder="<?=$frases[152][$datosUsuarioActual['uss_idioma']];?>" required autocomplete="off" autofocus />
+            <button type="submit"><?=$frases[150][$datosUsuarioActual['uss_idioma']];?></button>
+            <div class="newaccount"><a href="javascript:void(0)"><?=$frases[153][$datosUsuarioActual['uss_idioma']];?></a>
             </div>
         </div>
     </div>

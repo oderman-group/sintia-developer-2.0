@@ -3,7 +3,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/Estudiantes.php");?>
+<?php require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 
 </head>
 
@@ -48,11 +49,16 @@
                             <?php
                                 $p = 1;
                                 while($p<=$datosCargaActual['gra_periodos']){
-                                    $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."'
+                                    $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                     ");
                                     $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-                                    echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+                                    $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+                                    $porcentaje=25;
+                                    if($numPeriodosCursos>0){
+                                      $porcentaje=$periodosCursos['gvp_valor'];
+                                    }
+                                    echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
                                     $p++;
                                 }
                             ?> 
@@ -63,7 +69,7 @@
                     <tbody>
                         <?php
                         $contReg = 1; 
-                        $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+                        $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                             $colorEstudiante = '#000;';
                             if($resultado['mat_inclusion']==1){$colorEstudiante = 'blue;';}
@@ -80,37 +86,60 @@
                                 $sumaPorcentaje = 0;
                                 $n = 0;
                                 for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-                                $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'
+                                $consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
                                 ");
                                 $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-                                    $decimal = $periodosCursos['gvp_valor']/100;
+                                $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+                                $porcentaje=25;
+                                if($numPeriodosCursos>0){
+                                  $porcentaje=$periodosCursos['gvp_valor'];
+                                }
+                                    $decimal = $porcentaje/100;
                                     
                                 //LAS CALIFICACIONES
-                                $notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado['mat_id']." AND bol_carga=".$cargaConsultaActual." AND bol_periodo=".$i);
+                                $notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 $notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
                                 $numN = mysqli_num_rows($notasConsulta);
                                 if($numN){
                                     $n++;
-                                    $definitiva += $notasResultado[4]*$decimal;
+                                    $definitiva += $notasResultado['bol_nota']*$decimal;
                                     $sumaPorcentaje += $decimal;
                                 }
-                                if(isset($notasResultado) && $notasResultado[4]<$config[5] and $notasResultado[4]!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado[4]>=$config[5]) $color = $config[7];
+                                if(isset($notasResultado) && $notasResultado['bol_nota']<$config[5] and $notasResultado['bol_nota']!="")$color = $config[6]; elseif(isset($notasResultado) && $notasResultado['bol_nota']>=$config[5]) $color = $config[7];
+
+                                $notasResultadoFinal="";
+                                $notasAnteriorFinal="";
+                                $atributosA='';
+                                if(!empty($notasResultado)){
+                                    $notasResultadoFinal=$notasResultado['bol_nota'];
+                                    $notasAnteriorFinal=$notasResultado['bol_nota_anterior'];
+                                    $atributosA='style="text-decoration:underline; color:'.$color.';"';
+                                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                        $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado['bol_nota'].'" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+                
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
+                                        $notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                
+                                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota_anterior']);
+                                        $notasAnteriorFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                    }
+                                }
                                     
-                                if(isset($notasResultado) && $notasResultado[5]==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasResultado['bol_nota_anterior'].')</span>';}
-                                elseif(isset($notasResultado) && $notasResultado[5]==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasResultado['bol_nota_anterior'].')</span>';}
-                                    elseif(isset($notasResultado) && $notasResultado[5]==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasResultado['bol_nota_anterior'].')</span>';}
-                                elseif(isset($notasResultado) && $notasResultado[5]==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
+                                if(isset($notasResultado) && $notasResultado['bol_tipo']==2) {$tipo = '<span style="color:red; font-size:9px;">Rec. Periodo('.$notasAnteriorFinal.')</span>';}
+                                elseif(isset($notasResultado) && $notasResultado['bol_tipo']==3) {$tipo = '<span style="color:red; font-size:9px;">Rec. Indicador('.$notasAnteriorFinal.')</span>';}
+                                    elseif(isset($notasResultado) && $notasResultado['bol_tipo']==4) {$tipo = '<span style="color:red; font-size:9px;">Directiva('.$notasAnteriorFinal.')</span>';}
+                                elseif(isset($notasResultado) && $notasResultado['bol_tipo']==1) {$tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';} 
                                     else $tipo='';
 
 
                             ?>
                                 <td style="text-align:center;">
-                                    <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$color;?>;"><?php if(isset($notasResultado)){ echo $notasResultado[4];}?></a><br><?=$tipo;?><br>
+                                    <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$notasResultadoFinal?></a><br><?=$tipo;?><br>
 
-                                    <?php if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5]){?>
-                                        <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado[4];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
-                                        <span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado[6])) echo $notasResultado[6];?></span>
+                                    <?php if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5]){?>
+                                        <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
+                                        <span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado['bol_observaciones'])) echo $notasResultado['bol_observaciones'];?></span>
                                     <?php }?>
 
                                 </td>
@@ -119,8 +148,8 @@
                                 //CALCULAR NOTA MINIMA EN EL ULTIMO PERIODO PARA APROBAR LA MATERIA
                                     //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
                                     if($config[2]==$datosCargaActual['gra_periodos']){
-                                    $consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."'");
+                                    $consultaPeriodosCursos2=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+                                    WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$datosCargaActual['gra_periodos']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                         $periodosCursos2 = mysqli_fetch_array($consultaPeriodosCursos2, MYSQLI_BOTH);
                                         $decimal2 = $periodosCursos2['gvp_valor']/100;
                                         
@@ -141,7 +170,7 @@
                                     $definitiva = ($definitiva / $sumaPorcentaje);
                                 }
                                 
-                                $consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$resultado['mat_id']." AND niv_id_asg=".$cargaConsultaActual);
+                                $consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                 
                                 $numN = mysqli_num_rows($consultaN);
                                 $rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -150,10 +179,19 @@
                                         $definitiva = round(($definitiva), $config['conf_decimales_notas']);
                                         $tN = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';
                                 }else{
-                                    $definitiva = $rN[3];
+                                    $definitiva = $rN['niv_definitiva'];
                                     $tN = '<span style="color:red; font-size:9px;">'.$frases[124][$datosUsuarioActual['uss_idioma']].'</span>';
                                 }
                                 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];
+
+                                $definitivaFinal=$definitiva;
+                                $atributosA='style="text-decoration:underline; color:'.$color.';"';
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';
+            
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                                    $definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
                                 
                                 
                             ?>
@@ -161,11 +199,11 @@
                             <td style="text-align:center; color:<?=$colorFaltante;?>; font-weight:bold;"><?=$notaMinima;?></td>
 
                             <td style="text-align:center; color:<?=$color;?>;">
-                                <?=$definitiva."<br>".$tN;?><br>
+                                <?=$definitivaFinal."<br>".$tN;?><br>
                                 <?php
                                 if($n==$datosCargaActual['gra_periodos'] and $definitiva<$config[5]) $e = ''; else $e = 'disabled';
                                 ?>
-                                <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado[0];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
+                                <input size="5" name="<?=$i?>-<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
                             </td>
                         </tr>
                         <?php

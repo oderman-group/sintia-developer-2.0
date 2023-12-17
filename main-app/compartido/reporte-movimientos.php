@@ -1,7 +1,12 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0240';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/UsuariosPadre.php");
 ?>
 <head>
@@ -27,29 +32,25 @@ require_once("../class/UsuariosPadre.php");
                                         <th>Observaciones</th>
                                         <th>Cerrado</th>
   </tr>
-  <?php
-									 $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_anulado=0");
-                   $cont=0;
-									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                    $consultaU=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[6]."'");
-										 $u = mysqli_fetch_array($consultaU, MYSQLI_BOTH);
-                     $consultaCerrado=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[11]."'");
-										 $cerrado = mysqli_fetch_array($consultaCerrado, MYSQLI_BOTH);
-										 $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
-										 switch($resultado[4]){case 1: $tipo = "Ingreso"; break; case 2: $tipo = "Egreso"; break; case 3: $tipo = "Cuenta por cobrar"; break; case 4: $tipo = "Cuenta por pagar"; break;}
-										 switch($resultado[8]){case 1: $forma = "Efectivo"; break; case 2: $forma = "Cheque"; break; case 3: $forma = "T. D&eacute;bito"; break; case 4: $forma = "T. Cr&eacute;dito"; break; case 5: $forma = "N/A"; break; default: $forma = "N/A"; break;}
-									 ?>
+                  <?php
+									$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_anulado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                  $cont=0;
+									while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                    $u = UsuariosPadre::sesionUsuario($resultado['fcu_usuario']);
+                    $cerrado = UsuariosPadre::sesionUsuario($resultado['fcu_cerrado_usuario']);
+                    $nombreCompleto = UsuariosPadre::nombreCompletoDelUsuario($u);
+									?>
   <tr style="font-size:13px;">
-      <td><?=$resultado[0];?></td>
+      <td><?=$resultado['fcu_id'];?></td>
                                         <td><?=$nombreCompleto;?></td>
-                                        <td><?=$resultado[1];?></td>
-                                        <td><?=$resultado[2];?></td>
-                                        <td>$<?=number_format($resultado[3],2,",",".");?></td>
-                                        <td><?=$tipo;?></td>
-                                        <td><?=$forma;?></td>
+                                        <td><?=$resultado['fcu_fecha'];?></td>
+                                        <td><?=$resultado['fcu_detalle'];?></td>
+                                        <td>$<?=number_format($resultado['fcu_valor'],2,",",".");?></td>
+                                        <td><?=$tipoEstadoFinanzas[$resultado['fcu_tipo']];?></td>
+                                        <td><?=$formasPagoFinanzas[$resultado['fcu_forma_pago']] ?? "N/A";?></td>
                                         
-                                        <td><?=$resultado[5];?></td>
-                                        <td><?=$resultado[10];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado[4]);?></td>
+                                        <td><?=$resultado['fcu_observaciones'];?></td>
+                                        <td><?=$resultado['fcu_cerrado'];?> <br> <?php if(isset($cerrado[4])) echo strtoupper($cerrado['uss_nombre']);?></td>
 </tr>
   <?php
   $cont++;
@@ -63,5 +64,6 @@ require_once("../class/UsuariosPadre.php");
      </div>
 </body>
 </html>
-
-
+<?php
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>

@@ -19,17 +19,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Curso</label>
                 <div class="col-sm-10">
-                    <select class="form-control  select2" name="curso">
+                    <select class="form-control  select2" style="width: 100%;" name="curso">
                         <option value=""></option>
                         <?php
                         try {
-                            $c = mysqli_query($conexion, "SELECT * FROM academico_grados");
+                            $c = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
                         while ($r = mysqli_fetch_array($c, MYSQLI_BOTH)) {
                         ?>
-                            <option value="<?php echo $r[0]; ?>"><?php echo $r[2]; ?></option>
+                            <option value="<?php echo $r['gra_id']; ?>"><?php echo $r['gra_nombre']; ?></option>
                         <?php
                         }
                         ?>
@@ -40,17 +40,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Grupos</label>
                 <div class="col-sm-10">
-                    <select class="form-control  select2" name="grupo">
+                    <select class="form-control  select2" style="width: 100%;" name="grupo">
                         <option value=""></option>
                         <?php
                         try {
-                            $c = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                            $c = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
                         while ($r = mysqli_fetch_array($c, MYSQLI_BOTH)) {
                         ?>
-                            <option value="<?php echo $r[0]; ?>"><?php echo $r[2]; ?></option>
+                            <option value="<?php echo $r['gru_id']; ?>"><?php echo $r['gru_nombre']; ?></option>
                         <?php
                         }
                         ?>
@@ -58,7 +58,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 </div>
             </div>
 
-            <input type="submit" class="btn btn-success" value="Consultar Informe" name="consultas">
+            <input type="submit" class="btn btn-info" value="Consultar Informe" name="consultas">
         </form>
     </div>
 </div>

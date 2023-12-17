@@ -19,11 +19,22 @@
 		                                    <div class="inbox-body no-pad">
 		                                        <div class="mail-list">
 		                                            <div class="compose-mail">
-		                                                <form method="post" action="../compartido/guardar.php">
-															<input type="hidden" name="id" value="7">
+		                                                <form method="post" action="../compartido/mensajes-enviar.php">
 															<label>Para:</label>
 		                                                    <div class="form-group">
 																<select id="select_usuario" class="form-control select2-multiple" multiple name="para[]" required>
+																	<?php
+																		if(!empty($_GET['para'])){
+																			$filtro=" AND uss_id='".base64_decode($_GET['para'])."'";
+																			$lista=UsuariosPadre::obtenerTodosLosDatosDeUsuarios($filtro);
+																			while($dato=mysqli_fetch_array($lista, MYSQLI_BOTH)){
+																				$nombre=UsuariosPadre::nombreCompletoDelUsuario($dato)." - ".$dato["pes_nombre"];
+																	?>
+																		<option value="<?=$dato["uss_id"];?>" selected><?=$nombre;?></option>
+																	<?php
+																			}
+																		}
+																	?>
 																</select>
 		                                                    </div>
 															<script>
@@ -61,7 +72,7 @@
 																	<br>
 																	--- --- ---
 																	<p>    Cordialmente, </p>
-																	<small><b><?=strtoupper($datosUsuarioActual[4].' '.$datosUsuarioActual["uss_nombre2"].' '.$datosUsuarioActual["uss_apellido1"].' '.$datosUsuarioActual["uss_apellido2"]);?></b></small>
+																	<small><b><?=strtoupper($datosUsuarioActual['uss_nombre'].' '.$datosUsuarioActual["uss_nombre2"].' '.$datosUsuarioActual["uss_apellido1"].' '.$datosUsuarioActual["uss_apellido2"]);?></b></small>
 																</textarea>
 		                                                    </div>
 															

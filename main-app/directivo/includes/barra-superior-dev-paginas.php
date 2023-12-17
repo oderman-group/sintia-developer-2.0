@@ -37,7 +37,7 @@ if (!empty($_GET['busqueda'])) {
                         $estiloResaltado = '';
                         if ($datosFiltro['pes_id'] == $ussDev) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $datosFiltro['pes_id']; ?>&modulo=<?= $moduloDev; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['pes_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= base64_encode($datosFiltro['pes_id']); ?>&modulo=<?= base64_encode($moduloDev); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['pes_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -59,7 +59,7 @@ if (!empty($_GET['busqueda'])) {
                         $estiloResaltado = '';
                         if ($datosFiltro['mod_id'] == $moduloDev) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= $ussDev; ?>&modulo=<?= $datosFiltro['mod_id']; ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?uss=<?= base64_encode($ussDev); ?>&modulo=<?= base64_encode($datosFiltro['mod_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $datosFiltro['mod_nombre']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -68,18 +68,8 @@ if (!empty($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <?php
-                if (!empty($ussDev)){
-            ?>
-                <input type="hidden" name="uss" value="<?= $ussDev; ?>"/>
-            <?php
-                }
-                if (!empty($moduloDev)){
-            ?>
-                <input type="hidden" name="modulo" value="<?= $moduloDev; ?>"/>
-            <?php
-                }
-            ?>
+            <input type="hidden" name="uss" value="<?= $ussDev; ?>"/>
+            <input type="hidden" name="modulo" value="<?= $moduloDev; ?>"/>
             <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>

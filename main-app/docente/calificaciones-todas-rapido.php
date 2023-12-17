@@ -5,58 +5,19 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1),
-(SELECT count(*) FROM academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1)
+(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
+WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
 ");
 $valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
 $porcentajeRestante = 100 - $valores[0];
 include("../compartido/sintia-funciones-js.php");
 ?>
 	<title>Resumen de notas</title>
-<script type="application/javascript">
-//CALIFICACIONES	
-function notas(enviada){
-	
-  const idSplit = enviada.id.split('-');
-  var codNota = enviada.name;	 
-  var nota = enviada.value;
-  var codEst = idSplit[0];
-  var nombreEst = enviada.alt;
-  var operacion = enviada.title;
-  var notaAnterior = enviada.step;
- 
-if(operacion == 1 || operacion == 3){
-	if (alertValidarNota(nota)) {
-		return false;
-	}
-}
-
-if(operacion == 1) {
-	aplicarColorNota(nota, enviada.id);
-}
-
-	  
-$('#respRCT').empty().hide().html("Guardando información, espere por favor...").show(1);
-	datos = "nota="+(nota)+
-			"&codNota="+(codNota)+
-			"&operacion="+(operacion)+
-			"&nombreEst="+(nombreEst)+
-			"&notaAnterior="+(notaAnterior)+
-			"&codEst="+(codEst);
-		   $.ajax({
-			   type: "POST",
-			   url: "ajax-calificaciones-registrar.php",
-			   data: datos,
-			   success: function(data){
-			   	$('#respRCT').empty().hide().html(data).show(1);
-		   	   }
-		  });
-}
-</script>
 
 
 <style type="text/css">
@@ -115,32 +76,32 @@ th {
                                                 <thead>
 												  <tr>
 													<th style="width: 50px;">#</th>
-													<th style="width: 400px;"><?=$frases[61][$datosUsuarioActual[8]];?></th>
+													<th style="width: 400px;"><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 													<?php
-													 $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
+													 $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
-														echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR='.base64_encode($rA[0]).'" title="'.$rA[1].'">'.$rA[0].'<br>
-														'.$rA[1].'<br>
-														('.$rA[3].'%)</a><br>
-														<a href="#" name="guardar.php?get='.base64_encode(12).'&idR='.base64_encode($rA[0]).'&idIndicador='.base64_encode($rA['act_id_tipo']).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'" onClick="deseaEliminar(this)" '.$deleteOculto.'><i class="fa fa-times"></i></a><br>
-														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="3" name="'.$rA[0].'" onChange="notas(this)" '.$habilitado.'>
+														echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR='.base64_encode($rA['act_id']).'" title="'.$rA['act_descripcion'].'">'.$rA['act_id'].'<br>
+														'.$rA['act_descripcion'].'<br>
+														('.$rA['act_valor'].'%)</a><br>
+														<a href="#" name="calificaciones-eliminar.php?idR='.base64_encode($rA['act_id']).'&idIndicador='.base64_encode($rA['act_id_tipo']).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'" onClick="deseaEliminar(this)" '.$deleteOculto.'><i class="fa fa-times"></i></a><br>
+														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" name="'.$rA['act_id'].'" onChange="notasMasiva(this)" '.$habilitado.'>
 														</th>';
 													 }
 													?>
 													<th style="text-align:center; width:60px;">%</th>
-													<th style="text-align:center; width:60px;"><?=$frases[118][$datosUsuarioActual[8]];?></th>
+													<th style="text-align:center; width:60px;"><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
 												  </tr>
 												</thead>
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;
 														$periodo = $periodoConsultaActual;
-														$estudiante = $resultado[0];
+														$estudiante = $resultado['mat_id'];
 														include("../definitivas.php");
 														
 														$colorEstudiante = '#000;';
@@ -157,26 +118,35 @@ th {
 														</td>
 
 														<?php
-														 $cA = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."'");
+														 $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
 															//LAS CALIFICACIONES
-															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_estudiante=".$resultado[0]." AND cal_id_actividad=".$rA[0]);
+															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$rA['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
 															
 															$arrayEnviar = [
 																"tipo"=>5, 
 																"descripcionTipo"=>"Para ocultar la X y limpiar valor, cuando son diferentes actividades.", 
-																"idInput"=>$resultado[0]."-".$rA[0]
+																"idInput"=>$resultado['mat_id']."-".$rA['act_id']
 															];
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
+
+															if(!empty($notasResultado) && $notasResultado['cal_nota']<$config[5]) $colorNota= $config[6]; elseif(!empty($notasResultado) && $notasResultado['cal_nota']>=$config[5]) $colorNota= $config[7]; else $colorNota= "black";
+                        
+															$estiloNotaFinal="";
+															if(!empty($notasResultado) && $config['conf_forma_mostrar_notas'] == CUALITATIVA){		
+																$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['cal_nota']);
+																$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+															}
 														?>
 															<td style="text-align:center;">
-															<input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0]."-".$rA[0];?>" value="<?php if(!empty($notasResultado[3])){ echo $notasResultado[3];}?>" title="1" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?php if($notasResultado[3]<$config[5] and $notasResultado[3]!="")echo $config[6]; elseif($notasResultado[3]>=$config[5]) echo $config[7]; else echo "black";?>;" <?=$habilitado;?>>
-															<?php if(!empty($notasResultado[3])){?>
-																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="guardar.php?get=<?=base64_encode(21);?>&id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
-																<?php if($notasResultado[3]<$config[5]){?>
-																	<br><br><input size="5" maxlength="3" name="<?=$rA[0]?>" id="<?=$resultado[0];?>" title="4" alt="<?=$resultado['mat_nombres'];?>" step="<?=$notasResultado[3];?>" onChange="notas(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
+															<input size="5" maxlength="3" step="<?=$rA['act_id'];?>" name="<?=$notasResultado['cal_nota']?>" id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" title="<?=$rA['act_id'];?>" value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
+                        									<br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
+															<?php if(!empty($notasResultado['cal_nota'])){?>
+																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
+																<?php if($notasResultado['cal_nota']<$config[5]){?>
+																	<br><br><input size="5" maxlength="3" id="<?=$resultado['mat_id'];?>" title="<?=$rA['act_id'];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado['cal_nota'];?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
 																<?php }?>
 															<?php }?>
 
@@ -184,10 +154,19 @@ th {
 														<?php		
 														 }
 														if($definitiva<$config[5] and $definitiva!="") $colorDef = $config[6]; elseif($definitiva>=$config[5]) $colorDef = $config[7]; else $colorDef = "black";
+
+														$definitivaFinal=$definitiva;
+														$atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
+														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
+									
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+															$definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+														}
 														?>
 
 														<td style="text-align:center;"><?=$porcentajeActual;?></td>
-                                        				<td style="color:<?php if($definitiva<$config[5] and $definitiva!="")echo $config[6]; elseif($definitiva>=$config[5]) echo $config[7]; else echo "black";?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$colorDef;?>;"><?=$definitiva;?></a></td>
+                                        				<td style="color:<?php if($definitiva<$config[5] and $definitiva!="")echo $config[6]; elseif($definitiva>=$config[5]) echo $config[7]; else echo "black";?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$definitivaFinal;?></a></td>
                                                     </tr>
 													<?php
 														$contReg++;
@@ -202,7 +181,17 @@ th {
 <!-- notifications -->
 <script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js" ></script>
 <script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js" ></script>
-    <!-- end js include path -->
+<script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+<!-- bootstrap -->
+<script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+<!-- end js include path -->
+<script>
+		$(function () {
+			$('[data-toggle="popover"]').popover();
+		});
+
+		$('.popover-dismiss').popover({trigger: 'focus'});
+	</script>
 </body>
 
 </html>

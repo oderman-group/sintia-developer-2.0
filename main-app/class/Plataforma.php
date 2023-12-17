@@ -7,6 +7,31 @@ class Plataforma {
     public $colorTres = '#56ffe4';
     public $logo      = 'https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png';
 
+    /**
+     * Muestra el contenido de un modal de términos y políticas.
+     *
+     * Recupera y devuelve la información de un modal de términos y políticas específico.
+     *
+     * @global resource $conexion - Recurso de conexión a la base de datos.
+     * @global string $baseDatosServicios - Nombre de la base de datos de servicios.
+     *
+     * @param int $i - Identificador del modal de términos y políticas.
+     *
+     * @return array - Devuelve un array con la información del modal de términos y políticas.
+     *
+     * @example
+     * ```php
+     * // Ejemplo de uso para mostrar el contenido de un modal de términos y políticas
+     * $idModal = 1;
+     * $contenidoModal = mostrarModalTerminos($idModal);
+     * if (!empty($contenidoModal)) {
+     *     // Mostrar el contenido del modal
+     *     echo $contenidoModal['ttp_contenido'];
+     * } else {
+     *     // Mostrar mensaje o realizar acciones cuando no se encuentra el modal
+     * }
+     * ```
+     */
     public static function mostrarModalTerminos($i = 0)
     {
 
@@ -69,7 +94,7 @@ class Plataforma {
         $config = [];
 
         try {
-            $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+            $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_id_institucion='".$_SESSION["idInstitucion"]."' AND conf_agno='".$_SESSION["bd"]."'");
             $config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

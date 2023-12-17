@@ -1,16 +1,15 @@
 <?php
 include('session.php');
+require_once '../class/UsuariosPadre.php';
 if(isset($_POST['buscar']))
 { 
 	$doc = $_POST['uss_usuario'];
 	$valores = array();
 	$valores['existe'] = "0"; 
 
-	try{
-		$resultados = mysqli_query($conexion,"SELECT * FROM usuarios WHERE uss_usuario = '$doc' or uss_documento = '$doc'");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+
+	$resultados = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario = '$doc' or uss_documento = '$doc'");
+
 	while($consulta = mysqli_fetch_array($resultados))
 	{
 		$valores['existe'] = "1"; 

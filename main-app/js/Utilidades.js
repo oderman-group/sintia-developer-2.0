@@ -12,7 +12,7 @@ $(function () {
  */
 function fetchGeneral(url, title, method='POST', paramsJSON=null) {
 
-    document.getElementById("overlay").style.display = "block";
+    document.getElementById("overlay").style.display = "flex";
     
     const formData = new FormData();
 
@@ -165,4 +165,91 @@ function limitarSeleccion(select) {
         // Marcar solo la última opción seleccionada
         opcionesSeleccionadas[opcionesSeleccionadas.length - 1].selected = true;
     }
+}
+
+function verCuentaBancaria() {
+    document.getElementById("cuentaBancaria").innerHTML = `
+    Cuenta de ahorros Bancolombia número <b>431-565882-54</b>
+    `;
+}
+
+function cambiarPosicion(idCarga, posicionNueva, docente) {
+	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva+'&docente='+docente, {
+		method: 'GET'
+	})
+	.then(response => response.text()) // Convertir la respuesta a texto
+	.then(data => {
+
+        if(data == 1) {
+            $.toast({
+
+                heading: 'Proceso completado', 
+                text: 'Se ha guardado la nueva posición '+posicionNueva+' para la carga '+idCarga, 
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg:'#26c281', 
+                icon: 'success', 
+                hideAfter: 5000, 
+                stack: 6
+
+            });
+        }
+	})
+	.catch(error => {
+		// Manejar errores
+		console.error('Error:', error);
+	});
+}
+
+/**
+ * Obtiene datos de la URL especificada y muestra un mensaje de éxito usando $.toast.
+ * @param {string} url - La URL para obtener los datos.
+ */
+function fetchSoloAccion(url) {
+
+    fetch(url, {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        $.toast({
+
+			heading: 'Acción exitosa', 
+			text: 'La acción fue realizada con éxito', 
+			position: 'bottom-right',
+            showHideTransition: 'slide',
+			loaderBg:'#26c281', 
+			icon: 'success', 
+			hideAfter: 5000, 
+			stack: 6
+
+		});
+    })
+    .catch(error => {
+        // Manejar errores
+        console.error('Error:', error);
+    });
+
+}
+
+/**
+ * Cambia el estado de un registro y actualiza la interfaz de usuario.
+ *
+ * @param {HTMLElement} data - Elemento HTML que contiene atributos de datos necesarios.
+ */
+function cambiarEstados (data) {
+    const estados = {
+        1: 'Pendiente',
+        2: 'En proceso',
+        3: 'Aceptada',
+        4: 'Rechazada'
+    };
+    var idRegistro = data.getAttribute('data-id-registro');
+    var idEstado = data.getAttribute('data-id-estado');
+    var idRecurso = data.getAttribute('data-id-recurso');
+    var idUsuario = data.getAttribute('data-id-usuario');
+    
+    document.getElementById('estado'+idRegistro).innerHTML= estados[idEstado];
+    var url = 'solicitudes-estado-actualizar.php?idRegistro='+idRegistro+'&estado='+idEstado+'&idUsuario='+idUsuario;
+    fetchSoloAccion(url);
 }

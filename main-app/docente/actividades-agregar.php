@@ -33,25 +33,23 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[112][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[112][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="actividades.php" onClick="deseaRegresar(this)"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[112][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="actividades.php" onClick="deseaRegresar(this)"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[112][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
 						<div class="col-sm-3">
 
-
-						<?php include("info-carga-actual.php");?>
-
 							
                             <div class="panel">
-								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 <div class="panel-body">
 									<p><b>Banco de datos:</b> Tienes la opción de usar información que ya existe y así no tengas que escribir todo de nuevo. <mark>Sólo debes usar una de las 2 alternativas:</mark> o llenas la información desde cero o escoges la existente. Si usas las 2, <mark>el banco de datos tendrá prioridad</mark> y esta será lo que el sistema use.<br>
 									<mark> - MIO :</mark> Significa que la información fue creada por ti.
@@ -69,12 +67,11 @@
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form id="form_subir" name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
-										<input type="hidden" value="21" name="id">
+									<form id="form_subir" name="formularioGuardar" action="actividades-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
@@ -143,7 +140,7 @@
 												<div class="input-group spinner col-sm-10">
 													<label class="switchToggle">
 														<input type="checkbox" name="compartir" value="1" checked>
-														<span class="slider red round"></span>
+														<span class="slider sintia round"></span>
 													</label>
 												</div>
 											 </div>
@@ -158,8 +155,8 @@
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas 
-												WHERE tar_id_carga='".$cargaConsultaActual."' 
+												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
+												WHERE tar_id_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
@@ -174,9 +171,12 @@
                                             </div>
                                         </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-
 										<a href="#" name="actividades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<button type="submit" class="btn  btn-info">
+											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										</button>
+
+										
 										</form>
 										
 										<script>
@@ -205,16 +205,23 @@
 
 												peticion.addEventListener("load", () => {
 													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
-													
+
+													if (peticion.status >= 200 && peticion.status < 300) {
+														var respuesta = peticion.responseText;
+														console.log(respuesta); 
+													} else {
+														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+													}
+
 													setTimeout(redirect(), 2000);
 													
 													function redirect(){
-														location.href='actividades.php';
+														location.href='actividades.php?success=SC_DT_1&id='+respuesta;
 													}
 
 												});
 
-												peticion.open("POST", "guardar.php");
+												peticion.open("POST", "actividades-guardar.php");
 												peticion.send(new FormData(form));
 
 											}

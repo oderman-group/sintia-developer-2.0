@@ -73,7 +73,7 @@ $Plataforma = new Plataforma;
                                                         <th>Responsable</th>
                                                         <th>Institucion</th>
                                                         <th>Estado</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -99,8 +99,8 @@ $Plataforma = new Plataforma;
                                                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                                             $responsable='';
                                                             if(!empty($resultado['emp_usuario'])){
-                                                                $bd=$resultado['ins_bd'].'_'.date('Y');
-                                                                $consultaResponsable = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$bd.".usuarios WHERE uss_id='" . $resultado['emp_usuario'] . "'"));
+                                                                $year=date('Y');
+                                                                $consultaResponsable = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='" . $resultado['emp_usuario'] . "' AND institucion={$resultado['ins_id']} AND year={$year}"));
                                                                 $responsable=UsuariosPadre::nombreCompletoDelUsuario($consultaResponsable);
                                                             }
                                                             $estado='Activo';
@@ -119,13 +119,13 @@ $Plataforma = new Plataforma;
                                                             <td><?= $estado; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="mps-empresas-aditar.php?idR=<?= $resultado['emp_id']; ?>">Editar</a></li>
-                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['emp_id']; ?>" name="mps-empresas-eliminar.php?idR=<?= $resultado['emp_id']; ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                                                        <li><a href="mps-empresas-aditar.php?idR=<?= base64_encode($resultado['emp_id']); ?>">Editar</a></li>
+                                                                        <li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['emp_id']; ?>" name="mps-empresas-eliminar.php?idR=<?= base64_encode($resultado['emp_id']); ?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

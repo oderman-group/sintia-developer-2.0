@@ -10,7 +10,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas WHERE tar_id='".$idR."' AND tar_estado=1");
+$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idR."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
@@ -37,7 +37,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="actividades.php"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$datosConsulta['tar_titulo'];?></li>
                             </ol>
                         </div>
@@ -59,11 +59,11 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 												</div>
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$datosConsulta['tar_fecha_disponible'];?></div>
 													</li>
 													<li class="list-group-item">
-														<b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$datosConsulta['tar_fecha_entrega'];?></div>
 													</li>
 												</ul>
@@ -77,9 +77,9 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<header class="panel-heading panel-heading-purple"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_tareas
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
 											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$idR."' 
-											AND tar_estado=1
+											AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY tar_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
@@ -122,7 +122,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Enviada</th>
 														<th>Hace</th>
 														<th>Descargar</th>
@@ -131,11 +131,11 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM academico_actividad_tareas_entregas 
-														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$idR."'");
+														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
+														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														$numEntregas=mysqli_num_rows($consultaDatos1);
 														if ($numEntregas>0){
 															$datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);

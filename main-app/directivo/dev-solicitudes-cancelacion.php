@@ -68,7 +68,7 @@ include("../compartido/head.php");
                                                         <th>Institucion</th>
                                                         <th>Usuario</th>
                                                         <th>Estado</th>
-                                                        <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual[8]]; ?> </th>
+                                                        <th  style="width:10%;"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?> </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -85,12 +85,12 @@ include("../compartido/head.php");
                                                             <td><?= $resultado['solcan_estado']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-solicitudes-cancelacion-detalle.php?id=<?= $resultado['solcan_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-solicitudes-cancelacion-detalle.php?id=<?= base64_encode($resultado['solcan_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

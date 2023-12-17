@@ -69,22 +69,22 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Categoría</th>
 														<th>Faltas</th>
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
-														    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php	
                                                     try{												
-													    $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_categorias");
+													    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_categorias WHERE dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                         try{
-                                                            $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM disciplina_faltas
-                                                            WHERE dfal_id_categoria='".$resultado['dcat_id']."'");
+                                                            $consultaNumFaltas=mysqli_query($conexion, "SELECT COUNT(dfal_id) FROM ".BD_DISCIPLINA.".disciplina_faltas
+                                                            WHERE dfal_id_categoria='".$resultado['dcat_id']."' AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
@@ -106,17 +106,17 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                             <td>
                                                                 <?php if(Modulos::validarSubRol(['DT0070', 'DT0159'])) {?>
                                                                     <div class="btn-group">
-                                                                        <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                        <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
                                                                         <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                             <i class="fa fa-angle-down"></i>
                                                                         </button>
                                                                         <ul class="dropdown-menu" role="menu">
                                                                             <?php if(Modulos::validarSubRol(['DT0070'])) {?>
-                                                                                <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+                                                                                <li><a href="disciplina-categorias-editar.php?idR=<?=base64_encode($resultado['dcat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                             <?php }?>
                                                                             
                                                                             <?php if(Modulos::validarSubRol(['DT0159'])) {?>
-                                                                                <li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li>
+                                                                                <li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Desea eliminar este registro?','question','disciplina-categoria-eliminar.php?id=<?=base64_encode($resultado['dcat_id']);?>')">Eliminar</a></li>
                                                                             <?php }?>
                                                                         </ul>
                                                                     </div>

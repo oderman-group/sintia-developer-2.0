@@ -8,7 +8,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 <div class="card card-box">
     <div class="card-head">
-        <header><?= $frases[249][$datosUsuarioActual[8]]; ?></header>
+        <header><?= $frases[249][$datosUsuarioActual['uss_idioma']]; ?></header>
     </div>
     <div class="card-body " id="bar-parent6">
         <form class="form-horizontal" action="../compartido/reporte-disciplina-sacar.php" method="post" enctype="multipart/form-data" target="_blank">
@@ -16,17 +16,16 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 
 
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?= $frases[26][$datosUsuarioActual[8]]; ?></label>
+                <label class="col-sm-2 control-label"><?= $frases[26][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
                     <?php
                     try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-                                                    WHERE gra_estado=1");
+                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     } catch (Exception $e) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grado" required>
+                    <select class="form-control  select2" style="width: 100%;" name="grado" required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -38,16 +37,16 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?= $frases[250][$datosUsuarioActual[8]]; ?></label>
+                <label class="col-sm-2 control-label"><?= $frases[250][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
                     <?php
                     try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     } catch (Exception $e) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="grupo" required>
+                    <select class="form-control  select2" style="width: 100%;" name="grupo" required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -79,18 +78,18 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <hr>
             <h4 style="color: darkblue;">Filtros Opcionales</h4>
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?= $frases[55][$datosUsuarioActual[8]]; ?></label>
+                <label class="col-sm-2 control-label"><?= $frases[55][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
                     <?php
                     try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas 
-                                                    INNER JOIN usuarios ON uss_id=mat_id_usuario
-                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 ORDER BY mat_primer_apellido");
+                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+                                                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} ORDER BY mat_primer_apellido");
                     } catch (Exception $e) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" name="est">
+                    <select class="form-control  select2" style="width: 100%;" name="est">
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -102,14 +101,15 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?= $frases[248][$datosUsuarioActual[8]]; ?></label>
+                <label class="col-sm-2 control-label"><?= $frases[248][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
-                    <select name="falta" class="form-control select2">
+                    <select name="falta" class="form-control select2" style="width: 100%;">
                         <option value="">Seleccione una opción</option>
                         <?php
                         try {
-                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-                                                    INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria");
+                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+                                                    INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+                                                    WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
@@ -123,18 +123,13 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 
 
             <div class="form-group row">
-                <label class="col-sm-2 control-label"><?= $frases[75][$datosUsuarioActual[8]]; ?></label>
+                <label class="col-sm-2 control-label"><?= $frases[75][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
                     <?php
-                    try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-                                                        WHERE (uss_tipo=2 OR uss_tipo=5)
-                                                        ORDER BY uss_tipo, uss_nombre");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
+                    $datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo = ".TIPO_DIRECTIVO.")
+                    ORDER BY uss_tipo, uss_nombre");
                     ?>
-                    <select class="form-control  select2" name="usuario">
+                    <select class="form-control  select2" style="width: 100%;" name="usuario">
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {

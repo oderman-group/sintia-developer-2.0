@@ -9,24 +9,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."'");
+    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-
-$disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion()){
-	$disabledPermiso = "disabled";
-}
-
-if($resultado['fcu_anulado'] == 1) {
-    $disabledPermiso = "disabled";
-    echo '<script>
-    var idBtn = "btnEditarMovimientos";
-    ejecutarOtrasFunciones(idBtn);
-    </script>';
-}
 ?>
 
 	<!--bootstrap -->
@@ -61,7 +48,7 @@ if($resultado['fcu_anulado'] == 1) {
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Movimientos</li>
                             </ol>
                         </div>
@@ -72,7 +59,7 @@ if($resultado['fcu_anulado'] == 1) {
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -98,14 +85,14 @@ if($resultado['fcu_anulado'] == 1) {
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Valor</label>
 													<div class="col-sm-6">
-														<input type="number" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
+														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required>
 													</div>
 											</div>
 										
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
@@ -119,7 +106,7 @@ if($resultado['fcu_anulado'] == 1) {
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Anulado</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="anulado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
@@ -131,7 +118,7 @@ if($resultado['fcu_anulado'] == 1) {
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
@@ -142,7 +129,7 @@ if($resultado['fcu_anulado'] == 1) {
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($resultado['fcu_forma_pago']==1){ echo "selected";}?>>Efectivo</option>
@@ -160,16 +147,20 @@ if($resultado['fcu_anulado'] == 1) {
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
+                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
                                                     INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-                                                    WHERE uss_id='".$resultado['fcu_usuario']."'");
+                                                    WHERE uss_id='".$resultado['fcu_usuario']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
-                                                $resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH);
 												?>
-                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
-                                                    <option value="<?=$resultadosDatos[0];?>" selected><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+                                                <select class="form-control  select2" name="usuario" required>
+                                                    <option value="">Seleccione una opción</option>
+													<?php
+													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
+													?>
+                                                    	<option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+													<?php }?>
                                                 </select>
                                             </div>
                                         </div>
@@ -197,16 +188,6 @@ if($resultado['fcu_anulado'] == 1) {
                                                 });
                                             });
                                         </script>
-
-											<div class="form-group row">
-												<label class="col-sm-2 control-label">Notificar al usuario</label>
-												<div class="input-group spinner col-sm-10">
-													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
-														<span class="slider red round"></span>
-													</label>
-												</div>
-											 </div>
 										
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
@@ -216,12 +197,12 @@ if($resultado['fcu_anulado'] == 1) {
 											</div>
 										
 
-
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios" id="btnEditarMovimientos">&nbsp;
-                                        <?php }?>
+                                        <a href="javascript:void(0);" <?=$disabledPermiso;?> name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
 										
-										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>

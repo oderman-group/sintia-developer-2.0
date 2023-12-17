@@ -1,5 +1,5 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 //include(ROOT_PATH."/conexion-datos.php");
 
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
@@ -16,6 +16,7 @@ $yearStart = $yearArray[0];
 $yearEnd = $yearArray[1];
 
 $_SESSION["inst"] = $institucion['ins_bd'];
+$_SESSION["idInstitucion"] = $institucion['ins_id'];
 
 if(isset($yearEnd) and is_numeric($yearEnd)){
 	$_SESSION["bd"] = $yearEnd;
@@ -27,14 +28,13 @@ include("modelo/conexion.php");
 
 $variable = 1;
 
-$datosUsuario = Usuarios::datosUsuarioParaRecuperarClave($_POST["Usuario"]);
+$datosUsuario = Usuarios::datosUsuarioParaRecuperarClave($institucion['ins_id'],$_POST["Usuario"]);
 
 
 if(!empty($datosUsuario)){
 
 	$data = [
 		'institucion_id'   => $institucion['ins_id'],
-		'institucion_bd'   => $institucion['ins_bd'],
 		'institucion_agno' => $_SESSION["bd"],
 		'usuario_id'       => $datosUsuario['uss_id'],
 		'usuario_email'    => $datosUsuario['uss_email'],

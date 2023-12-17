@@ -16,7 +16,7 @@
 		exit();
 	}
 	try{
-		mysqli_query($conexion, "UPDATE academico_unidades SET uni_nombre='".$_POST["nombre"]."', uni_id_carga='".$cargaConsultaActual."', uni_periodo='".$periodoConsultaActual."', uni_descripcion='".$_POST["contenido"]."' WHERE uni_id='".$_POST["idR"]."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_unidades SET uni_nombre='".$_POST["nombre"]."', uni_id_carga='".$cargaConsultaActual."', uni_periodo='".$periodoConsultaActual."', uni_descripcion='".$_POST["contenido"]."' WHERE id_nuevo='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

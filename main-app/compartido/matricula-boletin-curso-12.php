@@ -1,19 +1,22 @@
-
 <?php
-    session_start();
-    include("../../config-general/config.php");
-    include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0224';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Estudiantes.php");
     require_once("../class/Boletin.php");
     require_once("../class/Usuarios.php");
     require_once("../class/UsuariosPadre.php");
     $Plataforma = new Plataforma;
 
-    $year=$agnoBD;
+    $year=$_SESSION["bd"];
     if(isset($_REQUEST["year"])){
     $year=base64_decode($_REQUEST["year"]);
     }
-    $BD=$_SESSION["inst"]."_".$year;
 
     $modulo = 1;
 
@@ -42,6 +45,7 @@
             break;
     }
 
+    $filtro = "";
     if (!empty($_REQUEST["id"])) {
         $filtro .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
     }
@@ -53,7 +57,7 @@
     if(!empty($_REQUEST["grupo"])){
         $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
     }
-    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
     if ($numeroEstudiantes == 0) {
     ?>
@@ -135,7 +139,7 @@
             <tr style="text-align:center; font-size: 13px;">
                 <td style="color: #b2adad;">
                     <?php
-                        $consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $BD);
+                        $consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"],$year);
                         $numEstiloNota=mysqli_num_rows($consultaEstiloNota);
                         $i=1;
                         while($estiloNota = mysqli_fetch_array($consultaEstiloNota, MYSQLI_BOTH)){
@@ -205,11 +209,12 @@
                             $condicion2 = "4";
                             break;
                     }
-                    $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM $BD.academico_materias
-                    INNER join $BD.academico_areas ON ar_id = mat_area
-                    INNER JOIN $BD.academico_cargas on car_materia = mat_id and car_curso = $gradoActual AND car_grupo = $grupoActual
-                    GROUP by mat_area
-                    ORDER BY ar_posicion");
+                    $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
+                    INNER join ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
+                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '".$gradoActual."' AND car_grupo = '".$grupoActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                    WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                    GROUP by am.mat_area
+                    ORDER BY a.ar_posicion");
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
                     $sumaPromedioGeneralPeriodo1=0;
@@ -222,11 +227,11 @@
                         ar_nombre, ar_posicion
                         bol_estudiante, bol_periodo, bol_nota,
                         bol_nota * (mat_valor/100) AS notaArea
-                        FROM $BD.academico_cargas
-                        INNER JOIN $BD.academico_materias ON mat_id = car_materia
-                        INNER JOIN $BD.academico_areas ON ar_id = mat_area
-                        INNER JOIN $BD.academico_boletin ON bol_carga=car_id AND bol_periodo =".$periodoActual." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
-                        WHERE car_curso = ".$datosAreas['car_curso']." AND car_grupo = ".$datosAreas['car_grupo']." AND mat_area = ".$datosAreas['ar_id']."");
+                        FROM ".BD_ACADEMICA.".academico_cargas car
+                        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                        INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
+                        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo ='".$periodoActual."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+                        WHERE car_curso = '".$datosAreas['car_curso']."' AND car_grupo = '".$datosAreas['car_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} AND am.mat_area = '".$datosAreas['ar_id']."'");
                         $notaArea=0;
                         $notaAreasPeriodos=0;
                         while($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)){
@@ -237,13 +242,16 @@
 
                             //NOTA PARA LAS MATERIAS
                             $notaMateria=round($datosMaterias['bol_nota'], 1);
-                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $BD);
+                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria,$year);
                             if($notaMateria<10){
                                 $estiloNota['notip_nombre']="Bajo";
                             }
+                            if($notaMateria>50){
+                                $estiloNota['notip_nombre']="Superior";
+                            }
 
                             //AUSENCIAS EN ESTA MATERIA
-                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $BD);
+                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $year);
                             $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
                             $ausencia="";
 
@@ -263,13 +271,25 @@
                                         $notaMateriasPeriodosTotal=0;
                                         for($i=1;$i<=$periodoActual;$i++){
                                             if($i!=$periodoActual){
-                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM academico_boletin WHERE bol_carga=".$datosMaterias['car_id']." AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."");
+                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                                                 $datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
                                                 $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
                                                 $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
+
+                                                $notaMateriasPeriodosFinal=$notaMateriasPeriodos;
+                                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                                    $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateriasPeriodos,$year);
+                                                    $notaMateriasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                                    if($notaMateriasPeriodos<10){
+                                                        $notaMateriasPeriodosFinal="Bajo";
+                                                    }
+                                                    if($notaMateriasPeriodos>50){
+                                                        $notaMateriasPeriodosFinal="Superior";
+                                                    }
+                                                }
                                     ?>
-                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodos?></td>
+                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
                                     <?php
                                                 }else{
                                     ?>
@@ -285,7 +305,7 @@
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
-                                        $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $BD);
+                                        $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria,$year);
                                         if($notaAcomuladoMateria<10){
                                             $estiloNotaAcomuladoMaterias['notip_nombre']="Bajo";
                                         }
@@ -305,7 +325,6 @@
 
                             //NOTA PARA LAS AREAS
                             if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
-                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea, $BD);
 
                         } //FIN WHILE DE LAS MATERIAS
                     ?>
@@ -323,11 +342,11 @@
                                         $consultaAreasPeriodos=mysqli_query($conexion,"SELECT mat_valor,
                                         bol_estudiante, bol_periodo, bol_nota,
                                         SUM(bol_nota * (mat_valor/100)) AS notaArea
-                                        FROM academico_cargas
-                                        INNER JOIN academico_materias ON mat_id = car_materia
-                                        INNER JOIN academico_boletin ON bol_carga=car_id AND bol_periodo=".$i." AND bol_estudiante = ".$matriculadosDatos['mat_id']."
-                                        WHERE mat_area = ".$datosAreas['ar_id']."
-                                        GROUP BY mat_area");
+                                        FROM ".BD_ACADEMICA.".academico_cargas car
+                                        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                                        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+                                        WHERE am.mat_area = '".$datosAreas['ar_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                                        GROUP BY am.mat_area");
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
                                         if(!empty($datosAreasPeriodos['notaArea'])) $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
@@ -342,10 +361,29 @@
                                                 $promGeneralPer3+=$notaAreasPeriodos;
                                                 break;
                                         }
+
+                                        $notaAreasPeriodosFinal=$notaAreasPeriodos;
+                                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos,$year);
+                                            $notaAreasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                            if($notaAreasPeriodos<10){
+                                                $notaAreasPeriodosFinal="Bajo";
+                                            }
+                                            if($notaAreasPeriodos>50){
+                                                $notaAreasPeriodosFinal="Superior";
+                                            }
+                                        }
                             ?>
-                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodos?></td>
+                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal?></td>
                             <?php
                                     }else{
+                                        $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea,$year);
+                                        if($notaArea<10){
+                                            $estiloNotaAreas['notip_nombre']="Bajo";
+                                        }
+                                        if($notaArea>50){
+                                            $estiloNotaAreas['notip_nombre']="Superior";
+                                        }
                             ?>
                             <td align="center"><?=$notaArea?></td>
                             <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
@@ -359,7 +397,7 @@
                                 if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
                                 }
-                                $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea, $BD);
+                                $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea,$year);
                                 if($notaAcomuladoArea<10){
                                     $estiloNotaAcomuladoAreas['notip_nombre']="Bajo";
                                 }
@@ -386,7 +424,7 @@
                         //PROMEDIO DE LAS AREAS
                         $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
                         $promedioGeneral= round($promedioGeneral,1);
-                        $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral, $BD);
+                        $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral,$year);
                         if($promedioGeneral<10){
                             $estiloNotaPromedioGeneral['notip_nombre']="Bajo";
                         }
@@ -414,8 +452,20 @@
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
                             $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
                             $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
+
+                            $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
+                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneralPeriodos,$year);
+                                $promedioGeneralPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                if($promedioGeneralPeriodos<10){
+                                    $promedioGeneralPeriodosFinal="Bajo";
+                                }
+                                if($promedioGeneralPeriodos>50){
+                                    $promedioGeneralPeriodosFinal="Superior";
+                                }
+                            }
                     ?>
-                    <td align="center"><?=$promedioGeneralPeriodos;?></td>
+                    <td align="center"><?=$promedioGeneralPeriodosFinal;?></td>
                     <?php
                         }else{
                     ?>
@@ -439,12 +489,12 @@
                 <?php
                     if(empty($_REQUEST["curso"])){
                         $filtro = " AND mat_grado='" . $gradoActual . "' AND mat_grupo='".$grupoActual."'";
-                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $BD);
+                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
                         $numeroEstudiantes = mysqli_num_rows($matriculadosDelCurso);
                     }
                     //Buscamos Puesto del estudiante en el curso
                     $puestoEstudiantesCurso = 0;
-                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual, $BD);
+                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual,$year);
                     
                     while($puestoCurso = mysqli_fetch_array($puestosCursos, MYSQLI_BOTH)){
                         if($puestoCurso['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -453,11 +503,11 @@
                     }
                     
                     //Buscamos Puesto del estudiante en la institución
-                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $BD);
+                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $year);
                     $numeroEstudiantesInstitucion = mysqli_num_rows($matriculadosDeLaInstitucion);
 
                     $puestoEstudiantesInstitucion = 0;
-                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $BD);
+                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $year);
                     
                     while($puestoInstitucion = mysqli_fetch_array($puestosInstitucion, MYSQLI_BOTH)){
                         if($puestoInstitucion['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -485,7 +535,7 @@
                 <tr style="color:#000;">
                     <td style="padding-left: 20px;">
                         <?php 
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM $BD.disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos[0]."' AND dn_periodo='".$periodoActual."'");
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos['mat_id']."' AND dn_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                             while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
 
                                 if(!empty($rndisiplina['dn_observacion'])){
@@ -524,23 +574,24 @@
             </thead>
 
             <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM $BD.academico_cargas
-	        INNER JOIN $BD.academico_materias ON mat_id=car_materia
-	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "'");
+            $conCargasDos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+	        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
+	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
                 
             ?>
                 <tbody>
                     <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= $datosCargasDos['uss_nombre']; ?></span></td>
+                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
                         <td>
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM $BD.academico_indicadores_carga 
-		                    INNER JOIN $BD.academico_indicadores ON ind_id=ipc_indicador
-		                    WHERE ipc_carga='" . $datosCargasDos['car_id'] . "' AND ipc_periodo='" . $periodoActual . "'");
+                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+		                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
+		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    
@@ -610,6 +661,7 @@
 <?php
             }
     }//FIN WHILE MATRICULADOS
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
 
         <script type="application/javascript">

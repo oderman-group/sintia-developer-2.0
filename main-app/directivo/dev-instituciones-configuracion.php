@@ -10,12 +10,12 @@ include("../compartido/head.php");
 
 $year = date("Y");
 if (!empty($_GET['year'])) {
-    $year = $_GET['year'];
+    $year = base64_decode($_GET['year']);
 }
 try{
     $consultaConfiguracion = mysqli_query($conexion, "SELECT configuracion.*, ins_siglas, ins_years FROM " . $baseDatosServicios . ".configuracion 
     INNER JOIN " . $baseDatosServicios . ".instituciones ON ins_id=conf_id_institucion
-    WHERE conf_id_institucion='" . $_GET["id"] . "' AND conf_agno='" . $year . "'");
+    WHERE conf_id_institucion='" . base64_decode($_GET["id"]) . "' AND conf_agno='" . $year . "'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -50,12 +50,12 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?= $frases[17][$datosUsuarioActual[8]]; ?> del Sistema de <b><?= $datosInstitucion['ins_siglas']; ?></b> (<?= $year; ?>)</div>
+                            <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> del Sistema de <b><?= $datosInstitucion['ins_siglas']; ?></b> (<?= $year; ?>)</div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
                             <li><a class="parent-item" href="javascript:void(0);" name="dev-instituciones.php" onClick="deseaRegresar(this)">Insituciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                            <li class="active"><?= $frases[17][$datosUsuarioActual[8]]; ?> del Sistema de <b><?= $datosInstitucion['ins_siglas']; ?></b></li>
+                            <li class="active"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> del Sistema de <b><?= $datosInstitucion['ins_siglas']; ?></b></li>
                         </ol>
                     </div>
                 </div>
@@ -68,12 +68,12 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                         ?>
                         <br>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[17][$datosUsuarioActual[8]]; ?> de <b><?= $datosInstitucion['ins_siglas']; ?></b></header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> de <b><?= $datosInstitucion['ins_siglas']; ?></b></header>
                             <div class="panel-body">
 
 
                                 <form name="formularioGuardar" action="dev-instituciones-configuracion-actualizar.php" method="post">
-                                    <input type="hidden" name="id" value="<?= $_GET["id"] ?>">
+                                    <input type="hidden" name="id" value="<?= base64_decode($_GET["id"]) ?>">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Año Actual</label>
@@ -125,15 +125,15 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 try{
-                                                    $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                    $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
                                                 while ($opcionesGeneralesDatos = mysqli_fetch_array($opcionesGeneralesConsulta, MYSQLI_BOTH)) {
-                                                    if ($datosInstitucion[22] == $opcionesGeneralesDatos[0])
-                                                        echo '<option value="' . $opcionesGeneralesDatos[0] . '" selected>' . $opcionesGeneralesDatos[1] . '</option>';
+                                                    if ($datosInstitucion[22] == $opcionesGeneralesDatos['catn_id'])
+                                                        echo '<option value="' . $opcionesGeneralesDatos['catn_id'] . '" selected>' . $opcionesGeneralesDatos['catn_nombre'] . '</option>';
                                                     else
-                                                        echo '<option value="' . $opcionesGeneralesDatos[0] . '">' . $opcionesGeneralesDatos[1] . '</option>';
+                                                        echo '<option value="' . $opcionesGeneralesDatos['catn_id'] . '">' . $opcionesGeneralesDatos['catn_nombre'] . '</option>';
                                                 }
                                                 ?>
                                             </select>
@@ -402,7 +402,9 @@ $datosInstitucion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                 </form>
                             </div>
                         </div>

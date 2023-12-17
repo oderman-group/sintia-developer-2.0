@@ -30,15 +30,15 @@
 	                                    </li>
 										-->
 										<?php
-										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM usuarios 
+										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
 										INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-										WHERE uss_estado=1 AND uss_bloqueado=0
+										WHERE uss_estado=1 AND uss_bloqueado=0 AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 										AND YEAR(uss_ultimo_ingreso)='".date("Y")."' AND MONTH(uss_ultimo_ingreso)='".date("m")."'
 										ORDER BY uss_nombre
 										LIMIT 0, 800");
 										while($datosChat = mysqli_fetch_array($datosConsultaChat, MYSQLI_BOTH)){
 											
-											$consultaSinLeer=mysqli_query($conexion, "SELECT * FROM mobiliar_sintia_social.chat 
+											$consultaSinLeer=mysqli_query($conexion, "SELECT * FROM ".BD_SOCIAL.".chat 
 											WHERE chat_destino_usuario='".$_SESSION["id"]."' AND chat_remite_usuario='".$datosChat["uss_id"]."'
 											AND chat_remite_institucion='".$config['conf_id_institucion']."' AND chat_destino_institucion='".$config['conf_id_institucion']."' AND chat_visto='0'");
 											$sinLeer = mysqli_num_rows($consultaSinLeer);
@@ -228,12 +228,12 @@
 														$.toast({
 															heading: mensaje.nombre,  
 															text: mensaje.data,
-															position: 'left-bottom',
+															position: 'bottom-right',
+            												showHideTransition: 'slide',
 															loaderBg:'#ff6849',
 															icon: 'info',
 															hideAfter: 5000, 
 															stack: 1,
-															showHideTransition: 'slide',
 															bgColor: '#007bff',
     														textColor: 'white'
 														});

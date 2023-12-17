@@ -2,27 +2,28 @@
             <div class="page-content-wrapper">
 				
 				<?php
+				require_once(ROOT_PATH."/main-app/class/Boletin.php");
 				$idE="";
 				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-				WHERE eva_id='".$idE."' AND eva_estado=1"), MYSQLI_BOTH);
+				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+				WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
-				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-				INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."'),
-				(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0)
+				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
+				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]} 
+				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
+				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
+				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
+				(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND res_id_respuesta=0)
 				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
-				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-				INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-				WHERE evp_id_evaluacion='".$idE."'
+				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
+				INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
+				WHERE evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
 				");
 				
 				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -34,8 +35,8 @@
 				}
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
+				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 				
 				if($nume==0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=203";</script>';
@@ -43,8 +44,8 @@
 				}
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_estudiantes 
-				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual[0]."' AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 					exit();
@@ -61,20 +62,20 @@
                             </div>
                             <?php 
 							//ESTUDIANTES
-							if($datosUsuarioActual[3]==4){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
 							<?php }?>
 							
 							<?php 
 							//DOCENTES
-							if($datosUsuarioActual[3]==2){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li><a class="parent-item" href="evaluaciones-resultados.php?idE=<?=$_GET["idE"];?>"><?=$evaluacion['eva_nombre'];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-								<li class="active"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></li>
+								<li class="active"><?=strtoupper($datosEstudianteActual['mat_primer_apellido']." ".$datosEstudianteActual['mat_segundo_apellido']." ".$datosEstudianteActual['mat_nombres']);?></li>
                             </ol>
 							<?php }?>
                         </div>
@@ -86,13 +87,13 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
-												<p><?=$frases[155][$datosUsuarioActual[8]];?></p>
+												<p><?=$frases[155][$datosUsuarioActual['uss_idioma']];?></p>
 												<p>
-													<b><?=$frases[141][$datosUsuarioActual[8]];?>:</b> <?=$frases[144][$datosUsuarioActual[8]];?>
+													<b><?=$frases[141][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[144][$datosUsuarioActual['uss_idioma']];?>
 												</p>
 											
 												<p>
-													<b><?=$frases[142][$datosUsuarioActual[8]];?>:</b> <?=$frases[145][$datosUsuarioActual[8]];?>
+													<b><?=$frases[142][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[145][$datosUsuarioActual['uss_idioma']];?>
 												</p>
 										</div>
 									</div>
@@ -100,20 +101,20 @@
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
-											<p><?=$frases[159][$datosUsuarioActual[8]];?></p>
+											<p><?=$frases[159][$datosUsuarioActual['uss_idioma']];?></p>
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados 
-												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual[0]."'"));
+												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 												
 												if($nume==0){continue;}
 											?>
-												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>" <?=$estiloResaltado;?>><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-ver.php?idE=<?=base64_encode($evaComun['eva_id']);?>&usrEstud=<?=base64_encode($datosEstudianteActual['mat_id_usuario']);?>"><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
@@ -138,24 +139,24 @@
 											$arrayColoresI = "";
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
+												WHERE resp_id_pregunta='".$preguntas['preg_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {
-													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual[8]].".</span>";
+													echo "<hr><span style='color:red';>".$frases[146][$datosUsuarioActual['uss_idioma']].".</span>";
 													continue;
 												}
 												
 												$respuestasXpregunta = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=1
-												WHERE res_id_evaluacion='".$idE."' AND res_id_pregunta='".$preguntas['preg_id']."'),
+												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
 												
-												(SELECT count(res_id) FROM academico_actividad_evaluaciones_resultados 
-												INNER JOIN academico_actividad_respuestas ON resp_id_pregunta=res_id_pregunta AND resp_id=res_id_respuesta AND resp_correcta=0
-												WHERE res_id_evaluacion='".$idE."' AND res_id_pregunta='".$preguntas['preg_id']."')
+												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
+												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]})
 												"), MYSQLI_BOTH);
 												
 												$totalPuntos +=$preguntas['preg_valor'];
@@ -171,12 +172,12 @@
 											<?php 
 												$contRespuestas = 1;
 												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
-													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones_resultados
-													WHERE res_id_evaluacion='".$_GET['idE']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."'
+													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados
+													WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 													"), MYSQLI_BOTH);
-													if(!empty($compararRespuestas[0])) $cheked = 'checked'; else $cheked = '';
+													if(!empty($compararRespuestas['res_id'])) $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
-													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas[0])){
+													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas['res_id'])){
 														$puntosSumados += $preguntas['preg_valor'];
 													}
 											?>
@@ -214,13 +215,23 @@
 											$arrayRespuestasCorrectas = substr($arrayRespuestasCorrectas,0,-1);
 											$arrayColoresC = substr($arrayColoresC,0,-1);
 											$arrayColoresI = substr($arrayColoresI,0,-1);
+
+											$notaFinal=$nota;
+											$title='';
+											$style='';
+											if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+												$title='title="Nota Cuantitativa: '.$nota.'"';
+												$style='style="font-size: 17px; margin-top: 13px"';
+												$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota);
+												$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+											}
 											?>
 
 			
 									</form>
 								
 									<div class="panel">
-										<header class="panel-heading panel-heading-purple"><?=$frases[160][$datosUsuarioActual[8]];?> </header>
+										<header class="panel-heading panel-heading-purple"><?=$frases[160][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<p>Este gráfico muestra cuántos estudiantes, de los que ya finalizaron la evaluación, respondieron correcta o incorrectamente cada pregunta.</p>
 											<canvas id="myChart" width="400" height="400"></canvas>
@@ -291,11 +302,11 @@
 												</div>
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
-														<b><?=$frases[130][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_desde'];?></div>
 													</li>
 													<li class="list-group-item">
-														<b><?=$frases[131][$datosUsuarioActual[8]];?> </b>
+														<b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?> </b>
 														<div class="profile-desc-item pull-right"><?=$evaluacion['eva_hasta'];?></div>
 													</li>
 												</ul>
@@ -303,30 +314,30 @@
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$cantPreguntas;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title" style="color: chartreuse;"> <span id="resp"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[141][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <span id="fin"></span> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[142][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 
 												<div class="row list-separated profile-stat">
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$respuestasEvaluacion[0];?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[156][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[156][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
 														<div class="uppercase profile-stat-title"> <?=$respuestasEvaluacion[1];?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[157][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[157][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 													<div class="col-md-4 col-sm-4 col-6">
-														<div class="uppercase profile-stat-title"> <?=$nota;?> </div>
-														<div class="uppercase profile-stat-text"> <?=$frases[108][$datosUsuarioActual[8]];?> </div>
+														<div class="uppercase profile-stat-title" <?=$title;?> <?=$style;?>> <?=$notaFinal;?> </div>
+														<div class="uppercase profile-stat-text"> <?=$frases[108][$datosUsuarioActual['uss_idioma']];?> </div>
 													</div>
 												</div>
 

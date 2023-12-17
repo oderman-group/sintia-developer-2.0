@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/UsuariosPadre.php");
 ?>
 <head>
 	<title>Estudiantes</title>
@@ -35,19 +36,18 @@ require_once("../class/Estudiantes.php");
   $cont=1;
   $consulta = Estudiantes::listarEstudiantes(0, $adicional, '');
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-  $consultaAcudiente=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado[26]."'");
-	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
-  $consultaGrado=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$resultado[6]."' AND gru_id='".$resultado[7]."'");
+	$acudiente = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
+  $consultaGrado=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$resultado['mat_grado']."' AND gru.gru_id='".$resultado['mat_grupo']."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
 	$grados = mysqli_fetch_array($consultaGrado, MYSQLI_BOTH);	
   ?>
   <tr style="font-size:13px;">
       <td><?=$resultado['mat_id'];?></td>
-      <td><?=$resultado[12];?></td>
+      <td><?=$resultado['mat_documento'];?></td>
       <td><?=Estudiantes::NombreCompletoDelEstudiante($resultado);?></td>
       <td><?=$grados["gra_nombre"];?></td>
       <td><?=$grados["gru_nombre"];?></td>
-      <td><?=$resultado[9];?></td>
-     <td><?=strtoupper($acudiente[4].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]);?></td> 
+      <td><?=$resultado['mat_fecha_nacimiento'];?></td>
+     <td><?=strtoupper($acudiente['uss_nombre'].' '.$acudiente["uss_nombre2"].' '.$acudiente["uss_apellido1"].' '.$acudiente["uss_apellido2"]);?></td> 
 </tr>
   <?php
   $cont++;

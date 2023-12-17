@@ -57,7 +57,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -75,7 +75,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas;");
+                                                    $c_posicionA=mysqli_query($conexion, "SELECT ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -114,7 +114,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
                                     </form>
                                 </div>

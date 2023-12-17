@@ -6,6 +6,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $disabled = '';
 if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) ) { 
     $disabled = 'disabled';
@@ -38,21 +39,30 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                 <tr>
                     <th>#</th>
                     <th>ID</th>
-                    <th><?=$frases[61][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
                     <th>DEF</th>
-                    <th><?=$frases[109][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+                    $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
                     $contReg = 1;
                     $colorNota = "black";
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                        $consultaNotas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$resultado[0]." AND bol_periodo='".$periodoConsultaActual."' AND bol_carga='".$cargaConsultaActual."'");
+                        $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$periodoConsultaActual."' AND bol_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                     $notas = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
                     $definitiva = isset($notas['bol_nota']) ? $notas['bol_nota'] : null;
                     if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';} 
+
+                    $definitivaFinal=$definitiva;
+                    $atributosA='style="text-decoration:underline; color:'.$colorNota.';"';
+                    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                        $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorNota.';"';
+
+                        $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                        $definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                    }
                     
                     ?>
                 
@@ -64,15 +74,14 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                         <?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>
                     </td>
                     
-                    <td><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" style="text-decoration:underline; color:<?=$colorNota;?>;"><?=$definitiva;?></a><br><span style="font-size: 10px;"><?php if(isset($notas)) echo $notas['bol_observaciones'];?></span></td>
+                    <td><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$definitivaFinal;?></a><br><span style="font-size: 10px;"><?php if(isset($notas)) echo $notas['bol_observaciones'];?></span></td>
                     
                     <td width="25%">
                         
                         <textarea rows="7" cols="80" 
-                        name="O<?=$contReg;?>" 
-                        id="<?=$resultado['mat_id'].'-'.$resultado['mat_nombres'].'-'.$cargaConsultaActual.'-'.$periodoConsultaActual;?>" 
-                        title="8" 
-                        onChange="notas(this)" 
+                        id="<?=$resultado['mat_id'];?>" 
+                        name="<?=$cargaConsultaActual;?>" title="<?=$periodoConsultaActual;?>" 
+                        onChange="observacionesBoletin(this)" 
                         <?=$disabled;?>
                         ><?php if(isset($notas)) echo $notas['bol_observaciones_boletin'];?></textarea>
                     </td>

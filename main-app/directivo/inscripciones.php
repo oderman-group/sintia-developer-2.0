@@ -13,7 +13,6 @@ require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $configAdmisiones=Inscripciones::configuracionAdmisiones($conexion,$baseDatosAdmisiones,$config['conf_id_institucion'],$_SESSION["bd"]);
 
-$db = $_SESSION["inst"]."_".$_SESSION["bd"];
 $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 ?>
 	<!-- data tables -->
@@ -113,10 +112,10 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 <?php
 												include("includes/consulta-paginacion-inscripciones.php");
                                                 try{
-                                                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_matriculas
+                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
                                                     INNER JOIN ".$baseDatosAdmisiones.".aspirantes ON asp_id=mat_solicitud_inscripcion
-                                                    LEFT JOIN academico_grados ON gra_id=asp_grado
-                                                    WHERE mat_estado_matricula=5 $filtro
+                                                    LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+                                                    WHERE mat_estado_matricula=5 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro
                                                     ORDER BY mat_primer_apellido
                                                     LIMIT $inicio,$registros");
                                                 } catch (Exception $e) {
@@ -150,7 +149,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     <td><?= $resultado["gra_nombre"]; ?></td>
                                                     <td>
                                                         <div class="btn-group">
-                                                            <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                            <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
                                                             <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                 <i class="fa fa-angle-down"></i>
                                                             </button>

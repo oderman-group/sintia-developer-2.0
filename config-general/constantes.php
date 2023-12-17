@@ -6,6 +6,9 @@ define('EMAIL_SENDER', 'info@plataformasintia.com');
 define('NAME_SENDER', 'Plataforma Sintia');
 
 define('HEADER_EMAIL_BACKGROUND', '#6017dc');
+define('GRADO_INDIVIDUAL', 'individual');
+define('GRADO_GRUPAL', 'grupal');
+
 
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
@@ -58,6 +61,25 @@ define('CONFIG_MANUAL_CALIFICACIONES', 1);
 define('CONFIG_AUTOMATICO_CALIFICACIONES', 0);
 define('PERMISO_EDICION_PERIODOS_DIFERENTES', true); //Diferentes al actual
 
+/* FORMAS DE VER NOTAS */
+define('CUALITATIVA', 'CUALITATIVA');
+define('CUANTITATIVA', 'CUANTITATIVA');
+
+define('CLAVE_SUGERIDA', 'sherman1298');
+
+/* SINTIA PLATFORM MODULES */
+define('MODULO_ACADEMICO', 1);
+define('MODULO_FINANCIERO', 2);
+define('MODULO_DISCIPLINARIO', 3);
+define('MODULO_ADMINISTRATIVO', 4);
+define('MODULO_COMUNICATIVO', 5);
+define('MODULO_MERCADEO', 6);
+define('MODULO_GENERAL', 7);
+define('MODULO_ADMISIONES', 8);
+define('MODULO_RESERVA_CUPO', 9);
+define('MODULO_MEDIA_TECNICA', 10);
+
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
@@ -67,7 +89,6 @@ switch($_SERVER['HTTP_HOST']){
 	case 'developer.plataformasintia.com':
         define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
         define('ENVIROMENT', 'TEST');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
 	case 'main.plataformasintia.com':

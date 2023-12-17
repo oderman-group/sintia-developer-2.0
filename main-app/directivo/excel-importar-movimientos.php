@@ -3,6 +3,7 @@ include("session.php");
 require_once("../class/Usuarios.php");
 require_once("../class/Estudiantes.php");
 require '../../librerias/Excel/vendor/autoload.php';
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -33,7 +34,7 @@ if($extension == 'xlsx'){
 			$arrayTodos = [];
 			$claves_validar = array('fcu_usuario', 'fcu_valor', 'fcu_tipo');
 			$tiposMovimientos = ['DEUDA'   => '1', 'A FAVOR'   => '2'];
-			$sql = "INSERT INTO finanzas_cuentas(fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado)VALUES";
+			$sql = "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_id, fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, institucion, year)VALUES";
 			
 			$movimientosCreados     = array();
 			$movimientosNoCreados   = array();
@@ -69,12 +70,8 @@ if($extension == 'xlsx'){
 
 					}elseif($_POST["datoID"]==2){//Si es por código de tesorería
 
-						try{
-							$consultaDatosUsuario=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-							WHERE mat_codigo_tesoreria='".$arrayIndividual['fcu_usuario']."' AND mat_eliminado=0");
-						} catch (Exception $e) {
-							include("../compartido/error-catch-to-report.php");
-						}
+
+						$consultaDatosUsuario=Estudiantes::obtenerListadoDeEstudiantes(" AND mat_codigo_tesoreria='".$arrayIndividual['fcu_usuario']."' AND mat_eliminado=0");
 						$datosUsuario = mysqli_fetch_array($consultaDatosUsuario, MYSQLI_BOTH);
 						$idUsuario = $datosUsuario['mat_id_usuario'];
 
@@ -82,7 +79,7 @@ if($extension == 'xlsx'){
 
 					if(!empty($idUsuario)){
 						try{
-							mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='".$idUsuario."'");
+							mysqli_query($conexion, "DELETE FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 						} catch (Exception $e) {
 							include("../compartido/error-catch-to-report.php");
 						}
@@ -99,7 +96,7 @@ if($extension == 'xlsx'){
 							if($tipoMovimiento == 1){
 								$tipo = 3;
 								try{
-									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."'");
+									mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado=1 WHERE uss_id='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}
@@ -107,14 +104,15 @@ if($extension == 'xlsx'){
 							}else{
 								$tipo = 4;
 								try{
-									mysqli_query($conexion, "UPDATE usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."'");
+									mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado='0' WHERE uss_id='".$idUsuario."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 								} catch (Exception $e) {
 									include("../compartido/error-catch-to-report.php");
 								}
 							}
 						}
 
-						$sql .="(now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0),";
+						$idInsercion=Utilidades::generateCode("FCU");
+						$sql .="('" .$idInsercion . "', now(), '".$_POST["detalle"]."', '".$arrayIndividual['fcu_valor']."', '".$tipo."', '".$arrayIndividual['fcu_observaciones']."', '".$idUsuario."', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$movimientosCreados["FILA_".$f] = $arrayIndividual['fcu_usuario'];
 					} else {

@@ -6,14 +6,15 @@ include("../compartido/head.php");
 
 //CONSULTA EXISTENCIA DE LA INSTITUCIÓN
 try{
-    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
+    $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
 
-$variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins_bd='.$_POST['ins_bd'].'&yearA='.$_POST['yearA'].'&siglasBD='.$_POST['siglasBD'].'&nombreInsti='.$_POST['nombreInsti'].'&siglasInst='.$_POST['siglasInst'].'&yearN='.$_POST['yearN'];
+$insBD=!empty($_POST['ins_bd']) ? $_POST['ins_bd'] : "";
+$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']);
 ?>
 </head>
 
@@ -48,8 +49,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                             Tipo De Institución:      <b>Nueva</b>.<br>
                                             Nombre De La Institución: <b>".$_POST['nombreInsti']."</b>.<br>
                                             Siglas De La Institución: <b>".$_POST['siglasInst']."</b>.<br>
-                                            Año a crear:              <b>".$year."</b>.<br>
-                                            BD a Crear:               <b>$bd</b>.
+                                            Año a crear:              <b>".$year."</b>.
                                         ";
                                         if($nueva==0){
                                             $msgConfirmacion="
@@ -57,8 +57,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                                 Tipo De Institución:      <b>Antigua</b>.<br>
                                                 ID:                       <b>$idInsti</b>.<br>
                                                 Nombre De La Institución: <b>".$datosInsti['ins_nombre']."</b>.<br>
-                                                Año a crear:              <b>".$year."</b>.<br>
-                                                BD a Crear:               <b>$bd</b>.
+                                                Año a crear:              <b>".$year."</b>.
                                             ";
                                         }
                                 ?>
@@ -73,7 +72,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                             <form class="form-horizontal" action="crear-bd.php" method="post">
                                                 <input type="hidden" name="tipoInsti" value="<?=$_POST['tipoInsti'];?>">
                                                 <input type="hidden" name="idInsti" value="<?=$_POST['idInsti'];?>">
-                                                <input type="hidden" name="ins_bd" value="<?php if(!empty($_POST['ins_bd'])) echo $_POST['ins_bd'];?>">
+                                                <input type="hidden" name="ins_bd" value="<?=$insBD;?>">
                                                 <input type="hidden" name="yearA" value="<?=$_POST['yearA'];?>">
                                                 <input type="hidden" name="siglasBD" value="<?=$_POST['siglasBD'];?>">
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
@@ -97,13 +96,13 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                         </button>
                                         ';
                                         $texto="
-                                            La BD <b>$bd</b> está disponible.<br><br>
+                                            El año <b>$year</b> está disponible.<br><br>
                                             Desea continuar?
                                         ";
                                         if($numInstituciones>0){
                                             $boton='';
                                             $texto="
-                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con la BD <b>$bd</b>.<br>
+                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con el año <b>$year</b>.<br>
                                                 Por favor, confirmar los datos ingresados para poder continuar.
                                             ";
                                         }
@@ -116,7 +115,7 @@ $variables='?tipoInsti='.$_POST['tipoInsti'].'&idInsti='.$_POST['idInsti'].'&ins
                                             <form class="form-horizontal" action="crear-bd.php" method="post">
                                                 <input type="hidden" name="tipoInsti" value="<?=$_POST['tipoInsti'];?>">
                                                 <input type="hidden" name="idInsti" value="<?=$_POST['idInsti'];?>">
-                                                <input type="hidden" name="ins_bd" value="<?=$_POST['ins_bd'];?>">
+                                                <input type="hidden" name="ins_bd" value="<?=$insBD;?>">
                                                 <input type="hidden" name="yearA" value="<?=$_POST['yearA'];?>">
                                                 <input type="hidden" name="siglasBD" value="<?=$_POST['siglasBD'];?>">
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">

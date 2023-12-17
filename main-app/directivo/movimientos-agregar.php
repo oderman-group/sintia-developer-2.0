@@ -41,12 +41,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[95][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[95][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[95][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[95][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -56,12 +56,11 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="8" name="id">
+									<form name="formularioGuardar" action="movimientos-guardar.php" method="post">
 										
 										<div class="form-group row">
 													<label class="col-sm-2 control-label">Fecha</label>
@@ -89,7 +88,7 @@ if(!Modulos::validarPermisoEdicion()){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Tipo de movimiento</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Ingreso</option>
@@ -102,7 +101,7 @@ if(!Modulos::validarPermisoEdicion()){
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Forma de pago</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1">Efectivo</option>
@@ -146,16 +145,6 @@ if(!Modulos::validarPermisoEdicion()){
                                                 });
                                             });
                                         </script>
-
-											<div class="form-group row">
-												<label class="col-sm-2 control-label">Notificar al usuario</label>
-												<div class="input-group spinner col-sm-10">
-													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked <?=$disabledPermiso;?>>
-														<span class="slider red round"></span>
-													</label>
-												</div>
-											 </div>
 										
 										<div class="form-group row">
 												<label class="col-sm-2 control-label">Observaciones</label>
@@ -165,12 +154,14 @@ if(!Modulos::validarPermisoEdicion()){
 											</div>
 										
 
-
+                                        <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                            </button>
                                         <?php }?>
 										
-										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										
                                     </form>
                                 </div>
                             </div>

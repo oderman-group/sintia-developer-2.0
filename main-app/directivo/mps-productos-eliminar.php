@@ -6,7 +6,7 @@ $idPaginaInterna = 'DV0066';
 include("../compartido/historial-acciones-guardar.php");
 
 try{
-    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".productos SET prod_estado=1 WHERE prod_id='".$_GET["idR"]."'");
+    mysqli_query($conexion, "UPDATE " . $baseDatosMarketPlace . ".productos SET prod_estado=1 WHERE prod_id='".base64_decode($_GET["idR"])."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

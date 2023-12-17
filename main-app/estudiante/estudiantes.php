@@ -48,14 +48,16 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
+                                                     require_once("../class/servicios/GradoServicios.php"); 
+                                                     $cursoActual=GradoServicios::consultarCurso($datosCargaActual['car_curso']);
                                                      $filtroEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
-													 $consulta = Estudiantes::listarEstudiantesParaEstudiantes($filtroEstudiantes);
+													 $consulta = Estudiantes::listarEstudiantesParaEstudiantes($filtroEstudiantes,$cursoActual,$datosCargaActual['car_grupo']);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                         $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($resultado);

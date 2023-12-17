@@ -1,14 +1,14 @@
 <?php
 if(isset($_GET["opt"]) && base64_decode($_GET["opt"])==2){
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
-	INNER JOIN usuarios ON uss_id=ema_para
+	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_para AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 	WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de='0'
 	ORDER BY ema_id DESC
 	");
 	$opt=base64_decode($_GET["opt"]);
 }else{
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
-	INNER JOIN usuarios ON uss_id=ema_de
+	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_de AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 	WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para='0'
 	ORDER BY ema_id DESC
 	");
@@ -112,7 +112,7 @@ $numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDa
 																		('.$resultado['ema_fecha_visto'].')</span>';?></td>
 																	<?php }?>
 																	
-																	<td class="view-message  text-right"><a href="../compartido/guardar.php?get=<?=base64_encode(17)?>&idR=<?=base64_encode($resultado['ema_id']);?>&elm=<?=base64_encode($eliminar);?>"><i class="fa fa-trash"></i></a></td>
+																	<td class="view-message  text-right"><a href="../compartido/mensajes-eliminar.php?idR=<?=base64_encode($resultado['ema_id']);?>&elm=<?=base64_encode($eliminar);?>"><i class="fa fa-trash"></i></a></td>
 				                                                </tr>
 																<?php
 																	$contReg++;	 

@@ -23,7 +23,7 @@ if(empty($datosUsr))
 	exit();
 }
 //=============================== MATERIAS DEL ESTUDIANTE =================
-$mat=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$datosUsr[6]." AND car_grupo='".$datosUsr[7]."' ORDER BY car_materia");
+$mat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY car_materia");
 
 $num_mat=mysqli_num_rows($mat);
 if($num_mat==0)
@@ -31,11 +31,11 @@ if($num_mat==0)
 	header("Location:cargas.php");
 	exit();
 }
-if($asg[2]<6)
+if($asg['car_curso']<6)
 	$tipo="EDUCACION BASICA PRIMARIA";
-elseif($asg[2]>=6 and $asg[2]<=9)
+elseif($asg['car_curso']>=6 and $asg['car_curso']<=9)
 	$tipo="EDUCACION BASICA SECUNDARIA";
-elseif($asg[2]>9 and $asg[2]<=11)
+elseif($asg['car_curso']>9 and $asg['car_curso']<=11)
 	$tipo="EDUCACION MEDIA";
 ?>
 <title>Informe Acad&eacute;mico</title>
@@ -86,7 +86,7 @@ $cont=1;
 $contador = 0;  //para que solo halla un while en area
 $totalDefini=0;
 $materiasPerdidas=0;
-$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia) AND (car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") AND ar_id=mat_area GROUP BY ar_id ORDER BY ar_posicion");
+$materia=mysqli_query($conexion, "SELECT  ar_id, ar_nombre, mat_nombre, mat_id, mat_area, car_id, car_materia, car_periodo FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas car WHERE (a.ar_id=am.mat_area AND am.at_id=car_materia) AND (car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."') AND a.ar_id=am.mat_area AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} GROUP BY a.ar_id ORDER BY a.ar_posicion");
 
 $ii = 1;
 while($fila_mat=mysqli_fetch_array($materia, MYSQLI_BOTH)){
@@ -96,12 +96,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td class="area" id="<?=$fila_mat[0]?>" colspan="9" style="font-size:10px; font-weight:bold;"><?php if(strtoupper(substr($fila_mat[1],0,4))=='ESPA') echo "ESPA&Ntilde;OL"; else echo strtoupper($fila_mat[1]);?></td>
     </tr>
 <?php 
-	$consulta = mysqli_query($conexion, "SELECT  mat_nombre, mat_area, mat_id, car_id FROM academico_areas, academico_materias, academico_cargas WHERE (ar_id=mat_area AND mat_id=car_materia)AND(car_curso=".$datosUsr[6]." AND car_grupo=".$datosUsr[7].") and ar_id=mat_area and mat_area=".$fila_mat[4]);
+	$consulta = mysqli_query($conexion, "SELECT mat_nombre, mat_area, mat_id, car_id FROM ".BD_ACADEMICA.".academico_areas a, ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas WHERE (a.ar_id=am.mat_area AND am.mat_id=car_materia)AND(car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."') and a.ar_id=am.mat_area and am.mat_area='".$fila_mat[4]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND a.institucion={$config['conf_id_institucion']} AND a.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 	
 	while($fila = mysqli_fetch_array($consulta, MYSQLI_BOTH)){	
 
 		$periodo=$fila_mat[7]-1; //asperiodo
-		$datos=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND  bol_periodo=".$periodoActual);//asmat
+		$datos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND  bol_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");//asmat
 		
 		$dato=mysqli_fetch_array($datos, MYSQLI_BOTH);
 		$numero=mysqli_num_rows($datos);
@@ -119,11 +119,11 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		while($per<=4){
 			
 			//============================ NOTA DE CADA UNO DE LOS PERIODOS  POR SEPARADO =====================================================
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga=".$fila[3]." AND bol_estudiante=".$_GET["id"]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila[3]."' AND bol_estudiante='".$_GET["id"]."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
 			//============================ FIN DE LAS NOTAS POR SEPARADO ======================================================================	
 ?>
-			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota[4]; $defini = $defini + $nota[4]; $prome = $nota[4];?></td>
+			<td class="<?=$per;?>"  align="center" style="font-weight:bold; border:groove;"><?php  echo $nota['bol_nota']; $defini = $defini + $nota['bol_nota']; $prome = $nota['bol_nota'];?></td>
 <?php 
 			$vectorT[$fila[1]][$per] = $prome;
 			
@@ -146,12 +146,12 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 		}//FIN MIENTRAS QUE DE PERIODOS (1-4)
 		$defini = ($defini/$periodoActual);
 		$defini = round($defini,1);
-		$nivelaciones = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante=".$_GET["id"]);
+		$nivelaciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg=".$fila_mat[5]." AND niv_cod_estudiante='".$_GET["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		$numNivelaciones = mysqli_num_rows($nivelaciones);
 		$notasNivelaciones = mysqli_fetch_array($nivelaciones, MYSQLI_BOTH);
 		if($numNivelaciones>0){
-			if($notasNivelaciones[3]>$defini){
-				$defini = $notasNivelaciones[3];
+			if($notasNivelaciones['niv_definitiva']>$defini){
+				$defini = $notasNivelaciones['niv_definitiva'];
 				$msjH = '<br><span style="font-size:9px; color:red;">Nivelada</span>';
 			}	
 		}else{$msjH = '';}
@@ -163,7 +163,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center" style="font-weight:bold; font-size:11px; border:groove;"><?php echo $defini." ".$msjH;?></td>	
 <?php 
 		$definitiva=substr($definitiva,0,3);
-		$final=$dato[4];
+		$final=$dato['bol_nota'];
 ?>
 		<td align="center" style="font-weight:bold; font-size:11px; border:groove;">
 <?php
@@ -177,7 +177,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
     	<td align="center"><?php if($aus[0]>0){ echo $aus[0]."/".$fila_mat[3];} else{ echo "0.0/".$fila_mat[3];};?></td>
 	</tr>
 <?php
-  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM academico_indicadores, academico_indicadores_carga WHERE ind_id=ipc_indicador AND ipc_periodo=".$periodoActual." AND ipc_carga=".$fila[3]);
+  	$consulta_2 =  mysqli_query($conexion, "SELECT ind_id, ind_nombre, ipc_valor, ipc_periodo FROM ".BD_ACADEMICA.".academico_indicadores ai, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ai.ind_id=aic.ipc_indicador AND aic.ipc_periodo='".$periodoActual."' AND aic.ipc_carga='".$fila[3]."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]} AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}");
 	$num = mysqli_num_rows($consulta);
 	if ($num>0) // si tiene indicadores 
 	{
@@ -198,7 +198,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
 <?php 
 		$ind ++;
 		$a = $_GET['id'];
-		$reg = mysqli_query($conexion, "SELECT * FROM academico_calificaciones, academico_actividades WHERE cal_id_actividad in(SELECT act_id FROM academico_actividades WHERE act_id_carga=".$fila[3]." and act_id_tipo=".$indicador[0]." and act_periodo=".$periodoActual.") and cal_id_estudiante=".$_GET['id']." and cal_id_actividad=act_id");
+		$reg = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones aac, ".BD_ACADEMICA.".academico_actividades aa WHERE aac.cal_id_actividad in(SELECT act_id FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$fila[3]."' and act_id_tipo='".$indicador[0]."' and act_periodo=".$periodoActual." AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}) and aac.cal_id_estudiante=".$_GET['id']." and aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}");
 		$num = mysqli_num_rows($reg);
     	$contador = 0;
 		while ($nota = mysqli_fetch_array($reg, MYSQLI_BOTH)){ //While de notas
@@ -208,7 +208,7 @@ if($ii%2==0)$bgC = '#FFF'; else $bgC = '#E0E0E0';
            </tr> 
 <?php
 		  //Todo este codigo es para sacar el resultado de cada indicador
-		   $array[$contador] = $nota[1];
+		   $array[$contador] = $nota['cal_id'];
 		   $contador++;
 		} //End while notas 
 		if ($num>0)
@@ -325,11 +325,11 @@ $ii++;
 <?php 
 if($periodoActual==4){
 	if($materiasPerdidas>=3)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 	elseif($materiasPerdidas<3 and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr[4])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_segundo_apellido'])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
 ?>
 	<!--Materias Perdidas = --><?php //echo $materiasPerdidas;?>
 <?php
@@ -375,7 +375,7 @@ $(function () {
                 margin: [ 50, 50, 100, 80]
             },
             title: {
-                text: '<?=strtoupper($datosUsr[4]);?> - Promedio por periodos'
+                text: '<?=strtoupper($datosUsr['mat_segundo_apellido']);?> - Promedio por periodos'
             },
             xAxis: {
                 categories: [

@@ -9,7 +9,7 @@
 
                 <?php
                     include("../compartido/datos-fechas.php");
-                    if((($datosUsuarioActual[3]==1) || ($datosUsuarioActual[3]==5)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){
+                    if((($datosUsuarioActual['uss_tipo'] == TIPO_DEV) || ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO)) && ($datosUnicosInstitucion['ins_deuda']==1 || $dfDias<=1)){
                         $monto=0;
                         $descripcion='Pago de';
                         if($datosUnicosInstitucion['ins_deuda']==1 && !empty($datosUnicosInstitucion['ins_valor_deuda'])){
@@ -28,12 +28,20 @@
                             $descripcion.=' renovación de la plataforma';
                         }
                 ?>
-                <div class="panel">
+                <div class="panel animate__animated animate__heartBeat animate__delay-1s animate__repeat-2">
                     <header class="panel-heading panel-heading-red">Pagos</header>
                     <div class="panel-body">
-                        <p><b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, le recordamos que tiene un
-                            pago pendiente con la plataforma SINTIA.<br><br>
-                            Puede hacer el pago en el siguiente botón.</p>
+                        <p style="text-align: justify;">
+                            Estimado <b><?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual)?></b>, le recordamos que,
+                            su Institución, <b><?=strtoupper($datosUnicosInstitucion['ins_nombre'])?></b>, tiene un
+                            saldo pendiente con nuestra compañía.<br>
+                            A continuación los detalles y las opciónes de pago:<br>
+                            <b>Saldo pendiente:</b> <?php if(is_numeric($monto) && $monto > 0) echo "$".number_format($monto,0,".",".");?>.<br>
+                            <b>Descripción:</b> <?=$datosUnicosInstitucion['ins_concepto_deuda'];?>.<br>
+                            <hr>
+                            Puede hacer una transferencia bancaria a la cuenta siguiente cuenta:<br>
+                            <a href="javascript:void(0);" onclick="verCuentaBancaria()" id="cuentaBancaria" style="text-decoration: underline;">Ver número de cuenta</a>,<br> o tambien puede hacer el pago en linea, de forma segura, en el siguiente botón.
+                        </p>
                         <div class="col-sm-4">
                             <form action="../pagos-online/index.php" method="post" target="_target">
                                 <input type="hidden" class="form-control" name="idUsuario" value="<?=$datosUsuarioActual['uss_id'];?>">
@@ -45,7 +53,7 @@
                                 <input type="hidden" class="form-control" name="monto" value="<?=$monto;?>">
                                 <input type="hidden" class="form-control" name="nombre" value="<?=$descripcion;?>">
 
-                                <button type="submit" class="btn btn-danger"><i class="fa fa-credit-card" aria-hidden="true"></i>PAGA AQUÍ</button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i>PAGA EN LINEA AQUÍ</button>
                             </form>
                         </div>
                     </div>
@@ -62,19 +70,18 @@
             <div class="col-md-4 col-lg-6">
                 <div class="card card-box">
                     <div class="card-head">
-                        <header><?=$frases[168][$datosUsuarioActual[8]];?></header>
+                        <header><?=$frases[168][$datosUsuarioActual['uss_idioma']];?></header>
                     </div>
                         <?php
                         $fotoUsrActual = $usuariosClase->verificarFoto($datosUsuarioActual['uss_foto']);
                         ?>
                     <div class="card-body " id="bar-parent1">
-                        <form class="form-horizontal" action="../compartido/guardar.php" method="post">
-                            <input type="hidden" name="id" value="1">
+                        <form class="form-horizontal" action="../compartido/noticia-rapida-guardar.php" method="post">
                             <input type="hidden" id="infoGeneral" value="<?=base64_encode($datosUsuarioActual['uss_id']);?>|<?=$fotoUsrActual;?>|<?=$datosUsuarioActual['uss_nombre'];?>">
                             <div class="form-group row">
                                 <div class="col-sm-12" data-hint="Realiza una publicación rápida, con solo texto.">
                                     <textarea id="contenido" name="contenido" class="form-control" rows="3"
-                                        placeholder="<?=$frases[169][$datosUsuarioActual[8]];?>"
+                                        placeholder="<?=$frases[169][$datosUsuarioActual['uss_idioma']];?>"
                                         style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"
                                         required></textarea>
                                 </div>
@@ -87,7 +94,7 @@
                                         class="btn deepPink-bgcolor"
                                         onClick="crearNoticia()"
                                     >
-                                        <?=$frases[170][$datosUsuarioActual[8]];?>
+                                        <?=$frases[170][$datosUsuarioActual['uss_idioma']];?>
                                     </button>
                                 </div>
                             </div>
@@ -112,9 +119,9 @@
 											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
-											LEFT JOIN usuarios ON uss_id=not_usuario
+											LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=not_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 											WHERE (not_estado=1 or (not_estado=0 and not_usuario='".$_SESSION["id"]."')) 
-											AND (not_para LIKE '%".$datosUsuarioActual[3]."%' OR not_usuario='".$_SESSION["id"]."')
+											AND (not_para LIKE '%".$datosUsuarioActual['uss_tipo']."%' OR not_usuario='".$_SESSION["id"]."')
 											AND not_year='" . $_SESSION["bd"] . "' AND (not_institucion='".$config['conf_id_institucion']."' OR not_global = 'SI')
 											$filtro
 											ORDER BY not_id DESC
@@ -123,20 +130,20 @@
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$colorFondo = 'style="background: #FFF;"';
-												if($resultado[5]==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
+												if($resultado['not_estado']==0){$colorFondo = 'style="background: #999; opacity:0.7;"';}
 												
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones
-												INNER JOIN usuarios ON uss_id=npr_usuario
-												WHERE npr_noticia='".$resultado[0]."'
+												INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=npr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+												WHERE npr_noticia='".$resultado['not_id']."'
 												ORDER BY npr_id DESC
 												");
 												$numReacciones = mysqli_num_rows($consultaReacciones);
 												$usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones 
-												WHERE npr_noticia='".$resultado[0]."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
+												WHERE npr_noticia='".$resultado['not_id']."' AND npr_usuario='".$_SESSION["id"]."'"), MYSQLI_BOTH);
 												
-												if($datosUsuarioActual[3]==4){
+												if($datosUsuarioActual['uss_tipo']==4){
 													include("verificar-usuario.php");
-													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado[0]."'");
+													$noticiasCursos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_cursos WHERE notpc_noticia='".$resultado['not_id']."'");
 													$notCursoNum = mysqli_num_rows($noticiasCursos);
 													if($notCursoNum>0){
 														$noticiaPermitida=0;
@@ -166,7 +173,7 @@
                             <div class="card-head">
                                 <header><?=$resultado['not_titulo'];?></header>
 
-                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1 || $datosUsuarioActual[3]==5){?>
+                                <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual['uss_tipo']==1 || $datosUsuarioActual['uss_tipo']==5){?>
 
                                     <button id="panel-<?=$resultado['not_id'];?>"
                                         class="mdl-button mdl-js-button mdl-button--icon pull-right"
@@ -181,33 +188,33 @@
                                         <a
                                         href="javascript:void(0);"
                                         id="<?=base64_encode($resultado['not_id']);?>|1"  
-                                        name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                        name="../compartido/noticias-gestionar.php?e=<?=base64_encode(1)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                         onClick="ocultarNoticia(this)"
                                         >
-                                        <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual[8]];?></a>
+                                        <i class="fa fa-eye"></i><?=$frases[172][$datosUsuarioActual['uss_idioma']];?></a>
                                     </li>
                                     <li class="mdl-menu__item">
                                     <a
                                     href="javascript:void(0);"
                                     id="<?=base64_encode($resultado['not_id']);?>|2"  
-                                    name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                    name="../compartido/noticias-gestionar.php?e=<?=base64_encode(0)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                     onClick="ocultarNoticia(this)"
                                     >
-                                        <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual[8]];?>
+                                        <i class="fa fa-eye-slash"></i><?=$frases[173][$datosUsuarioActual['uss_idioma']];?>
                                     </a>
                                     </li>
                                     
-                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual[3]==1){?>
+                                    <?php if($_SESSION["id"]==$resultado['not_usuario'] || $datosUsuarioActual['uss_tipo']==1){?>
                                         <li class="mdl-menu__item"><a
                                                 href="noticias-editar.php?idR=<?=base64_encode($resultado['not_id']);?>"><i
-                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual[8]];?></a>
+                                                    class="fa fa-pencil-square-o"></i><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a>
                                         </li>
                                         
                                         <li class="mdl-menu__item"><a href="javascript:void(0);" title="<?=$objetoEnviar;?>"
                                                 id="<?=base64_encode($resultado['not_id']);?>"
-                                                name="../compartido/guardar.php?get=<?=base64_encode(6)?>&e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
+                                                name="../compartido/noticias-gestionar.php?e=<?=base64_encode(2)?>&idR=<?=base64_encode($resultado['not_id']);?>"
                                                 onClick="deseaEliminar(this)"><i
-                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual[8]];?></a>
+                                                    class="fa fa-trash"></i><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a>
                                         </li>
                                     <?php }?>
 
@@ -258,8 +265,8 @@
 
                             <div class="panel-body">
                                 <p><?=$resultado['not_descripcion'];?></p>
-                                <?php if($resultado[7]!="" and file_exists('../files/publicaciones/'.$resultado[7])){?>
-                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado[7];?>"
+                                <?php if($resultado['not_imagen']!="" and file_exists('../files/publicaciones/'.$resultado['not_imagen'])){?>
+                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado['not_imagen'];?>"
                                             alt="<?=$resultado['not_titulo'];?>"></ah>
                                 </div>
                                 <p>&nbsp;</p>
@@ -312,7 +319,7 @@
 									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
                                     <li class="mdl-menu__item"><a
-                                            href="../compartido/guardar.php?get=<?=base64_encode(8)?>&r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
+                                            href="../compartido/noticias-reaccionar.php?r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
                                                 class="fa <?=$rIcons[$i];?>"></i><?=$rName[$i];?></a></li>
                                     <?php $i++;}?>
                                 </ul>

@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."'");
+    $consultaDatosEditar=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_categorias WHERE dcat_id='".base64_decode($_GET["idR"])."' AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -49,12 +49,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> Categoría</div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> Categoría</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="javascript:void(0);" name="disciplina-categorias.php" onClick="deseaRegresar(this)">Categorias</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> Categoría</li>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> Categoría</li>
                             </ol>
                         </div>
                     </div>
@@ -65,13 +65,13 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php" method="post">
-										<input type="hidden" value="58" name="id">
+									<form name="formularioGuardar" action="disciplina-categorias-actualizar.php" method="post">
 										<input type="hidden" value="<?=$datosEditar['dcat_id'];?>" name="idR">
+										<input type="hidden" value="<?=$datosEditar['dcat_id_nuevo'];?>" name="idRNuevo">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Categoría</label>
@@ -84,7 +84,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
 										
 										<a href="javascript:void(0);" name="disciplina-categorias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>

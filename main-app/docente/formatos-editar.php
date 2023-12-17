@@ -4,7 +4,7 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_id='".$_GET["idR"]."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
@@ -36,12 +36,12 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[221][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[221][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i>
-                                <li class="active"><?=$frases[165][$datosUsuarioActual[8]];?> <?=$frases[221][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i>
+                                <li class="active"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[221][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -57,7 +57,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -73,7 +73,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											</div>
 										
 
-								<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+								<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 												<a href="#" name="formatos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>

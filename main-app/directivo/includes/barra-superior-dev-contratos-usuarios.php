@@ -8,18 +8,6 @@ if (isset($_GET['busqueda'])) {
         OR ins_siglas LIKE '%" . $busqueda . "%'
         )";
 }
-$desde = '';
-if (!empty($_GET['desde'])) {
-    $desde = $_GET['desde'];
-}
-$hasta = '';
-if (!empty($_GET['hasta'])) {
-    $hasta = $_GET['hasta'];
-}
-$insti = '';
-if (!empty($_GET['insti'])) {
-    $insti = $_GET['insti'];
-}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +33,7 @@ if (!empty($_GET['insti'])) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $insti) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= $year; ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($datosInsti['ins_id']); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= base64_encode($year); ?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -59,9 +47,9 @@ if (!empty($_GET['insti'])) {
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
                     <form class="dropdown-item" method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
-                        <input type="hidden" name="insti" value="<?= $insti; ?>"/>
+                        <input type="hidden" name="insti" value="<?= base64_encode($insti); ?>"/>
                         <input type="hidden" name="busqueda" value="<?=$busqueda?>"/>
-                        <input type="hidden" name="year" value="<?= $year; ?>"/>
+                        <input type="hidden" name="year" value="<?= base64_encode($year); ?>"/>
                         <label>Fecha Desde:</label>
                         <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?= $desde; ?>"/>
 
@@ -89,7 +77,7 @@ if (!empty($_GET['insti'])) {
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $insti; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= $yearStartC; ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($insti); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?=$busqueda?>&year=<?= base64_encode($yearStartC); ?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 
@@ -101,10 +89,10 @@ if (!empty($_GET['insti'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <input type="hidden" name="insti" value="<?= $insti; ?>"/>
+            <input type="hidden" name="insti" value="<?= base64_encode($insti); ?>"/>
             <input type="hidden" name="desde" value="<?= $desde; ?>"/>
             <input type="hidden" name="hasta" value="<?= $hasta; ?>"/>
-            <input type="hidden" name="year" value="<?= $year; ?>"/>
+            <input type="hidden" name="year" value="<?= base64_encode($year); ?>"/>
             <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>

@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
+require_once("../class/UsuariosPadre.php.php");
 switch($_POST["documento"]){
 	case 1: $titulo = "CONTRATO DE PRESTACIÓN DE SERVICIO EDUCATIVO"; break;
 	case 2: $titulo = "COLEGIO CELCO DEL MPIO DE PAZ DE ARIPORO"; break;
@@ -14,13 +15,12 @@ switch($_POST["documento"]){
 
 $datos = Estudiantes::obtenerDatosEstudiante($_POST["estudiante"]);
 
-$consultaDg=mysqli_query($conexion, "SELECT * FROM academico_cargas
-INNER JOIN usuarios ON uss_id=car_docente
-WHERE car_curso='".$datos['mat_grado']."' AND car_grupo='".$datos['mat_grupo']."' AND car_director_grupo=1");
+$consultaDg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+WHERE car_curso='".$datos['mat_grado']."' AND car_grupo='".$datos['mat_grupo']."' AND car_director_grupo=1 AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 $dg = mysqli_fetch_array($consultaDg, MYSQLI_BOTH);
 
-$consultaAcudiente2=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$datos["mat_acudiente2"]."'");
-$acudiente2 = mysqli_fetch_array($consultaAcudiente2, MYSQLI_BOTH);
+$acudiente2 = UsuariosPadre::sesionUsuario($datos["mat_acudiente2"]);
 
 $meses=array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 ?>

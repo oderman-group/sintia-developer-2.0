@@ -50,7 +50,9 @@ try {
 	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "',
 	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "',
 	conf_ver_promedios_sabanas_docentes='" . $_POST["permisoDocentesPuestosSabanas"] . "',
-	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "'
+	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "',
+	conf_activar_encuesta='" . $_POST["activarEncuestaReservaCupo"] . "',
+	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "'
 	WHERE conf_id='".$config['conf_id']."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");

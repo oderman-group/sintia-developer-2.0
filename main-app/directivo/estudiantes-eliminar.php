@@ -16,77 +16,77 @@ $idU="";
 if(!empty($_GET["idU"])){ $idU=base64_decode($_GET["idU"]);}
 
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_evaluaciones_resultados WHERE res_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_foro_respuestas WHERE fore_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE fore_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_actividad_tareas_entregas WHERE ent_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_ausencias WHERE aus_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_boletin WHERE bol_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_calificaciones WHERE cal_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "UPDATE academico_matriculas SET mat_eliminado=1 WHERE mat_id='" . $idE . "'");
+    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_eliminado=1 WHERE mat_id='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_nivelaciones WHERE niv_cod_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM academico_recuperaciones_notas WHERE rec_cod_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE rec_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disciplina_matricula_condicional WHERE cond_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_matricula_condicional WHERE cond_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disciplina_reportes WHERE dr_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_reportes WHERE dr_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM disiplina_nota WHERE dn_cod_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM finanzas_cuentas WHERE fcu_usuario='" . $idU . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_usuario='" . $idU . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".general_resultados WHERE resg_id_usuario='" . $idU . "'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -101,12 +101,12 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM usuarios WHERE uss_id='" . $idU . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios WHERE uss_id='" . $idU . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 try{
-    mysqli_query($conexion, "DELETE FROM usuarios_por_estudiantes WHERE upe_id_estudiante='" . $idE . "'");
+    mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

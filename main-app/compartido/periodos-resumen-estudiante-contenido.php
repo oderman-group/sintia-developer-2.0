@@ -1,9 +1,11 @@
 <?php
-if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_sin_nota_numerica']==1){
+if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) and $config['conf_sin_nota_numerica']==1){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=218";</script>';
 	exit();
 }
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 ?>
+<?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -34,7 +36,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 									</div>
 									
 									<?php
-									if($datosUsuarioActual[3]!=4){
+									if($datosUsuarioActual['uss_tipo']!=4){
 									?>
 
 									<div class="panel">
@@ -44,7 +46,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
 														<b><?=strtoupper($frases[61][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=strtoupper($datosEstudianteActual[3]." ".$datosEstudianteActual[4]." ".$datosEstudianteActual[5]);?></div>
+														<div class="profile-desc-item pull-right"><?=Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);?></div>
 													</li>
 													
 												</ul>
@@ -78,31 +80,45 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														<?php
 															$p = 1;
 															while($p<=$datosEstudianteActual['gra_periodos']){
-																$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."'
-																"), MYSQLI_BOTH);
-																echo '<th style="text-align:center;">'.$p.'P<br>('.$periodosCursos['gvp_valor'].'%)</th>';
+																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+																");
+																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+																$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+																$porcentaje=25;
+																if($numPeriodosCursos>0){
+																	$porcentaje=$periodosCursos['gvp_valor'];
+																}
+																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
 																$p++;
 															}
 														?> 
 														<th style="text-align:center;"><?=$frases[117][$datosUsuarioActual['uss_idioma']];?></th>
-														<?php if($datosUsuarioActual[3]!=3 and $datosUsuarioActual[3]!=4){?>
+														<?php if($datosUsuarioActual['uss_tipo']!=3 and $datosUsuarioActual['uss_tipo']!=4){?>
 															<th style="text-align:center;"><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													$contReg = 1; 
-													$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
+													$contReg = 1;
+													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+													$filtroOr='';
+													if ($listaCursosMediaTecnica != null) { 
+														foreach ($listaCursosMediaTecnica as $dato) {
+															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+														}
+													}
+													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM academico_materias, academico_grados, usuarios WHERE mat_id='".$rCargas[4]."' AND gra_id='".$rCargas[2]."' AND uss_id='".$rCargas[1]."'");
+														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 													?>
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
-														<td style="text-align:center;"><?=$rCargas[0];?></td>
+														<td style="text-align:center;"><?=$rCargas['car_id'];?></td>
 														<td><?=$rDatos[1];?></td>
 
 														<?php
@@ -113,28 +129,43 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														 $n = 0;
 														 for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
 															
-															 $periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."'
-															"), MYSQLI_BOTH);
-															 $decimal = $periodosCursos['gvp_valor']/100;
+															$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+															");
+															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+															$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+															$porcentaje=25;
+															if($numPeriodosCursos>0){
+																$porcentaje=$periodosCursos['gvp_valor'];
+															}
+															 $decimal = $porcentaje/100;
 															 
 															//LAS CALIFICACIONES
-															$notasConsulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$datosEstudianteActual[0]." AND bol_carga=".$rCargas[0]." AND bol_periodo=".$i);
+															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$rCargas['car_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;
-																$definitiva += $notasResultado[4]*$decimal;
+																$definitiva += $notasResultado['bol_nota']*$decimal;
 																$sumaPorcentaje += $decimal;
 															}
-															if(!empty($notasResultado[4]) && $notasResultado[4]<$config[5])$color = $config[6]; elseif(!empty($notasResultado[4]) && $notasResultado[4]>=$config[5]) $color = $config[7];
-															if(!empty($notasResultado[5]) && $notasResultado[5]==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado[5]) && $notasResultado[5]==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
+															if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5])$color = $config[6]; elseif(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']>=$config[5]) $color = $config[7];
+															if(!empty($notasResultado['bol_tipo']) && $notasResultado['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">'.$frases[123][$datosUsuarioActual['uss_idioma']].'</span>'; elseif(!empty($notasResultado['bol_tipo']) && $notasResultado['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>'; else $tipo='';
 															$usrEstud="";
 															if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 
+															$notaFinal="";
+															if(!empty($notasResultado['bol_nota'])) {
+																$notaFinal=$notasResultado['bol_nota'];
+																if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																	$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado['bol_nota']);
+																	$notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+																}
+															}
+
 														?>
 															<td style="text-align:center;">
-																<a href="calificaciones.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?php if(!empty($notasResultado[4])) { echo $notasResultado[4]."<br>".$tipo;} ?></a>
+																<a href="calificaciones.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($i);?>&usrEstud=<?=base64_encode($usrEstud);?>" style="color:<?=$color;?>; text-decoration:underline;"><?=$notaFinal."<br>".$tipo;?></a>
 															</td>
 														<?php		
 														 }
@@ -142,7 +173,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 															if(!empty($sumaPorcentaje)){
 																$definitiva = ($definitiva / $sumaPorcentaje);
 															}
-															$consultaN = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$datosEstudianteActual[0]." AND niv_id_asg=".$rCargas[0]);
+															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$datosEstudianteActual['mat_id']."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -151,7 +182,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 																	$definitiva = round(($definitiva), $config['conf_decimales_notas']);
 																	$tN = '<span style="color:blue; font-size:9px;">'.$frases[122][$datosUsuarioActual['uss_idioma']].'</span>';
 															}else{
-																$definitiva = $rN[3];
+																$definitiva = $rN['niv_definitiva'];
 																$tN = '<span style="color:red; font-size:9px;">'.$frases[124][$datosUsuarioActual['uss_idioma']].'</span>';
 															}
 														 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];
@@ -160,14 +191,19 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 														 //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
 														 if($config[2]==$datosEstudianteActual['gra_periodos']){
 															 $notaMinima = ($config[5]-$definitiva);
-															 $periodosCursos2 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-															 WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$datosEstudianteActual['gra_periodos']."'
+															 $periodosCursos2 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+															 WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$datosEstudianteActual['gra_periodos']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 															 "), MYSQLI_BOTH);
 															 $decimal2 = $periodosCursos2['gvp_valor']/100;
 															
 															if(!empty($decimal2)){ 
 																$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);
-															} 
+															}
+
+															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+																$estiloNotaRecuperacion = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMinima);
+																$notaMinima= !empty($estiloNotaRecuperacion['notip_nombre']) ? $estiloNotaRecuperacion['notip_nombre'] : "";
+															}
 															 
 															 if($notaMinima<=0){
 																$notaMinima = "-";
@@ -183,7 +219,7 @@ if(($datosUsuarioActual[3]==3 or $datosUsuarioActual[3]==4) and $config['conf_si
 
 														<td style="text-align:center; color:<?=$colorFaltante;?>; font-weight:bold;"><?=$notaMinima;?></td>
 														
-														<?php if($datosUsuarioActual[3]!=3 and $datosUsuarioActual[3]!=4){?>
+														<?php if($datosUsuarioActual['uss_tipo']!=3 and $datosUsuarioActual['uss_tipo']!=4){?>
 															<td style="text-align:center; color:<?=$color;?>;">
 																<?=$definitiva."<br>".$tN;?>
 															</td>

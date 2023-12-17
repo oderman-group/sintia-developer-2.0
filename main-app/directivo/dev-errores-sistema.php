@@ -44,14 +44,22 @@ $Plataforma = new Plataforma;
                         <div class="row">
                             <?php
                                 $filtro = '';
-                                if (is_numeric($_GET["insti"])) {
-                                    $filtro .= " AND rperr_institucion='" . $_GET["insti"] . "'";
+                                $insti='';
+                                if (!empty($_GET["insti"])) {
+                                    $insti=base64_decode($_GET["insti"]);
+                                    $filtro .= " AND rperr_institucion='" . $insti . "'";
                                 }
+                                $desde='';
+                                $hasta='';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
-                                    $filtro .= " AND (rperr_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR rperr_fecha LIKE '%" . $_GET["hasta"] . "%')";
+                                    $desde=$_GET["desde"];
+                                    $hasta=$_GET["hasta"];
+                                    $filtro .= " AND (rperr_fecha BETWEEN '" . $desde . "' AND '" . $hasta . "' OR rperr_fecha LIKE '%" . $hasta . "%')";
                                 }
+                                $year='';
                                 if (!empty($_GET["year"])) {
-                                    $filtro .= " AND YEAR(rperr_fecha) =".$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
+                                    $filtro .= " AND YEAR(rperr_fecha) =".$year;
                                 }       
                             ?>
 
@@ -78,12 +86,13 @@ $Plataforma = new Plataforma;
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>ID</th>
                                                         <th>Cod</th>
                                                         <th>Fecha</th>
                                                         <th>Error</th>
                                                         <th>Responsable</th>
                                                         <th>Institución</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -93,7 +102,7 @@ $Plataforma = new Plataforma;
                                                     try{
                                                         $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
                                                         INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-                                                        LEFT JOIN usuarios ON uss_id=rperr_usuario
+                                                        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=rperr_usuario AND uss.institucion=rperr_institucion AND uss.year=rperr_year
                                                         WHERE rperr_id=rperr_id $filtro
                                                         ORDER BY rperr_id DESC
                                                         LIMIT $inicio,$registros;");
@@ -106,20 +115,16 @@ $Plataforma = new Plataforma;
                                                         $responsable=UsuariosPadre::nombreCompletoDelUsuario($resultado);
                                                         
                                                         $ussAutologin="NO";
-                                                        if($resultado['hil_usuario_autologin']!=0){
+                                                        if(!empty($resultado['hil_usuario_autologin']) && $resultado['hil_usuario_autologin']!=0){
 
-                                                            try{
-                                                                $consultaUssAutologin= mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$resultado['hil_usuario_autologin']."'");
-                                                            } catch (Exception $e) {
-                                                                include("../compartido/error-catch-to-report.php");
-                                                            }
-                                                            $datosUssAutologin = mysqli_fetch_array($consultaUssAutologin, MYSQLI_BOTH);
+                                                            $datosUssAutologin = UsuariosPadre::sesionUsuario($resultado['hil_usuario_autologin']);
                                                             $ussAutologin=UsuariosPadre::nombreCompletoDelUsuario($datosUssAutologin);
 
                                                         }
                                                     ?>
                                                         <tr>
                                                             <td><?= $contReg; ?></td>
+                                                            <td><?= $resultado['rperr_id']; ?></td>
                                                             <td><?= $resultado['rperr_numero']; ?></td>
                                                             <td><?= $resultado['rperr_fecha']; ?></td>
                                                             <td><?= $resultado['rperr_error']; ?></td>
@@ -127,12 +132,12 @@ $Plataforma = new Plataforma;
                                                             <td><?= $resultado['ins_siglas']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-errores-sistema-detalles.php?id=<?= $resultado['rperr_id']; ?>">Ver Detalles</a></li>
+                                                                        <li><a href="dev-errores-sistema-detalles.php?id=<?= base64_encode($resultado['rperr_id']); ?>">Ver Detalles</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>

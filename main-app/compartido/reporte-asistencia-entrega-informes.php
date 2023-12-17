@@ -1,15 +1,23 @@
 <?php
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0233';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $Plataforma = new Plataforma;
 
-$year = $agnoBD;
+$year = $_SESSION["bd"];
 if (isset($_REQUEST["year"])) {
     $year = $_REQUEST["year"];
 }
-$BD = $_SESSION["inst"] . "_" . $year;
 
 if (empty($_REQUEST["periodo"])) {
     $periodoActual = 1;
@@ -40,10 +48,11 @@ if($config['conf_firma_estudiante_informe_asistencia']==1){
     $colspan=2;
 }
 
-$consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM $BD.academico_materias
-INNER join $BD.academico_areas ON ar_id = mat_area
-INNER JOIN $BD.academico_cargas on car_materia = mat_id and car_curso = '" . $_REQUEST["curso"] . "' AND car_grupo = '" . $_REQUEST["grupo"] . "'
-ORDER BY mat_id");
+$consultaNombreMaterias= mysqli_query($conexion,"SELECT mat_nombre, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
+INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '" . $_REQUEST["curso"] . "' AND car_grupo = '" . $_REQUEST["grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+ORDER BY am.mat_id");
 $numMaterias=mysqli_num_rows($consultaNombreMaterias);
 ?>
 <!doctype html>
@@ -123,8 +132,10 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         </tr>
 
         <?php
+        $grupo="";
         if (!empty($_REQUEST["curso"]) and !empty($_REQUEST["grupo"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "' AND mat_grupo='" . $_REQUEST["grupo"] . "'";
+            $grupo=$_REQUEST["grupo"];
         } elseif (!empty($_REQUEST["curso"])) {
             $adicional = "AND mat_grado='" . $_REQUEST["curso"] . "'";
         } else {
@@ -132,7 +143,8 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         }
         $cont = 1;
         $filtroAdicional = $adicional . " AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-        $consulta = Estudiantes::listarEstudiantesParaPlanillas(0, $filtroAdicional, $BD);
+        $cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+        $consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo,$year);
         $numE = mysqli_num_rows($consulta);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);
@@ -142,11 +154,12 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                 <td><?=$resultado["gra_nombre"]." ".$resultado["gru_nombre"]?></td>
                 <td><?= $nombre ?></td>
                 <?php
-                    $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM academico_materias
-                    INNER JOIN academico_areas ON ar_id = mat_area
-                    INNER JOIN academico_cargas on car_materia = mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."'
-                    LEFT JOIN academico_boletin ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."'
-                    ORDER BY mat_id;");
+                    $consultaNotaMaterias= mysqli_query($conexion,"SELECT bol_nota FROM ".BD_ACADEMICA.".academico_materias am
+                    INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
+                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '".$_REQUEST["curso"]."' AND car_grupo = '".$_REQUEST["grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                    LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo = '".$_REQUEST["periodo"]."' AND bol_estudiante = '".$resultado["mat_id"]."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+                    WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                    ORDER BY am.mat_id;");
                     $numNotas = mysqli_num_rows($consultaNotaMaterias);
                     if($numNotas>0){
                         // $notaMateria= 0;
@@ -154,11 +167,19 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
                             if(!is_null($notaMaterias['bol_nota'])){
                                 $notaMateria= round($notaMaterias['bol_nota'],$config['conf_decimales_notas']);
 
+                                $notaMateriaFinal=$notaMateria;
+                                $diseñoCelda='';
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $diseñoCelda='class="vertical" title="Nota Cuantitativa: '.$notaMateria.'"';
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria, $year);
+                                    $notaMateriaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+
                                 $estiloNota="";
                                 if($notaMateria<$config['conf_nota_minima_aprobar']){
                                     $estiloNota='style="font-weight:bold; color:#008e07; background:#abf4af;"';
                                 }
-                                echo '<td align="center" '.$estiloNota.'>'.$notaMateria.'</td>';
+                                echo '<td align="center" '.$estiloNota.' '.$diseñoCelda.'>'.$notaMateriaFinal.'</td>';
                             }else{
                                 echo '<td align="center">&nbsp;</td>';
                             } 
@@ -180,6 +201,7 @@ $numMaterias=mysqli_num_rows($consultaNombreMaterias);
         <?php
             $cont++;
         } //Fin mientras que
+        include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
         ?>
     </table>
 

@@ -114,11 +114,7 @@ $datosContacto = mysqli_fetch_array($consultaDatosContacto, MYSQLI_BOTH);
                                         <label class="col-sm-2 control-label">Asesor de Ventas</label>
                                         <div class="col-sm-4">
                                             <?php
-                                            try{
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_bloqueado=0 AND (uss_tipo=5 OR uss_tipo=1)");
-                                            } catch (Exception $e) {
-                                                include("../compartido/error-catch-to-report.php");
-                                            }
+                                            $consulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_bloqueado=0 AND (uss_tipo=".TIPO_DIRECTIVO." OR uss_tipo=".TIPO_DEV.")");
                                             ?>
                                             <select class="form-control" name="asesor">
                                                 <option value="">Seleccione una opción</option>
@@ -154,7 +150,9 @@ $datosContacto = mysqli_fetch_array($consultaDatosContacto, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                 </form>
                             </div>
                         </div>

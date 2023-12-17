@@ -47,7 +47,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[51][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[222][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></th>
@@ -62,11 +62,11 @@
 													 $filtro = '';
 													 if(!empty($_GET["new"]) && $_GET["new"]==1){$filtro .= " AND dr_aprobacion_estudiante=0";}
 													
-													 $consulta = mysqli_query($conexion, "SELECT * FROM disciplina_reportes
-													 INNER JOIN disciplina_faltas ON dfal_id=dr_falta
-													 INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
-													 INNER JOIN usuarios ON uss_id=dr_usuario
-													 WHERE dr_estudiante='".$datosEstudianteActual['mat_id_usuario']."'
+													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_reportes dr
+													 INNER JOIN ".BD_DISCIPLINA.".disciplina_faltas ON dfal_id=dr_falta AND dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
+													 INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+													 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=dr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+													 WHERE dr_estudiante='".$datosEstudianteActual['mat_id_usuario']."' AND dr.institucion={$config['conf_id_institucion']} AND dr.year={$_SESSION["bd"]}
 													 $filtro
 													 ");
 													 $contReg = 1;
@@ -82,7 +82,7 @@
 														<td><?=$resultado['dr_observaciones'];?></td>
 														<td>
 															<?php if($resultado['dr_aprobacion_estudiante']==0){?>
-																<a href="guardar.php?get=<?=base64_encode(1);?>&id=<?=base64_encode($resultado['dr_id']);?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
+																<a href="reportes-disciplinarios-firmar.php?id=<?=base64_encode($resultado['dr_id']);?>" onClick="if(!confirm('Al firmar de forma digital estás aceptando que ésta sanción sí te corresponde. Deseas continuar?')){return false;}"><?=$frases[286][$datosUsuarioActual['uss_idioma']];?></a>
 															<?php }else{?>
 																<i class="fa fa-check-circle" title="<?=$resultado['dr_aprobacion_estudiante_fecha'];?>"></i>
 															<?php }?>

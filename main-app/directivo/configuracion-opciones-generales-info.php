@@ -1,12 +1,11 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0059';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
+<?php
+include("session.php");
+$idPaginaInterna = 'DV0069';
+include("../compartido/historial-acciones-guardar.php");
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
-	exit();
-}?>
+Modulos::verificarPermisoDev();
+include("../compartido/head.php");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -50,37 +49,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                         <div class="col-sm-12">
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
-
-                                   
-                                    <form action="guardar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-                                        <?php
-                                        if($_GET["a"]==1){
-                                            echo '<input type="hidden" name="id" value="46">';
-                                            try{
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales;");
-                                            } catch (Exception $e) {
-                                                include("../compartido/error-catch-to-report.php");
-                                            }
-                                            $n = mysqli_num_rows($consulta);
-                                        }	
-                                        elseif($_GET["a"]==2){
-                                            echo '<input type="hidden" name="id" value="47">';
-                                            echo '<input type="hidden" name="idogen" value="'.$_GET["idogen"].'">';
-                                            try{
-                                                $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$_GET["idogen"]."'");
-                                            } catch (Exception $e) {
-                                                include("../compartido/error-catch-to-report.php");
-                                            }
-                                            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-                                        }	
-                                        ?>
+                                    <form action="configuracion-opciones-generales-guardar.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="nombre" value="<?=$resultado["ogen_nombre"]?>" />
+                                                <input type="text" class="form-control" name="nombre" value="" />
                                             </div>
                                         </div>
 										
@@ -92,10 +68,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     <?php
                                                         foreach ($opcionesGenerales as $key => $value) {
                                                             if($key!=0){
-                                                                $selected="";
-                                                                if($resultado["ogen_grupo"]==$key){ $selected="selected";}
                                                     ?>
-                                                        <option value="<?=$key?>" <?=$selected?>><?=$value?></option>
+                                                        <option value="<?=$key?>"><?=$value?></option>
                                                     <?php
                                                             }
                                                         }
@@ -105,7 +79,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         </div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                     </form>
                                 </div>
                             </div>

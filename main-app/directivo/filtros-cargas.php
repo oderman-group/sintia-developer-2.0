@@ -1,5 +1,5 @@
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
-									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual[8]];?></p>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
+									<p style="color: darkblue;"><?=$frases[206][$datosUsuarioActual['uss_idioma']];?></p>
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[106][$datosUsuarioActual['uss_idioma']];?> </header>
@@ -8,7 +8,7 @@
 											$porcentaje = 0;
 											for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
 												try{
-													$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."'");
+													$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -33,11 +33,11 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-												INNER JOIN academico_materias ON mat_id=car_materia
-												INNER JOIN academico_grados ON gra_id=car_curso
-												INNER JOIN academico_grupos ON gru_id=car_grupo
-												WHERE car_docente='".$_SESSION["id"]."'
+												$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+												INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+												INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+												WHERE car_docente='".$_SESSION["id"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
 												ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");

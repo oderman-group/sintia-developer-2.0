@@ -36,7 +36,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?= $frases[367][$datosUsuarioActual[8]]; ?></div>
+                            <div class="page-title"><?= $frases[367][$datosUsuarioActual['uss_idioma']]; ?></div>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                             
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?= $frases[368][$datosUsuarioActual[8]]?></header>
+                                    <header><?= $frases[368][$datosUsuarioActual['uss_idioma']]?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
 

@@ -11,7 +11,7 @@ include("../compartido/head.php");
 
 try{
     $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".instituciones 
-    WHERE ins_id='" . $_GET["id"] . "' AND ins_enviroment='".ENVIROMENT."'");
+    WHERE ins_id='" . base64_decode($_GET["id"]) . "' AND ins_enviroment='".ENVIROMENT."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -65,7 +65,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 
                                 <form name="formularioGuardar" action="dev-instituciones-guardar.php" method="post">
-                                    <input type="hidden" name="id" value="<?=$_GET["id"]?>">
+                                    <input type="hidden" name="id" value="<?=base64_decode($_GET["id"])?>">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">ID</label>
@@ -217,7 +217,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Modulos</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-10">
                                             <select class="form-control  select2-multiple" name="modulos[]" multiple>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
@@ -228,7 +228,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                     }
                                                     while($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)){
                                                 ?>
-                                                <option value="<?=$modulos['mod_id'];?>" <?php if(Modulos::verificarModulosDeInstitucion($_GET["id"],$modulos['mod_id'])){echo "selected";}?>><?=$modulos['mod_nombre']?></option>
+                                                <option value="<?=$modulos['mod_id'];?>" <?php if(Modulos::verificarModulosDeInstitucion(base64_decode($_GET["id"]),$modulos['mod_id'])){echo "selected";}?>><?="[{$modulos['mod_id']}] - ".$modulos['mod_nombre'];?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
@@ -259,7 +259,9 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                 </form>
                             </div>
                         </div>

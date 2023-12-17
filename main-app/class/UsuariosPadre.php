@@ -29,11 +29,10 @@ class UsuariosPadre {
         global $filtro;
         $index=0;
         $tableName = BDT_GeneralPerfiles::getTableName();        
-        while($yearStart <= $yearEnd){
-            $instYear =$_SESSION["inst"] ."_". $yearStart;            
-            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios 
+        while($yearStart <= $yearEnd){          
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
             INNER JOIN ".$baseDatosServicios.".{$tableName} ON pes_id=uss_tipo
-            WHERE uss_usuario LIKE '".$usuario."%'");
+            WHERE uss_usuario LIKE '".$usuario."%' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$yearStart}");
             if($consultaUsuarioAuto->num_rows>0){               
                 while($fila=$consultaUsuarioAuto->fetch_assoc()){
                     $fila["anio"]=$yearStart;
@@ -46,24 +45,41 @@ class UsuariosPadre {
         return $arraysDatos;
     }
 
-    public static function sesionUsuario($idUsuario)
+    /**
+     * Obtiene los datos de un usuario a partir de su ID de usuario.
+     *
+     * Esta función consulta la base de datos para recuperar los datos de un usuario utilizando su ID de usuario.
+     *
+     * @param string $idUsuario - El ID de usuario para el cual se desean obtener los datos.
+     * @param string $filtroAdicional (Opcional) - Un filtro adicional que se puede aplicar a la consulta SQL.
+     *
+     * @return array - Un array que contiene los datos del usuario si se encuentra en la base de datos, o un array vacío si no se encuentra.
+     */
+    public static function sesionUsuario($idUsuario, $filtroAdicional='')
     {
         global $conexion;
 
-        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_id='".$idUsuario."'");
-        $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
+        try{
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$idUsuario."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]} {$filtroAdicional}");
+            $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            return [];
+        }
+    
         return $datosUsuarioAuto;
     }
-    public static function sesionUsuarioAnio($usuario,$instYear)
+
+    public static function sesionUsuarioAnio($usuario,$year)
     {
         global $conexion;
-        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ". $instYear.".usuarios WHERE uss_usuario='".$usuario."' limit 1");
+        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_usuario='".$usuario."' AND institucion={$_SESSION["idInstitucion"]} AND year={$year} limit 1");
         $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
         return $datosUsuarioAuto;
     }
 
-   public static function actualizarUsuariosAnios()
-   {
+    public static function actualizarUsuariosAnios()
+    {
         $get=$_GET["get"];
         $campoGet=null;
         $campoTabla=null;
@@ -96,31 +112,30 @@ class UsuariosPadre {
                 while($yearStart <= $yearEnd){	
                     if ($_SESSION["bd"] == $yearStart) {			
                         if($get == 5) {
-                            mysqli_query($conexion, "UPDATE usuarios SET 
+                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
                             uss_tema_header='" . $_GET["temaHeader"] . "', 
                             uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
                             uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                         }
                         else {
-                            mysqli_query($conexion, "UPDATE usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "'");
+                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                         }
                     } else {
                         $usuarioSession = $_SESSION["datosUsuario"];
-                        $instYear = $_SESSION["inst"] ."_". $yearStart;
-                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $instYear);
+                        $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $yearStart);
                         if($usauriosOtrosAnios) {
                             if($get == 5) {
-                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET 
+                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
                                 uss_tema_header='" . $_GET["temaHeader"] . "', 
                                 uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
                                 uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."'");
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
                             }
                             else {
-                                mysqli_query($conexion, "UPDATE ".$instYear.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "'"); 
+                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
+                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}"); 
                             }
                         }
                         
@@ -131,15 +146,46 @@ class UsuariosPadre {
         }        	
     }
 
-    public static function listarUsuariosCompartir($nombre='',$BD='')
+    public static function listarUsuariosCompartir(
+        $nombre='',
+        $BD='',
+        string $yearBd    = ''
+    )
     {
-        global $conexion,$baseDatosServicios;
+        global $conexion,$baseDatosServicios, $config;
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".$BD.".usuarios 
+        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".BD_GENERAL.".usuarios uss 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
-         
+        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year} ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
+
         return $consulta;         
+    }
+
+    /**
+     * Obtiene todos los datos de usuarios de la base de datos, opcionalmente aplicando un filtro de búsqueda.
+     *
+     * Esta función realiza una consulta a la base de datos para recuperar todos los datos de los usuarios. 
+     * Puede aplicarse un filtro de búsqueda opcional para refinar la consulta.
+     *
+     * @param string $filtroBusqueda (Opcional) - Un filtro de búsqueda que se puede aplicar a la consulta SQL.
+     *
+     * @return mixed - Un objeto de resultado de la consulta si tiene éxito, o 0 si ocurre un error.
+     */
+    public static function obtenerTodosLosDatosDeUsuarios($filtroBusqueda='')
+    {
+        global $conexion, $baseDatosServicios;
+
+        try{
+            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
+            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
+            WHERE uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]} {$filtroBusqueda}");
+            return $consultaUsuario;
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+            return 0;
+        }
+
     }
 
 }   

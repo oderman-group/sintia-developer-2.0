@@ -6,12 +6,12 @@
 <?php include("../compartido/head.php");?>
 <?php
 $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0),
-(SELECT sum(ipc_valor) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1),
-(SELECT count(*) FROM academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1)");
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
+(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
+WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 $sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -59,44 +59,27 @@ if(
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[63][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="indicadores.php"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[63][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
-
-							
-                            <!-- <div class="panel">
-								<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
-                                <div class="panel-body">
-									<p><b>Banco de datos:</b> Tienes la opción de usar información que ya existe y así no tengas que escribir todo de nuevo. <mark>Sólo debes usar una de las 2 alternativas:</mark> o llenas la información desde cero o escoges la existente. Si usas las 2, <mark>el banco de datos tendrá prioridad</mark> y esta será lo que el sistema use.<br>
-									<mark> - MIO :</mark> Significa que la información fue creada por ti.
-									</p>
-									<p><b>Compartir:</b> Compartir la información <mark>es una manera de colaborar con tus colegas.</mark> La información irá al banco de datos y podrá ser usada por ti o por otros colegas tuyos más adelante. En caso de que no desees compartirla puedes dar click sobre el botón para que se desactive y la información sólo puedas verla tú.</p>
-								</div>
-							</div> -->
-                        </div>
-						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="9" name="id">
+									<form name="formularioGuardar" action="indicadores-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 										<!-- Esto es porque hay un campo que existe o no dependiendo la configuración de la carga y afecta la función javascript-->
 										<input type="hidden" value="<?=$datosCargaActual['car_valor_indicador'];?>" name="configInd">
@@ -136,50 +119,18 @@ if(
 										<input type="hidden" name="saberes" class="form-control" value="0">
 										<?php }?>
 
-											<!-- <div class="form-group row">
-												<label class="col-sm-2 control-label">Compartir</label>
-												<div class="input-group spinner col-sm-10">
-													<label class="switchToggle">
-														<input type="checkbox" name="compartir" value="1" checked>
-														<span class="slider red round"></span>
-													</label>
-												</div>
-											 </div> -->
 										</div>
 										
 										<!-- div necesario para el Jscript-->
 										<div id="infoCeroDos"></div>
-										
-										
-										<!-- <p style="color: blue;">Ó si quieres puedes usar el <b>banco de datos</b>. Tal vez te sirva algo de lo que ya existe.</p>
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
-                                            <div class="col-sm-10">
-												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_indicadores
-												INNER JOIN academico_indicadores_carga ON ipc_indicador=ind_id
-												WHERE ind_obligatorio=0
-												");
-												?>
-                                                <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
-                                                    <option value="">Seleccione una opción</option>
-													<option value="0" selected>--Ninguno--</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-														if(($opcionesDatos['ind_publico']==0 and $opcionesDatos['ipc_carga']!=$cargaConsultaActual) or ($opcionesDatos['ipc_carga']==$cargaConsultaActual and $opcionesDatos['ipc_periodo']==$periodoConsultaActual)) continue;
-														$recursoPropio = '';
-														if($opcionesDatos['ipc_carga']==$cargaConsultaActual)$recursoPropio = ' - MIO';
-													?>
-                                                    	<option value="<?=$opcionesDatos['ind_id'];?>"><?=$opcionesDatos['ind_nombre']." (".$opcionesDatos['ipc_valor']."%)".$recursoPropio;?></option>
-													<?php }?>
-                                                </select>
-                                            </div>
-                                        </div> -->
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-										
 										<a href="#" name="indicadores.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+										<button type="submit" class="btn  btn-info">
+											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										</button>
+										
+										
                                     </form>
                                 </div>
                             </div>

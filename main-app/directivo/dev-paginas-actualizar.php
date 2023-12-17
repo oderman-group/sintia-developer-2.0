@@ -8,7 +8,7 @@
     //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
     if(trim($_POST["nombrePagina"])=="" || trim($_POST["rutaPagina"])==""){
         include("../compartido/guardar-historial-acciones.php");
-        echo '<script type="text/javascript">window.location.href="dev-paginas-editar.php?error=ER_DT_4&idP='.$_POST["codigoPagina"].'";</script>';
+        echo '<script type="text/javascript">window.location.href="dev-paginas-editar.php?error=ER_DT_4&idP='.base64_encode($_POST["codigoPagina"]).'";</script>';
         exit();
     }
 
@@ -23,7 +23,7 @@
     if($numIdPaginas>0){
         $datosPaginas=mysqli_fetch_array($verificar, MYSQLI_BOTH);
         include("../compartido/guardar-historial-acciones.php");
-        echo '<script type="text/javascript">window.location.href="dev-paginas-editar.php?error=ER_DT_14&idP='.$_POST["codigoPagina"].'&id='.$datosPaginas['pagp_id'].'&nombrePagina='.$datosPaginas['pagp_pagina'].'";</script>';
+        echo '<script type="text/javascript">window.location.href="dev-paginas-editar.php?error=ER_DT_14&idP='.base64_encode($_POST["codigoPagina"]).'&id='.base64_encode($datosPaginas['pagp_id']).'&nombrePagina='.$datosPaginas['pagp_pagina'].'";</script>';
         exit();
     }
 

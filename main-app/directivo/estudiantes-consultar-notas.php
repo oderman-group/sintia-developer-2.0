@@ -97,7 +97,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">C&oacute;digo Estudiantil</label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="idE" class="form-control" autocomplete="off"  value="<?=$e[1];?>">
+                                                <input type="text" name="idE" class="form-control" autocomplete="off"  value="<?=$e['mat_matricula'];?>">
                                             </div>
 
                                             <input type="submit" class="btn btn-info" value="Consultar">
@@ -107,14 +107,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                     <hr>
 
                                     <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" class="form-horizontal" enctype="multipart/form-data" target="_blank">
-                                        <input type="hidden" value="<?=$e[0];?>" name="estudiante">
+                                        <input type="hidden" value="<?=$e['mat_id'];?>" name="estudiante">
                                         <input type="hidden" value="8" name="id">
 										
 											
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Estudiante</label>
                                             <div class="col-sm-2">
-                                                <input type="text" name="codigoE" class="form-control" autocomplete="off" value="<?=$e[1];?>" readonly>
+                                                <input type="text" name="codigoE" class="form-control" autocomplete="off" value="<?=$e['mat_matricula'];?>" readonly>
                                             </div>
                                             
                                             <div class="col-sm-4">
@@ -126,7 +126,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <label class="col-sm-2 control-label">Carga Acad&eacute;mica</label> 
                                           	<?php 
                                             try{
-                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas, academico_materias WHERE car_curso='".$e[6]."' AND car_grupo='".$e[7]."' AND mat_id=car_materia");
+                                                $consulta_cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_materias am WHERE car_curso='".$e['car_curso']."' AND car_grupo='".$e['car_grupo']."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
@@ -136,7 +136,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <option value="0"></option>
                                                 <?php 
                                                     while($c = mysqli_fetch_array($consulta_cargas, MYSQLI_BOTH)){
-                                                        echo '<option value="'.$c[0].'">COD. '.$c[0].' - '.$c["mat_nombre"].'</option>';	
+                                                        echo '<option value="'.$c['car_id'].'">COD. '.$c['car_id'].' - '.$c["mat_nombre"].'</option>';	
                                                     }
 												 ?>
                                                 </select>

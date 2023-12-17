@@ -1,5 +1,6 @@
 <?php
-
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class AjaxNotas {
 
     /**
@@ -24,7 +25,7 @@ class AjaxNotas {
         if($nota>$config[4]) $nota = $config[4]; if($nota<1) $nota = 1;
 
         try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$codEstudiante." AND bol_carga=".$carga." AND bol_periodo=".$periodo);
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$codEstudiante."' AND bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -32,14 +33,15 @@ class AjaxNotas {
         $num = mysqli_num_rows($consulta);
         $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         if($num==0){
+            $codigoBOL=Utilidades::generateCode("BOL");
             try{
-                mysqli_query($conexion, "INSERT INTO academico_boletin(bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_observaciones)VALUES('".$carga."', '".$codEstudiante."', '".$periodo."', '".$nota."', 2, now(), 0, 'Recuperación del periodo.')");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_observaciones, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$codEstudiante."', '".$periodo."', '".$nota."', 2, now(), 0, 'Recuperación del periodo.', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
         }else{
             try{
-                mysqli_query($conexion, "UPDATE academico_boletin SET bol_nota='".$nota."', bol_nota_anterior='".$notaAnterior."', bol_observaciones='Recuperación del periodo.', bol_tipo=2, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=".$rB[0]);
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota='".$nota."', bol_nota_anterior='".$notaAnterior."', bol_observaciones='Recuperación del periodo.', bol_tipo=2, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id='".$rB['bol_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
@@ -69,7 +71,7 @@ class AjaxNotas {
         if($nota>$config[4]) $nota = $config[4]; if($nota<1) $nota = 1;
 
         try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante=".$codEstudiante." AND niv_id_asg=".$carga);
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante=".$codEstudiante." AND niv_id_asg='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -77,14 +79,15 @@ class AjaxNotas {
         $num = mysqli_num_rows($consulta);
         $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         if($num==0){
+            $codigo=Utilidades::generateCode("NIV");
             try{
-                mysqli_query($conexion, "INSERT INTO academico_nivelaciones(niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha)VALUES('".$carga."','".$codEstudiante."','".$nota."',now())");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_nivelaciones(niv_id, niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha, institucion, year)VALUES('".$codigo."', '".$carga."','".$codEstudiante."','".$nota."',now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
         }else{
             try{
-                mysqli_query($conexion, "UPDATE academico_nivelaciones SET niv_definitiva='".$nota."', niv_fecha=now() WHERE niv_id=".$rB[0]);
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_nivelaciones SET niv_definitiva='".$nota."', niv_fecha=now() WHERE niv_id='".$rB['niv_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }

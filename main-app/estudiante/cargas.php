@@ -1,11 +1,15 @@
 <?php include("session.php");?>
 <?php
-$_SESSION["bd"] = date("Y");
+// $_SESSION["bd"] = date("Y");
 ?>
 <?php include("verificar-usuario.php");?>
 <?php include("verificar-sanciones.php");?>
 <?php $idPaginaInterna = 'ES0010';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
+<?php require_once("../class/servicios/CargaServicios.php"); ?>
+<?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
+<?php require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
 <?php
 $cargaE="";
 if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
@@ -13,7 +17,7 @@ if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
 $periodoE="";
 if(!empty($_GET["periodo"])){ $periodoE=base64_decode($_GET["periodo"]);}
 
-if(is_numeric($cargaE)){
+if(!empty($cargaE)){
 	setcookie("cargaE",$cargaE);
 	setcookie("periodoE",$periodoE);
 	
@@ -32,8 +36,8 @@ if(is_numeric($cargaE)){
 <?php
 if($config['conf_activar_encuesta']==1){
 	$respuesta = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_encuestas 
-	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."'"));
-	if($respuesta==0 and $datosEstudianteActual[6]!=11){
+	WHERE genc_estudiante='".$datosEstudianteActual['mat_id']."' AND genc_institucion={$config['conf_id_institucion']} AND genc_year={$_SESSION["bd"]}"));
+	if($respuesta==0 and $datosEstudianteActual['mat_grado']!=11){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=214";</script>';
 		exit();	
 	}
@@ -67,15 +71,15 @@ if($config['conf_activar_encuesta']==1){
                     </div>
                    
 						<?php
-						$cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-						INNER JOIN academico_materias ON mat_id=car_materia
-						INNER JOIN academico_grados ON gra_id=car_curso
-						INNER JOIN usuarios ON uss_id=car_docente
-						WHERE car_curso='".$datosEstudianteActual[6]."' AND car_grupo='".$datosEstudianteActual[7]."'");
-						$nCargas = mysqli_num_rows($cCargas);
-						$mensajeCargas = new Cargas;
-						$mensajeCargas->verificarNumCargas($nCargas,$datosUsuarioActual['uss_idioma']);
-						?>
+						$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+						INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+						INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+						INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+						WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
+				$nCargas = mysqli_num_rows($cCargas);
+				$mensajeCargas = new Cargas;
+				$mensajeCargas->verificarNumCargas($nCargas, $datosUsuarioActual['uss_idioma']);
+				?>
 
 					
                    
@@ -85,45 +89,51 @@ if($config['conf_activar_encuesta']==1){
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 										//Verificar si el estudiante está matriculado en cursos de extensión o complementarios
 										if($rCargas['car_curso_extension']==1){
-											$cursoExt = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM academico_cargas_estudiantes WHERE carpest_carga='".$rCargas['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1"));
+											$cursoExt = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga='".$rCargas['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
 											if($cursoExt==0){continue;}
 										}
 									    
 										$ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
-										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM academico_cargas_acceso 
-										WHERE carpa_id_carga='".$rCargas[0]."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."'"), MYSQLI_BOTH);
+										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso 
+										WHERE carpa_id_carga='".$rCargas['car_id']."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
 										if(!empty($cargaHistorial['carpa_id'])){
 											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 										}
-										if(!empty($_COOKIE["cargaE"]) && $rCargas[0]==$_COOKIE["cargaE"]){
+										if(!empty($_COOKIE["cargaE"]) && $rCargas['car_id']==$_COOKIE["cargaE"]){
 											$fondoCargaActual = 'cornsilk';
 										}
 										//DEFINITIVAS
-										$carga = $rCargas[0];
+										$carga = $rCargas['car_id'];
 										$periodo = $rCargas['car_periodo'];
-										$estudiante = $datosEstudianteActual[0];
+										$estudiante = $datosEstudianteActual['mat_id'];
 										include("../definitivas.php");
+
+										$definitivaFinal=$definitiva;
+										if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+											$estiloNotaDefinitiva = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+											$definitivaFinal= !empty($estiloNotaDefinitiva['notip_nombre']) ? $estiloNotaDefinitiva['notip_nombre'] : "";
+										}
 									?>
 						 <div class="col-lg-3 col-md-6 col-12 col-sm-6"> 
 							
 							<div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
 								<div class="thumb-center">
-									<a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+									<a href="cargas.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
 								</div>
 	                        	<div class="course-box">
-	                        	<h4><a href="cargas.php?carga=<?=base64_encode($rCargas[0]);?>&periodo=<?=base64_encode($rCargas[5]);?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
+	                        	<h4><a href="cargas.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h4>
 		                            <div class="text-muted">
 										<span class="m-r-10" style="font-size: 10px;"><?=$ultimoAcceso;?></span> 
 										
-		                            	<?php if($datosUsuarioActual['uss_bloqueado']!=1 and $config['conf_sin_nota_numerica']!=1){?><a class="course-likes m-l-10" href="#"> <?=$definitiva;?></a><?php }?>
+		                            	<?php if($datosUsuarioActual['uss_bloqueado']!=1 and $config['conf_sin_nota_numerica']!=1){?><a class="course-likes m-l-10" href="#"> <?=$definitivaFinal;?></a><?php }?>
 										
 		                            </div>
 		                            <p><span><i class="fa fa-clock-o"></i> <?=$frases[101][$datosUsuarioActual['uss_idioma']];?>: <?=$rCargas['car_periodo'];?></span></p>
 		                            <p><span><i class="fa  fa-user"></i> <?=$frases[28][$datosUsuarioActual['uss_idioma']];?>: <?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></span></p>
 									
 									<!--
-		                            <a href="cargas.php?carga=<?=$rCargas[0];?>&periodo=<?=$rCargas[5];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
+		                            <a href="cargas.php?carga=<?=$rCargas['car_id'];?>&periodo=<?=$rCargas['car_periodo'];?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 btn-info"><?=$frases[103][$datosUsuarioActual['uss_idioma']];?></a>
 									-->
 									
 	                        	</div>
@@ -134,7 +144,72 @@ if($config['conf_activar_encuesta']==1){
 	                    
 			        </div>
 			        <!-- End course list -->
-			        
+			        <?php if (array_key_exists(10, $arregloModulos)) { ?>
+						<?php
+						$parametros = [
+							'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+							'matcur_id_institucion' => $config['conf_id_institucion'],
+							'matcur_years' => $config['conf_agno']
+						];
+						$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
+						if(!empty($listaCursosMediaTecnica)){ echo '<hr  noshade="noshade" size="3" width="100%" />';
+						foreach ($listaCursosMediaTecnica as $dato) {
+							$cursoMediaTecnica = GradoServicios::consultarCurso($dato["matcur_id_curso"]); ?>			
+
+							<div class="row">
+								<div class="col-12">
+									<div class="page-title"><?= $cursoMediaTecnica["gra_nombre"]; ?></div>
+								</div>
+							</div>							
+							<div class="row">
+							<?php
+							$parametros = [
+								'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+								'matcur_id_curso'     => $dato["matcur_id_curso"],
+								'matcur_id_grupo'     => $dato["matcur_id_grupo"],
+								'matcur_id_institucion' => $config['conf_id_institucion'],
+								'matcur_years' => $config['conf_agno']
+							];
+							$listacargaMediaTecnica = MediaTecnicaServicios::listarMaterias($parametros);
+							if ($listacargaMediaTecnica != null) { 
+								foreach ($listacargaMediaTecnica as $cargaMediaTecnica) {
+									$fondoCargaActual = '#FFF';
+									if(!empty($_COOKIE["cargaE"]) && $cargaMediaTecnica["car_id"]==$_COOKIE["cargaE"]){
+										$fondoCargaActual = 'cornsilk';
+									}
+								?>
+								<div class="col-lg-3 col-md-6 col-6 col-sm-6">
+									<div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
+										<div class="thumb-center">
+											<a href="cargas.php?carga=<?= base64_encode($cargaMediaTecnica["car_id"]); ?>&periodo=<?= base64_encode($cargaMediaTecnica["car_periodo"]); ?>"><img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg"></a>
+										</div>
+										<div class="course-box">
+											<h4><a href="cargas.php?carga=<?= base64_encode($cargaMediaTecnica["car_id"]); ?>&periodo=<?= base64_encode($cargaMediaTecnica["car_periodo"]); ?>" style="text-decoration: underline;"><?= strtoupper($cargaMediaTecnica['mat_nombre']); ?></a></h4>
+											<div class="text-muted">
+												<span class="m-r-10" style="font-size: 10px;"><?= $ultimoAcceso; ?></span>
+
+												<?php if ($datosUsuarioActual['uss_bloqueado'] != 1 and $config['conf_sin_nota_numerica'] != 1) { ?><a class="course-likes m-l-10" href="#"> <?= $definitiva; ?></a><?php } ?>
+
+											</div>
+											<p><span><i class="fa fa-clock-o"></i> <?= $frases[101][$datosUsuarioActual['uss_idioma']]; ?>: <?= $cargaMediaTecnica['car_periodo']; ?></span></p>
+											<p><span><i class="fa  fa-user"></i> <?= $frases[28][$datosUsuarioActual['uss_idioma']]; ?>: <?= UsuariosPadre::nombreCompletoDelUsuario($cargaMediaTecnica); ?></span></p>
+
+
+										</div>
+									</div>
+								</div>
+								<?php }} else {
+								echo '
+									<div class="col-12">
+										<div class="alert alert-danger">
+											<i class="icon-exclamation-sign"></i><strong>INFORMACIÓN:</strong> El curso de <b>' . $cursoMediaTecnica["gra_nombre"] . '</b> no tiene cargas academicas asignadas aún.
+										</div>
+									</div>
+									';
+							} ?>
+							</div>
+							<?php }} ?>
+					<?php } ?>
                 </div>
             </div>
             <!-- end page content -->

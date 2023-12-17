@@ -12,6 +12,7 @@ $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }?>
+<?php require_once("../class/servicios/GradoServicios.php"); ?>
     
 	<!-- steps -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/steps/steps.css"> 
@@ -75,6 +76,15 @@ if(!Modulos::validarPermisoEdicion()){
 				selectElement.remove(selectElement.selectedIndex);
 			}
 		}
+
+		function mostrarCursosAdicionales(enviada) {
+			var valor = enviada.value;
+			if (valor == '<?=GRADO_INDIVIDUAL;?>') {
+				document.getElementById("divCursosAdicionales").style.display='block';
+			} else {
+				document.getElementById("divCursosAdicionales").style.display='none';
+			}
+		}
 	</script>
 
 </head>
@@ -97,6 +107,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
                                 <div class="page-title">Crear matrículas</div>
+								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
                                 <li><a class="parent-item" href="javascript:void(0);" name="estudiantes.php" onClick="deseaRegresar(this)">Matrículas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
@@ -140,20 +151,16 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-4">
 													<?php
-													try{
-														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-														WHERE ogen_grupo=1");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=1");
 													?>
 													<select class="form-control  select2" name="tipoD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoD'])
-															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoD'])
+															echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 														else
-															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+															echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -175,13 +182,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="lugarD" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-															");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarEx']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -254,13 +257,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="lNacM" id="lNacM" onChange="lugarNacimiento(this)" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-															");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['lugarNac']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -280,16 +279,12 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="genero" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['genero'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['genero'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -326,16 +321,12 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="religion" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=2");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['religion'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['religion'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -369,14 +360,10 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="ciudadR" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
-															ORDER BY ciu_nombre
-															");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento 
+														ORDER BY ciu_nombre
+														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 															$selected='';
 															$opg['ciu_codigo'] = trim($opg['ciu_codigo']);
@@ -397,16 +384,12 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="estrato" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
 															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=3");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['estrato'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['estrato'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -435,22 +418,17 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
 													<?php
-													try{
-														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados
-														WHERE gra_estado=1
-														");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													?>
 													<select class="form-control" name="grado" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($opcionesDatos[0]==$datosMatricula['grado'])
-																echo '<option value="'.$opcionesDatos[0].'" selected>'.$opcionesDatos[2].'</option>';
+															if($opcionesDatos['gra_id']==$datosMatricula['grado'])
+																echo '<option value="'.$opcionesDatos['gra_id'].'" selected>'.$opcionesDatos['gra_nombre'].'</option>';
 															else
-																echo '<option value="'.$opcionesDatos[0].'">'.$opcionesDatos[2].'</option>';	
+																echo '<option value="'.$opcionesDatos['gra_id'].'">'.$opcionesDatos['gra_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -460,20 +438,17 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
 													<?php
-													try{
-														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+													");
 													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($rv[0]==$datosMatricula['grupo'])
-																echo '<option value="'.$rv[0].'" selected>'.$rv['gru_nombre'].'</option>';
+															if($rv['gru_id']==$datosMatricula['grupo'])
+																echo '<option value="'.$rv['gru_id'].'" selected>'.$rv['gru_nombre'].'</option>';
 															else
-																echo '<option value="'.$rv[0].'">'.$rv['gru_nombre'].'</option>';	
+																echo '<option value="'.$rv['gru_id'].'">'.$rv['gru_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -483,22 +458,18 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Tipo estudiante</label>
 												<div class="col-sm-4">
 													<?php
-													try{
-														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-														WHERE ogen_grupo=5
-														");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=5
+													");
 													?>
 													<select class="form-control" name="tipoEst" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoE'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoE'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -521,7 +492,69 @@ if(!Modulos::validarPermisoEdicion()){
 												<div class="col-sm-2">
 													<input type="text" name="va_matricula" class="form-control" autocomplete="off" value="<?=$datosMatricula['vaMatricula'];?>" <?=$disabledPermiso;?>>
 												</div>
-											</div>	
+											</div>
+											<?php if (array_key_exists(10, $arregloModulos)) { ?>
+												<div class="form-group row">
+													<label class="col-sm-2 control-label"> Puede estar en multiples cursos? </label>
+													<div class="col-sm-2">
+														<select class="form-control" onchange="mostrarCursosAdicionales(this)" name="tipoMatricula">
+															<option value="<?=GRADO_GRUPAL;?>" selected>NO</option>
+															<option value="<?=GRADO_INDIVIDUAL;?>">SI</option>
+														</select>
+													</div>
+												</div>
+
+												<div id="divCursosAdicionales" style="display: none;">
+													<div class="form-group row">
+														<label class="col-sm-2 control-label" >Cursos adicionales</label>
+														<div class="col-sm-4" >
+															<?php
+															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+															$listaIndividuales = GradoServicios::listarCursos($parametros);
+															?>
+															<select id="cursosAdicionales" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" onchange="mostrarGrupoCursosAdicionales(this)" multiple>
+																<option value="">Seleccione una opción</option>
+																<?php
+																foreach ($listaIndividuales as $clave => $dato) {
+																	$disabled = '';
+																	if ($dato['gra_estado'] == '0') {
+																		$disabled = 'disabled';
+																	};
+																	echo '<option value="' . $dato["gra_id"] . '" ' . $disabled . '>' . $dato['gra_id'] . '.' . strtoupper($dato['gra_nombre']) . '</option>';
+																}
+																?>
+															</select>
+														</div>
+													</div>
+			
+													<script type="application/javascript">
+														$(document).ready(mostrarGrupoCursosAdicionales(document.getElementById("cursosAdicionales")))
+														function mostrarGrupoCursosAdicionales(enviada) {
+															var valor = enviada.value;
+															if (valor != '') {
+																document.getElementById("divGradoMT").style.display='block';
+															} else {
+																document.getElementById("divGradoMT").style.display='none';
+															}
+														}
+													</script>
+													<div id="divGradoMT" style="display: none;">
+														<div class="form-group row" >
+															<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
+															<div class="col-sm-4">
+																<?php
+																$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																?>
+																<select class="form-control" name="grupoMT">
+																<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+																	echo '<option value="'.$rv['gru_id'].'">'.$rv['gru_nombre'].'</option>';
+																}?>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											<?php } ?>
 											
 									    </fieldset>
 										   
@@ -532,22 +565,18 @@ if(!Modulos::validarPermisoEdicion()){
 												<label class="col-sm-2 control-label">Tipo de documento</label>
 												<div class="col-sm-3">
 													<?php
-													try{
-														$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
-														WHERE ogen_grupo=1
-														");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=1
+													");
 													?>
 													<select class="form-control" name="tipoDAcudiente" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
 														while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['tipoDocA'])
-															echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['tipoDocA'])
+															echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 														else
-															echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+															echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>
@@ -573,13 +602,9 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control" id="lugardE" name="lugarDa" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
-															INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-															");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$opcionesG = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".localidad_ciudades
+														INNER JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+														");
 														while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
 														?>
 														<option value="<?=$opg['ciu_id'];?>" <?php if($opg['ciu_id']==$datosMatricula['expedicionA']){echo "selected";}?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
@@ -629,23 +654,19 @@ if(!Modulos::validarPermisoEdicion()){
 													<span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 													</div>
 												</div>
-												<input type="hidden" id="dtp_input2" name="fechaNA">
+												<input type="hidden" id="dtp_input1" name="fechaNA">
 
 												<label class="col-sm-2 control-label">Genero</label>
 												<div class="col-sm-3">
 													<select class="form-control select2" name="generoA" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
-														try{
-															$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+										  				$op = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_grupo=4");
 														while($o = mysqli_fetch_array($op, MYSQLI_BOTH)){
-															if($o[0]==$datosMatricula['generoA'])
-																echo '<option value="'.$o[0].'" selected>'.$o[1].'</option>';
+															if($o['ogen_id']==$datosMatricula['generoA'])
+																echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
 															else
-																echo '<option value="'.$o[0].'">'.$o[1].'</option>';	
+																echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
 														}?>
 													</select>
 												</div>

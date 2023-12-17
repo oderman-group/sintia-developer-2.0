@@ -48,9 +48,9 @@ $Plataforma = new Plataforma;
 											<?php
 											
 											try{
-												$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM academico_boletin
-												INNER JOIN academico_matriculas ON mat_id=bol_estudiante $filtro AND mat_eliminado=0
-												WHERE bol_id=bol_id $filtroBoletin
+												$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado FROM ".BD_ACADEMICA.".academico_boletin bol
+												INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro AND mat_eliminado=0
+												WHERE bol_id=bol_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]} $filtroBoletin
 												GROUP BY bol_estudiante ORDER BY promedio $filtroOrden
 												$filtroLimite");
 											} catch (Exception $e) {

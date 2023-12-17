@@ -16,7 +16,7 @@ if (!Modulos::validarPermisoEdicion()) {
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
 <div class="panel">
-                <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                 <div class="panel-body">
                     <form name="formularioGuardar" action="grupos-guardar.php" method="post">
                         <div class="form-group row">
@@ -33,7 +33,9 @@ if (!Modulos::validarPermisoEdicion()) {
                         </div>
 
                         <?php if (Modulos::validarPermisoEdicion()) { ?>
-                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                            <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                         <?php } ?>
                     </form>
                 </div>

@@ -1,11 +1,11 @@
 <?php
-session_start();
-include("../modelo/conexion.php");
+include("session-compartida.php");
+Modulos::validarAccesoDirectoPaginas();
 $filtro="";
-if(!empty($_POST["usuario"]) && $_POST["usuario"]!=0){ $filtro= "AND cpp_usuario = '".$_POST["usuario"]."'";}
-$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_clases_preguntas 
-INNER JOIN usuarios ON uss_id=cpp_usuario
-WHERE cpp_id_clase='" . $_POST["claseId"] . "' $filtro ORDER BY cpp_fecha DESC");
+if(!empty($_POST["usuario"]) && $_POST["usuario"]!=0){ $filtro= "AND cpp.cpp_usuario = '".$_POST["usuario"]."'";}
+$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+WHERE cpp.cpp_id_clase='" . $_POST["claseId"] . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} $filtro ORDER BY cpp.cpp_fecha DESC");
 $usuarioActual= $_POST["usuarioActual"];
 ?>
 <?php while ($preguntasDatos = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) { ?>
@@ -26,7 +26,7 @@ $usuarioActual= $_POST["usuarioActual"];
 				<div class="panel-body">
 					<p><span style="font-size: 11px; color: #000;"><?= $preguntasDatos['cpp_fecha']; ?></span>
 					<?php if($usuarioActual === $preguntasDatos['cpp_usuario']){
-						$href='../compartido/guardar.php?get='.base64_encode(24).'&idCom='.base64_encode($preguntasDatos['cpp_id']);?>
+						$href='../compartido/clases-eliminar-comentarios.php?idCom='.base64_encode($preguntasDatos['cpp_id']).'&idR='.base64_encode($_POST["claseId"]);?>
 						
 						<a href="javascript:void(0);" id="<?= base64_encode($preguntasDatos['cpp_id']); ?>" name="<?= $href ?>" onClick="deseaEliminar(this)">
 							<i class="fa fa-trash"></i>

@@ -41,36 +41,28 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[111][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[111][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="#" name="cronograma-calendario.php" onClick="deseaRegresar(this)"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[111][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
 						
-						<div class="col-sm-3">
-
-
-						<?php include("info-carga-actual.php");?>
-							
-						<?php include("../compartido/publicidad-lateral.php");?>	
-
-                        </div>
 						
                         <div class="col-sm-9">
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
-										<input type="hidden" value="14" name="id">
+									<form name="formularioGuardar" action="cronograma-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 
 
 											<div class="form-group row">
@@ -102,7 +94,9 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 											</div>
 
 
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 										
 										<a href="#" name="cronograma-calendario.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     </form>

@@ -24,6 +24,7 @@
                             </div>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
@@ -53,15 +54,15 @@
 											
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1
+												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												  ORDER BY eva_id DESC
 												  ");
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													
 													//Cantidad de preguntas de la evaluación
-													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."'");
+													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
+													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													$cantPreguntas = mysqli_num_rows($consultaCantPreguntas);
 												 ?>
 												  <div class="panel panel-default" id="reg<?=$resultado['eva_id'];?>">
@@ -77,9 +78,9 @@
 															  <p><?=$resultado['eva_descripcion'];?></p>
 															  
 															  <p>
-																  <b><?=$frases[139][$datosUsuarioActual[8]];?>:</b> <?=$cantPreguntas;?><br>
-																  <b><?=$frases[130][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_desde'];?><br>
-																  <b><?=$frases[131][$datosUsuarioActual[8]];?>:</b> <?=$resultado['eva_hasta'];?>
+																  <b><?=$frases[139][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$cantPreguntas;?><br>
+																  <b><?=$frases[130][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_desde'];?><br>
+																  <b><?=$frases[131][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$resultado['eva_hasta'];?>
 															  </p>
 															  
 															  <?php
@@ -94,7 +95,7 @@
 																  <?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
 																  <a class="btn green-color" href="evaluaciones-preguntas.php?idE=<?=base64_encode($resultado['eva_id']);?>"><i class="fa fa-question"></i> Preguntas</a>
 																  <a class="btn blue" href="evaluaciones-editar.php?idR=<?=base64_encode($resultado['eva_id']);?>"><i class="fa fa-edit"></i></a>
-																  <a class="btn red" href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['eva_id'];?>" name="guardar.php?get=<?=base64_encode(18);?>&idR=<?=base64_encode($resultado['eva_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
+																  <a class="btn red" href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['eva_id'];?>" name="evaluaciones-eliminar.php?idR=<?=base64_encode($resultado['eva_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 																  <?php }?>
 															  </p>
 															  

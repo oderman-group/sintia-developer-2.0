@@ -2,8 +2,8 @@
 	if(empty($_SESSION["empresa"])){
 		$consultaEmpresa=mysqli_query($conexion, "SELECT * FROM $baseDatosMarketPlace.empresas WHERE emp_usuario='".$_SESSION["id"]."' AND emp_institucion='".$config['conf_id_institucion']."'");
 		$empresa = mysqli_fetch_array($consultaEmpresa, MYSQLI_BOTH);
-		if(!empty($empresa[0])){
-			$_SESSION["empresa"] = $empresa[0];
+		if(!empty($empresa['emp_id'])){
+			$_SESSION["empresa"] = $empresa['emp_id'];
 		}
 	}
 ?>
@@ -87,7 +87,7 @@
 						if (!empty($_SESSION["empresa"]) && $_SESSION["empresa"] == $datosConsulta['emp_id']) {
 						?>
 							<a href="#" class="btn btn-success"><i class="fa fa-edit"></i></a>
-							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/guardar.php?get=<?= base64_encode(25); ?>&idR=<?= base64_encode($datosConsulta['prod_id']); ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+							<a href="#" title="<?= $objetoEnviar; ?>" id="<?= $datosConsulta['prod_id']; ?>" name="../compartido/productos-eliminar.php?idR=<?= base64_encode($datosConsulta['prod_id']); ?>" onClick="deseaEliminar(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
 						<?php
 							} else {
 								if ($precio >= 1) {

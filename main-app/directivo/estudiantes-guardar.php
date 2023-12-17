@@ -2,6 +2,8 @@
 include("session.php");
 require_once("../class/Estudiantes.php");
 require_once "../class/Modulos.php";
+require_once("../class/servicios/MediaTecnicaServicios.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0192';
@@ -34,18 +36,22 @@ if($valiEstudiante > 0){
 
 $result_numMat = strtotime("now");
 
-//Establecer valores por defecto cuando los campos vengan vacíos
-if(empty($_POST["va_matricula"])) $_POST["va_matricula"] = 0;
-if(empty($_POST["grupo"]))        $_POST["grupo"]        = 4;
-if(empty($_POST["tipoEst"]))      $_POST["tipoEst"]      = 128;
-if(empty($_POST["fNac"]))         $_POST["fNac"]         = '2000-01-01';
-if(empty($_POST["tipoD"]))        $_POST["tipoD"]        = 107;
-if(empty($_POST["genero"]))       $_POST["genero"]       = 126;
 
-if(empty($_POST["religion"]))     $_POST["religion"]     = 112;
-if(empty($_POST["estrato"]))      $_POST["estrato"]      = 116;
-if(empty($_POST["extran"]))       $_POST["extran"]       = 0;
-if(empty($_POST["inclusion"]))    $_POST["inclusion"]    = 0;
+if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
+
+//Establecer valores por defecto cuando los campos vengan vacíos
+if(empty($_POST["va_matricula"]))  $_POST["va_matricula"]  = 0;
+if(empty($_POST["grupo"]))         $_POST["grupo"]         = 4;
+if(empty($_POST["tipoEst"]))       $_POST["tipoEst"]       = 128;
+if(empty($_POST["fNac"]))          $_POST["fNac"]          = '2000-01-01';
+if(empty($_POST["tipoD"]))         $_POST["tipoD"]         = 107;
+if(empty($_POST["genero"]))        $_POST["genero"]        = 126;
+
+if(empty($_POST["religion"]))      $_POST["religion"]      = 112;
+if(empty($_POST["estrato"]))       $_POST["estrato"]       = 116;
+if(empty($_POST["extran"]))        $_POST["extran"]        = 0;
+if(empty($_POST["inclusion"]))     $_POST["inclusion"]     = 0;
+if(empty($_POST["tipoMatricula"])) $_POST["tipoMatricula"] = GRADO_GRUPAL;
 
 
 //Api solo para Icolven
@@ -59,16 +65,13 @@ if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
 	$procedencia=$_POST["ciudadPro"];
 }
 
-try{
-	$acudienteConsulta = mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_usuario='".$_POST["documentoA"]."'");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+$acudienteConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".$_POST["documentoA"]."'");
+
 $acudienteNum = mysqli_num_rows($acudienteConsulta);
 $acudienteDatos = mysqli_fetch_array($acudienteConsulta, MYSQLI_BOTH);
 //PREGUNTAMOS SI EL ACUDIENTE EXISTE
 if ($acudienteNum > 0) {	
-	$idAcudiente = $acudienteDatos[0];
+	$idAcudiente = $acudienteDatos['uss_id'];
 } else {
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["documentoA"])=="" or trim($_POST["nombresA"])==""){
@@ -86,9 +89,10 @@ if ($acudienteNum > 0) {
 	if(empty($_POST["tipoSangre"]))     $_POST["tipoSangre"]    = '';
 	if(empty($_POST["eps"]))       		$_POST["eps"]       	= 126;
 	
+	$idAcudiente=Utilidades::generateCode("USS");
 	//CREAMOS AL ACUDIENTE
 	try{
-		mysqli_query($conexion, "INSERT INTO usuarios(
+		mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, 
 			uss_usuario, 
 			uss_clave, 
 			uss_tipo, 
@@ -111,8 +115,8 @@ if ($acudienteNum > 0) {
 			uss_documento, 
 			uss_tema_sidebar,
 			uss_tema_header,
-			uss_tema_logo
-			)VALUES(
+			uss_tema_logo, institucion, year
+			)VALUES('".$idAcudiente."', 
 			'".$_POST["documentoA"]."',
 			'".$clavePorDefectoUsuarios."',
 			3,
@@ -135,18 +139,17 @@ if ($acudienteNum > 0) {
 			'".	$_POST["documentoA"]."',
 			'cyan-sidebar-color',
 			'header-indigo',
-			'logo-indigo'
+			'logo-indigo', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
 			)");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
-	
-	$idAcudiente = mysqli_insert_id($conexion);
 }
 
+$idEstudianteU=Utilidades::generateCode("USS");
 //INSERTAMOS EL USUARIO ESTUDIANTE
 try{
-	mysqli_query($conexion, "INSERT INTO usuarios(
+	mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, 
 		uss_usuario, 
 		uss_clave, 
 		uss_tipo, 
@@ -168,8 +171,8 @@ try{
 		uss_documento, 
 		uss_tema_sidebar,
 		uss_tema_header,
-		uss_tema_logo
-		)VALUES(
+		uss_tema_logo, institucion, year
+		)VALUES('".$idEstudianteU."', 
 		'".	$_POST["nDoc"]."',
 		'".$clavePorDefectoUsuarios."',
 		4,
@@ -191,9 +194,8 @@ try{
 		'".	$_POST["nDoc"]."',
 		'cyan-sidebar-color',
 		'header-indigo',
-		'logo-indigo'
+		'logo-indigo', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
 		)");
-		$idEstudianteU = mysqli_insert_id($conexion);
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -201,12 +203,26 @@ try{
 //Insertamos la matrícula
 $idEstudiante = Estudiantes::insertarEstudiantes($conexionPDO, $_POST, $idEstudianteU, $result_numMat, $procedencia, $idAcudiente);
 
+//Insertamos las matrículas Adicionales
+if ($_POST["tipoMatricula"]==GRADO_INDIVIDUAL && !empty($_POST["cursosAdicionales"])) { 
+	try{
+		MediaTecnicaServicios::guardar($idEstudiante,$_POST["cursosAdicionales"],$config,$_POST["grupoMT"]);
+	} catch (Exception $e) {
+		include("../compartido/error-catch-to-report.php");
+	}
+}
+$idInsercion=Utilidades::generateCode("UPE");
 try{
-	mysqli_query($conexion, "INSERT INTO usuarios_por_estudiantes(upe_id_usuario, upe_id_estudiante)VALUES('".$idAcudiente."', '".$idEstudiante."')");
+	mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$idEstudiante."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
+
+if(!isset($estado) AND !isset($mensaje)){
+	$estado="";
+	$mensaje="";
+}
 $idUsr = mysqli_insert_id($conexion);
 $estadoSintia=false;
 $mensajeSintia='El estudiante no pudo ser creado correctamente en SINTIA.';

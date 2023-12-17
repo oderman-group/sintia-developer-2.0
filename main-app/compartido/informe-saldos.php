@@ -15,9 +15,9 @@ include("../../config-general/consulta-usuario-actual.php");?>
 </div>   
 <?php
 									if(isset($_GET["tipo"]) and $_GET["tipo"]!="" and is_numeric($_GET["tipo"])){
-										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."'";
+										$SQL = "SELECT * FROM ".BD_GENERAL.".usuarios uss INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss_tipo='".$_GET["tipo"]."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}";
 									}else{
-										$SQL = "SELECT * FROM usuarios INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."'";
+										$SQL = "SELECT * FROM ".BD_GENERAL.".usuarios uss INNER JOIN ".$baseDatosServicios.".general_perfiles ON uss_tipo=pes_id WHERE uss_id!='".$_SESSION["id"]."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}";
 									}
 									//include("paginacion.php");
 									?>
@@ -33,23 +33,23 @@ include("../../config-general/consulta-usuario-actual.php");?>
   <?php
 									 $consulta = mysqli_query($conexion, $SQL);
 									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-										 if($resultado[5]==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado[5]==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
-										 if($resultado[3]==5) $b = "bold"; else $b="";
+										 if($resultado['uss_estado']==1) $s='<img src="../files/iconos/on.png">'; elseif($resultado['uss_estado']==0) $s='<img src="../files/iconos/off.png">'; else $s="-";
+										 if($resultado['uss_tipo']==5) $b = "bold"; else $b="";
 										 if($resultado['uss_bloqueado']==1) $c = "#F00"; else $c="";
-                     $consultaCobros=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=3 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]."");
+                     $consultaCobros=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=3 and fcu_anulado=0 AND fcu_usuario='".$resultado['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $cobros = mysqli_fetch_array($consultaCobros, MYSQLI_BOTH);
-                     $consultaPagos=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM finanzas_cuentas WHERE fcu_tipo=1 and fcu_anulado=0 AND fcu_usuario=".$resultado[0]."");
+                     $consultaPagos=mysqli_query($conexion, "SELECT sum(fcu_valor) FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo=1 and fcu_anulado=0 AND fcu_usuario='".$resultado['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										 $pagos = mysqli_fetch_array($consultaPagos, MYSQLI_BOTH);
 										 $estadoC = $pagos[0] - $cobros[0];
 										 if($estadoC==0){continue;}
 										 if($estadoC<0){$color = '#F00';}else{$color = '#090';}
 									 ?>
   <tr style="font-size:13px;">
-      <td><?=$resultado[0];?></td>
-                                        <td><?=$resultado[4];?></td>
+      <td><?=$resultado['uss_id'];?></td>
+                                        <td><?=$resultado['uss_nombre'];?></td>
                                          <td><?=$resultado["pes_nombre"];?></td>
-                                        <td><?=$resultado[12];?></td>
-                                        <td><?=$resultado[15];?></td>
+                                        <td><?=$resultado['uss_email'];?></td>
+                                        <td><?=$resultado['uss_celular'];?></td>
                                         <td style="color:<?=$color;?>;">$<?=number_format($estadoC,2,",",".");?></td>
 </tr>
   <?php

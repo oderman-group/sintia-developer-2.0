@@ -15,10 +15,10 @@ $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 
 try{
-    $consultaE=mysqli_query($conexion, "SELECT academico_matriculas.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM academico_matriculas
-    LEFT JOIN (SELECT * FROM academico_matriculas_retiradas ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=academico_matriculas.mat_id
-    LEFT JOIN usuarios ON uss_id=matret_responsable
-    WHERE mat_id='".$id."'");
+    $consultaE=mysqli_query($conexion, "SELECT mat.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+    LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+    LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+    WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }

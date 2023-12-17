@@ -7,12 +7,13 @@ if($idSession==""){
 }
 else
 {
-	include("../../config-general/config.php");
-	include("../../config-general/idiomas.php");
-	include("../../config-general/consulta-usuario-actual.php");
-	include("../../config-general/verificar-usuario-bloqueado.php");
+	require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+	require_once(ROOT_PATH."/config-general/config.php");
+	require_once(ROOT_PATH."/config-general/idiomas.php");
+	require_once(ROOT_PATH."/config-general/consulta-usuario-actual.php");
+	require_once(ROOT_PATH."/config-general/verificar-usuario-bloqueado.php");
 	
-	if($datosUsuarioActual[3] != TIPO_ACUDIENTE)
+	if($datosUsuarioActual['uss_tipo'] != TIPO_ACUDIENTE)
 	{
 		include("../compartido/sintia-funciones.php");
 		$destinos = validarUsuarioActual($datosUsuarioActual);

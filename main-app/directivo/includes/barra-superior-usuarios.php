@@ -39,21 +39,33 @@ if (isset($_GET['busqueda'])) {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="javascript:void(0);" 
-          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(4)?>')"
+          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los estudiantes?','question','usuarios-bloquear.php?tipo=<?=base64_encode(4)?>')"
           >Bloquear estudiantes</a>
           <a class="dropdown-item" href="javascript:void(0);" 
-          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los estudiantes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(4)?>')"
+          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los estudiantes?','question','usuarios-desbloquear.php?tipo=<?=base64_encode(4)?>')"
           >Desbloquear estudiantes</a>
           <a class="dropdown-item" href="javascript:void(0);" 
-          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(69)?>&tipo=<?=base64_encode(2)?>')"
+          onClick="sweetConfirmacion('Alerta!','Desea Bloquear a todos los docentes?','question','usuarios-bloquear.php?tipo=<?=base64_encode(2)?>')"
           >Bloquear docentes</a>
           <a class="dropdown-item" href="javascript:void(0);" 
-          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los docentes?','question','guardar.php?get=<?=base64_encode(70)?>&tipo=<?=base64_encode(2)?>')"
+          onClick="sweetConfirmacion('Alerta!','Desea Desbloquear a todos los docentes?','question','usuarios-desbloquear.php?tipo=<?=base64_encode(2)?>')"
           >Desbloquear docentes</a>
           <a>&nbsp;</a>
-          <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
-          <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
+          <?php 
+          if(Modulos::validarPermisoEdicion()) {
+            if(Modulos::validarSubRol(['DT0125']) ) {?>
+              <a class="dropdown-item" href="usuarios-importar-excel.php">Importar usuarios</a>
+          <?php 
+            } 
+            if(Modulos::validarSubRol(['DT0144']) ) {?>
+              <a class="dropdown-item" href="usuarios-generar-clave-filtros.php">Generar contraseña masiva</a>
+          <?php 
+            } 
+          }
+          ?>
+          <?php if(Modulos::validarSubRol(['DT0201']) ) {?>
           <a class="dropdown-item" href="usuarios-anios.php">Consultar todos los años</a>
+          <?php }?>
         </div>
       </li>
 

@@ -57,15 +57,14 @@ require_once("../class/Estudiantes.php");
                     <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
                     <th>Fecha</th>
                     <th>#EC/#ET</th>
-                    <th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+                    <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    $cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
-                    $consulta = mysqli_query($conexion, "SELECT * FROM academico_clases
-                    LEFT JOIN academico_unidades ON uni_id=cls_unidad AND uni_eliminado!=1
-                    WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 ORDER BY cls_unidad");
+                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases cls 
+                    LEFT JOIN ".BD_ACADEMICA.".academico_unidades aca_uni ON aca_uni.uni_id=cls.cls_unidad AND aca_uni.uni_eliminado!=1 AND aca_uni.institucion={$config['conf_id_institucion']} AND aca_uni.year={$_SESSION["bd"]}
+                    WHERE cls.cls_id_carga='".$cargaConsultaActual."' AND cls.cls_periodo='".$periodoConsultaActual."' AND cls.cls_estado=1 AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$_SESSION["bd"]} ORDER BY cls.cls_unidad");
                     $contReg = 1;
                     $unidadAnterior=0;
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -78,12 +77,18 @@ require_once("../class/Estudiantes.php");
                 <?php
                         }
                         $bg = '';
-                        $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT
-                        (SELECT count(*) FROM academico_ausencias 
-                        INNER JOIN academico_matriculas ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus_id_estudiante
-                        WHERE aus_id_clase='".$resultado[0]."')");
+                        if($datosCargaActual['gra_tipo'] == GRADO_INDIVIDUAL) {
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM ".BD_ACADEMICA.".academico_ausencias aus
+                            INNER JOIN ".$baseDatosServicios.".mediatecnica_matriculas_cursos ON matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_id_matricula=aus.aus_id_estudiante
+                            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=matcur_id_matricula AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+                            WHERE aus.aus_id_clase='".$resultado['cls_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$_SESSION["bd"]}");
+                        }else{
+                            $consultaNumerosEstudiantes=mysqli_query($conexion, "SELECT count(*) FROM ".BD_ACADEMICA.".academico_ausencias aus
+                            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aus.aus_id_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+                            WHERE aus.aus_id_clase='".$resultado['cls_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$_SESSION["bd"]}");
+                        }
                         $numerosEstudiantes = mysqli_fetch_array($consultaNumerosEstudiantes, MYSQLI_BOTH);
-                        if($numerosEstudiantes[0]<$numerosEstudiantes[1]) $bg = '#FCC';
+                        if($numerosEstudiantes[0]<$cantidadEstudiantesParaDocentes) $bg = '#FCC';
                         
                         $cheked = '';
                         if($resultado['cls_disponible']==1){$cheked = 'checked';}
@@ -105,7 +110,7 @@ require_once("../class/Estudiantes.php");
                     </td>
                     <td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado['cls_tema'];?></a></td>
                     <td><?=$resultado['cls_fecha'];?></td>
-                    <td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantes;?></td>
+                    <td style="background-color:<?=$bg;?>"><?=$numerosEstudiantes[0];?>/<?=$cantidadEstudiantesParaDocentes;?></td>
                     <td>
                         <?php if($periodoConsultaActual==$datosCargaActual['car_periodo'] or $datosCargaActual['car_permiso2']==1){?>
                         
@@ -118,7 +123,7 @@ require_once("../class/Estudiantes.php");
                                 <li><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>">Acceder</a></li>
                                 <li><a href="clases-editar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>">Editar</a></li>
                                 
-                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+                                <li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['cls_id'];?>" name="clases-eliminar.php?idR=<?=base64_encode($resultado['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
                             </ul>
                         </div>
                         <?php } ?>

@@ -64,7 +64,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="col-sm-8">
                                             <?php
                                             try{
-                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grados ORDER BY gra_vocal");
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY gra_vocal");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
@@ -76,7 +76,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     $disabled = '';
                                                     if($opcionesDatos['gra_estado']=='0') $disabled = 'disabled';
                                                 ?>
-                                                    <option value="<?=$opcionesDatos[0];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
+                                                    <option value="<?=$opcionesDatos['gra_id'];?>" <?=$disabled;?>><?=$opcionesDatos['gra_id'].". ".strtoupper($opcionesDatos['gra_nombre']);?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
@@ -87,7 +87,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="col-sm-4">
                                             <?php
                                             try{
-                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                             } catch (Exception $e) {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
@@ -97,7 +97,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 <?php
                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                 ?>
-                                                    <option value="<?=$opcionesDatos[0];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                    <option value="<?=$opcionesDatos['gru_id'];?>"><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
                                                 <?php }?>
                                             </select>
                                              <span id="mensaje" style="color: #6017dc; display:none;">Espere un momento por favor.</span> 
@@ -173,7 +173,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
                                     </div>
                                     
-                                    <?php if(Modulos::validarPermisoEdicion()){?>
+                                    <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051'])){?>
                                         <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
                                     <?php }?>
                                     

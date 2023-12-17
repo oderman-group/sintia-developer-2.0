@@ -29,22 +29,12 @@ include("../compartido/head.php");
                             </div>
                         </div>
                     </div>
-                    
+                    <?php include("includes/barra-superior-informacion-actual.php"); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
 								
-								<div class="col-md-4 col-lg-3">
-									
-									<?php include("info-carga-actual.php");?>
-							
-									<?php include("filtros-cargas.php");?>
-									
-									<?php include("../compartido/publicidad-lateral.php");?>
-
-								</div>
-								
-								<div class="col-md-8 col-lg-9">
+								<div class="col-md-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[55][$datosUsuarioActual['uss_idioma']];?></header>
@@ -60,26 +50,26 @@ include("../compartido/head.php");
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[241][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[138][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[118][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[138][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[118][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+													$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$fotoEstudiante = $usuariosClase->verificarFoto($resultado['uss_foto']);
-														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado[8]."'");
+														$consultaGenero=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_genero']."'");
 														 $genero = mysqli_fetch_array($consultaGenero, MYSQLI_BOTH);
 														//DEFINITIVAS
 														$carga = $cargaConsultaActual;
 														$periodo = $periodoConsultaActual;
-														$estudiante = $resultado[0];
+														$estudiante = $resultado['mat_id'];
 														include("../definitivas.php");
 														if($definitiva<$config[5] and $definitiva!="") $colorNota = $config[6]; elseif($definitiva>=$config[5]) $colorNota = $config[7]; else {$colorNota = 'black'; $definitiva='';}
 														 
@@ -102,7 +92,7 @@ include("../compartido/head.php");
 														<td>
 														<?php if($datosCargaActual['car_director_grupo']==1 || empty($_SESSION['admin']) ){?>
 															<div class="btn-group">
-																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		  <i class="fa fa-angle-down"></i>
 																	  </button>

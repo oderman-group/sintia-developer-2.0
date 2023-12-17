@@ -18,7 +18,7 @@ $_SESSION["configuracion"] = $config;
             LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo AND pagp_navegable = 1
             WHERE 
             hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
-            AND hil_usuario= ".$datosUsuarioActual[0]." AND hil_institucion =".$config['conf_id_institucion']."
+            AND hil_usuario= '".$datosUsuarioActual['uss_id']."' AND hil_institucion =".$config['conf_id_institucion']."
             ORDER BY hil_id DESC LIMIT 5");										 
             while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
             ?>

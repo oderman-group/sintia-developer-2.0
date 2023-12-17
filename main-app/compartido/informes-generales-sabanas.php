@@ -3,6 +3,7 @@ session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -16,10 +17,14 @@ if(!empty($_GET["per"])) {
   $per = base64_decode($_GET["per"]);
 }
 
+require_once("../class/servicios/GradoServicios.php");
 $filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");	
+$cursoActual=GradoServicios::consultarCurso($curso);
+$asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);	
+
 $num_asg=mysqli_num_rows($asig);
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM academico_grados, academico_grupos WHERE gra_id='".$curso."' AND gru_id='".$grupo."'");
+$consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='".$curso."' AND gru.gru_id='".$grupo."' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
+
 $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 ?>
 <head>
@@ -38,7 +43,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
     PERIODO: <?=$per;?></br>
     <b><?=strtoupper($grados["gra_nombre"]." ".$grados["gru_nombre"]);?></b><br>
 
-    <?php if($informacion_inst["info_institucion"]==1){?>
+    <?php if($informacion_inst["info_institucion"]==ICOLVEN){?>
     <p><a href="reportes-sabanas-indicador.php?curso=<?=$_GET["curso"];?>&grupo=<?=$_GET["grupo"];?>&per=<?=$_GET["per"];?>" target="_blank">VER SABANAS CON INDICADORES</a></p>
     <?php } ?>
 </div>  
@@ -50,12 +55,12 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".$mat1[4]);
+			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 		?>
-        	<td align="center"><?=strtoupper($Mat[3]);?></td>      
+        	<td align="center"><?=strtoupper($Mat['mat_siglas']);?></td>      
   		<?php
 		}
 		?>
@@ -66,28 +71,40 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   $mayor=0;
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
-    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);	  
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_periodo=".$per." GROUP BY bol_carga");
-		$numero=mysqli_num_rows($cuentaest);
-		$def='0.0';
+    $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
 		
   ?>
   <tr style="font-size:13px;">
       <td align="center"> <?php echo $cont;?></td>
-      <td align="center"> <?php echo $fila[1];?></td>
+      <td align="center"> <?php echo $fila['mat_id'];?></td>
       <td><?=$nombre?></td> 
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso=".$curso." AND car_grupo='".$grupo."'");
+		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+		$numero=mysqli_num_rows($materias1);
+		$def='0.0';
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_estudiante=".$fila[0]." AND bol_carga=".$mat1[0]." AND bol_periodo=".$per);
+			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_carga='".$mat1['car_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
       $defini = 0;
-      if(!empty($nota[4])){$defini = $nota[4];$suma=($suma+$defini);}
+      if(!empty($nota['bol_nota'])){$defini = $nota['bol_nota'];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
+
+      $notaEstudiante="";
+      if(!empty($nota['bol_nota'])){
+        $notaEstudiante=$nota['bol_nota'];
+      }
+
+      $notaEstudianteFinal=$notaEstudiante;
+      $title='';
+      if($notaEstudiante!="" && $config['conf_forma_mostrar_notas'] == CUALITATIVA){
+        $title='title="Nota Cuantitativa: '.$notaEstudiante.'"';
+        $estiloNotaEstudiante = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaEstudiante);
+        $notaEstudianteFinal= !empty($estiloNotaEstudiante['notip_nombre']) ? $estiloNotaEstudiante['notip_nombre'] : "";
+      }
 		?>
-        	<td align="center" style="color:<?=$color;?>;"><?php if(!empty($nota[4])){ echo $nota[4];}?></td>      
+        	<td align="center" style="color:<?=$color;?>;" <?=$title;?>><?=$notaEstudianteFinal?></td>      
   		<?php
 		}
 		if($numero>0) {
@@ -96,9 +113,17 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		if($def==1)	$def="1.0"; if($def==2)	$def="2.0"; if($def==3)	$def="3.0"; if($def==4)	$def="4.0"; if($def==5)	$def="5.0"; 	
 		if($def<$config[5]) $color='red'; else $color='blue'; 
 		$notas1[$cont] = $def;
-		$grupo1[$cont] = strtoupper($fila[3]." ".$fila[4]." ".$fila[5]);
+		$grupo1[$cont] = $nombre;
+
+    $defFinal=$def;
+    $title='';
+    if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+      $title='title="Nota Cuantitativa: '.$def.'"';
+      $estiloDef = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $def);
+      $defFinal= !empty($estiloDef['notip_nombre']) ? $estiloDef['notip_nombre'] : "";
+    }
 		?>
-      <td align="center" style="font-weight:bold; color:<?=$color;?>;"><?=$def;?></td>  
+      <td align="center" style="font-weight:bold; color:<?=$color;?>;" <?=$title;?>><?=$defFinal;?></td>  
 </tr>
   <?php
   $cont++;
@@ -107,12 +132,12 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   </table>
   
 <?php
-$puestos = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS prom, mat_primer_apellido, mat_segundo_apellido, mat_nombres FROM academico_boletin
-INNER JOIN academico_matriculas ON mat_id=bol_estudiante
-INNER JOIN academico_cargas ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."'
-WHERE bol_periodo='".$per."'
+$puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM ".BD_ACADEMICA.".academico_boletin bol
+INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
+WHERE bol_periodo='".$per."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
 GROUP BY bol_estudiante
-ORDER BY prom DESC
+ORDER BY suma DESC
 ");
 ?>
 
@@ -131,12 +156,21 @@ ORDER BY prom DESC
       </tr> 
     <?php
     $j=1;
-      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){		
+      while($ptos = mysqli_fetch_array($puestos, MYSQLI_BOTH)){	
+        $prom=round(($ptos['suma']/$numero),2);	
+
+        $promFinal=$prom;
+        $title='';
+        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+          $title='title="Nota Cuantitativa: '.$prom.'"';
+          $estiloProm = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $prom);
+          $promFinal= !empty($estiloProm['notip_nombre']) ? $estiloProm['notip_nombre'] : "";
+        }
     ?>	
       <tr style="font-weight:bold; font-size:12px;">
           <td align="center"><?=$j;?></td>
-          <td><?=strtoupper($ptos[1]." ".$ptos[2]." ".$ptos[3]);?></td>
-          <td align="center"><?=$ptos[0];?></td>
+          <td><?=Estudiantes::NombreCompletoDelEstudiante($ptos);?></td>
+          <td align="center"  <?=$title;?>><?=$promFinal;?></td>
       </tr>
     <?php	
       $j++;

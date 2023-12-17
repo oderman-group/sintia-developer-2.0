@@ -1,26 +1,28 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$_POST["indicador"]."'");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$_POST["indicador"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $indicadorObg = mysqli_fetch_array($consultaIndicadorObg, MYSQLI_BOTH);
 
-$consultaCargasEjemplo=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$_POST["carga"]."'");
+$consultaCargasEjemplo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $cargaEjemplo = mysqli_fetch_array($consultaCargasEjemplo, MYSQLI_BOTH);
 
-$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$cargaEjemplo['car_curso']."' AND car_materia='".$cargaEjemplo['car_materia']."'");
+$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$cargaEjemplo['car_curso']."' AND car_materia='".$cargaEjemplo['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-	$consultaIpc=mysqli_query($conexion, "SELECT * FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_indicador='".$_POST["indicador"]."' AND ipc_creado=0");
+	$consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$cgs['car_id']."' AND ipc_indicador='".$_POST["indicador"]."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH);
 	if($ipc[0]==""){
 		$p=1;
 		while($p<=$config['conf_periodos_maximos']){
-			mysqli_query($conexion, "INSERT INTO academico_indicadores_carga(ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado)VALUES('".$cgs[0]."','".$_POST["indicador"]."','".$indicadorObg['ind_valor']."','".$p."',0)");
+			$codigo=Utilidades::generateCode("IPC");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cgs['car_id']."','".$_POST["indicador"]."','".$indicadorObg['ind_valor']."','".$p."',0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			
 			$p++;
 		}
 	}else{
-		mysqli_query($conexion, "DELETE FROM academico_indicadores_carga WHERE ipc_carga='".$cgs[0]."' AND ipc_indicador='".$_POST["indicador"]."' AND ipc_creado=0");
+		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$cgs['car_id']."' AND ipc_indicador='".$_POST["indicador"]."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		
 	}
 }

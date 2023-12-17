@@ -115,15 +115,15 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'ER_DT_14':
                 $tipo = 'danger';
-                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . $_GET["nombrePagina"] . '</b>.<br>
+                $mensaje = 'Estos datos ya se encuentran registrados y asociados a la pagina <b>' . base64_decode($_GET["nombrePagina"]) . '</b>.<br>
                 ¿Desea mostrar toda la información de la pagina?<br>
-                <a href="dev-paginas-editar.php?idP=' . $_GET["id"] . '" id="addRow" class="btn deepPink-bgcolor">
+                <a href="dev-paginas-editar.php?idP=' . base64_decode($_GET["id"]) . '" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>';
             break;
             case 'ER_DT_15':
                 $tipo = 'danger';
-                $mensaje = $_GET["msj"];
+                $mensaje = base64_decode($_GET["msj"]);
             break;
 
             case 'ER_DT_16':
@@ -146,6 +146,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'ER_DT_19':
                 $tipo = 'danger';
                 $mensaje = 'Este estudiante ya existe en el año <b>'.base64_decode($_GET['yearPasar']).'</b>.';
+            break;
+
+            case 'ER_DT_20':
+                $tipo = 'danger';
+                $mensaje = 'Ya existe una carga con esta misma información, verifica la información suministrada y vuelve a intentarlo.';
             break;
 
             default:
@@ -242,6 +247,31 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_DT_14':
                 $tipo = 'success';
                 $mensaje = 'El estudiante fue movido al año <b>'.base64_decode($_GET['yearPasar']).'</b> exitosamente.';
+            break;
+
+            case 'SC_GN_1':
+                $tipo = 'success';
+                $mensaje = 'La evaluación fue creada correctamente. El siguiente paso es crear las preguntas o utilizar algunas existentes del banco de datos. <b>Empieza ahora!</b>';
+            break;
+
+            case 'SC_GN_2':
+                $tipo = 'success';
+                $mensaje = 'La información fue importada correctamente';
+            break;
+
+            case 'SC_GN_3':
+                $tipo = 'success';
+                $mensaje = 'La tematica fue registrada correctamente';
+            break;
+
+            case 'SC_GN_4':
+                $tipo = 'success';
+                $mensaje = 'El plan de clase fue registrado correctamente';
+            break;
+            
+            case 'SC_GN_5':
+                $tipo = 'success';
+                base64_decode($_GET["estado"])==1 ? $mensaje = 'La respuesta cambio de estado a correcta' : $mensaje = 'La respuesta cambio de estado a incorrecta';
             break;
 
             default:

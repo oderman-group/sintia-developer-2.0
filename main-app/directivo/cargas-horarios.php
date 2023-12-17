@@ -29,7 +29,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Horarios</li>
                             </ol>
                         </div>
@@ -55,7 +55,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0043'])){?>
 															<a href="cargas-horarios-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -72,7 +72,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Día</th>
 														<th>Desde</th>
 														<th>Hasta</th>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0042','DT0156'])){?>
 															<th>Acciones</th>
 														<?php }?>
                                                     </tr>
@@ -80,12 +80,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_horarios WHERE hor_id_carga=".base64_decode($_GET["id"])." AND hor_estado=1;");
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id_carga='".base64_decode($_GET["id"])."' AND hor_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														switch($resultado[2]){
+														switch($resultado['hor_dia']){
 															case 1: $dia = 'Domingo'; break;
 
 															case 2: $dia = 'Lunes'; break;
@@ -104,20 +104,23 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														}
 													?>
 													<tr>
-														<td><?=$resultado[0];?></td>
+														<td><?=$resultado['hor_id'];?></td>
 														<td><?=$dia;?></td>
-														<td><?=$resultado[3];?></td>
-														<td><?=$resultado[4];?></td>
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<td><?=$resultado['hor_desde'];?></td>
+														<td><?=$resultado['hor_hasta'];?></td>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0042','DT0156'])){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado[0]);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
-																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado[0]);?>&idC=<?=base64_encode($resultado[1]);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+																		<?php if(Modulos::validarSubRol(['DT0042'])){?>
+																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado['id_nuevo']);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0156'])){?>
+																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado['id_nuevo']);?>&idC=<?=base64_encode($resultado['hor_id_carga']);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+                                                        				<?php }?>
 																	</ul>
 																</div>
 															</td>

@@ -16,14 +16,14 @@ require_once("../class/SubRoles.php");
 if (empty($_POST["paginas"])) {
 	include("../compartido/guardar-historial-acciones.php");
 	$msj = 'Seleccione al menos una página para el rol';
-	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' . $msj;
+	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' .base64_encode($msj);
 	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
 }
 if (empty($_POST["nombre"])) {
 	include("../compartido/guardar-historial-acciones.php");
 	$msj = 'Agregue un Nombre para el rol';
-	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' . $msj;
+	$url = $_SERVER["HTTP_REFERER"] . '?error=ER_DT_15&msj=' .base64_encode($msj);
 	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
 }

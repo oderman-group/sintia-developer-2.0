@@ -4,11 +4,13 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once("../class/servicios/GradoServicios.php"); 
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
 $jQueryTable = '';
 if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
 	$jQueryTable = 'id="example1"';
@@ -95,7 +97,7 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0084'])){?>
 															<a href="estudiantes-agregar.php" id="addRow" class="btn deepPink-bgcolor">
 																Agregar nuevo <i class="fa fa-plus"></i>
 															</a>
@@ -110,41 +112,40 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
-														<th><?=$frases[246][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[241][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[61][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[26][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[26][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Usuario</th>
 														<th>Acudiente</th>
-														<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite);
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														try{
-															$consultaAcudientes = mysqli_query($conexion, "SELECT * FROM usuarios 
-															WHERE uss_id='".$resultado["mat_acudiente"]."'");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$acudiente = mysqli_fetch_array($consultaAcudientes, MYSQLI_BOTH);
+														$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
 
 														$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
 														$nombreAcudiente = '';
-														if (isset($acudiente[0])) {
+														if (isset($acudiente['uss_id'])) {
 															$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente); 
 															$idAcudiente = $acudiente['uss_id'];
 														}
+
+														$marcaMediaTecnica = '';
+														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL && array_key_exists(10,$arregloModulos)) {
+															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
+														} 
 
 														$miArray = [
 															'id_estudiante'    => $resultado['mat_id'], 
@@ -187,9 +188,13 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														</td>
                                         				
 														<td>
-															<a style="cursor: pointer;" id="estadoMatricula<?=$resultado['mat_id'];?>" 
-															onclick='cambiarEstadoMatricula(<?=$dataParaJavascript;?>)'
-															>
+														<?php 
+															$cambiarEstado='';
+															if(Modulos::validarSubRol(['DT0217'])){
+																$cambiarEstado="onclick='cambiarEstadoMatricula(".$dataParaJavascript.")'";
+															}
+														?>
+															<a style="cursor: pointer;" id="estadoMatricula<?=$resultado['mat_id'];?>" <?=$cambiarEstado;?> >
 																<span class="<?=$estadosEtiquetasMatriculas[$resultado['mat_estado_matricula']];?>">
 																	<?=$estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']];?>
 																</span>
@@ -198,84 +203,111 @@ if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] !
 														<td><?=$resultado['mat_documento'];?></td>
 														<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado);?>
 														
-														<td style="color:<?=$color;?>;"><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
+														<td style="color:<?=$color;?>;"><?=$marcaMediaTecnica;?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?=Estudiantes::NombreCompletoDelEstudiante($resultado);?>" data-content="<?=$infoTooltipEstudiante;?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?=$nombre;?></a></td>
 														<td><?=strtoupper($resultado['gra_nombre']." ".$resultado['gru_nombre']);?></td>
 														<td><?=$resultado['uss_usuario'];?></td>
-														<td><a href="usuarios-editar.php?id=<?=base64_encode($idAcudiente);?>" style="text-decoration:underline;" target="_blank"><?=$nombreAcudiente;?></a>
+														<?php 
+															$editarAcudiente=$nombreAcudiente;
+															if(Modulos::validarSubRol(['DT0124'])){
+																$editarAcudiente='<a href="usuarios-editar.php?id='.base64_encode($idAcudiente).'" style="text-decoration: underline;">'.$nombreAcudiente.'</a>';
+															}
+														?>
+														<td><?=$editarAcudiente;?>
 														<?php if(!empty($acudiente['uss_id']) && !empty($nombreAcudiente)){?>
-															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente[0]);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
+															<br><a href="mensajes-redactar.php?para=<?=base64_encode($acudiente['uss_id']);?>" style="text-decoration:underline; color:blue;">Enviar mensaje</a>
 														<?php }?>
 														</td>
 
 														<td>
 															<div class="btn-group">
-																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																	<i class="fa fa-angle-down"></i>
 																</button>
 																<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																	<?php if(Modulos::validarPermisoEdicion()){?>
-																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> matrícula</a></li>
+																		<?php if(Modulos::validarSubRol(['DT0078'])){?>
+																		<li><a href="estudiantes-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> matrícula</a></li>
+                                                        				<?php }?>
 																		
-																		<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
+																		<?php if($config['conf_id_institucion'] == ICOLVEN && Modulos::validarSubRol(['DT0218'])){ ?>
 																			<li><a href="javascript:void(0);" 
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
 																		
-																		<?php if(!empty($resultado['uss_usuario'])) {?>
-																			<li><a 
-																			href="javascript:void(0);"
-																			onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)'
-																			>Bloquear/Desbloquear</a></li>
+																		<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) {?>
+																			<li><a href="javascript:void(0);" onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)' >Bloquear/Desbloquear</a></li>
 																		<?php }?>
 
-																		<?php if(!empty($resultado['uss_id'])) {?>
-																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual[8]];?> usuario</a></li>
+																		<?php if(!empty($resultado['uss_id']) && Modulos::validarSubRol(['DT0124'])) {?>
+																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> usuario</a></li>
 																		<?php }?>
 
 																		
-																		<?php if(!empty($resultado['gra_nombre'])){ ?>
+																		<?php if(!empty($resultado['gra_nombre']) && Modulos::validarSubRol(['DT0083'])){ ?>
 																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#cambiarGrupoModal<?=$resultado['mat_id'];?>" >Cambiar de grupo</a></li>
 																		<?php } ?>
-																		<?php 
+																		<?php if(Modulos::validarSubRol(['DT0074'])){
 																		$retirarRestaurar='Retirar';
 																		if($resultado['mat_estado_matricula']==3){
 																				$retirarRestaurar='Restaurar';
 																		}
 																		?>
 																		<li><a href="javascript:void(0);"  data-toggle="modal" data-target="#retirarModal<?=$resultado['mat_id'];?>"><?=$retirarRestaurar?></a></li>
-																		<li><a href="javascript:void(0);"
-																		onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
-																		>Reservar cupo</a></li>
+                                                        				<?php }?>
+																		<?php if( !empty($resultado['mat_grado']) && !empty($resultado['mat_grupo']) && Modulos::validarSubRol(['DT0219'])) {?>
+																			<li><a href="javascript:void(0);"
+																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea reservar el cupo para este estudiante?','question','estudiantes-reservar-cupo.php?idEstudiante=<?=base64_encode($resultado['mat_id']);?>')" 
+																			>Reservar cupo</a></li>
+																		<?php }?>
+
+																		<?php if(Modulos::validarSubRol(['DT0162'])){?>
 																		 <li><a href="javascript:void(0);" 
 																		onClick="sweetConfirmacion('Alerta!','Esta seguro de ejecutar esta acción?','question','estudiantes-eliminar.php?idE=<?=base64_encode($resultado["mat_id"]);?>&idU=<?=base64_encode($resultado["mat_id_usuario"]);?>')"
 																		>Eliminar</a></li>
+                                                        				<?php }?>
 																		
+																		<?php if(Modulos::validarSubRol(['DT0220'])){?>
 																		<li><a href="javascript:void(0);"  
 																		onClick="sweetConfirmacion('Alerta!','Está seguro de ejecutar esta acción?','question','estudiantes-crear-usuario-estudiante.php?id=<?=base64_encode($resultado["mat_id"]);?>')"
 																		>Generar usuario</a></li>
+                                                        				<?php }?>
 
-																		<?php if(!empty($resultado['uss_usuario'])) {?>
+																		<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0129'])) {?>
 																			<li><a href="auto-login.php?user=<?=base64_encode($resultado['mat_id_usuario']);?>&tipe=<?=base64_encode(4)?>">Autologin</a></li>
 																		<?php }?>
 
 																	<?php }?>
-
-																	<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
-																	<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
-																	<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
-																	<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
-																	<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
 																	
-																	<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>	
+																	<?php if(!empty($resultado['mat_grado']) && !empty($resultado['mat_grupo'])) {?>
+																		<?php if(Modulos::validarSubRol(['DT0224'])){?>
+																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
+                                                        				<?php }?>
+																		<?php if(Modulos::validarSubRol(['DT0247'])){?>
+																		<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
+                                                        				<?php }?>
+																		<?php if(Modulos::validarSubRol(['DT0248'])){?>
+																		<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
+                                                        				<?php }?>
+																	<?php }?>
+
+																	<?php if(!empty($resultado['mat_matricula']) && Modulos::validarSubRol(['DT0249'])) {?>
+																		<li><a href="../compartido/matriculas-formato3.php?ref=<?=base64_encode($resultado["mat_matricula"]);?>" target="_blank">Hoja de matrícula</a></li>
+																	<?php }?>
+																	
+																	<?php if($config['conf_id_institucion'] == ICOLVEN && !empty($resultado['mat_codigo_tesoreria'])){ ?>	
 																		<li><a href="http://sion.icolven.edu.co/Services/ServiceIcolven.svc/GenerarEstadoCuenta/<?=$resultado['mat_codigo_tesoreria'];?>/<?=date('Y');?>" target="_blank">SION - Estado de cuenta</a></li>
 																	<?php }?>
 
 																	<?php if(!empty($resultado['uss_usuario'])) {?>
+																		<?php if(Modulos::validarSubRol(['DT0023'])){?>
+																		<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0093'])){?>
 																		<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0117'])){?>
 																		<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
-																	<?php }?>
+																	<?php }}?>
 																</ul>
 															</div>
 														</td>

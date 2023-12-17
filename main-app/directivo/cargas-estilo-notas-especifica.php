@@ -53,7 +53,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0047'])){?>
                                                             <a href="cargas-estilo-notas-especifica-agregar.php?id=<?=$_GET["id"]?>" id="addRow" class="btn deepPink-bgcolor">
                                                                 Agregar nuevo <i class="fa fa-plus"></i>
                                                             </a>
@@ -71,7 +71,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>Nombre</th>
                                                         <th>Nota desde</th>
                                                         <th>Nota hasta</th>
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0046','DT0155'])){?>
 														    <th>Acciones</th>
                                                         <?php }?>
                                                     </tr>
@@ -79,7 +79,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
                                                     try{
-                                                        $consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM academico_notas_tipos WHERE notip_categoria='".base64_decode($_GET["id"])."'");
+                                                        $consulta = mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -92,18 +92,21 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$resultado["notip_nombre"];?></td>
                                                         <td><?=$resultado["notip_desde"];?></td>
                                                         <td><?=$resultado["notip_hasta"];?></td>
-                                                        <?php if(Modulos::validarPermisoEdicion()){?>														
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0046','DT0155'])){?>														
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+                                                                    <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
+																		<?php if(Modulos::validarSubRol(['DT0046'])){?>
+                                                                        <li><a href="cargas-estilo-notas-especifica-editar.php?id=<?=base64_encode($resultado["notip_id"]);?>&idCN=<?=$_GET["id"]?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if(Modulos::validarSubRol(['DT0155'])){?>
                                                                         <li>
                                                                         <a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','cargas-estilo-notas-especifica-eliminar.php?idN=<?=base64_encode($resultado["notip_id"]);?>&idNC=<?=$_GET["id"]?>')">Eliminar</a>    
-                                                                       </li>
+                                                                        </li>
+                                                                        <?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>

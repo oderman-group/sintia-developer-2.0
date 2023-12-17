@@ -96,6 +96,8 @@ class Usuarios{
 
 		switch($tipoUsuario){	
 
+			case 1: $url = '../directivo/'.$paginaRedireccion; break;
+
 			case 2: $url = '../docente/'.$paginaRedireccion; break;
 
 			case 3: $url = '../acudiente/'.$paginaRedireccion; break;
@@ -115,36 +117,6 @@ class Usuarios{
 		
 
 	}
-
-	
-
-}
-
-
-
-class BaseDatos {
-
-	
-
-	function eliminarPorId($tabla, $clave, $id, $urlRetorno){
-
-		include('../modelo/conexion.php');
-
-		
-
-		mysqli_query($conexion, "DELETE FROM ".$tabla." WHERE ".$clave."='".$id."'");
-
-		$lineaError = __LINE__;
-
-		include("../compartido/reporte-errores.php");
-
-		echo '<script type="text/javascript">window.location.href="'.$urlRetorno.'";</script>';
-
-		exit();
-
-	}
-
-
 
 	
 
@@ -213,7 +185,7 @@ function validarClave($clave) {
 
 
 function validarUsuarioActual($datosUsuarioActual) {
-	switch ($datosUsuarioActual[3]) {
+	switch ($datosUsuarioActual['uss_tipo']) {
 		case 5:
 			$destinos = "../directivo/";
 			break;

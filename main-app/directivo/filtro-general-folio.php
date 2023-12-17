@@ -92,7 +92,9 @@ include("../compartido/head.php");
                                         </div>
                                     </div>
 
+                                    <?php if(Modulos::validarSubRol(['DT0193'])){?>
                                     <input type="submit" class="btn btn-primary" value="Generar Folios">&nbsp;
+                                    <?php }?>
 
                                     <a href="javascript:void(0);" name="estudiantes.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                 </form>

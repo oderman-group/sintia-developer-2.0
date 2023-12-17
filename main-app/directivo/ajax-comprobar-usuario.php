@@ -1,14 +1,11 @@
 <?php
 include('session.php');
+require_once '../class/UsuariosPadre.php';
 if($_REQUEST['usuario']!=""){
 $usuario = $_REQUEST['usuario'];
 $jsonData = array();
-try{
-    $selectQuery   = ("SELECT * FROM usuarios WHERE uss_usuario='".$usuario."' ");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$query         = mysqli_query($conexion, $selectQuery);
+
+$query         = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".$usuario."'");
 $totalCliente  = mysqli_num_rows($query);
 
 if( $totalCliente <= 0 ){

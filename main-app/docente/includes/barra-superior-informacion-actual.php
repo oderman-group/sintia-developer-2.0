@@ -7,9 +7,9 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?= $Plataforma->colorUno; ?>;">
-          <b><?= strtoupper($frases[116][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
-          <b><?= strtoupper($frases[26][$datosUsuarioActual[8]]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
-          <b><?= strtoupper($frases[27][$datosUsuarioActual[8]]); ?>: </b> <?= $periodoConsultaActual; ?>
+          <b><?= strtoupper($frases[116][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['mat_nombre']); ?>
+          <b><?= strtoupper($frases[26][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= strtoupper($datosCargaActual['gra_nombre'] . " " . $datosCargaActual['gru_nombre']); ?>
+          <b><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?>: </b> <?= $periodoConsultaActual; ?>
           <span class="fa fa-angle-down"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -30,17 +30,22 @@
           <?php
           $porcentaje = 0;
           for ($i = 1; $i <= $datosCargaActual['gra_periodos']; $i++) {
-            $consultaPeriodosCursos = mysqli_query($conexion, "SELECT * FROM academico_grados_periodos
-												WHERE gvp_grado='" . $datosCargaActual['car_curso'] . "' AND gvp_periodo='" . $i . "'
+            $consultaPeriodosCursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+												WHERE gvp_grado='" . $datosCargaActual['car_curso'] . "' AND gvp_periodo='" . $i . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
             $periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+            $numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
+            $porcentaje=25;
+            if($numPeriodosCursos>0){
+              $porcentaje=$periodosCursos['gvp_valor'];
+            }
 
             if ($i == $datosCargaActual['car_periodo']) $msjPeriodoActual = '- ACTUAL';
             else $msjPeriodoActual = '';
             if ($i == $periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"';
             else $estiloResaltadoP = '';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>&get=<?= base64_encode(100); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $periodosCursos['gvp_valor']; ?>%) <?= $msjPeriodoActual; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>&get=<?= base64_encode(100); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentaje; ?>%) <?= $msjPeriodoActual; ?></a>
           <?php } ?>
 
         </div>
@@ -53,11 +58,11 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <?php
-          $cCargas = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-											INNER JOIN academico_materias ON mat_id=car_materia
-											INNER JOIN academico_grados ON gra_id=car_curso
-											INNER JOIN academico_grupos ON gru_id=car_grupo
-											WHERE car_docente='" . $_SESSION["id"] . "'
+          $cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+											INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+											INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
+											INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+											WHERE car_docente='" . $_SESSION["id"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
 											ORDER BY car_posicion_docente, car_curso, car_grupo, mat_nombre
 											");
           $nCargas = mysqli_num_rows($cCargas);

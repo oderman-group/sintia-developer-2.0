@@ -1,5 +1,12 @@
 <?php
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0238';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 $carga='';
 $grado='';
@@ -17,6 +24,7 @@ if(!empty($_POST['carga'])){
 	$grupo=$_POST['grupo'];
 	$periodo=$_POST['per'];
 }
+require_once("../class/servicios/GradoServicios.php");
 ?>
 <head>
 	<title>Notas</title>
@@ -40,24 +48,25 @@ include("../compartido/head-informes.php") ?>
   <?php
   //ESTUDIANTES ACTUALES
   $filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+  $cursoActual=GradoServicios::consultarCurso($grado);
+  $consultaNumEstudiantes =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo);
 	$numEstudiantes = mysqli_num_rows($consultaNumEstudiantes);
   $cont=1;
-  $consulta = mysqli_query($conexion, "SELECT * FROM academico_actividades WHERE act_id_carga='".$carga."' AND act_estado=1 AND act_periodo='".$periodo."'");
+  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$carga."' AND act_estado=1 AND act_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-  $consultaInd=mysqli_query($conexion, "SELECT * FROM academico_indicadores WHERE ind_id='".$resultado[4]."'");
+  $consultaInd=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$resultado['act_id_tipo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
-	if($resultado[6]==1) $estado = "REGISTRADA"; else $estado = "PENDIENTE";
-  $consultaNumCalificados=mysqli_query($conexion, "SELECT * FROM academico_calificaciones WHERE cal_id_actividad='".$resultado[0]."'");
+	if($resultado['act_registrada']==1) $estado = "REGISTRADA"; else $estado = "PENDIENTE";
+  $consultaNumCalificados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$numCalificados = mysqli_num_rows($consultaNumCalificados);
 	if($numEstudiantes!=$numCalificados) $bg = '#FCC'; else $bg = '#FFF';
   ?>
   <tr style="text-transform: uppercase; border-color: <?=$Plataforma->colorDos;?>">
-      <td align="center"><?=$resultado[0];?></td>
-      <td><?=$resultado[1];?></td>
-      <td align="center"><?=$resultado[2];?></td>
-      <td align="center"><?=$resultado[3];?>%</td>
-      <td><?=$ind[1];?></td>
+      <td align="center"><?=$resultado['act_id'];?></td>
+      <td><?=$resultado['act_descripcion'];?></td>
+      <td align="center"><?=$resultado['act_fecha'];?></td>
+      <td align="center"><?=$resultado['act_valor'];?>%</td>
+      <td><?=$ind['ind_nombre'];?></td>
       <td><?=$estado;?></td> 
       <td style="text-align:center; background:<?=$bg;?>"><?=$numEstudiantes;?>/<?=$numCalificados;?></td>  
 </tr>
@@ -66,7 +75,9 @@ include("../compartido/head-informes.php") ?>
   }//Fin mientras que
   ?>
   </table>
-  <?php include("../compartido/footer-informes.php") ?>;
+  <?php include("../compartido/footer-informes.php");
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </body>
 </html>
 

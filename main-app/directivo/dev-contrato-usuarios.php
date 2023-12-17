@@ -46,13 +46,19 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                             <?php
                                 $year=$agnoBD;
                                 if (!empty($_GET["year"])) {
-                                    $year=$_GET["year"];
+                                    $year=base64_decode($_GET["year"]);
                                 } 
                                 $filtro = '';
+                                $insti = '';
                                 if (!empty($_GET["insti"])) {
+                                    $insti = base64_decode($_GET['insti']);
                                     $filtro .= " AND ins_id='" . $_GET["insti"] . "'";
                                 }
+                                $desde = '';
+                                $hasta = '';
                                 if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+                                    $desde = $_GET['desde'];
+                                    $hasta = $_GET['hasta'];
                                     $filtro .= " AND (cxu_fecha_aceptacion BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR cxu_fecha_aceptacion LIKE '%" . $_GET["hasta"] . "%')";
                                 }                        
                             ?>
@@ -102,13 +108,11 @@ $datosContrato = mysqli_fetch_array($contrato, MYSQLI_BOTH);
                                                     $contReg = 1;
                                                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
-                                                        $BD=$resultado["ins_bd"]."_".$year;
-
                                                         $responsable="";
                                                         if($resultado['cxu_id_usuario']!=0){
 
                                                             try{
-                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."'");
+                                                                $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$resultado['cxu_id_usuario']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                                                             } catch (Exception $e) {
                                                                 include("../compartido/error-catch-to-report.php");
                                                             }

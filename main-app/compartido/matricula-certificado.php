@@ -1,7 +1,15 @@
 <?php
-include("../directivo/session.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0225';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $modulo = 1;
 
@@ -41,7 +49,7 @@ $modulo = 1;
 
         CÓDIGO DEL DANE 305001003513</b><br><br>
 
-        Los suscritos Rector y Secretaria del Instituto Colombo Venezolano, establecimiento de carácter privado, calendario A, con sus estudios aprobados de Primaria y Bachillerato, según Resolución 8339 del 25 de octubre de 1993, por los años de 1993 a 1997 y 008965 del 21 de junio de 1994.
+        Los suscritos Rector y Secretaria del <b><?= $informacion_inst["info_nombre"] ?></b>, establecimiento de carácter privado, calendario A, con sus estudios aprobados de Primaria y Bachillerato, según Resolución 8339 del 25 de octubre de 1993, por los años de 1993 a 1997 y 008965 del 21 de junio de 1994.
 
     </div>
 
@@ -75,18 +83,21 @@ $modulo = 1;
     $grados = "";
 
     while ($i <= $restaAgnos) {
-
-	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
-	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
+	
+	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
+	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=9) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
+	elseif($estudiante["mat_grado"]>=10 and $estudiante["mat_grado"]<=11) {$educacion = "MEDIA SECUNDARIA"; $horasT = 35;}	
+	elseif($estudiante["mat_grado"]>=12 and $estudiante["mat_grado"]<=15) {$educacion = "PREESCOLAR"; $horasT = 25;}
 
         if ($i < $restaAgnos)
 
-            $grados .= $estudiante["gra_nombre"] . ", ";
+            $grados .= strtoupper($estudiante["gra_nombre"]) . ", ";
 
         else
 
-            $grados .= $estudiante["gra_nombre"];
+            $grados .= strtoupper($estudiante["gra_nombre"]);
 
         $inicio++;
 
@@ -97,7 +108,7 @@ $modulo = 1;
 
 
 
-    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=$grados;?></b> grado(s) de educación básica primaria  y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=$grados;?></b> grado(s) de <?=$educacion;?>  y obtuvo las siguientes calificaciones:</p>
 
 
 
@@ -110,15 +121,13 @@ $modulo = 1;
     $inicio = $_POST["desde"];
 
     while ($i <= $restaAgnos) {
-
-	mysqli_select_db($conexion, $config['conf_base_datos']."_".$inicio);
-	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
+	$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 
     ?>
 
 
         <p align="center" style="font-weight:bold;">
-            <?= strtoupper(Utilidades::getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN BÁSICA SECUNDARIA <?= $inicio; ?><br>
+            <?= strtoupper(Utilidades::getToString($matricula["gra_nombre"])); ?> GRADO DE EDUCACIÓN <?=$educacion;?> <?= $inicio; ?><br>
             MATRÍCULA <?= strtoupper(Utilidades::getToString($matricula["mat_matricula"])); ?> FOLIO <?= strtoupper(Utilidades::getToString($matricula["mat_folio"])); ?>
         </p>
 
@@ -143,13 +152,13 @@ $modulo = 1;
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
 
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 $materiasPerdidas = 0;
 
@@ -158,7 +167,7 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
@@ -166,18 +175,23 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    if ($nota < $config[5]) {
+                if ($nota < $config[5]) {
+                    $materiasPerdidas++;
+                }
 
-                        $materiasPerdidas++;
-                    }
+                $notaFinal=$nota;
+                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota,$inicio);
+                    $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                }
 
                 ?>
 
                     <tr>
 
-                        <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
+                        <td><?= $cargas["car_id"] .") -". strtoupper($cargas["mat_nombre"]); ?></td>
 
-                        <td><?= $nota; ?></td>
+                        <td><?= $notaFinal; ?></td>
 
                         <td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
 
@@ -187,6 +201,61 @@ $modulo = 1;
                 $horasT += $cargas["car_ih"];
 
                 }
+
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+                //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS DE MT
+
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
+
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am. ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
+
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
+
+                $materiasPerdidas = 0;
+
+                while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+                    //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
+
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
+
+                if ($nota < $config[5]) {
+                    $materiasPerdidas++;
+                }
+
+                $notaFinal=$nota;
+                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota,$inicio);
+                    $notaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                }
+
+                ?>
+
+                    <tr>
+
+                        <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
+
+                        <td><?= $notaFinal; ?></td>
+
+                        <td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
+
+                    </tr>
+
+                <?php
+
+                }}}}
 
                 ?>
 
@@ -200,13 +269,13 @@ $modulo = 1;
 
             <?php
 
-            $nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM academico_nivelaciones 
+            $nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
 
-									INNER JOIN academico_cargas ON car_id=niv_id_asg
+									INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=niv.niv_id_asg AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}
 
-									INNER JOIN academico_materias ON mat_id=car_materia
+									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-									WHERE niv_cod_estudiante='" . $_POST["id"] . "'");
+									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
 
 
 
@@ -281,13 +350,13 @@ $modulo = 1;
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
 
-                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM academico_cargas 
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
 
-                                            INNER JOIN academico_materias ON mat_id=car_materia
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
 
-                                            INNER JOIN academico_areas ON ar_id=mat_area
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
 
-                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "'");
+                                            WHERE car_curso='" . $matricula["mat_grado"] . "' AND car_grupo='" . Utilidades::getToString($matricula["mat_grupo"]) . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
                 $materiasPerdidas = 0;
                 $horasT = 0;
@@ -295,19 +364,19 @@ $modulo = 1;
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "'");
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
                 $nota = 0;
                 if(!empty($boletin[0])){
                     $nota = round($boletin[0],1);
                 }
+                
+				if ($nota < $config[5]) {
+					$materiasPerdidas++;
+				}
 
-                if ($nota < $config[5]) {
-                    $materiasPerdidas++;
-                }
-
-                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta");
+                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                     $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
 
                 ?>
@@ -327,10 +396,19 @@ $modulo = 1;
 
                         while ($p <= $config[19]) {
 
-                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "'");
+                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                             $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
 
-                            echo '<td>' . $notasPeriodo[0] . '</td>';
+                            $notasPeriodoFinal='';
+                            if(!empty($notasPeriodo[0])){
+                                $notasPeriodoFinal=$notasPeriodo[0];
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
+                                    $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+                            }
+
+                            echo '<td>' . $notasPeriodoFinal . '</td>';
 
                             $p++;
                         }
@@ -339,13 +417,88 @@ $modulo = 1;
 
                         <td><?= $nota; ?></td>
 
-                        <td><?= $desempeno[1]; ?></td>
+                        <td><?= $desempeno['notip_nombre']; ?></td>
 
                     </tr>
 
                 <?php
 
                 }
+
+                //MEDIA TECNICA
+                if (array_key_exists(10, $_SESSION["modulos"])){
+                    $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$inicio,$_POST["id"]);
+                    while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
+                        if(!empty($datosEstudianteActualMT)){
+
+                //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
+                $cargasAcademicas = mysqli_query($conexion, "SELECT car_id, car_materia, car_ih, mat_id, mat_nombre, mat_area FROM ".BD_ACADEMICA.".academico_cargas car 
+
+                                            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
+
+                                            INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
+
+                                            WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
+
+                while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
+
+                    //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
+
+                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+
+                $nota = 0;
+                if(!empty($boletin[0])){
+                    $nota = round($boletin[0],1);
+                }
+
+                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+                    $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+
+                ?>
+
+                    <tr style="text-align:center;">
+
+                        <td style="text-align:left;"><?= strtoupper($cargas["mat_nombre"]); ?></td>
+
+                        <td><?= $cargas["car_ih"]; ?></td>
+
+                        <?php
+
+                        $p = 1;
+
+                        //PERIODOS
+
+                        while ($p <= $config[19]) {
+
+                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+                            $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
+
+                            $notasPeriodoFinal='';
+                            if(!empty($notasPeriodo[0])){
+                                $notasPeriodoFinal=$notasPeriodo[0];
+                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
+                                    $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                }
+                            }
+
+                            echo '<td>' . $notasPeriodoFinal . '</td>';
+
+                            $p++;
+                        }
+
+                        ?>
+
+                        <td><?= $nota; ?></td>
+
+                        <td><?= $desempeno['notip_nombre']; ?></td>
+
+                    </tr>
+
+                <?php
+
+                }}}}
 
                 ?>
 
@@ -413,7 +566,10 @@ $modulo = 1;
 
 
 
-    <?php include("../compartido/footer-informes.php") ?>;
+    <?php 
+        include("../compartido/footer-informes.php");
+        include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+    ?>
 
 
 

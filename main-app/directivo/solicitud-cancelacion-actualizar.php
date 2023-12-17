@@ -15,7 +15,7 @@ Modulos::validarAccesoDirectoPaginas();
 if (empty($_POST["respuesta"])) {
 	include("../compartido/guardar-historial-acciones.php");
 	$msj = 'Verificar que el campo respuesta este lleno';
-	$url = $_SERVER["HTTP_REFERER"] . '&error=ER_DT_15&msj=' . $msj;
+	$url = $_SERVER["HTTP_REFERER"] . '&error=ER_DT_15&msj=' . base64_encode($msj);
 	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
 }

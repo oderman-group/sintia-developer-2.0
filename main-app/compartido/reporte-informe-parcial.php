@@ -1,7 +1,12 @@
 <?php
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
+include("session-compartida.php");
+$idPaginaInterna = 'DT0222';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 $filtro = '';
 $busqueda='';
@@ -52,7 +57,7 @@ if(!empty($_GET["busqueda"])){
         <th>Estado</th>
       </tr>
       <?php
-      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado");
+      $estadoMatricula = array("", "Matriculado", "No matriculado", "No matriculado", "No matriculado", "En Inscripción");
       $cont = 1;
 
       $ordenado = 'mat_primer_apellido, mat_segundo_apellido ASC';
@@ -71,8 +76,8 @@ if(!empty($_GET["busqueda"])){
         <tr style="border-color:<?=$Plataforma->colorDos;?>;">
 
           <td><?= $resultado['mat_id']; ?></td>
-          <td><?= $resultado[12]; ?></td>
-          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado[0]; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
+          <td><?= $resultado['mat_documento']; ?></td>
+          <td><a href="../directivo/estudiantes-editar.php?id=<?= $resultado['mat_id']; ?>" target="_blank"><?= strtoupper($resultado['mat_primer_apellido'] . " " . $resultado['mat_segundo_apellido'] . " " . $resultado['mat_nombres'] . " " . $resultado['mat_nombre2']); ?></a></td>
           <td><?= $resultado["gra_nombre"]; ?></td>
           <td align="center" style="background-color: <?= $colorProceso; ?> ;"><?= $resultado["mat_informe_parcial"]; ?></td>
           <td align="center"><?= $resultado["mat_informe_parcial_fecha"]; ?></td>
@@ -90,5 +95,7 @@ if(!empty($_GET["busqueda"])){
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </body>
-
+<?php 
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>
 </html>

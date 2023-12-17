@@ -106,7 +106,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $filtro = " AND mat_grado=".base64_decode($_GET["curso"])." AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
+                                                        $filtro = " AND mat_grado='".base64_decode($_GET["curso"])."' AND (mat_promocionado=0 OR mat_promocionado=NULL) AND mat_estado_matricula=1";
                                                         $consultaEstudiantes = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                                         $numeroEstudiantes=mysqli_num_rows($consultaEstudiantes);
                                                         while($datosEstudiante = mysqli_fetch_array($consultaEstudiantes, MYSQLI_BOTH)){
@@ -123,7 +123,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 <div class="col-sm-4">
                                                                     <?php
                                                                     try{
-                                                                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+                                                                        $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                                     } catch (Exception $e) {
                                                                         include("../compartido/error-catch-to-report.php");
                                                                     }
@@ -137,7 +137,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                                 $selected="selected";
                                                                             }
                                                                         ?>
-                                                                            <option value="<?=$opcionesDatos[0];?>" <?=$selected;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
+                                                                            <option value="<?=$opcionesDatos['gru_id'];?>" <?=$selected;?>><?=$opcionesDatos['gru_id'].". ".strtoupper($opcionesDatos['gru_nombre']);?></option>
                                                                         <?php }?>
                                                                     </select>
                                                                 </div>

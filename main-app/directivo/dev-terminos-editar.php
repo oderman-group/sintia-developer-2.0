@@ -10,7 +10,7 @@ Modulos::verificarPermisoDev();
 include("../compartido/head.php");
 
 try{
-    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".$_GET['id']."'");
+    $consultaTerminos = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".terminos_tratamiento_politica WHERE ttp_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -63,7 +63,7 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                             <header class="panel-heading panel-heading-purple">Detalles</header>
                             <div class="panel-body">
                                 <form name="formularioGuardar" action="dev-terminos-actualizar.php" method="post">
-                                    <input type="hidden" name="id" class="form-control" value="<?=$_GET['id']?>">
+                                    <input type="hidden" name="id" class="form-control" value="<?=base64_decode($_GET['id'])?>">
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Titulo</label>
@@ -96,7 +96,9 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                 </form>
                             </div>
                         </div>

@@ -58,12 +58,12 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                     <?php
                                     try{
-                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id=".base64_decode($_GET["id"]).";");
+                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                     } catch (Exception $e) {
                                         include("../compartido/error-catch-to-report.php");
                                     }
@@ -101,7 +101,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <option value="">Seleccione una opci n</option>
                                                 <?php
                                                 try{
-                                                    $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas;");
+                                                    $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
@@ -128,7 +128,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
                                     </form>
                                 </div>

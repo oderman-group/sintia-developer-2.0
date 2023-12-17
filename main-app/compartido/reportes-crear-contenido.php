@@ -9,21 +9,20 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                             <div class="card card-box">
                                 <div class="card-head">
-                                    <header><?=$frases[96][$datosUsuarioActual[8]];?></header>
+                                    <header><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="12">
+                                    <form class="form-horizontal" action="../compartido/reportes-guardar.php" method="post" enctype="multipart/form-data">
 
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">  
                                                 <input type="date" class="form-control" name="fecha" required value="<?=date("Y-m-d");?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[55][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <?php
 												$datosConsulta = Estudiantes::listarEstudiantesParaDocentes('');
@@ -40,12 +39,13 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
                                                 <select id="multiple" name="faltas[]" class="form-control select2-multiple" multiple <?=$disabledPermiso;?>>
 												<?php
-												$datosConsulta = mysqli_query($conexion, "SELECT * FROM disciplina_faltas 
-												INNER JOIN disciplina_categorias ON dcat_id=dfal_id_categoria
+												$datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disciplina_faltas 
+												INNER JOIN ".BD_DISCIPLINA.".disciplina_categorias ON dcat_id=dfal_id_categoria AND dcat_institucion={$config['conf_id_institucion']} AND dcat_year={$_SESSION["bd"]}
+												WHERE dfal_institucion={$config['conf_id_institucion']} AND dfal_year={$_SESSION["bd"]}
 												");
 												while($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
 												?>	
@@ -55,15 +55,13 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 										
-										<?php if($datosUsuarioActual[3]==5){?>
+										<?php if($datosUsuarioActual['uss_tipo']==5){?>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual[8]];?></label>
+												<label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-10">
 													<?php
-													$datosConsulta = mysqli_query($conexion, "SELECT * FROM usuarios
-													WHERE (uss_tipo=2 OR uss_tipo=5)
-													ORDER BY uss_tipo, uss_nombre
-													");
+													$datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND (uss_tipo = ".TIPO_DOCENTE." OR uss_tipo= ".TIPO_DIRECTIVO.")
+													ORDER BY uss_tipo, uss_nombre");
 													?>
 													<select class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
@@ -80,17 +78,19 @@ if(!Modulos::validarPermisoEdicion()){
 										<?php }?>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual[8]];?></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">  
                                                 <textarea name="contenido" class="form-control" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
 										
-										<?php if(Modulos::validarPermisoEdicion()){?>
-											<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-										<?php }?>
-										
 										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+
+										<?php if(Modulos::validarPermisoEdicion()){?>
+											<button type="submit" class="btn  btn-info">
+												<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+											</button>
+										<?php }?>
 
                                     </form>
                                 </div>

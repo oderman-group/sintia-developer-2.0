@@ -1,21 +1,20 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0081';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
 <?php
+include("session.php");
+$idPaginaInterna = 'DT0081';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+require_once("../class/Estudiantes.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-require_once("../class/Estudiantes.php");
-?>
-<?php
-  $consultaCurso = Grados::obtenerDatosGrados($_POST["curso"]);
-	$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-  
-  $consultaGrupo = Grupos::obtenerDatosGrupos($_POST["grupo"]);
-	$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
+
+$consultaCurso = Grados::obtenerDatosGrados($_POST["curso"]);
+$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
+
+$consultaGrupo = Grupos::obtenerDatosGrupos($_POST["grupo"]);
+$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
@@ -120,7 +119,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<th rowspan="2" style="font-size:9px;">Estudiante</th>
 													<?php
 													try{
-														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1");
+														$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
@@ -128,13 +127,13 @@ if(!Modulos::validarPermisoEdicion()){
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
 														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 													?>
-														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia[2];?></th>
+														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia['mat_nombre'];?></th>
 													<?php
 													}
 													?>
@@ -144,7 +143,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<tr>
 														<?php
 														try{
-															$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+															$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -166,8 +165,9 @@ if(!Modulos::validarPermisoEdicion()){
 												<!-- BEGIN -->
 												<tbody>
 												<?php
-												$filtro = " AND mat_grado='".$_POST["curso"]."' AND mat_grupo='".$_POST["grupo"]."'";
-												$consulta = Estudiantes::listarEstudiantes(0, $filtro, '');
+												$filtroAdicional= "AND mat_grado='".$_REQUEST["curso"]."' AND mat_grupo='".$_REQUEST["grupo"]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+												$cursoActual=GradoServicios::consultarCurso($_REQUEST["curso"]);
+												$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$_REQUEST["grupo"]);
 												//PRIMER PUESTO
 												$primerPuestoNota = 0;
 												$primerPuestoNombre = '';
@@ -180,17 +180,17 @@ if(!Modulos::validarPermisoEdicion()){
 												$defPorEstudiante = 0;
 												?>
 												<tr id="data1" class="odd gradeX">
-													<td style="font-size:9px;"><?=$resultado[12];?></td>
-													<td style="font-size:9px;"><?=$resultado[3]." ".$resultado[4]." ".$resultado[5];?></td>
+													<td style="font-size:9px;"><?=$resultado['mat_documento'];?></td>
+													<td style="font-size:9px;"><?=Estudiantes::NombreCompletoDelEstudiante($resultado)?></td>
 													<?php
 													try{
-														$cargas = mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1"); 
+														$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_POST["curso"]."' AND car_grupo='".$_POST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM academico_materias WHERE mat_id='".$carga[4]."'");
+															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -199,31 +199,27 @@ if(!Modulos::validarPermisoEdicion()){
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
 														while($p<=$config[19]){
-															try{
-																$consultaBoletin=mysqli_query($conexion, "SELECT * FROM academico_boletin WHERE bol_carga='".$carga[0]."' AND bol_estudiante='".$resultado[0]."' AND bol_periodo='".$p."'");
-															} catch (Exception $e) {
-																include("../compartido/error-catch-to-report.php");
-															}
+															$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga['car_id']."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
-															if(isset($boletin[4]) and $boletin[4]<$config[5] and $boletin[4]!="")$color = $config[6]; elseif(isset($boletin[4]) and $boletin[4]>=$config[5]) $color = $config[7];
-															if(isset($boletin[4])){
-																$defPorMateria += $boletin[4];
+															if(isset($boletin['bol_nota']) and $boletin['bol_nota']<$config[5] and $boletin['bol_nota']!="")$color = $config[6]; elseif(isset($boletin['bol_nota']) and $boletin['bol_nota']>=$config[5]) $color = $config[7];
+															if(isset($boletin['bol_nota'])){
+																$defPorMateria += $boletin['bol_nota'];
 															}
-															if(isset($boletin[5]) and $boletin[5]==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
-															elseif(isset($boletin[5]) and $boletin[5]==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
-															elseif(isset($boletin[5]) and $boletin[5]==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
-															elseif(isset($boletin[5]) and $boletin[5]==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
+															if(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==1) $tipo = '<span style="color:blue; font-size:9px;">Normal</span>'; 
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==2) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Per.</span>';
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==3) $tipo = '<span style="color:red; font-size:9px;">Recuperaci&oacute;n Ind.</span>';
+															elseif(isset($boletin['bol_tipo']) and $boletin['bol_tipo']==4) $tipo = '<span style="color:red; font-size:9px;">Directivo</span>';
 															
 															else $tipo='';
 															//DEFINITIVA DE CADA PERIODO
 															
 															$disabled = "";
-															if((isset($boletin[4]) and ($boletin[4]!="" or $carga['car_periodo']<=$p)) and $config['conf_editar_definitivas_consolidado']!=true){
+															if((isset($boletin['bol_nota']) and ($boletin['bol_nota']!="" or $carga['car_periodo']<=$p)) and $config['conf_editar_definitivas_consolidado']!=true){
 																$disabled = "disabled";
 															}
 														?>	
 															<td style="text-align:center;">
-																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin[4])){ echo $boletin[4];}?>" name="<?=$carga[0];?>" id="<?=$resultado[0];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia[2];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
+																<input style="text-align:center; width:40px; color:<?=$color;?>" value="<?php if(isset($boletin['bol_nota'])){ echo $boletin['bol_nota'];}?>" name="<?=$carga['car_id'];?>" id="<?=$resultado['mat_id'];?>" onChange="def(this)" alt="<?=$p;?>" title="Materia: <?=$materia['mat_nombre'];?> - Periodo: <?=$p;?>" <?=$disabled;?> <?=$disabledPermiso;?>><br><?=$tipo;?>
 															</td>
 														<?php
 															$p++;
@@ -232,15 +228,11 @@ if(!Modulos::validarPermisoEdicion()){
 															//DEFINITIVA DE CADA MATERIA
 															if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
 															//CONSULTAR NIVELACIONES
-															try{
-																$consultaNiv=mysqli_query($conexion, "SELECT * FROM academico_nivelaciones WHERE niv_cod_estudiante='".$resultado[0]."' AND niv_id_asg='".$carga[0]."'");
-															} catch (Exception $e) {
-																include("../compartido/error-catch-to-report.php");
-															}
+															$consultaNiv=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
-															if(isset($cNiv[3]) and $cNiv[3]>$defPorMateria){$defPorMateria=$cNiv[3]; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
+															if(isset($cNiv['niv_definitiva']) and $cNiv['niv_definitiva']>$defPorMateria){$defPorMateria=$cNiv['niv_definitiva']; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														?>
-															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?php if(isset($defPorMateria)){ echo $defPorMateria;}?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?php if(isset($msj)){ echo $msj;}?><br><?php if(isset($cNiv[5]) and isset($cNiv[6])){ echo "Acta ".$cNiv[5]." de ".$cNiv[6];}?></span></td>
+															<td style="text-align:center; background:#FFC;"><input style="text-align:center; width:40px; font-weight:bold; color:<?=$color;?>" value="<?php if(isset($defPorMateria)){ echo $defPorMateria;}?>" disabled><br><span style="font-size:10px; color:rgb(255,0,0); font-weight:bold;"><?php if(isset($msj)){ echo $msj;}?><br><?php if(isset($cNiv['niv_acta']) and isset($cNiv['niv_fecha_nivelacion'])){ echo "Acta ".$cNiv['niv_acta']." de ".$cNiv['niv_fecha_nivelacion'];}?></span></td>
 													<?php
 														//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
 														$defPorEstudiante += $defPorMateria;   

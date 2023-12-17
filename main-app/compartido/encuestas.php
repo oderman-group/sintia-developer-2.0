@@ -16,8 +16,7 @@
 										<div class="item" align="center" style="margin-bottom: 10px;"><img src="http://plataformasintia.com/files-general/encuestas/<?=$encuesta['adenc_imagen'];?>"></div>
 									<?php }?>
 									
-									<form class="form-horizontal" action="../compartido/guardar.php" method="post">
-										<input type="hidden" name="id" value="11">
+									<form class="form-horizontal" action="../compartido/encuentas-respuestas.php" method="post">
 										<input type="hidden" name="encuesta" value="<?=$encuesta['adenc_id'];?>">
 										<?php
 										$opcionesR = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".encuestas_opciones WHERE adencop_encuesta='".$encuesta['adenc_id']."'");

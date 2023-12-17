@@ -19,7 +19,7 @@ if(!isset($_GET["carga"]) or !is_numeric(base64_decode($_GET["carga"]))){
 	}
 }
 try{
-	$consultaCargaH=mysqli_query($conexion, "SELECT * FROM academico_cargas WHERE car_id='".$cargaConsultaActual."'");
+	$consultaCargaH=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -27,14 +27,14 @@ $cargaHconsulta = mysqli_fetch_array($consultaCargaH, MYSQLI_BOTH);
 
 if($cargaHconsulta['car_primer_acceso_docente']==""){
 	try{
-		mysqli_query($conexion, "UPDATE academico_cargas SET car_primer_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_primer_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
 	
 }else{
 	try{
-		mysqli_query($conexion, "UPDATE academico_cargas SET car_ultimo_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."'");
+		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_ultimo_acceso_docente=now() WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -42,11 +42,11 @@ if($cargaHconsulta['car_primer_acceso_docente']==""){
 }
 //A los directivos no se les consulta el docente ni tampoco el estado de la carga (Activa o Inactiva)
 try{
-	$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM academico_cargas 
-	INNER JOIN academico_materias ON mat_id=car_materia
-	INNER JOIN academico_grados ON gra_id=car_curso
-	INNER JOIN academico_grupos ON gru_id=car_grupo
-	WHERE car_id='".$cargaConsultaActual."'");
+	$consultaCargaActual = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
+	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+	INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
+	INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+	WHERE car_id='".$cargaConsultaActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }

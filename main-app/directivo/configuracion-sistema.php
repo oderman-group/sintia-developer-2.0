@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 try{
     $consultaCfg=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion 
-    WHERE conf_base_datos='".$_SESSION["inst"]."' AND conf_agno='".$_SESSION["bd"]."'");
+    WHERE conf_id_institucion='".$_SESSION["idInstitucion"]."' AND conf_agno='".$_SESSION["bd"]."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -50,11 +50,11 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</div>
+                                <div class="page-title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[17][$datosUsuarioActual[8]];?> del Sistema</li>
+                                <li class="active"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> del Sistema</li>
                             </ol>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                                 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -154,15 +154,15 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <option value="">Seleccione una opción</option>
                                                     <?php 
                                                         try{
-                                                            $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM academico_categorias_notas");
+                                                            $opcionesGeneralesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         } catch (Exception $e) {
                                                             include("../compartido/error-catch-to-report.php");
                                                         }
                                                         while($opcionesGeneralesDatos = mysqli_fetch_array($opcionesGeneralesConsulta, MYSQLI_BOTH)){
-                                                            if($cfg[22]==$opcionesGeneralesDatos[0])
-                                                                echo '<option value="'.$opcionesGeneralesDatos[0].'" selected>'.$opcionesGeneralesDatos[1].'</option>';
+                                                            if($cfg[22]==$opcionesGeneralesDatos['catn_id'])
+                                                                echo '<option value="'.$opcionesGeneralesDatos['catn_id'].'" selected>'.$opcionesGeneralesDatos['catn_nombre'].'</option>';
                                                             else
-                                                                echo '<option value="'.$opcionesGeneralesDatos[0].'">'.$opcionesGeneralesDatos[1].'</option>';	
+                                                                echo '<option value="'.$opcionesGeneralesDatos['catn_id'].'">'.$opcionesGeneralesDatos['catn_nombre'].'</option>';	
                                                         }
                                                     ?>
                                                 </select>
@@ -259,6 +259,16 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
 											</div>
 										</div>
+
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Forma para mostrar las notas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción mostrará a los usuarios las notas en formato numérico o con frases de desempeño que corresponden a las notas numéricas, dependiendo la opción que seleccione."><i class="fa fa-question"></i></button> </label>
+											<div class="col-sm-2">
+                                                <select class="form-control  select2" name="formaNotas" <?=$disabledPermiso;?>>
+                                                    <option value="<?=CUALITATIVA?>" <?php if($cfg['conf_forma_mostrar_notas'] == CUALITATIVA){ echo "selected";} ?>>CUALITATIVA (sin numéros)</option>
+                                                    <option value="<?=CUANTITATIVA?>" <?php if($cfg['conf_forma_mostrar_notas'] == CUANTITATIVA){ echo "selected";} ?>>CUANTITATIVA (con números)</option>
+                                                </select>
+											</div>
+										</div>
 										
                                         
                                         <p class="h3">Permisos</p>
@@ -351,6 +361,18 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Activar encuesta de reserva de cupos?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los acudientes responder si desean reservar o no el cupo para sus acudidos para el siguiente año."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control col-sm-2 select2" name="activarEncuestaReservaCupo" <?=$disabledPermiso;?>>
+                                                    <option value="1" <?php if($cfg['conf_activar_encuesta']==1){ echo "selected";} ?>>SI</option>
+                                                    <option value="0" <?php if($cfg['conf_activar_encuesta']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         
 										<p class="h3">Otras</p>
 
@@ -381,7 +403,9 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
                                     </form>
                                 </div>

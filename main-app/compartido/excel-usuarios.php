@@ -10,8 +10,9 @@ include("../../config-general/consulta-usuario-actual.php");
 
 
 <?php
-$consulta=mysqli_query($conexion, "SELECT * FROM usuarios
+$consulta=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
 	INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
+    WHERE uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
 	ORDER BY uss_tipo");
 ?>
 <div align="center">  

@@ -5,7 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_formatos WHERE form_id='".$_GET["idF"]."'");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos WHERE form_id='".$_GET["idF"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 
@@ -37,12 +37,12 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[225][$datosUsuarioActual[8]];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></div>
+                                <div class="page-title"><?=$frases[225][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[225][$datosUsuarioActual[8]];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></li>
+                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[225][$datosUsuarioActual['uss_idioma']];?>: <b><?=$datosConsultaBD['form_nombre'];?></b></li>
                             </ol>
                         </div>
                     </div>
@@ -61,8 +61,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="panel-body">
 											<p>Puedes cambiar a otro formato rápidamente para monitorear a los evaluados.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM academico_formatos 
-											WHERE form_id!='".$_GET["idF"]."' ORDER BY form_id DESC");
+											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_formatos 
+											WHERE form_id!='".$_GET["idF"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ORDER BY form_id DESC");
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idF=<?=$regComun['form_id'];?>"><?=$regComun['form_nombre'];?></a></p>
@@ -77,7 +77,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 								<div class="col-md-8 col-lg-9">
 									
 									<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -122,8 +122,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[139][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[108][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[108][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -169,7 +169,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
                                         </div>
                                     </div>
 										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 												<a href="#" name="formatos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>

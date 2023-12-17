@@ -9,6 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if (trim($_POST["nombre"]) == "" or trim($_POST["valor"]) == "") {
@@ -18,7 +19,7 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 	
 	try{
-		$consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor)+" . $_POST["valor"] . " FROM academico_indicadores where ind_obligatorio=1");
+		$consultaInd=mysqli_query($conexion, "SELECT sum(ind_valor)+" . $_POST["valor"] . " FROM ".BD_ACADEMICA.".academico_indicadores where ind_obligatorio=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
@@ -29,9 +30,10 @@ include("../compartido/historial-acciones-guardar.php");
 		echo "<span style='font-family:Arial; color:red;'>Los valores de los indicadores no deben superar el 100%.</samp>";
 		exit();
 	}
+	$codigo=Utilidades::generateCode("IND");
 
 	try{
-		mysqli_query($conexion, "INSERT INTO academico_indicadores(ind_nombre, ind_valor, ind_obligatorio)VALUES('" . $_POST["nombre"] . "','" . $_POST["valor"] . "',1)");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_valor, ind_obligatorio, institucion, year)VALUES('".$codigo."', '" . $_POST["nombre"] . "','" . $_POST["valor"] . "',1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}

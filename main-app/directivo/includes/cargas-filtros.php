@@ -11,22 +11,22 @@
 									
 									<?php
 									try{
-										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM academico_cargas)");
+										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 									} catch (Exception $e) {
 										include("../compartido/error-catch-to-report.php");
 									}
 										$estadisticasCargas = mysqli_fetch_array($consultaEstadisticaCarga, MYSQLI_BOTH);
 										?>
 									
-									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual[8]]);?></h4>
+									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
 									
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
 											try{
-												$cursos = mysqli_query($conexion, "SELECT * FROM academico_grados
-												WHERE gra_estado=1
+												$cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+												WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												ORDER BY gra_vocal
 												");
 											} catch (Exception $e) {
@@ -34,7 +34,7 @@
 											}
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												try{
-													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_curso='".$curso['gra_id']."'");
+													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso['gra_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -70,7 +70,7 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$grupos = mysqli_query($conexion, "SELECT * FROM academico_grupos");
+												$grupos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}
@@ -89,17 +89,11 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[28][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$docentes = mysqli_query($conexion, "SELECT * FROM usuarios
-												WHERE uss_tipo=2 AND uss_bloqueado=0
-												ORDER BY uss_nombre
-												");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$docentes = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo = ".TIPO_DOCENTE." AND uss_bloqueado=0
+											ORDER BY uss_nombre");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_docente='".$docente['uss_id']."'");
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_docente='".$docente['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}
@@ -136,7 +130,7 @@
 										<div class="panel-body">
 											<?php
 											try{
-												$docentes = mysqli_query($conexion, "SELECT * FROM academico_materias
+												$docentes = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												ORDER BY mat_nombre
 												");
 											} catch (Exception $e) {
@@ -144,7 +138,7 @@
 											}
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM academico_cargas WHERE car_materia='".$docente['mat_id']."'");
+													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$docente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 												} catch (Exception $e) {
 													include("../compartido/error-catch-to-report.php");
 												}

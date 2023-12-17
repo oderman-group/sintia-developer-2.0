@@ -5,9 +5,7 @@
                                     <header>Registrar mi negocio</header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form class="form-horizontal" action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-										<input type="hidden" name="id" value="16">
-                                        
+                                    <form class="form-horizontal" action="../compartido/empresas-guardar.php" method="post" enctype="multipart/form-data">
 										<div class="form-group row">
                                             <label class="col-sm-3 control-label">Nombre de tu negocio (*)</label>
                                             <div class="col-sm-9">
@@ -39,20 +37,19 @@
 													$infoConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosMarketPlace.".servicios_categorias");
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 													?>	
-													    <option value="<?=$infoDatos[0];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
+													    <option value="<?=$infoDatos['svcat_id'];?>"><?=strtoupper($infoDatos['svcat_nombre']);?></option>
 													<?php }?>	
 													</select>
 													<span style="color: navy;">Seleccione al menos un sector.</span>
 												</div>
 												
 											</div>
-											
-
-										
-										<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
-										
+                                            
 										<a href="#" name="noticias.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
+										<button type="submit" class="btn  btn-info">
+                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                        </button>
                                     </form>
                                 </div>
                             </div>

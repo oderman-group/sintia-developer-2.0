@@ -32,14 +32,14 @@
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[139][$datosUsuarioActual[8]];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i>
-								<li><a class="parent-item" href="formatos-categorias.php?idF=<?=$_GET["idF"];?>"><?=$frases[222][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-								<li><a class="parent-item" href="formatos-categorias-preguntas.php?idF=<?=$_GET["idF"];?>&idE=<?=$_GET["idE"];?>"><?=$frases[139][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual[8]];?> <?=$frases[139][$datosUsuarioActual[8]];?></li>
+                                <li><a class="parent-item" href="formatos.php"><?=$frases[221][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i>
+								<li><a class="parent-item" href="formatos-categorias.php?idF=<?=$_GET["idF"];?>"><?=$frases[222][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+								<li><a class="parent-item" href="formatos-categorias-preguntas.php?idF=<?=$_GET["idF"];?>&idE=<?=$_GET["idE"];?>"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
@@ -83,7 +83,9 @@
 											 </div>	
 										
 
-								<input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+								<button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
 
 												<a href="#" name="formatos-categorias-preguntas.php?idF=<?=$_GET["idF"];?>&idE=<?=$_GET["idE"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>

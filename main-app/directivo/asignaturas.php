@@ -51,7 +51,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if (Modulos::validarPermisoEdicion()) { ?>
+														<?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0022'])) { ?>
                                                         <a href="javascript:void(0);" data-toggle="modal" data-target="#nuevaAsigModal" class="btn deepPink-bgcolor">
 														   <?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
                                                         </a>
@@ -69,33 +69,33 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[49][$datosUsuarioActual[8]];?></th>
-														<th><?=$frases[73][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
 															<th>Valor(%)</th>
 														<?php }?>	
-														<th><?=$frases[93][$datosUsuarioActual[8]];?></th>
+														<th><?=$frases[93][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Cargas</th>
 														<?php if(Modulos::validarPermisoEdicion()){?>
-															<th><?=$frases[54][$datosUsuarioActual[8]];?></th>
+															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
 													 $filtro = '';
-													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND mat_area='".base64_decode($_GET["area"])."'";}
+													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";}
 													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM academico_materias
-														INNER JOIN academico_areas ON ar_id=mat_area
-														WHERE mat_id=mat_id $filtro");
+														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am
+														INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
+														WHERE am.mat_id=am.mat_id AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} $filtro");
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
-															$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM academico_cargas WHERE car_materia='".$resultado['mat_id']."'");
+															$consultaNumeros=mysqli_query($conexion, "SELECT COUNT(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
@@ -109,18 +109,25 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<td><?=$resultado['mat_valor'];?></td>
 														<?php }?>	
 														<td><?=$resultado['ar_nombre'];?></td>
-														<td><a href="cargas.php?asignatura=<?=base64_encode($resultado['mat_id']);?>" style="text-decoration: underline;"><?=$numeros[0];?></a></td>
+														<?php 
+															$cargas=$numeros[0];
+															if(Modulos::validarSubRol(['DT0032'])){
+																$cargas='<a href="cargas.php?asignatura='.base64_encode($resultado['mat_id']).'" style="text-decoration: underline;">'.$numeros[0].'</a>';
+															}
+														?>
+														<td><?=$cargas?></td>
 														
-														<?php if(Modulos::validarPermisoEdicion()){?>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0021','DT0151'])){?>
 															<td>
 																<div class="btn-group">
-																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual[8]];?></button>
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
-																		<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado[0]);?>"><?=$frases[165][$datosUsuarioActual[8]];?></a></li>
-																		<?php if($numeros[0]==0){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado[0]);?>')">Eliminar</a></li><?php } ?>
+																		<?php if(Modulos::validarSubRol(['DT0021'])){?>
+																			<li><a href="asignaturas-editar.php?id=<?=base64_encode($resultado['mat_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } if($numeros[0]==0 && Modulos::validarSubRol(['DT0151'])){?><li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','asignaturas-eliminar.php?id=<?=base64_encode($resultado['mat_id']);?>')">Eliminar</a></li><?php } ?>
 																	</ul>
 																</div>
 															</td>

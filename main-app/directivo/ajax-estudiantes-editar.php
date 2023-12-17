@@ -1,11 +1,9 @@
 <?php 
 include("session.php");
-try{
-    $consultaDoc=mysqli_query($conexion, "SELECT * FROM academico_matriculas
-    WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_id!='".$_POST["idEstudiante"]."' AND mat_eliminado=0");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+
+$consultaDoc = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_documento ='".$_POST["nDoct"]."' AND mat_id!='".$_POST["idEstudiante"]."' AND mat_eliminado=0");
+
 $datosEstudiantes = mysqli_fetch_array($consultaDoc, MYSQLI_BOTH);
 $numDatos=mysqli_num_rows($consultaDoc);
 if ($numDatos > 0) {

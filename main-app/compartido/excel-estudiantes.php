@@ -1,11 +1,16 @@
 <?php
+include("session-compartida.php");
+$idPaginaInterna = 'DT0244';
+
+if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
+	exit();
+}
+include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 header("Content-Type: application/vnd.ms-excel");
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 header("content-disposition: attachment;filename=Estudiantes_".date("d/m/Y")."-SINTIA.xls");
-session_start();
-include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 
 $consulta = Estudiantes::listarEstudiantes(0, '', '');
@@ -58,9 +63,9 @@ $consulta = Estudiantes::listarEstudiantes(0, '', '');
 $conta=1;
 while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 {
-    $consultaDatosA=mysqli_query($conexion, "SELECT * FROM usuarios 
+    $consultaDatosA=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
     LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=uss_tipo_documento
-    WHERE uss_id='".$resultado['mat_acudiente']."'");
+    WHERE uss_id='".$resultado['mat_acudiente']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 
 	$datosA = mysqli_fetch_array($consultaDatosA, MYSQLI_BOTH);
 
@@ -73,7 +78,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             <td align="center"><?=$resultado['gra_nombre'];?></td>
             <td align="center"><?=$resultado['gru_nombre'];?></td>
             <td align="center"><?=$estadoM;?></td>
-            <td align="center"><?=$resultado[9];?></td>
+            <td align="center"><?=$resultado['mat_fecha_nacimiento'];?></td>
             <td align="center"><?php
             if(!empty($resultado['mat_lugar_nacimiento'])){
                 $lugarNacimiento = is_numeric($resultado['mat_lugar_nacimiento']) ?  $resultado['ciu_nombre']
@@ -84,17 +89,17 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
             ?></td>
             <td align="center"><?=$resultado['ogen_nombre'];?></td>
             <td align="center"><?=$resultado['mat_documento'];?></td>
-            <td align="center"><?=$resultado[13];?></td>
-            <td align="center"><?=$resultado[15];?></td>
-            <td align="center"><?=$resultado[16];?></td>
-            <td align="center"><?=$resultado[17];?></td>
+            <td align="center"><?=$resultado['mat_lugar_expedicion'];?></td>
+            <td align="center"><?=$resultado['mat_direccion'];?></td>
+            <td align="center"><?=$resultado['mat_barrio'];?></td>
+            <td align="center"><?=$resultado['mat_telefono'];?></td>
             <td><?php
             if(!empty($resultado['mat_email'])){ 
                 echo strtolower($resultado['mat_email']);
             }    
             ?></td>
-			<td align="center"><?=$resultado[34];?></td>
-            <td align="center"><?=$resultado[35];?></td>
+			<td align="center"><?=$resultado['mat_folio'];?></td>
+            <td align="center"><?=$resultado['mat_codigo_tesoreria'];?></td>
             <td align="center"><?=$resultado['mat_numero_matricula'];?></td>
 
             <td><?=$datosA['ogen_nombre'];?></td>
@@ -118,6 +123,7 @@ while($resultado=mysqli_fetch_array($consulta, MYSQLI_BOTH))
 <?php
 	$conta++;
 }
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>        
     </tbody>
 </table>

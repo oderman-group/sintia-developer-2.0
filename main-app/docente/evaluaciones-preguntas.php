@@ -40,7 +40,7 @@ function mostrarNuevaRespuesta(datos){
 	
 
   function realizando(){
-  	var eva = <?=$idE;?>;
+  	var eva = '<?=$idE;?>';
 	var consulta = 1;
 	  $('#resp').empty().hide().html("...").show(1);
 		datos = "eva="+(eva)+
@@ -58,7 +58,7 @@ function mostrarNuevaRespuesta(datos){
 	setInterval('realizando()',5000);
 	
 	function finalizado(){
-  	var eva = <?=$idE;?>;	
+  	var eva = '<?=$idE;?>';	
 	var consulta = 2;
 	  $('#fin').empty().hide().html("...").show(1);
 		datos = "eva="+(eva)+
@@ -84,16 +84,16 @@ function mostrarNuevaRespuesta(datos){
 <?php include("../compartido/body.php");?>
 	
 	<?php
-	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones 
-	WHERE eva_id='".$idE."' AND eva_estado=1");
+	$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
+	WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluacion_preguntas
-	INNER JOIN academico_actividad_preguntas ON preg_id=evp_id_pregunta
-	WHERE evp_id_evaluacion='".$idE."'
-	ORDER BY preg_id DESC
+	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas evp
+	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
+	WHERE evp_id_evaluacion='".$idE."' AND evp.institucion={$config['conf_id_institucion']} AND evp.year={$_SESSION["bd"]}
+	ORDER BY preg.preg_id DESC
 	");
 	
 	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
@@ -116,11 +116,12 @@ function mostrarNuevaRespuesta(datos){
                                 <div class="page-title"><?=$evaluacion['eva_nombre'];?></div>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="evaluaciones.php"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active"><?=$evaluacion['eva_nombre'];?></li>
                             </ol>
                         </div>
                     </div>
+					<?php include(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                     <div class="row">
 
 							<div class="col-md-3">
@@ -128,9 +129,9 @@ function mostrarNuevaRespuesta(datos){
 									<div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="panel-body">
-												<p><b><?=$frases[141][$datosUsuarioActual[8]];?>:</b> <?=$frases[144][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[141][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[144][$datosUsuarioActual['uss_idioma']];?></p>
 											
-												<p><b><?=$frases[142][$datosUsuarioActual[8]];?>:</b> <?=$frases[145][$datosUsuarioActual[8]];?></p>
+												<p><b><?=$frases[142][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[145][$datosUsuarioActual['uss_idioma']];?></p>
 											
 												<p><b>Respuesta correcta:</b> Haciendo click sobre el icono <i class="fa fa-exchange"></i> al lado de la respuesta para marcarlas como correctas o incorrectas. De color verde se resalatan las correctas y de color rojo las incorrectas.</p>
 										</div>
@@ -140,13 +141,13 @@ function mostrarNuevaRespuesta(datos){
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1
+											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
+											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 											ORDER BY eva_id DESC
 											");
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
-												<p><a href="evaluaciones-preguntas.php?idE=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>
+												<p><a href="evaluaciones-preguntas.php?idE=<?=base64_encode($evaComun['eva_id']);?>"><?=$evaComun['eva_nombre'];?></a></p>
 											<?php }?>
 										</div>
                                     </div>
@@ -184,8 +185,8 @@ function mostrarNuevaRespuesta(datos){
 											$totalPuntos = 0;
 											$contPreguntas = 1;
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."'
+												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
+												WHERE resp_id_pregunta='".$preguntas['preg_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
 												");
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
@@ -209,7 +210,7 @@ function mostrarNuevaRespuesta(datos){
 																			
 																		   <li class = "mdl-menu__item"><a href="preguntas-editar.php?idR=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>"><i class="fa fa-edit"></i> Editar pregunta</a></li>
 																		   
-																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="guardar.php?get=<?=base64_encode(27);?>&idP=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
+																			<li class = "mdl-menu__item"><a href="#" title="<?=$objetoEnviar;?>" id="<?=$preguntas['preg_id'];?>" name="evaluaciones-preguntas-eliminar.php?idP=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar pregunta</a></li>
 																		</ul>
 													</div>
 													
@@ -255,9 +256,9 @@ function mostrarNuevaRespuesta(datos){
 												
 														
 												<p id="reg<?=$respuestas['resp_id'];?>">	
-													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="guardar.php?get=<?=base64_encode(9);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
+													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$respuestas['resp_id'];?>" name="evaluaciones-respuestas-eliminar.php?idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>" onClick="deseaEliminar(this)"><i class="fa fa-times-circle"></i></a>
 													
-													<a href="guardar.php?get=<?=base64_encode(8);?>&idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>">
+													<a href="evaluaciones-respuestas-cambiar-estado.php?idR=<?=base64_encode($respuestas['resp_id']);?>&estado=<?=base64_encode($respuestas['resp_correcta']);?>&preg=<?=base64_encode($preguntas['preg_id']);?>&idE=<?=$_GET["idE"];?>">
 														<i class="fa fa-exchange"></i>
 													</a>
 													

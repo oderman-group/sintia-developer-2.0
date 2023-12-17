@@ -45,7 +45,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual[8]];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="cargas.php" onClick="deseaRegresar(this)"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Transferir Cargas</li>
                             </ol>
                         </div>
@@ -65,13 +65,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             <label class="col-sm-2 control-label">Del Docente</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="de" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    try{
-                                                        $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $docen = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DOCENTE);
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
                                                         echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";
@@ -85,13 +81,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             <label class="col-sm-2 control-label">Al Docente</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="para" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opci�n</option>
+                                                    <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    try{
-                                                        $docen=mysqli_query($conexion, "SELECT * FROM usuarios WHERE uss_tipo=2");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $docen = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DOCENTE);
                                                     while($nDocen=mysqli_fetch_array($docen, MYSQLI_BOTH))
                                                     {
                                                         echo "<option value='".$nDocen["uss_id"]."'>".UsuariosPadre::nombreCompletoDelUsuario($nDocen)."</option>";
@@ -102,7 +94,9 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-                                            <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                            <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
 										
 										<a href="javascript:void(0);" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>

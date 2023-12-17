@@ -33,7 +33,7 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?=$frases[339][$datosUsuarioActual[8]];?></div>
+                            <div class="page-title"><?=$frases[339][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="col-sm-9">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header><?=$frases[339][$datosUsuarioActual[8]];?></header>
+                                <header><?=$frases[339][$datosUsuarioActual['uss_idioma']];?></header>
                             </div>
                             <div class="card-body " id="bar-parent6">
 
@@ -53,15 +53,14 @@
 
 
 
-                                <p><?=$frases[352][$datosUsuarioActual[8]];?></p>
+                                <p><?=$frases[352][$datosUsuarioActual['uss_idioma']];?></p>
 
 
 
-                                <form action="../compartido/guardar.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id" value="25">
+                                <form action="../compartido/guardar-firma.php" method="post" enctype="multipart/form-data">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label"><?=$frases[353][$datosUsuarioActual[8]];?></label>
+                                        <label class="col-sm-2 control-label"><?=$frases[353][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-4">
                                             <input type="file" name="archivo" class="form-control">
                                         </div>
@@ -73,7 +72,7 @@
 
 
                                     <?php if ($datosEstudianteActual["mat_mayores14"] == 1 and $datosEstudianteActual["mat_hoja_firma"] == '0') { ?>
-                                        <input type="submit" class="btn btn-primary" value="<?=$frases[353][$datosUsuarioActual[8]];?>">&nbsp;
+                                        <input type="submit" class="btn btn-primary" value="<?=$frases[353][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
                                     <?php } ?>
 
                                 </form>
@@ -81,13 +80,13 @@
 
                                 <?php if ($datosEstudianteActual["mat_hoja_firma"] == 1 and $datosEstudianteActual["mat_estado_matricula"] == 4) { ?>
                                     <p align="center" style="margin-top:50px; font-size: 20px;">
-                                    <?=$frases[354][$datosUsuarioActual[8]];?>
+                                    <?=$frases[354][$datosUsuarioActual['uss_idioma']];?>
                                     </p>
                                 <?php } ?>
 
                                 <?php if ($datosEstudianteActual["mat_hoja_firma"] == 1 and $datosEstudianteActual["mat_estado_matricula"] == 1) { ?>
                                     <p align="center" style="margin-top:50px;">
-                                        <a href="comprobante-matricula.php?" style="text-decoration: underline; font-weight: bold; color:green;" target="_Blank"><?=$frases[355][$datosUsuarioActual[8]];?></a>
+                                        <a href="comprobante-matricula.php?" style="text-decoration: underline; font-weight: bold; color:green;" target="_Blank"><?=$frases[355][$datosUsuarioActual['uss_idioma']];?></a>
                                     </p>
                                 <?php } ?>
 

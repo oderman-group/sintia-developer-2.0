@@ -12,25 +12,26 @@ include("../compartido/head.php");
 try{
     $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".reporte_errores
     INNER JOIN ".$baseDatosServicios.".instituciones ON ins_id=rperr_institucion AND ins_enviroment='".ENVIROMENT."'
-    WHERE rperr_id='".$_GET['id']."'");
+    WHERE rperr_id='".base64_decode($_GET['id'])."'");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
 $datosReportes = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
-$BD=$datosReportes["ins_bd"]."_".$agnoBD;
-
 $responsable="";
 if(!empty($datosReportes['rperr_usuario'])){
     try{
-        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".$BD.".usuarios 
+        $consultaResponsable= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios 
         INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo 
-        WHERE uss_id='".$datosReportes['rperr_usuario']."'");
+        WHERE uss_id='".$datosReportes['rperr_usuario']."' AND institucion={$datosReportes['ins_id']} AND year={$agnoBD}");
     } catch (Exception $e) {
         include("../compartido/error-catch-to-report.php");
     }
-    $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
-    $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    $numDatosResponsable=mysqli_num_rows($consultaResponsable);
+    if($numDatosResponsable>0){
+        $datosResponsable = mysqli_fetch_array($consultaResponsable, MYSQLI_BOTH);
+        $responsable=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)."(".$datosResponsable['pes_nombre'].")";
+    }
 }
 ?>
 

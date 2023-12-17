@@ -10,24 +10,25 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
 	}
 
     require_once(ROOT_PATH."/main-app/modelo/conexion.php");
-    $consultaSesion=mysqli_query($conexion,"SELECT * FROM usuarios 
-    WHERE uss_id='" . $_SESSION["id"] . "'");
+	require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+    
+    $consultaSesion = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_id='" . $_SESSION["id"] . "'");
 		$sesionAbierta = mysqli_fetch_array($consultaSesion, MYSQLI_BOTH);
 
-		switch ($sesionAbierta[3]) {
-			case 1:
+		switch ($sesionAbierta['uss_tipo']) {
+			case TIPO_DEV:
 				$url = 'directivo/'.$pagina;
 				break;
-			case 2:
+			case TIPO_DOCENTE:
 				$url = 'docente/'.$pagina;
 				break;
-			case 3:
+			case TIPO_ACUDIENTE:
 				$url = 'acudiente/'.$pagina;
 				break;
-			case 4:
+			case TIPO_ESTUDIANTE:
 				$url = 'estudiante/'.$pagina;
 				break;
-			case 5:
+			case TIPO_ESTUDIANTE:
 				$url = 'directivo/'.$pagina;
 				break;
 			default:

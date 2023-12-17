@@ -4,8 +4,8 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $usuario=0;
 if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM academico_clases 
-WHERE cls_id='".$idR."' AND cls_estado=1");
+$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+WHERE cls_id='".$idR."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 ?>
 					<div class="page-bar">
@@ -35,8 +35,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM academico_clases 
-													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1");
+													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$resaltaItem = $Plataforma->colorDos;
 														if($resultado['cls_id']==$idR){$resaltaItem = $Plataforma->colorUno;}
@@ -64,8 +64,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<ul class="list-group list-group-unbordered">
 											<?php
 											$urlClase = 'clases-ver.php?idR='.$_GET["idR"];
-											$filtroAdicional= "AND mat_grado='".$datosCargaActual[2]."' AND mat_grupo='".$datosCargaActual[3]."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-											$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
+											$filtroAdicional= "AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
+											$cursoActual=GradoServicios::consultarCurso($datosCargaActual['car_curso']);
+											$consulta =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$datosCargaActual['car_grupo']);
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$nombreCompleto =Estudiantes::NombreCompletoDelEstudiante($resultado);
@@ -78,7 +79,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												WHERE hil_url LIKE '%".$urlClase."%' AND hil_usuario='".$resultado['uss_id']."' AND hil_institucion='".$config['conf_id_institucion']."' AND hil_fecha LIKE '%".$_SESSION["bd"]."%'");
 												$ingresoClase = mysqli_fetch_array($consultaIngresoClase, MYSQLI_BOTH);
 												
-												if(empty($ingresoClase[0])){continue;}
+												if(empty($ingresoClase['hil_id'])){continue;}
 											?>
 											<li class="list-group-item">
 												<a href="clases-ver.php?idR=<?=$_GET["idR"];?>&usuario=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$nombreCompleto?></a> 
@@ -101,7 +102,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 									<?php 
 									if(!empty($datosConsultaBD['cls_meeting']) and !empty($datosConsultaBD['cls_clave_docente']) and !empty($datosConsultaBD['cls_clave_estudiante'])){
 										
-										if($datosUsuarioActual['uss_tipo']==2){
+										if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){
 											$nombreSala = trim($datosCargaActual['mat_nombre'])."_".trim($datosCargaActual['gra_nombre'])."_".trim($datosCargaActual['gru_nombre']);
 									?>
 										
@@ -117,7 +118,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										
 									<?php 
 										}
-										if($datosUsuarioActual['uss_tipo']==4){
+										if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){
 									?>
 								
 											<input id="meetingID" name="meetingID" value="<?=$datosConsultaBD['cls_meeting'];?>" type="hidden">
@@ -138,13 +139,13 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										<div class="card-head">
 											<header><?=$datosConsultaBD['cls_tema'];?></header>
 											
-											<?php if($datosUsuarioActual['uss_tipo']==2){?>
+											<?php if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
 												<button id ="panel-p"  class = "mdl-button mdl-js-button mdl-button--icon pull-right">
 													<i class = "material-icons">more_vert</i>
 												</button>
 												<ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-p">
 													<li class = "mdl-menu__item"><a href="clases-editar.php?idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>"><i class="fa fa-edit"></i>Editar</a></li>
-													<li class = "mdl-menu__item"><a href="javascript:void(0);" name="guardar.php?get=<?=base64_encode(11);?>&idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar</a></li>
+													<li class = "mdl-menu__item"><a href="javascript:void(0);" name="clases-eliminar.php?idR=<?=base64_encode($datosConsultaBD['cls_id']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i>Eliminar</a></li>
 												</ul>
 											<?php }?>
 											
@@ -257,8 +258,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 											var star = starSplit[1];
 											var panel = document.getElementById("feedbackPanel");
 											var comment = document.getElementById("feedbackContent");
-											var claseId = <?= $idR; ?>;
-											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
+											var claseId = '<?= $idR; ?>';
+											var usuarioActual = '<?= $datosUsuarioActual['uss_id']; ?>';
 
 											datos = "claseId="+claseId+
 													"&usuarioActual="+usuarioActual+
@@ -276,7 +277,8 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 													$.toast({
 														heading: data.titulo, 
 														text: data.mensaje, 
-														position: 'mid-center',
+														position: 'bottom-right',
+                										showHideTransition: 'slide',
 														loaderBg:'#26c281', 
 														icon: data.estado, 
 														hideAfter: 5000, 
@@ -292,26 +294,24 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 
 										window.onload = consultarPreguntas();	
 										
-										function guardar(){																
-											id="14";
-											idClase=<?=$idR;?>;
-											sesionUsuario=<?=$_SESSION["id"];?>;
+										function guardar(){
+											idClase='<?=$idR;?>';
+											sesionUsuario='<?=$_SESSION["id"];?>';
 											contenido=document.getElementById("contenido").value;
 											btn=document.getElementById("btnEnviar");
 											if(validar()){
-												datos = "id="+id
-														+"&idClase="+idClase
+												datos = "&idClase="+idClase
 														+"&sesionUsuario="+sesionUsuario
 														+"&contenido="+contenido;
 													
 												
 													$.ajax({
 													type: "POST",
-													url: "../compartido/guardar.php",
+													url: "../compartido/clases-guardar-comentarios.php",
 													data: datos,
 													success: function(data){
 														document.getElementById("contenido").value="";
-														btn.disabled=false;																				
+														btn.disabled=false;
 														consultarPreguntas();
 													}
 													});
@@ -330,9 +330,9 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 										}
 										function consultarPreguntas(){
 
-											var claseId = <?= $idR; ?>;
-											var usuarioActual = <?= $datosUsuarioActual['uss_id']; ?>;
-											var usuario = <?= $usuario; ?>;
+											var claseId = '<?= $idR; ?>';
+											var usuarioActual = '<?= $datosUsuarioActual['uss_id']; ?>';
+											var usuario = '<?= $usuario; ?>';
 											datos = "claseId="+claseId+"&usuarioActual="+usuarioActual+"&usuario="+usuario;
 												$.ajax({
 												type: "POST",
@@ -360,7 +360,6 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												<input type="hidden" name="id" value="14">
 												<input type="hidden" name="idClase" value="<?=$idR;?>">
 												<input type="hidden" name="sesionUsuario" value="<?=$_SESSION["id"];?>">
-												<input type="hidden" name="bdConsulta" value="<?=$_SESSION["inst"];?>">
 												<input type="hidden" name="agnoConsulta" value="<?=$_SESSION["bd"];?>">
 												
 												<input type="hidden" name="envia" id="envia">
@@ -375,7 +374,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 													<div class="offset-md-3 col-md-9">
 														<button  id="btnEnviar" class="btn btn-info"  onclick="this.disabled=true;guardar()">Enviar</button>
 														
-														<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual[8]];?></button>
+														<button type="reset" class="btn btn-default"><?=$frases[171][$datosUsuarioActual['uss_idioma']];?></button>
 													</div>
 												</div>
 											</form>

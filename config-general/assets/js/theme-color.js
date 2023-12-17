@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
 	   jQuery( "body" ).removeClass( "white-sidebar-color dark-sidebar-color blue-sidebar-color indigo-sidebar-color green-sidebar-color red-sidebar-color cyan-sidebar-color" );
 	   jQuery( "body" ).addClass( sidebar_color );
 	   
-	   fetch('../compartido/guardar.php?get=3&temaSidebar='+sidebar_color, {
+	   fetch('../compartido/cambiar-idioma-tema.php?get=3&temaSidebar='+sidebar_color, {
 		method: 'GET'
 		})
 		.then(response => response.text()) // Convertir la respuesta a texto
@@ -21,7 +21,8 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores de la barra lateral.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
@@ -40,7 +41,7 @@ jQuery(document).ready(function() {
 	   jQuery( "body" ).removeClass( "logo-white logo-dark logo-blue logo-indigo logo-red logo-cyan logo-green" );
 	   jQuery( "body" ).addClass( logo_color );
 
-	   fetch('../compartido/guardar.php?get=4&temaLogo='+logo_color, {
+	   fetch('../compartido/cambiar-idioma-tema.php?get=4&temaLogo='+logo_color, {
 		method: 'GET'
 		})
 		.then(response => response.text()) // Convertir la respuesta a texto
@@ -49,7 +50,8 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores del encabezado del menú.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
@@ -67,7 +69,7 @@ jQuery(document).ready(function() {
 	   jQuery( "body" ).removeClass( "header-white header-dark header-blue header-indigo header-red header-cyan header-green" );
 	   jQuery( "body" ).addClass( header_color );
 
-	   fetch('../compartido/guardar.php?get=2&temaHeader='+header_color, {
+	   fetch('../compartido/cambiar-idioma-tema.php?get=2&temaHeader='+header_color, {
 		method: 'GET'
 		})
 		.then(response => response.text()) // Convertir la respuesta a texto
@@ -76,11 +78,12 @@ jQuery(document).ready(function() {
 
 				heading: 'Proceso completado', 
 				text: 'Hemos actualizado tu preferencia para los colores del encabezado del menú.', 
-				position: 'top-left',
+				position: 'bottom-right',
+                showHideTransition: 'slide',
 				loaderBg:'#26c281', 
 				icon: 'success', 
 				hideAfter: 3000, 
-				stack: 6
+				stack: 6,
 
 			});
 		})

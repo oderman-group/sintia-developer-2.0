@@ -1,4 +1,5 @@
 <?php
+$busqueda = '';
 if (isset($_GET['busqueda'])) {
     $busqueda = $_GET['busqueda'];
     $filtro .= " AND (
@@ -6,6 +7,7 @@ if (isset($_GET['busqueda'])) {
         OR hil_url LIKE '%" . $busqueda . "%' 
         OR ins_nombre LIKE '%" . $busqueda . "%' 
         OR ins_siglas LIKE '%" . $busqueda . "%'
+        OR hil_titulo LIKE '%" . $busqueda . "%'
         )";
 }
 ?>
@@ -34,7 +36,7 @@ if (isset($_GET['busqueda'])) {
                         $estiloResaltado = '';
                         if ($datosInsti['ins_id'] == $instID) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $datosInsti['ins_id']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $_GET['year']; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($datosInsti['ins_id']); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?= $busqueda; ?>&year=<?= base64_encode($year); ?>&mes=<?=base64_encode($mes)?>" <?= $estiloResaltado; ?>><?= $datosInsti['ins_siglas']; ?></a>
                     <?php } ?>
                     <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
                 </div>
@@ -48,33 +50,15 @@ if (isset($_GET['busqueda'])) {
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
                     <form class="dropdown-item" method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
-                        <?php
-                            if (!empty($_GET['insti'])){
-                        ?>
-                            <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
-                        <?php
-                            }
-                            if (!empty($_GET['busqueda'])){
-                        ?>
-                            <input type="hidden" name="busqueda" value="<?= $_GET['busqueda']; ?>"/>
-                        <?php
-                            }
-                            if (!empty($_GET['year'])){
-                        ?>
-                            <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
-                        <?php
-                            }
-                            if (!empty($_GET['mes'])){
-                        ?>
-                            <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
-                        <?php
-                            }
-                        ?>
+                        <input type="hidden" name="insti" value="<?= base64_encode($instID); ?>"/>
+                        <input type="hidden" name="busqueda" value="<?= $busqueda; ?>"/>
+                        <input type="hidden" name="year" value="<?= base64_encode($year); ?>"/>
+                        <input type="hidden" name="mes" value="<?= base64_encode($mes); ?>"/>
                         <label>Fecha Desde:</label>
-                        <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?php if (!empty($_GET['desde'])) echo $_GET['desde']; ?>"/>
+                        <input type="date" class="form-control" placeholder="desde"  name="desde" value="<?= $desde; ?>"/>
 
                         <label>Hasta</label>
-                        <input type="date" class="form-control" placeholder="hasta"  name="hasta" value="<?php if (!empty($_GET['hasta'])) echo $_GET['hasta']; ?>"/>
+                        <input type="date" class="form-control" placeholder="hasta"  name="hasta" value="<?= $hasta; ?>"/>
                         
                         <input type="submit" class="btn deepPink-bgcolor" name="fFecha" value="Filtrar" style="margin: 5px;">
                     </form>
@@ -97,7 +81,7 @@ if (isset($_GET['busqueda'])) {
                                 $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
                             }
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?= $yearStartC; ?>&mes=<?=$_GET['mes']?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($instID); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?= $busqueda; ?>&year=<?= base64_encode($yearStartC); ?>&mes=<?=base64_encode($mes)?>" <?= $estiloResaltado; ?>><?= $yearStartC; ?></a>
                     <?php 
                             $yearStartC++;
                         } 
@@ -117,7 +101,7 @@ if (isset($_GET['busqueda'])) {
                                 $estiloResaltado="";
                                 if($key==$mes){ $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';}
                     ?>
-                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= $_GET['insti']; ?>&desde=<?= $_GET['desde']; ?>&hasta=<?= $_GET['hasta']; ?>&busqueda=<?= $_GET['busqueda']; ?>&year=<?=$_GET['year']; ?>&mes=<?=$key?>" <?= $estiloResaltado; ?>><?=$value?></a>
+                        <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?insti=<?= base64_encode($instID); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&busqueda=<?= $busqueda; ?>&year=<?=base64_encode($year); ?>&mes=<?=base64_encode($key)?>" <?= $estiloResaltado; ?>><?=$value?></a>
                     <?php
                         }
                     ?>
@@ -128,30 +112,12 @@ if (isset($_GET['busqueda'])) {
         </ul>
 
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
-            <?php
-                if (!empty($_GET['insti'])){
-            ?>
-                <input type="hidden" name="insti" value="<?= $_GET['insti']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['desde']) || !empty($_GET['hasta'])){
-            ?>
-                <input type="hidden" name="desde" value="<?= $_GET['desde']; ?>"/>
-                <input type="hidden" name="hasta" value="<?= $_GET['hasta']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['year'])){
-            ?>
-                <input type="hidden" name="year" value="<?= $_GET['year']; ?>"/>
-            <?php
-                }
-                if (!empty($_GET['mes'])){
-            ?>
-                <input type="hidden" name="mes" value="<?= $_GET['mes']; ?>"/>
-            <?php
-                }
-            ?>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if (isset($_GET['busqueda'])) echo $_GET['busqueda']; ?>">
+            <input type="hidden" name="insti" value="<?= base64_encode($instID); ?>"/>
+            <input type="hidden" name="desde" value="<?= $desde; ?>"/>
+            <input type="hidden" name="hasta" value="<?= $hasta; ?>"/>
+            <input type="hidden" name="year" value="<?= base64_encode($year); ?>"/>
+            <input type="hidden" name="mes" value="<?= base64_encode($mes); ?>"/>
+            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
         </form>
 

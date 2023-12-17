@@ -50,7 +50,7 @@ include("../compartido/head.php");
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual[8]]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="mps-productos-guardar.php" method="post" enctype="multipart/form-data">

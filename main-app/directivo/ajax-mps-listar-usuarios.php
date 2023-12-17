@@ -2,7 +2,7 @@
 include("session.php");
 $instiConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones WHERE ins_id='".$_POST['insti']."'");
 $insti = mysqli_fetch_array($instiConsulta, MYSQLI_BOTH);
-$bd=$insti['ins_bd'].'_'.date('Y');
+$year= date('Y');
 ?>
 <!--select2-->
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
@@ -14,9 +14,9 @@ $bd=$insti['ins_bd'].'_'.date('Y');
         <select class="form-control select2" style="width: 100%;"  name="responsable" id="responsable" aucomplete="off">
             <?php
             if(!empty($_POST['responsable'])){
-                $consultaExiste=mysqli_query($conexion, "SELECT * FROM ".$bd.".usuarios
+                $consultaExiste=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
                 INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-                WHERE uss_id='".$_POST['responsable']."'");
+                WHERE uss_id='".$_POST['responsable']."' AND uss.institucion={$insti['ins_id']} AND uss.year={$year}");
                 $existe = mysqli_fetch_array($consultaExiste, MYSQLI_BOTH);
 
                 if(!is_null($existe)){
@@ -37,7 +37,7 @@ $bd=$insti['ins_bd'].'_'.date('Y');
         theme: "bootstrap",
             ajax: {
                 type: 'GET',
-                url: 'ajax-listar-usuarios.php?bd=<?=$bd?>',
+                url: 'ajax-listar-usuarios.php?year=<?=$year?>',
                 processResults: function(data) {
                     data = JSON.parse(data);
                     return {

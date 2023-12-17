@@ -11,7 +11,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
-}?>
+}
+
+try{
+    $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE ar_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
+$rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -57,23 +65,15 @@ if(!Modulos::validarPermisoEdicion()){
 
 
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual[8]];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[119][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
-                                    <?php 
-                                    try{
-                                        $consultaCarga=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM academico_areas WHERE ar_id=".base64_decode($_GET["id"]).";");
-                                    } catch (Exception $e) {
-                                        include("../compartido/error-catch-to-report.php");
-                                    }
-                                    $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
-                                    ?>
 									<form name="formularioGuardar" action="areas-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=base64_decode($_GET["id"])?>" name="idA">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Nombre del Areas</label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>" <?=$disabledPermiso;?> require>
+                                                <input type="text" name="nombreA" class="form-control" value="<?=$rCargas["ar_nombre"] ?>" <?=$disabledPermiso;?> required>
                                             </div>
                                         </div>	
 										
@@ -82,26 +82,29 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
 												<?php
                                                 try{
-                                                    $cPosicionA=mysqli_query($conexion, "SELECT ar_posicion FROM academico_areas WHERE ar_id NOT IN (".$rCargas["ar_id"].");");
+                                                    $cPosicionA=mysqli_query($conexion, "SELECT ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE ar_id NOT IN ('".$rCargas["ar_id"]."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
 												?>
                                                 <select class="form-control  select2" name="posicionA" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opci n</option>
+                                                    <option value="">Seleccione una opción</option>
 													<?php
+                                                    $numDatos=mysqli_num_rows($cPosicionA);
                                                     $cont=0;
                                                     while($rPos=mysqli_fetch_array($cPosicionA, MYSQLI_BOTH)){
                                                         $cont++;
                                                         $posciones[$cont]=$rPos["ar_posicion"];
-                                                        }
+                                                    }
                                                     $cond=0;
                                                     $exist=0;
                                                     for($i=1;$i<=(20+$cond);$i++){
-                                                        for($j=0;$j<=count($posciones);$j++){
-                                                            if($i==$posciones[$j]){
-                                                                $exist=1;
-                                                            } 
+                                                        if($numDatos>0){
+                                                            for($j=0;$j<=count($posciones);$j++){
+                                                                if($i==$posciones[$j]){
+                                                                    $exist=1;
+                                                                } 
+                                                            }
                                                         }
                                                         if($exist!=1){
                                                             if($rCargas["ar_posicion"]==$i){
@@ -121,7 +124,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Guardar cambios">&nbsp;
+										    <button type="submit" class="btn  btn-info">
+										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+									</button>
                                         <?php }?>
                                     </form>
                                 </div>

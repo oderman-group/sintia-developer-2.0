@@ -46,14 +46,14 @@ $Plataforma = new Plataforma;
                             <?php
                                 $filtro = '';
                                 $ussDev='';
-                                if (!empty($_GET["uss"]) && is_numeric($_GET["uss"])) {
-                                    $ussDev=$_GET["uss"];
-                                    $filtro .= " AND pagp_tipo_usuario='" . $_GET["uss"] . "'";
+                                if (!empty($_GET["uss"])) {
+                                    $ussDev=base64_decode($_GET["uss"]);
+                                    $filtro .= " AND pagp_tipo_usuario='" . $ussDev . "'";
                                 }
                                 $moduloDev='';
-                                if (!empty($_GET["modulo"]) && is_numeric($_GET["modulo"])) {
-                                    $moduloDev=$_GET["modulo"];
-                                    $filtro .= " AND pagp_modulo='" . $_GET["modulo"] . "'";
+                                if (!empty($_GET["modulo"])) {
+                                    $moduloDev=base64_decode($_GET["modulo"]);
+                                    $filtro .= " AND pagp_modulo='" . $moduloDev . "'";
                                 }
                             ?>
 
@@ -95,7 +95,7 @@ $Plataforma = new Plataforma;
                                                         <th>Archivo</th>
                                                         <th>Modulo</th>
                                                         <th>Usuario</th>
-                                                        <th><?= $frases[54][$datosUsuarioActual[8]]; ?></th>
+                                                        <th><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -115,12 +115,12 @@ $Plataforma = new Plataforma;
                                                             <td><?= $resultado['pes_nombre']; ?></td>
                                                             <td>
                                                                 <div class="btn-group">
-                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual[8]]; ?></button>
+                                                                    <button type="button" class="btn btn-primary"><?= $frases[54][$datosUsuarioActual['uss_idioma']]; ?></button>
                                                                     <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-                                                                        <li><a href="dev-paginas-editar.php?idP=<?= $resultado['pagp_id']; ?>">Editar</a></li>
+                                                                        <li><a href="dev-paginas-editar.php?idP=<?= base64_encode($resultado['pagp_id']); ?>">Editar</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </td>
