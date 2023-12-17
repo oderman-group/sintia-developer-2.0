@@ -103,7 +103,7 @@ if ($esMediaTecnica) {
 }
 
 try {
-	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET {$fechaNacimientoU} uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }	
