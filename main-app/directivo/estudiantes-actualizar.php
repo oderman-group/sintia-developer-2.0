@@ -46,8 +46,10 @@ if($config['conf_id_institucion'] == ICOLVEN){
 	require_once("apis-sion-modify-student.php");
 }
 $fechaNacimiento="";
+$fechaNacimientoU="";
 if(!empty($_POST["fNac"])){
 	$fechaNacimiento="mat_fecha_nacimiento='" . $_POST["fNac"] . "', ";
+	$fechaNacimientoU="uss_fecha_nacimiento='" . $_POST["fNac"] . "', ";
 }
 $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
