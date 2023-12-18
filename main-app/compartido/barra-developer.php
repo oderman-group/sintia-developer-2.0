@@ -65,7 +65,6 @@ $datosUsuarioActual['uss_tipo'] == TIPO_DEV
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual['uss_tipo'];?>&nbsp;|&nbsp;
     <a href="../compartido/return-dev-admin-panel.php" style="color:white; text-decoration:underline;">VOLVER AL DEV PANEL</a>
   <?php } elseif( isset($_SESSION['admin']) ){?>
-?>
     <b>Usuario actual:</b>&nbsp;<?php echo $datosUsuarioActual['uss_id'];?>&nbsp;|&nbsp;
     <b>Tipo de Usuario:</b>&nbsp;<?php echo $datosUsuarioActual['uss_tipo'];?>&nbsp;|&nbsp;
     <b>User Admin:&nbsp;</b> <?=$_SESSION['admin']; ?>&nbsp;|&nbsp;

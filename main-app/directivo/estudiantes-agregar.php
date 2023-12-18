@@ -509,7 +509,7 @@ if(!Modulos::validarPermisoEdicion()){
 														<label class="col-sm-2 control-label" >Cursos adicionales</label>
 														<div class="col-sm-4" >
 															<?php
-															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+															$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1, 'institucion' => $config['conf_id_institucion'], 'year' => $_SESSION["bd"]];
 															$listaIndividuales = GradoServicios::listarCursos($parametros);
 															?>
 															<select id="cursosAdicionales" class="form-control select2-multiple" style="width: 100% !important" name="cursosAdicionales[]" onchange="mostrarGrupoCursosAdicionales(this)" multiple>
