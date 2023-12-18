@@ -116,7 +116,7 @@
                 <?php 
 											$filtro = '';
 											if(!empty($_GET["busqueda"])){$filtro .= " AND (not_titulo LIKE '%".$_GET["busqueda"]."%') OR (not_descripcion LIKE '%".$_GET["busqueda"]."%') OR (not_keywords LIKE '%".$_GET["busqueda"]."%')";}
-											if(!empty($_GET["usuario"]) and is_numeric(base64_decode($_GET["usuario"]))){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
+											if(!empty($_GET["usuario"])){$filtro .= " AND not_usuario='".base64_decode($_GET["usuario"])."'";}
 									
 											$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias
 											LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=not_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}

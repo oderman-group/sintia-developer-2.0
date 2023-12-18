@@ -4,7 +4,7 @@ include("../modelo/conexion.php");
 $datosUnicosInstitucion=$_SESSION["datosUnicosInstitucion"];
 $mensajesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails 
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_de AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$_SESSION["bd"]}
-WHERE ema_para='".$_SESSION["id"]."' AND ema_visto=0 ORDER BY ema_id DESC");
+WHERE ema_para='".$_SESSION["id"]."' AND ema_visto=0 AND ema_institucion={$_SESSION["idInstitucion"]} AND ema_year={$_SESSION["bd"]} ORDER BY ema_id DESC");
 $mensajesNumero = mysqli_num_rows($mensajesConsulta);
 ?>
 

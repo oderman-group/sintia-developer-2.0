@@ -92,7 +92,7 @@ include("../compartido/sintia-funciones-js.php");
 		<tbody>
 			<?php
 			$contReg = 1;
-			$consulta = Estudiantes::listarEstudiantesNotasFaltantes($cargaConsultaActual,$periodoConsultaActual);//Estudiantes::listarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
+			$consulta = Estudiantes::listarEstudiantesNotasFaltantes($cargaConsultaActual,$periodoConsultaActual,$datosCargaActual["gra_tipo"]);
 			while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 				$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($resultado);
 				//DEFINITIVAS

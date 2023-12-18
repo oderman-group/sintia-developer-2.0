@@ -127,7 +127,7 @@ $_SESSION["configuracion"] = $config;
 
 												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
 
-												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"]);
+												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"],$rCargas["gra_tipo"]);
 												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
 
 												$btnGenerarInforme='

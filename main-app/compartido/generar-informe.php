@@ -3,6 +3,7 @@ session_start();
 $idPaginaInterna = 'CM0006';
 include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 $config = Plataforma::sesionConfiguracion();
@@ -14,7 +15,8 @@ $carga = base64_decode($_GET["carga"]);
 $periodo = base64_decode($_GET["periodo"]);
 
 if($config['conf_porcentaje_completo_generar_informe']==1){
-	$consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($carga,$periodo);
+	$cursoActual=GradoServicios::consultarCurso($grado);
+	$consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($carga,$periodo,$cursoActual["gra_tipo"]);
 	//Verificamos que el estudiante tenga sus notas al 100%
 	if(mysqli_num_rows($consultaListaEstudantesError)>0){
 ?>
