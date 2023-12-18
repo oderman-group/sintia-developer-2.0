@@ -67,6 +67,19 @@ if ($_POST["tipoG"]==GRADO_INDIVIDUAL) {
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
+				try{
+					$consultaExistenciaEstudianteMT = MediaTecnicaServicios::existeEstudianteMT($config,$_SESSION["bd"],$idMatriculaGuardar);
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$numEstudianteMT=mysqli_num_rows($consultaExistenciaEstudianteMT);
+				if($numEstudianteMT==1){
+					try{
+						mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_tipo_matricula='" . GRADO_INDIVIDUAL . "' WHERE mat_id='" . $idMatriculaGuardar . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
+				}
 			}
 		}
 
@@ -78,6 +91,20 @@ if ($_POST["tipoG"]==GRADO_INDIVIDUAL) {
 					mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$_POST["id_curso"]."' AND matcur_id_matricula='".$idMatriculaEliminar."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
+				}
+				
+				try{
+					$consultaExistenciaEstudianteMT = MediaTecnicaServicios::existeEstudianteMT($config,$_SESSION["bd"],$idMatriculaEliminar);
+				} catch (Exception $e) {
+					include("../compartido/error-catch-to-report.php");
+				}
+				$numEstudianteMT=mysqli_num_rows($consultaExistenciaEstudianteMT);
+				if($numEstudianteMT<1){
+					try{
+						mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_tipo_matricula='" . GRADO_GRUPAL . "' WHERE mat_id='" . $idMatriculaEliminar . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 				}
 			}
 		}
