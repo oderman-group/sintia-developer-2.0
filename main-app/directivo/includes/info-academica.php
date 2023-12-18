@@ -86,7 +86,7 @@
 											</div>
 	<?php if (array_key_exists(10, $arregloModulos)) { 
 			require_once("../class/servicios/MediaTecnicaServicios.php");
-			$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1];
+			$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1, 'institucion' => $config['conf_id_institucion'], 'year' => $_SESSION["bd"]];
 			
 			$listaIndividuales = GradoServicios::listarCursos($parametros);
 			$parametros = ['matcur_id_matricula' => $id];

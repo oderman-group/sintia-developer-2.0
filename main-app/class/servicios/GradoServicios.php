@@ -7,7 +7,7 @@ class GradoServicios
     {
       $sqlInicial="SELECT * FROM ".BD_ACADEMICA.".academico_grados";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('gra_tipo','gra_estado');
+        $parametrosValidos=array('gra_tipo','gra_estado','institucion','year');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $sqlFinal =" ORDER BY gra_vocal";
