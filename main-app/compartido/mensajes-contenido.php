@@ -2,19 +2,19 @@
 if(isset($_GET["opt"]) && base64_decode($_GET["opt"])==2){
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_para AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-	WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de='0'
+	WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de='0' AND ema_institucion={$_SESSION["idInstitucion"]} AND ema_year={$_SESSION["bd"]}
 	ORDER BY ema_id DESC
 	");
 	$opt=base64_decode($_GET["opt"]);
 }else{
 	$consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails
 	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=ema_de AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-	WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para='0'
+	WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para='0' AND ema_institucion={$_SESSION["idInstitucion"]} AND ema_year={$_SESSION["bd"]}
 	ORDER BY ema_id DESC
 	");
 }
-$numR = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para!=1 AND ema_visto=0"));
-$numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de!=1 AND ema_visto=0"));
+$numR = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_para='".$_SESSION["id"]."' AND ema_eliminado_para!=1 AND ema_visto=0 AND ema_institucion={$_SESSION["idInstitucion"]} AND ema_year={$_SESSION["bd"]}"));
+$numRenviados = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_emails WHERE ema_de='".$_SESSION["id"]."' AND ema_eliminado_de!=1 AND ema_visto=0 AND ema_institucion={$_SESSION["idInstitucion"]} AND ema_year={$_SESSION["bd"]}"));
 ?>
 <div class="row">
                         <div class="col-md-12">
