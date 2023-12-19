@@ -170,7 +170,8 @@ try {
 				'ins_notificaciones_acudientes' => 0,
 				'ins_siglas' => $siglasInst,
 				'ins_fecha_renovacion' => $fechaCompleta,
-				'ins_id_plan' => 1
+				'ins_id_plan' => 1,
+				'ins_year_default' => $year
 			);
 
 			// Crear la consulta SQL
@@ -279,12 +280,12 @@ try {
 		
 		//TODOS LOS USUARIOS
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, institucion, year) VALUES 
-			('1','sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN PLATAFORMA SINTIA',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,'".$idInsti."','".$year."'),
-			('2','pruebaDT',SHA1('12345678'),5,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('3','pruebaDC',SHA1('12345678'),2,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('4','pruebaAC',SHA1('12345678'),3,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('5','pruebaES',SHA1('12345678'),4,'USUARIO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."');");
+			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_apellido1, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, institucion, year) VALUES 
+			('1','sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN', 'SINTIA',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,'".$idInsti."','".$year."'),
+			('2','pruebaDT',SHA1('12345678'),5,'USUARIO','DIRECTIVO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
+			('3','pruebaDC',SHA1('12345678'),2,'USUARIO','DOCENTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
+			('4','pruebaAC',SHA1('12345678'),3,'USUARIO','ACUDIENTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
+			('5','pruebaES',SHA1('12345678'),4,'USUARIO','ESTUDIANTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."');");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
