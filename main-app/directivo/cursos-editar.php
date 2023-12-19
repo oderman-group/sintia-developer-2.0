@@ -283,6 +283,9 @@ if(!Modulos::validarPermisoEdicion()){
                                         }
                                         ?>
                                         <script type="text/javascript">
+                                            // Almacenar el estado actual de los grupos
+                                            var estadoActualGrupos = {};
+
                                             $(document).ready(function() {mostrarEstudiantes(document.getElementById("tipoG"))});
                                             function mostrarEstudiantes(data) {
                                                 if(data.value == "<?=GRADO_INDIVIDUAL?>"){
@@ -292,6 +295,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     document.getElementById("escogerEstudiantes").value = '';
                                                 }
                                             }
+
                                             $(document).ready(function() {
                                                 $('#select_estudiante').select2({
                                                 placeholder: 'Seleccione los estudiantes...',
@@ -315,16 +319,23 @@ if(!Modulos::validarPermisoEdicion()){
                                                     }
                                                 });
                                             });
+
+                                            function guardarGrupo(datos) {
+                                                var id = datos.getAttribute('data-id');
+                                                // Actualizar el estadoActualGrupos cuando cambia el valor del select
+                                                estadoActualGrupos[id] = datos.value;
+                                            }
+
                                             $(document).ready(function() {mostrarSelects(document.getElementById("select_estudiante"))});
                                             function mostrarSelects(selectElement) {
                                                 // Obtener el div contenedor donde se mostrarán los selects adicionales
                                                 var selectsContainer = document.getElementById('selectsContainer');
 
-                                                // Limpiar los selects existentes en el contenedor
-                                                selectsContainer.innerHTML = '';
-
                                                 // Obtener las opciones seleccionadas del select múltiple
                                                 var opcionesSeleccionadas = selectElement.selectedOptions;
+
+                                                // Limpiar los selects existentes en el contenedor
+                                                selectsContainer.innerHTML = '';
                                                 
                                                 if(opcionesSeleccionadas.length>0){
                                                     selectsContainer.style.display = "block";
@@ -357,6 +368,10 @@ if(!Modulos::validarPermisoEdicion()){
                                                         // Agregar clases al select
                                                         select.classList.add('form-control','select2');
 
+                                                        // Agregar evento onChange al select
+                                                        select.setAttribute('onchange', 'guardarGrupo(this)');
+                                                        select.setAttribute('data-id', opcion);
+
                                                         // Agregar opciones al select
                                                         var option = document.createElement('option');
                                                         option.value = '';
@@ -380,11 +395,23 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 // Establecer la opción que estará seleccionada por defecto (por ejemplo, Opción 2)
                                                                 if (grupoEstu == <?=$rv['gru_id']?>) {
                                                                     option<?=$cont?>.selected = true;
+                                                                    estadoActualGrupos[opcion] = '<?=$rv['gru_id']?>';
                                                                 }
                                                         <?php
                                                                 $cont++;
                                                             }
                                                         ?>
+
+                                                        // Restaurar el grupo de la opción según el estado almacenado
+                                                        if (estadoActualGrupos.hasOwnProperty(opcion)) {
+                                                            // Buscar la opción correspondiente en el nuevo select por su valor
+                                                            var optionToSelect = select.querySelector('option[value="' + estadoActualGrupos[opcion] + '"]');
+                                                            
+                                                            // Seleccionar la opción si se encuentra
+                                                            if (optionToSelect) {
+                                                                optionToSelect.selected = true;
+                                                            }
+                                                        }
 
                                                         divCol.appendChild(select);
                                                     }
