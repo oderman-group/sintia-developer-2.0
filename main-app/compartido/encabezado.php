@@ -168,8 +168,22 @@ $institucionNombre = $institucion['ins_siglas'];
                                 <i class="fa fa-envelope-o"></i>
                                 <span id="mensajes_numero"></span>
                             </a>
-                             <span id="mensajes"></span>
-                           
+                            <span id="mensajes"></span>
+                            <script>
+                                socket.on("recibio_correo_<?=$_SESSION['id']?>_<?=$_SESSION['idInstitucion']?>",async (data) => {
+                                    mensajes();
+                                    $.toast({
+                                        heading: 'Notificación',  
+                                        text: 'Tienes '+data['numCorreo']+' mensajes nuevos. Revisalos en el icono del sobre, que está en la parte superior.',
+                                        position: 'bottom-right',
+                                        showHideTransition: 'slide',
+                                        loaderBg:'#ff6849',
+                                        icon: 'info',
+                                        hideAfter: 10000, 
+                                        stack: 6
+                                    })
+                                });
+                            </script>
                         </li>
                         <!-- end message dropdown -->
  						<!-- start manage user dropdown -->

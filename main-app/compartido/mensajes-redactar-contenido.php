@@ -19,7 +19,7 @@
 		                                    <div class="inbox-body no-pad">
 		                                        <div class="mail-list">
 		                                            <div class="compose-mail">
-		                                                <form method="post" action="../compartido/mensajes-enviar.php">
+		                                                <form method="post" action="#../compartido/mensajes-enviar.php">
 															<label>Para:</label>
 		                                                    <div class="form-group">
 																<select id="select_usuario" class="form-control select2-multiple" multiple name="para[]" required>
@@ -63,7 +63,7 @@
 															</script>
 															<label>Asunto:</label>
 		                                                    <div class="form-group">
-		                                                        <input type="text" tabindex="1" class="form-control" name="asunto" value="<?php if(isset($_GET["asunto"])){ echo base64_decode($_GET["asunto"]);}?>" required>
+		                                                        <input type="text" tabindex="1" class="form-control" id="asunto" name="asunto" value="<?php if(isset($_GET["asunto"])){ echo base64_decode($_GET["asunto"]);}?>" required>
 		                                                    </div>
 		                                                    <div class="form-group">
 																<textarea cols="80" id="editor1" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required>
@@ -77,7 +77,7 @@
 		                                                    </div>
 															
 		                                                    <div class="btn-group margin-top-20 ">
-				                                                <button type="submit" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
+				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,<?=$_SESSION['id']?>)" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
 				                                                <button type="reset" class="btn btn-sm btn-default margin-right-10"><i class="fa fa-times"></i> Cancelar</button>
 				                                            </div>
 		                                                </form>
@@ -92,3 +92,31 @@
                         </div>
                     </div>
                 </div>
+				<script>
+					socket.on("envio_correo_<?=$_SESSION['id']?>_<?=$_SESSION['idInstitucion']?>",async (data) => {
+						if (data["ema_id"] != null || data["ema_id"] !== '' || data["ema_id"] !== undefined) {
+							$.toast({
+								heading: 'Notificación',  
+								text: 'Mensaje enviado correctamente.',
+								position: 'bottom-right',
+								showHideTransition: 'slide',
+								loaderBg:'#26c281', 
+								icon: 'success', 
+								hideAfter: 5000, 
+								stack: 6
+							})
+							location.href='mensajes.php?opt=Mg==';
+						}else{
+							$.toast({
+								heading: 'Notificación',  
+								text: 'Mensaje no enviado, intente nuevamente.',
+								position: 'bottom-right',
+								showHideTransition: 'slide',
+								loaderBg:'#ff6849',
+								icon: 'warning',
+								hideAfter: 5000, 
+								stack: 6
+							})
+						}
+					});
+				</script>
