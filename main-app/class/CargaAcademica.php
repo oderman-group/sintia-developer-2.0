@@ -1,4 +1,6 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class CargaAcademica {
 
     /**
@@ -183,6 +185,79 @@ class CargaAcademica {
 
         return $result;
 
+    }
+
+    /**
+     * Verifica el acceso de un estudiante a una carga académica.
+     *
+     * @param mysqli $conexion Objeto de conexión a la base de datos.
+     * @param array $config Configuraciones de la aplicación.
+     * @param string $idCarga Identificador de la carga académica.
+     * @param string $idEstudiante Identificador del estudiante.
+     *
+     * @return mysqli_result|false Devuelve el resultado de la consulta o false en caso de error.
+     */
+    public static function accesoCargasEstudiante(
+        mysqli $conexion, 
+        array $config, 
+        string $idCarga, 
+        string $idEstudiante
+    ){
+        try {
+            $consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        return $consulta;
+    }
+    
+    /**
+     * Guardar el acceso de un estudiante a una carga académica.
+     *
+     * @param mysqli $conexion Objeto de conexión a la base de datos.
+     * @param array $config Configuraciones de la aplicación.
+     * @param string $idCarga Identificador de la carga académica.
+     * @param string $idEstudiante Identificador del estudiante.
+     *
+     */
+    public static function guardarAccesoCargasEstudiante(
+        mysqli $conexion, 
+        array $config, 
+        string $idCarga, 
+        string $idEstudiante
+    ){
+        $idInsercion=Utilidades::generateCode("ACC");
+
+        try {
+            mysqli_query($conexion,"INSERT INTO ".BD_ACADEMICA.".academico_cargas_acceso(carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES ('" .$idInsercion . "', '".$idCarga."', '".$idEstudiante."', now(), now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Actualizar el acceso de un estudiante a una carga académica.
+     *
+     * @param mysqli $conexion Objeto de conexión a la base de datos.
+     * @param array $config Configuraciones de la aplicación.
+     * @param string $idCarga Identificador de la carga académica.
+     * @param string $idEstudiante Identificador del estudiante.
+     *
+     */
+    public static function actualizarAccesoCargasEstudiante(
+        mysqli $conexion, 
+        array $config, 
+        string $idCarga, 
+        string $idEstudiante
+    ){
+        try {
+            mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_cargas_acceso SET carpa_ultimo_acceso=now(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
     }
 
 }
