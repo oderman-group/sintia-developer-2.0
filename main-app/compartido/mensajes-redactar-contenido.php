@@ -77,7 +77,7 @@
 		                                                    </div>
 															
 		                                                    <div class="btn-group margin-top-20 ">
-				                                                <button type="button" onclick="enviarMensajes()" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
+				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,<?=$_SESSION['id']?>)" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
 				                                                <button type="reset" class="btn btn-sm btn-default margin-right-10"><i class="fa fa-times"></i> Cancelar</button>
 				                                            </div>
 		                                                </form>
@@ -93,26 +93,6 @@
                     </div>
                 </div>
 				<script>
-					function enviarMensajes(){
-						var year			= '<?=$_SESSION['bd']?>';
-						var institucion		= '<?=$_SESSION['idInstitucion']?>';
-						var emisor			= '<?=$_SESSION['id']?>';
-						var selectUsuario 	= document.getElementById('select_usuario');
-						var asunto			= document.getElementById('asunto').value;
-						var contenido		= document.getElementById('editor1').value;
-						var receptores 		= [];
-						
-						// Obtener todos los elementos seleccionados en el select múltiple
-						for (var i = 0; i < selectUsuario.options.length; i++) {
-							var option = selectUsuario.options[i];
-							if (option.selected) {
-								receptores.push(option.value);
-							}
-						}
-						receptores.forEach(function(receptor) {
-							socket.emit("enviar_mensaje_correo", { year: year, institucion: institucion, emisor: emisor, asunto: asunto, contenido: contenido, receptor: receptor });
-						});
-					}
 					socket.on("envio_correo_<?=$_SESSION['id']?>_<?=$_SESSION['idInstitucion']?>",async (data) => {
 						if (data["ema_id"] != null || data["ema_id"] !== '' || data["ema_id"] !== undefined) {
 							$.toast({
