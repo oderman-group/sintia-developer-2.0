@@ -90,6 +90,22 @@ LIMIT ".$empezar.",1
 		}
 	});
 </script>
+<?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV){ ?>
+<script>
+	socket.on("notificar_solicitud_desbloqueo_<?=$_SESSION['idInstitucion']?>", (data) => {
+		$.toast({
+			heading: 'SOLICITUD DE DESBLOQUEO',  
+			text: 'Ha recibido una nueva solicitud de desbloqueo para el estudiante '+data['nombre']+'.',
+			position: 'bottom-right',
+			showHideTransition: 'slide',
+			loaderBg:'#26c281', 
+			icon: 'warning', 
+			hideAfter: 6500, 
+			stack: 6
+		})
+	});
+</script>
+<?php } ?>
 <!-- boton de chat -->
 <?php if($idPaginaInterna != 'DT0209' && $datosUsuarioActual['uss_tipo'] == TIPO_DEV ){ ?>
 <a id="boton_notificacion" style="text-shadow: none;color: #fefefe;font-family:arial; background:<?= $Plataforma->colorUno; ?>;" href="../directivo/chat2.php" class="float"> <!-- "fa-beat-fade" se agregará una clase cuando hay una nueva notificacion  -->

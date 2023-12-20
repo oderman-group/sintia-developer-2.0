@@ -37,7 +37,18 @@
 										</div>
                                     </div>
                                 </div>
-								
+                                <?php if($_GET["idmsg"]==110){ ?>
+                                <script>
+                                        var year		= <?=$_SESSION['bd']?>;
+                                        var institucion	= <?=$_SESSION['idInstitucion']?>;
+                                        var idRecurso	= <?=base64_decode($_GET['idRecurso'])?>;
+                                        socket.emit("solicitud_desbloqueo", {
+                                            year: year,
+                                            institucion: institucion,
+                                            idRecurso: idRecurso
+                                        });
+                                </script>
+                                <?php } ?>
 								<div class="col-md-4 col-lg-3">
 									<div class="panel">
 										<header class="panel-heading panel-heading-red"><?=$frases[133][$datosUsuarioActual['uss_idioma']];?> </header>
