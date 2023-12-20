@@ -369,7 +369,11 @@
 							
 							<?php 
 							//MENÚ DOCENTES
-							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){?>
+							if($datosUsuarioActual['uss_tipo']==TIPO_DOCENTE){
+								if(!empty($_SESSION["infoCargaActual"])) {
+									$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
+								}
+							?>
 							
 							<li class="nav-item" data-step="13" data-intro="<b>Cargas académicas:</b> Aquí encontrarás las cargas académicas que los directivos te han asignado para trabajar. Debes seleccionar una carga primero, antes de empezar a llenar cualquier información como calificaciones, actividades, foros, etc." data-position='right' data-scrollTo='tooltip'>
 	                            <a href="cargas.php" class="nav-link nav-toggle"> <i class="material-icons">class</i>
