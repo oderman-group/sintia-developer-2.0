@@ -1,9 +1,10 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/Cronograma.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma WHERE cro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+$datosConsultaBD = Cronograma::buscarCronograma($conexion, $config, $idR);
 ?>
 <div class="page-content">
                     <div class="page-bar">
