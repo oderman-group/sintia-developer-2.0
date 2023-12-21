@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0017';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -90,13 +91,7 @@ function mostrarNuevaRespuesta(datos){
 
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas evp
-	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
-	WHERE evp_id_evaluacion='".$idE."' AND evp.institucion={$config['conf_id_institucion']} AND evp.year={$_SESSION["bd"]}
-	ORDER BY preg.preg_id DESC
-	");
-	
-	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
+	$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
 
 	?>
 

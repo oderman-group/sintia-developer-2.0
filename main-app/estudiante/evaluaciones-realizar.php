@@ -1,6 +1,7 @@
 <?php include("session.php");?>
 <?php include("verificar-usuario.php");?>
-<?php $idPaginaInterna = 'ES0019';?>
+<?php $idPaginaInterna = 'ES0019';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
@@ -106,12 +107,7 @@
 	}
 	
 	//Cantidad de preguntas de la evaluación
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
-	WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-	");
-	
-	$cantPreguntas = mysqli_num_rows($preguntasConsulta);
+	$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
 
 	//Si la evaluación no tiene preguntas, lo mandamos para la pagina informativa
 	if($cantPreguntas==0){
