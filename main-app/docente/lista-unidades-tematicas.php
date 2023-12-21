@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0093';
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
@@ -36,8 +37,7 @@ include("../compartido/head.php");
                 </thead>
                 <tbody>
                     <?php
-                        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
-                        WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                        $consulta = Clases::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
                         $contReg = 1;
                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
