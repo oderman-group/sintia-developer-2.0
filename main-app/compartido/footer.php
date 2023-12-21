@@ -100,7 +100,7 @@ LIMIT ".$empezar.",1
 			showHideTransition: 'slide',
 			loaderBg:'#26c281', 
 			icon: 'warning', 
-			hideAfter: 6500, 
+			hideAfter: 10000, 
 			stack: 6
 		})
 	});

@@ -65,6 +65,7 @@
 		                                                    <div class="form-group">
 		                                                        <input type="text" tabindex="1" class="form-control" id="asunto" name="asunto" value="<?php if(isset($_GET["asunto"])){ echo base64_decode($_GET["asunto"]);}?>" required>
 		                                                    </div>
+															<?php $nombreEmisor=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual); ?>
 		                                                    <div class="form-group">
 																<textarea cols="80" id="editor1" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required>
 																	<br>
@@ -72,12 +73,12 @@
 																	<br>
 																	--- --- ---
 																	<p>    Cordialmente, </p>
-																	<small><b><?=strtoupper($datosUsuarioActual['uss_nombre'].' '.$datosUsuarioActual["uss_nombre2"].' '.$datosUsuarioActual["uss_apellido1"].' '.$datosUsuarioActual["uss_apellido2"]);?></b></small>
+																	<small><b><?=$nombreEmisor;?></b></small>
 																</textarea>
 		                                                    </div>
 															
 		                                                    <div class="btn-group margin-top-20 ">
-				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,<?=$_SESSION['id']?>)" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
+				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,<?=$_SESSION['id']?>,'<?=$nombreEmisor?>')" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
 				                                                <button type="reset" class="btn btn-sm btn-default margin-right-10"><i class="fa fa-times"></i> Cancelar</button>
 				                                            </div>
 		                                                </form>

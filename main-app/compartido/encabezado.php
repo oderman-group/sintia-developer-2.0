@@ -173,8 +173,8 @@ $institucionNombre = $institucion['ins_siglas'];
                                 socket.on("recibio_correo_<?=$_SESSION['id']?>_<?=$_SESSION['idInstitucion']?>",async (data) => {
                                     mensajes();
                                     $.toast({
-                                        heading: 'Notificación',  
-                                        text: 'Tienes '+data['numCorreo']+' mensajes nuevos. Revisalos en el icono del sobre, que está en la parte superior.',
+                                        heading: data['asunto'],  
+                                        text: 'Tienes un mensaje nuevo del usuario '+data['nombreEmisor']+', Revisalo en el icono del sobre que está en la parte superior.',
                                         position: 'bottom-right',
                                         showHideTransition: 'slide',
                                         loaderBg:'#ff6849',
