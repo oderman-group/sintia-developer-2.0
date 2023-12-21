@@ -55,10 +55,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 											
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												  ORDER BY eva_id DESC
-												  ");
+												$consulta= Evaluaciones::consultaEvaluacionCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													
 													//Cantidad de preguntas de la evaluación

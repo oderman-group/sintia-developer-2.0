@@ -14,9 +14,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 $idE="";
 	if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 
-	$consultaEvaluacion = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-	WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
+	$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
 	
 	//Cantidad de preguntas de la evaluación
@@ -103,10 +101,7 @@ $idE="";
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY eva_id DESC
-											");
+											$evaluacionesEnComun = Evaluaciones::consultaEvaluacionTodas($conexion, $config, $idE, $cargaConsultaActual, $periodoConsultaActual);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="evaluaciones-resultados.php?idE=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>

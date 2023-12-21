@@ -6,8 +6,7 @@
 				require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 				$idE="";
 				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-				WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+				$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
@@ -99,10 +98,7 @@
 										<div class="panel-body">
 											<p><?=$frases[159][$datosUsuarioActual['uss_idioma']];?></p>
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY eva_id DESC
-											");
+											$evaluacionesEnComun = Evaluaciones::consultaEvaluacionTodas($conexion,$config, $idE, $cargaConsultaActual, $periodoConsultaActual);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
