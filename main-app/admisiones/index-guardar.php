@@ -3,6 +3,7 @@ include("bd-conexion.php");
 include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
@@ -125,14 +126,7 @@ if ($newId > 0) {
     $matriculas->execute();
 
     //Documentos
-    $documentosQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_documentos(matd_id, matd_matricula, institucion, year)VALUES(:codigo, :matricula, :idInstitucion, :year)";
-    $codigo=Utilidades::generateCode("MTD");
-    $documentos = $pdoI->prepare($documentosQuery);
-    $documentos->bindParam(':codigo', $codigo, PDO::PARAM_STR);
-    $documentos->bindParam(':matricula', $codigoMAT, PDO::PARAM_STR);
-    $documentos->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $documentos->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
-    $documentos->execute();
+    Inscripciones::guardarDocumentos($pdoI, $datosConfig, $codigoMAT);
 
 
     //Mensaje para correo

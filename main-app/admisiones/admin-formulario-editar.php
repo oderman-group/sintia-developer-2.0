@@ -8,6 +8,7 @@ if ($_SESSION["id"] == "") {
 <?php
 include("bd-conexion.php");
 include("php-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -28,13 +29,7 @@ $num = $est->rowCount();
 $datos = $est->fetch();
 
 //Documentos
-$documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula = :id AND institucion= :idInstitucion AND year= :year";
-$documentos = $pdoI->prepare($documentosQuery);
-$documentos->bindParam(':id', $datos['mat_id'], PDO::PARAM_STR);
-$documentos->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$documentos->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
-$documentos->execute();
-$datosDocumentos = $documentos->fetch();
+$datosDocumentos = Inscripciones::traerDocumentos($pdoI, $datosConfig, $datos['mat_id']);
 
 //Padre
 $padreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";

@@ -12,6 +12,7 @@ include(ROOT_PATH."/main-app/compartido/head.php");
 
 include(ROOT_PATH."/main-app/admisiones/php-funciones.php");
 include(ROOT_PATH."/config-general/config-admisiones.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $id = "";
 if (!empty($_GET["id"])) {
@@ -34,13 +35,7 @@ $num = $est->rowCount();
 $datos = $est->fetch();
 
 //Documentos
-$documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula = :id AND institucion= :idInstitucion AND year= :year";
-$documentos = $conexionPDO->prepare($documentosQuery);
-$documentos->bindParam(':id', $datos['mat_id'], PDO::PARAM_STR);
-$documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-$documentos->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
-$documentos->execute();
-$datosDocumentos = $documentos->fetch();
+$datosDocumentos = Inscripciones::traerDocumentos($conexionPDO, $config, $datos['mat_id']);
 
 //Padre
 $padreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";

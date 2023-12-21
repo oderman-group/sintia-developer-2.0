@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DT0013';
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -81,120 +82,7 @@ $asp->execute();
 
 
 //Documentos
-if (!empty($_FILES['pazysalvo']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['pazysalvo']['name']);
-	$extension = end($explode);
-	$pazysalvo = uniqid('pyz_') . "." . $extension;
-	@unlink($destino . "/" . $pazysalvo);
-	move_uploaded_file($_FILES['pazysalvo']['tmp_name'], $destino . "/" . $pazysalvo);
-} else {
-	$pazysalvo = $_POST['pazysalvoA'];
-}
-
-if (!empty($_FILES['observador']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['observador']['name']);
-	$extension = end($explode);
-	$observador = uniqid('obs_') . "." . $extension;
-	@unlink($destino . "/" . $observador);
-	move_uploaded_file($_FILES['observador']['tmp_name'], $destino . "/" . $observador);
-} else {
-	$observador = $_POST['observadorA'];
-}
-
-if (!empty($_FILES['eps']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['eps']['name']);
-	$extension = end($explode);
-	$eps = uniqid('eps_') . "." . $extension;
-	@unlink($destino . "/" . $eps);
-	move_uploaded_file($_FILES['eps']['tmp_name'], $destino . "/" . $eps);
-} else {
-	$eps = $_POST['epsA'];
-}
-
-if (!empty($_FILES['recomendacion']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['recomendacion']['name']);
-	$extension = end($explode);
-	$recomendacion = uniqid('rec_') . "." . $extension;
-	@unlink($destino . "/" . $recomendacion);
-	move_uploaded_file($_FILES['recomendacion']['tmp_name'], $destino . "/" . $recomendacion);
-} else {
-	$recomendacion = $_POST['recomendacionA'];
-}
-
-if (!empty($_FILES['vacunas']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['vacunas']['name']);
-	$extension = end($explode);
-	$vacunas = uniqid('vac_') . "." . $extension;
-	@unlink($destino . "/" . $vacunas);
-	move_uploaded_file($_FILES['vacunas']['tmp_name'], $destino . "/" . $vacunas);
-} else {
-	$vacunas = $_POST['vacunasA'];
-}
-
-if (!empty($_FILES['boletines']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['boletines']['name']);
-	$extension = end($explode);
-	$boletines = uniqid('bol_') . "." . $extension;
-	@unlink($destino . "/" . $boletines);
-	move_uploaded_file($_FILES['boletines']['tmp_name'], $destino . "/" . $boletines);
-} else {
-	$boletines = $_POST['boletinesA'];
-}
-
-if (!empty($_FILES['documentoIde']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['documentoIde']['name']);
-	$extension = end($explode);
-	$documentoIde = uniqid('doc_') . "." . $extension;
-	@unlink($destino . "/" . $documentoIde);
-	move_uploaded_file($_FILES['documentoIde']['tmp_name'], $destino . "/" . $documentoIde);
-} else {
-	$documentoIde = $_POST['documentoIdeA'];
-}
-
-if (!empty($_FILES['certificado']['name'])) {
-	$destino = ROOT_PATH.'/main-app/admisiones/files/otros';
-    $explode = explode(".", $_FILES['certificado']['name']);
-	$extension = end($explode);
-	$certificado = uniqid('cert_') . "." . $extension;
-	@unlink($destino . "/" . $certificado);
-	move_uploaded_file($_FILES['certificado']['tmp_name'], $destino . "/" . $certificado);
-} else {
-	$certificado = $_POST['certificadoA'];
-}
-
-$documentosQuery = "UPDATE ".BD_ACADEMICA.".academico_matriculas_documentos SET
-matd_pazysalvo = :pazysalvo, 
-matd_observador = :observador, 
-matd_eps = :eps, 
-matd_recomendacion = :recomendacion, 
-matd_vacunas = :vacunas, 
-matd_boletines_actuales = :boletines,
-matd_documento_identidad = :documentoIde,
-matd_certificados = :certificado
-WHERE matd_matricula = :idMatricula AND institucion= :idInstitucion AND year= :year";
-$documentos = $conexionPDO->prepare($documentosQuery);
-
-$documentos->bindParam(':idMatricula', $_POST['idMatricula'], PDO::PARAM_STR);
-$documentos->bindParam(':pazysalvo', $pazysalvo, PDO::PARAM_STR);
-$documentos->bindParam(':observador', $observador, PDO::PARAM_STR);
-$documentos->bindParam(':eps', $eps, PDO::PARAM_STR);
-$documentos->bindParam(':vacunas', $vacunas, PDO::PARAM_STR);
-$documentos->bindParam(':boletines', $boletines, PDO::PARAM_STR);
-$documentos->bindParam(':documentoIde', $documentoIde, PDO::PARAM_STR);
-$documentos->bindParam(':recomendacion', $recomendacion, PDO::PARAM_STR);
-$documentos->bindParam(':certificado', $certificado, PDO::PARAM_STR);
-$documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-$documentos->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
-
-$documentos->execute();
-$filasAfectadasDoc = $documentos->rowCount();
+Inscripciones::actualizarDocumentos($conexionPDO, $config, $_FILES, $_POST);
 
 
 //Acudiente
