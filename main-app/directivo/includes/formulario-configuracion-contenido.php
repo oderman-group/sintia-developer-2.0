@@ -21,9 +21,9 @@ if(!Modulos::validarPermisoEdicion() && $datosUsuarioActual['uss_tipo'] == TIPO_
 	$disabledPermiso = "disabled";
 }
 
-$confiDEV =0;
+$configDEV =0;
 $institucion ='';
-if($idPaginaInterna == 'DV0032'){ $confiDEV =1; $institucion = "de <b>".$datosConfiguracion['ins_siglas']."</b> (". $year .")"; }
+if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosConfiguracion['ins_siglas']."</b> (". $year .")"; }
 ?>
 <div class="page-bar">
     <div class="page-title-breadcrumb">
@@ -55,7 +55,7 @@ if($idPaginaInterna == 'DV0032'){ $confiDEV =1; $institucion = "de <b>".$datosCo
             <header class="panel-heading panel-heading-purple"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> <?=$institucion?></header>
             <div class="panel-body">
                 <form name="formularioGuardar" action="configuracion-sistema-guardar.php" method="post">
-                    <input type="hidden" name="confiDEV" value="<?= $confiDEV; ?>">
+                    <input type="hidden" name="configDEV" value="<?= $configDEV; ?>">
                     <input type="hidden" name="id" value="<?= $datosConfiguracion['conf_id']; ?>">
 
                     <p class="h3">General</p>

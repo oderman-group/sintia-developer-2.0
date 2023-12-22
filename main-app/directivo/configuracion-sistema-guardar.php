@@ -3,7 +3,7 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0187';
-if($_POST["confiDEV"]==1){
+if($_POST["configDEV"]==1){
 	$idPaginaInterna = 'DV0033';
 }
 
@@ -59,12 +59,12 @@ try {
 	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "',
 	conf_activar_encuesta='" . $_POST["activarEncuestaReservaCupo"] . "',
 	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "'
-	WHERE conf_id='".$config['conf_id']."'");
+	WHERE conf_id='".$_POST['id']."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
-if($_POST["confiDEV"]==0){
+if($_POST["configDEV"]==0){
 	$config = Plataforma::sesionConfiguracion();
 	$_SESSION["configuracion"] = $config;
 }
