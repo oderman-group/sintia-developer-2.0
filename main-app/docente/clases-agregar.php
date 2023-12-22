@@ -1,5 +1,6 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0025';?>
+<?php $idPaginaInterna = 'DC0025';
+require_once(ROOT_PATH."/main-app/class/Unidades.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("verificar-periodos-diferentes.php");?>
@@ -107,8 +108,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 												<label class="col-sm-2 control-label">Unidad</label>
 												<div class="col-sm-10">
 													<?php
-													$unidadConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_unidades 
-													WHERE uni_id_carga='" . $cargaConsultaActual . "' AND uni_periodo='" . $periodoConsultaActual . "' AND uni_eliminado!=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													$unidadConsulta = Unidades::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													?>
 													<select class="form-control  select2" name="unidad">
 														<option value="">Seleccione una opción</option>

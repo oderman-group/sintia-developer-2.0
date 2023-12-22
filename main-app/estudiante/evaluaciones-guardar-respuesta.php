@@ -5,6 +5,7 @@ include("verificar-usuario.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'ES0057';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 
 //SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 try{
@@ -32,14 +33,7 @@ try{
 }
 
 //Cantidad de preguntas de la evaluación
-try{
-	$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-	INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
-	WHERE aca_eva_pre.evp_id_evaluacion='".$_POST["idE"]."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
-$cantPreguntas = mysqli_num_rows($preguntasConsulta);
+$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $_POST["idE"]);
 
 $contPreguntas = 1;
 while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){

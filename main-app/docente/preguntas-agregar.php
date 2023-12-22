@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0023';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -9,17 +10,10 @@ include("../compartido/head.php");
 $idE="";
 if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 
-$consultaEvaluacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
+$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
 //Cantidad de preguntas de la evaluación
-$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
-WHERE aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-ORDER BY preg.preg_id DESC");
-
-$cantPreguntas = mysqli_num_rows($preguntasConsulta);
+$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
 ?>
 
 	<!--bootstrap -->

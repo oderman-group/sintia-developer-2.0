@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0076';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -9,8 +10,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaEvaluaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
+$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idR);
 ?>
 
 	<!--bootstrap -->
@@ -60,10 +60,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluaciones, MYSQLI_BOTH);
 										<header class="panel-heading panel-heading-purple"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idR."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY eva_id DESC
-											");
+											$evaluacionesEnComun = Evaluaciones::consultaEvaluacionTodas($conexion, $config, $idR, $cargaConsultaActual, $periodoConsultaActual);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="evaluaciones-editar.php?idR=<?=$evaComun['eva_id'];?>"><?=$evaComun['eva_nombre'];?></a></p>

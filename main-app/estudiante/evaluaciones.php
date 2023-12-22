@@ -1,6 +1,7 @@
 <?php include("session.php");?>
 <?php include("verificar-usuario.php");?>
-<?php $idPaginaInterna = 'ES0006';?>
+<?php $idPaginaInterna = 'ES0006';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("verificar-pagina-bloqueada.php");?>
@@ -77,17 +78,12 @@
 										<div class="card-body" id="line-parent">
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												  ORDER BY eva_id DESC
-												  ");
+												$consulta= Evaluaciones::consultaEvaluacionCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													  if(!empty($resultado['eva_clave'])) $ulrEva = 'evaluaciones-clave.php'; else $ulrEva = 'evaluaciones-realizar.php';
 													
 													//Cantidad de preguntas de la evaluación
-													$cantPreguntas = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-													"));
+													$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $resultado['eva_id']);
 													  
 													  //Obtener los datos si ya ha realizado la evaluación
 													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes

@@ -9,7 +9,8 @@
 <?php require_once("../class/servicios/CargaServicios.php"); ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <?php require_once("../class/servicios/GradoServicios.php");
-require_once(ROOT_PATH."/main-app/class/Boletin.php"); ?>
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php"); ?>
 <?php
 $cargaE="";
 if(!empty($_GET["carga"])){ $cargaE=base64_decode($_GET["carga"]);}
@@ -95,8 +96,9 @@ if($config['conf_activar_encuesta']==1){
 									    
 										$ultimoAcceso = 'Nunca';
 										$fondoCargaActual = '#FFF';
-										$cargaHistorial = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso 
-										WHERE carpa_id_carga='".$rCargas['car_id']."' AND carpa_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+										
+										$consultaHistorial = CargaAcademica::accesoCargasEstudiante($conexion, $config, $rCargas['car_id'], $datosEstudianteActual['mat_id']);
+										$cargaHistorial = mysqli_fetch_array($consultaHistorial, MYSQLI_BOTH);
 										if(!empty($cargaHistorial['carpa_id'])){
 											$ultimoAcceso = "(".$cargaHistorial['carpa_cantidad'].") ".$cargaHistorial['carpa_ultimo_acceso'];
 										}

@@ -3,10 +3,10 @@
 				
 				<?php
 				require_once(ROOT_PATH."/main-app/class/Boletin.php");
+				require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 				$idE="";
 				if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
-				$evaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-				WHERE eva_id='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+				$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
 				//respuestas
 				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
@@ -21,12 +21,7 @@
 				"), MYSQLI_BOTH);
 
 				//Cantidad de preguntas de la evaluación
-				$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
-				INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
-				WHERE evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-				");
-				
-				$cantPreguntas = mysqli_num_rows($preguntasConsulta);
+				$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
 
 				//Si la evaluación no tiene preguntas, lo mandamos para la pagina informativa
 				if($cantPreguntas==0){
@@ -103,10 +98,7 @@
 										<div class="panel-body">
 											<p><?=$frases[159][$datosUsuarioActual['uss_idioma']];?></p>
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-											WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_id!='".$idE."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY eva_id DESC
-											");
+											$evaluacionesEnComun = Evaluaciones::consultaEvaluacionTodas($conexion,$config, $idE, $cargaConsultaActual, $periodoConsultaActual);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
 												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 

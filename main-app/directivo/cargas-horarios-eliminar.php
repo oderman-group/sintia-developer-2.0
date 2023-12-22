@@ -3,6 +3,7 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0156';
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -10,12 +11,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-try{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_estado=0 WHERE id_nuevo='" . base64_decode($_GET["idH"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-	include("../compartido/guardar-historial-acciones.php");
+CargaAcademica::eliminarHorarios($conexion, $config, $_GET["idH"]);
 
-	echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_GET["idC"] . '";</script>';
-	exit();
+include("../compartido/guardar-historial-acciones.php");
+echo '<script type="text/javascript">window.location.href="cargas-horarios.php?id=' . $_GET["idC"] . '";</script>';
+exit();

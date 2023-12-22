@@ -8,6 +8,7 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Cronograma.php");
 
 //Importar indicadores
 if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
@@ -257,12 +258,7 @@ if(!empty($_POST["foros"])){
 //Importar cronograma
 if(!empty($_POST["cronograma"])){		
 	//Consultamos la información del cronograma a Importar
-	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma
-		WHERE cro_id_carga='".$_POST["cargaImportar"]."' AND cro_periodo='".$_POST["periodoImportar"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$calImpConsulta = Cronograma::traerDatosCompletosCronograma($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){

@@ -1,5 +1,6 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0043';?>
+<?php $idPaginaInterna = 'DC0043';
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
@@ -54,16 +55,11 @@
 											
 											<div class="panel-group accordion" id="accordion3">
 												<?php
-												  $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-												  WHERE eva_id_carga='".$cargaConsultaActual."' AND eva_periodo='".$periodoConsultaActual."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												  ORDER BY eva_id DESC
-												  ");
+												$consulta= Evaluaciones::consultaEvaluacionCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 												  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													
 													//Cantidad de preguntas de la evaluación
-													$consultaCantPreguntas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas
-													WHERE evp_id_evaluacion='".$resultado['eva_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													$cantPreguntas = mysqli_num_rows($consultaCantPreguntas);
+													$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $resultado['eva_id']);
 												 ?>
 												  <div class="panel panel-default" id="reg<?=$resultado['eva_id'];?>">
 													  <div class="panel-heading panel-heading-gray">

@@ -8,8 +8,8 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 $codigo=Utilidades::generateCode("PRE");
-$codigoEVP=Utilidades::generateCode("EVP");
 
 if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	//Archivos para evaluaciones
@@ -29,11 +29,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
 
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas(evp_id, evp_id_evaluacion, evp_id_pregunta, institucion, year)VALUES('".$codigoEVP."', '".$_POST["idE"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
 
 	if($_POST["opcionR"]==1){
 		$cont=1;
@@ -124,11 +120,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		}
 	}
 
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas(evp_id, evp_id_evaluacion, evp_id_pregunta, institucion, year)VALUES('".$codigoEVP."', '".$_POST["idE"]."', '".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
