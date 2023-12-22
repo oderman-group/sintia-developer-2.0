@@ -1,7 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0096';
-require_once(ROOT_PATH."/main-app/class/Clases.php");
+require_once(ROOT_PATH."/main-app/class/Unidades.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -10,7 +10,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$datosUnidad = Clases::consultarUnidadesPorID($conexion, $idR);
+$datosUnidad = Unidades::consultarUnidadesPorID($conexion, $idR);
 ?>
 
 <!--bootstrap -->
@@ -58,7 +58,7 @@ $datosUnidad = Clases::consultarUnidadesPorID($conexion, $idR);
 							<header class="panel-heading panel-heading-purple"><?= $frases[374][$datosUsuarioActual['uss_idioma']]; ?> </header>
 							<div class="panel-body">
 								<?php
-								$unidadesEnComun = Clases::consultarUnidadesDiferentes($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $idR);
+								$unidadesEnComun = Unidades::consultarUnidadesDiferentes($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $idR);
 								while ($uniComun = mysqli_fetch_array($unidadesEnComun, MYSQLI_BOTH)) {
 								?>
 									<p><a href="unidades-editar.php?idR=<?= base64_encode($uniComun['uni_id']); ?>"><?= $uniComun['uni_nombre']; ?></a></p>

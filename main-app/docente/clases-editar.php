@@ -1,7 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0070';
-require_once(ROOT_PATH."/main-app/class/Clases.php");
+require_once(ROOT_PATH."/main-app/class/Unidades.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -107,7 +107,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 												<label class="col-sm-2 control-label">Unidad</label>
 												<div class="col-sm-10">
 													<?php
-													$unidadConsulta = Clases::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
+													$unidadConsulta = Unidades::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													?>
 													<select class="form-control  select2" name="unidad">
 														<option value="">Seleccione una opción</option>

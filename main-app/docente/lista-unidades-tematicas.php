@@ -1,7 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0093';
-require_once(ROOT_PATH."/main-app/class/Clases.php");
+require_once(ROOT_PATH."/main-app/class/Unidades.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
@@ -37,7 +37,7 @@ include("../compartido/head.php");
                 </thead>
                 <tbody>
                     <?php
-                        $consulta = Clases::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
+                        $consulta = Unidades::consultarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
                         $contReg = 1;
                         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 

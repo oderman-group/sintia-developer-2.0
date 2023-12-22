@@ -15,9 +15,9 @@
 		echo '<script type="text/javascript">window.location.href="unidades-agregar.php?error=ER_DT_4";</script>';
 		exit();
 	}
-	require_once(ROOT_PATH."/main-app/class/Clases.php");
+	require_once(ROOT_PATH."/main-app/class/Unidades.php");
 
-	Clases::guardarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $_POST);
+	Unidades::guardarUnidades($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $_POST);
 	
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="clases.php?carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'&tab=2";</script>';

@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-class Clases{
+class Unidades{
     /**
      * Este metodo me trae las unidades de una carga
      * @param mysqli $conexion
