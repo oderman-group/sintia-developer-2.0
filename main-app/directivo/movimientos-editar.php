@@ -14,6 +14,11 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
+	$disabledPermiso = "disabled";
+}
 ?>
 
 	<!--bootstrap -->
@@ -28,6 +33,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
     <!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="../js/Movimientos.js" ></script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -64,51 +70,46 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
                                    
 									<form name="formularioGuardar" action="movimientos-actualizar.php" method="post">
-										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU">
+										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU" id="idTransaction">
 										
 										<div class="form-group row">
-                                        <label class="col-sm-2 control-label">Usuario</label>
+                                            <label class="col-sm-2 control-label">Usuario</label>
                                             <div class="col-sm-4">
-												<?php
+                                                <?php
                                                 try{
                                                     $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
                                                     INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
                                                     WHERE uss_id='".$resultado['fcu_usuario']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
-                                                <select class="form-control  select2" name="usuario" required>
+                                                } catch (Exception $e) {
+                                                    include("../compartido/error-catch-to-report.php");
+                                                }
+                                                ?>
+                                                <select class="form-control  select2" id="select_usuario" name="usuario" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<?php
-													while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
-													<?php }?>
+                                                    <?php
+                                                    while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
+                                                    ?>
+                                                        <option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+                                                    <?php }?>
                                                 </select>
                                             </div>
 
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>" <?=$disabledPermiso;?>>
-													</div>
-
-                                                    
-											</div>
-											
-											
+                                            <label class="col-sm-2 control-label">Fecha</label>
+                                            <div class="col-sm-4">
+                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>" <?=$disabledPermiso;?>>
+                                            </div>
+                                        </div>
 										
 										<div class="form-group row">
                                         <label class="col-sm-2 control-label">Descripción general</label>
-												<div class="col-sm-4">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required <?=$disabledPermiso;?>>
-												</div>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required <?=$disabledPermiso;?>>
+                                            </div>
 
-													<label class="col-sm-2 control-label">Valor adicional</label>
-													<div class="col-sm-4">
-														<input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required>
-													</div>
-                                                    
+                                            <label class="col-sm-2 control-label">Valor adicional</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
+                                            </div>
 										</div>
 
                                         <div class="form-group row">
@@ -136,7 +137,6 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                             </div>
                                         </div>
 										
-										
 										<div class="form-group row">
                                             
                                             <label class="col-sm-2 control-label">Estado</label>
@@ -157,10 +157,7 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 </select>
                                             </div>
                                         </div>
-										
-										
-											
-										
+
                                         <script>
                                             $(document).ready(function() {
                                                 $('#select_usuario').select2({
@@ -185,63 +182,102 @@ $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 });
                                             });
                                         </script>
-										
-										
 
+                                        <div class="panel">
+                                            <header class="panel-heading panel-heading-blue"> Items</header>
+                                            <div class="panel-body">
 
-                                            <div class="panel">
-                                                <header class="panel-heading panel-heading-blue"> Items</header>
-                                                <div class="panel-body">
-
-                                                    <div class="table-scrollable">
-                                                        <table class="display" style="width:100%;">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Item</th>
-                                                                    <th>Precio</th>
-                                                                    <th>Cant.</th>
-                                                                    <th>Total</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php
-                                                                // Obtener el resultado
-                                                                $idTransaction = base64_decode($_GET["idU"]);
-                                                                $itemsConsulta = mysqli_query($conexion, "CALL ".BD_FINANCIERA.".get_transaction_items('{$idTransaction}', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-
+                                                <div class="table-scrollable">
+                                                    <table class="display" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Item</th>
+                                                                <th>Precio</th>
+                                                                <th>Cant.</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="mostrarItems">
+                                                            <?php
+                                                                $idTransaction = base64_decode($_GET['idU']);
+                                                                try {
+                                                                    $consulta = "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price, ti.cantity, ti.subtotal
+                                                                    FROM ".BD_FINANCIERA.".transaction_items ti
+                                                                    INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
+                                                                    WHERE ti.id_transaction = '{$idTransaction}'
+                                                                    AND ti.type_transaction = 'INVOICE'
+                                                                    AND ti.institucion = {$config['conf_id_institucion']}
+                                                                    AND ti.year = {$_SESSION["bd"]}";
+                                                                    $itemsConsulta = mysqli_query($conexion, $consulta);
+                                                                } catch(Exception $e) {
+                                                                    echo $e->getMessage();
+                                                                    exit();
+                                                                }
+                                                                $numItems=mysqli_num_rows($itemsConsulta);
+                                                                if($numItems>0){
                                                                 // Manejar el resultado según tus necesidades
                                                                 while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
                                                                 ?>
                                                                 <tr>
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
-                                                                    <td><?=$fila['price'];?></td>
-                                                                    <td><?=$fila['cantity'];?></td>
-                                                                    <td><?=$fila['subtotal'];?></td>
+                                                                    <td id="precio<?=$fila['idtx'];?>"><?=$fila['price'];?></td>
+                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>"></td>
+                                                                    <td id="subtotal<?=$fila['idtx'];?>"><?=$fila['subtotal'];?></td>
                                                                 </tr>
-                                                                <?php } ?>
-                                                            </tbody>
-                                                        </table>
-
+                                                            <?php }} ?>
+                                                        </tbody>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="idItemNuevo"></td>
+                                                                <td>
+                                                                    <div class="col-sm-5" style="padding: 0px;">
+                                                                        <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)">
+                                                                            <option value="">Seleccione una opción</option>
+                                                                            <?php
+                                                                                try{
+                                                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                                } catch (Exception $e) {
+                                                                                    include("../compartido/error-catch-to-report.php");
+                                                                                }
+                                                                                while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                                                            ?>
+                                                                            <option value="<?=$datosConsulta['id']?>" name="<?=$datosConsulta['price']?>"><?=$datosConsulta['name']?></option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td id="precioNuevo">0</td>
+                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1"></td>
+                                                                <td id="subtotalNuevo">0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5">
+                                                                    <button type="button" title="Agregar nuevo item" style="padding: 4px 4px;margin-left: 5px;margin-bottom: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                           <hr>
-                                            <div class="form-group row">
-												<label class="col-sm-12 control-label">Observaciones</label>
-												<div class="col-sm-12">
-                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
-												</div>
-											</div>
-										
-                                        <div class="text-right">
-                                            <a href="javascript:void(0);" <?=$disabledPermiso;?> name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                            <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                                            </button>
+                                        </div>
+                                        <hr>
+                                        <div class="form-group row">
+                                            <label class="col-sm-12 control-label">Observaciones</label>
+                                            <div class="col-sm-12">
+                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
+                                            </div>
                                         </div>
 										
-										
+                                        <div class="text-right">
+                                            <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                                <button type="submit" class="btn  btn-info">
+                                                    <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                                </button>
+                                            <?php }?>
+                                        </div>
                                     </form>
                                 </div>
                             </div>

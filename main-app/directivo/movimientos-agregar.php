@@ -25,6 +25,7 @@ if(!Modulos::validarPermisoEdicion()){
     <!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="../js/Movimientos.js" ></script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -61,66 +62,58 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="movimientos-guardar.php" method="post">
+										<input type="hidden" value="FCU_NUEVO" name="idU" id="idTransaction">
 										
 										<div class="form-group row">
-													<label class="col-sm-2 control-label">Fecha</label>
-													<div class="col-sm-4">
-														<input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date("Y-m-d");?>" <?=$disabledPermiso;?>>
-													</div>
-											</div>
-
-											<div class="form-group row">
-												<label class="col-sm-2 control-label">Detalle</label>
-												<div class="col-sm-10">
-													<input type="text" name="detalle" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
-												</div>
-											</div>
-											
-											
-										
-										<div class="form-group row">
-													<label class="col-sm-2 control-label">Valor</label>
-													<div class="col-sm-6">
-														<input type="number" name="valor" class="form-control" autocomplete="off" required <?=$disabledPermiso;?>>
-													</div>
-											</div>
-										
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Tipo de movimiento</label>
+                                            <label class="col-sm-2 control-label">Usuario</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="1">Ingreso</option>
-													<option value="2">Egreso</option>
-													<option value="3">Cobro (CPC)</option>
-													<option value="4">Deuda (CPP)</option>
+                                                <select class="form-control  select2" id="select_usuario" name="usuario" required <?=$disabledPermiso;?>>
                                                 </select>
+                                            </div>
+
+                                            <label class="col-sm-2 control-label">Fecha</label>
+                                            <div class="col-sm-4">
+                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
+                                        <label class="col-sm-2 control-label">Descripción general</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="detalle" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?>>
+                                            </div>
+
+                                            <label class="col-sm-2 control-label">Valor adicional</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?>>
+                                            </div>
+										</div>
+
+                                        <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Tipo de movimiento</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
+                                                    <option value="">Seleccione una opción</option>
+													<option value="1" >Ingreso</option>
+													<option value="2" >Egreso</option>
+													<option value="3" >Cobro (CPC)</option>
+													<option value="4" >Deuda (CPP)</option>
+                                                </select>
+                                            </div>
+
                                             <label class="col-sm-2 control-label">Forma de pago</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1">Efectivo</option>
-													<option value="2">Cheque</option>
-													<option value="3">T. Débito</option>
-													<option value="4">T. Crédito</option>
-													<option value="5" selected>No aplica</option>
+													<option value="1" >Efectivo</option>
+													<option value="2" >Cheque</option>
+													<option value="3" >T. Débito</option>
+													<option value="4" >T. Crédito</option>
+													<option value="5" >No aplica</option>
                                                 </select>
                                             </div>
                                         </div>
-										
-											
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Usuario</label>
-                                            <div class="col-sm-10">
-                                                <select id="select_usuario" class="form-control  select2" name="usuario" required <?=$disabledPermiso;?>>
-                                                </select>
-                                            </div>
-                                        </div>
+
                                         <script>
                                             $(document).ready(function() {
                                                 $('#select_usuario').select2({
@@ -145,23 +138,74 @@ if(!Modulos::validarPermisoEdicion()){
                                                 });
                                             });
                                         </script>
-										
-										<div class="form-group row">
-												<label class="col-sm-2 control-label">Observaciones</label>
-												<div class="col-sm-10">
-                                                    <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>></textarea>
-												</div>
-											</div>
-										
 
-                                        <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                                            </button>
-                                        <?php }?>
+                                        <div class="panel">
+                                            <header class="panel-heading panel-heading-blue"> Items</header>
+                                            <div class="panel-body">
+
+                                                <div class="table-scrollable">
+                                                    <table class="display" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Item</th>
+                                                                <th>Precio</th>
+                                                                <th>Cant.</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="mostrarItems">
+                                                        </tbody>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="idItemNuevo"></td>
+                                                                <td>
+                                                                    <div class="col-sm-5" style="padding: 0px;">
+                                                                        <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)">
+                                                                            <option value="">Seleccione una opción</option>
+                                                                            <?php
+                                                                                try{
+                                                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                                } catch (Exception $e) {
+                                                                                    include("../compartido/error-catch-to-report.php");
+                                                                                }
+                                                                                while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                                                            ?>
+                                                                            <option value="<?=$datosConsulta['id']?>" name="<?=$datosConsulta['price']?>"><?=$datosConsulta['name']?></option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td id="precioNuevo">0</td>
+                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1"></td>
+                                                                <td id="subtotalNuevo">0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5">
+                                                                    <button type="button" title="Agregar nuevo item" style="padding: 4px 4px;margin-left: 5px;margin-bottom: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="form-group row">
+                                            <label class="col-sm-12 control-label">Observaciones</label>
+                                            <div class="col-sm-12">
+                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>></textarea>
+                                            </div>
+                                        </div>
 										
-										
+                                        <div class="text-right">
+                                            <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                            <?php if(Modulos::validarPermisoEdicion()){?>
+                                                <button type="submit" class="btn  btn-info">
+                                                    <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+                                                </button>
+                                            <?php }?>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
