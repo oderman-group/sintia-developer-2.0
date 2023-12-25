@@ -251,11 +251,13 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" <?=$disabledPermiso;?>></td>
                                                                 <td id="subtotalNuevo">0</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="5">
+                                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                                                <tr>
+                                                                    <td colspan="5">
                                                                     <button type="button" title="Agregar nuevo item" style="padding: 4px 4px;margin-left: 5px;margin-bottom: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i></button>
                                                                 </td>
                                                             </tr>
+                                                            <?php }?>
                                                         </tbody>
                                                     </table>
                                                 </div>
