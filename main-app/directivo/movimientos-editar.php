@@ -248,7 +248,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     </div>
                                                                 </td>
                                                                 <td id="precioNuevo">0</td>
-                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1"></td>
+                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;"></td>
                                                                 <td id="subtotalNuevo">0</td>
                                                             </tr>
                                                             <tr>
